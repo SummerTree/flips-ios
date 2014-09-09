@@ -9,6 +9,11 @@ Scenario: Touching Photo icon
   When I touch "Image" icon
   Then I should see "Take Picture" screen
 
+Scenario: Accessing Take Picture screen by User Information
+  Given I am on the "User Information" screen
+  When I touch "Image" icon
+  Then I should see "Take Picture" screen
+
 Scenario: Touching Photo icon when the fields are not filled
   Given I am on the "Register" screen
   And All fields are filled

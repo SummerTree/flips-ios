@@ -14,13 +14,13 @@ Scenario: Informing 9 numbers
   When I type 9 numbers
   Then I shouldn't see "Verify Code" screen
 
-Scenario: Informing a wrong code
+Scenario: Informing a wrong number
   Given I am on the "Forgot Password" screen
-  When I type a invalid phone number
+  When I type an invalid phone number
   Then I should see "Verify Code" screen
   And I shouldn't receive the message
 
-Scenario: Informing a right code
+Scenario: Informing a right number
   Given I am on the "Forgot Password" screen
   When I type a valid phone number
   Then I should see "Verify Code" screen
@@ -48,3 +48,8 @@ Scenario: Touching Back button on Forgot password screen
   Given I am on the "Forgot Password" screen
   When I touch "Back" button
   Then I should see "Login" screen
+
+Scenario: Touching Back button on Verification Code screen
+  Given I am on the "Verification Code" screen
+  When I touch "Back" button
+  Then I should see "Forgot Password" screen  

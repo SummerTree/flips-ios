@@ -24,3 +24,8 @@ Scenario: Choosing a picture when you don't have pictures on the galery
   And I don't have photos on my galery
   Then I should see "Choose Photo" screen
   And I should see a message: "No Photos or Videos You can take photos and videos using the camera, or sync photos and videos onto your iPad usung iTunes."
+
+Scenario: Touching X button
+  Given I am on the "Choose Photo" screen
+  When I touch "X" button
+  Then I should see "Take Picture"

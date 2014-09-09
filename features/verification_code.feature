@@ -14,11 +14,6 @@ Scenario: Access Verify code screen by Phone Number
   When I type 10 numbers
   Then I should see "Verify Code" screen
 
-Scenario: Touching Back button on Verification Code screen
-  Given I am on the "Verification Code" screen
-  When I touch "Back" button
-  Then I should see "Forgot Password" screen
-
 Scenario: Touching Resend Code without code typed
   Given I am on the "Verification Code" screen
   When Don't type the code

@@ -19,7 +19,7 @@ Scenario: Done button when there is a value on new password field
   When I type a value on "New password" field
   Then I should see "Done" button in white collor
 
-Scenario: Invalid Password
+Scenario Outline: Invalid Password
   Given I am on the "New Password" screen
   When I fill "New Password" with "<value>"
   And I touch "Done" button

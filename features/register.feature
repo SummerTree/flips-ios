@@ -9,7 +9,7 @@ Scenario: Touch Sign Up button
   When I touch "Sign Up" button
   Then I should see "Register" screen
 
-Scenario: Fill only one field
+Scenario Outline: Fill only one field
   Given I am on the "Register" screen
   When I fill the field "<field>" with "<value>"
   Then The button "Next" should be disable
@@ -20,7 +20,7 @@ Scenario: Fill only one field
   | Password   | MugChat8          |
   | Birthday   | 12/01/1987        |
 
-Scenario: Fill all fields and select a photo
+Scenario Outline: Fill all fields and select a photo
   Given I am on the "Register" screen
   When I fill the field "First Name" with "First"
   And I fill the field "Last Name" with "Last"
@@ -44,7 +44,7 @@ Scenario: Fill all fields and don't select a photo
   And I don't choose a photo
   Then The button "Next" should be disable
 
-Scenario: Fill with invalid values
+Scenario Outline: Fill with invalid values
   Given I am on the "Register" screen
   When I fill the field "First Name" with "First"
   And I fill the field "Last Name" with "Last"

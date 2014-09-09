@@ -37,7 +37,7 @@ Scenario: Done button
    And I fill "Password" field
   Then I should see "Done" button on the keyboard
 
-Scenario: Invalid email
+Scenario Outline: Invalid email
   Given I am on the "Login" screen
   And the field "Password" is filled
   When I fill "Email" field with the value "<value>"
@@ -47,7 +47,7 @@ Scenario: Invalid email
   | mug@mail |
   | mug.com  |
 
-Scenario: Invalid password
+Scenario Outline: Invalid password
   Given I am on the "Login" screen
   And the field "Email" is filled
   When I fill "Password" field with the value "<value>"
