@@ -1,3 +1,8 @@
+Feature: Change the number seted up on my MugChat
+  As an user
+  I want to change my number
+  So, I can update it on MugChat app
+
 Scenario: Access Change Number screen
   Given I am on the "Settings" scren
   When I touch "Change Number" option

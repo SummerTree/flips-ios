@@ -68,6 +68,18 @@ Scenario: Touching back button
   When I touch "Back" button
   Then I should see "Login" screen
 
+Scenario: Touching Photo icon when the fields are not filled
+  Given I am on the "Register" screen
+  And All fields are filled
+  When I touch "Image" icon
+  Then Nothing should happend
+
+Scenario: Changing the taked photo
+  Given I am on the "Register" screen
+  And There is a photo already selected
+  When I touch the picture
+  Then Nothing should happend  
+
 @manual
 Scenario: Verifying design
   Given I am on the "Register" screen
