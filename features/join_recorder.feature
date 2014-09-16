@@ -8,6 +8,7 @@ Scenario: Touching Plus button
   Given I am on the "Join_Word_Photo" screen
   When I touch "Plus" button
   Then I should see "Join Recorder" screen
+  And The camera should be with front-facing enabled
 
 #Ben, what should happen in this scenario?
 Scenario: Touching Preview button without video/photo
@@ -72,7 +73,7 @@ Scenario: Showing a message when the last word is selected on any mug
   Given I am on the "Join Recorder" screen
   When The mug selected is not MugBoys mug
   And I selected the last word
-  Then I should not see the message: "Last one! Take the driver seat on this one and be as creative as you want. We'll be here when you get back!"  
+  Then I should not see the message: "Last one! Take the driver seat on this one and be as creative as you want. We'll be here when you get back!"
 
 Scenario: Showing words
   Given I am on the "Join Recorder" screen

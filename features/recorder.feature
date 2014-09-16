@@ -27,7 +27,9 @@ Scenario: Touching recorder icon
 Scenario: Touching and holding recorder icon
   Given I am on the "Recorder" screen
   When I touch and hold "Recorder" icon
-  Then After one second I should see the "Confirm" screen
+  Then The recorder should starts
+  And I should see a thermometer with the progress
+  And After one second I should see the "Confirm" screen
 
 Scenario: Words that already have a mug
   Given I am on the "Recorder" screen

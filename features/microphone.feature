@@ -54,6 +54,7 @@ Scenario: Recording a voice
   Given I am on the "Microphone" screen
   And I tap and holp "Microphone Recorder" icon
   Then The recorder voice should starts
+  And I should see a thermometer with the progress
 
 Scenario: Touching microphone recorder icon for the second time when it was allowed on the first time
   Given I am on the "Microphone" screen
