@@ -12,3 +12,11 @@ Scenario: Touching Back button
   Given I am on the "Change Number" screen
   When I touch "Back" button
   Then I should see "Settings" screen
+
+Scenario: Verifying title screen
+  Given I am on the "Change Number" screen
+  Then I should see "Change Number" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Change Number" screen
+  Then The desing screen should be the same on the prototype design

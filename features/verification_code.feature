@@ -14,6 +14,9 @@ Scenario: Access Verify code screen by Phone Number screen
   Then I should see "Verify Code" screen
 
 Scenario: Access Verify code screen by Change Number screen
+  Given I am on the "Type Number" screen
+  When I type a valid phone number
+  Then I should see "Verify Code" screen
 
 #Ben, could you verify this scenario? There is not a message on the flow and prototype
 Scenario: Typed 3 times the wrong code

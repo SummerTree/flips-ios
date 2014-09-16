@@ -18,11 +18,6 @@ Scenario: Touching Back on About screen
   When I touch "Back" button
   Then I should see "Settings" screen
 
-Scenario: Access Send FeedBack screen
-  Given I am on the "Settings" scren
-  When I touch "Send FeedBack" option
-  Then I should see "Send FeedBack" screen
-
 Scenario: Touching Log Out option
   Given I am on the "Settings" scren
   When I touch "Log Out" option
@@ -32,3 +27,11 @@ Scenario: Touching X button
   Given I am on the "Settings" screen
   When I touch "X" button
   Then I should see "Onboarding" screen
+
+Scenario: Verifying title screen
+  Given I am on the "Settings" screen
+  Then I should see "Settings" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Settings" screen
+  Then The desing screen should be the same on the prototype design

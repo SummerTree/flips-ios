@@ -1,7 +1,9 @@
+Feature: Type number screen
+  As a user
+  I want to change my phone number
+  So, I can type my new number
 
-
-
-Scenario: Touching Next button
+Scenario: Touching Next button on change number screen
   Given I am on the "Change Number" screen
   When I touch "Next" button
   Then I should see "Type Number" screen
@@ -26,8 +28,7 @@ Scenario: Informing a wrong number
 Scenario: Informing a right number
   Given I am on the "Type Number" screen
   When I type a valid phone number
-  Then I should see "Verify Code" screen
-  And I should receive the message
+  Then I should receive the message
 
 Scenario: Change Number by iPod
   Given I am access MugChat on my iPod
@@ -68,4 +69,11 @@ Scenario: Touching back button on Verification Code screen
   Given I am on the "Verification Code" screen
   When I touch "Back" button
   Then I should see "Type Number" screen
-  
+
+Scenario: Verifying title screen
+  Given I am on the "Type Number" screen
+  Then I should see "Change Number" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Type Number" screen
+  Then The desing screen should be the same on the prototype design

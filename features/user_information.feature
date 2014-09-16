@@ -1,4 +1,9 @@
-Scenario: Touching user's information
+Feature: User Information screen
+  As a user
+  I want to view my profile informations
+  So, I can update my informations
+
+Scenario: Access user's information
   Given I am on the "Settings" screen
   When I touch "User's Information" option
   Then I should see "User information" fields filled
@@ -50,3 +55,7 @@ Scenario Outline: Changes to a invalid email
   | email             |
   | mugchat.com       |
   | mugchat@gmail     |
+
+Scenario: Verifying design screen
+  Given I am on the "User Information" screen
+  Then The desing screen should be the same on the prototype design

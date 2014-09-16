@@ -32,9 +32,18 @@ Scenario: Touching Next button
   When I touch "Next" button
   Then I should see "Join_Word_Photo" screen
 
+#Ben, is there a maximum of words/charactes that I can type?
 Scenario: Writing a lot of words on text field
   Given I am on the "Send FeedBack" screen
   And I am seeing the Text field
   When I write more than XX characters
   And I touch "Next" button
   Then I should ????
+
+Scenario: Verifying title screen
+  Given I am on the "Send FeedBack" screen
+  Then I should see "MugBoys" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Send FeedBack" screen
+  Then The desing screen should be the same on the prototype design

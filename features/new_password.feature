@@ -34,3 +34,11 @@ Scenario: Touching Back button on New Password
   Given I am on the "New Password" screen
   When I touch "Back" button
   Then I should see "Forgot Password" screen
+
+Scenario: Verifying title screen
+  Given I am on the "New Password" screen
+  Then I should see "New Password" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "New Password" screen
+  Then The desing screen should be the same on the prototype design
