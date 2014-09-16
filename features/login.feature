@@ -3,11 +3,18 @@ Feature: Login screen
   I want to enter on MugChat
   So, I can do login
 
+Scenario Outline: Access Login screen
+  Given I am on the "Splash" screen
+  When I touch the field: <field>
+  Then I should see "Login" screen
+  | field    |
+  | Email    |
+  | Password |
+
 Scenario Outline: Missing the keyboard
   Given I am on the "Splash" screen
   When I touch the field: <field>
   Then I should see the keyboard
-  And I should see "Login" screen
   | field    |
   | Email    |
   | Password |
@@ -47,6 +54,16 @@ Scenario Outline: Invalid email
   | mug@mail |
   | mug.com  |
 
+Scenario: Fixing wrong values
+  Given I am on the "Login" screen
+  And I typed a wrong value on "<field>"
+  And I am seeing a warning message
+  When I fix this value
+  Then I shouldn't see the message
+  | field    |
+  | Email    |
+  | Password |
+
 Scenario Outline: Invalid password
   Given I am on the "Login" screen
   And the field "Email" is filled
@@ -75,12 +92,6 @@ Scenario: Login with wrong email and right password
   Then I should see "Forgot Password" button
   And I should see the icon "!"
 
-Scenario: Touching Terms of Use
+Scenario: Verifying design screen
   Given I am on the "Login" screen
-  When I touch "Terms of Use" option
-  Then I should see "Terms of Use" screen
-
-Scenario: Touching Privacy Policy
-  Given I am on the "Login" screen
-  When I touch "Privacy Policy" option
-  Then I should see "Privacy Policy" screen
+  Then The desing screen should be the same on the prototype design
