@@ -19,6 +19,18 @@ Scenario: Showing joined words
   When I have a joined word
   Then I should see both words in only one group of words
 
+#Ben, is just it? The word have to has some specific characteristic?
+Scenario: Spliting words
+  Given I am on the "Join Word Photo" screen
+  When I have only one word
+  And I touch it
+  Then I should see "Split" option
+
+Scenario: Showing split words
+  Given I am seeing "Split" option
+  When I touch it
+  Then I should see 2 words
+
 Scenario: Touching Back button
   Given I am on the "Join Word Photo" screen
   When I touch "Back" button
@@ -32,48 +44,47 @@ Scenario: Updating a text
   And I go to "Join_Word_Photo" screen
   Then I should see the words updated
 
-#esperar resposta do Ben
 Scenario: Touching Preview button when I don't have imges/videos joining my words
   Given I am on the "Join Word Photo" screen
   And I don't have photos joining my words
   When I touch "Preview" button
-  Then I should see a preview about my words and videos
+  Then I should see a preview about my words
+  And I should see a green background
 
 Scenario: Touching Preview button when I have imges/videos joining my words
   Given I am on the "Join Word Photo" screen
   And I have photos joining my words
   When I touch "Preview" button
-  Then I should see a preview about my words and videos
+  Then I should see a preview about my words and videos/photos
 
-#Aguardar resposta do Ben pra complementar
+#Ben, will it happen? I didn't find the stok mug screen
 Scenario: Touching Stock Mugs when the selected word is on the stock mug
   Given I am on the "Join Word Photo" screen
   And I have a word selected that is in stock mug
   When I touch "Stock Mug" option
   Then I should see "Stock Mug" screen
 
-#Aguardar resposta do Ben pra complementar
+#Ben, will it happen? I didn't find the stok mug screen
 Scenario: Touching Stock Mugs when the selected word isn't on the stock mug
   Given I am on the "Join Word Photo" screen
   And I have a word selected that isn't in stock mug
   When I touch "Stock Mug" option
   Then I should see "Stock Mug" screen
 
-#Aguardar resposta do Ben pra complementar
+#Ben, Is it right?
 Scenario: Viewing my mugs when there are other mugs
   Given I am on the "Join Word Photo" screen
   When I have mugs on my dictionary for all words typed
   And I touch the words
   Then My mugs should update as the selected word
 
-#Aguardar resposta do Ben pra complementar
 Scenario: Viewing my mugs when there aren't other mugs
   Given I am on the "Join Word Photo" screen
   When I don't have mugs on my dictionary for all words typed
   And I touch the words
   Then My mugs should show nothing
 
-#Aguardar resposta do Ben pra complementar
+#Ben, what should happen in this scenario?
 Scenario: Touching an existent mug
   Given I am on the "Join Word Photo" screen
   And I have a selected word that has mugs seted up
@@ -99,22 +110,17 @@ Scenario: Selecting a video/photo
 Scenario: After selected a video/photo
   Given I am on the "Join Word Photo" screen
   When I have a selected video/photo to a word
-  Then I should see this word with a green background
-  And I should see the next word selected
+  Then I should see the next word selected
+  And I should see this word with a green background
 
-Scenario: Touching Plus button
-  Given I am on the "Join Word Photo" screen
-  When I touch "Plus" button
-  Then I should see "Join Recorder" screen
-
-Scenario: re-recorder a video/photo
+Scenario: Re-recorder a video/photo
   Given I am on the "Join Word Photo" screen
   And I already have a photo/video selected
   When I recorder another photo/video
   Then I should see this new photo/video
 
-#Aguardar a resposta do Ben
-Scenario: Selecting Love picture before I picture
+#Ben, Should I do it? And send this mug without picture on the word I
+Scenario: Selecting Love word before has a picture to word I
   Given I am on the "Join Word Photo" screen
   And I don't have a video or photo to word I
   When I touch word "Love"
@@ -124,4 +130,18 @@ Scenario: Selecting Love picture before I picture
 Scenario: Don't selecting a word
   Given I am on the "Join Word Photo" screen
   When I try don't have any word selected
-  Then I should not can
+  Then  I should not do it
+
+Scenario: Verifying title screen when the mug has only one person
+  Given I am on the "Join Word Photo" screen
+  When I have a mug with only one person
+  Then I should see person's name who send me the mug as a title
+
+Scenario: Verifying title screen when the mug has more than one person
+  Given I am on the "Join Word Photo" screen
+  When I have a mug with only more than one person
+  Then I should see "Group Chat" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Join Word Photo" screen
+  Then The desing screen should be the same on the prototype design

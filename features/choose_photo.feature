@@ -20,30 +20,37 @@ Scenario Outline: Choosing a picture when you have only one photo
   When I touch "Photo" icon
   Then I should see "<screen2>" screen
   And I should see the photo
-  | screen        | screen2      |
-  | Take Picture  | Choose Photo |
-  | Join Recorder | Albums       |
+  | screen          | screen2      |
+  | Take Picture    | Choose Photo |
+  | Join Recorder   | Albums       |
+  | Join Word Photo | Albums       |
+  | Recorder        | Albums       |
 
 #Ben in this scenario, Should I see Photo icon?
 Scenario Outline: Choosing a picture when you don't have pictures on the galery
   Given I am on the "<screen>" screen
-  When I touch "Photo" icon
-  And I don't have photos on my galery
-  Then I should see "<screen2>" screen
-  And I should see a message: "No Photos or Videos You can take photos and videos using the camera, or sync photos and videos onto your iPad usung iTunes."
-  | screen        | screen2      |
-  | Take Picture  | Choose Photo |
-  | Join Recorder | Albums       |
+  When I don't have photos on my galery
+  Then I should see "Photo" icon
+  | screen          |
+  | Take Picture    |
+  | Join Word Photo |
+  | Join Recorder   |
+  | Recorder        |
 
 Scenario: Touching X button
   Given I am on the "Choose Photo" screen
   When I touch "X" button
   Then I should see "Take Picture"
 
-Scenario: Touching Back button
-  Given I am on the "Albums" screen
+Scenario Outline: Touching Back button
+  Given I am on the "<screen>" screen
+  And I go to "Albums" screen
   When I touch "Back" button
-  Then I should see "Join Recorder" screen
+  Then I should see "<screen1>" screen
+  | screen          | screen1         |
+  | Join Word Photo | View Mug        |
+  | Join Recorder   | View Mug        |
+  | Recorder        | Join Word Photo |
 
 Scenario Outline: Verifying title screen
   Given I am on the "<screen>" screen

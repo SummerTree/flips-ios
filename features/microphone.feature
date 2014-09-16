@@ -1,3 +1,8 @@
+Feature: Microphone recorder
+  As an user
+  I want to recorder a voice
+  So, I can send a MugChat to my friends with image and voice
+
 Scenario: Acception a take picture by Recorder screen
   Given I am on the "Recorder" screen
   When I take a picture
@@ -21,7 +26,7 @@ Scenario: Touching microphone recorder icon for the first time
   Then I should see the a message: ""MugChat" Woud Like to Access your Microphone"
   And I should see buttons:"Don't Allow" and "OK"
 
-#aguardando a resposta do Ben
+#Ben, what should happen in this scenario?
 Scenario: Don't allow the microphone
   Given I am on the "Microphone" screen
   And I touch "Microphone Recorder" icon
@@ -64,3 +69,17 @@ Scenario: Canceling the voice recorder
   Given I am on the "Microphone" screen
   When I touch the "Cancel Microphone Recoder" icon
   Then I should see "Confirm" screen
+
+Scenario: Verifying title screen when the mug has only one person
+  Given I am on the "Microphone" screen
+  When I have a mug with only one person
+  Then I should see person's name who send me the mug as a title
+
+Scenario: Verifying title screen when the mug has more than one person
+  Given I am on the "Microphone" screen
+  When I have a mug with only more than one person
+  Then I should see "Group Chat" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Microphone" screen
+  Then The desing screen should be the same on the prototype design

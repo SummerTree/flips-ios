@@ -16,13 +16,18 @@ Scenario: Access Onboarding screen by New password screen
   And I touch "Done" button
   Then I should see "Onboarding" screen
 
+Scenario: Access Onboarding screen by Register screen
+  Given I am on the "Register" screen
+  When I fill all fields with valid values
+  Then I should see "Onboarding" screen
+
 Scenario: Visualizing Onboarding screen for the first time
-  Given It is the first time that I am login on the app
+  Given It is the first time that I log in on the app
   When I am on the "Onboarding" screen
-  Then I should see "MugBoys" message
+  Then I should see "MugBoys" mug
 
 Scenario: Purple ballon messages
-  Given It is the first time that I am login on the app
+  Given It is the first time that I log in on the app
   When I am on the "Onboarding" screen
   Then I should see a purple ballon with the message: "Welcome to MugChat You have a message. Must be nice to be so popular."
 
@@ -38,7 +43,8 @@ Scenario: Having read and unread messages
   And I should see a yellow bar on the right side with the total unread messages
 
 Scenario: Person's photo mug when the message has more than one person and read and unread messages
-  Given I have a mug with more than one person
+  Given I am on the "Onboarding" screen
+  And I have a mug with more than one person
   When I have read and unread messages sent by diferent people in the same Mug
   Then I should see the person's photo from the guy who sent the 1st unread message
 
@@ -53,27 +59,32 @@ Scenario: Total of people when there is just one person on a mug
   Then I should not see a little circle on person's photo with the number of people on the mug
 
 Scenario: Person's photo mug when the message has more than one person and only read messages
-  Given I have a mug with more than one person
+  Given I am on the "Onboarding" screen
+  And I have a mug with more than one person
   When I have only read messages sent by diferent people in the same Mug
   Then I should see the person's photo from the last guy who sent message
 
 Scenario: Person's photo when I have a mug with just one person
-  Given I have a mug with just a person
+  Given I am on the "Onboarding" screen
+  And I have a mug with just a person
   When I have unread or read messages
   Then I should see person's photo
 
 Scenario: Background's photo mug when the message has more than one person and read and unread messages
-  Given I have a mug with more than one person
+  Given I am on the "Onboarding" screen
+  And I have a mug with more than one person
   When I have read and unread messages sent by diferent people in the same Mug
   Then I should see the first image sent like background
 
 Scenario: Background's photo mug when the message has more than one person and only read messages
-  Given I have a mug with more than one person
+  Given I am on the "Onboarding" screen
+  And I have a mug with more than one person
   When I have only read messages sent by diferent people in the same Mug
   Then I should see the first image sent like background
 
 Scenario: Background's photo when I have a mug with just one person
-  Given I have a mug with just a person
+  Given I am on the "Onboarding" screen
+  And I have a mug with just a person
   When I have unread or read messages
   Then I should see the first image sent like background
 
@@ -117,7 +128,8 @@ Scenario: Receiving a new mug
   Then It should be on the top of the list
 
 Scenario: So much mugs on my list
-  Given I have a lot of mugs
+  Given I am on the "Onboarding" screen
+  And I have a lot of mugs
   When I have no space to so much mugs
   Then A scroll bar should be showed
 
@@ -130,3 +142,7 @@ Scenario: Touching Construction icon
   Given I am on the "Onboarding" screen
   When I touch the "Construction" icon
   Then I should see "Builder" screen
+
+Scenario: Verifying design screen
+  Given I am on the "Onboarding" screen
+  Then The desing screen should be the same on the prototype design

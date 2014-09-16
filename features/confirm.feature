@@ -43,3 +43,11 @@ Scenario: Acception a recorder by Recorder screen and this is not the last word
   And I touch "V" icon
   Then I should see "Join Word Photo" screen
   And I should see the next word selected
+
+Scenario: Verifying title screen
+  Given I am on the "Confirm" screen
+  Then I should see "Confirm Picture" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Confirm" screen
+  Then The desing screen should be the same on the prototype design
