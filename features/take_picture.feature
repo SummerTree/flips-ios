@@ -19,6 +19,10 @@ Scenario: Touching Back button
   When I touch "Back" button
   Then I should see "Register" screen
 
+Scenario: Seeing the image camera
+  Given I am on the "Take Picture" screen
+  Then The image camera should be showed with a circle
+
 Scenario: Touch flash button when the camera is in front
   Given I am on the "Take Picture" screen
   When I touch "Flash" button
@@ -49,3 +53,11 @@ Scenario: Rotate in front camera
  And the camera is in back of device
  When I touch "Camera" button
  Then the camera should rotate to in front
+
+Scenario: Verifying title screen
+  Given I am on the "Take Picture" screen
+  Then I should see "Take Picture" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Take Picture" screen
+  Then The desing screen should be the same on the prototype design
