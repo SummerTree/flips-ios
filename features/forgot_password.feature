@@ -52,4 +52,12 @@ Scenario: Touching Back button on Forgot password screen
 Scenario: Touching Back button on Verification Code screen
   Given I am on the "Verification Code" screen
   When I touch "Back" button
-  Then I should see "Forgot Password" screen  
+  Then I should see "Forgot Password" screen
+
+Scenario: Verifying title screen
+  Given I am on the "Forgot Password" screen
+  Then I should see "Forgot Password" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Forgot Password" screen
+  Then The desing screen should be the same on the prototype design

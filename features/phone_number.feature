@@ -3,8 +3,7 @@ Feature: Phone Number
   I want to register my phone number
   So, I can access my friend's photos and videos
 
-
-Scenario: Seeing Forgot Password screen
+Scenario: Access Phone Number screen by Register screen
   Given I am on the "Register" screen
   When I fill all fields with valid values
   And I touch "Next" button
@@ -54,3 +53,11 @@ Scenario: Touching Back button on Verification Code screen
   Given I am on the "Verification Code" screen
   When I touch "Back" button
   Then I should see "Phone Number" screen
+
+Scenario: Verifying title screen
+  Given I am on the "Phone Number" screen
+  Then I should see "Phone Number" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "Phone Number" screen
+  Then The desing screen should be the same on the prototype design

@@ -3,8 +3,7 @@ Feature: Register a user
   I want to register access MugChat
   So I have to register a user
 
-
-Scenario: Touch Sign Up button
+Scenario: Access Register screen
   Given I am on the "Login" screen
   When I touch "Sign Up" button
   Then I should see "Register" screen
@@ -63,6 +62,16 @@ Scenario Outline: Fill with invalid values
   | mugchat@gmail.com | mugChat8 | today + 1d       | You must be at least 13 years old                           |
   | mugchat@gmail.com | mugchat8 | today-13years+1d | You must be at least 13 years old                           |
 
+Scenario: Fixing wrong values
+  Given I am on the "Register" screen
+  And I typed a wrong value on "<field>"
+  When I fix this value
+  Then I shouldn't see the message
+  | field    |
+  | Email    |
+  | Password |
+  | Birthday |
+
 Scenario: Touching back button
   Given I am on the "Register" screen
   When I touch "Back" button
@@ -78,7 +87,7 @@ Scenario: Changing the taked photo
   Given I am on the "Register" screen
   And There is a photo already selected
   When I touch the picture
-  Then Nothing should happend  
+  Then Nothing should happend
 
 @manual
 Scenario: Verifying design
