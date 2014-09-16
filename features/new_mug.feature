@@ -13,8 +13,10 @@ Scenario: Canceling a new mug
   When I touch "Cancel" button
   Then I should see "Onboarding" screen
 
-Scenario: Verifying contacts from the phone
+Scenario: Verifying contacts from the phone when I logged in by facebook account
   Given I am on the "New Mug" screen
+  And I logged in with my facebook account
+  When I search for my contacts friends
   Then I should see all my contacts phone
 
 Scenario: Verifying facebook contacts when I logged in by facebook account
@@ -35,6 +37,8 @@ Scenario: Seeing my contacts
   And I have contacts didn't register on MugChat
   Then The contacts registered on MugChat should be on the top of the list
   And I should see my contacts in alphabetical order
+  And I should see the photo picked up on the MugChat profile of my friends
+  And The contacts that don't have a MugChat account have to show their initias in place of a photo
 
 Scenario: Next button when I don't have a text typed
   Given I am on the "New Mug" screen
@@ -65,12 +69,67 @@ Scenario: Searching a person
   When I type a string with 2 or 3 characters
   Then I should see on the list just the contacts that containing this string
 
-avatar
-2 numbers - shows 2 registers
-the same name in low and upper case, or with different last names what will happen?
-If I'm logged in with facebook will shows me facebook contacts + cellphone contacts?
-The first time that I logged in it will sincronize?
+Scenario: Seeing the contact list when a person has 2 different numbers
+  Given I am on the "New Mug" screen
+  When I have a contact with 2 numbers registred
+  Then I should see this person twice on the list
 
-If a mug is sent to a person who doesn't has MugChat, a sms will be sent to this person with the message: Ben sent you a message on MugChat, download it here
-When the user download the app, the Ben's message will be showed to the user
-Scenario: your friend doesn't have MugChat even you number, what will be showed on the message? Name or number?
+Scenario: Seeing the contact list when a person has just one number but different names
+  Given I am on the "New Mug" screen
+  When I have a contact with 2 different names
+  But The same number
+  Then I should see this person twice on the list
+
+Scenario: Sending a MugChat to a person who doens't have MugChat
+  Given I am on the "New Mug" screen
+  When I pick up on a list a contact that doesn't have a MugChat account
+  And This contact doesn't have my number on her/him cellphone
+  And I send a MugChat message to him/her
+  Then The person should receive a SMS with the message: <my name> sent you a message on MugChat, download it here!
+
+Scenario: Touching Download it here!
+  Given I received a SMS by MugChat with the link: Download here!
+  When I touch this link
+  Then I should see the site to do the download
+
+Scenario: Receiving a MugChat after downloaded it
+  Given I downloaded the MugChat
+  Then I should receive my friend's MugChat message
+
+Scenario: Sendind a MugChat to two or more home numbers
+  Given I am on the "New Mug" screen
+  And I pick up 2 or more contacts with home numbers
+  When I send a MugChat to them
+  Then I should see a list with the numbers that couldn't be sent
+
+Scenario: Sending the Mug again
+  Given I am seeing the list with the numbers that couldn't receive my mug
+  When I sent the mug again
+  Then I should see the list again
+
+Scenario: Removing numbers from the reject list
+  Given I am seeing the reject list
+  When I remove a contact
+  And I send the mug again
+  Then I should see the reject list again without the contact removed
+
+Scenario: Adding cellphone numbers on the reject list
+  Given I am seeing the reject list
+  When I add a contact with cellphone number on the list
+  And I send the Mug again
+  Then The cellphone added should receive the Mug
+  And I should see the reject list with the contacts with home numbers
+
+Scenario: Adding home numbers on the reject list
+  Given I am seeing the reject list
+  When I add a contact with home number on the list
+  And I send the Mug again
+  Then I should see the reject list with the home number added
+
+Scenario: Verifying title screen
+  Given I am on the "New Mug" screen
+  Then I should see "New Mug" as a title
+
+Scenario: Verifying design screen
+  Given I am on the "New Mug" screen
+  Then The desing screen should be the same on the prototype design

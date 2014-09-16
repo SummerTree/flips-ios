@@ -31,3 +31,11 @@ Scenario: Reply a message to more than one person
   And I am view a mug that there is more than one person
   When I reply a message in this mug
   Then All people in this mug should receive my mug reply
+
+#Ben, is there a time to receive the message? Like I'm 3 days without connect on internet, so, if I connect now, the mug was gone!  
+Scenario: Sending a Mug to a offline contact
+  Given I am on the "New Mug" screen
+  When I pick up a offline contact
+  And I send a mug to him/her
+  Then I should receive any message
+  And The contact should receive the message when he/she conects on the internet
