@@ -14,7 +14,18 @@ Scenario: Micriphone screen
   Then I should see "Microphone Recorder" icon
   And I should see "Cancel recorder" icon
 
-#Aguardar resposta do Ben
+#Ben, this message will be showed just on MugBoys Chat? Or at first time for any mug?
+Scenario: Showing a message on MugBoys mug
+  Given I am on the "Microphone" screen
+  When The selected mug is MugBoys
+  Then I should see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+
+Scenario: Showing a message on any mug
+  Given I am on the "Microphone" screen
+  When The selected mug is not MugBoys
+  Then I should not see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+
+#waiting for Ben
 Scenario: Preview button
   Given I am on the "Microphone" screen
   Then I should see "Preview" button disable

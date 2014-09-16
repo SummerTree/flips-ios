@@ -31,6 +31,17 @@ Scenario: Showing split words
   When I touch it
   Then I should see 2 words
 
+#Ben, this message will be showed just on MugBoys Chat? Or at first time for any mug?
+Scenario: Showing Message when is MugBoys mug
+  Given I am on the "Join Word Photo" screen
+  When The mug selected is MugBoys mug
+  Then I should see the message: "This is where the magic happens. Tap the + to record the first word."
+
+Scenario: Showing Message when is not MugBoys mug
+  Given I am on the "Join Word Photo" screen
+  When The mug selected is not MugBoys mug
+  Then I shouldn't see the message: "This is where the magic happens. Tap the + to record the first word."
+
 Scenario: Touching Back button
   Given I am on the "Join Word Photo" screen
   When I touch "Back" button

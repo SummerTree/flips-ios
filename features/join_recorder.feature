@@ -37,6 +37,43 @@ Scenario: Words that don't have a mug
   When The word doesn't hahave another mug
   Then I shouldn't see "..." icon on the top of word
 
+#Ben, this message will be showed just on MugBoys Chat? Or at first time for any mug?
+Scenario: Showing a message when the word I is selected on MugBoys mug
+  Given I am on the "Join Recorder" screen
+  When The mug selected is MugBoys mug
+  And I selected the word I
+  Then I should see the message: "You look good today! Let's record a selfie. Tap & Hold to record a video"
+
+Scenario: Showing a message when the word LOVE is selected on MugBoys mug
+  Given I am on the "Join Recorder" screen
+  When The mug selected is MugBoys mug
+  And I selected the word LOVE
+  Then I should see the message: "You're doing great! Let's snap a photo this time. Tap to capture a photo"
+
+Scenario: Showing a message when the last word is selected on MugBoys mug
+  Given I am on the "Join Recorder" screen
+  When The mug selected is MugBoys mug
+  And I selected the last word
+  Then I should see the message: "Last one! Take the driver seat on this one and be as creative as you want. We'll be here when you get back!"
+
+Scenario: Showing a message when the word I is selected on any mug
+  Given I am on the "Join Recorder" screen
+  When The mug selected is not MugBoys mug
+  And I selected the word I
+  Then I should not see the message: "You look good today! Let's record a selfie. Tap & Hold to record a video"
+
+Scenario: Showing a message when the word LOVE is selected on any mug
+  Given I am on the "Join Recorder" screen
+  When The mug selected is not MugBoys mug
+  And I selected the word LOVE
+  Then I should not see the message: "You're doing great! Let's snap a photo this time. Tap to capture a photo"
+
+Scenario: Showing a message when the last word is selected on any mug
+  Given I am on the "Join Recorder" screen
+  When The mug selected is not MugBoys mug
+  And I selected the last word
+  Then I should not see the message: "Last one! Take the driver seat on this one and be as creative as you want. We'll be here when you get back!"  
+
 Scenario: Showing words
   Given I am on the "Join Recorder" screen
   Then I should see all words that I typed on the previous screen

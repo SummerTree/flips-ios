@@ -1,26 +1,41 @@
+Feature: Update contacts list
+  As a user
+  I want to add new contacts on my cellphone or facebook and I want to see them on MugChat
+  So, I can send mugs to these contacts too
+
+#Ben, what should happen here?
 Scenario: Touching Next time
   Given I am on the "Update Contacts" screen
   When I touch "Next time" button
-  Then
+  Then ??
 
 Scenario: Touching Yeah,duh
   Given I am on the "Update Contacts" screen
+  And I logged in with registration option
   When I touch "Yeah,duh" button
-  Then I should see a message: ""MugChat" wants to access your contact list. Do you allow it?"
-  And I should see buttons: "Don't Allow" and "Allow"
+  Then I should see a message: ""MugChat" Would Like to Access your Contact"
+  And I should see buttons: "Cancel" and "OK"
 
-#Ver com o Ben
-Scenario: Touching don't allow option
-  Given I am on the "Allow" message
-  When I touch "Don't Allow" option
-  Then I should see???
+#waiting Ben
+Scenario: Touching Cancel option
+  Given I am seeing the permission message
+  When I touch "Cancel" option
+  Then I should see ???
 
+#waiting Ben
 Scenario: Touching allow option
-  Given I am on the "Allow" message
-  When I touch "Allow" option
-  Then I should see
+  Given I am seeing the permission message
+  When I touch "OK" option
+  Then I should see ???
 
-#Aguardar resposta do Ben
-Scenario: User loged in by facebook
-Exibe mensagem de permissao tbm?
-Atualiza com os contatos do face e do celular certo?
+#Ben, the same message? It will update the contacts with the phone and facebook right?
+Scenario: User logged in by facebook
+  Given I am on the "Update Contacts" screen
+  And I logged in with facebook option
+  When I touch "Yeah,duh" button
+  Then I should see a message: ""MugChat" Would Like to Access your Contact"
+  And I should see buttons: "Cancel" and "OK"
+
+Scenario: Verifying design screen
+  Given I am on the "Update Contacts" screen
+  Then The desing screen should be the same on the prototype design
