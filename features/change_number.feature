@@ -22,4 +22,4 @@ Scenario: Verifying design screen
   Then The desing screen should be the same on the prototype design
   
   
-//Are we missing the actual flow of changing the number, or is that elsewhere?
+#Are we missing the actual flow of changing the number, or is that elsewhere?
