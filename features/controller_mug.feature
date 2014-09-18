@@ -1,5 +1,5 @@
 Feature: Controller of MugChat
-  As an user
+  As a user
   I want to do some not commons things
   So, I want to have a nice feedback from the app
 

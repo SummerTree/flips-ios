@@ -1,5 +1,5 @@
 Feature: Verification Code
-  As an user
+  As a user
   I want to be security to change my password
   So I the send me a code to change my password
 

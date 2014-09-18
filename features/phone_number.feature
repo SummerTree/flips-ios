@@ -1,5 +1,5 @@
 Feature: Phone Number
-  As an user
+  As a user
   I want to register my phone number
   So, I can access my friend's photos and videos
 

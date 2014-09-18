@@ -1,5 +1,5 @@
 Feature: Microphone recorder
-  As an user
+  As a user
   I want to recorder a voice
   So, I can send a MugChat to my friends with image and voice
 

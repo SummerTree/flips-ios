@@ -1,5 +1,5 @@
 Feature: Choose Photo
-  As an user
+  As a user
   I want to see the photos on my device divided in subfolders
   So I can select one photo easiest
 

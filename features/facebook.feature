@@ -1,5 +1,5 @@
 Feature: Facebook access
-  As an user
+  As a user
   I don't want to register a user
   So, I can login with Facebook account
 

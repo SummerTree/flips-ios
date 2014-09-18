@@ -1,5 +1,5 @@
 Feature: Register a user
-  As an user
+  As a user
   I want to register access MugChat
   So I have to register a user
 

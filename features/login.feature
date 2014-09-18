@@ -1,5 +1,5 @@
 Feature: Login screen
-  As an user
+  As a user
   I want to enter on MugChat
   So, I can do login
 

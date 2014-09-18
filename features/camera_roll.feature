@@ -1,10 +1,10 @@
 Feature: Camera Roll
-  As an user
+  As a user
   I don't want to take a photo
   So I can select a photo on my device
 
 Scenario: Access Camera Roll screen
-  Given I am on the "Choose Photo" screen
+  Given I am on the "<screen>" screen
   When I touch an iten
   Then I should see "Camera Roll" screen
   | screen       |

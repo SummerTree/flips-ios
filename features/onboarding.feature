@@ -1,5 +1,5 @@
 Feature: Onboarding screen
-  As an user
+  As a user
   I want to have a organizated list
   So I can see all of my mugs
 

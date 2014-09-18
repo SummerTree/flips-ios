@@ -1,5 +1,5 @@
 Feature: Forgot Password
-  As an user
+  As a user
   I want to reset my password
   So, If I forget that I can enter with another one
 

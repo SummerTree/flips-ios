@@ -1,5 +1,5 @@
 Feature: Settings screen
-  As an user
+  As a user
   I wanto to set up some informations
   So, I can access Settings screen
 
