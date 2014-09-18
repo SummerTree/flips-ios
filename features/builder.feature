@@ -1,13 +1,11 @@
 Feature: Builder screen
   As a user
-  I want to register words that I use a lot
-  #This should be "I want to quickly record words into my personal dictionary"
-  So, I don't need to take a picture or video every time
-  #"So that they will be available to me the next time I type a message"
+  I want to quickly record words into my personal dictionary
+  So that they will be available to me the next time I type a message
 
 Scenario: Access Builder screen for the first time
-  Given I am on the "Onboarding" screen
-  #This should occur upon the user's first time arriving at the Builder screen.  It doensn't have to be during Onboarding... the user could wait 3 weeks before tapping the "Builder" button from the Inbox screen, and they should still see the explainer message.
+  Given I am on the "Inbox" screen
+  And It is the first time that the user access builder screen
   When I touch "Builder" icon
   Then I should see a screen with a message: Hi <user>, this is your word builder. It's a quick & esasy tool to define & add words to use for future messages. We have suggested words to get you started, but feel free to add as many words as you like.
   And I should see: "ok, sweet!" button
@@ -19,16 +17,15 @@ Scenario: Touching ok, sweet button
   And I should see any words sent by the server listed in the queue, ready to be recorded
 
 Scenario: Access Builder screen for the second time
-  Given I am on the "Onboarding" screen
-  #This should be from the "Inbox" screen
+  Given I am on the "Inbox" screen
+  And I already touch this button once ago
   When I touch "Builder" icon
   Then I should see "Builder" screen
 
 Scenario: Touching Back button
   Given I am on the "Builder" screen
   When I touch "Back" button
-  Then I should see "Onboading" screen
-  #"Inbox" screen, not Onboarding
+  Then I should see "Inbox" screen
 
 Scenario: Open Builder Word Queue List
   Given that I am on the "Builder" screen

@@ -22,7 +22,7 @@ Scenario: Fill New Number with 10 characters
 Scenario: Informing a wrong number
   Given I am on the "Type Number" screen
   When I type an invalid phone number
-  Then I should see "Verify Code" screen
+  Then I should see "Verification Code" screen
   And I shouldn't receive the message
 
 Scenario: Informing a right number

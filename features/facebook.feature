@@ -36,4 +36,4 @@ Scenario: I am log in at facebook again
   Given I am on the "Login" screen
   And I already loged in with facebook account
   When I touch "Login with Facebook" button
-  Then I should see "Onboarding" screen
+  Then I should see "Inbox" screen

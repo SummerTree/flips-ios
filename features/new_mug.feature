@@ -4,14 +4,14 @@ Feature: New Mug
   So I can create a new mug
 
 Scenario: Creating a new Mug
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch "pencil" icon
   Then I should see "New Mug" screen
 
 Scenario: Canceling a new mug
   Given I am on the "New Mug" screen
   When I touch "Cancel" button
-  Then I should see "Onboarding" screen
+  Then I should see "Inbox" screen
 
 Scenario: Verifying contacts from the phone when I logged in by facebook account
   Given I am on the "New Mug" screen

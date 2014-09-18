@@ -5,31 +5,31 @@ Feature: View Mug screen
 
 
 Scenario: Touching a mug
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch a mug on the list
   Then I should see "View Mug" screen
 
 Scenario: Watching an unread mug
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch an unread mug on the list
   Then The mug video should start to play
   And I shouldn't see the all the words
 
 #Ben, is it right?
 Scenario: Watching a read mug
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch a read mug on the list
   Then The video shouldn't start to play
   And I should see the message sent to me
 
 #Ben, is it right?
 Scenario: Watching a mug when there is a read and an unread message
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch a mug that has a read and an unread message
   Then The mug video for the unread message should start
 
 Scenario: Watching a mug when there is two or more unread messages sent by different people
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch a mug that has more than 2 unread messages
   Then I should see the first unread message sent to me
   And At the end of this message I should see the other oldest unread message sent to me
@@ -122,7 +122,7 @@ Scenario: Showing user message for the first time watching a message didn't send
 Scenario: Touching Back button
   Given I am on the "View Mug" screen
   When I touch "Back" button
-  Then I should see "Onboarding" screen
+  Then I should see "Inbox" screen
 
 Scenario: Verifying title screen when the mug has only one person
   Given I am on the "View Mug" screen

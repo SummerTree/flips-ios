@@ -21,7 +21,7 @@ Scenario: Sending a mug when I have the same number in 2 devices
   And My other device should have the log of this mug
 
 Scenario: Sending a mug to a user
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I send a mug to a specific user
   Then Just this user should receive the mug
   And the other friends should not receive the mug
