@@ -1,4 +1,4 @@
-Feature: Change the number seted up on my MugChat
+Feature: Change the number set up on my MugChat
   As an user
   I want to change my number
   So, I can update it on MugChat app
@@ -20,3 +20,6 @@ Scenario: Verifying title screen
 Scenario: Verifying design screen
   Given I am on the "Change Number" screen
   Then The desing screen should be the same on the prototype design
+  
+  
+//Are we missing the actual flow of changing the number, or is that elsewhere?
