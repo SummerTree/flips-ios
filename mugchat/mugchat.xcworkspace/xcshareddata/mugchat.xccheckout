@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F2C08C84-C897-4D91-A632-1D686D210C4B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>mugchat</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
+		<string>https://github.com/arctouch/mugchat-ios</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>mugchat/mugchat.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/arctouch/mugchat-ios</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>mugchat-ios</string>
+		</dict>
+	</array>
+</dict>
+</plist>

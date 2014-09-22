@@ -2,3 +2,7 @@ spikes/pubnub/DerivedData
 spikes/pubnub/Pods/
 spikes/pubnub/Podfile.lock
 
+mugchat/DerivedData
+mugchat/Pods
+mugchat/Podfile.lock
+
