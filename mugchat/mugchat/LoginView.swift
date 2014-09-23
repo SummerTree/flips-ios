@@ -16,7 +16,9 @@ let BACKGROUND_COLOR = UInt(0xED625F)
 
 class LoginView : UIView {
     
-    var bubbleChat: UIImageView!
+    var bubbleChatImageView: UIImageView!
+    var emailTextField: UITextField!
+    var passwordTextField: UITextField!
     
     override init() {
         super.init()
@@ -24,25 +26,29 @@ class LoginView : UIView {
         addSubviews()
         makeContraints()
     }
-
+    
+    func addSubviews() {
+        bubbleChatImageView = UIImageView(image: UIImage(named: "ChatBubble"))
+        self.addSubview(bubbleChatImageView)
+        
+        let emailView = UIView()
+        
+    }
+    
+    func makeContraints() {
+        bubbleChatImageView.mas_makeConstraints { (maker) -> Void in
+            maker.centerX.equalTo()(self)
+            var statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+            maker.top.equalTo()(self).with().offset()(statusBarHeight)
+        }
+    }
+    
+    // MARK: Required methods
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-    }
-    
-    func addSubviews() {
-        bubbleChat = UIImageView(image: UIImage(named: "ChatBubble"))
-        self.addSubview(bubbleChat)
-    }
-    
-    func makeContraints() {
-        bubbleChat.mas_makeConstraints { (maker) -> Void in
-            maker.centerX.equalTo()(self)
-            maker.top.equalTo()(self).with().offset()(22)
-            return ()
-        }
     }
 }
