@@ -1,9 +1,13 @@
 //
-//  AppDelegate.swift
-//  mugchat
+// Copyright 2014 ArcTouch, Inc.
+// All rights reserved.
 //
-//  Created by Diego Santiviago on 9/22/14.
-//  Copyright (c) 2014 ArcTouch Inc. All rights reserved.
+// This file, its contents, concepts, methods, behavior, and operation
+// (collectively the "Software") are protected by trade secret, patent,
+// and copyright laws. The use of the Software is governed by a license
+// agreement. Disclosure of the Software to third parties, in any form,
+// in whole or in part, is expressly prohibited except as authorized by
+// the license agreement.
 //
 
 import UIKit
@@ -14,10 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        return true
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        
+        let loginViewController = LoginViewController()
+        self.window?.rootViewController = loginViewController
+        self.window?.makeKeyAndVisible()
+        return true;
     }
 
     func applicationWillResignActive(application: UIApplication) {

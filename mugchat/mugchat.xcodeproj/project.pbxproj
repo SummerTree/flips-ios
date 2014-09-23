@@ -8,24 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		529FBC9A5ADB4130A5662AB4 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2855AFB3B9540ADAEC3E76F /* libPods.a */; };
+		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
+		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
-		70FD4E7B19D064450024EBDB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* ViewController.swift */; };
-		70FD4E7E19D064450024EBDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7C19D064450024EBDB /* Main.storyboard */; };
+		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		70FD4E8019D064450024EBDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
-		70FD4E8319D064450024EBDB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E8119D064450024EBDB /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70FD4E7819D064450024EBDB /* mugchat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mugchat.xcdatamodel; sourceTree = "<group>"; };
-		70FD4E7A19D064450024EBDB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		70FD4E7D19D064450024EBDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		70FD4E7A19D064450024EBDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		70FD4E7F19D064450024EBDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		70FD4E8219D064450024EBDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		D2855AFB3B9540ADAEC3E76F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -42,6 +42,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		704E110A19D08E3C00D2BB88 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				704E110D19D0934700D2BB88 /* Login */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		704E110B19D08E4700D2BB88 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				704E111019D0936800D2BB88 /* Login */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		704E110C19D08E7B00D2BB88 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
+		704E110D19D0934700D2BB88 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				70FD4E7A19D064450024EBDB /* LoginViewController.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		704E111019D0936800D2BB88 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				704E110E19D0935F00D2BB88 /* LoginView.swift */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		704E111519D0ACAF00D2BB88 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		70FD4E6719D064450024EBDB = {
 			isa = PBXGroup;
 			children = (
@@ -64,13 +112,12 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7519D064450024EBDB /* AppDelegate.swift */,
-				70FD4E7A19D064450024EBDB /* ViewController.swift */,
-				70FD4E7C19D064450024EBDB /* Main.storyboard */,
-				70FD4E7F19D064450024EBDB /* Images.xcassets */,
-				70FD4E8119D064450024EBDB /* LaunchScreen.xib */,
-				70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */,
+				704E110A19D08E3C00D2BB88 /* Controller */,
+				704E110C19D08E7B00D2BB88 /* CoreData */,
+				704E111519D0ACAF00D2BB88 /* Extensions */,
+				704E110B19D08E4700D2BB88 /* View */,
 				70FD4E7319D064450024EBDB /* Supporting Files */,
-				70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */,
+				70FD4E7F19D064450024EBDB /* Images.xcassets */,
 			);
 			path = mugchat;
 			sourceTree = "<group>";
@@ -78,6 +125,7 @@
 		70FD4E7319D064450024EBDB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */,
 				70FD4E7419D064450024EBDB /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -124,6 +172,7 @@
 				TargetAttributes = {
 					70FD4E6F19D064450024EBDB = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = 5HMJW6N276;
 					};
 				};
 			};
@@ -150,8 +199,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70FD4E7E19D064450024EBDB /* Main.storyboard in Resources */,
-				70FD4E8319D064450024EBDB /* LaunchScreen.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,32 +243,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70FD4E7B19D064450024EBDB /* ViewController.swift in Sources */,
+				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
+				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
+				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		70FD4E7C19D064450024EBDB /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				70FD4E7D19D064450024EBDB /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		70FD4E8119D064450024EBDB /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				70FD4E8219D064450024EBDB /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		70FD4E9019D064450024EBDB /* Debug */ = {
@@ -306,9 +336,14 @@
 			baseConfigurationReference = 8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mugchat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
 			};
 			name = Debug;
@@ -318,9 +353,14 @@
 			baseConfigurationReference = 8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mugchat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
 			};
 			name = Release;
