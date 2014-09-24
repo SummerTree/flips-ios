@@ -14,13 +14,23 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
-    override func loadView() {
-        let loginView = LoginView();
-        self.view = loginView;
+    var loginView: LoginView!
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        loginView.viewWillAppear()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        loginView.viewDidAppear()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loginView = LoginView()
+        self.view = loginView
         
         let manager = AFHTTPRequestOperationManager()
         
