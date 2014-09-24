@@ -14,6 +14,23 @@ import Foundation
 
 class LoginView : UIView {
     
+    private let MARGIN_TOP:CGFloat = 40.0
+    private let MARGIN_RIGHT:CGFloat = 40.0
+    private let MARGIN_BOTTOM:CGFloat = 20.0
+    private let MARGIN_LEFT:CGFloat = 40.0
+    
+    private let CREDENTIALS_MARGIN_TOP:CGFloat = 49.0
+    private let EMAIL_MARGIN_LEFT:CGFloat = 15.0
+    private let FACEBOOK_MARGIN_TOP:CGFloat = 30.0
+    private let PASSWORD_MARGIN_TOP:CGFloat = 12.5
+    private let SEPARATOR_HEIGHT:CGFloat = 0.5
+    private let SEPARATOR_MARGIN_TOP:CGFloat = 12.5
+    private let SIGNUP_MARGIN_TOP:CGFloat = 18
+    
+    private let PRIVACY_POLICY_MARGIN_LEFT: CGFloat = 20
+    private let TERMS_OF_SERVICE_MARGIN_LEFT:CGFloat = 60
+
+    
     var bubbleChatImageView: UIImageView!
     var credentialsView: UIView!
     var emailImageView: UIImageView!
@@ -30,7 +47,7 @@ class LoginView : UIView {
     override init() {
         super.init()
         self.backgroundColor = UIColor.mugOrange()
-        addSubviews()
+        self.addSubviews()
         self.makeContraints()
     }
     
@@ -77,7 +94,7 @@ class LoginView : UIView {
         emailTextField = UITextField()
         emailTextField.textColor = UIColor.whiteColor()
         emailTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
-        emailTextField.attributedPlaceholder = NSAttributedString(string: "Email", attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
+        emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", comment: "Email"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
         credentialsView.addSubview(emailTextField)
         
         emailPasswordSeparator = UIView()
@@ -91,37 +108,37 @@ class LoginView : UIView {
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         passwordTextField.secureTextEntry = true
-        passwordTextField.attributedPlaceholder = NSAttributedString(string:"Password", attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
+        passwordTextField.attributedPlaceholder = NSAttributedString(string:NSLocalizedString("Password", comment: "Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
         credentialsView.addSubview(passwordTextField)
         
         facebookLogoImage = UIImage(named: "FacebookLogo")
         facebookButton = UIButton()
         facebookButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         facebookButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
-        facebookButton.titleLabel?.attributedText = NSAttributedString(string:"Login with Facebook", attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        facebookButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         facebookButton.setBackgroundImage(UIImage(named: "FacebookButtonBackground"), forState: UIControlState.Normal)
         facebookButton.setBackgroundImage(UIImage(named: "FacebookButtonBackgroundTap"), forState: UIControlState.Highlighted)
         facebookButton.setImage(facebookLogoImage, forState: UIControlState.Normal)
         facebookButton.setImage(facebookLogoImage, forState: UIControlState.Highlighted)
-        facebookButton.setTitle("Login with Facebook", forState: UIControlState.Normal)
+        facebookButton.setTitle(NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), forState: UIControlState.Normal)
         self.addSubview(facebookButton)
         
         signupButton = UIButton()
         signupButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        signupButton.titleLabel?.attributedText = NSAttributedString(string:"Sign Up", attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
+        signupButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Sign Up", comment: "Sign Up"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackground"), forState: UIControlState.Normal)
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackgroundTap"), forState: UIControlState.Highlighted)
-        signupButton.setTitle("Sign Up", forState: UIControlState.Normal)
+        signupButton.setTitle(NSLocalizedString("Sign Up", comment: "Sign Up"), forState: UIControlState.Normal)
         self.addSubview(signupButton)
         
         termsOfService = UIButton()
         termsOfService.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h5)
-        termsOfService.setTitle("Terms of Service", forState: UIControlState.Normal)
+        termsOfService.setTitle(NSLocalizedString("Terms of Service", comment: "Terms of Service"), forState: UIControlState.Normal)
         self.addSubview(termsOfService)
         
         privacyPolicy = UIButton()
         privacyPolicy.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h5)
-        privacyPolicy.setTitle("Privacy Policy", forState: UIControlState.Normal)
+        privacyPolicy.setTitle(NSLocalizedString("Privacy Policy", comment: "Privacy Policy"), forState: UIControlState.Normal)
         self.addSubview(privacyPolicy)
     }
     
@@ -129,9 +146,7 @@ class LoginView : UIView {
         bubbleChatImageView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self).with().offset()(40)
-            make.left.equalTo()(self).with().offset()(40)
-            make.right.equalTo()(self).with().offset()(-40)
+            make.top.equalTo()(self).with().offset()(self.MARGIN_TOP)
         }
     }
     
@@ -139,13 +154,13 @@ class LoginView : UIView {
         bubbleChatImageView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.centerY.equalTo()(self)
-            make.left.equalTo()(self).with().offset()(40)
-            make.right.equalTo()(self).with().offset()(-40)
+            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
         }
         
         credentialsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.bubbleChatImageView.mas_left)
-            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(49)
+            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.CREDENTIALS_MARGIN_TOP)
             make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
             make.bottom.equalTo()(self.passwordTextField.mas_bottom)
         }
@@ -158,19 +173,19 @@ class LoginView : UIView {
         
         emailTextField.mas_makeConstraints { (make) -> Void in
             make.centerY.equalTo()(self.emailImageView.mas_centerY)
-            make.left.equalTo()(self.emailImageView.mas_right).with().offset()(15)
+            make.left.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
             make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
         }
         
         emailPasswordSeparator.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.emailTextField.mas_bottom).with().offset()(12.5)
+            make.top.equalTo()(self.emailTextField.mas_bottom).with().offset()(self.SEPARATOR_MARGIN_TOP)
             make.left.equalTo()(self.emailTextField.mas_left)
             make.width.equalTo()(self.emailTextField.mas_width)
-            make.height.equalTo()(0.5)
+            make.height.equalTo()(self.SEPARATOR_HEIGHT)
         }
         
         passwordImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.emailPasswordSeparator.mas_bottom).with().offset()(12.5)
+            make.top.equalTo()(self.emailPasswordSeparator.mas_bottom).with().offset()(self.PASSWORD_MARGIN_TOP)
             make.left.equalTo()(self.emailImageView.mas_left)
             make.right.equalTo()(self.emailImageView.mas_right)
         }
@@ -183,22 +198,22 @@ class LoginView : UIView {
         
         facebookButton.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self.passwordTextField.mas_bottom).with().offset()(30)
+            make.top.equalTo()(self.passwordTextField.mas_bottom).with().offset()(self.FACEBOOK_MARGIN_TOP)
         }
         
         signupButton.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self.facebookButton.mas_bottom).with().offset()(18)
+            make.top.equalTo()(self.facebookButton.mas_bottom).with().offset()(self.SIGNUP_MARGIN_TOP)
         }
         
         termsOfService.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self).with().offset()(60)
-            make.bottom.equalTo()(self.mas_bottom).with().offset()(-20)
+            make.left.equalTo()(self).with().offset()(self.TERMS_OF_SERVICE_MARGIN_LEFT)
+            make.bottom.equalTo()(self.mas_bottom).with().offset()(-self.MARGIN_BOTTOM)
         }
         
         privacyPolicy.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.termsOfService.mas_right).with().offset()(20)
-            make.bottom.equalTo()(self.mas_bottom).with().offset()(-20)
+            make.left.equalTo()(self.termsOfService.mas_right).with().offset()(self.PRIVACY_POLICY_MARGIN_LEFT)
+            make.bottom.equalTo()(self.mas_bottom).with().offset()(-self.MARGIN_BOTTOM)
         }
     }
     
