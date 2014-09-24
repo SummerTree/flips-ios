@@ -10,6 +10,7 @@
 		529FBC9A5ADB4130A5662AB4 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2855AFB3B9540ADAEC3E76F /* libPods.a */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
+		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
@@ -17,8 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
 		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
+				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -180,10 +183,6 @@
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
-			);
 			mainGroup = 70FD4E6719D064450024EBDB;
 			productRefGroup = 70FD4E7119D064450024EBDB /* Products */;
 			projectDirPath = "";
@@ -245,6 +244,7 @@
 			files = (
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
+				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
@@ -288,7 +288,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -324,7 +324,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
