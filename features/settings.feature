@@ -1,10 +1,10 @@
 Feature: Settings screen
-  As an user
+  As a user
   I wanto to set up some informations
   So, I can access Settings screen
 
 Scenario: Access Settings Screen
-  Given I am on the "Onboarding" screen
+  Given I am on the "Inbox" screen
   When I touch "Gear" button
   Then I should see "Settings" screen
 
@@ -26,7 +26,7 @@ Scenario: Touching Log Out option
 Scenario: Touching X button
   Given I am on the "Settings" screen
   When I touch "X" button
-  Then I should see "Onboarding" screen
+  Then I should see "Inbox" screen
 
 Scenario: Verifying title screen
   Given I am on the "Settings" screen

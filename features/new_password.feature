@@ -1,5 +1,5 @@
 Feature: New Password
-  As an user
+  As a user
   I want to have a possible to register a new password
   So I can infomr a new password when I forgot mine
 

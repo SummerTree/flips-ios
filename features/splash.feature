@@ -1,5 +1,5 @@
 Feature: Splash screen
-  As an user
+  As a user
   I want to use the app
   So I open the MugChat
 

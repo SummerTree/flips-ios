@@ -1,22 +1,22 @@
 Feature: Verification Code
-  As an user
+  As a user
   I want to be security to change my password
   So I the send me a code to change my password
 
-Scenario: Access Verify code screen by Forgot Password screen
+Scenario: Access Verification code screen by Forgot Password screen
   Given I am on the "Forgot Password" screen
   When I type 10 numbers
-  Then I should see "Verify Code" screen
+  Then I should see "Verification Code" screen
 
-Scenario: Access Verify code screen by Phone Number screen
+Scenario: Access Verification code screen by Phone Number screen
   Given I am on the "Phone Number" screen
   When I type 10 numbers
-  Then I should see "Verify Code" screen
+  Then I should see "Verification Code" screen
 
-Scenario: Access Verify code screen by Change Number screen
+Scenario: Access Verification code screen by Change Number screen
   Given I am on the "Type Number" screen
   When I type a valid phone number
-  Then I should see "Verify Code" screen
+  Then I should see "Verification Code" screen
 
 #Ben, could you verify this scenario? There is not a message on the flow and prototype
 Scenario: Typed 3 times the wrong code

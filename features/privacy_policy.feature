@@ -1,5 +1,5 @@
 Feature: Privacy Policy on MugChat
-  As an user
+  As a user
   I want to know about Privacy Policy on MugChat
   So, I can understand how my personal data will be used
 

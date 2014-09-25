@@ -1,5 +1,5 @@
 Feature: Take a picture on the mug
-  As an user
+  As a user
   I want to recorder videos and take pictures
   So, I can send it to my friends
 

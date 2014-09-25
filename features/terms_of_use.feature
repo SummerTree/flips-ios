@@ -1,5 +1,5 @@
 Feature: Terms of use on MugChat
-  As an user
+  As a user
   I want to know about terms of use on MugChat
   So, I can understand what I can do or not
 

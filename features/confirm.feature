@@ -1,5 +1,5 @@
 Feature: Confirm Take Picture
-  As an user
+  As a user
   I want take photos and choose if the photo is good
   So, I can confirm ou reject the photo taked
 

@@ -1,5 +1,5 @@
 Feature: Take Picture
-  As an user
+  As a user
   I want to choose which photo my frieds will see on my profile
   So I can pick up a photo
 

@@ -1,5 +1,5 @@
 Feature: Preview screen
-  As an user
+  As a user
   I want to see a preview of the mug that I'm creating
   So, If I don't like something, I can change it before send it to my friends
 

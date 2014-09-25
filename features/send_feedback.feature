@@ -1,5 +1,5 @@
 Feature: Send FeedBack screen
-  As an user
+  As a user
   I want to send suggestions to mugchat time
   So I can access Send Feedback on settings
 
