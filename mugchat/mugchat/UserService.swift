@@ -72,6 +72,7 @@ public class UserService: MugchatService {
     }
     
     // MARK: - Sign-in
+    
     func signin(username: String, password: String, responseCallback: UserServiceResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
@@ -81,7 +82,7 @@ public class UserService: MugchatService {
         request.POST(url,
             parameters: parms,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let user = self.parseSignupResponse(responseObject)
+                let user = self.parseSigninResponse(responseObject)
                 responseCallback(nil, user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
@@ -93,15 +94,16 @@ public class UserService: MugchatService {
     
     func parseSigninResponse(response: AnyObject) -> User? {
         var user = User()
+        println(response.valueForKeyPath("facebookID")?)
         user.id = String(response.valueForKeyPath("id") as Int!)
         user.username = response.valueForKeyPath("username") as String!
         user.firstName = response.valueForKeyPath("firstName") as String!
         user.lastName = response.valueForKeyPath("lastName") as String!
         user.birthday = NSDate(dateTimeString: (response.valueForKeyPath("birthday") as String!))
-        user.facebookID = response.valueForKeyPath("facebookID") as String!
-        user.photoUrl = response.valueForKeyPath("photoUrl") as String!
-        user.nickname = response.valueForKeyPath("nickname") as String!
-        user.pubnubId = response.valueForKeyPath("pubnubId") as String!
+        //user.facebookID = response.valueForKeyPath("facebookID") as String!
+        //user.photoUrl = response.valueForKeyPath("photoUrl") as String?
+        user.nickname = response.valueForKeyPath("nickname") as String?
+        user.pubnubId = response.valueForKeyPath("pubnubId") as String?
         user.createdAt = NSDate(dateTimeString: (response.valueForKeyPath("createdAt") as String!))
         user.updatedAt = NSDate(dateTimeString: (response.valueForKeyPath("updatedAt") as String!))
         return user
