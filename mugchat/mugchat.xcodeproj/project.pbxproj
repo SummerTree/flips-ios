@@ -7,7 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		529FBC9A5ADB4130A5662AB4 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2855AFB3B9540ADAEC3E76F /* libPods.a */; };
+		39124D040DF240528E49DF18 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; settings = {ATTRIBUTES = (Required, ); }; };
+		5707185B19D1A1060069064F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707185A19D1A1060069064F /* User.swift */; };
+		5707185D19D1A7230069064F /* Mug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707185C19D1A7230069064F /* Mug.swift */; };
+		5707185F19D1A7FD0069064F /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707185E19D1A7FD0069064F /* Device.swift */; };
+		5707186119D1A8FC0069064F /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186019D1A8FC0069064F /* Room.swift */; };
+		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
+		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
+		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
+		574156A019D33F87006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
+		574156A219D34F2B006F0A2F /* MugError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A119D34F2B006F0A2F /* MugError.swift */; };
+		57D2A09319D310C000FA729D /* mugchatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2A09219D310C000FA729D /* mugchatTests.swift */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
@@ -15,9 +25,39 @@
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		70FD4E8019D064450024EBDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
+		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		57D2A09419D310C000FA729D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 70FD4E6819D064450024EBDB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70FD4E6F19D064450024EBDB;
+			remoteInfo = mugchat;
+		};
+		57D2A09E19D312F300FA729D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 70FD4E6819D064450024EBDB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70FD4E6F19D064450024EBDB;
+			remoteInfo = mugchat;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		5707185A19D1A1060069064F /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5707185C19D1A7230069064F /* Mug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mug.swift; sourceTree = "<group>"; };
+		5707185E19D1A7FD0069064F /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		5707186019D1A8FC0069064F /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
+		5707186419D1AEBB0069064F /* MugchatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugchatService.swift; sourceTree = "<group>"; };
+		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		5741569E19D33F30006F0A2F /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
+		574156A119D34F2B006F0A2F /* MugError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugError.swift; sourceTree = "<group>"; };
+		57D2A08E19D310C000FA729D /* mugchatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mugchatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		57D2A09119D310C000FA729D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57D2A09219D310C000FA729D /* mugchatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mugchatTests.swift; sourceTree = "<group>"; };
+		57D2A0A019D3240E00FA729D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
 		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
@@ -29,21 +69,84 @@
 		70FD4E7A19D064450024EBDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		70FD4E7F19D064450024EBDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		D2855AFB3B9540ADAEC3E76F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		57D2A08B19D310C000FA729D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39124D040DF240528E49DF18 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		70FD4E6D19D064450024EBDB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				529FBC9A5ADB4130A5662AB4 /* libPods.a in Frameworks */,
+				ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5707185619D19D180069064F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5707185719D19D580069064F /* Backend */,
+				5707185819D19D600069064F /* PubNub */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		5707185719D19D580069064F /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				5707185919D19ECF0069064F /* Models */,
+				574156A119D34F2B006F0A2F /* MugError.swift */,
+				5707186419D1AEBB0069064F /* MugchatService.swift */,
+				5707186619D1AF110069064F /* UserService.swift */,
+			);
+			name = Backend;
+			sourceTree = "<group>";
+		};
+		5707185819D19D600069064F /* PubNub */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = PubNub;
+			sourceTree = "<group>";
+		};
+		5707185919D19ECF0069064F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5707185A19D1A1060069064F /* User.swift */,
+				5707185C19D1A7230069064F /* Mug.swift */,
+				5707185E19D1A7FD0069064F /* Device.swift */,
+				5707186019D1A8FC0069064F /* Room.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		57D2A08F19D310C000FA729D /* mugchatTests */ = {
+			isa = PBXGroup;
+			children = (
+				57D2A09219D310C000FA729D /* mugchatTests.swift */,
+				57D2A09019D310C000FA729D /* Supporting Files */,
+			);
+			path = mugchatTests;
+			sourceTree = "<group>";
+		};
+		57D2A09019D310C000FA729D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				57D2A09119D310C000FA729D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
+				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
 				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
 			);
 			name = Extensions;
@@ -97,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7219D064450024EBDB /* mugchat */,
+				57D2A08F19D310C000FA729D /* mugchatTests */,
 				70FD4E7119D064450024EBDB /* Products */,
 				8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */,
 				EC5A81A5795A49A3B7523B70 /* Frameworks */,
@@ -107,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7019D064450024EBDB /* mugchat.app */,
+				57D2A08E19D310C000FA729D /* mugchatTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,8 +224,9 @@
 				704E110A19D08E3C00D2BB88 /* Controller */,
 				704E110C19D08E7B00D2BB88 /* CoreData */,
 				704E111519D0ACAF00D2BB88 /* Extensions */,
-				704E110B19D08E4700D2BB88 /* View */,
+				5707185619D19D180069064F /* Services */,
 				70FD4E7319D064450024EBDB /* Supporting Files */,
+				704E110B19D08E4700D2BB88 /* View */,
 				70FD4E7F19D064450024EBDB /* Images.xcassets */,
 			);
 			path = mugchat;
@@ -137,7 +244,8 @@
 		EC5A81A5795A49A3B7523B70 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D2855AFB3B9540ADAEC3E76F /* libPods.a */,
+				57D2A0A019D3240E00FA729D /* Foundation.framework */,
+				C3E055BF9E4B434289F06FD3 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -145,6 +253,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		57D2A08D19D310C000FA729D /* mugchatTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 57D2A09619D310C000FA729D /* Build configuration list for PBXNativeTarget "mugchatTests" */;
+			buildPhases = (
+				40068AB86F3548C3B0BFA6E6 /* Check Pods Manifest.lock */,
+				57D2A08A19D310C000FA729D /* Sources */,
+				57D2A08B19D310C000FA729D /* Frameworks */,
+				57D2A08C19D310C000FA729D /* Resources */,
+				E77E33F19FB94AD9A605EA06 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				57D2A09519D310C000FA729D /* PBXTargetDependency */,
+				57D2A09F19D312F300FA729D /* PBXTargetDependency */,
+			);
+			name = mugchatTests;
+			productName = mugchatTests;
+			productReference = 57D2A08E19D310C000FA729D /* mugchatTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		70FD4E6F19D064450024EBDB /* mugchat */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "mugchat" */;
@@ -173,6 +302,10 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "ArcTouch Inc.";
 				TargetAttributes = {
+					57D2A08D19D310C000FA729D = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 70FD4E6F19D064450024EBDB;
+					};
 					70FD4E6F19D064450024EBDB = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = 5HMJW6N276;
@@ -192,11 +325,19 @@
 			projectRoot = "";
 			targets = (
 				70FD4E6F19D064450024EBDB /* mugchat */,
+				57D2A08D19D310C000FA729D /* mugchatTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		57D2A08C19D310C000FA729D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		70FD4E6E19D064450024EBDB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -223,6 +364,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		40068AB86F3548C3B0BFA6E6 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		5703BC6994854CA9A34690DC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -238,25 +394,120 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		E77E33F19FB94AD9A605EA06 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		57D2A08A19D310C000FA729D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				574156A019D33F87006F0A2F /* NSDateExtension.swift in Sources */,
+				57D2A09319D310C000FA729D /* mugchatTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		70FD4E6C19D064450024EBDB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
+				5707185D19D1A7230069064F /* Mug.swift in Sources */,
+				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
+				5707185B19D1A1060069064F /* User.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
+				5707186119D1A8FC0069064F /* Room.swift in Sources */,
+				5707186719D1AF110069064F /* UserService.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
+				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
+				5707185F19D1A7FD0069064F /* Device.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		57D2A09519D310C000FA729D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70FD4E6F19D064450024EBDB /* mugchat */;
+			targetProxy = 57D2A09419D310C000FA729D /* PBXContainerItemProxy */;
+		};
+		57D2A09F19D312F300FA729D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70FD4E6F19D064450024EBDB /* mugchat */;
+			targetProxy = 57D2A09E19D312F300FA729D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		57D2A09719D310C000FA729D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = mugchatTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mugchat.app/mugchat";
+			};
+			name = Debug;
+		};
+		57D2A09819D310C000FA729D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = mugchatTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mugchat.app/mugchat";
+			};
+			name = Release;
+		};
 		70FD4E9019D064450024EBDB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -343,7 +594,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mugchat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -360,7 +611,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mugchat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -423,6 +674,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		57D2A09619D310C000FA729D /* Build configuration list for PBXNativeTarget "mugchatTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				57D2A09719D310C000FA729D /* Debug */,
+				57D2A09819D310C000FA729D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
