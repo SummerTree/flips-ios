@@ -33,6 +33,7 @@ Scenario: Dismissing keyboard when the fields are filled
   And I should see MugChat icon
   And MugChat text and fields should animate down
 
+@7171
 Scenario Outline: Return button
   Given I am on the "Login" screen
   When I fill "<field1>" field
@@ -43,12 +44,14 @@ Scenario Outline: Return button
   | Email    | Password |
   | Password | Email    |
 
+@7171
 Scenario: Done button
   Given I am on the "Login" screen
   When I fill "Email" field
   And I fill "Password" field
   Then I should see "Done" button on the keyboard
 
+@7171
 Scenario Outline: Invalid values
   Given I am on the "Login" screen
   When I fill "<field>" field with the value "<value>"
@@ -63,6 +66,7 @@ Scenario Outline: Invalid values
   | Password | Mugcchat | Your password should be 8+ Characters, Mixed Case, 1 Number |
   | Password | mugchat1 | Your password should be 8+ Characters, Mixed Case, 1 Number |
 
+@7171
 Scenario: Fixing wrong values
   Given I am on the "Login" screen
   And I typed a wrong value on "<field>"
@@ -73,12 +77,14 @@ Scenario: Fixing wrong values
   | Email    |
   | Password |
 
+@7171
 Scenario: Swiping up warning messages panel
   Given I am on the "Login" screen
   And I filled invalid values on the fields
   When I swipe up the warning messages panel
   Then I shouldn't see the panel
 
+@7171
 Scenario: Swiping down warning messages panel
   Given I am on the "Login" screen
   And I filled invalid values on the fields
@@ -86,11 +92,13 @@ Scenario: Swiping down warning messages panel
   When I swipe down the warning messages panel
   Then I should see the panel again
 
+@7171
 Scenario: I already logged in on the app in this device
   Given I am on the "Login" screen
   When I already logged in with a valid account
   Then I should see this email on the "Email" field
 
+@7171
 Scenario: Login with right email and wrong password
   Given I am on the "Login" screen
   When I fill "Email" with the value: "mug@mail.com"
@@ -99,6 +107,7 @@ Scenario: Login with right email and wrong password
   Then I should see "Forgot Password" button
   And I should see the icon "!" between the fields
 
+@7171
 Scenario: Login with wrong email and right password
   Given I am on the "Login" screen
   When I fill "Email" with the value: "mag@mail.com"
@@ -107,6 +116,19 @@ Scenario: Login with wrong email and right password
   Then I should see "Forgot Password" button
   And I should see the icon "!" between the fields
 
+@7171
+Scenario: Showing Email keyboard
+  Given I am on the "Login" screen
+  When I touch "Email" field
+  Then I should see "Email" keyboard
+
+@7171
+Scenario: Showing Alpha keyboard
+  Given I am on the "Login" screen
+  When I touch "Password" field
+  Then I should see "Alpha" keyboard
+
+@7171
 Scenario: Verifying design screen
   Given I am on the "Login" screen
   Then The desing screen should be the same on the prototype design
