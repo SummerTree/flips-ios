@@ -1,17 +1,19 @@
 //
-//  NSDateExtension.swift
-//  mugchat
+// Copyright 2014 ArcTouch, Inc.
+// All rights reserved.
 //
-//  Created by Ecil Teodoro on 9/24/14.
-//  Copyright (c) 2014 ArcTouch Inc. All rights reserved.
+// This file, its contents, concepts, methods, behavior, and operation
+// (collectively the "Software") are protected by trade secret, patent,
+// and copyright laws. The use of the Software is governed by a license
+// agreement. Disclosure of the Software to third parties, in any form,
+// in whole or in part, is expressly prohibited except as authorized by
+// the license agreement.
 //
 
 import Foundation
 
 extension NSDate {
     
-    // example usage: var date = NSDate(dateString: "1968-12-02")
-
     convenience init(dateString:String) {
         let dateStringFormatter = NSDateFormatter()
         dateStringFormatter.dateFormat = "yyyy-MM-dd"
