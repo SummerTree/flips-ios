@@ -26,17 +26,18 @@ public class User {
     var rooms: [Room]?
     var contacts: [User]?
     
-    convenience init(json : NSDictionary) {
+    convenience init(object : AnyObject) {
         self.init()
-        self.id = String(json.valueForKeyPath("id") as Int!)
-        self.username = json.valueForKeyPath("username") as String!
-        self.firstName = json.valueForKeyPath("firstName") as String!
-        self.lastName = json.valueForKeyPath("lastName") as String!
-        self.birthday = NSDate(dateTimeString: (json.valueForKeyPath("birthday") as String!))
-        self.nickname = json.valueForKeyPath("nickname") as String!
-        self.facebookID = json.valueForKeyPath("facebookID") as String!
-        self.photoUrl = json.valueForKeyPath("photoUrl") as String!
-        self.pubnubId = json.valueForKeyPath("pubnubId") as String!
+        let json = JSON(object: object)
+        self.id = json["id"].stringValue
+        self.username = json["username"].stringValue
+        self.firstName = json["firstName"].stringValue
+        self.lastName = json["lastName"].stringValue
+        self.birthday = NSDate(dateTimeString: json["birthday"].stringValue!)
+        self.nickname = json["nickname"].stringValue
+        self.facebookID = json["facebookID"].stringValue
+        self.photoUrl = json["photoUrl"].stringValue
+        self.pubnubId = json["pubnubId"].stringValue
     }
     
 }
