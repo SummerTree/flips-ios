@@ -52,6 +52,10 @@ class LoginViewController: UIViewController {
             println(user?.username)
             println(error?.error)
         })
+        service.signin("devtest@arctouch.com", password: "YetAnotherPwd123", { (error: MugError?, user: User?) -> Void in
+            println(user?.username)
+            println(error?.error)
+        })
         
 //        
 //        
