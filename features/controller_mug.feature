@@ -3,6 +3,12 @@ Feature: Controller of MugChat
   I want to do some not commons things
   So, I want to have a nice feedback from the app
 
+@7087
+Scenario: Receiving a notification
+  Given My device is on back ground
+  When I receive a  mug
+  Then I should see the native notification from device  
+
 Scenario: Migration to another device
   Given I set up my number on my iphone
   And I have a lot of friends and mugs
@@ -32,7 +38,7 @@ Scenario: Reply a message to more than one person
   When I reply a message in this mug
   Then All people in this mug should receive my mug reply
 
-#Ben, is there a time to receive the message? Like I'm 3 days without connect on internet, so, if I connect now, the mug was gone!  
+#Ben, is there a time to receive the message? Like I'm 3 days without connect on internet, so, if I connect now, the mug was gone!
 Scenario: Sending a Mug to a offline contact
   Given I am on the "New Mug" screen
   When I pick up a offline contact

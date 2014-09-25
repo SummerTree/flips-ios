@@ -3,57 +3,70 @@ Feature: Login screen
   I want to enter on MugChat
   So, I can do login
 
-Scenario Outline: Access Login screen
-  Given I am on the "Splash" screen
-  When I touch the field: <field>
-  Then I should see "Login" screen
-  | field    |
-  | Email    |
-  | Password |
-
-Scenario Outline: Missing the keyboard
-  Given I am on the "Splash" screen
-  When I touch the field: <field>
-  Then I should see the keyboard
-  | field    |
-  | Email    |
-  | Password |
-
-Scenario: Showing the keyboard
+@7224 @7171
+Scenario Outline: Missing keyboard
   Given I am on the "Login" screen
-  And The keyboard is open
-  And There are value typed on the fields
+  When I touch the field: "<field>"
+  Then I should see the keyboard
+  And The MugChat icon should animate off the top
+  And MugChat text should animates further up
+  And The fields should animate up
+  | field    |
+  | Email    |
+  | Password |
+
+@7224 @7171
+Scenario: Dismissing keyboard when the fields are empty
+  Given I am on the "Login" screen
+  And The cursor are on some field
   When I touch somewhere on "Login" screen
   Then The keyboard should dismiss
-  And I should see "Splash" screen
-  But the filds should keep with the values typed
+  And I should see MugChat icon
+  And MugChat text and fields should animate down
 
+@7224 @7171
+Scenario: Dismissing keyboard when the fields are filled
+  Given I am on the "Login" screen
+  And The fields are filled
+  When I touch somewhere on "Login" screen
+  Then The keyboard should dismiss
+  And I should see MugChat icon
+  And MugChat text and fields should animate down
+
+@7171
 Scenario Outline: Return button
   Given I am on the "Login" screen
-  When I fill <field1>  field
-  And Don’t fill <field2> field
+  When I fill "<field1>" field
+  And Don’t fill "<field2>" field
   Then I should see "Return" button on the keyboard
   And I shouldn't see "Done" button
   | field1   | field2   |
   | Email    | Password |
   | Password | Email    |
 
+@7171
 Scenario: Done button
   Given I am on the "Login" screen
   When I fill "Email" field
-   And I fill "Password" field
+  And I fill "Password" field
   Then I should see "Done" button on the keyboard
 
-Scenario Outline: Invalid email
+@7171
+Scenario Outline: Invalid values
   Given I am on the "Login" screen
-  And the field "Password" is filled
-  When I fill "Email" field with the value "<value>"
-  And I touch "Done" button
-  Then I should see the message: "You email should look like this mug@mail.com"
-  | value    |
-  | mug@mail |
-  | mug.com  |
+  When I fill "<field>" field with the value "<value>"
+  And I exit the field
+  Then I should see the message: "<message>"
+  And The "Done" button should keep disable
+  | field    | value    | message                                                     |
+  | Email    | mug@mail | You email should look like this mug@mail.com                |
+  | Email    | mug.com  | You email should look like this mug@mail.com                |
+  | Password | Mugcha1  | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | Password | 12345678 | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | Password | Mugcchat | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | Password | mugchat1 | Your password should be 8+ Characters, Mixed Case, 1 Number |
 
+@7171
 Scenario: Fixing wrong values
   Given I am on the "Login" screen
   And I typed a wrong value on "<field>"
@@ -64,34 +77,58 @@ Scenario: Fixing wrong values
   | Email    |
   | Password |
 
-Scenario Outline: Invalid password
+@7171
+Scenario: Swiping up warning messages panel
   Given I am on the "Login" screen
-  And the field "Email" is filled
-  When I fill "Password" field with the value "<value>"
-  And I touch "Done" button
-  Then I should see the message: "Your password should be 8+ Characters, Mixed Case, 1 Number"
-  | value    |
-  | Mugcha1  |
-  | 12345678 |
-  | Mugcchat |
-  | mugchat1 |
+  And I filled invalid values on the fields
+  When I swipe up the warning messages panel
+  Then I shouldn't see the panel
 
+@7171
+Scenario: Swiping down warning messages panel
+  Given I am on the "Login" screen
+  And I filled invalid values on the fields
+  And The warning messages panel is swiped up
+  When I swipe down the warning messages panel
+  Then I should see the panel again
+
+@7171
+Scenario: I already logged in on the app in this device
+  Given I am on the "Login" screen
+  When I already logged in with a valid account
+  Then I should see this email on the "Email" field
+
+@7171
 Scenario: Login with right email and wrong password
   Given I am on the "Login" screen
   When I fill "Email" with the value: "mug@mail.com"
   And I fill "Password" with the value: "Mugchat2"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  And I should see the icon "!"
+  And I should see the icon "!" between the fields
 
+@7171
 Scenario: Login with wrong email and right password
   Given I am on the "Login" screen
   When I fill "Email" with the value: "mag@mail.com"
   And I fill "Password" with the value: "Mugchat1"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  And I should see the icon "!"
+  And I should see the icon "!" between the fields
 
+@7171
+Scenario: Showing Email keyboard
+  Given I am on the "Login" screen
+  When I touch "Email" field
+  Then I should see "Email" keyboard
+
+@7171
+Scenario: Showing Alpha keyboard
+  Given I am on the "Login" screen
+  When I touch "Password" field
+  Then I should see "Alpha" keyboard
+
+@7171
 Scenario: Verifying design screen
   Given I am on the "Login" screen
   Then The desing screen should be the same on the prototype design
