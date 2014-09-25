@@ -298,20 +298,6 @@
 /* Begin PBXProject section */
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
-			attributes = {
-				LastUpgradeCheck = 0600;
-				ORGANIZATIONNAME = "ArcTouch Inc.";
-				TargetAttributes = {
-					57D2A08D19D310C000FA729D = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 70FD4E6F19D064450024EBDB;
-					};
-					70FD4E6F19D064450024EBDB = {
-						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 5HMJW6N276;
-					};
-				};
-			};
 			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
