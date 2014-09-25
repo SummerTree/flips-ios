@@ -17,8 +17,6 @@ public struct Device {
     var phoneNumber: String? = nil
     var platform: String? = nil
     var uuid: String? = nil
-    var verificationCode: String? = nil
     var isVerified: Bool? = nil
-    var retryCount: UInt8? = nil
     
 }
