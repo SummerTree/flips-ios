@@ -277,7 +277,7 @@ class LoginView : UIView, UITextFieldDelegate {
         super.updateConstraints()
     }
     
-    // MARK: Keyboard control
+    // MARK: - Keyboard control
     
     func dismissKeyboard() {
         self.emailTextField.resignFirstResponder()
@@ -319,24 +319,21 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func slideViews(movedUp: Bool, offset: CGFloat) {
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(0.5)
-        
-        if (movedUp) {
-            self.bubbleChatImageView.frame.origin.y -= BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-            self.mugchatWordImageView.frame.origin.y -= MUGCHAT_WORD_ANIMATION_OFFSET
-            self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
-        } else {
-            self.bubbleChatImageView.frame.origin.y += BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-            self.mugchatWordImageView.frame.origin.y += MUGCHAT_WORD_ANIMATION_OFFSET
-            self.credentialsView.frame.origin.y += CREDENTIALS_ANIMATION_OFFSET
-        }
-        
-        UIView.commitAnimations()
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            if (movedUp) {
+                self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET
+                self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
+            } else {
+                self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                self.mugchatWordImageView.frame.origin.y += self.MUGCHAT_WORD_ANIMATION_OFFSET
+                self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
+            }
+        })
     }
 
     
-    // MARK: Required methods
+    // MARK: - Required methods
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -345,7 +342,7 @@ class LoginView : UIView, UITextFieldDelegate {
         super.init(frame: frame)
     }
     
-    // MARK: Private methods
+    // MARK: - Private methods
     private func getKeyboardOffset(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
