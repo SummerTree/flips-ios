@@ -30,7 +30,7 @@ Scenario: I log in at facebook
   Given I am on the Facebook's login screen
   When I fill out the fields and touch Login
   Then I should see a message: ""MugChat" would like to access our basic profile info and list of friends."
-  And I should see the buttons: "Don't Allow" and "Allow"
+  And I should see the buttons: "Don't Allow" and "OK"
 
 Scenario: I am log in at facebook again
   Given I am on the "Login" screen
