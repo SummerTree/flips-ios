@@ -28,6 +28,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private let EMAIL_MARGIN_LEFT: CGFloat = 15.0
     private let EMAIL_MARGIN_BOTTOM: CGFloat = 12.5
     private let EMAIL_HEIGHT: CGFloat = 44.0
+    private let EMAIL_IMAGE_MARGIN_TOP: CGFloat = 10.0
     private let FACEBOOK_MARGIN_TOP: CGFloat = 30.0
     private let PASSWORD_MARGIN_TOP: CGFloat = 12.5
     private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
@@ -237,7 +238,7 @@ class LoginView : UIView, UITextFieldDelegate {
             make.leading.equalTo()(self.bubbleChatImageView)
             make.bottom.equalTo()(self.facebookButton.mas_top).with().offset()(-self.FACEBOOK_MARGIN_TOP)
             make.trailing.equalTo()(self.bubbleChatImageView)
-            make.top.equalTo()(self.emailImageView.mas_top).with().offset()(-10)
+            make.top.equalTo()(self.emailImageView.mas_top).with().offset()(-self.EMAIL_IMAGE_MARGIN_TOP)
         }
         
         passwordImageView.mas_updateConstraints { (make) -> Void in
