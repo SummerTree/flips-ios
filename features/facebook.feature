@@ -40,21 +40,21 @@ Scenario: I am log in on facebook again
   Given I am on the "Login" screen
   And I already loged in with facebook account
   When I touch "Login with Facebook" button
-  Then I should see "Inbox" screen
+  Then I should see "Phone Number" screen
 
 @7169
 Scenario: Log in on Facebook for the first time when my user doesn't have friends list
   Given I am on the facebook's message accept
   And My user doesn't have a friends list
   When I touch "OK" option on the message
-  Then I should see "Inbox" screen
+  Then I should see "Phone Number" screen
 
 @7169
 Scenario: Log in on Facebook for the first time when my user doesn't have avatar photo
   Given I am on the facebook's message accept
   And My user doesn't have an avatar photo
   When I touch "OK" option on the message
-  Then I should see "Inbox" screen
+  Then I should see "Phone Number" screen
 
 @7169
 Scenario: Log in on Facebook again when I deleted my friends list
