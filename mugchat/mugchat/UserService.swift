@@ -22,7 +22,15 @@ public class UserService: MugchatService {
         }
         return Static.instance
     }
-    
+
+    //    usage:
+    //    
+    //    var service = UserService.sharedInstance
+    //    var date = NSDate(dateString: "1968-12-02")
+    //    service.signup("devtest@arctouch.com", password: "YetAnotherPwd123", firstName: "Dev", lastName: "Test", birthday: date, nickname: "Neo", { (error: MugError?, user: User?) -> Void in
+    //        println(user?.username)
+    //        println(error?.error)
+    //    })
     func signup(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, responseCallback: ServiceResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
