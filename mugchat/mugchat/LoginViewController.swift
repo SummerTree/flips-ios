@@ -35,6 +35,28 @@ class LoginViewController: UIViewController {
                 error: NSError!) in
                 println("Error: " + error.localizedDescription)
         })
+        
+        var service = UserService.sharedInstance
+        var date = NSDate(dateString: "1968-12-02")
+        service.signup("devtest@arctouch.com", password: "YetAnotherPwd123", firstName: "Dev", lastName: "Test", birthday: date, nickname: "Neo", { (error: MugError?, user: User?) -> Void in
+            println(user?.username)
+            println(error?.error)
+        })
+        
+//        
+//        
+//        let user = ["username" : "devtest@arctouch.com", "password" : "YetAnotherPwd123", "firstName" : "Dev", "lastName" : "Test", "birthday" : "1968-12-02", "nickname" : "Neo"]
+//        manager.POST(
+//            "http://localhost:1337/signup",
+//            parameters: user,
+//            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+//                println("JSON: " + responseObject.description)
+//            },
+//            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+//                println("Error: " + error.localizedDescription)
+//        })
     }
+    
+    
 }
 
