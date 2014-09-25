@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias ServiceResponse = (MugError?, User?) -> Void
+public typealias UserServiceResponse = (MugError?, User?) -> Void
 
 public class UserService: MugchatService {
     
@@ -36,7 +36,7 @@ public class UserService: MugchatService {
     //        println(user?.username)
     //        println(error?.error)
     //    })
-    func signup(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, responseCallback: ServiceResponse) {
+    func signup(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, responseCallback: UserServiceResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
