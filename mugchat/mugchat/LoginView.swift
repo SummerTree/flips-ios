@@ -12,26 +12,37 @@
 
 import Foundation
 
-class LoginView : UIView {
+class LoginView : UIView, UITextFieldDelegate {
     
     private let MARGIN_TOP:CGFloat = 40.0
     private let MARGIN_RIGHT:CGFloat = 40.0
     private let MARGIN_BOTTOM:CGFloat = 20.0
     private let MARGIN_LEFT:CGFloat = 40.0
-    
-    private let CREDENTIALS_MARGIN_TOP:CGFloat = 49.0
-    private let EMAIL_MARGIN_LEFT:CGFloat = 15.0
-    private let FACEBOOK_MARGIN_TOP:CGFloat = 30.0
-    private let PASSWORD_MARGIN_TOP:CGFloat = 12.5
-    private let SEPARATOR_HEIGHT:CGFloat = 0.5
-    private let SEPARATOR_MARGIN_TOP:CGFloat = 12.5
-    private let SIGNUP_MARGIN_TOP:CGFloat = 18
-    
-    private let PRIVACY_POLICY_MARGIN_LEFT: CGFloat = 20
-    private let TERMS_OF_SERVICE_MARGIN_LEFT:CGFloat = 60
 
+    private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
+    private let MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat = 100.0
     
+    private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
+    private let CREDENTIALS_MARGIN_TOP: CGFloat = 49.0
+    private let CREDENTIALS_ANIMATION_OFFSET: CGFloat = 70.0
+    private let EMAIL_MARGIN_LEFT: CGFloat = 15.0
+    private let EMAIL_MARGIN_BOTTOM: CGFloat = 12.5
+    private let EMAIL_HEIGHT: CGFloat = 44.0
+    private let FACEBOOK_MARGIN_TOP: CGFloat = 30.0
+    private let PASSWORD_MARGIN_TOP: CGFloat = 12.5
+    private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
+    private let PASSWORD_HEIGHT: CGFloat = 44.0
+    private let SEPARATOR_HEIGHT: CGFloat = 0.5
+    private let SEPARATOR_MARGIN_TOP:CGFloat = 12.5
+    private let SIGNUP_MARGIN_TOP: CGFloat = 18.0
+    private let SIGNUP_MARGIN_BOTTOM: CGFloat = 14.0
+    
+    private let PRIVACY_POLICY_MARGIN_LEFT: CGFloat = 20.0
+    private let TERMS_OF_SERVICE_MARGIN_LEFT: CGFloat = 60.0
+
+    var logoView: UIView!
     var bubbleChatImageView: UIImageView!
+    var mugchatWordImageView: UIImageView!
     var credentialsView: UIView!
     var emailImageView: UIImageView!
     var emailTextField: UITextField!
@@ -48,10 +59,14 @@ class LoginView : UIView {
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        self.makeContraints()
+        self.updateConstraintsIfNeeded()
     }
     
     func viewDidAppear() {
+        
+        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.addGestureRecognizer(tapGestureRecognizer)
+        
         UIView.animateWithDuration(1.0, animations: {
             self.updateBubbleChatConstraints()
             self.layoutIfNeeded()
@@ -65,6 +80,14 @@ class LoginView : UIView {
     func viewWillAppear() {
         self.bubbleChatImageView.center = self.center
         setFieldsHidden(true)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func setFieldsHidden(hidden: Bool) {
@@ -81,17 +104,28 @@ class LoginView : UIView {
     }
     
     func addSubviews() {
+        
+        logoView = UIView()
+        self.addSubview(logoView)
+        
         bubbleChatImageView = UIImageView(image: UIImage(named: "ChatBubble"))
-        bubbleChatImageView.contentMode = UIViewContentMode.ScaleAspectFit
-        self.addSubview(bubbleChatImageView)
+        bubbleChatImageView.contentMode = UIViewContentMode.Center
+        logoView.addSubview(bubbleChatImageView)
+        
+        mugchatWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
+        mugchatWordImageView.contentMode = UIViewContentMode.Center
+        logoView.addSubview(mugchatWordImageView)
         
         credentialsView = UIView()
         self.addSubview(credentialsView)
         
         emailImageView = UIImageView(image: UIImage(named: "Mail"));
+        emailImageView.contentMode = .Center
         credentialsView.addSubview(emailImageView);
         
         emailTextField = UITextField()
+        emailTextField.autocorrectionType = UITextAutocorrectionType.No
+        emailTextField.delegate = self
         emailTextField.textColor = UIColor.whiteColor()
         emailTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", comment: "Email"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
@@ -102,9 +136,12 @@ class LoginView : UIView {
         credentialsView.addSubview(emailPasswordSeparator)
         
         passwordImageView = UIImageView(image: UIImage(named: "Password"));
+        passwordImageView.contentMode = .Center
         credentialsView.addSubview(passwordImageView);
         
         passwordTextField = UITextField()
+        passwordTextField.delegate = self
+        passwordTextField.returnKeyType = UIReturnKeyType.Done
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         passwordTextField.secureTextEntry = true
@@ -143,79 +180,160 @@ class LoginView : UIView {
     }
     
     func updateBubbleChatConstraints() {
-        bubbleChatImageView.mas_updateConstraints { (make) -> Void in
+        logoView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.centerX.equalTo()(self)
             make.top.equalTo()(self).with().offset()(self.MARGIN_TOP)
+            make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
         }
     }
     
-    func makeContraints() {
-        bubbleChatImageView.mas_makeConstraints { (make) -> Void in
+    override func updateConstraints() {
+        var height: CGFloat = self.bubbleChatImageView.frame.size.height + self.mugchatWordImageView.frame.size.height
+        logoView.mas_updateConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.centerY.equalTo()(self)
-            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+        }
+
+        bubbleChatImageView.mas_updateConstraints { (make) -> Void in
+            make.centerX.equalTo()(self.logoView)
+            make.top.equalTo()(self.logoView)
+            make.leading.equalTo()(self.logoView)
+            make.trailing.equalTo()(self.logoView)
         }
         
-        credentialsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.bubbleChatImageView.mas_left)
-            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.CREDENTIALS_MARGIN_TOP)
-            make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
-            make.bottom.equalTo()(self.passwordTextField.mas_bottom)
+        mugchatWordImageView.mas_updateConstraints { (make) -> Void in
+            make.centerX.equalTo()(self.bubbleChatImageView.mas_centerX)
+            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.MUGCHAT_WORD_LOGO_MARGIN_TOP)
+            make.leading.equalTo()(self.logoView)
+            make.trailing.equalTo()(self.logoView)
+            make.bottom.equalTo()(self.logoView)
         }
         
-        emailImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.credentialsView)
-            make.left.equalTo()(self.credentialsView)
-            make.width.equalTo()(self.emailImageView.image?.size.width)
-        }
-        
-        emailTextField.mas_makeConstraints { (make) -> Void in
-            make.centerY.equalTo()(self.emailImageView.mas_centerY)
-            make.left.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
-            make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
-        }
-        
-        emailPasswordSeparator.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.emailTextField.mas_bottom).with().offset()(self.SEPARATOR_MARGIN_TOP)
-            make.left.equalTo()(self.emailTextField.mas_left)
-            make.width.equalTo()(self.emailTextField.mas_width)
-            make.height.equalTo()(self.SEPARATOR_HEIGHT)
-        }
-        
-        passwordImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.emailPasswordSeparator.mas_bottom).with().offset()(self.PASSWORD_MARGIN_TOP)
-            make.left.equalTo()(self.emailImageView.mas_left)
-            make.right.equalTo()(self.emailImageView.mas_right)
-        }
-        
-        passwordTextField.mas_makeConstraints { (make) -> Void in
-            make.centerY.equalTo()(self.passwordImageView.mas_centerY)
-            make.left.equalTo()(self.emailTextField)
-            make.trailing.equalTo()(self.emailTextField)
-        }
-        
-        facebookButton.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self)
-            make.top.equalTo()(self.passwordTextField.mas_bottom).with().offset()(self.FACEBOOK_MARGIN_TOP)
-        }
-        
-        signupButton.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self)
-            make.top.equalTo()(self.facebookButton.mas_bottom).with().offset()(self.SIGNUP_MARGIN_TOP)
-        }
-        
-        termsOfService.mas_makeConstraints { (make) -> Void in
+        termsOfService.mas_updateConstraints { (make) -> Void in
             make.left.equalTo()(self).with().offset()(self.TERMS_OF_SERVICE_MARGIN_LEFT)
             make.bottom.equalTo()(self.mas_bottom).with().offset()(-self.MARGIN_BOTTOM)
         }
         
-        privacyPolicy.mas_makeConstraints { (make) -> Void in
+        privacyPolicy.mas_updateConstraints { (make) -> Void in
             make.left.equalTo()(self.termsOfService.mas_right).with().offset()(self.PRIVACY_POLICY_MARGIN_LEFT)
             make.bottom.equalTo()(self.mas_bottom).with().offset()(-self.MARGIN_BOTTOM)
         }
+        
+        signupButton.mas_updateConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.bottom.equalTo()(self.privacyPolicy.mas_top).with().offset()(-self.SIGNUP_MARGIN_BOTTOM)
+        }
+        
+        facebookButton.mas_updateConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.bottom.equalTo()(self.signupButton.mas_top).with().offset()(-self.SIGNUP_MARGIN_TOP)
+        }
+        
+        credentialsView.mas_updateConstraints { (make) -> Void in
+            make.leading.equalTo()(self.bubbleChatImageView)
+            make.bottom.equalTo()(self.facebookButton.mas_top).with().offset()(-self.FACEBOOK_MARGIN_TOP)
+            make.trailing.equalTo()(self.bubbleChatImageView)
+            make.top.equalTo()(self.emailImageView.mas_top).with().offset()(-10)
+        }
+        
+        passwordImageView.mas_updateConstraints { (make) -> Void in
+            make.left.equalTo()(self.credentialsView)
+            make.width.equalTo()(self.passwordImageView.image?.size.width)
+            make.bottom.equalTo()(self.credentialsView)
+        }
+        
+        passwordTextField.mas_updateConstraints { (make) -> Void in
+            make.centerY.equalTo()(self.passwordImageView)
+            make.left.equalTo()(self.passwordImageView.mas_right).with().offset()(self.PASSWORD_MARGIN_LEFT)
+            make.trailing.equalTo()(self.credentialsView)
+            make.bottom.equalTo()(self.credentialsView)
+        }
+        
+        emailPasswordSeparator.mas_updateConstraints { (make) -> Void in
+            make.left.equalTo()(self.passwordTextField)
+            make.width.equalTo()(self.passwordTextField)
+            make.height.equalTo()(self.SEPARATOR_HEIGHT)
+            make.bottom.equalTo()(self.passwordTextField.mas_top).with().offset()(-self.PASSWORD_MARGIN_TOP)
+        }
+        
+        emailImageView.mas_updateConstraints { (make) -> Void in
+            make.centerY.equalTo()(self.emailTextField)
+            make.left.equalTo()(self.credentialsView)
+            make.width.equalTo()(self.emailImageView.image?.size.width)
+            make.bottom.equalTo()(self.emailPasswordSeparator.mas_top).with().offset()(-self.EMAIL_MARGIN_BOTTOM)
+        }
+        
+        emailTextField.mas_updateConstraints { (make) -> Void in
+            make.left.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
+            make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
+            make.bottom.equalTo()(self.emailPasswordSeparator.mas_top).with().offset()(-self.EMAIL_MARGIN_BOTTOM)
+        }
+        
+        super.updateConstraints()
     }
+    
+    // MARK: Keyboard control
+    
+    func dismissKeyboard() {
+        self.emailTextField.resignFirstResponder()
+        self.passwordTextField.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if (textField == self.emailTextField) {
+            // next button was pressed
+            self.emailTextField.resignFirstResponder()
+            self.passwordTextField.becomeFirstResponder()
+            
+        } else if (textField == self.passwordTextField) {
+            // Done button was pressed
+            // TODO: Authenticate?
+            self.passwordTextField.resignFirstResponder()
+        }
+        
+        return true
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        let keyboardOffset = getKeyboardOffset(notification)
+        
+        if (self.bubbleChatImageView.frame.origin.y >= 0) {
+            self.slideViews(true, offset: keyboardOffset)
+        } else {
+            self.slideViews(false, offset: keyboardOffset)
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        let keyboardOffset = getKeyboardOffset(notification)
+        if (self.bubbleChatImageView.frame.origin.y >= 0) {
+            self.slideViews(true, offset: keyboardOffset)
+        } else {
+            self.slideViews(false, offset: keyboardOffset)
+        }
+    }
+    
+    func slideViews(movedUp: Bool, offset: CGFloat) {
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(0.5)
+        
+        if (movedUp) {
+            self.bubbleChatImageView.frame.origin.y -= BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+            self.mugchatWordImageView.frame.origin.y -= MUGCHAT_WORD_ANIMATION_OFFSET
+            self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
+        } else {
+            self.bubbleChatImageView.frame.origin.y += BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+            self.mugchatWordImageView.frame.origin.y += MUGCHAT_WORD_ANIMATION_OFFSET
+            self.credentialsView.frame.origin.y += CREDENTIALS_ANIMATION_OFFSET
+        }
+        
+        UIView.commitAnimations()
+    }
+
     
     // MARK: Required methods
     required init(coder aDecoder: NSCoder) {
@@ -224,5 +342,12 @@ class LoginView : UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    // MARK: Private methods
+    private func getKeyboardOffset(notification: NSNotification) -> CGFloat {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
+        return CGRectGetHeight(keyboardRect)
     }
 }

@@ -21,6 +21,11 @@ class LoginViewController: UIViewController {
         loginView.viewWillAppear()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        loginView.viewWillDisappear()
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         loginView.viewDidAppear()
@@ -28,6 +33,8 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.navigationBarHidden = true
 
         loginView = LoginView()
         self.view = loginView
