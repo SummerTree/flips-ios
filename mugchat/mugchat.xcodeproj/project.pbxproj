@@ -298,6 +298,8 @@
 /* Begin PBXProject section */
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -605,6 +607,13 @@
 			};
 			name = Release;
 		};
+		C31BC68E19D49A7A00101A40 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = mugchatTests;
+			};
+			name = Distribution;
+		};
 		C31F49D319D485EF005DADD4 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -646,8 +655,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = mugchat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -665,6 +674,7 @@
 			buildConfigurations = (
 				57D2A09719D310C000FA729D /* Debug */,
 				57D2A09819D310C000FA729D /* Release */,
+				C31BC68E19D49A7A00101A40 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
