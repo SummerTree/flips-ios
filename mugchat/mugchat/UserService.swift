@@ -77,8 +77,14 @@ public class UserService: MugchatService {
                 responseCallback(nil, user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                var response = operation.responseObject as NSDictionary
-                responseCallback(MugError(error: response["error"] as String!, details:nil), nil)
+                let response = operation.responseObject as? NSDictionary
+                var message: String
+                if (response == nil) {
+                    message = error.localizedDescription
+                } else {
+                    message = response!["error"] as String
+                }
+                responseCallback(MugError(error: message, details:nil), nil)
             }
         )
     }
