@@ -10,7 +10,8 @@
 // the license agreement.
 //
 
-public typealias UserServiceResponse = (MugError?, User?) -> Void
+public typealias UserServiceSuccessResponse = (User?) -> Void
+public typealias UserServiceFaiureResponse = (MugError?) -> Void
 
 public class UserService: MugchatService {
     
@@ -28,39 +29,65 @@ public class UserService: MugchatService {
         return Static.instance
     }
     
-    //    usage:
-    //
-    //    var service = UserService.sharedInstance
-    //    var date = NSDate(dateString: "1968-12-02")
-    //    service.signup("devtest@arctouch.com", password: "YetAnotherPwd123", firstName: "Dev", lastName: "Test", birthday: date, nickname: "Neo", { (error: MugError?, user: User?) -> Void in
-    //        println(user?.username)
-    //        println(error?.error)
-    //    })
-    func signup(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, responseCallback: UserServiceResponse) {
+    // MARK: - Sign-up
+    
+
+    func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
-        let parms = ["username" : username, "password" : password, "firstName" : firstName, "lastName" : lastName, "birthday" : birthday, "nickname" : nickname!]
+        let params = ["username" : username, "password" : password, "firstName" : firstName, "lastName" : lastName, "birthday" : birthday, "nickname" : nickname!]
         
         request.POST(url,
-            parameters: parms,
+            parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSignupResponse(responseObject)
-                responseCallback(nil, user)
+                success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
-                    var response = operation.responseObject as NSDictionary
-                    responseCallback(MugError(error: response["error"] as String!, details:nil), nil)
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
                 } else {
-                    responseCallback(MugError(error: "Unexpected Error", details:nil), nil)
+                    failure(MugError(error: error.localizedDescription, details:nil))
                 }
             }
         )
     }
     
     func parseSignupResponse(response: AnyObject) -> User? {
-        var user = User(json: response as NSDictionary)
+        var user = User(object: response)
+        return user
+    }
+    
+    // MARK: - Sign-in
+    
+    
+    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        let url = HOST + SIGNIN_URL
+        let params = ["username" : username, "password" : password]
+        
+        request.POST(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let user = self.parseSigninResponse(responseObject)
+                success(user)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    func parseSigninResponse(response: AnyObject) -> User? {
+        var user = User(object: response)
         return user
     }
     

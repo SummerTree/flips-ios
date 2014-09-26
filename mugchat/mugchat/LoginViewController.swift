@@ -32,7 +32,7 @@ class LoginViewController: UIViewController {
         super.viewDidAppear(animated)
         loginView.viewDidAppear()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,15 +52,7 @@ class LoginViewController: UIViewController {
                 error: NSError!) in
                 println("Error: " + error.localizedDescription)
         })
-        
-        var service = UserService.sharedInstance
-        var date = NSDate(dateString: "1968-12-02")
-        service.signup("devtest@arctouch.com", password: "YetAnotherPwd123", firstName: "Dev", lastName: "Test", birthday: date, nickname: "Neo", { (error: MugError?, user: User?) -> Void in
-            println(user?.username)
-            println(error?.error)
-        })
-        
+                
     }
-    
-}
 
+}

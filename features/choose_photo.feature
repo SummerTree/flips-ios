@@ -26,7 +26,6 @@ Scenario Outline: Choosing a picture when you have only one photo
   | Join Word Photo | Albums       |
   | Recorder        | Albums       |
 
-#Ben in this scenario, Should I see Photo icon?
 Scenario Outline: Choosing a picture when you don't have pictures on the galery
   Given I am on the "<screen>" screen
   When I don't have photos on my galery
@@ -36,6 +35,12 @@ Scenario Outline: Choosing a picture when you don't have pictures on the galery
   | Join Word Photo |
   | Join Recorder   |
   | Recorder        |
+
+Scenario: Touching Photo icon when I don't have pictures on the galery
+  Given I am seeing "Photo" icon
+  And I don't have pictures on my galery
+  When I touch "Photo" icon
+  Then I should see a message informing me that I don't have pictures to choose
 
 Scenario: Touching X button
   Given I am on the "Choose Photo" screen

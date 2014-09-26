@@ -14,7 +14,7 @@ Scenario: Access Phone Number screen by Register screen
 Scenario: Auto-formatted when the user types a number
   Given I am on the "Phone Number" screen
   When The user taps the number
-  Then The field should auto-formatted on this way: ###-###-####
+  Then The field should auto-formatted on this way: "###-###-####"
 
 @7173
 Scenario: Informing 9 numbers
@@ -47,13 +47,13 @@ Scenario: Forgot password by iPod
 Scenario: Forgot password by another cellphone
   Given I am access MugChat on my cellphone
   And I am on the "Phone Number" screen
-  When I type  my cellphone number's friend
-  Then I should receive the code on my cellphone's friend
+  When I type  my friend's cellphone number
+  Then I should receive the code on my friend's cellphone
 
 @7173
-Scenario: Informing a code received on my cellphone's friend
+Scenario: Informing a code received on my friend's cellphone
   Given I am on my cellphone
-  And I receive a code on my cellphone's friend
+  And I receive a code on my friend's cellphone
   When I put this code on my cellphone
   Then I should see "New Password" screen
 

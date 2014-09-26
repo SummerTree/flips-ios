@@ -46,7 +46,7 @@ Scenario: Touching Resend Code without code typed
   Then I should receive another verification code
 
 @7172 @7173
-Scenario: Touching Resend when the code is wrong
+Scenario: Entring with a wrong verification code
   Given I am on the "Verification Code" screen
   When I type a wrong code
   Then I should see a blue background on the code
@@ -61,18 +61,28 @@ Scenario: Resend Code when my code is wrong
 
 @7172 @7173
 Scenario: Update the wrong code to a right one
-  Given I am on the "Verification Code" screen
+  Given I am on the "<screen1>" screen
+  And I go to "Verification Code" screen
   And A wrong code is typed
   When I correct the code
   Then The background turns red
   And I shouldn't see "!" icon
+  And I should see "<screen2>" screen
+  | screen1         | screen2      |
+  | Forgot Password | New Password |
+  | Phone Number    | Inbox        |
+  | Type Number     | Settings     |
 
 @7172 @7173
 Scenario: Touching Resend Code button when the code is right on Forgot Password screen
-  Given I am on the "Forgot Password" screen
+  Given I am on the "<screen1>" screen
   And I go to "Verification Code" screen
   When I type a right code
-  Then I should see "New Password" screen
+  Then I should see "<screen2>" screen
+  | screen1         | screen2      |
+  | Forgot Password | New Password |
+  | Phone Number    | Inbox        |
+  | Type Number     | Settings     |
 
 @7172 @7173
 Scenario: Changing phone number
@@ -80,14 +90,7 @@ Scenario: Changing phone number
   And I touch "Back" button
   And I change the phone number
   When I go to "Verification Code"
-  Then I should receibe a new code on the new phone number
-
-@7172 @7173
-Scenario: Changing phone number 3 times
-  Given I am on the "Verification Code" screen
-  When I change the phone number 3 times
-  Then I should see a message ?????
-  And The new code should not be sent
+  Then I should receive a new code on the new phone number
 
 @7172 @7173
 Scenario: Verifying title screen
