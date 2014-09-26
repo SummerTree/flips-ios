@@ -10,10 +10,6 @@
 // the license agreement.
 //
 
-private let MUG_CELL_HEIGHT : CGFloat = 168.5
-private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
-
-
 class InboxView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     // TODO: will be removed - just for test
@@ -22,7 +18,9 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate {
         InboxItem(userName: "Diego", mugMessage: "I love SF", notReadMessages: 0, mugTime: "10:16 PM"),
         InboxItem(userName: "MugBoys", mugMessage: "Welcome to MugChat", notReadMessages: 0, mugTime: "10:01 PM") ]
     
-    private let cellIdentifier = "conversationCell"
+    private let MUG_CELL_HEIGHT : CGFloat = 168.5
+    private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
+    private let CELL_IDENTIFIER = "conversationCell"
     
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
@@ -50,7 +48,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     private func initSubviews() {
         conversationsTableView = UITableView(frame: self.frame, style: .Plain)
-        conversationsTableView.registerClass(ConversationTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        conversationsTableView.registerClass(ConversationTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
         conversationsTableView.separatorStyle = .None
         self.addSubview(conversationsTableView)
         
@@ -73,7 +71,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate {
         }
         
         composeButton.mas_makeConstraints { (make) -> Void in
-            make.bottom.lessThanOrEqualTo()(self).with().offset()(-COMPOSE_BUTTON_BOTTOM_MARGIN)
+            make.bottom.lessThanOrEqualTo()(self).with().offset()(-self.COMPOSE_BUTTON_BOTTOM_MARGIN)
             make.centerX.equalTo()(self)
         }
     }
@@ -82,7 +80,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate {
     // MARK: - UITableViewDataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as ConversationTableViewCell
+        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ConversationTableViewCell
         cell.item = items[indexPath.row]
         return cell;
     }

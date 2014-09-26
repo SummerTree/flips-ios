@@ -12,11 +12,12 @@
 
 import Foundation
 
-let CUSTOM_BADGE_VIEW_TAG = 222
-private let BADGE_SIZE = 25 + THUMBNAIL_BORDER_WIDTH
-
 class CustomBadgeView : UIView {
-    
+
+    let CUSTOM_BADGE_VIEW_TAG = 222
+
+    private let BADGE_SIZE = 25 + THUMBNAIL_BORDER_WIDTH
+
     var badgeLabel : UILabel!
     
     convenience override init() {

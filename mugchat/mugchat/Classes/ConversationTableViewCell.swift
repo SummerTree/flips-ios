@@ -12,10 +12,6 @@
 
 import Foundation
 
-private let CELL_MUG_IMAGE_VIEW_HEIGHT = 112.5
-private let CELL_INFO_VIEW_HEIGHT = 56
-private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
-
 // TODO: will be removed - just for test
 struct InboxItem {
     var userName : String
@@ -26,6 +22,12 @@ struct InboxItem {
 
 class ConversationTableViewCell : UITableViewCell {
     
+    private let CELL_MUG_IMAGE_VIEW_HEIGHT = 112.5
+    private let CELL_INFO_VIEW_HEIGHT = 56
+    private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
+    private let BADGE_TOP_MARGIN : CGFloat = 4
+    private let BADGE_RIGHT_MARGIN : CGFloat = 12
+
     // TODO: will be removed - just for test
     var item : InboxItem!
     
@@ -103,14 +105,14 @@ class ConversationTableViewCell : UITableViewCell {
     override func updateConstraints() {
         mugImageView.mas_updateConstraints { (make) -> Void in
             make.width.equalTo()(self)
-            make.height.equalTo()(CELL_MUG_IMAGE_VIEW_HEIGHT)
+            make.height.equalTo()(self.CELL_MUG_IMAGE_VIEW_HEIGHT)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
         }
         mugImageView.backgroundColor = UIColor.greenColor()
         
         userImageView.mas_updateConstraints { (make) -> Void in
-            make.leading.equalTo()(self).with().offset()(CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.mugImageView.mas_bottom)
             make.width.equalTo()(self.userImageView.frame.size.width)
             make.height.equalTo()(self.userImageView.frame.size.height)
@@ -118,34 +120,34 @@ class ConversationTableViewCell : UITableViewCell {
         userImageView.backgroundColor = UIColor.blueColor()
         
         badgeView.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self.userImageView).with().offset()(4)
-            make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(-12)
+            make.top.equalTo()(self.userImageView).with().offset()(self.BADGE_TOP_MARGIN)
+            make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(-self.BADGE_RIGHT_MARGIN)
             make.width.equalTo()(self.badgeView.frame.size.width)
             make.height.equalTo()(self.badgeView.frame.size.height)
         }
         
         infoView.mas_updateConstraints { (make) -> Void in
-            make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.trailing.equalTo()(self)
             make.top.equalTo()(self.mugImageView.mas_bottom)
-            make.height.equalTo()(CELL_INFO_VIEW_HEIGHT)
+            make.height.equalTo()(self.CELL_INFO_VIEW_HEIGHT)
         }
         
         mugTimeLabel.mas_updateConstraints { (make) -> Void in
-            make.trailing.equalTo()(self.infoView).with().offset()(-CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.trailing.equalTo()(self.infoView).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.top.equalTo()(self.infoView)
             make.bottom.equalTo()(self.infoView.mas_centerY)
         }
         
         userNameLabel.mas_updateConstraints { (make) -> Void in
             make.leading.equalTo()(self.infoView)
-            make.trailing.equalTo()(self.mugTimeLabel.mas_leading).with().offset()(-CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.trailing.equalTo()(self.mugTimeLabel.mas_leading).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.bottom.equalTo()(self.infoView.mas_centerY)
         }
         
         mugMessageLabel.mas_updateConstraints { (make) -> Void in
             make.leading.equalTo()(self.userNameLabel)
-            make.trailing.equalTo()(self.infoView).with().offset()(-CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.trailing.equalTo()(self.infoView).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.top.equalTo()(self.userNameLabel.mas_bottom)
         }
         
