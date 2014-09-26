@@ -21,6 +21,7 @@
 		57D2A09319D310C000FA729D /* mugchatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2A09219D310C000FA729D /* mugchatTests.swift */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
+		7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059148E19D490DC009614DB /* LoginViewDelegate.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
@@ -71,6 +72,7 @@
 		57D2A0A019D3240E00FA729D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
 		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		7059148E19D490DC009614DB /* LoginViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewDelegate.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				704E110E19D0935F00D2BB88 /* LoginView.swift */,
+				7059148E19D490DC009614DB /* LoginViewDelegate.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
+				7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */,
 				5707185F19D1A7FD0069064F /* Device.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
@@ -526,13 +530,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		574156A719D49A5E006F0A2F /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = mugchatTests;
-			};
-			name = Distribution;
-		};
 		57D2A09719D310C000FA729D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8DBF9C2E373E48DD8AACF379 /* Pods.xcconfig */;

@@ -12,20 +12,19 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
     override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        loginView.viewWillAppear()
         self.navigationController?.navigationBarHidden = true
+        super.viewWillAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.navigationBarHidden = false
         super.viewWillDisappear(animated)
         loginView.viewWillDisappear()
-        self.navigationController?.navigationBarHidden = false
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -37,22 +36,17 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         loginView = LoginView()
+        loginView.delegate = self
         self.view = loginView
-        
-        let manager = AFHTTPRequestOperationManager()
-        
-        manager.GET(
-            "http://echo.jsontest.com/key/value/one/two",
-            parameters: nil,
-            success: { (operation: AFHTTPRequestOperation!,
-                responseObject: AnyObject!) in
-                println("JSON: " + responseObject.description)
-            },
-            failure: { (operation: AFHTTPRequestOperation!,
-                error: NSError!) in
-                println("Error: " + error.localizedDescription)
-        })
-                
+        loginView.viewDidLoad()
     }
-
+    
+    func loginViewDidTapTermsOfUse(loginView: LoginView!) {
+        // do nothing
+    }
+    
+    func loginViewDidTapSignInButton(loginView: LoginView!) {
+        var inboxViewController = InboxViewController()
+        self.navigationController?.pushViewController(inboxViewController, animated: true)
+    }
 }
