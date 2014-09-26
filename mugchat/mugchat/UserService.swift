@@ -10,7 +10,8 @@
 // the license agreement.
 //
 
-public typealias UserServiceResponse = (MugError?, User?) -> Void
+public typealias UserServiceSuccessResponse = (User?) -> Void
+public typealias UserServiceFaiureResponse = (MugError?) -> Void
 
 public class UserService: MugchatService {
     
@@ -29,30 +30,27 @@ public class UserService: MugchatService {
     }
     
     // MARK: - Sign-up
+    
 
-    //    usage:
-    //    
-    //    var service = UserService.sharedInstance
-    //    var date = NSDate(dateString: "1968-12-02")
-    //    service.signup("devtest@arctouch.com", password: "YetAnotherPwd123", firstName: "Dev", lastName: "Test", birthday: date, nickname: "Neo", { (error: MugError?, user: User?) -> Void in
-    //        println(user?.username)
-    //        println(error?.error)
-    //    })
-    func signup(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, responseCallback: UserServiceResponse) {
+    func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
-        let parms = ["username" : username, "password" : password, "firstName" : firstName, "lastName" : lastName, "birthday" : birthday, "nickname" : nickname!]
+        let params = ["username" : username, "password" : password, "firstName" : firstName, "lastName" : lastName, "birthday" : birthday, "nickname" : nickname!]
         
         request.POST(url,
-            parameters: parms,
+            parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSignupResponse(responseObject)
-                responseCallback(nil, user)
+                success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                var response = operation.responseObject as NSDictionary
-                responseCallback(MugError(error: response["error"] as String!, details:nil), nil)
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
             }
         )
     }
@@ -64,27 +62,26 @@ public class UserService: MugchatService {
     
     // MARK: - Sign-in
     
-    func signin(username: String, password: String, responseCallback: UserServiceResponse) {
+    
+    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNIN_URL
-        let parms = ["username" : username, "password" : password]
+        let params = ["username" : username, "password" : password]
         
         request.POST(url,
-            parameters: parms,
+            parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSigninResponse(responseObject)
-                responseCallback(nil, user)
+                success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                let response = operation.responseObject as? NSDictionary
-                var message: String
-                if (response == nil) {
-                    message = error.localizedDescription
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
                 } else {
-                    message = response!["error"] as String
+                    failure(MugError(error: error.localizedDescription, details:nil))
                 }
-                responseCallback(MugError(error: message, details:nil), nil)
             }
         )
     }
@@ -93,7 +90,5 @@ public class UserService: MugchatService {
         var user = User(object: response)
         return user
     }
-
-    
     
 }
