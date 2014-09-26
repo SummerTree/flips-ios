@@ -10,11 +10,8 @@
 // the license agreement.
 //
 
-import UIKit
-
-protocol LoginViewDelegate {
+public class MugchatService : NSObject {
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!) -> Void
-    func loginViewDidTapSignInButton(loginView: LoginView!) -> Void
-
+    let HOST: String = "http://localhost:1337"
+    
 }

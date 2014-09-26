@@ -195,7 +195,7 @@ class LoginView : UIView, UITextFieldDelegate {
         acceptanceView.addSubview(self.acceptTermsPhrase)
         
         termsOfUse = UIButton()
-        termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        //termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         termsOfUse.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         termsOfUse.setTitle(NSLocalizedString("Terms of Use", comment: "Terms of Use"), forState: UIControlState.Normal)
         acceptanceView.addSubview(termsOfUse)
@@ -332,10 +332,16 @@ class LoginView : UIView, UITextFieldDelegate {
         super.updateConstraints()
     }
     
+    
     // MARK: - Buttons delegate
+    func signInButtonTapped(sender: AnyObject?) {
+        self.delegate?.loginViewDidTapSignInButton(self)
+    }
+    
     func termsOfUseButtonTapped(sender: AnyObject?) {
         self.delegate?.loginViewDidTapTermsOfUse(self)
     }
+    
     
     // MARK: - Keyboard control
     
@@ -353,6 +359,7 @@ class LoginView : UIView, UITextFieldDelegate {
         } else if (textField == self.passwordTextField) {
             // Done button was pressed
             // TODO: Authenticate?
+            self.signInButtonTapped(self)
             self.passwordTextField.resignFirstResponder()
         }
         

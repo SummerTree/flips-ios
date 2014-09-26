@@ -25,14 +25,14 @@ Scenario: Touching Back on Privacy Policy screen
 
 @7168
 Scenario: Updating informations
-  Given The user changed some information on the "Privacy Policy" screen
+  Given The administrator changed some information on the "Privacy Policy" screen
   When I see this screen again
   Then I should see these changes
 
 @7168
-Scenario: Scrooling Privacy Policy
+Scenario: Scrolling Privacy Policy
   Given I am on the "Privacy Policy" screen
-  When I scrool the screen
+  When I scroll the screen
   Then I should see the rest of the page
 
 @7168

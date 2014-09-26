@@ -1,5 +1,7 @@
 platform :ios, "7.0"
 
+link_with 'mugchat', 'mugchatTests'
+
 pod 'AFNetworking', '2.4.1'
 pod 'Masonry', '0.5.3'
 

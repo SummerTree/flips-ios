@@ -10,11 +10,12 @@
 // the license agreement.
 //
 
-import UIKit
-
-protocol LoginViewDelegate {
+public struct Room {
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!) -> Void
-    func loginViewDidTapSignInButton(loginView: LoginView!) -> Void
-
+    var id: String? = nil
+    var name: String? = nil
+    var admin: User? = nil
+    var participants: [User]? = nil
+    var pubnubId: String? = nil
+    
 }

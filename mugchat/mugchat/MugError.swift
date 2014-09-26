@@ -10,11 +10,7 @@
 // the license agreement.
 //
 
-import UIKit
-
-protocol LoginViewDelegate {
-    
-    func loginViewDidTapTermsOfUse(loginView: LoginView!) -> Void
-    func loginViewDidTapSignInButton(loginView: LoginView!) -> Void
-
+public struct MugError {
+    var error: String?
+    var details: String?
 }

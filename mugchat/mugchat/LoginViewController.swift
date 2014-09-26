@@ -31,7 +31,7 @@ class LoginViewController: UIViewController, LoginViewDelegate {
         super.viewDidAppear(animated)
         loginView.viewDidAppear()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,9 +42,11 @@ class LoginViewController: UIViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
-        var termsViewController = TermsOfServiceViewController()
-        self.navigationController?.pushViewController(termsViewController, animated: true)
-//        self.presentViewController(termsViewController, animated: true, completion: nil)
+        // do nothing
+    }
+    
+    func loginViewDidTapSignInButton(loginView: LoginView!) {
+        var inboxViewController = InboxViewController()
+        self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
 }
-

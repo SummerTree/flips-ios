@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        
         let loginViewController = LoginViewController()
         let navigationViewControler = UINavigationController(rootViewController: loginViewController)
 
@@ -38,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.saveContext()
     }
 
+    
     // MARK: - Core Data stack
 
     lazy var applicationDocumentsDirectory: NSURL = {
@@ -87,6 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return managedObjectContext
     }()
 
+    
     // MARK: - Core Data Saving support
 
     func saveContext () {

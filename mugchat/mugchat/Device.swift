@@ -10,11 +10,13 @@
 // the license agreement.
 //
 
-import UIKit
-
-protocol LoginViewDelegate {
+public struct Device {
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!) -> Void
-    func loginViewDidTapSignInButton(loginView: LoginView!) -> Void
-
+    var id: String? = nil
+    var user: User? = nil
+    var phoneNumber: String? = nil
+    var platform: String? = nil
+    var uuid: String? = nil
+    var isVerified: Bool? = nil
+    
 }
