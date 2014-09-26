@@ -25,11 +25,13 @@ class ConversationTableViewCell : UITableViewCell {
     private let CELL_MUG_IMAGE_VIEW_HEIGHT = 112.5
     private let CELL_INFO_VIEW_HEIGHT = 56
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
-    private let BADGE_TOP_MARGIN : CGFloat = 4
-    private let BADGE_RIGHT_MARGIN : CGFloat = 12
-
+    private let DRAG_ANIMATION_DURATION = 0.25
+    
     // TODO: will be removed - just for test
     var item : InboxItem!
+    
+    private var deleteButton : UIButton!
+    private var cellContainerView : UIView!
     
     private var mugImageView : UIImageView!
     private var userImageView : UIImageView!
@@ -50,7 +52,13 @@ class ConversationTableViewCell : UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.selectionStyle = .Gray
+        deleteButton = UIButton()
+        deleteButton.setImage(UIImage(named: "Delete"), forState: .Normal)
+        deleteButton.backgroundColor = UIColor.deepSea()
+        deleteButton.addTarget(self, action: "deleteButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        cellContainerView = UIView()
+        cellContainerView.backgroundColor = UIColor.whiteColor()
         
         mugImageView = UIImageView()
         userImageView = UIImageView.avatarA3()
@@ -85,14 +93,20 @@ class ConversationTableViewCell : UITableViewCell {
         self.addSubviews()
         
         self.updateConstraintsIfNeeded()
+        
+        var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        self.cellContainerView.addGestureRecognizer(panGestureRecognizer)
     }
-    
+   
     func addSubviews() {
-        self.addSubview(mugImageView)
-        self.addSubview(infoView)
-        self.addSubview(userImageView)
-        self.addSubview(badgeView)
-        self.addSubview(highlightedView)
+        self.addSubview(deleteButton)
+        self.addSubview(cellContainerView)
+
+        cellContainerView.addSubview(mugImageView)
+        cellContainerView.addSubview(infoView)
+        cellContainerView.addSubview(userImageView)
+        cellContainerView.addSubview(badgeView)
+        cellContainerView.addSubview(highlightedView)
         
         infoView.addSubview(mugMessageLabel)
         infoView.addSubview(userNameLabel)
@@ -103,16 +117,32 @@ class ConversationTableViewCell : UITableViewCell {
     // MARK: - Overridden methods
     
     override func updateConstraints() {
-        mugImageView.mas_updateConstraints { (make) -> Void in
-            make.width.equalTo()(self)
-            make.height.equalTo()(self.CELL_MUG_IMAGE_VIEW_HEIGHT)
-            make.leading.equalTo()(self)
+        
+        deleteButton.mas_updateConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.bottom.equalTo()(self)
             make.trailing.equalTo()(self)
+            make.width.equalTo()(110)
+        }
+        
+        cellContainerView.mas_updateConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.bottom.equalTo()(self)
+            make.width.equalTo()(self)
+            make.trailing.equalTo()(self)
+        }
+        
+        
+        mugImageView.mas_updateConstraints { (make) -> Void in
+            make.top.equalTo()(self.cellContainerView)
+            make.height.equalTo()(self.CELL_MUG_IMAGE_VIEW_HEIGHT)
+            make.leading.equalTo()(self.cellContainerView)
+            make.trailing.equalTo()(self.cellContainerView)
         }
         mugImageView.backgroundColor = UIColor.greenColor()
         
         userImageView.mas_updateConstraints { (make) -> Void in
-            make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.leading.equalTo()(self.cellContainerView).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.mugImageView.mas_bottom)
             make.width.equalTo()(self.userImageView.frame.size.width)
             make.height.equalTo()(self.userImageView.frame.size.height)
@@ -120,15 +150,15 @@ class ConversationTableViewCell : UITableViewCell {
         userImageView.backgroundColor = UIColor.blueColor()
         
         badgeView.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self.userImageView).with().offset()(self.BADGE_TOP_MARGIN)
-            make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(-self.BADGE_RIGHT_MARGIN)
+            make.bottom.equalTo()(self.userImageView.mas_centerY)
+            make.leading.equalTo()(self.userImageView.mas_centerX)
             make.width.equalTo()(self.badgeView.frame.size.width)
             make.height.equalTo()(self.badgeView.frame.size.height)
         }
         
         infoView.mas_updateConstraints { (make) -> Void in
             make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-            make.trailing.equalTo()(self)
+            make.trailing.equalTo()(self.cellContainerView)
             make.top.equalTo()(self.mugImageView.mas_bottom)
             make.height.equalTo()(self.CELL_INFO_VIEW_HEIGHT)
         }
@@ -152,10 +182,10 @@ class ConversationTableViewCell : UITableViewCell {
         }
         
         highlightedView.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.bottom.equalTo()(self)
-            make.leading.equalTo()(self)
-            make.trailing.equalTo()(self)
+            make.top.equalTo()(self.cellContainerView)
+            make.bottom.equalTo()(self.cellContainerView)
+            make.leading.equalTo()(self.cellContainerView)
+            make.trailing.equalTo()(self.cellContainerView)
         }
         
         super.updateConstraints()
@@ -185,9 +215,42 @@ class ConversationTableViewCell : UITableViewCell {
     }
     
     
-    // MARK: - Private Methods
+    // MARK: - Actions Handlers
     
     private func setCellBackgroundColorForState(selected: Bool) {
         highlightedView.hidden = !selected
+    }
+    
+    func handlePan(recognizer:UIPanGestureRecognizer) {
+        let translation = recognizer.translationInView(self.cellContainerView)
+        if (recognizer.view!.center.x <= self.center.x) {
+            // Don't move to right
+            recognizer.view!.center = CGPoint(x:recognizer.view!.center.x + translation.x, y:recognizer.view!.center.y)
+        }
+        recognizer.setTranslation(CGPointZero, inView: self.cellContainerView)
+        
+        if (recognizer.state == UIGestureRecognizerState.Ended) {
+            var newCenterX = self.center.x
+            var positionLimitToAutomaticalyShowDeleteButton = CGRectGetMinX(self.deleteButton.frame) + CGRectGetWidth(self.deleteButton.frame) / 2
+            if ((CGRectGetMaxX(recognizer.view!.frame) + translation.x) < positionLimitToAutomaticalyShowDeleteButton) {
+                newCenterX = self.center.x - self.deleteButton.frame.size.width
+            }
+            
+            UIView.animateWithDuration(DRAG_ANIMATION_DURATION, animations: { () -> Void in
+                recognizer.view!.center = CGPoint(x:newCenterX, y:recognizer.view!.center.y)
+                recognizer.setTranslation(CGPointZero, inView: self.cellContainerView)
+            })
+
+        }
+    }
+    
+    func deleteButtonTapped() {
+        println("deleteButtonTapped")
+        if (self.cellContainerView.center.x != self.center.x) {
+            UIView.animateWithDuration(DRAG_ANIMATION_DURATION, animations: { () -> Void in
+                self.cellContainerView.center.x = self.center.x
+            })
+        }
+
     }
 }
