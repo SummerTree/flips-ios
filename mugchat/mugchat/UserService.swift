@@ -27,9 +27,9 @@ public class UserService: MugchatService {
         }
         return Static.instance
     }
-
+    
     //    usage:
-    //    
+    //
     //    var service = UserService.sharedInstance
     //    var date = NSDate(dateString: "1968-12-02")
     //    service.signup("devtest@arctouch.com", password: "YetAnotherPwd123", firstName: "Dev", lastName: "Test", birthday: date, nickname: "Neo", { (error: MugError?, user: User?) -> Void in
@@ -49,8 +49,12 @@ public class UserService: MugchatService {
                 responseCallback(nil, user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                var response = operation.responseObject as NSDictionary
-                responseCallback(MugError(error: response["error"] as String!, details:nil), nil)
+                if (operation.responseObject != nil) {
+                    var response = operation.responseObject as NSDictionary
+                    responseCallback(MugError(error: response["error"] as String!, details:nil), nil)
+                } else {
+                    responseCallback(MugError(error: "Unexpected Error", details:nil), nil)
+                }
             }
         )
     }
