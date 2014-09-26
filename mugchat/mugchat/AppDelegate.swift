@@ -23,9 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        
-        let loginViewController = LoginViewController()
-        let navigationViewControler = UINavigationController(rootViewController: loginViewController)
+//        let loginViewController = LoginViewController()
+        let inbox = InboxViewController()
+        let navigationViewControler = UINavigationController(rootViewController: inbox)
 
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
