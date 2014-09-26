@@ -25,7 +25,13 @@ Scenario Outline: Invalid Password
   | mugChatt |
   | 12345678 |
   | mugCha8  |
-  | mugChat8 |#same value current password
+
+@7172
+Scenario: Informing on the new password the password that I forgot
+  Given I am on the "New Password" screen
+  When I fill "New Password" whit the password that I forgot
+  And I touch "Done" button
+  Then I should see "Inbox" screen
 
 @7172
 Scenario: Touching Back button on New Password
