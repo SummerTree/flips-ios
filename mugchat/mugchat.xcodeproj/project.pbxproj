@@ -10,6 +10,8 @@
 		529FBC9A5ADB4130A5662AB4 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2855AFB3B9540ADAEC3E76F /* libPods.a */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
+		7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059148E19D490DC009614DB /* LoginViewDelegate.swift */; };
+		7059149119D4940D009614DB /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059149019D4940D009614DB /* TermsOfServiceViewController.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
@@ -20,6 +22,8 @@
 /* Begin PBXFileReference section */
 		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
 		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		7059148E19D490DC009614DB /* LoginViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewDelegate.swift; sourceTree = "<group>"; };
+		7059149019D4940D009614DB /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				704E110D19D0934700D2BB88 /* Login */,
+				7059149219D49414009614DB /* TermsofService */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -80,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				704E110E19D0935F00D2BB88 /* LoginView.swift */,
+				7059148E19D490DC009614DB /* LoginViewDelegate.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -91,6 +97,14 @@
 				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		7059149219D49414009614DB /* TermsofService */ = {
+			isa = PBXGroup;
+			children = (
+				7059149019D4940D009614DB /* TermsOfServiceViewController.swift */,
+			);
+			name = TermsofService;
 			sourceTree = "<group>";
 		};
 		70FD4E6719D064450024EBDB = {
@@ -246,11 +260,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
+				7059149119D4940D009614DB /* TermsOfServiceViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
+				7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
