@@ -202,7 +202,7 @@ class LoginView : UIView, UITextFieldDelegate {
         acceptanceView.addSubview(self.acceptTermsPhrase)
         
         termsOfUse = UIButton()
-        //termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         termsOfUse.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         termsOfUse.setTitle(NSLocalizedString("Terms of Use", comment: "Terms of Use"), forState: UIControlState.Normal)
         acceptanceView.addSubview(termsOfUse)
