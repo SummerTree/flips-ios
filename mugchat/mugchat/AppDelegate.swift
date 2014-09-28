@@ -23,8 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        let loginViewController = LoginViewController()
-        let navigationViewControler = UINavigationController(rootViewController: loginViewController)
+//        let loginViewController = LoginViewController()
+//        let navigationViewControler = UINavigationController(rootViewController: loginViewController)
+        
+        let phoneNumberViewController = PhoneNumberViewController()
+        let navigationViewControler = UINavigationController(rootViewController: phoneNumberViewController)
 
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
