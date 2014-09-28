@@ -29,6 +29,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private let CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
     private let EMAIL_MARGIN_LEFT: CGFloat = 15.0
     private let EMAIL_MARGIN_BOTTOM: CGFloat = 12.5
+    private let MINIMAL_SPACER_HEIGHT: CGFloat = 10.0
     private let PASSWORD_MARGIN_TOP: CGFloat = 12.5
     private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
     private let PRIVACY_POLICY_HEIGHT: CGFloat = 20.0
@@ -258,7 +259,7 @@ class LoginView : UIView, UITextFieldDelegate {
             make.bottom.equalTo()(self.credentialsView.mas_top)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
-            make.height.greaterThanOrEqualTo()(10.0)
+            make.height.greaterThanOrEqualTo()(self.MINIMAL_SPACER_HEIGHT)
         }
         
         credentialsView.mas_makeConstraints { (make) -> Void in
