@@ -46,6 +46,11 @@ class LoginViewController: UIViewController, LoginViewDelegate {
         self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
+    func loginViewDidTapPrivacyPolicy(loginView: LoginView!) {
+        var privacyPolicyViewController = PrivacyPolicyViewController()
+        self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
+    }
+    
     func loginViewDidTapSignInButton(loginView: LoginView!) {
         var inboxViewController = InboxViewController()
         self.navigationController?.pushViewController(inboxViewController, animated: true)
