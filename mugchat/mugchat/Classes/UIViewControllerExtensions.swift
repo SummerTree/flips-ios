@@ -32,6 +32,23 @@ extension UIViewController {
         closeBarButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = closeBarButton
     }
+    
+    func setupWhiteNavBarWithBackButton(title: String) {
+        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.alpha = 0.9
+        
+        var titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
+        titleLabel.textColor = UIColor.blackColor()
+        titleLabel.textAlignment = .Center
+        titleLabel.sizeToFit()
+        self.navigationItem.titleView = titleLabel
+        
+        var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
+        backBarButton.tintColor = UIColor.orangeColor()
+        self.navigationItem.leftBarButtonItem = backBarButton
+    }
 
     func setupRedNavBar(centerThumbnailImage: String, showSettingsButton: Bool, showBuilderButton: Bool) {
         self.setNavBarColor()
@@ -84,6 +101,10 @@ extension UIViewController {
     
     func closeButtonTapped() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func backButtonTapped() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     
