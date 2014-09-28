@@ -22,29 +22,19 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
     private let MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat = 100.0
     
+    private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
     private let ANDWORD_MARGIN_LEFT: CGFloat = 2
     private let ANDWORD_MARGIN_RIGHT: CGFloat = 2
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
-    private let CREDENTIALS_MARGIN_TOP: CGFloat = 49.0
     private let CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
     private let EMAIL_MARGIN_LEFT: CGFloat = 15.0
     private let EMAIL_MARGIN_BOTTOM: CGFloat = 12.5
-    private let EMAIL_HEIGHT: CGFloat = 44.0
-    private let EMAIL_IMAGE_MARGIN_TOP: CGFloat = 10.0
-    private let FACEBOOK_MARGIN_TOP: CGFloat = 15.0
     private let PASSWORD_MARGIN_TOP: CGFloat = 12.5
     private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
-    private let PASSWORD_HEIGHT: CGFloat = 44.0
     private let PRIVACY_POLICY_HEIGHT: CGFloat = 20.0
     private let SEPARATOR_HEIGHT: CGFloat = 0.5
-    private let SEPARATOR_MARGIN_TOP:CGFloat = 12.5
-    private let SIGNUP_MARGIN_TOP: CGFloat = 10.0
-    private let SIGNUP_MARGIN_BOTTOM: CGFloat = 14.0
     private let TERMS_OF_USE_HEIGHT: CGFloat = 20.0
     
-    private let ACCEPTANCE_MARGIN_LEFT: CGFloat = 40.0
-    private let ACCEPTANCE_MARGIN_TOP: CGFloat = 10.0
-
     private var logoView: UIView!
     private var bubbleChatImageView: UIImageView!
     private var mugchatWordImageView: UIImageView!
@@ -64,6 +54,11 @@ class LoginView : UIView, UITextFieldDelegate {
     private var andWord: UILabel!
     private var privacyPolicy: UIButton!
     private var isInitialized = false
+    
+    private var spaceBetweenMugchatAndCredentials: UIView!
+    private var spaceBetweenCredentialsAndFacebook: UIView!
+    private var spaceBetweenFacebookAndSignUp: UIView!
+    private var spaceBetweenSignUpAndAcceptance: UIView!
     
     var delegate: LoginViewDelegate?
     
@@ -133,8 +128,14 @@ class LoginView : UIView, UITextFieldDelegate {
         mugchatWordImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(mugchatWordImageView)
         
+        spaceBetweenMugchatAndCredentials = UIView()
+        self.addSubview(spaceBetweenMugchatAndCredentials)
+        
         credentialsView = UIView()
         self.addSubview(credentialsView)
+        
+        spaceBetweenCredentialsAndFacebook = UIView()
+        self.addSubview(spaceBetweenCredentialsAndFacebook)
         
         emailImageView = UIImageView(image: UIImage(named: "Mail"));
         emailImageView.contentMode = .Center
@@ -177,6 +178,9 @@ class LoginView : UIView, UITextFieldDelegate {
         facebookButton.setTitle(NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), forState: UIControlState.Normal)
         self.addSubview(facebookButton)
         
+        spaceBetweenFacebookAndSignUp = UIView()
+        self.addSubview(spaceBetweenFacebookAndSignUp)
+        
         signupButton = UIButton()
         signupButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         signupButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Sign Up", comment: "Sign Up"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
@@ -184,6 +188,9 @@ class LoginView : UIView, UITextFieldDelegate {
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackgroundTap"), forState: UIControlState.Highlighted)
         signupButton.setTitle(NSLocalizedString("Sign Up", comment: "Sign Up"), forState: UIControlState.Normal)
         self.addSubview(signupButton)
+        
+        spaceBetweenSignUpAndAcceptance = UIView()
+        self.addSubview(spaceBetweenSignUpAndAcceptance)
         
         acceptanceView = UIView()
         self.addSubview(acceptanceView)
@@ -210,8 +217,6 @@ class LoginView : UIView, UITextFieldDelegate {
         privacyPolicy.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         privacyPolicy.setTitle(NSLocalizedString("Privacy Policy", comment: "Privacy Policy"), forState: UIControlState.Normal)
         acceptanceView.addSubview(privacyPolicy)
-        
-        
     }
     
     func updateBubbleChatConstraints() {
@@ -241,92 +246,125 @@ class LoginView : UIView, UITextFieldDelegate {
         }
         
         mugchatWordImageView.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self.bubbleChatImageView.mas_centerX)
+            make.centerX.equalTo()(self.bubbleChatImageView)
             make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.MUGCHAT_WORD_LOGO_MARGIN_TOP)
             make.leading.equalTo()(self.logoView)
             make.trailing.equalTo()(self.logoView)
             make.bottom.equalTo()(self.logoView)
         }
         
-        acceptanceView.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self).with().offset()(-self.MARGIN_BOTTOM)
-            make.top.equalTo()(self.signupButton.mas_bottom).with().offset()(self.ACCEPTANCE_MARGIN_TOP)
-            make.left.equalTo()(self.signupButton)
-            make.right.equalTo()(self.signupButton)
-        }
-        
-        termsOfUse.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.acceptanceView)
-            make.height.equalTo()(self.TERMS_OF_USE_HEIGHT)
-            make.bottom.equalTo()(self.acceptanceView)
-        }
-        
-        andWord.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.termsOfUse.mas_right).with().offset()(self.ANDWORD_MARGIN_LEFT)
-            make.centerY.equalTo()(self.termsOfUse)
-            make.right.equalTo()(self.privacyPolicy.mas_left).with().offset()(-self.ANDWORD_MARGIN_RIGHT)
-            make.bottom.equalTo()(self.acceptanceView)
-        }
-        
-        privacyPolicy.mas_makeConstraints { (make) -> Void in
-            make.right.equalTo()(self.acceptanceView)
-            make.height.equalTo()(self.PRIVACY_POLICY_HEIGHT)
-            make.bottom.equalTo()(self.acceptanceView)
-        }
-        
-        acceptTermsPhrase.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self.termsOfUse.mas_top).with().offset()(5)
-            make.centerX.equalTo()(self.signupButton)
-        }
-        
-        signupButton.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self)
-            make.bottom.equalTo()(self.privacyPolicy.mas_top).with().offset()(-self.SIGNUP_MARGIN_BOTTOM)
-        }
-        
-        facebookButton.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self)
-            make.bottom.equalTo()(self.signupButton.mas_top).with().offset()(-self.SIGNUP_MARGIN_TOP)
+        spaceBetweenMugchatAndCredentials.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.logoView.mas_bottom)
+            make.bottom.equalTo()(self.credentialsView.mas_top)
+            make.leading.equalTo()(self)
+            make.trailing.equalTo()(self)
+            make.height.greaterThanOrEqualTo()(10.0)
         }
         
         credentialsView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.bubbleChatImageView)
-            make.bottom.equalTo()(self.facebookButton.mas_top).with().offset()(-self.FACEBOOK_MARGIN_TOP)
             make.trailing.equalTo()(self.bubbleChatImageView)
-            make.top.equalTo()(self.emailImageView.mas_top).with().offset()(-self.EMAIL_IMAGE_MARGIN_TOP)
-        }
-        
-        passwordImageView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.credentialsView)
-            make.width.equalTo()(self.passwordImageView.image?.size.width)
-            make.bottom.equalTo()(self.credentialsView)
-        }
-        
-        passwordTextField.mas_makeConstraints { (make) -> Void in
-            make.centerY.equalTo()(self.passwordImageView)
-            make.left.equalTo()(self.passwordImageView.mas_right).with().offset()(self.PASSWORD_MARGIN_LEFT)
-            make.trailing.equalTo()(self.credentialsView)
-            make.bottom.equalTo()(self.credentialsView)
-        }
-        
-        emailPasswordSeparator.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.passwordTextField)
-            make.width.equalTo()(self.passwordTextField)
-            make.height.equalTo()(self.SEPARATOR_HEIGHT)
-            make.bottom.equalTo()(self.passwordTextField.mas_top).with().offset()(-self.PASSWORD_MARGIN_TOP)
+            make.top.equalTo()(self.spaceBetweenMugchatAndCredentials.mas_bottom)
+            make.bottom.equalTo()(self.passwordImageView)
         }
         
         emailImageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.credentialsView)
             make.centerY.equalTo()(self.emailTextField)
-            make.left.equalTo()(self.credentialsView)
+            make.leading.equalTo()(self.credentialsView)
             make.width.equalTo()(self.emailImageView.image?.size.width)
             make.bottom.equalTo()(self.emailPasswordSeparator.mas_top).with().offset()(-self.EMAIL_MARGIN_BOTTOM)
         }
         
         emailTextField.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
+            make.top.equalTo()(self.credentialsView)
+            make.leading.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
             make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
             make.bottom.equalTo()(self.emailPasswordSeparator.mas_top).with().offset()(-self.EMAIL_MARGIN_BOTTOM)
+        }
+        
+        emailPasswordSeparator.mas_makeConstraints { (make) -> Void in
+            make.leading.equalTo()(self.passwordTextField)
+            make.trailing.equalTo()(self.passwordTextField)
+            make.height.equalTo()(self.SEPARATOR_HEIGHT)
+            make.bottom.equalTo()(self.passwordTextField.mas_top).with().offset()(-self.PASSWORD_MARGIN_TOP)
+        }
+        
+        passwordImageView.mas_makeConstraints { (make) -> Void in
+            make.centerY.equalTo()(self.passwordTextField)
+            make.leading.equalTo()(self.credentialsView)
+            make.width.equalTo()(self.passwordImageView.image?.size.width)
+            make.bottom.equalTo()(self.credentialsView)
+        }
+        
+        passwordTextField.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.passwordImageView.mas_right).with().offset()(self.PASSWORD_MARGIN_LEFT)
+            make.trailing.equalTo()(self.credentialsView)
+            make.bottom.equalTo()(self.credentialsView)
+        }
+        
+        spaceBetweenCredentialsAndFacebook.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.credentialsView.mas_bottom)
+            make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
+        }
+
+        facebookButton.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.top.equalTo()(self.spaceBetweenCredentialsAndFacebook.mas_bottom)
+        }
+
+        spaceBetweenFacebookAndSignUp.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.facebookButton.mas_bottom)
+            make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
+        }
+
+        signupButton.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.top.equalTo()(self.spaceBetweenFacebookAndSignUp.mas_bottom)
+        }
+
+        spaceBetweenSignUpAndAcceptance.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.signupButton.mas_bottom)
+            make.bottom.equalTo()(self.acceptanceView.mas_top)
+            make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
+        }
+        
+        acceptanceView.mas_makeConstraints { (make) -> Void in
+            make.bottom.equalTo()(self).with().offset()(-self.MARGIN_BOTTOM)
+            make.top.equalTo()(self.spaceBetweenSignUpAndAcceptance.mas_bottom)
+            make.trailing.equalTo()(self.signupButton)
+            make.leading.equalTo()(self.signupButton)
+            make.height.equalTo()(self.ACCEPTANCE_VIEW_HEIGHT)
+        }
+        
+        termsOfUse.mas_makeConstraints { (make) -> Void in
+            make.leading.equalTo()(self.acceptanceView)
+            make.height.equalTo()(self.TERMS_OF_USE_HEIGHT)
+            make.bottom.equalTo()(self.acceptanceView)
+        }
+        
+        andWord.mas_makeConstraints { (make) -> Void in
+            make.leading.equalTo()(self.termsOfUse.mas_right).with().offset()(self.ANDWORD_MARGIN_LEFT)
+            make.centerY.equalTo()(self.termsOfUse)
+            make.trailing.equalTo()(self.privacyPolicy.mas_left).with().offset()(-self.ANDWORD_MARGIN_RIGHT)
+            make.bottom.equalTo()(self.acceptanceView)
+        }
+        
+        privacyPolicy.mas_makeConstraints { (make) -> Void in
+            make.trailing.equalTo()(self.acceptanceView)
+            make.height.equalTo()(self.PRIVACY_POLICY_HEIGHT)
+            make.bottom.equalTo()(self.acceptanceView)
+        }
+        
+        acceptTermsPhrase.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.acceptanceView)
+            make.centerX.equalTo()(self.signupButton)
         }
         
         super.updateConstraints()
@@ -334,6 +372,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     
     // MARK: - Buttons delegate
+    
     func signInButtonTapped(sender: AnyObject?) {
         self.delegate?.loginViewDidTapSignInButton(self)
     }
@@ -358,7 +397,6 @@ class LoginView : UIView, UITextFieldDelegate {
             
         } else if (textField == self.passwordTextField) {
             // Done button was pressed
-            // TODO: Authenticate?
             self.signInButtonTapped(self)
             self.passwordTextField.resignFirstResponder()
         }
