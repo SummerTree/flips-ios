@@ -41,6 +41,7 @@ class MugChatWebViewController: UIViewController {
         self.setupWhiteNavBarWithBackButton(NSLocalizedString(self.webTitle, comment: self.webTitle))
     }
     
+    
     // MARK: - Required init
     
     required init(coder aDecoder: NSCoder) {

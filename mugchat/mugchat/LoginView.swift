@@ -20,15 +20,17 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MARGIN_LEFT:CGFloat = 40.0
 
     private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
-    private let MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat = 100.0
-    
+
+    private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
+    private var MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat = 100.0
+    private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
+
     private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
     private let ANDWORD_MARGIN_LEFT: CGFloat = 2
     private let ANDWORD_MARGIN_RIGHT: CGFloat = 2
-    private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
-    private let CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
     private let EMAIL_MARGIN_LEFT: CGFloat = 15.0
     private let EMAIL_MARGIN_BOTTOM: CGFloat = 12.5
+    private let KEYBOARD_MARGIN_TOP: CGFloat = 30.0
     private let MINIMAL_SPACER_HEIGHT: CGFloat = 10.0
     private let PASSWORD_MARGIN_TOP: CGFloat = 12.5
     private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
@@ -398,7 +400,6 @@ class LoginView : UIView, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if (textField == self.emailTextField) {
             // next button was pressed
-            self.emailTextField.resignFirstResponder()
             self.passwordTextField.becomeFirstResponder()
             
         } else if (textField == self.passwordTextField) {
@@ -411,31 +412,33 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        let keyboardOffset = getKeyboardOffset(notification)
-        
-        if (self.bubbleChatImageView.frame.origin.y >= 0) {
-            self.slideViews(true, offset: keyboardOffset)
-        } else {
-            self.slideViews(false, offset: keyboardOffset)
-        }
+        let keyboardMinY = getKeyboardMinY(notification)
+        self.slideViews(true, keyboardTop: keyboardMinY)
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        let keyboardOffset = getKeyboardOffset(notification)
-        if (self.bubbleChatImageView.frame.origin.y >= 0) {
-            self.slideViews(true, offset: keyboardOffset)
-        } else {
-            self.slideViews(false, offset: keyboardOffset)
-        }
+        let keyboardMinY = getKeyboardMinY(notification)
+        self.slideViews(false, keyboardTop: keyboardMinY)
     }
     
-    func slideViews(movedUp: Bool, offset: CGFloat) {
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
+    func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
+        UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
+                self.facebookButton.alpha = 0.0
                 self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET
+                
+                // positioning above keyboard
+                var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
+                self.CREDENTIALS_ANIMATION_OFFSET = self.credentialsView.frame.origin.y - credentialsFinalPosition
                 self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
+                
+                // positioning the mug word between the credentials view and top the screen
+                var mugWordFinalPosition = (self.credentialsView.frame.origin.y / 2) - (self.mugchatWordImageView.frame.height / 2)
+                self.MUGCHAT_WORD_ANIMATION_OFFSET = self.mugchatWordImageView.frame.origin.y - mugWordFinalPosition
+                self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET
+                
             } else {
+                self.facebookButton.alpha = 1.0
                 self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                 self.mugchatWordImageView.frame.origin.y += self.MUGCHAT_WORD_ANIMATION_OFFSET
                 self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
@@ -454,9 +457,9 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     // MARK: - Private methods
-    private func getKeyboardOffset(notification: NSNotification) -> CGFloat {
+    private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
-        return CGRectGetHeight(keyboardRect)
+        return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
 }

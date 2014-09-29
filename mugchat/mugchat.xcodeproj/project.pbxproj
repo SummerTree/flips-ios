@@ -192,7 +192,7 @@
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
 				7A0D6CEC19D4961700E39A1B /* Settings */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
-				70B560A019D995D500FE4C34 /* WebView */,
+				70B560A019D995D500FE4C34 /* Web View */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -280,12 +280,12 @@
 			name = "Privacy Policy";
 			sourceTree = "<group>";
 		};
-		70B560A019D995D500FE4C34 /* WebView */ = {
+		70B560A019D995D500FE4C34 /* Web View */ = {
 			isa = PBXGroup;
 			children = (
 				70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */,
 			);
-			name = WebView;
+			name = "Web View";
 			sourceTree = "<group>";
 		};
 		70B560A319D996B900FE4C34 /* Web View */ = {
