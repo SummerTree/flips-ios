@@ -25,14 +25,14 @@ class MugChatWebView: UIView {
     }
     
     func addSubviews() {
-        
         self.webView = UIWebView()
-        
+        self.addSubview(self.webView)
+    }
+    
+    func viewDidLoad() {
         let URL = NSURL(string: self.url)
         let request = NSURLRequest(URL: URL)
-        
         self.webView.loadRequest(request)
-        self.addSubview(self.webView)
     }
     
     func makeConstraints() {
@@ -43,6 +43,7 @@ class MugChatWebView: UIView {
             make.top.equalTo()(self)
         }
     }
+    
     
     // MARK: - Required methods
     
