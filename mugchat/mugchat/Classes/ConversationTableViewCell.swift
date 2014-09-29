@@ -26,6 +26,7 @@ class ConversationTableViewCell : UITableViewCell {
     private let CELL_INFO_VIEW_HEIGHT = 56
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     private let DRAG_ANIMATION_DURATION = 0.25
+    private let DELETE_BUTTON_WIDTH = 110.0
     
     // TODO: will be removed - just for test
     var item : InboxItem!
@@ -122,7 +123,7 @@ class ConversationTableViewCell : UITableViewCell {
             make.top.equalTo()(self)
             make.bottom.equalTo()(self)
             make.trailing.equalTo()(self)
-            make.width.equalTo()(110)
+            make.width.equalTo()(self.DELETE_BUTTON_WIDTH)
         }
         
         cellContainerView.mas_updateConstraints { (make) -> Void in
