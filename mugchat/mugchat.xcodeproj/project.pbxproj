@@ -450,11 +450,6 @@
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				TargetAttributes = {
-					70FD4E6F19D064450024EBDB = {
-						DevelopmentTeam = 5HMJW6N276;
-					};
-				};
 			};
 			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */;
 			compatibilityVersion = "Xcode 3.2";
