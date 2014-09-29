@@ -232,8 +232,8 @@ class ConversationTableViewCell : UITableViewCell {
         
         if (recognizer.state == UIGestureRecognizerState.Ended) {
             var newCenterX = self.center.x
-            var positionLimitToAutomaticalyShowDeleteButton = CGRectGetMinX(self.deleteButton.frame) + CGRectGetWidth(self.deleteButton.frame) / 2
-            if ((CGRectGetMaxX(recognizer.view!.frame) + translation.x) < positionLimitToAutomaticalyShowDeleteButton) {
+            var positionLimitToAutomaticallyShowDeleteButton = CGRectGetMinX(self.deleteButton.frame) + CGRectGetWidth(self.deleteButton.frame) / 2
+            if ((CGRectGetMaxX(recognizer.view!.frame) + translation.x) < positionLimitToAutomaticallyShowDeleteButton) {
                 newCenterX = self.center.x - self.deleteButton.frame.size.width
             }
             
