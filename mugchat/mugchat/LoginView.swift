@@ -203,7 +203,7 @@ class LoginView : UIView, UITextFieldDelegate {
         acceptanceView.addSubview(self.acceptTermsPhrase)
         
         termsOfUse = UIButton()
-        //termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         termsOfUse.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         termsOfUse.setTitle(NSLocalizedString("Terms of Use", comment: "Terms of Use"), forState: UIControlState.Normal)
         acceptanceView.addSubview(termsOfUse)
@@ -215,6 +215,7 @@ class LoginView : UIView, UITextFieldDelegate {
         acceptanceView.addSubview(andWord)
         
         privacyPolicy = UIButton()
+        privacyPolicy.addTarget(self, action: "privacyPolicyButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         privacyPolicy.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         privacyPolicy.setTitle(NSLocalizedString("Privacy Policy", comment: "Privacy Policy"), forState: UIControlState.Normal)
         acceptanceView.addSubview(privacyPolicy)
@@ -380,6 +381,10 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func termsOfUseButtonTapped(sender: AnyObject?) {
         self.delegate?.loginViewDidTapTermsOfUse(self)
+    }
+    
+    func privacyPolicyButtonTapped(sender: AnyObject?) {
+        self.delegate?.loginViewDidTapPrivacyPolicy(self)
     }
     
     

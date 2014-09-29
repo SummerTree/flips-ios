@@ -12,10 +12,22 @@
 
 import UIKit
 
-protocol LoginViewDelegate {
+class TermsOfUseView: MugChatWebView {
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!)
-    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
-    func loginViewDidTapSignInButton(loginView: LoginView!)
+    let TERMS_OF_USE_URL = "www.arctouch.com"
+    
+    init() {
+        super.init(URL: TERMS_OF_USE_URL)
+    }
+    
+    // MARK: Required methods
 
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
 }

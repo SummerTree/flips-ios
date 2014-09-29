@@ -42,7 +42,13 @@ class LoginViewController: UIViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
-        // do nothing
+        var termsOfUseViewController = TermsOfUseViewController()
+        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
+    }
+    
+    func loginViewDidTapPrivacyPolicy(loginView: LoginView!) {
+        var privacyPolicyViewController = PrivacyPolicyViewController()
+        self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
     func loginViewDidTapSignInButton(loginView: LoginView!) {

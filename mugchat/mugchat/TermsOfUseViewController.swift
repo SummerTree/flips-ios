@@ -12,10 +12,21 @@
 
 import UIKit
 
-protocol LoginViewDelegate {
-    
-    func loginViewDidTapTermsOfUse(loginView: LoginView!)
-    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
-    func loginViewDidTapSignInButton(loginView: LoginView!)
+class TermsOfUseViewController: MugChatWebViewController {
 
+    init() {
+        super.init(view: TermsOfUseView(), title: "Terms of Use")
+    }
+
+    
+    // MARK: - Required methods
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
 }
