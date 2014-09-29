@@ -12,27 +12,21 @@
 
 import UIKit
 
-class PrivacyPolicyViewController: UIViewController {
+class PrivacyPolicyViewController: MugChatWebViewController {
     
-    var privacyPolicyView: PrivacyPolicyView!
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
+    init() {
+        super.init(view: PrivacyPolicyView(), title: "Privacy Policy")
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
+    
+    // MARK: - Required methods
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        privacyPolicyView = PrivacyPolicyView()
-        
-        self.view = privacyPolicyView
-        
-        self.setupWhiteNavBarWithBackButton(NSLocalizedString("Privacy Policy", comment: "Privacy Policy"))
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
 }

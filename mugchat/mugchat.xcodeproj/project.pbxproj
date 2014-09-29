@@ -27,6 +27,8 @@
 		7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */; };
 		7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059148E19D490DC009614DB /* LoginViewDelegate.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
+		70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */; };
+		70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A419D996F000FE4C34 /* MugChatWebView.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
@@ -83,6 +85,8 @@
 		7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyController.swift; sourceTree = "<group>"; };
 		7059148E19D490DC009614DB /* LoginViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewDelegate.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
+		70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebViewController.swift; sourceTree = "<group>"; };
+		70B560A419D996F000FE4C34 /* MugChatWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebView.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -188,6 +192,7 @@
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
 				7A0D6CEC19D4961700E39A1B /* Settings */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
+				70B560A019D995D500FE4C34 /* WebView */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 				704E111019D0936800D2BB88 /* Login */,
 				7056FE5719D8822F00BD6571 /* Privacy Policy */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
+				70B560A319D996B900FE4C34 /* Web View */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -272,6 +278,22 @@
 				7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */,
 			);
 			name = "Privacy Policy";
+			sourceTree = "<group>";
+		};
+		70B560A019D995D500FE4C34 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */,
+			);
+			name = WebView;
+			sourceTree = "<group>";
+		};
+		70B560A319D996B900FE4C34 /* Web View */ = {
+			isa = PBXGroup;
+			children = (
+				70B560A419D996F000FE4C34 /* MugChatWebView.swift */,
+			);
+			name = "Web View";
 			sourceTree = "<group>";
 		};
 		70FD4E6719D064450024EBDB = {
@@ -567,8 +589,10 @@
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7056FE5319D859D700BD6571 /* TermsOfUseViewController.swift in Sources */,
 				7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */,
+				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
 				5707185F19D1A7FD0069064F /* Device.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
+				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
 				7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */,
 			);

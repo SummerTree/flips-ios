@@ -12,27 +12,21 @@
 
 import UIKit
 
-class TermsOfUseViewController: UIViewController {
+class TermsOfUseViewController: MugChatWebViewController {
 
-    var termsOfUseView: TermsOfUseView!
+    init() {
+        super.init(view: TermsOfUseView(), title: "Terms of Use")
+    }
+
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
+    // MARK: - Required methods
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        termsOfUseView = TermsOfUseView()
-
-        self.view = termsOfUseView
-        
-        self.setupWhiteNavBarWithBackButton(NSLocalizedString("Terms of Use", comment: "Terms of Use"))
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
 }
