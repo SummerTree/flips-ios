@@ -16,6 +16,12 @@ class ForgotPasswordView : UIView {
     
     var delegate: ForgotPasswordViewDelegate?
     
+    private let MARGIN_TOP:CGFloat = 25.0
+    
+    private var enterMobileNumberLabel: UILabel!
+    private var mobileNumberTextField: UITextField!
+    
+    
     override init() {
         super.init()
         self.backgroundColor = UIColor.mugOrange()
@@ -37,16 +43,22 @@ class ForgotPasswordView : UIView {
     
     func addSubviews() {
         
-        //logoView = UIView()
-        //self.addSubview(logoView)
+        enterMobileNumberLabel = UILabel()
+        enterMobileNumberLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h7)
+        enterMobileNumberLabel.text = "Enter your phone number below to reset your password"
+        enterMobileNumberLabel.textColor = UIColor.whiteColor()
+        self.addSubview(enterMobileNumberLabel)
         
-        //bubbleChatImageView = UIImageView(image: UIImage(named: "ChatBubble"))
-        //bubbleChatImageView.contentMode = UIViewContentMode.Center
-        //logoView.addSubview(bubbleChatImageView)
     }
     
     func makeConstraints() {
         
+        enterMobileNumberLabel.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.top.equalTo()(self).with().offset()(self.MARGIN_TOP)
+        }
+        
+        super.updateConstraints()
     }
     
     
