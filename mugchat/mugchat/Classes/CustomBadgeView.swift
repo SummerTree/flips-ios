@@ -43,8 +43,8 @@ class CustomBadgeView : UIView {
         
         badgeLabel.mas_updateConstraints { (make) -> Void in
             make.centerY.equalTo()(self)
-            make.leading.equalTo()(self).with().offset()(THUMBNAIL_BORDER_WIDTH)
-            make.trailing.equalTo()(self).with().offset()(-THUMBNAIL_BORDER_WIDTH)
+            make.leading.equalTo()(self)
+            make.trailing.equalTo()(self)
         }
     }
 

@@ -10,24 +10,12 @@
 // the license agreement.
 //
 
-import UIKit
+import Foundation
 
-class PrivacyPolicyView: MugChatWebView {
+protocol InboxViewDelegate {
     
-    let PRIVACY_POLICY_URL = "http://www.arctouch.com"
-    
-    init() {
-        super.init(URL: PRIVACY_POLICY_URL)
-    }
-    
-    
-    // MARK: Required methods
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
+    func inboxViewDidTapComposeButton(inboxView : InboxView)
+    func inboxViewDidTapSettingsButton(inboxView : InboxView)
+    func inboxViewDidTapBuilderButton(inboxView : InboxView)
+    func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) // not sure if we will use int. Kept it for now.
 }

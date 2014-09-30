@@ -12,20 +12,24 @@
 
 import UIKit
 
-class MugChatWebViewController: UIViewController {
+class MugChatWebViewController: MugChatViewController {
     
     var mugChatWebView: MugChatWebView!
     var webTitle: String!
     
     init(view: MugChatWebView, title: String) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.mugChatWebView = view
         self.webTitle = title
     }
-    
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -35,21 +39,10 @@ class MugChatWebViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         
-        self.view = mugChatWebView
-        
+        self.view = self.mugChatWebView
         self.setupWhiteNavBarWithBackButton(NSLocalizedString(self.webTitle, comment: self.webTitle))
+        self.mugChatWebView.viewDidLoad()
     }
-    
-    
-    // MARK: - Required init
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
 }

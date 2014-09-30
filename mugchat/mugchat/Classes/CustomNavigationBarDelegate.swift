@@ -10,24 +10,12 @@
 // the license agreement.
 //
 
-import UIKit
+import Foundation
 
-class PrivacyPolicyView: MugChatWebView {
+protocol CustomNavigationBarDelegate {
+
+    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
+    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
     
-    let PRIVACY_POLICY_URL = "http://www.arctouch.com"
-    
-    init() {
-        super.init(URL: PRIVACY_POLICY_URL)
-    }
-    
-    
-    // MARK: Required methods
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
 }
+

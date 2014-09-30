@@ -31,7 +31,7 @@ class ConversationTableViewCell : UITableViewCell {
     // TODO: will be removed - just for test
     var item : InboxItem!
     
-    private var deleteButton : UIButton!
+    // private var deleteButton : UIButton! // TODO: probably, it will be removed. But I want to keep track of it, because the client didn't decide if we need to do it or no. So I need to commit it at least one time :P
     private var cellContainerView : UIView!
     
     private var mugImageView : UIImageView!
@@ -53,10 +53,11 @@ class ConversationTableViewCell : UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        deleteButton = UIButton()
-        deleteButton.setImage(UIImage(named: "Delete"), forState: .Normal)
-        deleteButton.backgroundColor = UIColor.deepSea()
-        deleteButton.addTarget(self, action: "deleteButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        // TODO: probably will be remove with the deleteButton declaration
+        //        deleteButton = UIButton()
+        //        deleteButton.setImage(UIImage(named: "Delete"), forState: .Normal)
+        //        deleteButton.backgroundColor = UIColor.deepSea()
+        //        deleteButton.addTarget(self, action: "deleteButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         
         cellContainerView = UIView()
         cellContainerView.backgroundColor = UIColor.whiteColor()
@@ -70,7 +71,8 @@ class ConversationTableViewCell : UITableViewCell {
         userNameLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         userNameLabel.textColor = UIColor.deepSea()
         userNameLabel.setContentHuggingPriority(251, forAxis: .Vertical)
-        userNameLabel.setContentHuggingPriority(252, forAxis: .Horizontal)
+        userNameLabel.setContentHuggingPriority(249, forAxis: .Horizontal)
+        userNameLabel.setContentCompressionResistancePriority(250, forAxis: .Horizontal)
         
         mugMessageLabel = UILabel()
         mugMessageLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
@@ -81,7 +83,7 @@ class ConversationTableViewCell : UITableViewCell {
         mugTimeLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         mugTimeLabel.textColor = UIColor.deepSea()
         mugTimeLabel.textAlignment = .Right
-        mugTimeLabel.setContentHuggingPriority(251, forAxis: .Horizontal)
+        mugTimeLabel.setContentHuggingPriority(999, forAxis: .Horizontal)
         
         badgeView = CustomBadgeView()
         
@@ -95,14 +97,16 @@ class ConversationTableViewCell : UITableViewCell {
         
         self.updateConstraintsIfNeeded()
         
-        var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
-        self.cellContainerView.addGestureRecognizer(panGestureRecognizer)
+        // TODO: probably will be remove with the deleteButton
+        // var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        // self.cellContainerView.addGestureRecognizer(panGestureRecognizer)
     }
-   
+    
     func addSubviews() {
-        self.addSubview(deleteButton)
+        // TODO: probably will be remove with the deleteButton
+        // self.addSubview(deleteButton)
         self.addSubview(cellContainerView)
-
+        
         cellContainerView.addSubview(mugImageView)
         cellContainerView.addSubview(infoView)
         cellContainerView.addSubview(userImageView)
@@ -119,12 +123,13 @@ class ConversationTableViewCell : UITableViewCell {
     
     override func updateConstraints() {
         
-        deleteButton.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.bottom.equalTo()(self)
-            make.trailing.equalTo()(self)
-            make.width.equalTo()(self.DELETE_BUTTON_WIDTH)
-        }
+        // TODO: probably will be remove with the deleteButton
+        //        deleteButton.mas_updateConstraints { (make) -> Void in
+        //            make.top.equalTo()(self)
+        //            make.bottom.equalTo()(self)
+        //            make.trailing.equalTo()(self)
+        //            make.width.equalTo()(self.DELETE_BUTTON_WIDTH)
+        //        }
         
         cellContainerView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self)
@@ -198,6 +203,7 @@ class ConversationTableViewCell : UITableViewCell {
         userNameLabel.text = item.userName
         mugMessageLabel.text = item.mugMessage
         mugTimeLabel.text = item.mugTime
+        mugTimeLabel.sizeToFit()
         
         if (item.notReadMessages == 0) {
             badgeView.hidden = true
@@ -222,36 +228,43 @@ class ConversationTableViewCell : UITableViewCell {
         highlightedView.hidden = !selected
     }
     
-    func handlePan(recognizer:UIPanGestureRecognizer) {
-        let translation = recognizer.translationInView(self.cellContainerView)
-        if (recognizer.view!.center.x <= self.center.x) {
-            // Don't move to right
-            recognizer.view!.center = CGPoint(x:recognizer.view!.center.x + translation.x, y:recognizer.view!.center.y)
-        }
-        recognizer.setTranslation(CGPointZero, inView: self.cellContainerView)
-        
-        if (recognizer.state == UIGestureRecognizerState.Ended) {
-            var newCenterX = self.center.x
-            var positionLimitToAutomaticallyShowDeleteButton = CGRectGetMinX(self.deleteButton.frame) + CGRectGetWidth(self.deleteButton.frame) / 2
-            if ((CGRectGetMaxX(recognizer.view!.frame) + translation.x) < positionLimitToAutomaticallyShowDeleteButton) {
-                newCenterX = self.center.x - self.deleteButton.frame.size.width
-            }
-            
-            UIView.animateWithDuration(DRAG_ANIMATION_DURATION, animations: { () -> Void in
-                recognizer.view!.center = CGPoint(x:newCenterX, y:recognizer.view!.center.y)
-                recognizer.setTranslation(CGPointZero, inView: self.cellContainerView)
-            })
-
-        }
-    }
+    // TODO: probably will be remove with the deleteButton
+    //    func handlePan(recognizer:UIPanGestureRecognizer) {
+    //
+    //        let translation = recognizer.translationInView(self.cellContainerView)
+    //        if (recognizer.view!.center.x <= self.center.x) {
+    //            // Don't move to right
+    //            recognizer.view!.center = CGPoint(x:recognizer.view!.center.x + translation.x, y:recognizer.view!.center.y)
+    //        }
+    //        recognizer.setTranslation(CGPointZero, inView: self.cellContainerView)
+    //
+    //        if (recognizer.state == UIGestureRecognizerState.Ended) {
+    //            var newCenterX = self.center.x
+    //            var positionLimitToAutomaticallyShowDeleteButton = CGRectGetMinX(self.deleteButton.frame) + CGRectGetWidth(self.deleteButton.frame) / 2
+    //            if ((CGRectGetMaxX(recognizer.view!.frame) + translation.x) < positionLimitToAutomaticallyShowDeleteButton) {
+    //                newCenterX = self.center.x - self.deleteButton.frame.size.width
+    //            }
+    //
+    //            UIView.animateWithDuration(DRAG_ANIMATION_DURATION, animations: { () -> Void in
+    //                recognizer.view!.center = CGPoint(x:newCenterX, y:recognizer.view!.center.y)
+    //                recognizer.setTranslation(CGPointZero, inView: self.cellContainerView)
+    //            })
+    //        }
+    //    }
     
-    func deleteButtonTapped() {
-        println("deleteButtonTapped")
-        if (self.cellContainerView.center.x != self.center.x) {
-            UIView.animateWithDuration(DRAG_ANIMATION_DURATION, animations: { () -> Void in
-                self.cellContainerView.center.x = self.center.x
-            })
-        }
-
-    }
+    // TODO: probably will be remove with the deleteButton
+    // override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    //     return true
+    // }
+    
+    // TODO: probably will be remove with the deleteButton
+    //    func deleteButtonTapped() {
+    //        println("deleteButtonTapped")
+    //        if (self.cellContainerView.center.x != self.center.x) {
+    //            UIView.animateWithDuration(DRAG_ANIMATION_DURATION, animations: { () -> Void in
+    //                self.cellContainerView.center.x = self.center.x
+    //            })
+    //        }
+    //        
+    //    }
 }
