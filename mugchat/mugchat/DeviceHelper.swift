@@ -10,24 +10,15 @@
 // the license agreement.
 //
 
-import UIKit
+import Foundation
 
-class PrivacyPolicyView: MugChatWebView {
+class DeviceHelper: NSObject {
     
-    let PRIVACY_POLICY_URL = "http://www.arctouch.com"
-    
-    init() {
-        super.init(URL: PRIVACY_POLICY_URL)
+    class func isDeviceModelLessOrEqualThaniPhone5S() -> Bool {
+        return DeviceScreenSize.screenRect.size.height <= 568
     }
     
-    
-    // MARK: Required methods
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    struct DeviceScreenSize {
+        static let screenRect: CGRect = UIScreen.mainScreen().bounds
     }
 }

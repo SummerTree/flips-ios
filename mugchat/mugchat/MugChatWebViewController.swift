@@ -41,8 +41,8 @@ class MugChatWebViewController: MugChatViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
-        self.view = mugChatWebView
-        
+        self.view = self.mugChatWebView
         self.setupWhiteNavBarWithBackButton(NSLocalizedString(self.webTitle, comment: self.webTitle))
+        self.mugChatWebView.viewDidLoad()
     }
 }

@@ -14,11 +14,12 @@ import UIKit
 
 class TermsOfUseView: MugChatWebView {
     
-    let TERMS_OF_USE_URL = "www.arctouch.com"
+    let TERMS_OF_USE_URL = "http://www.arctouch.com"
     
     init() {
         super.init(URL: TERMS_OF_USE_URL)
     }
+    
     
     // MARK: Required methods
 
