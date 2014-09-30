@@ -12,7 +12,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, LoginViewDelegate {
+class LoginViewController: MugChatViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
@@ -22,7 +22,6 @@ class LoginViewController: UIViewController, LoginViewDelegate {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = false
         super.viewWillDisappear(animated)
         loginView.viewWillDisappear()
     }
