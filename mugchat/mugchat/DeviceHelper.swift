@@ -19,6 +19,6 @@ class DeviceHelper: NSObject {
     }
     
     struct DeviceScreenSize {
-        static let screenRect: CGRect = UIScreen.mainScreen().applicationFrame
+        static let screenRect: CGRect = UIScreen.mainScreen().bounds
     }
 }
