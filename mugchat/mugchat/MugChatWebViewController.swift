@@ -36,9 +36,9 @@ class MugChatWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view = mugChatWebView
-        
+        self.view = self.mugChatWebView
         self.setupWhiteNavBarWithBackButton(NSLocalizedString(self.webTitle, comment: self.webTitle))
+        self.mugChatWebView.viewDidLoad()
     }
     
     

@@ -14,11 +14,12 @@ import UIKit
 
 class PrivacyPolicyView: MugChatWebView {
     
-    let PRIVACY_POLICY_URL = "www.arctouch.com"
+    let PRIVACY_POLICY_URL = "http://www.arctouch.com"
     
     init() {
         super.init(URL: PRIVACY_POLICY_URL)
     }
+    
     
     // MARK: Required methods
     
