@@ -22,7 +22,8 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
 
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
-    private var MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat = 100.0
+    private var LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
+    private var MUGCHAT_WORD_LAST_CENTER_Y: CGFloat!
     private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
 
     private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
@@ -58,6 +59,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private var privacyPolicy: UIButton!
     private var isInitialized = false
     
+    private var spaceBetweenTopAndMugchat: UIView!
     private var spaceBetweenMugchatAndCredentials: UIView!
     private var spaceBetweenCredentialsAndFacebook: UIView!
     private var spaceBetweenFacebookAndSignUp: UIView!
@@ -120,14 +122,19 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func addSubviews() {
         
+        spaceBetweenTopAndMugchat = UIView()
+        self.addSubview(spaceBetweenTopAndMugchat)
+        
         logoView = UIView()
         self.addSubview(logoView)
         
         bubbleChatImageView = UIImageView(image: UIImage(named: "ChatBubble"))
+        bubbleChatImageView.sizeToFit()
         bubbleChatImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(bubbleChatImageView)
         
         mugchatWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
+        mugchatWordImageView.sizeToFit()
         mugchatWordImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(mugchatWordImageView)
         
@@ -227,34 +234,46 @@ class LoginView : UIView, UITextFieldDelegate {
         logoView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self).with().offset()(self.MARGIN_TOP)
+            make.top.equalTo()(self.spaceBetweenTopAndMugchat.mas_bottom)
             make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
             make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
         }
     }
     
     func makeConstraints() {
-        var height: CGFloat = self.bubbleChatImageView.frame.size.height + self.mugchatWordImageView.frame.size.height
+        
+        spaceBetweenTopAndMugchat.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.top.equalTo()(self)
+            make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            make.height.greaterThanOrEqualTo()(self.MARGIN_TOP)
+        }
+        
         logoView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.centerY.equalTo()(self)
             make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
             make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            make.top.equalTo()(self.bubbleChatImageView)
+            make.bottom.equalTo()(self.mugchatWordImageView)
         }
 
         bubbleChatImageView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.logoView)
             make.top.equalTo()(self.logoView)
+            make.height.equalTo()(self.bubbleChatImageView.frame.size.height)
             make.leading.equalTo()(self.logoView)
             make.trailing.equalTo()(self.logoView)
         }
         
         mugchatWordImageView.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self.bubbleChatImageView)
+            make.centerX.equalTo()(self.logoView)
             make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.MUGCHAT_WORD_LOGO_MARGIN_TOP)
             make.leading.equalTo()(self.logoView)
             make.trailing.equalTo()(self.logoView)
             make.bottom.equalTo()(self.logoView)
+            make.height.equalTo()(self.mugchatWordImageView.frame.height)
         }
         
         spaceBetweenMugchatAndCredentials.mas_makeConstraints { (make) -> Void in
@@ -323,7 +342,7 @@ class LoginView : UIView, UITextFieldDelegate {
             make.top.equalTo()(self.facebookButton.mas_bottom)
             make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
             make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.height.equalTo()(self.spaceBetweenSignUpAndAcceptance)
         }
 
         signupButton.mas_makeConstraints { (make) -> Void in
@@ -336,7 +355,7 @@ class LoginView : UIView, UITextFieldDelegate {
             make.bottom.equalTo()(self.acceptanceView.mas_top)
             make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
             make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.height.equalTo()(20)
         }
         
         acceptanceView.mas_makeConstraints { (make) -> Void in
@@ -424,8 +443,6 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
-                self.facebookButton.alpha = 0.0
-                self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                 
                 // positioning above keyboard
                 var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
@@ -433,15 +450,29 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
                 
                 // positioning the mug word between the credentials view and top the screen
-                var mugWordFinalPosition = (self.credentialsView.frame.origin.y / 2) - (self.mugchatWordImageView.frame.height / 2)
-                self.MUGCHAT_WORD_ANIMATION_OFFSET = self.mugchatWordImageView.frame.origin.y - mugWordFinalPosition
-                self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET
+                var logoFinalPosition = (self.credentialsView.frame.origin.y / 2) - (self.logoView.frame.height / 2)
+                
+                if (logoFinalPosition < 0) {
+                    logoFinalPosition = 0
+                }
+                
+                self.LOGO_VIEW_ANIMATION_OFFSET = self.logoView.frame.origin.y - logoFinalPosition
+                self.logoView.frame.origin.y -= self.LOGO_VIEW_ANIMATION_OFFSET
+                
+                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                    self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                    self.MUGCHAT_WORD_LAST_CENTER_Y = self.mugchatWordImageView.center.y
+                    self.mugchatWordImageView.center.y = self.logoView.center.y
+                }
                 
             } else {
-                self.facebookButton.alpha = 1.0
-                self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                self.mugchatWordImageView.frame.origin.y += self.MUGCHAT_WORD_ANIMATION_OFFSET
+                self.logoView.frame.origin.y += self.LOGO_VIEW_ANIMATION_OFFSET
                 self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
+                
+                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                    self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                    self.mugchatWordImageView.center.y = self.MUGCHAT_WORD_LAST_CENTER_Y
+                }
             }
         })
     }
