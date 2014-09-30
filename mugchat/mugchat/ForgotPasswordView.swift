@@ -18,6 +18,7 @@ class ForgotPasswordView : UIView {
     
     private let MARGIN_TOP:CGFloat = 25.0
     
+    private var navigationBar: CustomNavigationBar!
     private var enterMobileNumberLabel: UILabel!
     private var mobileNumberTextField: UITextField!
     
@@ -43,6 +44,10 @@ class ForgotPasswordView : UIView {
     
     func addSubviews() {
         
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Forgot Password", showBackButton: true)
+        //navigationBar.delegate = self
+        self.addSubview(navigationBar)
+        
         enterMobileNumberLabel = UILabel()
         enterMobileNumberLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h7)
         enterMobileNumberLabel.text = "Enter your phone number below to reset your password"
@@ -53,9 +58,16 @@ class ForgotPasswordView : UIView {
     
     func makeConstraints() {
         
+        navigationBar.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.leading.equalTo()(self)
+            make.trailing.equalTo()(self)
+            make.height.equalTo()(self.navigationBar.frame.size.height)
+        }
+        
         enterMobileNumberLabel.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self).with().offset()(self.MARGIN_TOP)
+            make.top.equalTo()(self.navigationBar.mas_bottom).with().offset()(self.MARGIN_TOP)
         }
         
         super.updateConstraints()
