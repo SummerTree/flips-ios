@@ -37,6 +37,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
     private let PRIVACY_POLICY_HEIGHT: CGFloat = 20.0
     private let SEPARATOR_HEIGHT: CGFloat = 0.5
+    private let SIGNUP_MARGIN_BOTTOM: CGFloat = 20.0
     private let TERMS_OF_USE_HEIGHT: CGFloat = 20.0
     
     private var logoView: UIView!
@@ -355,7 +356,7 @@ class LoginView : UIView, UITextFieldDelegate {
             make.bottom.equalTo()(self.acceptanceView.mas_top)
             make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
             make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.height.equalTo()(20)
+            make.height.equalTo()(self.SIGNUP_MARGIN_BOTTOM)
         }
         
         acceptanceView.mas_makeConstraints { (make) -> Void in
