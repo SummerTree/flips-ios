@@ -81,7 +81,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         labelsView.addSubview(phoneNumberLabel)
         
         codeView = UIView()
-        codeView.backgroundColor = UIColor.blurredBackground()
+        codeView.backgroundColor = UIColor.lightSemitransparentBackground()
         self.addSubview(codeView)
         
         codeField = UITextField()

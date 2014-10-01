@@ -12,9 +12,9 @@
 
 import Foundation
 
-class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
+class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
     
-    var delegate: PhoneNumberViewDelegate?
+    var delegate: ForgotPasswordViewDelegate?
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
@@ -23,10 +23,9 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
-    private let HINT_TEXT: String = "Enter your number\nto verify you are a human."
-    private let SPAM_TEXT: String = "That whole spam thing...\nYeah, we don't do that."
+    private let HINT_TEXT: String = "Enter your phone number below\n to reset your password"
     
-    private var navigationBar: CustomNavigationBar!
+    var navigationBar: CustomNavigationBar!
     
     var hintView: UIView!
     var hintText: UILabel!
@@ -36,19 +35,20 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     var spamView: UIView!
     var spamText: UILabel!
     var keyboardFillerView: UIView!
-    
     var keyboardHeight: CGFloat = 0.0
     
     override init() {
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
+        self.makeConstraints()
+        
         let center = NSNotificationCenter.defaultCenter()
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {
-        navigationBar = CustomNavigationBar.CustomNormalNavigationBar(NSLocalizedString("Phone Number", comment: "Phone Number"), showBackButton: true)
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Forgot Password", showBackButton: true)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
         
@@ -81,34 +81,26 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
-        mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         mobileNumberView.addSubview(mobileNumberField)
         
         spamView = UIView()
         spamView.contentMode = .Center
         self.addSubview(spamView)
         
-        spamText = UILabel()
-        spamText.numberOfLines = 0
-        spamText.textAlignment = NSTextAlignment.Center
-        spamText.text = NSLocalizedString(SPAM_TEXT, comment: SPAM_TEXT)
-        spamText.textColor = UIColor.whiteColor()
-        spamText.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        spamView.addSubview(spamText)
-        
         keyboardFillerView = UIView()
+        keyboardFillerView.backgroundColor = UIColor.greenColor()
         self.addSubview(keyboardFillerView)
     }
     
-    override func updateConstraints() {
+    func makeConstraints() {
         
         navigationBar.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
             make.height.equalTo()(self.navigationBar.frame.size.height)
-       }
-                
+        }
+        
         hintView.mas_updateConstraints { (make) in
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
@@ -145,11 +137,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
             make.height.equalTo()(self.hintView)
         })
         
-        spamText.mas_updateConstraints { (make) in
-            make.centerY.equalTo()(self.spamView)
-            make.centerX.equalTo()(self.spamView)
-        }
-        
         keyboardFillerView.mas_updateConstraints( { (make) in
             make.top.equalTo()(self.spamView.mas_bottom)
             make.left.equalTo()(self)
@@ -162,8 +149,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     }
     
     
-    // MARK: - UITextFieldDelegate methods
-    
+    // MARK: - UITextField delegate
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text
@@ -192,16 +178,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         return shouldReplace;
     }
     
-    func mobileNumberFieldDidChange(textField: UITextField) {
-        if (countElements(textField.text) == 12) {
-            textField.resignFirstResponder()
-            self.finishTypingMobileNumber(textField)
-
-        }
-    }
     
     // MARK: - Notifications
-    
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
             let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
@@ -210,17 +188,16 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         }
     }
     
-    // MARK: - Buttons delegate
     
+    // MARK: - Buttons delegate
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.phoneNumberViewDidFinishTypingMobileNumber(self)
+        self.delegate?.forgotPasswordViewDidFinishTypingMobileNumber(self)
     }
     
     
     // MARK: - CustomNavigationBarDelegate Methods
-    
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        self.delegate?.phoneNumberViewDidTapBackButton(self)
+        self.delegate?.forgotPasswordViewDidTapBackButton(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
@@ -230,7 +207,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     
     // MARK: - Required methods
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
