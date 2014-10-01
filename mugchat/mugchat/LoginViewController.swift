@@ -51,8 +51,26 @@ class LoginViewController: UIViewController, LoginViewDelegate {
         self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
-    func loginViewDidTapSignInButton(loginView: LoginView!) {
-        var inboxViewController = InboxViewController()
-        self.navigationController?.pushViewController(inboxViewController, animated: true)
+    func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String) {
+        UserService.sharedInstance.signIn(username, password: password, success: { (user) -> Void in
+
+            if (user == nil) {
+                self.loginView.showValidationErrorInCredentialFields()
+            }
+            
+            var authenticatedUser: User = user as User!
+            self.storeLastAuthenticatedUsername(authenticatedUser.username!)
+            var inboxViewController = InboxViewController()
+            self.navigationController?.pushViewController(inboxViewController, animated: true)
+            
+        }) { (error) -> Void in
+            self.loginView.showValidationErrorInCredentialFields()
+        }
+    }
+    
+    private func storeLastAuthenticatedUsername(username: String) {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
+        userDefaults.synchronize()
     }
 }
