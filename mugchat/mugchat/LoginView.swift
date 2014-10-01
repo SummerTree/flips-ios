@@ -189,6 +189,7 @@ class LoginView : UIView, UITextFieldDelegate {
         
         forgotPasswordImage = UIImage(named: "ForgotPassword")
         forgotPasswordButton = UIButton()
+        forgotPasswordButton.addTarget(self, action: "forgotPasswordButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         forgotPasswordButton.alpha = 0.0
         forgotPasswordButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
@@ -485,6 +486,10 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func privacyPolicyButtonTapped(sender: AnyObject?) {
         self.delegate?.loginViewDidTapPrivacyPolicy(self)
+    }
+    
+    func forgotPasswordButtonTapped(sender: AnyObject?) {
+        self.delegate?.loginViewDidTapForgotPassword(self)
     }
     
     

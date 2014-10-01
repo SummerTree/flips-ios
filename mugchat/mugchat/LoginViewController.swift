@@ -62,4 +62,10 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             self.loginView.showValidationErrorInCredentialFields()
         }
     }
+    
+    func loginViewDidTapForgotPassword(loginView: LoginView!) {
+        var forgotPasswordViewController = ForgotPasswordViewController()
+        self.navigationController?.pushViewController(forgotPasswordViewController, animated: true)
+    }
+    
 }
