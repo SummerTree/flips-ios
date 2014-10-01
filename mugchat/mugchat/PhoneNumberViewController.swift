@@ -16,21 +16,12 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     var phoneNumberView: PhoneNumberView!
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         phoneNumberView = PhoneNumberView()
         self.view = phoneNumberView
     }
+    
     
     // MARK: - ForgotPasswordViewDelegate Methods
     func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!) {
@@ -43,16 +34,6 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     func phoneNumberViewDidTapBackButton() {
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
-    
-//    // MARK: - Notifications
-//    func keyboardOnScreen(notification: NSNotification) {
-//        if let info = notification.userInfo {
-//            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-//            phoneNumberView.keyboardHeight = keyboardFrame.height
-//            phoneNumberView.updateConstraints()
-//        }
-//    }
     
     
     // MARK: - Required methods
