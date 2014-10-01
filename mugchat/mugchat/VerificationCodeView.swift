@@ -29,6 +29,9 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private let BULLET: String = "\u{2022}"
     
+    private let MAX_NUMBER_OF_DIGITS = 4
+    private let CODE_FIELD_KENEL_ADJUST_VALUE : CGFloat = 20.0
+    
     private var navigationBar: CustomNavigationBar!
     
     var hintView: UIView!
@@ -87,18 +90,15 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         self.addSubview(codeView)
         
         codeField = UITextField()
-        //codeField.textAlignment = NSTextAlignment.Center
-        //codeField.sizeToFit()
+        codeField.textAlignment = NSTextAlignment.Center
         codeField.delegate = self
         codeField.becomeFirstResponder()
         codeField.textColor = UIColor.whiteColor()
         codeField.tintColor = UIColor.clearColor()
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        //codeField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         codeField.keyboardType = UIKeyboardType.PhonePad
         var attributedString = NSMutableAttributedString(string: "\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
-        attributedString.addAttribute(NSKernAttributeName, value: 20.0, range: NSMakeRange(0, 1))
-        attributedString.addAttribute(NSBackgroundColorAttributeName, value: UIColor.greenColor(), range: NSMakeRange(0, 1))
+        attributedString.addAttribute(NSKernAttributeName, value: CODE_FIELD_KENEL_ADJUST_VALUE, range: NSMakeRange(0, 3))
         codeField.attributedText = attributedString
         codeView.addSubview(codeField)
         
@@ -142,13 +142,15 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeView.mas_updateConstraints { (make) in
             make.top.equalTo()(self.hintView.mas_bottom)
             make.height.equalTo()(self.CODE_VIEW_HEIGHT)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
+            make.centerX.equalTo()(self)
+            make.width.equalTo()(self)
         }
         
         codeField.mas_updateConstraints { (make) in
             make.centerY.equalTo()(self.codeView)
             make.centerX.equalTo()(self.codeView)
+            make.width.equalTo()(self.codeView)
+
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in
@@ -164,30 +166,31 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        let text = textField.text
-        let length = countElements(text)
-        var shouldReplace = true
+        var stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
+        var numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         
-//        if (string != "") {
-//            switch length {
-//            case 3, 7:
-//                textField.text = "\(text)-"
-//            default:
-//                break;
-//            }
-//            if (length > 3) {
-//                shouldReplace = false
-//            }
-//        } else {
-//            switch length {
-//            case 5, 9:
-//                let nsString = text as NSString
-//                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-//            default:
-//                break;
-//            }
-//        }
-        return shouldReplace;
+        var newText = textField.text
+        if (string == "" ) {
+            if (numberOfDigitsProvided > 0) {
+                // Is removing the digit. We need to add the bullet back
+                var nsStringText = textField.text as NSString
+                nsStringText.sizeWithAttributes([NSFontAttributeName: textField.font])
+                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided-1, 1), withString: BULLET)
+            }
+            
+        } else {
+            if (numberOfDigitsProvided < MAX_NUMBER_OF_DIGITS) {
+                // Is adding a new digit. We need to replace the bullet
+                var nsStringText = textField.text as NSString
+                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
+            }
+        }
+
+        var newAttributedString = NSMutableAttributedString(string: newText)
+        newAttributedString.addAttribute(NSKernAttributeName, value: CODE_FIELD_KENEL_ADJUST_VALUE, range: NSMakeRange(0, 3))
+        textField.attributedText = newAttributedString
+
+        return false;
     }
     
     
