@@ -59,18 +59,13 @@ class LoginViewController: UIViewController, LoginViewDelegate {
             }
             
             var authenticatedUser: User = user as User!
-            self.storeLastAuthenticatedUsername(authenticatedUser.username!)
+            AuthenticationHelper.sharedInstance.saveAuthenticatedUsername(authenticatedUser.username!)
+
             var inboxViewController = InboxViewController()
             self.navigationController?.pushViewController(inboxViewController, animated: true)
             
         }) { (error) -> Void in
             self.loginView.showValidationErrorInCredentialFields()
         }
-    }
-    
-    private func storeLastAuthenticatedUsername(username: String) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
-        userDefaults.synchronize()
     }
 }
