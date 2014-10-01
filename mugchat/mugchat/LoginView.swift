@@ -12,8 +12,6 @@
 
 import Foundation
 
-let LOGIN_USERNAME_KEY = "username"
-
 class LoginView : UIView, UITextFieldDelegate {
     
     private let MARGIN_TOP:CGFloat = 25.0
@@ -117,7 +115,7 @@ class LoginView : UIView, UITextFieldDelegate {
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.addGestureRecognizer(tapGestureRecognizer)
         
-        retrieveLastAuthenticatedUsernameIfExists()
+        self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
     }
     
     func viewWillDisappear() {
@@ -473,7 +471,7 @@ class LoginView : UIView, UITextFieldDelegate {
     func signInButtonTapped(sender: AnyObject?) {
         
         if (self.emailTextField.text.isEmpty || self.passwordTextField.text.isEmpty) {
-            var alertMessage = UIAlertView(title: "Login Error", message: "Please complete both fields.", delegate: nil, cancelButtonTitle: "OK")
+            var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
             alertMessage.show()
             return
         }
@@ -581,10 +579,5 @@ class LoginView : UIView, UITextFieldDelegate {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
-    }
-    
-    private func retrieveLastAuthenticatedUsernameIfExists() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        self.emailTextField.text = userDefaults.valueForKey(LOGIN_USERNAME_KEY) as String?
     }
 }
