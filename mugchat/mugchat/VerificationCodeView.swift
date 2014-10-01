@@ -65,9 +65,9 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         
         phoneNumberLabel = UILabel()
         phoneNumberLabel.textAlignment = NSTextAlignment.Center
-        phoneNumberLabel.text = NSLocalizedString("415-555-7777", comment: "415-555-7777")
+        phoneNumberLabel.text = NSLocalizedString("415 - 555 - 7777", comment: "415 - 555 - 7777")
         phoneNumberLabel.textColor = UIColor.whiteColor()
-        phoneNumberLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h4)
+        phoneNumberLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
         labelsView.addSubview(phoneNumberLabel)
         
         codeView = UIView()
@@ -76,11 +76,12 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         self.addSubview(codeView)
         
         codeField = UITextField()
+        codeField.contentMode = .Center
         codeField.delegate = self
         codeField.becomeFirstResponder()
         codeField.textColor = UIColor.whiteColor()
         codeField.tintColor = UIColor.whiteColor()
-        codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
         //codeField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         codeField.keyboardType = UIKeyboardType.PhonePad
         codeField.text = "XXXX\(BULLET)\(BULLET)\(BULLET)\(BULLET)"
@@ -121,6 +122,11 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
             make.height.equalTo()(self.CODE_VIEW_HEIGHT)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
+        }
+        
+        codeField.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.codeView)
+            make.centerX.equalTo()(self.codeView)
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in
