@@ -36,6 +36,16 @@ class MugChatViewController : UIViewController {
         self.setNeedsStatusBarAppearanceUpdate()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        self.navigationController?.navigationBarHidden = true
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.navigationBarHidden = false
+        super.viewWillDisappear(animated)
+    }
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         // Default is light - to applu black content you should override this method
         return UIStatusBarStyle.LightContent

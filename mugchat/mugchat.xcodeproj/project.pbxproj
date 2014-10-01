@@ -50,6 +50,9 @@
 		7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */; };
 		7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
+		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
+		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
+		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -121,6 +124,9 @@
 		7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableViewExtensions.swift; path = Classes/UITableViewExtensions.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -250,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7A19D064450024EBDB /* LoginViewController.swift */,
+				A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -259,6 +266,8 @@
 			children = (
 				704E110E19D0935F00D2BB88 /* LoginView.swift */,
 				7059148E19D490DC009614DB /* LoginViewDelegate.swift */,
+				A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */,
+				A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -606,6 +615,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */,
+				A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */,
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				5707185D19D1A7230069064F /* Mug.swift in Sources */,
@@ -636,6 +647,7 @@
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7056FE5319D859D700BD6571 /* TermsOfUseViewController.swift in Sources */,
 				7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */,
+				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
