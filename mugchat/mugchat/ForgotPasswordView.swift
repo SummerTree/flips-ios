@@ -45,6 +45,9 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
         self.makeConstraints()
+        
+        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func addSubviews() {
@@ -191,6 +194,12 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         // Do nothing
         println("customNavigationBarDidTapRightButton")
+    }
+    
+    
+    // MARK: - Keyboard control
+    func dismissKeyboard() {
+        self.mobileNumberField.resignFirstResponder()
     }
     
     
