@@ -32,7 +32,7 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
-    func forgotPasswordViewDidTapBackButton() {
+    func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!) {
         self.navigationController?.popViewControllerAnimated(true)
     }
 

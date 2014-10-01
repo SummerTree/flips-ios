@@ -16,6 +16,6 @@ protocol ForgotPasswordViewDelegate {
 
     func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!)
     
-    func forgotPasswordViewDidTapBackButton()
+    func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!)
     
 }

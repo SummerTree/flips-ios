@@ -45,9 +45,6 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         
         let center = NSNotificationCenter.defaultCenter()
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
-        
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
-        self.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func addSubviews() {
@@ -151,6 +148,8 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         super.updateConstraints()
     }
     
+    
+    // MARK: - UITextField delegate
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text
@@ -189,6 +188,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         }
     }
     
+    
     // MARK: - Buttons delegate
     func finishTypingMobileNumber(sender: AnyObject?) {
         self.delegate?.forgotPasswordViewDidFinishTypingMobileNumber(self)
@@ -197,18 +197,12 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     // MARK: - CustomNavigationBarDelegate Methods
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        self.delegate?.forgotPasswordViewDidTapBackButton()
+        self.delegate?.forgotPasswordViewDidTapBackButton(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         // Do nothing
         println("customNavigationBarDidTapRightButton")
-    }
-    
-    
-    // MARK: - Keyboard control
-    func dismissKeyboard() {
-        self.mobileNumberField.resignFirstResponder()
     }
     
     
