@@ -13,8 +13,10 @@
 import Foundation
 
 public class AuthenticationHelper: NSObject {
-    
+
     private let LOGIN_USERNAME_KEY = "username"
+    
+    var userInSession: User!
     
     func saveAuthenticatedUsername(username: String) {
         var userDefaults = NSUserDefaults.standardUserDefaults()

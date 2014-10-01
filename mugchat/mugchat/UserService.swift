@@ -29,9 +29,9 @@ public class UserService: MugchatService {
         return Static.instance
     }
     
+    
     // MARK: - Sign-up
     
-
     func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
@@ -71,6 +71,30 @@ public class UserService: MugchatService {
         
         request.POST(url,
             parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let user = self.parseSigninResponse(responseObject)
+                success(user)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        let url = HOST + FACEBOOK_SIGNIN_URL
+
+        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: "access_token")
+        
+        request.POST(url,
+            parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSigninResponse(responseObject)
                 success(user)

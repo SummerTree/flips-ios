@@ -244,6 +244,7 @@ class LoginView : UIView, UITextFieldDelegate {
         
         facebookLogoImage = UIImage(named: "FacebookLogo")
         facebookButton = UIButton()
+        facebookButton.addTarget(self, action: "facebookSignInTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         facebookButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         facebookButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         facebookButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
@@ -467,6 +468,10 @@ class LoginView : UIView, UITextFieldDelegate {
     
     
     // MARK: - Buttons delegate
+    
+    func facebookSignInTapped(sender: AnyObject?) {
+        self.delegate?.loginViewDidTapFacebookSignInButton(self)
+    }
     
     func signInButtonTapped(sender: AnyObject?) {
         

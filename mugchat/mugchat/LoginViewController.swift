@@ -58,13 +58,52 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             }
             
             var authenticatedUser: User = user as User!
+            AuthenticationHelper.sharedInstance.userInSession = user
             AuthenticationHelper.sharedInstance.saveAuthenticatedUsername(authenticatedUser.username!)
 
             var inboxViewController = InboxViewController()
             self.navigationController?.pushViewController(inboxViewController, animated: true)
             
-        }) { (error) -> Void in
+        }) { (mugError) -> Void in
+            println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
+    }
+    
+    func loginViewDidTapFacebookSignInButton(loginView: LoginView!) {
+
+        // If the session state is any of the two "open" states when the button is clicked
+        if (FBSession.activeSession().state == FBSessionState.Open || FBSession.activeSession().state == FBSessionState.OpenTokenExtended) {
+            
+            println("User is already authenticated with session = \(FBSession.activeSession().accessTokenData.accessToken)")
+            
+            authenticateWithFacebook(FBSession.activeSession().accessTokenData.accessToken)
+        }
+        // If the session state is not any of the two "open" states when the button is clicked
+        else {
+        // Open a session showing the user the login UI
+        // You must ALWAYS ask for public_profile permissions when opening a session
+            var scope = ["public_profile", "email", "user_birthday"]
+            FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
+                completionHandler: { (session, state, error) -> Void in
+                    self.authenticateWithFacebook(session!.accessTokenData.accessToken)
+                    println("Facebook Login with session: \(FBSession.activeSession().accessTokenData.accessToken)")
+            })
+        }
+    }
+    
+
+    // MARK: - Private methods
+    
+    private func authenticateWithFacebook(token: String) {
+        UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
+            success: { (user) -> Void in
+                AuthenticationHelper.sharedInstance.userInSession = user
+                var inboxViewController = InboxViewController()
+                self.navigationController?.pushViewController(inboxViewController, animated: true)
+                
+            }, failure: { (mugError) -> Void in
+                println(mugError!.error)
+        })
     }
 }
