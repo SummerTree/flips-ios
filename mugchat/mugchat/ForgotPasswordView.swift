@@ -12,15 +12,9 @@
 
 import Foundation
 
-class ForgotPasswordView : UIView, UITextFieldDelegate {
+class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
     
     var delegate: ForgotPasswordViewDelegate?
-    
-    private let MARGIN_TOP:CGFloat = 25.0
-    private let MARGIN_RIGHT:CGFloat = 40.0
-    private let MARGIN_BOTTOM:CGFloat = 10.0
-    private let MARGIN_LEFT:CGFloat = 40.0
-    
     
     private let TOP_MARGIN: CGFloat = 44.0
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
@@ -31,11 +25,8 @@ class ForgotPasswordView : UIView, UITextFieldDelegate {
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
     private let HINT_TEXT: String = "Enter your phone number below\n to reset your password"
-    private let SPAM_TEXT: String = "That whole spam thing...\nYeah, we don't do that."
     
     private var navigationBar: CustomNavigationBar!
-    //private var enterMobileNumberLabel: UILabel!
-    //private var mobileNumberTextField: UITextField!
     
     var hintView: UIView!
     var hintText: UILabel!
@@ -56,33 +47,10 @@ class ForgotPasswordView : UIView, UITextFieldDelegate {
         self.makeConstraints()
     }
     
-//    func viewDidLoad() {
-//        
-//    }
-//    
-//    func viewDidAppear() {
-//        
-//    }
-//    
-//    func viewWillDisappear() {
-//        
-//    }
-    
     func addSubviews() {
-        
         navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Forgot Password", showBackButton: true)
-        //navigationBar.delegate = self
+        navigationBar.delegate = self
         self.addSubview(navigationBar)
-        
-        /*enterMobileNumberLabel = UILabel()
-        enterMobileNumberLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
-        enterMobileNumberLabel.text = "Enter your phone number below to reset your password"
-        enterMobileNumberLabel.textAlignment = NSTextAlignment.Center;
-        enterMobileNumberLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        enterMobileNumberLabel.numberOfLines = 0; //unlimited lines
-        //enterMobileNumberLabel.sizeToFit()
-        enterMobileNumberLabel.textColor = UIColor.whiteColor()
-        self.addSubview(enterMobileNumberLabel)*/
         
         hintView = UIView()
         hintView.contentMode = .Center
@@ -119,18 +87,9 @@ class ForgotPasswordView : UIView, UITextFieldDelegate {
         spamView.contentMode = .Center
         self.addSubview(spamView)
         
-        spamText = UILabel()
-        spamText.numberOfLines = 0
-        spamText.textAlignment = NSTextAlignment.Center
-        spamText.text = NSLocalizedString(SPAM_TEXT, comment: SPAM_TEXT)
-        spamText.textColor = UIColor.whiteColor()
-        spamText.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        spamView.addSubview(spamText)
-        
         keyboardFillerView = UIView()
         keyboardFillerView.backgroundColor = UIColor.greenColor()
         self.addSubview(keyboardFillerView)
-        
     }
     
     func makeConstraints() {
@@ -141,12 +100,6 @@ class ForgotPasswordView : UIView, UITextFieldDelegate {
             make.trailing.equalTo()(self)
             make.height.equalTo()(self.navigationBar.frame.size.height)
         }
-        
-        /*enterMobileNumberLabel.mas_makeConstraints { (make) -> Void in
-            make.left.offset()(self.MARGIN_LEFT);
-            make.right.offset()(-self.MARGIN_RIGHT);
-            make.top.equalTo()(self.navigationBar.mas_bottom).with().offset()(self.MARGIN_TOP)
-        }*/
         
         hintView.mas_updateConstraints { (make) in
             make.top.equalTo()(self).with().offset()(self.TOP_MARGIN)
@@ -183,11 +136,6 @@ class ForgotPasswordView : UIView, UITextFieldDelegate {
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
             make.height.equalTo()(self.hintView)
         })
-        
-        spamText.mas_updateConstraints { (make) in
-            make.centerY.equalTo()(self.spamView)
-            make.centerX.equalTo()(self.spamView)
-        }
         
         keyboardFillerView.mas_updateConstraints( { (make) in
             make.top.equalTo()(self.spamView.mas_bottom)
@@ -232,6 +180,17 @@ class ForgotPasswordView : UIView, UITextFieldDelegate {
     // MARK: - Buttons delegate
     func finishTypingMobileNumber(sender: AnyObject?) {
         self.delegate?.forgotPasswordViewDidFinishTypingMobileNumber(self)
+    }
+    
+    
+    // MARK: - CustomNavigationBarDelegate Methods
+    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
+        self.delegate?.forgotPasswordViewDidTapBackButton()
+    }
+    
+    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
+        // Do nothing
+        println("customNavigationBarDidTapRightButton")
     }
     
     
