@@ -43,7 +43,7 @@ class ComposeViewController : MugChatViewController, CustomNavigationBarDelegate
     }
     
     
-    // MARK: -
+    // MARK: - CustomNavigationBarDelegate Methods
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
         self.navigationController?.popViewControllerAnimated(true)
