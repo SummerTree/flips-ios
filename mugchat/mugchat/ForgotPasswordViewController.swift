@@ -30,6 +30,9 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         //TODO: open VerificationCode screen (story 7153)
         //var verificationCodeViewController = VerificationCodeViewController()
         //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+        //temp
+        var newPasswordViewController = NewPasswordViewController()
+        self.navigationController?.pushViewController(newPasswordViewController, animated: true)
     }
     
     func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!) {

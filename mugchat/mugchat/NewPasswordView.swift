@@ -12,9 +12,9 @@
 
 import Foundation
 
-class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
+class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
     
-    var delegate: ForgotPasswordViewDelegate?
+    var delegate: NewPasswordViewDelegate?
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
@@ -23,7 +23,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
-    private let HINT_TEXT: String = "Enter your phone number below\n to reset your password"
+    private let HINT_TEXT: String = "Enter a new password below"
     
     var navigationBar: CustomNavigationBar!
     
@@ -31,7 +31,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     var hintText: UILabel!
     var mobileNumberView: UIView!
     var phoneImageView: UIImageView!
-    var mobileNumberField: UITextField!
+    var passwordField: UITextField!
     var spamView: UIView!
     var spamText: UILabel!
     var keyboardFillerView: UIView!
@@ -48,7 +48,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     }
     
     func addSubviews() {
-        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Forgot Password", showBackButton: true)
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("New Password", showBackButton: true)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
         
@@ -69,19 +69,20 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         mobileNumberView.backgroundColor = UIColor.lightSemitransparentBackground()
         self.addSubview(mobileNumberView)
         
-        phoneImageView = UIImageView(image: UIImage(named: "Phone"))
+        phoneImageView = UIImageView(image: UIImage(named: "Password"))
         phoneImageView.contentMode = .Center
         mobileNumberView.addSubview(phoneImageView)
         
-        mobileNumberField = UITextField()
-        mobileNumberField.delegate = self
-        mobileNumberField.becomeFirstResponder()
-        mobileNumberField.textColor = UIColor.whiteColor()
-        mobileNumberField.tintColor = UIColor.whiteColor()
-        mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
-        mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
-        mobileNumberField.keyboardType = UIKeyboardType.PhonePad
-        mobileNumberView.addSubview(mobileNumberField)
+        passwordField = UITextField()
+        passwordField.delegate = self
+        passwordField.secureTextEntry = true;
+        passwordField.becomeFirstResponder()
+        passwordField.textColor = UIColor.whiteColor()
+        passwordField.tintColor = UIColor.whiteColor()
+        passwordField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        passwordField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Password", comment: "New Password"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        passwordField.keyboardType = UIKeyboardType.Default
+        mobileNumberView.addSubview(passwordField)
         
         spamView = UIView()
         spamView.contentMode = .Center
@@ -125,7 +126,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
-        mobileNumberField.mas_updateConstraints { (make) in
+        passwordField.mas_updateConstraints { (make) in
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
             make.centerY.equalTo()(self.mobileNumberView)
         }
@@ -150,6 +151,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     
     // MARK: - UITextField delegate
+    //TODO: 8+ characters, Mixed case, at least 1 number
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text
@@ -160,8 +162,8 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
             switch length {
             case 3, 7:
                 textField.text = "\(text)-"
-            case 11:
-                didFinishTypingMobileNumber = true;
+            //case 11:
+                //didFinishTypingMobileNumber = true;
             default:
                 break;
             }
@@ -180,13 +182,13 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         return shouldReplace;
     }
     
-    private var didFinishTypingMobileNumber: Bool = false {
-        didSet {
-            if didFinishTypingMobileNumber  {
-                finishTypingMobileNumber(self);
-            }
-        }
-    }
+//    private var didFinishTypingMobileNumber: Bool = false {
+//        didSet {
+//            if didFinishTypingMobileNumber  {
+//                finishTypingMobileNumber(self);
+//            }
+//        }
+//    }
     
     
     // MARK: - Notifications
@@ -200,14 +202,14 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     
     // MARK: - Buttons delegate
-    func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.forgotPasswordViewDidFinishTypingMobileNumber(self)
-    }
+//    func finishTypingMobileNumber(sender: AnyObject?) {
+//        self.delegate?.newPasswordViewDidFinishTypingMobileNumber(self)
+//    }
     
     
     // MARK: - CustomNavigationBarDelegate Methods
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        self.delegate?.forgotPasswordViewDidTapBackButton(self)
+        self.delegate?.newPasswordViewDidTapBackButton(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {

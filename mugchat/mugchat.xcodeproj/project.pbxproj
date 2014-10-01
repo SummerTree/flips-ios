@@ -53,6 +53,9 @@
 		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
 		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
+		A2124E9C19DC876C00631FE0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9B19DC876C00631FE0 /* NewPasswordViewController.swift */; };
+		A2124E9E19DC87C100631FE0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9D19DC87C100631FE0 /* NewPasswordView.swift */; };
+		A2124EA019DC87D100631FE0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9F19DC87D100631FE0 /* NewPasswordViewDelegate.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -127,6 +130,9 @@
 		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewDelegate.swift; sourceTree = "<group>"; };
+		A2124E9B19DC876C00631FE0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
+		A2124E9D19DC87C100631FE0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
+		A2124E9F19DC87D100631FE0 /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,6 +263,7 @@
 			children = (
 				70FD4E7A19D064450024EBDB /* LoginViewController.swift */,
 				A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */,
+				A2124E9B19DC876C00631FE0 /* NewPasswordViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -268,6 +275,8 @@
 				7059148E19D490DC009614DB /* LoginViewDelegate.swift */,
 				A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */,
 				A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */,
+				A2124E9D19DC87C100631FE0 /* NewPasswordView.swift */,
+				A2124E9F19DC87D100631FE0 /* NewPasswordViewDelegate.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -615,6 +624,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2124E9E19DC87C100631FE0 /* NewPasswordView.swift in Sources */,
 				A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */,
 				A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */,
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
@@ -627,11 +637,13 @@
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
+				A2124E9C19DC876C00631FE0 /* NewPasswordViewController.swift in Sources */,
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				5707185B19D1A1060069064F /* User.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
+				A2124EA019DC87D100631FE0 /* NewPasswordViewDelegate.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
