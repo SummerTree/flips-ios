@@ -26,7 +26,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     private let HINT_TEXT: String = "Enter your phone number below\n to reset your password"
     
-    private var navigationBar: CustomNavigationBar!
+    var navigationBar: CustomNavigationBar!
     
     var hintView: UIView!
     var hintText: UILabel!
@@ -36,9 +36,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     var spamView: UIView!
     var spamText: UILabel!
     var keyboardFillerView: UIView!
-    
     var keyboardHeight: CGFloat = 0.0
-    
     
     override init() {
         super.init()

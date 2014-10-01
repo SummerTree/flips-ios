@@ -24,20 +24,6 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         self.view = forgotPasswordView
     }
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = true
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = false
-        super.viewWillDisappear(animated)
-    }
-    
     
     // MARK: - ForgotPasswordViewDelegate Methods
     func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!) {

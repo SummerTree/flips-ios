@@ -16,11 +16,6 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = true
-        super.viewWillAppear(animated)
-    }
-    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loginView.viewWillDisappear()
