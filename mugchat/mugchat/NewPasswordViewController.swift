@@ -25,12 +25,12 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
     }
     
     
-    // MARK: - ForgotPasswordViewDelegate Methods
-//    func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!) {
-//        //TODO: open VerificationCode screen (story 7153)
-//        //var verificationCodeViewController = VerificationCodeViewController()
-//        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
-//    }
+    // MARK: - NewPasswordViewDelegate Methods
+    func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
+        //TODO: save new password to the back-end, and return user to login window to sign in with email address and new password.
+        //var loginViewController = LoginViewController()
+        //self.navigationController?.pushViewController(loginViewController, animated: true)
+    }
   
     func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!) {
         self.navigationController?.popViewControllerAnimated(true)

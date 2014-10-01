@@ -32,8 +32,9 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     var mobileNumberView: UIView!
     var phoneImageView: UIImageView!
     var passwordField: UITextField!
-    var spamView: UIView!
-    var spamText: UILabel!
+    var bottomView: UIView!
+    //var spamText: UILabel!
+    var doneButton: UIButton!
     var keyboardFillerView: UIView!
     var keyboardHeight: CGFloat = 0.0
     
@@ -84,9 +85,18 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         passwordField.keyboardType = UIKeyboardType.Default
         mobileNumberView.addSubview(passwordField)
         
-        spamView = UIView()
-        spamView.contentMode = .Center
-        self.addSubview(spamView)
+        bottomView = UIView()
+        bottomView.contentMode = .Center
+        self.addSubview(bottomView)
+        
+        doneButton = UIButton()
+        doneButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        doneButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Done", comment: "Done"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
+        doneButton.setBackgroundImage(UIImage(named: "SignupButtonBackground"), forState: UIControlState.Normal)
+        doneButton.setBackgroundImage(UIImage(named: "SignupButtonBackgroundTap"), forState: UIControlState.Highlighted)
+        doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
+        doneButton.addTarget(self, action: "didTapDoneButton", forControlEvents: .TouchUpInside)
+        bottomView.addSubview(doneButton)
         
         keyboardFillerView = UIView()
         keyboardFillerView.backgroundColor = UIColor.greenColor()
@@ -131,15 +141,20 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.centerY.equalTo()(self.mobileNumberView)
         }
         
-        spamView.mas_updateConstraints({ (make) in
+        bottomView.mas_updateConstraints({ (make) in
             make.top.equalTo()(self.mobileNumberView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
             make.height.equalTo()(self.hintView)
         })
         
+        doneButton.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.bottomView)
+            make.centerX.equalTo()(self.bottomView)
+        }
+        
         keyboardFillerView.mas_updateConstraints( { (make) in
-            make.top.equalTo()(self.spamView.mas_bottom)
+            make.top.equalTo()(self.bottomView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.keyboardHeight)
@@ -148,47 +163,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         
         super.updateConstraints()
     }
-    
-    
-    // MARK: - UITextField delegate
-    //TODO: 8+ characters, Mixed case, at least 1 number
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        let text = textField.text
-        let length = countElements(text)
-        var shouldReplace = true
-        
-        if (string != "") {
-            switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
-            //case 11:
-                //didFinishTypingMobileNumber = true;
-            default:
-                break;
-            }
-            if (length > 11) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
-        }
-        return shouldReplace;
-    }
-    
-//    private var didFinishTypingMobileNumber: Bool = false {
-//        didSet {
-//            if didFinishTypingMobileNumber  {
-//                finishTypingMobileNumber(self);
-//            }
-//        }
-//    }
     
     
     // MARK: - Notifications
@@ -202,9 +176,10 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     
     // MARK: - Buttons delegate
-//    func finishTypingMobileNumber(sender: AnyObject?) {
-//        self.delegate?.newPasswordViewDidFinishTypingMobileNumber(self)
-//    }
+    func didTapDoneButton(sender: AnyObject?) {
+        //TODO: 8+ characters, Mixed case, at least 1 number
+        self.delegate?.newPasswordViewDidTapDoneButton(self)
+    }
     
     
     // MARK: - CustomNavigationBarDelegate Methods

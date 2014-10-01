@@ -14,7 +14,7 @@ import UIKit
 
 protocol NewPasswordViewDelegate {
     
-    //func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!)
+    func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!)
     
     func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!)
     
