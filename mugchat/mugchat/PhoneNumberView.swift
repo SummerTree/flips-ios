@@ -12,7 +12,9 @@
 
 import Foundation
 
-class PhoneNumberView : UIView, UITextFieldDelegate {
+class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
+    
+    var delegate: PhoneNumberViewDelegate?
     
     private let TOP_MARGIN: CGFloat = 44.0
     
@@ -22,9 +24,12 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
+    private let MOBILE_NUMBER_FIELD_OPACITY: CGFloat = 0.25
     
     private let HINT_TEXT: String = "Enter your number\nto verify you are a human."
     private let SPAM_TEXT: String = "That whole spam thing...\nYeah, we don't do that."
+    
+    private var navigationBar: CustomNavigationBar!
     
     var hintView: UIView!
     var hintText: UILabel!
@@ -41,10 +46,15 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        self.updateConstraintsIfNeeded()
+        let center = NSNotificationCenter.defaultCenter()
+        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {
+        
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Phone Number", showBackButton: true)
+        navigationBar.delegate = self
+        self.addSubview(navigationBar)
         
         hintView = UIView()
         hintView.contentMode = .Center
@@ -60,7 +70,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
         
         mobileNumberView = UIView()
         mobileNumberView.contentMode = .Center
-        mobileNumberView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.25)
+        mobileNumberView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(MOBILE_NUMBER_FIELD_OPACITY)
         self.addSubview(mobileNumberView)
         
         phoneImageView = UIImageView(image: UIImage(named: "Phone"))
@@ -96,6 +106,13 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
     }
     
     override func updateConstraints() {
+        
+        navigationBar.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.leading.equalTo()(self)
+            make.trailing.equalTo()(self)
+            make.height.equalTo()(self.navigationBar.frame.size.height)
+       }
                 
         hintView.mas_updateConstraints { (make) in
             make.top.equalTo()(self).with().offset()(self.TOP_MARGIN)
@@ -175,6 +192,32 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
             }
         }
         return shouldReplace;
+    }
+    
+    
+    // MARK: - Notifications
+    func keyboardOnScreen(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            keyboardHeight = keyboardFrame.height
+            updateConstraints()
+        }
+    }
+    
+    // MARK: - Buttons delegate
+    func finishTypingMobileNumber(sender: AnyObject?) {
+        self.delegate?.phoneNumberViewDidFinishTypingMobileNumber(self)
+    }
+    
+    
+    // MARK: - CustomNavigationBarDelegate Methods
+    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
+        self.delegate?.phoneNumberViewDidTapBackButton()
+    }
+    
+    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
+        // Do nothing
+        println("customNavigationBarDidTapRightButton")
     }
     
     

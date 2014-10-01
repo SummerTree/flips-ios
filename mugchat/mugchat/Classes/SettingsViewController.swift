@@ -12,22 +12,7 @@
 
 import Foundation
 
-class SettingsViewController : UIViewController {
-    
-    // MARK: Init methods
-    
-    required init(coder: NSCoder) {
-        fatalError("NSCoding not supported")
-    }
-    
-    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    convenience override init() {
-        self.init(nibName: nil, bundle: nil)
-    }
-    
+class SettingsViewController : MugChatViewController {
     
     // MARK: - Overridden Methods
     
@@ -35,6 +20,12 @@ class SettingsViewController : UIViewController {
         super.viewDidLoad()
         
         self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.deepSea()
+        
+        self.setNeedsStatusBarAppearanceUpdate()
+    }
+
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.BlackOpaque
     }
 }

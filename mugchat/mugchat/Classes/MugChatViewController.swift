@@ -12,20 +12,33 @@
 
 import Foundation
 
-class BuilderViewController : MugChatViewController {
+class MugChatViewController : UIViewController {
+    
+    // MARK: - Init methods
+    
+    required init(coder: NSCoder) {
+        fatalError("NSCoding not supported")
+    }
+    
+    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    convenience override init() {
+        self.init(nibName: nil, bundle: nil)
+    }
+    
     
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Builder", comment: "Builder"))
-        self.view.backgroundColor = UIColor.deepSea()
-     
         self.setNeedsStatusBarAppearanceUpdate()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        // Default is light - to applu black content you should override this method
+        return UIStatusBarStyle.LightContent
     }
+    
 }

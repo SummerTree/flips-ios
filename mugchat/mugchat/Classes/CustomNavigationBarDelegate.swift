@@ -10,15 +10,12 @@
 // the license agreement.
 //
 
-import UIKit
+import Foundation
 
-class TermsOfUseViewController: MugChatWebViewController {
+protocol CustomNavigationBarDelegate {
 
-    init() {
-        super.init(view: TermsOfUseView(), title: "Terms of Use")
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
+    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
+    
 }
+

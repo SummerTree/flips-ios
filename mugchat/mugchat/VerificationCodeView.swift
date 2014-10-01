@@ -71,20 +71,24 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         labelsView.addSubview(phoneNumberLabel)
         
         codeView = UIView()
-        codeView.contentMode = .Center
+        //codeView.contentMode = .Center
         codeView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.25)
         self.addSubview(codeView)
         
         codeField = UITextField()
-        codeField.contentMode = .Center
+        //codeField.textAlignment = NSTextAlignment.Center
+        //codeField.sizeToFit()
         codeField.delegate = self
         codeField.becomeFirstResponder()
         codeField.textColor = UIColor.whiteColor()
-        codeField.tintColor = UIColor.whiteColor()
+        codeField.tintColor = UIColor.clearColor()
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
         //codeField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         codeField.keyboardType = UIKeyboardType.PhonePad
-        codeField.text = "XXXX\(BULLET)\(BULLET)\(BULLET)\(BULLET)"
+        var attributedString = NSMutableAttributedString(string: "XXXX")
+        attributedString.addAttribute(NSKernAttributeName, value: 20.0, range: NSMakeRange(0, 3))
+        attributedString.addAttribute(NSBackgroundColorAttributeName, value: UIColor.greenColor(), range: NSMakeRange(0, 3))
+        codeField.attributedText = attributedString
         codeView.addSubview(codeField)
         
         keyboardFillerView = UIView()
@@ -148,12 +152,12 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         
         if (string != "") {
             switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
+//            case 3, 7:
+//                textField.text = "\(text)-"
             default:
                 break;
             }
-            if (length > 11) {
+            if (length > 3) {
                 shouldReplace = false
             }
         } else {

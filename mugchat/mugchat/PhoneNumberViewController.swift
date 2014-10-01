@@ -12,16 +12,10 @@
 
 import Foundation
 
-class PhoneNumberViewController: UIViewController {
+class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
     
     var phoneNumberView: PhoneNumberView!
     
-    override init() {
-        super.init()
-        let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
-    }
-
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
@@ -36,18 +30,29 @@ class PhoneNumberViewController: UIViewController {
         super.viewDidLoad()
         phoneNumberView = PhoneNumberView()
         self.view = phoneNumberView
-        self.setupOrangeNavBarWithBackButton(NSLocalizedString("Phone Number", comment: "Phone Number"))
+    }
+    
+    // MARK: - ForgotPasswordViewDelegate Methods
+    func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!) {
+        //TODO: open VerificationCode screen (story 7153)
+        //var verificationCodeViewController = VerificationCodeViewController()
+        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
     
-    // MARK: - Notifications
-    func keyboardOnScreen(notification: NSNotification) {
-        if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            phoneNumberView.keyboardHeight = keyboardFrame.height
-            phoneNumberView.updateConstraints()
-        }
+    func phoneNumberViewDidTapBackButton() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    
+//    // MARK: - Notifications
+//    func keyboardOnScreen(notification: NSNotification) {
+//        if let info = notification.userInfo {
+//            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+//            phoneNumberView.keyboardHeight = keyboardFrame.height
+//            phoneNumberView.updateConstraints()
+//        }
+//    }
     
     
     // MARK: - Required methods

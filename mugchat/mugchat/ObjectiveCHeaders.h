@@ -11,5 +11,6 @@
 
 #import <AFNetworking/AFNetworking.h>
 #import <Masonry/Masonry.h>
+#import "UIImage+ImageEffects.h"
 
 #endif

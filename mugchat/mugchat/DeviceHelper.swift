@@ -12,20 +12,13 @@
 
 import Foundation
 
-class BuilderViewController : MugChatViewController {
+class DeviceHelper: NSObject {
     
-    // MARK: - Overridden Methods
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Builder", comment: "Builder"))
-        self.view.backgroundColor = UIColor.deepSea()
-     
-        self.setNeedsStatusBarAppearanceUpdate()
+    class func isDeviceModelLessOrEqualThaniPhone5S() -> Bool {
+        return DeviceScreenSize.screenRect.size.height <= 568
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+    struct DeviceScreenSize {
+        static let screenRect: CGRect = UIScreen.mainScreen().bounds
     }
 }

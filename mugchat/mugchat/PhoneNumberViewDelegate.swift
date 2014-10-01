@@ -10,15 +10,10 @@
 // the license agreement.
 //
 
-import UIKit
-
-class TermsOfUseViewController: MugChatWebViewController {
-
-    init() {
-        super.init(view: TermsOfUseView(), title: "Terms of Use")
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+protocol PhoneNumberViewDelegate {
+    
+    func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!)
+    
+    func phoneNumberViewDidTapBackButton()
+    
 }

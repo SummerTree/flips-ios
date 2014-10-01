@@ -10,29 +10,13 @@
 // the license agreement.
 //
 
-class InboxViewController : UIViewController {
-    
-    // MARK: - Init methods
-
-    required init(coder: NSCoder) {
-        fatalError("NSCoding not supported")
-    }
-
-    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    convenience override init() {
-        self.init(nibName: nil, bundle: nil)
-    }
+class InboxViewController : MugChatViewController, InboxViewDelegate {
     
     // MARK: - UIViewController overridden methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.setupRedNavBar("tmp_homer", showSettingsButton: true, showBuilderButton: true) // TODO: change it to logged user thumnail
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.initInboxView()
     }
     
@@ -41,6 +25,7 @@ class InboxViewController : UIViewController {
     
     private func initInboxView() {
         var inboxView = InboxView()
+        inboxView.delegate = self
         self.view.addSubview(inboxView)
         
         inboxView.mas_makeConstraints { (maker) -> Void in
@@ -49,6 +34,33 @@ class InboxViewController : UIViewController {
             maker.leading.equalTo()(self.view)
             maker.trailing.equalTo()(self.view)
         }
+    }
+    
+    
+    // MARK: - InboxViewDelegate
+    
+    func inboxViewDidTapComposeButton(inboxView : InboxView) {
+        self.navigationController?.pushViewController(ComposeViewController(), animated: true)
+    }
+    
+    func inboxViewDidTapSettingsButton(inboxView : InboxView) {
+        var settingsViewController = SettingsViewController()
+        var navigationController = UINavigationController(rootViewController: settingsViewController)
+        
+        settingsViewController.modalPresentationStyle = UIModalPresentationStyle.FullScreen;
+        self.presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
+    func inboxViewDidTapBuilderButton(inboxView : InboxView) {
+        var builderViewController = BuilderViewController()
+        var navigationController = UINavigationController(rootViewController: builderViewController)
+        
+        builderViewController.modalPresentationStyle = UIModalPresentationStyle.PageSheet;
+        self.presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
+    func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
+        println("tap at cell \(index)")
     }
 }
 

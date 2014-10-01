@@ -12,13 +12,22 @@
 
 import UIKit
 
-class TermsOfUseViewController: MugChatWebViewController {
-
+class PrivacyPolicyView: MugChatWebView {
+    
+    let PRIVACY_POLICY_URL = "http://www.arctouch.com"
+    
     init() {
-        super.init(view: TermsOfUseView(), title: "Terms of Use")
+        super.init(URL: PRIVACY_POLICY_URL)
     }
-
-    required init(coder: NSCoder) {
+    
+    
+    // MARK: Required methods
+    
+    required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
 }

@@ -14,7 +14,8 @@ import UIKit
 
 protocol LoginViewDelegate {
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!) -> Void
-    func loginViewDidTapSignInButton(loginView: LoginView!) -> Void
+    func loginViewDidTapTermsOfUse(loginView: LoginView!)
+    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
+    func loginViewDidTapSignInButton(loginView: LoginView!)
 
 }

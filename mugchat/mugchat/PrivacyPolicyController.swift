@@ -12,10 +12,10 @@
 
 import UIKit
 
-class TermsOfUseViewController: MugChatWebViewController {
-
+class PrivacyPolicyViewController: MugChatWebViewController {
+    
     init() {
-        super.init(view: TermsOfUseView(), title: "Terms of Use")
+        super.init(view: PrivacyPolicyView(), title: "Privacy Policy")
     }
 
     required init(coder: NSCoder) {

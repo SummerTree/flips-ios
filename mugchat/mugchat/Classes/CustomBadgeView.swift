@@ -16,7 +16,7 @@ class CustomBadgeView : UIView {
 
     let CUSTOM_BADGE_VIEW_TAG = 222
 
-    private let BADGE_SIZE = 25 + THUMBNAIL_BORDER_WIDTH
+    private let BADGE_SIZE : CGFloat = 25
 
     var badgeLabel : UILabel!
     
@@ -27,13 +27,13 @@ class CustomBadgeView : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.frame = CGRectMake(0, 0, BADGE_SIZE, BADGE_SIZE)
-        self.backgroundColor = UIColor.redColor()
-        self.tag = CUSTOM_BADGE_VIEW_TAG;
-        self.layer.cornerRadius = BADGE_SIZE / 2
-        self.layer.borderColor = UIColor.whiteColor().CGColor
-        self.layer.borderWidth = THUMBNAIL_BORDER_WIDTH
-        self.clipsToBounds = true
+        var badgeBackgroundImage = UIImage(named: "Notification")
+        
+        self.frame = CGRectMake(0, 0, badgeBackgroundImage.size.width, badgeBackgroundImage.size.height)
+
+        var backgroundImageView = UIImageView(image: badgeBackgroundImage)
+        backgroundImageView.sizeToFit()
+        self.addSubview(backgroundImageView)
 
         badgeLabel = UILabel()
         badgeLabel.textAlignment = .Center
@@ -43,8 +43,8 @@ class CustomBadgeView : UIView {
         
         badgeLabel.mas_updateConstraints { (make) -> Void in
             make.centerY.equalTo()(self)
-            make.leading.equalTo()(self).with().offset()(THUMBNAIL_BORDER_WIDTH)
-            make.trailing.equalTo()(self).with().offset()(-THUMBNAIL_BORDER_WIDTH)
+            make.leading.equalTo()(self)
+            make.trailing.equalTo()(self)
         }
     }
 

@@ -12,7 +12,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, LoginViewDelegate {
+class LoginViewController: MugChatViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
@@ -22,7 +22,6 @@ class LoginViewController: UIViewController, LoginViewDelegate {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = false
         super.viewWillDisappear(animated)
         loginView.viewWillDisappear()
     }
@@ -44,6 +43,11 @@ class LoginViewController: UIViewController, LoginViewDelegate {
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
         var termsOfUseViewController = TermsOfUseViewController()
         self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
+    }
+    
+    func loginViewDidTapPrivacyPolicy(loginView: LoginView!) {
+        var privacyPolicyViewController = PrivacyPolicyViewController()
+        self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
     func loginViewDidTapSignInButton(loginView: LoginView!) {

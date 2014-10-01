@@ -12,40 +12,17 @@
 
 import UIKit
 
-class TermsOfUseView: UIView {
+class TermsOfUseView: MugChatWebView {
     
     let TERMS_OF_USE_URL = "http://www.arctouch.com"
     
-    var webView: UIWebView!
-    
-    override init() {
-        super.init()
-        self.addSubviews()
-        self.makeConstraints()
+    init() {
+        super.init(URL: TERMS_OF_USE_URL)
     }
     
-    func addSubviews() {
-        
-        self.webView = UIWebView()
+    
+    // MARK: Required methods
 
-        let URL = NSURL(string: TERMS_OF_USE_URL)
-        let request = NSURLRequest(URL: URL)
-        
-        self.webView.loadRequest(request)
-        self.addSubview(self.webView)
-    }
-    
-    func makeConstraints() {
-        self.webView.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self)
-            make.leading.equalTo()(self)
-            make.trailing.equalTo()(self)
-            make.top.equalTo()(self)
-        }
-    }
-    
-    // MARK: - Required methods
-    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -53,4 +30,5 @@ class TermsOfUseView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
+    
 }
