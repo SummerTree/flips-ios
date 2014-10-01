@@ -88,4 +88,8 @@ extension UIColor {
     class func lightBackground() -> UIColor {
         return UIColor.whiteColor()
     }
+    
+    class func blurredBackground() -> UIColor {
+        return UIColor.whiteColor().colorWithAlphaComponent(0.25)
+    }
 }

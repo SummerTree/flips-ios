@@ -20,6 +20,7 @@
 		57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */; };
 		57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */; };
 		57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */; };
+		57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */; };
 		57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */; };
 		57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
 		70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
@@ -71,6 +72,7 @@
 		57D2A09219D310C000FA729D /* mugchatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mugchatTests.swift; sourceTree = "<group>"; };
 		57D2A0A019D3240E00FA729D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewDelegate.swift; sourceTree = "<group>"; };
+		57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewDelegate.swift; sourceTree = "<group>"; };
 		57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
 		57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeView.swift; sourceTree = "<group>"; };
 		70057E9319DADF59004343ED /* DeviceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */,
 				57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */,
 				57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */,
+				57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */,
 			);
 			name = Verification;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
+				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,

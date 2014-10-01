@@ -12,7 +12,9 @@
 
 import Foundation
 
-class VerificationCodeView : UIView, UITextFieldDelegate {
+class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
+    
+    var delegate: VerificationCodeViewDelegate?
     
     private let TOP_MARGIN: CGFloat = 44.0
     
@@ -21,10 +23,13 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
     private let CODE_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let CODE_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     private let CODE_VIEW_HEIGHT: CGFloat = 60.0
+    private let CODE_VIEW_OPACITY: CGFloat = 60.0
     
     private let HINT_TEXT: String = "Enter the code sent to"
     
     private let BULLET: String = "\u{2022}"
+    
+    private var navigationBar: CustomNavigationBar!
     
     var hintView: UIView!
     var labelsView: UIView!
@@ -44,9 +49,15 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
         self.updateConstraintsIfNeeded()
+        let center = NSNotificationCenter.defaultCenter()
+        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {
+        
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Verification Code", showBackButton: true)
+        navigationBar.delegate = self
+        self.addSubview(navigationBar)
         
         hintView = UIView()
         hintView.contentMode = .Center
@@ -72,7 +83,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         
         codeView = UIView()
         //codeView.contentMode = .Center
-        codeView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.25)
+        codeView.backgroundColor = UIColor.blurredBackground()
         self.addSubview(codeView)
         
         codeField = UITextField()
@@ -85,9 +96,9 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
         //codeField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         codeField.keyboardType = UIKeyboardType.PhonePad
-        var attributedString = NSMutableAttributedString(string: "XXXX")
-        attributedString.addAttribute(NSKernAttributeName, value: 20.0, range: NSMakeRange(0, 3))
-        attributedString.addAttribute(NSBackgroundColorAttributeName, value: UIColor.greenColor(), range: NSMakeRange(0, 3))
+        var attributedString = NSMutableAttributedString(string: "\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
+        attributedString.addAttribute(NSKernAttributeName, value: 20.0, range: NSMakeRange(0, 1))
+        attributedString.addAttribute(NSBackgroundColorAttributeName, value: UIColor.greenColor(), range: NSMakeRange(0, 1))
         codeField.attributedText = attributedString
         codeView.addSubview(codeField)
         
@@ -98,6 +109,13 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
     }
     
     override func updateConstraints() {
+        
+        navigationBar.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.leading.equalTo()(self)
+            make.trailing.equalTo()(self)
+            make.height.equalTo()(self.navigationBar.frame.size.height)
+        }
         
         hintView.mas_updateConstraints { (make) in
             make.top.equalTo()(self).with().offset()(self.TOP_MARGIN)
@@ -150,25 +168,25 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
         let length = countElements(text)
         var shouldReplace = true
         
-        if (string != "") {
-            switch length {
+//        if (string != "") {
+//            switch length {
 //            case 3, 7:
 //                textField.text = "\(text)-"
-            default:
-                break;
-            }
-            if (length > 3) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
-        }
+//            default:
+//                break;
+//            }
+//            if (length > 3) {
+//                shouldReplace = false
+//            }
+//        } else {
+//            switch length {
+//            case 5, 9:
+//                let nsString = text as NSString
+//                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+//            default:
+//                break;
+//            }
+//        }
         return shouldReplace;
     }
     
@@ -181,6 +199,32 @@ class VerificationCodeView : UIView, UITextFieldDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    
+    // MARK: - Notifications
+    func keyboardOnScreen(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            keyboardHeight = keyboardFrame.height
+            updateConstraints()
+        }
+    }
+    
+    // MARK: - Buttons delegate
+    func didFinishTypingVerificationCode(sender: AnyObject?) {
+        self.delegate?.didFinishTypingVerificationCode(self)
+    }
+    
+    
+    // MARK: - CustomNavigationBarDelegate Methods
+    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
+        self.delegate?.verificationCodeViewDidTapBackButton()
+    }
+    
+    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
+        // Do nothing
+        println("customNavigationBarDidTapRightButton")
     }
     
 }

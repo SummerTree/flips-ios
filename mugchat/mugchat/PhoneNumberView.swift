@@ -24,7 +24,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
-    private let MOBILE_NUMBER_FIELD_OPACITY: CGFloat = 0.25
     
     private let HINT_TEXT: String = "Enter your number\nto verify you are a human."
     private let SPAM_TEXT: String = "That whole spam thing...\nYeah, we don't do that."
@@ -70,7 +69,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         mobileNumberView = UIView()
         mobileNumberView.contentMode = .Center
-        mobileNumberView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(MOBILE_NUMBER_FIELD_OPACITY)
+        mobileNumberView.backgroundColor = UIColor.blurredBackground()
         self.addSubview(mobileNumberView)
         
         phoneImageView = UIImageView(image: UIImage(named: "Phone"))

@@ -12,25 +12,9 @@
 
 import Foundation
 
-class VerificationCodeViewController: UIViewController {
+class VerificationCodeViewController: MugChatViewController, VerificationCodeViewDelegate {
     
     var verificationCodeView: VerificationCodeView!
-    
-    override init() {
-        super.init()
-        let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,13 +24,15 @@ class VerificationCodeViewController: UIViewController {
         self.setupOrangeNavBarWithBackButton(NSLocalizedString("Verification Code", comment: "Verification Code"))
     }
     
-    // MARK: - Notifications
-    func keyboardOnScreen(notification: NSNotification) {
-        if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            verificationCodeView.keyboardHeight = keyboardFrame.height
-            verificationCodeView.updateConstraints()
-        }
+    // MARK: - ForgotPasswordViewDelegate Methods
+    func didFinishTypingVerificationCode(view: VerificationCodeView!) {
+        //var verificationCodeViewController = VerificationCodeViewController()
+        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+    }
+    
+    
+    func verificationCodeViewDidTapBackButton() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     
