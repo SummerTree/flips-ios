@@ -46,6 +46,24 @@ extension UIViewController {
         backBarButton.tintColor = UIColor.orangeColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }
+    
+    func setupOrangeNavBarWithBackButton(title: String) {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.translucent = true
+        
+        var titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
+        titleLabel.textColor = UIColor.whiteColor()
+        titleLabel.textAlignment = .Center
+        titleLabel.sizeToFit()
+        self.navigationItem.titleView = titleLabel
+        
+        var backBarButton = UIBarButtonItem(image: UIImage(named: "back") , style: .Done, target: self, action: "backButtonTapped")
+        backBarButton.tintColor = UIColor.whiteColor()
+        self.navigationItem.leftBarButtonItem = backBarButton
+    }
 
     
     // MARK: - Nav Button Actions
