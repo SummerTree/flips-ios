@@ -14,31 +14,28 @@ import Foundation
 
 class PhoneNumberView : UIView, UITextFieldDelegate {
     
-    private let MARGIN_TOP: CGFloat = 40.0
+    private let TOP_MARGIN: CGFloat = 44.0
     
-    private let TOP_BAR_MARGIN_LEFT: CGFloat = 16.0
-    private let TOP_BAR_MARGIN_RIGHT: CGFloat = 16.0
-    private let TOP_BAR_HEIGHT: CGFloat = 44.0
-    private let HINT_VIEW_HEIGHT: CGFloat = 218.0
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_LEFT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
+    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
-    private let TOP_BAR_TITLE: String = "Phone Number"
-    private let HINT_TEXT: String = "Enter your number\n to verify you are a human."
+    private let HINT_TEXT: String = "Enter your number\nto verify you are a human."
+    private let SPAM_TEXT: String = "That whole spam thing...\nYeah, we don't do that."
     
-    var topBarView: UIView!
-    var topBarTitle: UILabel!
-    var backButton: UIButton!
-    var backImage: UIImage!
     var hintView: UIView!
     var hintText: UILabel!
     var mobileNumberView: UIView!
     var phoneImageView: UIImageView!
     var mobileNumberField: UITextField!
-    var noticeView: UIView!
+    var spamView: UIView!
+    var spamText: UILabel!
+    var keyboardFillerView: UIView!
+    
+    var keyboardHeight: CGFloat = 0.0
     
     override init() {
         super.init()
@@ -46,25 +43,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
         self.addSubviews()
         self.updateConstraintsIfNeeded()
     }
-
     
     func addSubviews() {
-        
-        topBarView = UIView()
-        topBarView.contentMode = .Center
-        self.addSubview(topBarView)
-        
-        backImage = UIImage(named: "Back")
-        backButton = UIButton()
-        backButton.setImage(backImage, forState: UIControlState.Normal)
-        backButton.setImage(backImage, forState: UIControlState.Highlighted)
-        topBarView.addSubview(backButton)
-        
-        topBarTitle = UILabel()
-        topBarTitle.text = NSLocalizedString(TOP_BAR_TITLE, comment: TOP_BAR_TITLE)
-        topBarTitle.textColor = UIColor.whiteColor()
-        topBarTitle.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
-        topBarView.addSubview(topBarTitle)
         
         hintView = UIView()
         hintView.contentMode = .Center
@@ -75,7 +55,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
         hintText.textAlignment = NSTextAlignment.Center
         hintText.text = NSLocalizedString(HINT_TEXT, comment: HINT_TEXT)
         hintText.textColor = UIColor.whiteColor()
-        hintText.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
+        hintText.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         hintView.addSubview(hintText)
         
         mobileNumberView = UIView()
@@ -87,33 +67,38 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
         phoneImageView.contentMode = .Center
         mobileNumberView.addSubview(phoneImageView)
         
+        mobileNumberField = UITextField()
+        mobileNumberField.delegate = self
+        mobileNumberField.becomeFirstResponder()
+        mobileNumberField.textColor = UIColor.whiteColor()
+        mobileNumberField.tintColor = UIColor.whiteColor()
+        mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        mobileNumberField.keyboardType = UIKeyboardType.PhonePad
+        mobileNumberView.addSubview(mobileNumberField)
         
+        spamView = UIView()
+        spamView.contentMode = .Center
+        self.addSubview(spamView)
         
+        spamText = UILabel()
+        spamText.numberOfLines = 0
+        spamText.textAlignment = NSTextAlignment.Center
+        spamText.text = NSLocalizedString(SPAM_TEXT, comment: SPAM_TEXT)
+        spamText.textColor = UIColor.whiteColor()
+        spamText.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        spamView.addSubview(spamText)
+        
+        keyboardFillerView = UIView()
+        keyboardFillerView.backgroundColor = UIColor.greenColor()
+        self.addSubview(keyboardFillerView)
         
     }
     
     override func updateConstraints() {
-        
-        topBarView.mas_updateConstraints { (make) in
-            make.top.equalTo()(self).with().offset()(self.MARGIN_TOP)
-            make.height.equalTo()(self.TOP_BAR_HEIGHT)
-            make.left.equalTo()(self).with().offset()(self.TOP_BAR_MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.TOP_BAR_MARGIN_RIGHT)
-        }
-        
-        backButton.mas_updateConstraints { (make) in
-            make.left.equalTo()(self.topBarView.mas_left)
-            make.centerY.equalTo()(self.topBarView.mas_centerY)
-        }
-        
-        topBarTitle.mas_updateConstraints { (make) in
-            make.centerX.equalTo()(self.mas_centerX)
-            make.centerY.equalTo()(self.topBarView.mas_centerY)
-        }
-        
+                
         hintView.mas_updateConstraints { (make) in
-            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
-            make.top.equalTo()(self.topBarView.mas_bottom)
+            make.top.equalTo()(self).with().offset()(self.TOP_MARGIN)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
         }
@@ -136,9 +121,62 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
+        mobileNumberField.mas_updateConstraints { (make) in
+            make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
+            make.centerY.equalTo()(self.mobileNumberView)
+        }
+        
+        spamView.mas_updateConstraints({ (make) in
+            make.top.equalTo()(self.mobileNumberView.mas_bottom)
+            make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
+            make.height.equalTo()(self.hintView)
+        })
+        
+        spamText.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.spamView)
+            make.centerX.equalTo()(self.spamView)
+        }
+        
+        keyboardFillerView.mas_updateConstraints( { (make) in
+            make.top.equalTo()(self.spamView.mas_bottom)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.keyboardHeight)
+            make.bottom.equalTo()(self)
+        })
+        
         super.updateConstraints()
     }
-
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        let text = textField.text
+        let length = countElements(text)
+        var shouldReplace = true
+        
+        if (string != "") {
+            switch length {
+            case 3, 7:
+                textField.text = "\(text)-"
+            default:
+                break;
+            }
+            if (length > 11) {
+                shouldReplace = false
+            }
+        } else {
+            switch length {
+            case 5, 9:
+                let nsString = text as NSString
+                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+            default:
+                break;
+            }
+        }
+        return shouldReplace;
+    }
+    
     
     // MARK: - Required methods
     
@@ -149,5 +187,5 @@ class PhoneNumberView : UIView, UITextFieldDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-
+    
 }

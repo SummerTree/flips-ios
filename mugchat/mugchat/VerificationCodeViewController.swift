@@ -12,16 +12,16 @@
 
 import Foundation
 
-class PhoneNumberViewController: UIViewController {
+class VerificationCodeViewController: UIViewController {
     
-    var phoneNumberView: PhoneNumberView!
+    var verificationCodeView: VerificationCodeView!
     
     override init() {
         super.init()
         let center = NSNotificationCenter.defaultCenter()
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
@@ -34,18 +34,18 @@ class PhoneNumberViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        phoneNumberView = PhoneNumberView()
-        self.view = phoneNumberView
-        self.setupOrangeNavBarWithBackButton(NSLocalizedString("Phone Number", comment: "Phone Number"))
+        verificationCodeView = VerificationCodeView()
+        verificationCodeView.phoneNumber = "415-555-0001"
+        self.view = verificationCodeView
+        self.setupOrangeNavBarWithBackButton(NSLocalizedString("Verification Code", comment: "Verification Code"))
     }
-    
     
     // MARK: - Notifications
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
             let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            phoneNumberView.keyboardHeight = keyboardFrame.height
-            phoneNumberView.updateConstraints()
+            verificationCodeView.keyboardHeight = keyboardFrame.height
+            verificationCodeView.updateConstraints()
         }
     }
     
@@ -58,6 +58,6 @@ class PhoneNumberViewController: UIViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-
+    
     
 }
