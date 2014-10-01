@@ -16,7 +16,6 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     var delegate: ForgotPasswordViewDelegate?
     
-    private let TOP_MARGIN: CGFloat = 44.0
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_LEFT: CGFloat = 25.0
@@ -70,7 +69,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         
         mobileNumberView = UIView()
         mobileNumberView.contentMode = .Center
-        mobileNumberView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.25)
+        mobileNumberView.backgroundColor = UIColor.lightSemitransparentBackground()
         self.addSubview(mobileNumberView)
         
         phoneImageView = UIImageView(image: UIImage(named: "Phone"))
@@ -106,7 +105,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         }
         
         hintView.mas_updateConstraints { (make) in
-            make.top.equalTo()(self).with().offset()(self.TOP_MARGIN)
+            make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
         }
