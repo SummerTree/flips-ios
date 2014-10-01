@@ -50,8 +50,21 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
-    func loginViewDidTapSignInButton(loginView: LoginView!) {
-        var inboxViewController = InboxViewController()
-        self.navigationController?.pushViewController(inboxViewController, animated: true)
+    func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String) {
+        UserService.sharedInstance.signIn(username, password: password, success: { (user) -> Void in
+
+            if (user == nil) {
+                self.loginView.showValidationErrorInCredentialFields()
+            }
+            
+            var authenticatedUser: User = user as User!
+            AuthenticationHelper.sharedInstance.saveAuthenticatedUsername(authenticatedUser.username!)
+
+            var inboxViewController = InboxViewController()
+            self.navigationController?.pushViewController(inboxViewController, animated: true)
+            
+        }) { (error) -> Void in
+            self.loginView.showValidationErrorInCredentialFields()
+        }
     }
 }

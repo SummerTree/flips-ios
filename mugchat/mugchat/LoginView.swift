@@ -20,10 +20,12 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MARGIN_LEFT:CGFloat = 40.0
 
     private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
+    private var MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat!
 
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
     private var LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
     private var MUGCHAT_WORD_LAST_CENTER_Y: CGFloat!
+    private let MUGCHAT_WORD_OFFSET: CGFloat = 20.0
     private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
 
     private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
@@ -31,13 +33,15 @@ class LoginView : UIView, UITextFieldDelegate {
     private let ANDWORD_MARGIN_RIGHT: CGFloat = 2
     private let EMAIL_MARGIN_LEFT: CGFloat = 15.0
     private let EMAIL_MARGIN_BOTTOM: CGFloat = 12.5
+    private let FORGOT_PASSWORD_MARGIN_TOP: CGFloat = 10
+    private let FORGOT_PASSWORD_MARGIN_BOTTOM: CGFloat = 15
     private let KEYBOARD_MARGIN_TOP: CGFloat = 30.0
     private let MINIMAL_SPACER_HEIGHT: CGFloat = 10.0
     private let PASSWORD_MARGIN_TOP: CGFloat = 12.5
     private let PASSWORD_MARGIN_LEFT: CGFloat = 15.0
     private let PRIVACY_POLICY_HEIGHT: CGFloat = 20.0
     private let SEPARATOR_HEIGHT: CGFloat = 0.5
-    private let SIGNUP_MARGIN_BOTTOM: CGFloat = 20.0
+    private let SIGNUP_MARGIN_BOTTOM: CGFloat = 15.0
     private let TERMS_OF_USE_HEIGHT: CGFloat = 20.0
     
     private var logoView: UIView!
@@ -52,6 +56,8 @@ class LoginView : UIView, UITextFieldDelegate {
     private var facebookLogoImage: UIImage!
     private var facebookButton: UIButton!
     private var signupButton: UIButton!
+    private var forgotPasswordImage: UIImage!
+    private var forgotPasswordButton: UIButton!
     
     private var acceptanceView: UIView!
     private var acceptTermsPhrase: UILabel!
@@ -66,10 +72,16 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
     
+    private var didUserMistakenPassword: Bool = false
+    
+    private var animator: UIDynamicAnimator!
+    
     var delegate: LoginViewDelegate?
     
     override init() {
         super.init()
+        
+        self.animator = UIDynamicAnimator(referenceView: self)
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
         self.makeConstraints()
@@ -102,11 +114,47 @@ class LoginView : UIView, UITextFieldDelegate {
         
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.addGestureRecognizer(tapGestureRecognizer)
+        
+        self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
     }
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func showValidationErrorInCredentialFields() {
+        self.didUserMistakenPassword = true
+        self.emailTextField.rightView = UIImageView(image: UIImage(named: "Error"))
+        self.emailTextField.rightView?.alpha = 0.0
+        
+        self.passwordTextField.rightView = UIImageView(image: UIImage(named: "Error"))
+        self.passwordTextField.rightView?.alpha = 0.0
+
+        UIView.animateWithDuration(1.0, animations: {
+            self.emailTextField.rightView?.alpha = 1.0
+            self.passwordTextField.rightView?.alpha = 1.0
+            self.forgotPasswordButton.alpha = 1.0
+            
+            if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
+                    self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
+                    self.forgotPasswordButton.center.y = (self.credentialsView.center.y + self.mugchatWordImageView.center.y) / 2
+                })
+            }
+            
+            var shakeAnimation = CABasicAnimation(keyPath: "position")
+            shakeAnimation.duration = 0.075
+            shakeAnimation.repeatCount = 3
+            shakeAnimation.autoreverses = true
+            shakeAnimation.fromValue = NSValue(CGPoint: CGPointMake(self.credentialsView.center.x - 30.0, self.credentialsView.center.y))
+            shakeAnimation.toValue = NSValue(CGPoint: CGPointMake(self.credentialsView.center.x + 30.0, self.credentialsView.center.y))
+            
+            self.credentialsView.layer.addAnimation(shakeAnimation, forKey: "position")
+
+        })
+    
     }
     
     func setFieldsHidden(hidden: Bool) {
@@ -139,6 +187,20 @@ class LoginView : UIView, UITextFieldDelegate {
         mugchatWordImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(mugchatWordImageView)
         
+        forgotPasswordImage = UIImage(named: "ForgotPassword")
+        forgotPasswordButton = UIButton()
+        forgotPasswordButton.alpha = 0.0
+        forgotPasswordButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
+        forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
+        forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
+        forgotPasswordButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        forgotPasswordButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Forgot Password", comment: "Forgot Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
+        forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Normal)
+        forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Highlighted)
+        forgotPasswordButton.setTitle(NSLocalizedString("Forgot Password", comment: "Forgot Password"), forState: UIControlState.Normal)
+        self.addSubview(forgotPasswordButton)
+        
+        
         spaceBetweenMugchatAndCredentials = UIView()
         self.addSubview(spaceBetweenMugchatAndCredentials)
         
@@ -155,6 +217,8 @@ class LoginView : UIView, UITextFieldDelegate {
         emailTextField = UITextField()
         emailTextField.autocorrectionType = UITextAutocorrectionType.No
         emailTextField.delegate = self
+        emailTextField.keyboardType = UIKeyboardType.EmailAddress
+        emailTextField.rightViewMode = UITextFieldViewMode.Always
         emailTextField.textColor = UIColor.whiteColor()
         emailTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", comment: "Email"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
@@ -171,6 +235,7 @@ class LoginView : UIView, UITextFieldDelegate {
         passwordTextField = UITextField()
         passwordTextField.delegate = self
         passwordTextField.returnKeyType = UIReturnKeyType.Done
+        passwordTextField.rightViewMode = UITextFieldViewMode.Always
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         passwordTextField.secureTextEntry = true
@@ -285,6 +350,11 @@ class LoginView : UIView, UITextFieldDelegate {
             make.height.greaterThanOrEqualTo()(self.MINIMAL_SPACER_HEIGHT)
         }
         
+        forgotPasswordButton.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.bottom.equalTo()(self.credentialsView.mas_top).with().offset()(-self.FORGOT_PASSWORD_MARGIN_BOTTOM)
+        }
+        
         credentialsView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.bubbleChatImageView)
             make.trailing.equalTo()(self.bubbleChatImageView)
@@ -301,6 +371,7 @@ class LoginView : UIView, UITextFieldDelegate {
         }
         
         emailTextField.mas_makeConstraints { (make) -> Void in
+            make.centerY.equalTo()(self.emailImageView)
             make.top.equalTo()(self.credentialsView)
             make.leading.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
             make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
@@ -398,7 +469,14 @@ class LoginView : UIView, UITextFieldDelegate {
     // MARK: - Buttons delegate
     
     func signInButtonTapped(sender: AnyObject?) {
-        self.delegate?.loginViewDidTapSignInButton(self)
+        
+        if (self.emailTextField.text.isEmpty || self.passwordTextField.text.isEmpty) {
+            var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            alertMessage.show()
+            return
+        }
+        
+        self.delegate?.loginViewDidTapSignInButton(self, username: self.emailTextField.text, password: self.passwordTextField.text)
     }
     
     func termsOfUseButtonTapped(sender: AnyObject?) {
@@ -425,7 +503,6 @@ class LoginView : UIView, UITextFieldDelegate {
         } else if (textField == self.passwordTextField) {
             // Done button was pressed
             self.signInButtonTapped(self)
-            self.passwordTextField.resignFirstResponder()
         }
         
         return true
@@ -444,6 +521,9 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
+                if (self.didUserMistakenPassword) {
+                    self.forgotPasswordButton.alpha = 1.0
+                }
                 
                 // positioning above keyboard
                 var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
@@ -463,13 +543,17 @@ class LoginView : UIView, UITextFieldDelegate {
                 if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
                     self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.MUGCHAT_WORD_LAST_CENTER_Y = self.mugchatWordImageView.center.y
-                    self.mugchatWordImageView.center.y = self.logoView.center.y
+                    
+                    if (self.didUserMistakenPassword) {
+                        self.mugchatWordImageView.frame.origin.y = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
+                    } else {
+                        self.mugchatWordImageView.center.y = self.logoView.center.y
+                    }
                 }
-                
             } else {
+                self.forgotPasswordButton.alpha = 0.0
                 self.logoView.frame.origin.y += self.LOGO_VIEW_ANIMATION_OFFSET
                 self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
-                
                 if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
                     self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.mugchatWordImageView.center.y = self.MUGCHAT_WORD_LAST_CENTER_Y
@@ -488,7 +572,9 @@ class LoginView : UIView, UITextFieldDelegate {
         super.init(frame: frame)
     }
     
+    
     // MARK: - Private methods
+    
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
