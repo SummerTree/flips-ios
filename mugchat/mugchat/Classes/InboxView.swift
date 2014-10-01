@@ -49,9 +49,6 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    // MARK: - Private Methods
-    
     private func initSubviews() {
         navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "tmp_homer"), showSettingsButton: true, showBuiderButton: true)
         navigationBar.delegate = self
@@ -128,6 +125,12 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
         }
     }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        var size = CGSizeMake(CGRectGetWidth(navigationBar.frame), CGRectGetHeight(navigationBar.frame))
+        navigationBar.setBackgroundImage(conversationsTableView.getImageWithSize(size))
+    }
+    
     
     // MARK: - UITableViewDelegate
     

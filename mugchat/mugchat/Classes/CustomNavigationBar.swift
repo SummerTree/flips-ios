@@ -10,7 +10,6 @@
 // the license agreement.
 //
 
-
 // It needs to declared outside of the class because it is being used in a static method. Swift is not supporting static variables yet.
 private let STATUS_BAR_HEIGHT = UIApplication.sharedApplication().statusBarFrame.size.height
 private let SMALL_NAVIGATION_BAR_HEIGHT : CGFloat = 56.0
@@ -25,6 +24,8 @@ class CustomNavigationBar : UIView {
     
     private let BUTTON_HORIZONTAL_MARGIN : CGFloat = 11.0
     private let BUTTON_MINIMUM_SIZE : CGFloat = 44.0
+    
+    private var backgroundImageView : UIImageView!
     
     private var avatarImageView : UIImageView!
     private var titleTextView : UITextView!
@@ -108,12 +109,10 @@ class CustomNavigationBar : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        // ToolBar is used to apply a blur in the background. According with what I read, is the easiest way in iOS7
-        var toolBar = UIToolbar(frame: frame)
-        toolBar.translucent = true
-        toolBar.barStyle = UIBarStyle.Black
-        toolBar.barTintColor = UIColor.mugOrange()
-        self.addSubview(toolBar)
+        backgroundImageView = UIImageView(frame: frame)
+        backgroundImageView.backgroundColor = UIColor.mugOrange()
+        backgroundImageView.alpha = 0.9
+        self.addSubview(backgroundImageView)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -149,7 +148,7 @@ class CustomNavigationBar : UIView {
         }
         
         if (rightButtonObject != nil) {
-            // Right button could be have a background image or a title
+            // Right button could have a background image or a title
             rightButton = UIButton()
             if let rightButtonItem = rightButtonObject as? String {
                 rightButton.setTitle(rightButtonItem, forState: .Normal)
@@ -238,15 +237,15 @@ class CustomNavigationBar : UIView {
         }
     }
     
-    
-    // MARK: Getters
+
+    // MARK: - Getters
     
     func getNavigationBarHeight() -> CGFloat {
         return CGRectGetHeight(self.frame) - STATUS_BAR_HEIGHT
     }
     
     
-    // MARK: Button Handlers
+    // MARK: - Button Handlers
     
     func didTapLeftButton() {
         delegate?.customNavigationBarDidTapLeftButton(self)
@@ -254,5 +253,13 @@ class CustomNavigationBar : UIView {
     
     func didTapRightButton() {
         delegate?.customNavigationBarDidTapRightButton(self)
+    }
+    
+    
+    // MARK: - Blur Background Handler
+    
+    func setBackgroundImage(image: UIImage) {
+        backgroundImageView.alpha = 1.0
+        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
     }
 }
