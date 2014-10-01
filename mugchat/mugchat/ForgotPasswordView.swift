@@ -44,6 +44,9 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         self.addSubviews()
         self.makeConstraints()
         
+        let center = NSNotificationCenter.defaultCenter()
+        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.addGestureRecognizer(tapGestureRecognizer)
     }
@@ -177,6 +180,15 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         return shouldReplace;
     }
     
+    
+    // MARK: - Notifications
+    func keyboardOnScreen(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            keyboardHeight = keyboardFrame.height
+            updateConstraints()
+        }
+    }
     
     // MARK: - Buttons delegate
     func finishTypingMobileNumber(sender: AnyObject?) {

@@ -36,14 +36,4 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         self.navigationController?.popViewControllerAnimated(true)
     }
 
-
-    // MARK: - Notifications
-    func keyboardOnScreen(notification: NSNotification) {
-        if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            forgotPasswordView.keyboardHeight = keyboardFrame.height
-            forgotPasswordView.updateConstraints()
-        }
-    }
-
 }
