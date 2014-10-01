@@ -16,27 +16,34 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     var phoneNumberView: PhoneNumberView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         phoneNumberView = PhoneNumberView()
+        phoneNumberView.delegate = self
         self.view = phoneNumberView
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        phoneNumberView.mobileNumberField.becomeFirstResponder()
     }
     
     
     // MARK: - ForgotPasswordViewDelegate Methods
+    
     func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!) {
-        //TODO: open VerificationCode screen (story 7153)
-        //var verificationCodeViewController = VerificationCodeViewController()
-        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: view.mobileNumberField.text)
+        self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
     
-    func phoneNumberViewDidTapBackButton() {
+    func phoneNumberViewDidTapBackButton(view: PhoneNumberView!) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
     
     // MARK: - Required methods
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

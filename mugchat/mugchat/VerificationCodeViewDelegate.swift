@@ -14,6 +14,8 @@ protocol VerificationCodeViewDelegate {
     
     func didFinishTypingVerificationCode(view: VerificationCodeView!)
     
-    func verificationCodeViewDidTapBackButton()
+    func didTapBackButton(view: VerificationCodeView!)
+    
+    func didTapResendButton(view: VerificationCodeView!)
     
 }

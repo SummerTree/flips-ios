@@ -14,6 +14,6 @@ protocol PhoneNumberViewDelegate {
     
     func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!)
     
-    func phoneNumberViewDidTapBackButton()
+    func phoneNumberViewDidTapBackButton(view: PhoneNumberView!)
     
 }

@@ -15,15 +15,14 @@ import Foundation
 class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
     
     var delegate: VerificationCodeViewDelegate?
-    
-    private let TOP_MARGIN: CGFloat = 44.0
-    
+        
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     private let CODE_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let CODE_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     private let CODE_VIEW_HEIGHT: CGFloat = 60.0
-    private let CODE_VIEW_OPACITY: CGFloat = 60.0
+    private let CODE_FIELD_KERNEL_ADJUSTMENT_VALUE: CGFloat = 20.0
+    private let MAX_NUMBER_OF_DIGITS = 4
     
     private let HINT_TEXT: String = "Enter the code sent to"
     
@@ -44,11 +43,11 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     var keyboardHeight: CGFloat = 0.0
     var phoneNumber: String = ""
     
-    override init() {
+    init(phoneNumber : String!) {
         super.init()
+        self.phoneNumber = phoneNumber
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        self.updateConstraintsIfNeeded()
         let center = NSNotificationCenter.defaultCenter()
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
@@ -76,34 +75,39 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         
         phoneNumberLabel = UILabel()
         phoneNumberLabel.textAlignment = NSTextAlignment.Center
-        phoneNumberLabel.text = NSLocalizedString("415 - 555 - 7777", comment: "415 - 555 - 7777")
+        phoneNumberLabel.text = NSLocalizedString(phoneNumber, comment: phoneNumber)
         phoneNumberLabel.textColor = UIColor.whiteColor()
         phoneNumberLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
         labelsView.addSubview(phoneNumberLabel)
         
         codeView = UIView()
-        //codeView.contentMode = .Center
         codeView.backgroundColor = UIColor.blurredBackground()
         self.addSubview(codeView)
         
         codeField = UITextField()
-        //codeField.textAlignment = NSTextAlignment.Center
-        //codeField.sizeToFit()
+        codeField.textAlignment = NSTextAlignment.Center
+        codeField.sizeToFit()
         codeField.delegate = self
         codeField.becomeFirstResponder()
         codeField.textColor = UIColor.whiteColor()
         codeField.tintColor = UIColor.clearColor()
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        //codeField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         codeField.keyboardType = UIKeyboardType.PhonePad
-        var attributedString = NSMutableAttributedString(string: "\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
-        attributedString.addAttribute(NSKernAttributeName, value: 20.0, range: NSMakeRange(0, 1))
-        attributedString.addAttribute(NSBackgroundColorAttributeName, value: UIColor.greenColor(), range: NSMakeRange(0, 1))
-        codeField.attributedText = attributedString
+        
+        codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
         codeView.addSubview(codeField)
         
+        resendButtonView = UIView()
+        resendButtonView.contentMode = .Center
+        self.addSubview(resendButtonView)
+        
+        resendButton = UIButton()
+        resendButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Resend Code", comment: "Resend Code"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
+        resendButton.setBackgroundImage(UIImage(named: "Resend_button_normal"), forState: UIControlState.Normal)
+        resendButton.setBackgroundImage(UIImage(named: "Resend_button_tap"), forState: UIControlState.Highlighted)
+        resendButtonView.addSubview(resendButton)
+        
         keyboardFillerView = UIView()
-        keyboardFillerView.backgroundColor = UIColor.greenColor()
         self.addSubview(keyboardFillerView)
         
     }
@@ -118,7 +122,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         }
         
         hintView.mas_updateConstraints { (make) in
-            make.top.equalTo()(self).with().offset()(self.TOP_MARGIN)
+            make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
         }
@@ -149,10 +153,24 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeField.mas_updateConstraints { (make) in
             make.centerY.equalTo()(self.codeView)
             make.centerX.equalTo()(self.codeView)
+            make.width.equalTo()(UIFont.HeadingSize.h1 * 4 + self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE * 3)
         }
         
+        resendButtonView.mas_updateConstraints({ (make) in
+            make.top.equalTo()(self.codeView.mas_bottom)
+            make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
+            make.height.equalTo()(self.hintView)
+        })
+        
+        resendButton.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.resendButtonView)
+            make.centerX.equalTo()(self.resendButtonView)
+        }
+
+        
         keyboardFillerView.mas_updateConstraints( { (make) in
-            make.top.equalTo()(self.codeView.mas_bottom) // LOOOOOOOKKKKKKKKK
+            make.top.equalTo()(self.resendButtonView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.keyboardHeight)
@@ -163,31 +181,35 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        var stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
+        var numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         
-        let text = textField.text
-        let length = countElements(text)
-        var shouldReplace = true
+        var newText = textField.text
+        if (string == "" ) {
+            if (numberOfDigitsProvided > 0) {
+                // Is removing the digit. We need to add the bullet back
+                var nsStringText = textField.text as NSString
+                nsStringText.sizeWithAttributes([NSFontAttributeName: textField.font])
+                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided-1, 1), withString: BULLET)
+            }
+            
+        } else {
+            if (numberOfDigitsProvided < MAX_NUMBER_OF_DIGITS) {
+                // Is adding a new digit. We need to replace the bullet
+                var nsStringText = textField.text as NSString
+                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
+            }
+        }
         
-//        if (string != "") {
-//            switch length {
-//            case 3, 7:
-//                textField.text = "\(text)-"
-//            default:
-//                break;
-//            }
-//            if (length > 3) {
-//                shouldReplace = false
-//            }
-//        } else {
-//            switch length {
-//            case 5, 9:
-//                let nsString = text as NSString
-//                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-//            default:
-//                break;
-//            }
-//        }
-        return shouldReplace;
+        textField.attributedText = makeVerificatioCodeAttributedString(newText)
+        
+        return false;
+    }
+    
+    func makeVerificatioCodeAttributedString(code : String) -> NSMutableAttributedString {
+        var verificationCodeAttributedString = NSMutableAttributedString(string: code)
+        verificationCodeAttributedString.addAttribute(NSKernAttributeName, value: CODE_FIELD_KERNEL_ADJUSTMENT_VALUE, range: NSMakeRange(0, 3))
+        return verificationCodeAttributedString
     }
     
     
@@ -203,6 +225,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     
     // MARK: - Notifications
+    
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
             let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
@@ -212,14 +235,16 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     // MARK: - Buttons delegate
+    
     func didFinishTypingVerificationCode(sender: AnyObject?) {
         self.delegate?.didFinishTypingVerificationCode(self)
     }
     
     
     // MARK: - CustomNavigationBarDelegate Methods
+    
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        self.delegate?.verificationCodeViewDidTapBackButton()
+        self.delegate?.didTapBackButton(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {

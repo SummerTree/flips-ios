@@ -15,28 +15,33 @@ import Foundation
 class VerificationCodeViewController: MugChatViewController, VerificationCodeViewDelegate {
     
     var verificationCodeView: VerificationCodeView!
+    var phoneNumber: String!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        verificationCodeView = VerificationCodeView()
-        verificationCodeView.phoneNumber = "415-555-0001"
+    override func loadView() {
+        super.loadView()
+        verificationCodeView = VerificationCodeView(phoneNumber: phoneNumber)
+        verificationCodeView.delegate = self
         self.view = verificationCodeView
-        self.setupOrangeNavBarWithBackButton(NSLocalizedString("Verification Code", comment: "Verification Code"))
     }
     
     // MARK: - ForgotPasswordViewDelegate Methods
+    
     func didFinishTypingVerificationCode(view: VerificationCodeView!) {
         //var verificationCodeViewController = VerificationCodeViewController()
         //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
     
-    func verificationCodeViewDidTapBackButton() {
+    func didTapBackButton(view: VerificationCodeView!) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
+    func didTapResendButton(view: VerificationCodeView!) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     
     // MARK: - Required methods
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -45,5 +50,9 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
+    init(phoneNumber: String!) {
+        super.init(nibName: nil, bundle: nil)
+        self.phoneNumber = phoneNumber
+    }
     
 }
