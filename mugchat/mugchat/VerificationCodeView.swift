@@ -15,7 +15,7 @@ import Foundation
 class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
     
     var delegate: VerificationCodeViewDelegate?
-        
+    
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     private let CODE_VIEW_MARGIN_LEFT: CGFloat = 25.0
@@ -167,7 +167,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             make.centerY.equalTo()(self.resendButtonView)
             make.centerX.equalTo()(self.resendButtonView)
         }
-
+        
         
         keyboardFillerView.mas_updateConstraints( { (make) in
             make.top.equalTo()(self.resendButtonView.mas_bottom)
