@@ -10,15 +10,12 @@
 // the license agreement.
 //
 
-import UIKit
+import Foundation
 
-class PrivacyPolicyViewController: MugChatWebViewController {
+protocol CustomNavigationBarDelegate {
+
+    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
+    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
     
-    init() {
-        super.init(view: PrivacyPolicyView(), title: "Privacy Policy")
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
+

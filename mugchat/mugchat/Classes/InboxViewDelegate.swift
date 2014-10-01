@@ -10,15 +10,12 @@
 // the license agreement.
 //
 
-import UIKit
+import Foundation
 
-class PrivacyPolicyViewController: MugChatWebViewController {
+protocol InboxViewDelegate {
     
-    init() {
-        super.init(view: PrivacyPolicyView(), title: "Privacy Policy")
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    func inboxViewDidTapComposeButton(inboxView : InboxView)
+    func inboxViewDidTapSettingsButton(inboxView : InboxView)
+    func inboxViewDidTapBuilderButton(inboxView : InboxView)
+    func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) // not sure if we will use int. Kept it for now.
 }
