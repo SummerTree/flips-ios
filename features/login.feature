@@ -4,6 +4,7 @@ Feature: Login screen
   So, I can do login
 
 @7224 @7171
+# For iPhone 6 / 6+ the animation is different
 Scenario Outline: Showing keyboard
   Given I am on the "Login" screen
   When I touch the field: "<field>"
@@ -16,6 +17,7 @@ Scenario Outline: Showing keyboard
   | Password |
 
 @7224 @7171
+# For iPhone 6 / 6+ the animation is different
 Scenario: Dismissing keyboard when the fields are empty
   Given I am on the "Login" screen
   And The cursor are on some field
