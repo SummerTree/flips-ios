@@ -23,8 +23,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
-    private let HINT_TEXT: String = "Enter your number\nto verify you are a human."
-    private let SPAM_TEXT: String = "That whole spam thing...\nYeah, we don't do that."
+    private let HINT_TEXT = "Enter your number\nto verify you are a human."
+    private let SPAM_TEXT = "That whole spam thing...\nYeah, we don't do that."
     
     private var navigationBar: CustomNavigationBar!
     

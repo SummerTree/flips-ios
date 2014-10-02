@@ -29,13 +29,12 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     }
     
     
-    // MARK: - ForgotPasswordViewDelegate Methods
+    // MARK: - PhoneNumberViewDelegate Methods
     
     func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!) {
         var verificationCodeViewController = VerificationCodeViewController(phoneNumber: view.mobileNumberField.text)
         self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
-    
     
     func phoneNumberViewDidTapBackButton(view: PhoneNumberView!) {
         self.navigationController?.popViewControllerAnimated(true)
