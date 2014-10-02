@@ -263,6 +263,7 @@ class LoginView : UIView, UITextFieldDelegate {
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackground"), forState: UIControlState.Normal)
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackgroundTap"), forState: UIControlState.Highlighted)
         signupButton.setTitle(NSLocalizedString("Sign Up", comment: "Sign Up"), forState: UIControlState.Normal)
+        signupButton.addTarget(self, action: "signUpButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(signupButton)
         
         spaceBetweenSignUpAndAcceptance = UIView()
@@ -485,6 +486,10 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func privacyPolicyButtonTapped(sender: AnyObject?) {
         self.delegate?.loginViewDidTapPrivacyPolicy(self)
+    }
+    
+    func signUpButtonTapped(sender: AnyObject?) {
+        self.delegate?.loginViewDidTapSignUpButton(self)
     }
     
     

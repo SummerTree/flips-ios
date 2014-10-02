@@ -24,6 +24,11 @@ class SettingsViewController : MugChatViewController {
         
         self.setNeedsStatusBarAppearanceUpdate()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
