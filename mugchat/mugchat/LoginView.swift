@@ -124,26 +124,32 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func showValidationErrorInCredentialFields() {
-        self.didUserMistakenPassword = true
-        self.emailTextField.rightView = UIImageView(image: UIImage(named: "Error"))
-        self.emailTextField.rightView?.alpha = 0.0
         
-        self.passwordTextField.rightView = UIImageView(image: UIImage(named: "Error"))
-        self.passwordTextField.rightView?.alpha = 0.0
-
+        if (!self.didUserMistakenPassword) {
+            self.didUserMistakenPassword = true
+        
+            self.emailTextField.rightView = UIImageView(image: UIImage(named: "Error"))
+            self.emailTextField.rightView?.alpha = 0.0
+            
+            self.passwordTextField.rightView = UIImageView(image: UIImage(named: "Error"))
+            self.passwordTextField.rightView?.alpha = 0.0
+            
+            UIView.animateWithDuration(1.0, animations: {
+                self.emailTextField.rightView?.alpha = 1.0
+                self.passwordTextField.rightView?.alpha = 1.0
+                self.forgotPasswordButton.alpha = 1.0
+                
+                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                    UIView.animateWithDuration(0.5, animations: { () -> Void in
+                        self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
+                        self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
+                        self.forgotPasswordButton.center.y = (self.credentialsView.center.y + self.mugchatWordImageView.center.y) / 2
+                    })
+                }
+            })
+        }
+        
         UIView.animateWithDuration(1.0, animations: {
-            self.emailTextField.rightView?.alpha = 1.0
-            self.passwordTextField.rightView?.alpha = 1.0
-            self.forgotPasswordButton.alpha = 1.0
-            
-            if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
-                    self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
-                    self.forgotPasswordButton.center.y = (self.credentialsView.center.y + self.mugchatWordImageView.center.y) / 2
-                })
-            }
-            
             var shakeAnimation = CABasicAnimation(keyPath: "position")
             shakeAnimation.duration = 0.075
             shakeAnimation.repeatCount = 3
@@ -152,7 +158,7 @@ class LoginView : UIView, UITextFieldDelegate {
             shakeAnimation.toValue = NSValue(CGPoint: CGPointMake(self.credentialsView.center.x + 30.0, self.credentialsView.center.y))
             
             self.credentialsView.layer.addAnimation(shakeAnimation, forKey: "position")
-
+            
         })
     
     }
