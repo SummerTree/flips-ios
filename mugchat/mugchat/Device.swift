@@ -10,13 +10,26 @@
 // the license agreement.
 //
 
-public struct Device {
+public class Device {
     
-    var id: String? = nil
-    var user: User? = nil
-    var phoneNumber: String? = nil
-    var platform: String? = nil
-    var uuid: String? = nil
-    var isVerified: Bool? = nil
+    var id: String?
+    var user: User?
+    var phoneNumber: String?
+    var platform: String?
+    var uuid: String?
+    var isVerified: Bool?
+    
+    convenience init(object : AnyObject) {
+        self.init()
+        let json = JSON(object: object)
+        self.id = json["id"].stringValue
+        var newUser = User()
+        newUser.id = json["user"].stringValue
+        self.user = newUser
+        self.phoneNumber = json["phoneNumber"].stringValue
+        self.platform = json["platform"].stringValue
+        self.uuid = json["uuid"].stringValue
+        self.isVerified = json["isVerified"].integerValue == 0 ? false : true
+    }
     
 }

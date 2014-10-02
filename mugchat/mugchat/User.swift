@@ -40,4 +40,7 @@ public class User {
         self.pubnubId = json["pubnubId"].stringValue
     }
     
+    init() {
+    }
+    
 }
