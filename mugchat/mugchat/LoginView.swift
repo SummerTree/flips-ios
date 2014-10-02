@@ -220,6 +220,7 @@ class LoginView : UIView, UITextFieldDelegate {
         
         emailTextField = UITextField()
         emailTextField.autocorrectionType = UITextAutocorrectionType.No
+        emailTextField.autocapitalizationType = UITextAutocapitalizationType.None
         emailTextField.delegate = self
         emailTextField.keyboardType = UIKeyboardType.EmailAddress
         emailTextField.rightViewMode = UITextFieldViewMode.Always
