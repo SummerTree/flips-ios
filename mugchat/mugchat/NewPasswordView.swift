@@ -182,12 +182,15 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         if (passwordStatus.isValid){
             self.delegate?.newPasswordViewDidTapDoneButton(self)
         } else {
-            //TODO: show message passwordStatus.message
+            let alert = UIAlertView()
+            alert.title = "Your password should have"
+            alert.message = "8+ characters, Mixed Case, 1 Number"
+            alert.addButtonWithTitle("OK")
+            alert.show()
         }
     }
     
     //8+ characters, Mixed case, at least 1 number
-    //TODO: handle grouped states (verify the 3 conditions before generate the error message)
     func verifyPassword(password: String) -> (isValid: Bool, message: String) {
         if countElements(password) < 8 {
             return (false, "Password must have at least 8 characters.");
