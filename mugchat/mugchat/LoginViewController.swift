@@ -16,11 +16,6 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
-    override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBarHidden = true
-        super.viewWillAppear(animated)
-    }
-    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loginView.viewWillDisappear()
@@ -39,6 +34,9 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         self.view = loginView
         loginView.viewDidLoad()
     }
+    
+    
+    // MARK: - LoginViewDelegate Methods
     
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
         var termsOfUseViewController = TermsOfUseViewController()
@@ -68,6 +66,11 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
+        
+    }
+    
+    func loginViewDidTapSignUpButton(loginView: LoginView!) {
+        self.navigationController?.pushViewController(InboxViewController(), animated: true) // TODO: just for tests
     }
     
     func loginViewDidTapFacebookSignInButton(loginView: LoginView!) {

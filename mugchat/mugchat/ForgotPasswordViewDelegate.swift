@@ -12,11 +12,10 @@
 
 import UIKit
 
-protocol LoginViewDelegate {
+protocol ForgotPasswordViewDelegate {
+
+    func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!)
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!)
-    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
-    func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String)
-    func loginViewDidTapFacebookSignInButton(loginView: LoginView!)
-    func loginViewDidTapSignUpButton(loginView: LoginView!)
+    func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!)
+    
 }

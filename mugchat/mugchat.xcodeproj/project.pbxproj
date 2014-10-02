@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		39124D040DF240528E49DF18 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		5707185B19D1A1060069064F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707185A19D1A1060069064F /* User.swift */; };
 		5707185D19D1A7230069064F /* Mug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707185C19D1A7230069064F /* Mug.swift */; };
 		5707185F19D1A7FD0069064F /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707185E19D1A7FD0069064F /* Device.swift */; };
@@ -15,16 +14,20 @@
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
-		574156A019D33F87006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
 		574156A219D34F2B006F0A2F /* MugError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A119D34F2B006F0A2F /* MugError.swift */; };
 		574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A919D4A05F006F0A2F /* SwiftyJSON.swift */; };
-		57D2A09319D310C000FA729D /* mugchatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D2A09219D310C000FA729D /* mugchatTests.swift */; };
+		5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
+		57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */; };
+		57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */; };
+		57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */; };
+		57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */; };
+		57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */; };
+		57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
 		70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
 		7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
 		7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */; };
-		7056FE5319D859D700BD6571 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
 		7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */; };
 		7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */; };
 		7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7059148E19D490DC009614DB /* LoginViewDelegate.swift */; };
@@ -50,25 +53,11 @@
 		7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */; };
 		7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
+		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
+		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
+		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		57D2A09419D310C000FA729D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 70FD4E6819D064450024EBDB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 70FD4E6F19D064450024EBDB;
-			remoteInfo = mugchat;
-		};
-		57D2A09E19D312F300FA729D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 70FD4E6819D064450024EBDB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 70FD4E6F19D064450024EBDB;
-			remoteInfo = mugchat;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
@@ -81,10 +70,15 @@
 		5741569E19D33F30006F0A2F /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		574156A119D34F2B006F0A2F /* MugError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugError.swift; sourceTree = "<group>"; };
 		574156A919D4A05F006F0A2F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
-		57D2A08E19D310C000FA729D /* mugchatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mugchatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
+		57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
 		57D2A09119D310C000FA729D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57D2A09219D310C000FA729D /* mugchatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mugchatTests.swift; sourceTree = "<group>"; };
 		57D2A0A019D3240E00FA729D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewDelegate.swift; sourceTree = "<group>"; };
+		57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewDelegate.swift; sourceTree = "<group>"; };
+		57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewController.swift; sourceTree = "<group>"; };
+		57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeView.swift; sourceTree = "<group>"; };
 		70057E9319DADF59004343ED /* DeviceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHelper.swift; sourceTree = "<group>"; };
 		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
@@ -121,19 +115,14 @@
 		7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableViewExtensions.swift; path = Classes/UITableViewExtensions.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		57D2A08B19D310C000FA729D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				39124D040DF240528E49DF18 /* libPods.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		70FD4E6D19D064450024EBDB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -183,6 +172,26 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		57A3A6BC19D5E2E70043790E /* Verification */ = {
+			isa = PBXGroup;
+			children = (
+				57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */,
+				57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */,
+				57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */,
+				57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */,
+			);
+			name = Verification;
+			sourceTree = "<group>";
+		};
+		57A3A6BF19D5E4C00043790E /* Verification */ = {
+			isa = PBXGroup;
+			children = (
+				57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */,
+				57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */,
+			);
+			name = Verification;
+			sourceTree = "<group>";
+		};
 		57D2A08F19D310C000FA729D /* mugchatTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
+				57A3A6BF19D5E4C00043790E /* Verification */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
@@ -228,6 +238,7 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				57A3A6BC19D5E2E70043790E /* Verification */,
 				7A28ADC019D4428A00887831 /* Custom */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
@@ -250,6 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7A19D064450024EBDB /* LoginViewController.swift */,
+				A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -259,6 +271,8 @@
 			children = (
 				704E110E19D0935F00D2BB88 /* LoginView.swift */,
 				7059148E19D490DC009614DB /* LoginViewDelegate.swift */,
+				A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */,
+				A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -342,7 +356,6 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7019D064450024EBDB /* mugchat.app */,
-				57D2A08E19D310C000FA729D /* mugchatTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -446,27 +459,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		57D2A08D19D310C000FA729D /* mugchatTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 57D2A09619D310C000FA729D /* Build configuration list for PBXNativeTarget "mugchatTests" */;
-			buildPhases = (
-				40068AB86F3548C3B0BFA6E6 /* Check Pods Manifest.lock */,
-				57D2A08A19D310C000FA729D /* Sources */,
-				57D2A08B19D310C000FA729D /* Frameworks */,
-				57D2A08C19D310C000FA729D /* Resources */,
-				E77E33F19FB94AD9A605EA06 /* Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				57D2A09519D310C000FA729D /* PBXTargetDependency */,
-				57D2A09F19D312F300FA729D /* PBXTargetDependency */,
-			);
-			name = mugchatTests;
-			productName = mugchatTests;
-			productReference = 57D2A08E19D310C000FA729D /* mugchatTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		70FD4E6F19D064450024EBDB /* mugchat */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "mugchat" */;
@@ -492,6 +484,7 @@
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0600;
 			};
 			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -506,19 +499,11 @@
 			projectRoot = "";
 			targets = (
 				70FD4E6F19D064450024EBDB /* mugchat */,
-				57D2A08D19D310C000FA729D /* mugchatTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		57D2A08C19D310C000FA729D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		70FD4E6E19D064450024EBDB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -545,21 +530,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		40068AB86F3548C3B0BFA6E6 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		5703BC6994854CA9A34690DC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -575,42 +545,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		E77E33F19FB94AD9A605EA06 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		57D2A08A19D310C000FA729D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				574156A019D33F87006F0A2F /* NSDateExtension.swift in Sources */,
-				57D2A09319D310C000FA729D /* mugchatTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		70FD4E6C19D064450024EBDB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */,
+				A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */,
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				5707185D19D1A7230069064F /* Mug.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
+				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */,
 				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
@@ -618,6 +567,7 @@
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
+				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				5707185B19D1A1060069064F /* User.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
@@ -630,16 +580,21 @@
 				7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */,
 				7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
+				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
+				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
+				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
+				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
-				7056FE5319D859D700BD6571 /* TermsOfUseViewController.swift in Sources */,
 				7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */,
+				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				7059148F19D490DC009614DB /* LoginViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
 				5707185F19D1A7FD0069064F /* Device.swift in Sources */,
+				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
@@ -650,70 +605,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		57D2A09519D310C000FA729D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 70FD4E6F19D064450024EBDB /* mugchat */;
-			targetProxy = 57D2A09419D310C000FA729D /* PBXContainerItemProxy */;
-		};
-		57D2A09F19D312F300FA729D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 70FD4E6F19D064450024EBDB /* mugchat */;
-			targetProxy = 57D2A09E19D312F300FA729D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		57D2A09719D310C000FA729D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = mugchatTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mugchat.app/mugchat";
-			};
-			name = Debug;
-		};
-		57D2A09819D310C000FA729D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C42F2704A96077C5800507B0 /* Pods.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = mugchatTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mugchat.app/mugchat";
-			};
-			name = Release;
-		};
 		70FD4E9019D064450024EBDB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -825,14 +717,6 @@
 			};
 			name = Release;
 		};
-		C31BC68E19D49A7A00101A40 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */;
-			buildSettings = {
-				PRODUCT_NAME = mugchatTests;
-			};
-			name = Distribution;
-		};
 		C31F49D319D485EF005DADD4 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -874,8 +758,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = mugchat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -888,16 +772,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		57D2A09619D310C000FA729D /* Build configuration list for PBXNativeTarget "mugchatTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				57D2A09719D310C000FA729D /* Debug */,
-				57D2A09819D310C000FA729D /* Release */,
-				C31BC68E19D49A7A00101A40 /* Distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

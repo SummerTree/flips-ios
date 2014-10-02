@@ -10,13 +10,10 @@
 // the license agreement.
 //
 
-import UIKit
-
-protocol LoginViewDelegate {
+protocol PhoneNumberViewDelegate {
     
-    func loginViewDidTapTermsOfUse(loginView: LoginView!)
-    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
-    func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String)
-    func loginViewDidTapFacebookSignInButton(loginView: LoginView!)
-    func loginViewDidTapSignUpButton(loginView: LoginView!)
+    func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!)
+    
+    func phoneNumberViewDidTapBackButton(view: PhoneNumberView!)
+    
 }
