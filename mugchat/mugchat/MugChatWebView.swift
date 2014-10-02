@@ -15,7 +15,7 @@ import UIKit
 class MugChatWebView: UIView, UIWebViewDelegate {
     
     let webView: UIWebView! = UIWebView()
-    let activityIndicator: UIActivityIndicatorView! = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+    let activityIndicator: UIActivityIndicatorView! = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
     
     var url: String!
     
@@ -30,6 +30,8 @@ class MugChatWebView: UIView, UIWebViewDelegate {
         self.webView.delegate = self
         self.addSubview(self.webView)
         
+        self.activityIndicator.backgroundColor = UIColor.blackColor()
+        self.activityIndicator.alpha = 0.25
         self.activityIndicator.hidesWhenStopped = true
         self.addSubview(self.activityIndicator)
     }
@@ -49,8 +51,12 @@ class MugChatWebView: UIView, UIWebViewDelegate {
         }
         
         self.activityIndicator.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self.webView)
-            make.centerY.equalTo()(self.webView)
+            make.top.equalTo()(self.webView)
+            make.bottom.equalTo()(self.webView)
+            make.leading.equalTo()(self.webView)
+            make.trailing.equalTo()(self.webView)
+            //            make.centerX.equalTo()(self.webView)
+            //            make.centerY.equalTo()(self.webView)
         }
     }
     
