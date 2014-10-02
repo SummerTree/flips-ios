@@ -36,7 +36,13 @@ public class UserService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
-        let params = ["username" : username, "password" : password, "firstName" : firstName, "lastName" : lastName, "birthday" : birthday, "nickname" : nickname!]
+        let params = [
+                RequestParams.USERNAME : username,
+                RequestParams.PASSWORD : password,
+                RequestParams.FIRSTNAME : firstName,
+                RequestParams.LASTNAME : lastName,
+                RequestParams.BIRTHDAY : birthday,
+                RequestParams.NICKNAME : nickname!]
         
         request.POST(url,
             parameters: params,
@@ -67,7 +73,7 @@ public class UserService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNIN_URL
-        let params = ["username" : username, "password" : password]
+        let params = [RequestParams.USERNAME : username, RequestParams.PASSWORD : password]
         
         request.POST(url,
             parameters: params,
@@ -91,7 +97,7 @@ public class UserService: MugchatService {
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + FACEBOOK_SIGNIN_URL
 
-        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: "access_token")
+        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
         
         request.POST(url,
             parameters: nil,
@@ -113,6 +119,19 @@ public class UserService: MugchatService {
     func parseSigninResponse(response: AnyObject) -> User? {
         var user = User(object: response)
         return user
+    }
+    
+    struct RequestHeaders {
+        static let FACEBOOK_ACCESS_TOKEN = "access_token"
+    }
+    
+    struct RequestParams {
+        static let USERNAME = "username"
+        static let PASSWORD = "password"
+        static let FIRSTNAME = "firstName"
+        static let LASTNAME = "lastName"
+        static let BIRTHDAY = "birthday"
+        static let NICKNAME = "nickname"
     }
     
 }
