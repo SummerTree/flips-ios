@@ -72,7 +72,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
     
-    private var didUserMistakenPassword: Bool = false
+    private var isInformedWrongPassword: Bool = false
     
     private var animator: UIDynamicAnimator!
     
@@ -125,8 +125,8 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func showValidationErrorInCredentialFields() {
         
-        if (!self.didUserMistakenPassword) {
-            self.didUserMistakenPassword = true
+        if (!self.isInformedWrongPassword) {
+            self.isInformedWrongPassword = true
         
             self.emailTextField.rightView = UIImageView(image: UIImage(named: "Error"))
             self.emailTextField.rightView?.alpha = 0.0
@@ -530,7 +530,7 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
-                if (self.didUserMistakenPassword) {
+                if (self.isInformedWrongPassword) {
                     self.forgotPasswordButton.alpha = 1.0
                 }
                 
@@ -553,7 +553,7 @@ class LoginView : UIView, UITextFieldDelegate {
                     self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.MUGCHAT_WORD_LAST_CENTER_Y = self.mugchatWordImageView.center.y
                     
-                    if (self.didUserMistakenPassword) {
+                    if (self.isInformedWrongPassword) {
                         self.mugchatWordImageView.frame.origin.y = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
                     } else {
                         self.mugchatWordImageView.center.y = self.logoView.center.y
