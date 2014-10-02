@@ -83,11 +83,14 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         else {
         // Open a session showing the user the login UI
         // You must ALWAYS ask for public_profile permissions when opening a session
-            var scope = ["public_profile", "email", "user_birthday"]
+            var scope = ["public_profile", "email", "user_birthday", "user_friends"]
             FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
                 completionHandler: { (session, state, error) -> Void in
-                    self.authenticateWithFacebook(session!.accessTokenData.accessToken)
-                    println("Facebook Login with session: \(FBSession.activeSession().accessTokenData.accessToken)")
+                    if (error != nil || session == nil || session!.accessTokenData == nil) {
+                        println("Error authenticating: \(error)")
+                    } else {
+                        self.authenticateWithFacebook(session!.accessTokenData.accessToken)
+                    }
             })
         }
     }
@@ -103,7 +106,9 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                 self.navigationController?.pushViewController(inboxViewController, animated: true)
                 
             }, failure: { (mugError) -> Void in
-                println(mugError!.error)
+                println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
+                var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                alertView.show()
         })
     }
 }
