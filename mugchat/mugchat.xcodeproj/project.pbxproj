@@ -227,8 +227,8 @@
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				57A3A6BF19D5E4C00043790E /* Verification */,
 				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
+				57A3A6BF19D5E4C00043790E /* Verification */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
