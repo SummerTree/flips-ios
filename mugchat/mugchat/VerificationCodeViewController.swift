@@ -26,17 +26,16 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     // MARK: - ForgotPasswordViewDelegate Methods
     
-    func didFinishTypingVerificationCode(view: VerificationCodeView!) {
+    func verificatioCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
         //var verificationCodeViewController = VerificationCodeViewController()
         //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
-    
-    func didTapBackButton(view: VerificationCodeView!) {
+    func verificatioCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func didTapResendButton(view: VerificationCodeView!) {
+    func verificatioCodeViewDidTapResendButton(view: VerificationCodeView!) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     

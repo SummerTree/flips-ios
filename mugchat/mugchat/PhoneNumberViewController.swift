@@ -25,14 +25,15 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        //phoneNumberView.showKeyboard()
         phoneNumberView.mobileNumberField.becomeFirstResponder()
     }
     
     
     // MARK: - PhoneNumberViewDelegate Methods
     
-    func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!) {
-        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: view.mobileNumberField.text)
+    func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
+        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber)
         self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     

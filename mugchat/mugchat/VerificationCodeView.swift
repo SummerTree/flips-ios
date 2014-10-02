@@ -30,18 +30,18 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private var navigationBar: CustomNavigationBar!
     
-    var hintView: UIView!
-    var labelsView: UIView!
-    var hintText: UILabel!
-    var phoneNumberLabel: UILabel!
-    var codeView: UIView!
-    var codeField: UITextField!
-    var resendButtonView: UIView!
-    var resendButton: UIButton!
-    var keyboardFillerView: UIView!
+    private var hintView: UIView!
+    private var labelsView: UIView!
+    private var hintText: UILabel!
+    private var phoneNumberLabel: UILabel!
+    private var codeView: UIView!
+    private var codeField: UITextField!
+    private var resendButtonView: UIView!
+    private var resendButton: UIButton!
+    private var keyboardFillerView: UIView!
     
-    var keyboardHeight: CGFloat = 0.0
-    var phoneNumber: String = ""
+    private var keyboardHeight: CGFloat = 0.0
+    private var phoneNumber: String = ""
     
     init(phoneNumber : String!) {
         super.init()
@@ -237,14 +237,14 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     // MARK: - Buttons delegate
     
     func didFinishTypingVerificationCode(sender: AnyObject?) {
-        self.delegate?.didFinishTypingVerificationCode(self)
+        self.delegate?.verificatioCodeView(self, didFinishTypingVerificationCode: codeField.text)
     }
     
     
     // MARK: - CustomNavigationBarDelegate Methods
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        self.delegate?.didTapBackButton(self)
+        self.delegate?.verificatioCodeViewDidTapBackButton(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
