@@ -32,8 +32,6 @@ class ConversationTableViewCell : UITableViewCell {
     var item : InboxItem!
     
     // private var deleteButton : UIButton! // TODO: probably, it will be removed. But I want to keep track of it, because the client didn't decide if we need to do it or no. So I need to commit it at least one time :P
-    private var cellContainerView : UIView!
-    
     private var mugImageView : UIImageView!
     private var userImageView : UIImageView!
     private var infoView : UIView!
@@ -59,8 +57,7 @@ class ConversationTableViewCell : UITableViewCell {
         //        deleteButton.backgroundColor = UIColor.deepSea()
         //        deleteButton.addTarget(self, action: "deleteButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         
-        cellContainerView = UIView()
-        cellContainerView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor.whiteColor()
         
         mugImageView = UIImageView()
         userImageView = UIImageView.avatarA3()
@@ -105,13 +102,12 @@ class ConversationTableViewCell : UITableViewCell {
     func addSubviews() {
         // TODO: probably will be remove with the deleteButton
         // self.addSubview(deleteButton)
-        self.addSubview(cellContainerView)
         
-        cellContainerView.addSubview(mugImageView)
-        cellContainerView.addSubview(infoView)
-        cellContainerView.addSubview(userImageView)
-        cellContainerView.addSubview(badgeView)
-        cellContainerView.addSubview(highlightedView)
+        contentView.addSubview(mugImageView)
+        contentView.addSubview(infoView)
+        contentView.addSubview(userImageView)
+        contentView.addSubview(badgeView)
+        contentView.addSubview(highlightedView)
         
         infoView.addSubview(mugMessageLabel)
         infoView.addSubview(userNameLabel)
@@ -131,24 +127,16 @@ class ConversationTableViewCell : UITableViewCell {
         //            make.width.equalTo()(self.DELETE_BUTTON_WIDTH)
         //        }
         
-        cellContainerView.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.bottom.equalTo()(self)
-            make.width.equalTo()(self)
-            make.trailing.equalTo()(self)
-        }
-        
-        
         mugImageView.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self.cellContainerView)
+            make.top.equalTo()(self.contentView)
             make.height.equalTo()(self.CELL_MUG_IMAGE_VIEW_HEIGHT)
-            make.leading.equalTo()(self.cellContainerView)
-            make.trailing.equalTo()(self.cellContainerView)
+            make.leading.equalTo()(self.contentView)
+            make.trailing.equalTo()(self.contentView)
         }
         mugImageView.backgroundColor = UIColor.greenColor()
         
         userImageView.mas_updateConstraints { (make) -> Void in
-            make.leading.equalTo()(self.cellContainerView).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.leading.equalTo()(self.contentView).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.mugImageView.mas_bottom)
             make.width.equalTo()(self.userImageView.frame.size.width)
             make.height.equalTo()(self.userImageView.frame.size.height)
@@ -164,7 +152,7 @@ class ConversationTableViewCell : UITableViewCell {
         
         infoView.mas_updateConstraints { (make) -> Void in
             make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-            make.trailing.equalTo()(self.cellContainerView)
+            make.trailing.equalTo()(self.contentView)
             make.top.equalTo()(self.mugImageView.mas_bottom)
             make.height.equalTo()(self.CELL_INFO_VIEW_HEIGHT)
         }
@@ -188,10 +176,10 @@ class ConversationTableViewCell : UITableViewCell {
         }
         
         highlightedView.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self.cellContainerView)
-            make.bottom.equalTo()(self.cellContainerView)
-            make.leading.equalTo()(self.cellContainerView)
-            make.trailing.equalTo()(self.cellContainerView)
+            make.top.equalTo()(self.contentView)
+            make.bottom.equalTo()(self.contentView)
+            make.leading.equalTo()(self.contentView)
+            make.trailing.equalTo()(self.contentView)
         }
         
         super.updateConstraints()
