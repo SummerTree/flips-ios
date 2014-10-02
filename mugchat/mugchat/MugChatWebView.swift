@@ -55,8 +55,6 @@ class MugChatWebView: UIView, UIWebViewDelegate {
             make.bottom.equalTo()(self.webView)
             make.leading.equalTo()(self.webView)
             make.trailing.equalTo()(self.webView)
-            //            make.centerX.equalTo()(self.webView)
-            //            make.centerY.equalTo()(self.webView)
         }
     }
     
