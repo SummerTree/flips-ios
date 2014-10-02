@@ -12,6 +12,6 @@
 
 public class MugchatService : NSObject {
     
-    let HOST: String = "http://192.168.40.115:1337"
+    let HOST: String = "http://localhost:1337"
     
 }
