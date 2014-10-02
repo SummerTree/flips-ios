@@ -29,14 +29,20 @@ public class UserService: MugchatService {
         return Static.instance
     }
     
+    
     // MARK: - Sign-up
     
-
     func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
-        let params = ["username" : username, "password" : password, "firstName" : firstName, "lastName" : lastName, "birthday" : birthday, "nickname" : nickname!]
+        let params = [
+                RequestParams.USERNAME : username,
+                RequestParams.PASSWORD : password,
+                RequestParams.FIRSTNAME : firstName,
+                RequestParams.LASTNAME : lastName,
+                RequestParams.BIRTHDAY : birthday,
+                RequestParams.NICKNAME : nickname!]
         
         request.POST(url,
             parameters: params,
@@ -67,7 +73,7 @@ public class UserService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNIN_URL
-        let params = ["username" : username, "password" : password]
+        let params = [RequestParams.USERNAME : username, RequestParams.PASSWORD : password]
         
         request.POST(url,
             parameters: params,
@@ -86,9 +92,46 @@ public class UserService: MugchatService {
         )
     }
     
+    func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        let url = HOST + FACEBOOK_SIGNIN_URL
+
+        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
+        
+        request.POST(url,
+            parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let user = self.parseSigninResponse(responseObject)
+                success(user)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
     func parseSigninResponse(response: AnyObject) -> User? {
         var user = User(object: response)
         return user
+    }
+    
+    struct RequestHeaders {
+        static let FACEBOOK_ACCESS_TOKEN = "access_token"
+    }
+    
+    struct RequestParams {
+        static let USERNAME = "username"
+        static let PASSWORD = "password"
+        static let FIRSTNAME = "firstName"
+        static let LASTNAME = "lastName"
+        static let BIRTHDAY = "birthday"
+        static let NICKNAME = "nickname"
     }
     
 }

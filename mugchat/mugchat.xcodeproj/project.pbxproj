@@ -222,14 +222,14 @@
 			isa = PBXGroup;
 			children = (
 				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
-				57A3A6BF19D5E4C00043790E /* Verification */,
-				7A11791E19DA07B60086A66B /* Compose */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
+				7A11791E19DA07B60086A66B /* Compose */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
 				704E110D19D0934700D2BB88 /* Login */,
-				7A0D6CEC19D4961700E39A1B /* Settings */,
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
+				7A0D6CEC19D4961700E39A1B /* Settings */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
+				57A3A6BF19D5E4C00043790E /* Verification */,
 				70B560A019D995D500FE4C34 /* Web View */,
 			);
 			name = Controller;
@@ -238,12 +238,12 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				57A3A6BC19D5E2E70043790E /* Verification */,
 				7A28ADC019D4428A00887831 /* Custom */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
 				7056FE5719D8822F00BD6571 /* Privacy Policy */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
+				57A3A6BC19D5E2E70043790E /* Verification */,
 				70B560A319D996B900FE4C34 /* Web View */,
 			);
 			name = View;
