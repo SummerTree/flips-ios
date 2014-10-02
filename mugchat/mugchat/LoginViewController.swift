@@ -57,7 +57,6 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             
             var authenticatedUser: User = user as User!
             AuthenticationHelper.sharedInstance.userInSession = user
-            AuthenticationHelper.sharedInstance.saveAuthenticatedUsername(authenticatedUser.username!)
 
             var inboxViewController = InboxViewController()
             self.navigationController?.pushViewController(inboxViewController, animated: true)

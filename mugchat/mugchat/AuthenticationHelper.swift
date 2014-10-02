@@ -16,11 +16,26 @@ public class AuthenticationHelper: NSObject {
 
     private let LOGIN_USERNAME_KEY = "username"
     
-    var userInSession: User!
+    var userInSession: User! {
+        willSet(newUser) {
+            if (newUser != nil) {
+                self.userInSession = newUser
+                saveAuthenticatedUsername(newUser.username!)
+            } else {
+                removeAuthenticatedUsername()
+            }
+        }
+    }
     
-    func saveAuthenticatedUsername(username: String) {
+    private func saveAuthenticatedUsername(username: String) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
+        userDefaults.synchronize()
+    }
+    
+    private func removeAuthenticatedUsername() {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(LOGIN_USERNAME_KEY)
         userDefaults.synchronize()
     }
     
