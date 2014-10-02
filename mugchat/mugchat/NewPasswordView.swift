@@ -176,9 +176,33 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     
     // MARK: - Buttons delegate
-    func didTapDoneButton(sender: AnyObject?) {
-        //TODO: 8+ characters, Mixed case, at least 1 number
-        self.delegate?.newPasswordViewDidTapDoneButton(self)
+    func didTapDoneButton() {
+        let passwordStatus = verifyPassword(passwordField.text)
+            
+        if (passwordStatus.isValid){
+            self.delegate?.newPasswordViewDidTapDoneButton(self)
+        } else {
+            //TODO: show message passwordStatus.message
+        }
+    }
+    
+    //8+ characters, Mixed case, at least 1 number
+    //TODO: handle grouped states (verify the 3 conditions before generate the error message)
+    func verifyPassword(password: String) -> (isValid: Bool, message: String) {
+        if countElements(password) < 8 {
+            return (false, "Password must have at least 8 characters.");
+        }
+        
+        if password.lowercaseString == password || password.uppercaseString == password {
+            return (false, "Password must have upper and lower case letters.");
+        }
+        
+        let match = password.rangeOfString("[0-9]", options: .RegularExpressionSearch)
+        if match == nil {
+            return (false, "Password must have at least one number.");
+        }
+    
+        return (true, "");
     }
     
     
