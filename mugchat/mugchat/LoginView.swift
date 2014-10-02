@@ -72,7 +72,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
     
-    private var didUserMistakenPassword: Bool = false
+    private var isInformedWrongPassword: Bool = false
     
     private var animator: UIDynamicAnimator!
     
@@ -124,26 +124,32 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func showValidationErrorInCredentialFields() {
-        self.didUserMistakenPassword = true
-        self.emailTextField.rightView = UIImageView(image: UIImage(named: "Error"))
-        self.emailTextField.rightView?.alpha = 0.0
         
-        self.passwordTextField.rightView = UIImageView(image: UIImage(named: "Error"))
-        self.passwordTextField.rightView?.alpha = 0.0
-
+        if (!self.isInformedWrongPassword) {
+            self.isInformedWrongPassword = true
+        
+            self.emailTextField.rightView = UIImageView(image: UIImage(named: "Error"))
+            self.emailTextField.rightView?.alpha = 0.0
+            
+            self.passwordTextField.rightView = UIImageView(image: UIImage(named: "Error"))
+            self.passwordTextField.rightView?.alpha = 0.0
+            
+            UIView.animateWithDuration(1.0, animations: {
+                self.emailTextField.rightView?.alpha = 1.0
+                self.passwordTextField.rightView?.alpha = 1.0
+                self.forgotPasswordButton.alpha = 1.0
+                
+                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                    UIView.animateWithDuration(0.5, animations: { () -> Void in
+                        self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
+                        self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
+                        self.forgotPasswordButton.center.y = (self.credentialsView.center.y + self.mugchatWordImageView.center.y) / 2
+                    })
+                }
+            })
+        }
+        
         UIView.animateWithDuration(1.0, animations: {
-            self.emailTextField.rightView?.alpha = 1.0
-            self.passwordTextField.rightView?.alpha = 1.0
-            self.forgotPasswordButton.alpha = 1.0
-            
-            if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
-                    self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
-                    self.forgotPasswordButton.center.y = (self.credentialsView.center.y + self.mugchatWordImageView.center.y) / 2
-                })
-            }
-            
             var shakeAnimation = CABasicAnimation(keyPath: "position")
             shakeAnimation.duration = 0.075
             shakeAnimation.repeatCount = 3
@@ -152,9 +158,7 @@ class LoginView : UIView, UITextFieldDelegate {
             shakeAnimation.toValue = NSValue(CGPoint: CGPointMake(self.credentialsView.center.x + 30.0, self.credentialsView.center.y))
             
             self.credentialsView.layer.addAnimation(shakeAnimation, forKey: "position")
-
         })
-    
     }
     
     func setFieldsHidden(hidden: Bool) {
@@ -526,7 +530,7 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
-                if (self.didUserMistakenPassword) {
+                if (self.isInformedWrongPassword) {
                     self.forgotPasswordButton.alpha = 1.0
                 }
                 
@@ -549,7 +553,7 @@ class LoginView : UIView, UITextFieldDelegate {
                     self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.MUGCHAT_WORD_LAST_CENTER_Y = self.mugchatWordImageView.center.y
                     
-                    if (self.didUserMistakenPassword) {
+                    if (self.isInformedWrongPassword) {
                         self.mugchatWordImageView.frame.origin.y = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
                     } else {
                         self.mugchatWordImageView.center.y = self.logoView.center.y
