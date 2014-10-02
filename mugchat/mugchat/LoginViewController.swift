@@ -35,6 +35,9 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         loginView.viewDidLoad()
     }
     
+    
+    // MARK: - LoginViewDelegate Methods
+    
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
         var termsOfUseViewController = TermsOfUseViewController()
         self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
@@ -61,5 +64,10 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         }) { (error) -> Void in
             self.loginView.showValidationErrorInCredentialFields()
         }
+        
+    }
+    
+    func loginViewDidTapSignUpButton(loginView: LoginView!) {
+        self.navigationController?.pushViewController(InboxViewController(), animated: true) // TODO: just for tests
     }
 }
