@@ -50,7 +50,7 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
                     failure(MugError(error: error.localizedDescription, details:nil))
                 }
