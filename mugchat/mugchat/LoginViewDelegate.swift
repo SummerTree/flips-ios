@@ -17,7 +17,8 @@ protocol LoginViewDelegate {
     func loginViewDidTapTermsOfUse(loginView: LoginView!)
     func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
     func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String)
-    func loginViewDidTapForgotPassword(loginView: LoginView!)
+    func loginViewDidTapFacebookSignInButton(loginView: LoginView!)
     func loginViewDidTapSignUpButton(loginView: LoginView!)
+    func loginViewDidTapForgotPassword(loginView: LoginView!)
 
 }
