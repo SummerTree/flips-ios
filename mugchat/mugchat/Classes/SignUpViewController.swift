@@ -30,5 +30,20 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         println("didTapNextButtonWithUser with \(firstName)")
+        
+        let dateStringFormatter = NSDateFormatter()
+        dateStringFormatter.dateFormat = "MM-dd-yyyy"
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
+        
+        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthdayDate, nickname: firstName, success: { (user) -> Void in
+            AuthenticationHelper.sharedInstance.userInSession = user
+            var phoneNumberViewController = PhoneNumberViewController()
+            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+        }) { (mugError) -> Void in
+            println("Error in the sing up [error=\(mugError!.error), details=\(mugError!.details)]")
+            var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+            alertView.show()
+        }
     }
 }
