@@ -24,6 +24,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
     private let HINT_TEXT: String = "Enter a new password below"
+    private let INVALID_PASSWORD_TEXT: String = "Your password should have\n8+ characters, Mixed Case, 1 Number"
     
     var navigationBar: CustomNavigationBar!
     
@@ -46,6 +47,10 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         
         let center = NSNotificationCenter.defaultCenter()
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+    }
+    
+    func viewDidAppear() {
+        passwordField.becomeFirstResponder()
     }
     
     func addSubviews() {
@@ -99,7 +104,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         bottomView.addSubview(doneButton)
         
         keyboardFillerView = UIView()
-        keyboardFillerView.backgroundColor = UIColor.greenColor()
         self.addSubview(keyboardFillerView)
     }
     
@@ -148,6 +152,9 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.height.equalTo()(self.hintView)
         })
         
+        self.bottomView.backgroundColor = UIColor.redColor()
+        self.doneButton.backgroundColor = UIColor.greenColor()
+        
         doneButton.mas_updateConstraints { (make) in
             make.centerY.equalTo()(self.bottomView)
             make.centerX.equalTo()(self.bottomView)
@@ -179,18 +186,15 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     func didTapDoneButton() {
         let passwordStatus = verifyPassword(passwordField.text)
             
-        if (passwordStatus.isValid){
+        if (passwordStatus.isValid) {
             self.delegate?.newPasswordViewDidTapDoneButton(self)
         } else {
-            let alert = UIAlertView()
-            alert.title = "Your password should have"
-            alert.message = "8+ characters, Mixed Case, 1 Number"
-            alert.addButtonWithTitle("OK")
-            alert.show()
+            hintText.text = NSLocalizedString(INVALID_PASSWORD_TEXT, comment: INVALID_PASSWORD_TEXT)
         }
     }
     
-    //8+ characters, Mixed case, at least 1 number
+    // Requirement: 8+ characters, Mixed case, at least 1 number
+    // Specific messages not being used for now
     func verifyPassword(password: String) -> (isValid: Bool, message: String) {
         if countElements(password) < 8 {
             return (false, "Password must have at least 8 characters.");
