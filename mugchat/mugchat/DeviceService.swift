@@ -30,16 +30,17 @@ public class DeviceService: MugchatService {
     
     // MARK: - Create Device
     
-    func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+    func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + createURL
-        let params = [
+        var params = [
             RequestParams.PHONE_NUMBER : phoneNumber,
-            RequestParams.PLATFORM : platform,
-            RequestParams.UUID : uuid]
-        
+            RequestParams.PLATFORM : platform]
+        if (uuid != nil) {
+            params[RequestParams.UUID] = uuid?
+        }
         request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in

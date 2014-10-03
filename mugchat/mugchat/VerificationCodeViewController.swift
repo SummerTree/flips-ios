@@ -48,7 +48,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     // MARK: - Backend Services Integration
     
-    private func createDeviceForUser(userId: String, phoneNumber: String, platform: String, token: String) {
+    private func createDeviceForUser(userId: String, phoneNumber: String, platform: String, token: String?) {
         DeviceService.sharedInstance.createDevice(userId,
             phoneNumber: phoneNumber,
             platform: platform,
@@ -120,7 +120,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         let userId = AuthenticationHelper.sharedInstance.userInSession.id!
         let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()!
+        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
         
         createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
     }
