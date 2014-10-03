@@ -227,11 +227,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         self.delegate?.phoneNumberViewDidTapBackButton(self)
     }
     
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
-        // Do nothing
-        println("customNavigationBarDidTapRightButton")
-    }
-    
     
     // MARK: - Required methods
     

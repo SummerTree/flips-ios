@@ -65,11 +65,10 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
-        
     }
     
     func loginViewDidTapSignUpButton(loginView: LoginView!) {
-        self.navigationController?.pushViewController(InboxViewController(), animated: true) // TODO: just for tests
+        self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
     func loginViewDidTapFacebookSignInButton(loginView: LoginView!) {

@@ -10,11 +10,10 @@
 // the license agreement.
 //
 
-@objc protocol CustomNavigationBarDelegate {
-
-    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
+protocol UserFormViewDelegate {
     
-    optional func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
-    optional func customNavigationBarDidTapAvatarButton(navBar : CustomNavigationBar)
-}
+    func userFormView(userFormView: UserFormView, didFailValidationWithErrorMessages errorMessages: NSArray)
 
+    func userFormViewDidValidateAllFieldsSuccessfully(userFormView: UserFormView)
+    
+}
