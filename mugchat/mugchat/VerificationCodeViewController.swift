@@ -20,7 +20,6 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
     var verificationCode: String = "XXXX"
-    var retryCount: Int = 0
     
     override func loadView() {
         super.loadView()
@@ -29,17 +28,11 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         self.view = verificationCodeView
     }
     
-    // MARK: - ForgotPasswordViewDelegate Methods
+    
+    // MARK: - VerificationCodeViewDelegate Methods
     
     func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
-        if (verificationCode != self.verificationCode) {
-            self.retryCount++
-            verificationCodeView.resetVerificationCodeField()
-            verificationCodeView.showKeyboard()
-            if (self.retryCount > 2) {
-                self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
-            }
-        }
+        self.verifyDevice(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!, verificationCode: verificationCode)
     }
     
     func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!) {
@@ -48,7 +41,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
         verificationCodeView.resetVerificationCodeField()
-        verificationCodeView.showKeyboard()
+        verificationCodeView.focusKeyboardOnCodeField()
         self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
     }
     
@@ -66,8 +59,6 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     return ()
                 }
                 DeviceHelper.sharedInstance.saveDeviceId(device!.id!)
-                self.verificationCode = device!.verificationCode!
-                self.retryCount = device!.retryCount!
             },
             failure: { (mugError) in
                 println("Error trying to register device: " + mugError!.error!)
@@ -82,13 +73,34 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     println("Error: Verification Code was not resent")
                     return ()
                 }
-                self.verificationCode = device!.verificationCode!
-                self.retryCount = device!.retryCount!
+                self.verificationCodeView.resetVerificationCodeField()
+                self.verificationCodeView.focusKeyboardOnCodeField()
             },
             failure: { (mugError) in
                 println("Error trying to resend verification code to device: " + mugError!.error!)
             })
     }
+    
+    private func verifyDevice(userId: String, deviceId: String, verificationCode: String) {
+        DeviceService.sharedInstance.verifyDevice(userId,
+            deviceId: deviceId,
+            verificationCode: verificationCode,
+            success: { (device) in
+                if (device == nil) {
+                    println("Error verifying device")
+                    return ()
+                }
+                // go to inbox
+                var inboxViewController = InboxViewController()
+                self.navigationController?.pushViewController(inboxViewController, animated: true)
+            },
+            failure: { (mugError) in
+                println("Error trying to resend verification code to device: " + mugError!.error!)
+                self.verificationCodeView.resetVerificationCodeField()
+                self.verificationCodeView.focusKeyboardOnCodeField()
+            })
+    }
+    
     
     // MARK: - Required methods
     

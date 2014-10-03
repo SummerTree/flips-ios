@@ -221,11 +221,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         if (numberOfDigitsProvided == 4) {
             self.didFinishTypingVerificationCode(textField)
-            
         }
     }
     
-    func showKeyboard() {
+    func focusKeyboardOnCodeField() {
         codeField.becomeFirstResponder()
     }
     
