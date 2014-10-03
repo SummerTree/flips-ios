@@ -91,4 +91,30 @@ public class UserService: MugchatService {
         return user
     }
     
+    
+    // MARK: - Forgot password
+    
+    func forgot(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        let url = HOST + FORGOT_URL
+        let params = ["email" : email, "phoneNumber" : phoneNumber]
+        
+        request.POST(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                //let user = self.parseForgotResponse(responseObject)
+                success()
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
 }
