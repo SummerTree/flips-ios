@@ -17,16 +17,27 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
         let loginViewController = LoginViewController()
         let navigationViewControler = UINavigationController(rootViewController: loginViewController)
-        
+       
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
+        
+        // register for push notifications
+        
+        if (DeviceHelper.sharedInstance.systemVersion() >= 8.0) {
+            application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: (UIUserNotificationType.Alert | UIUserNotificationType.Sound | UIUserNotificationType.Badge), categories: nil))
+            application.registerForRemoteNotifications()
+        } else {
+            application.registerForRemoteNotificationTypes(UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound | UIRemoteNotificationType.Badge)
+        }
+        
+        
         return true;
     }
     
@@ -42,6 +53,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"))
+        token = token.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        DeviceHelper.sharedInstance.saveDeviceToken(token)
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        println(error.description)
     }
 
     

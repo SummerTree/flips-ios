@@ -139,7 +139,7 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.passwordTextField.rightView?.alpha = 1.0
                 self.forgotPasswordButton.alpha = 1.0
                 
-                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     UIView.animateWithDuration(0.5, animations: { () -> Void in
                         self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
                         self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
@@ -560,7 +560,7 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.LOGO_VIEW_ANIMATION_OFFSET = self.logoView.frame.origin.y - logoFinalPosition
                 self.logoView.frame.origin.y -= self.LOGO_VIEW_ANIMATION_OFFSET
                 
-                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.MUGCHAT_WORD_LAST_CENTER_Y = self.mugchatWordImageView.center.y
                     
@@ -574,7 +574,7 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.forgotPasswordButton.alpha = 0.0
                 self.logoView.frame.origin.y += self.LOGO_VIEW_ANIMATION_OFFSET
                 self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
-                if (DeviceHelper.isDeviceModelLessOrEqualThaniPhone5S()) {
+                if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.mugchatWordImageView.center.y = self.MUGCHAT_WORD_LAST_CENTER_Y
                 }
