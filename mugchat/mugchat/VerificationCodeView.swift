@@ -180,6 +180,20 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         super.updateConstraints()
     }
     
+    func viewDidAppear() {
+        codeField.becomeFirstResponder()
+    }
+    
+    
+    //new
+    private var didFinishTypingMobileNumber: Bool = false {
+        didSet {
+            if didFinishTypingMobileNumber  {
+                didFinishTypingVerificationCode(codeField);
+            }
+        }
+    }
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
         let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
@@ -198,6 +212,11 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
                 // Is adding a new digit. We need to replace the bullet
                 var nsStringText = textField.text as NSString
                 newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
+                
+                println("numberOfDigitsProvided: \(numberOfDigitsProvided)")
+                if (numberOfDigitsProvided == 3) { //New (TODO: ver com Ecil pq o codeFieldDidChange não funciona5
+                    didFinishTypingMobileNumber = true;
+                }
             }
         }
         

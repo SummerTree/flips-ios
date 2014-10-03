@@ -201,7 +201,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     // MARK: - Buttons delegate
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.forgotPasswordViewDidFinishTypingMobileNumber(self)
+        self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text)
     }
     
     

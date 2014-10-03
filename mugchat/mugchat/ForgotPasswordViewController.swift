@@ -26,13 +26,9 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
     
     
     // MARK: - ForgotPasswordViewDelegate Methods
-    func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!) {
-        //TODO: open VerificationCode screen (story 7153)
-        //var verificationCodeViewController = VerificationCodeViewController()
-        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
-        //temp
-        var newPasswordViewController = NewPasswordViewController()
-        self.navigationController?.pushViewController(newPasswordViewController, animated: true)
+    func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
+        var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
+        self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
     func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!) {

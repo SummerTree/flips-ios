@@ -60,6 +60,7 @@
 		A2124E9C19DC876C00631FE0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9B19DC876C00631FE0 /* NewPasswordViewController.swift */; };
 		A2124E9E19DC87C100631FE0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9D19DC87C100631FE0 /* NewPasswordView.swift */; };
 		A2124EA019DC87D100631FE0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9F19DC87D100631FE0 /* NewPasswordViewDelegate.swift */; };
+		A2124EAA19DEF08E00631FE0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124EA919DEF08E00631FE0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +127,7 @@
 		A2124E9B19DC876C00631FE0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		A2124E9D19DC87C100631FE0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
 		A2124E9F19DC87D100631FE0 /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
+		A2124EA919DEF08E00631FE0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,6 +273,7 @@
 			children = (
 				70FD4E7A19D064450024EBDB /* LoginViewController.swift */,
 				A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */,
+				A2124EA919DEF08E00631FE0 /* ForgotPasswordVerificationCodeViewController.swift */,
 				A2124E9B19DC876C00631FE0 /* NewPasswordViewController.swift */,
 			);
 			name = Login;
@@ -573,6 +576,7 @@
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
+				A2124EAA19DEF08E00631FE0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */,
 				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,

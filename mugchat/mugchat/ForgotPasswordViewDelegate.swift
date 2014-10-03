@@ -13,8 +13,8 @@
 import UIKit
 
 protocol ForgotPasswordViewDelegate {
-
-    func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!)
+    
+    func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!)
     
     func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!)
     

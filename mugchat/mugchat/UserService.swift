@@ -137,7 +137,7 @@ public class UserService: MugchatService {
     
     // MARK: - Forgot password
     
-    func forgot(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+    func forgot(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + FORGOT_URL
