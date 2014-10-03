@@ -147,7 +147,7 @@ public class UserService: MugchatService {
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 //let user = self.parseForgotResponse(responseObject)
-                success()
+                //success()
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
