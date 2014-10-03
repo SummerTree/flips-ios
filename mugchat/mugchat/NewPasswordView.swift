@@ -18,10 +18,12 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
+    private let HINT_VIEW_HEIGHT: CGFloat = 100.0
     private let MOBILE_NUMBER_MARGIN_LEFT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
+    private let DONE_BUTTON_MARGIN_TOP: CGFloat = 25.0
     
     private let HINT_TEXT: String = "Enter a new password below"
     private let INVALID_PASSWORD_TEXT: String = "Your password should have\n8+ characters, Mixed Case, 1 Number"
@@ -120,6 +122,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
+            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
         }
         
         hintText.mas_updateConstraints { (make) in
@@ -149,15 +152,16 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.top.equalTo()(self.mobileNumberView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-            make.height.equalTo()(self.hintView)
+            //make.height.equalTo()(self.HINT_VIEW_HEIGHT)
         })
         
-        self.bottomView.backgroundColor = UIColor.redColor()
-        self.doneButton.backgroundColor = UIColor.greenColor()
+        //self.bottomView.backgroundColor = UIColor.redColor()
+        //self.doneButton.backgroundColor = UIColor.greenColor()
         
         doneButton.mas_updateConstraints { (make) in
-            make.centerY.equalTo()(self.bottomView)
             make.centerX.equalTo()(self.bottomView)
+            //make.centerY.equalTo()(self.bottomView)
+            make.top.equalTo()(self.DONE_BUTTON_MARGIN_TOP)
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in
