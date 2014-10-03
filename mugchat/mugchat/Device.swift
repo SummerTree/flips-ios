@@ -18,6 +18,8 @@ public class Device {
     var platform: String?
     var uuid: String?
     var isVerified: Bool?
+    var retryCount: Int?
+    var verificationCode: String?
     
     convenience init(object : AnyObject) {
         self.init()
@@ -30,6 +32,8 @@ public class Device {
         self.platform = json["platform"].stringValue
         self.uuid = json["uuid"].stringValue
         self.isVerified = json["isVerified"].integerValue == 0 ? false : true
+        self.retryCount = json["retryCount"].integerValue
+        self.verificationCode = json["verificationCode"].stringValue
     }
     
 }

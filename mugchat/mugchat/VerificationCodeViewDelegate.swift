@@ -12,10 +12,10 @@
 
 protocol VerificationCodeViewDelegate {
     
-    func verificatioCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!)
+    func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!)
     
-    func verificatioCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!)
+    func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!)
     
-    func verificatioCodeViewDidTapResendButton(verificatioCodeView: VerificationCodeView!)
+    func verificationCodeViewDidTapResendButton(verificatioCodeView: VerificationCodeView!)
     
 }

@@ -18,6 +18,7 @@ public class DeviceService: MugchatService {
     let CREATE_URL: String = "/user/{{user_id}}/devices"
     let FIND_ONE_URL: String = "/user/{{user_id}}/devices/{{device_id}}"
     let VERIFY_URL: String = "/user/{{user_id}}/devices/{{device_id}}/verify"
+    let RESEND_URL: String = "/user/{{user_id}}/devices/{{device_id}}/resend"
     
     public class var sharedInstance : DeviceService {
     struct Static {
@@ -32,7 +33,7 @@ public class DeviceService: MugchatService {
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
-        let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + createURL
         let params = [
             RequestParams.PHONE_NUMBER : phoneNumber,
@@ -42,7 +43,7 @@ public class DeviceService: MugchatService {
         request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let device = self.parseCreateResponse(responseObject)
+                let device = self.parseDeviceResponse(responseObject)
                 success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
@@ -56,7 +57,7 @@ public class DeviceService: MugchatService {
         )
     }
     
-    func parseCreateResponse(response: AnyObject) -> Device? {
+    private func parseDeviceResponse(response: AnyObject) -> Device? {
         var device = Device(object: response)
         return device
     }
@@ -64,12 +65,74 @@ public class DeviceService: MugchatService {
     
     // MARK: - Find a Device
     
+    
     // MARK: - Verify a Device
+    
+    func verifyDevice(userId: String, deviceId: String, verificationCode: String, success: UserServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let url = HOST + verifyURL
+        let params = [RequestParams.VERIFICATION_CODE : verificationCode]
+        
+        request.POST(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let user = self.parseUserResponse(responseObject)
+                success(user)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    private func parseUserResponse(response: AnyObject) -> User? {
+        var user = User(object: response)
+        return user
+    }
+    
+    
+    // MARK: - Resend Verification Code to Device
+    
+    func resendVerificationCode(userId: String, deviceId: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        var resendURL = RESEND_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        resendURL = RESEND_URL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let url = HOST + resendURL
+        
+        request.POST(url,
+            parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let device = self.parseDeviceResponse(responseObject)
+                success(device)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    
+    // MARK: - Data Structures
     
     struct RequestParams {
         static let PHONE_NUMBER = "phoneNumber"
         static let PLATFORM = "platform"
         static let UUID = "uuid"
+        static let VERIFICATION_CODE = "verification_code"
     }
     
 }

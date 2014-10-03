@@ -15,7 +15,7 @@ import Foundation
 class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
     
     var phoneNumberView: PhoneNumberView!
-    
+        
     override func loadView() {
         super.loadView()
         phoneNumberView = PhoneNumberView()

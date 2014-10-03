@@ -93,8 +93,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeField.tintColor = UIColor.clearColor()
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
         codeField.keyboardType = UIKeyboardType.PhonePad
-        
         codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
+        codeField.addTarget(self, action: "codeFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         codeView.addSubview(codeField)
         
         resendButtonView = UIView()
@@ -181,8 +181,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        var stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
-        var numberOfDigitsProvided = countElements(stringWithDigitsOnly)
+        let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
+        let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         
         var newText = textField.text
         if (string == "" ) {
@@ -206,10 +206,27 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         return false;
     }
     
-    func makeVerificatioCodeAttributedString(code : String) -> NSMutableAttributedString {
+    private func makeVerificatioCodeAttributedString(code : String) -> NSMutableAttributedString {
         var verificationCodeAttributedString = NSMutableAttributedString(string: code)
         verificationCodeAttributedString.addAttribute(NSKernAttributeName, value: CODE_FIELD_KERNEL_ADJUSTMENT_VALUE, range: NSMakeRange(0, 3))
         return verificationCodeAttributedString
+    }
+    
+    func resetVerificationCodeField() {
+        codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
+    }
+    
+    private func codeFieldDidChange(textField: UITextField) {
+        let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
+        let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
+        if (numberOfDigitsProvided == 4) {
+            self.didFinishTypingVerificationCode(textField)
+            
+        }
+    }
+    
+    func showKeyboard() {
+        codeField.becomeFirstResponder()
     }
     
     
@@ -237,14 +254,14 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     // MARK: - Buttons delegate
     
     func didFinishTypingVerificationCode(sender: AnyObject?) {
-        self.delegate?.verificatioCodeView(self, didFinishTypingVerificationCode: codeField.text)
+        self.delegate?.verificationCodeView(self, didFinishTypingVerificationCode: (sender as UITextField).text)
     }
     
     
     // MARK: - CustomNavigationBarDelegate Methods
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        self.delegate?.verificatioCodeViewDidTapBackButton(self)
+        self.delegate?.verificationCodeViewDidTapBackButton(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
