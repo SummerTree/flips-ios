@@ -10,11 +10,10 @@
 // the license agreement.
 //
 
-@objc protocol CustomNavigationBarDelegate {
+protocol SignUpViewDelegate {
 
-    func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
+    func signUpViewDidTapBackButton(signUpView: SignUpView)
     
-    optional func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
-    optional func customNavigationBarDidTapAvatarButton(navBar : CustomNavigationBar)
+    func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
+    
 }
-

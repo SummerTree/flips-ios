@@ -247,9 +247,4 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         self.delegate?.didTapBackButton(self)
     }
     
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
-        // Do nothing
-        println("customNavigationBarDidTapRightButton")
-    }
-    
 }

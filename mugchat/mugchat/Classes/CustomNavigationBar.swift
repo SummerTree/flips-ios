@@ -27,6 +27,7 @@ class CustomNavigationBar : UIView {
     
     private var backgroundImageView : UIImageView!
     
+    private var avatarButton : UIButton!
     private var avatarImageView : UIImageView!
     private var titleTextView : UITextView!
     
@@ -40,7 +41,7 @@ class CustomNavigationBar : UIView {
     
     // MARK: - Static Creator Method
     
-    class func CustomSmallNavigationBar(avatarImage : UIImage, showSettingsButton : Bool, showBuiderButton : Bool) -> CustomNavigationBar {
+    class func CustomSmallNavigationBar(avatarImage: UIImage, showSettingsButton: Bool, showBuiderButton: Bool) -> CustomNavigationBar {
         
         var settingsButtonImage : UIImage?
         if (showSettingsButton) {
@@ -59,12 +60,12 @@ class CustomNavigationBar : UIView {
         var imageView = UIImageView.avatarA4()
         imageView.image = avatarImage
         
-        navigationBar.setup(imageView, leftButtonImage: settingsButtonImage, rightButtonImage: builderButtonImage)
+        navigationBar.setup(imageView, leftButtonImage: settingsButtonImage, rightButtonObject: builderButtonImage)
         
         return navigationBar
     }
     
-    class func CustomNormalNavigationBar(title : String, showBackButton : Bool) -> CustomNavigationBar {
+    class func CustomNormalNavigationBar(title: String, showBackButton: Bool) -> CustomNavigationBar {
         
         var backButtonImage : UIImage?
         if (showBackButton) {
@@ -80,7 +81,33 @@ class CustomNavigationBar : UIView {
         return navigationBar
     }
     
-    class func CustomLargeNavigationBar(avatarImage : UIImage, showBackButton : Bool, showSaveButton : Bool) -> CustomNavigationBar {
+    class func CustomLargeNavigationBar(avatarImage: UIImage, isAvatarButtonInteractionEnabled: Bool = false, showBackButton: Bool, showNextButton: Bool) -> CustomNavigationBar {
+        var backButtonImage : UIImage?
+        if (showBackButton) {
+            backButtonImage = UIImage(named: "Back")
+        }
+        
+        var nextButtonImage : UIImage?
+        var nextButtonInactiveImage : UIImage?
+        if (showNextButton) {
+            nextButtonImage = UIImage(named: "Forward")
+            nextButtonInactiveImage = UIImage(named: "Forward_Inactive")
+        }
+        
+        var navBarHeight = LARGE_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
+
+        var imageButton = UIButton.avatarA2(avatarImage)
+        imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
+        
+        navigationBar.setup(imageButton, leftButtonImage: backButtonImage, rightButtonObject: nextButtonImage, rightButtonInactiveObject: nextButtonInactiveImage)
+        
+        return navigationBar
+    }
+    
+    class func CustomLargeNavigationBar(avatarImage: UIImage, isAvatarButtonInteractionEnabled: Bool = false, showBackButton: Bool, showSaveButton: Bool) -> CustomNavigationBar {
         var backButtonImage : UIImage?
         if (showBackButton) {
             backButtonImage = UIImage(named: "Back")
@@ -95,11 +122,12 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
-        var imageView = UIImageView.avatarA2()
-        imageView.image = avatarImage
-        
-        navigationBar.setup(imageView, leftButtonImage: backButtonImage, rightButtonImage: saveButtonTitle)
 
+        var imageButton = UIButton.avatarA2(avatarImage)
+        imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
+        
+        navigationBar.setup(imageButton, leftButtonImage: backButtonImage, rightButtonObject: saveButtonTitle)
+        
         return navigationBar
     }
     
@@ -122,7 +150,7 @@ class CustomNavigationBar : UIView {
     
     // MARK: - Setup Methods
     
-    private func setup(titleObject : AnyObject?, leftButtonImage : UIImage? = nil, rightButtonImage : AnyObject? = nil) {
+    private func setup(titleObject: AnyObject?, leftButtonImage: UIImage? = nil, leftButtonInactiveImage: UIImage? = nil, rightButtonObject: AnyObject? = nil, rightButtonInactiveObject: AnyObject? = nil) {
         if let title = titleObject as? String {
             titleTextView = UITextView()
             titleTextView.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
@@ -134,15 +162,22 @@ class CustomNavigationBar : UIView {
         } else if let imageView = titleObject as? UIImageView {
             avatarImageView = imageView
             self.addSubview(avatarImageView)
+        } else if let imageButton = titleObject as? UIButton {
+            avatarButton = imageButton
+            avatarButton.addTarget(self, action: "didTapAvatarButton", forControlEvents: UIControlEvents.TouchUpInside)
+            self.addSubview(avatarButton)
         }
         
-        self.setupButtons(leftButtonImage, rightButtonObject: rightButtonImage)
+        self.setupButtons(leftButtonImage, leftButtonInactiveImage: leftButtonInactiveImage, rightButtonObject: rightButtonObject, rightButtonInactiveObject: rightButtonInactiveObject)
     }
-
-    private func setupButtons(leftButtonImage : UIImage?, rightButtonObject : AnyObject?) {
+    
+    private func setupButtons(leftButtonImage: UIImage?, leftButtonInactiveImage: UIImage? = nil, rightButtonObject: AnyObject?, rightButtonInactiveObject: AnyObject? = nil) {
         if (leftButtonImage != nil) {
             leftButton = UIButton()
             leftButton.setImage(leftButtonImage, forState: .Normal)
+            if (leftButtonInactiveImage != nil) {
+                leftButton.setImage(leftButtonInactiveImage, forState: UIControlState.Disabled)
+            }
             leftButton.addTarget(self, action: "didTapLeftButton", forControlEvents: .TouchUpInside)
             self.addSubview(leftButton)
         }
@@ -157,8 +192,9 @@ class CustomNavigationBar : UIView {
                 rightButton.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h3)
             } else if let rightButtonItem = rightButtonObject as? UIImage {
                 rightButton.setImage(rightButtonItem, forState: .Normal)
+                rightButton.setImage(rightButtonInactiveObject as? UIImage, forState: .Disabled)
             }
-
+            
             rightButton.addTarget(self, action: "didTapRightButton", forControlEvents: .TouchUpInside)
             self.addSubview(rightButton)
         }
@@ -170,10 +206,19 @@ class CustomNavigationBar : UIView {
     override func updateConstraints() {
         super.updateConstraints()
         
+        if (avatarButton != nil) {
+            avatarButton.mas_updateConstraints({ (update) -> Void in
+                update.centerX.equalTo()(self)
+                update.centerY.equalTo()(self.mas_centerY).with().offset()(STATUS_BAR_HEIGHT / 2)
+                update.width.equalTo()(self.avatarButton.frame.size.width)
+                update.height.equalTo()(self.avatarButton.frame.size.height)
+            })
+        }
+
         if (avatarImageView != nil) {
             avatarImageView.mas_updateConstraints { (update) -> Void in
                 update.centerX.equalTo()(self)
-                update.centerY.equalTo()(self.mas_centerY).with().offset()(STATUS_BAR_HEIGHT / 2)
+                update.centerY.equalTo()(self)
                 update.width.equalTo()(self.avatarImageView.frame.size.width)
                 update.height.equalTo()(self.avatarImageView.frame.size.height)
             }
@@ -187,7 +232,7 @@ class CustomNavigationBar : UIView {
                 update.height.equalTo()(self.titleTextView.frame.size.height)
             })
         }
-
+        
         if (leftButton != nil) {
             leftButton.mas_updateConstraints { (update) -> Void in
                 update.leading.equalTo()(self).with().offset()(self.buttonsMargin)
@@ -203,7 +248,7 @@ class CustomNavigationBar : UIView {
                 update.height.greaterThanOrEqualTo()(self.BUTTON_MINIMUM_SIZE)
             }
         }
-
+        
         if (CGRectGetHeight(self.frame) >= LARGE_NAVIGATION_BAR_HEIGHT) {
             // Buttons should be top aligned
             if (leftButton != nil) {
@@ -237,11 +282,22 @@ class CustomNavigationBar : UIView {
         }
     }
     
-
+    
     // MARK: - Getters
     
     func getNavigationBarHeight() -> CGFloat {
         return CGRectGetHeight(self.frame) - STATUS_BAR_HEIGHT
+    }
+    
+    
+    // MARK: - Setters
+    
+    func setRightButtonEnabled(enabled: Bool) {
+        rightButton.enabled = enabled
+    }
+    
+    func setLeftButtonEnabled(enabled: Bool) {
+        leftButton.enabled = enabled
     }
     
     
@@ -252,9 +308,12 @@ class CustomNavigationBar : UIView {
     }
     
     func didTapRightButton() {
-        delegate?.customNavigationBarDidTapRightButton(self)
+        delegate?.customNavigationBarDidTapRightButton?(self)
     }
     
+    func didTapAvatarButton() {
+        delegate?.customNavigationBarDidTapAvatarButton?(self)
+    }
     
     // MARK: - Blur Background Handler
     
