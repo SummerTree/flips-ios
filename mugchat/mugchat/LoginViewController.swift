@@ -65,7 +65,6 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
-        
     }
     
     func loginViewDidTapSignUpButton(loginView: LoginView!) {
