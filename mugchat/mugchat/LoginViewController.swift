@@ -62,13 +62,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             self.navigationController?.pushViewController(inboxViewController, animated: true)
             
         }) { (mugError) -> Void in
-            var alertView = UIAlertView(
-                title: NSLocalizedString("Login Error", comment: "Login Error"),
-                message: mugError!.error,
-                delegate: nil,
-                cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
-            
-            alertView.show()
+            println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
     }
