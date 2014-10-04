@@ -68,7 +68,6 @@ public class UserService: MugchatService {
     
     // MARK: - Sign-in
     
-    
     func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
@@ -98,6 +97,7 @@ public class UserService: MugchatService {
         let url = HOST + FACEBOOK_SIGNIN_URL
 
         request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
+        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: "token")
         
         request.POST(url,
             parameters: nil,
@@ -122,7 +122,7 @@ public class UserService: MugchatService {
     }
     
     struct RequestHeaders {
-        static let FACEBOOK_ACCESS_TOKEN = "access_token"
+        static let FACEBOOK_ACCESS_TOKEN = "facebook_access_token"
     }
     
     struct RequestParams {
