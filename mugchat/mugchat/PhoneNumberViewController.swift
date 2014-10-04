@@ -15,7 +15,7 @@ import Foundation
 class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
     
     var phoneNumberView: PhoneNumberView!
-    
+        
     override func loadView() {
         super.loadView()
         phoneNumberView = PhoneNumberView()
@@ -25,14 +25,14 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        phoneNumberView.mobileNumberField.becomeFirstResponder()
+        phoneNumberView.focusKeyboardOnMobileNumberField()
     }
     
     
     // MARK: - PhoneNumberViewDelegate Methods
     
-    func phoneNumberViewDidFinishTypingMobileNumber(view: PhoneNumberView!) {
-        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: view.mobileNumberField.text)
+    func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
+        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber)
         self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     

@@ -10,12 +10,10 @@
 // the license agreement.
 //
 
-protocol VerificationCodeViewDelegate {
+protocol UserFormViewDelegate {
     
-    func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!)
-    
-    func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!)
-    
-    func verificationCodeViewDidTapResendButton(verificatioCodeView: VerificationCodeView!)
+    func userFormView(userFormView: UserFormView, didFailValidationWithErrorMessages errorMessages: NSArray)
+
+    func userFormViewDidValidateAllFieldsSuccessfully(userFormView: UserFormView)
     
 }

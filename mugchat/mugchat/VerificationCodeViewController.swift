@@ -14,8 +14,12 @@ import Foundation
 
 class VerificationCodeViewController: MugChatViewController, VerificationCodeViewDelegate {
     
+    private let PLATFORM = "ios"
+    private let US_CODE = "+1"
+    
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
+    var verificationCode: String = "XXXX"
     
     override func loadView() {
         super.loadView()
@@ -24,21 +28,79 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         self.view = verificationCodeView
     }
     
-    // MARK: - ForgotPasswordViewDelegate Methods
     
-    func didFinishTypingVerificationCode(view: VerificationCodeView!) {
-        //var verificationCodeViewController = VerificationCodeViewController()
-        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+    // MARK: - VerificationCodeViewDelegate Methods
+    
+    func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
+        self.verifyDevice(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!, verificationCode: verificationCode)
     }
     
-    
-    func didTapBackButton(view: VerificationCodeView!) {
+    func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func didTapResendButton(view: VerificationCodeView!) {
-        self.navigationController?.popViewControllerAnimated(true)
+    func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
+        verificationCodeView.resetVerificationCodeField()
+        verificationCodeView.focusKeyboardOnCodeField()
+        self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
     }
+    
+    
+    // MARK: - Backend Services Integration
+    
+    private func createDeviceForUser(userId: String, phoneNumber: String, platform: String, token: String?) {
+        DeviceService.sharedInstance.createDevice(userId,
+            phoneNumber: phoneNumber,
+            platform: platform,
+            uuid: token,
+            success: { (device) in
+                if (device == nil) {
+                    println("Error: Device was not created")
+                    return ()
+                }
+                DeviceHelper.sharedInstance.saveDeviceId(device!.id!)
+            },
+            failure: { (mugError) in
+                println("Error trying to register device: " + mugError!.error!)
+        })
+    }
+    
+    private func resendVerificationCode(userId: String, deviceId: String) {
+        DeviceService.sharedInstance.resendVerificationCode(userId,
+            deviceId: deviceId,
+            success: { (device) in
+                if (device == nil) {
+                    println("Error: Verification Code was not resent")
+                    return ()
+                }
+                self.verificationCodeView.resetVerificationCodeField()
+                self.verificationCodeView.focusKeyboardOnCodeField()
+            },
+            failure: { (mugError) in
+                println("Error trying to resend verification code to device: " + mugError!.error!)
+            })
+    }
+    
+    private func verifyDevice(userId: String, deviceId: String, verificationCode: String) {
+        DeviceService.sharedInstance.verifyDevice(userId,
+            deviceId: deviceId,
+            verificationCode: verificationCode,
+            success: { (device) in
+                if (device == nil) {
+                    println("Error verifying device")
+                    return ()
+                }
+                // go to inbox
+                var inboxViewController = InboxViewController()
+                self.navigationController?.pushViewController(inboxViewController, animated: true)
+            },
+            failure: { (mugError) in
+                println("Error trying to resend verification code to device: " + mugError!.error!)
+                self.verificationCodeView.resetVerificationCodeField()
+                self.verificationCodeView.focusKeyboardOnCodeField()
+            })
+    }
+    
     
     // MARK: - Required methods
     
@@ -53,6 +115,14 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     init(phoneNumber: String!) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
+        
+        
+        let userId = AuthenticationHelper.sharedInstance.userInSession.id!
+        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
+        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
+        
+        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
     }
     
 }

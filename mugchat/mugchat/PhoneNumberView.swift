@@ -28,14 +28,14 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     private var navigationBar: CustomNavigationBar!
     
-    var hintView: UIView!
-    var hintText: UILabel!
-    var mobileNumberView: UIView!
-    var phoneImageView: UIImageView!
-    var mobileNumberField: UITextField!
-    var spamView: UIView!
-    var spamText: UILabel!
-    var keyboardFillerView: UIView!
+    private var hintView: UIView!
+    private var hintText: UILabel!
+    private var mobileNumberView: UIView!
+    private var phoneImageView: UIImageView!
+    private var mobileNumberField: UITextField!
+    private var spamView: UIView!
+    private var spamText: UILabel!
+    private var keyboardFillerView: UIView!
     
     var keyboardHeight: CGFloat = 0.0
     
@@ -200,6 +200,10 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         }
     }
     
+    func focusKeyboardOnMobileNumberField() {
+        mobileNumberField.becomeFirstResponder()
+    }
+    
     // MARK: - Notifications
     
     func keyboardOnScreen(notification: NSNotification) {
@@ -213,7 +217,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.phoneNumberViewDidFinishTypingMobileNumber(self)
+        self.delegate?.phoneNumberView(self, didFinishTypingMobileNumber: mobileNumberField.text)
     }
     
     
@@ -221,11 +225,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
         self.delegate?.phoneNumberViewDidTapBackButton(self)
-    }
-    
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
-        // Do nothing
-        println("customNavigationBarDidTapRightButton")
     }
     
     

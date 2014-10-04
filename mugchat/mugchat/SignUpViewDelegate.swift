@@ -10,12 +10,10 @@
 // the license agreement.
 //
 
-protocol VerificationCodeViewDelegate {
+protocol SignUpViewDelegate {
+
+    func signUpViewDidTapBackButton(signUpView: SignUpView)
     
-    func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!)
-    
-    func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!)
-    
-    func verificationCodeViewDidTapResendButton(verificatioCodeView: VerificationCodeView!)
+    func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
     
 }

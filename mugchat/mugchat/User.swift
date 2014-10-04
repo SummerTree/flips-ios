@@ -12,6 +12,16 @@
 
 public class User {
     
+    private let ID = "id"
+    private let USERNAME = "username"
+    private let FIRST_NAME = "firstName"
+    private let LAST_NAME = "lastName"
+    private let BIRTHDAY = "birthday"
+    private let NICKNAME = "nickname"
+    private let FACEBOOK_ID = "facebookID"
+    private let PHOTO_URL = "photoUrl"
+    private let PUBNUB_ID = "pubnubId"
+    
     var id: String?
     var username: String?
     var firstName: String?
@@ -29,15 +39,23 @@ public class User {
     convenience init(object : AnyObject) {
         self.init()
         let json = JSON(object: object)
-        self.id = json["id"].stringValue
-        self.username = json["username"].stringValue
-        self.firstName = json["firstName"].stringValue
-        self.lastName = json["lastName"].stringValue
-        self.birthday = NSDate(dateTimeString: json["birthday"].stringValue!)
-        self.nickname = json["nickname"].stringValue
-        self.facebookID = json["facebookID"].stringValue
-        self.photoUrl = json["photoUrl"].stringValue
-        self.pubnubId = json["pubnubId"].stringValue
+        self.id = json[ID].stringValue
+        self.username = json[USERNAME].stringValue
+        self.firstName = json[FIRST_NAME].stringValue
+        self.lastName = json[LAST_NAME].stringValue
+        self.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue!)
+        self.nickname = json[NICKNAME].stringValue
+        self.facebookID = json[FACEBOOK_ID].stringValue
+        self.photoUrl = json[PHOTO_URL].stringValue
+        self.pubnubId = json[PUBNUB_ID].stringValue
+    }
+    
+    convenience init(id: String) {
+        self.init()
+        self.id = id
+    }
+    
+    init() {
     }
     
 }

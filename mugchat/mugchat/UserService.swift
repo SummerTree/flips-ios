@@ -11,7 +11,7 @@
 //
 
 public typealias UserServiceSuccessResponse = (User?) -> Void
-public typealias UserServiceFaiureResponse = (MugError?) -> Void
+public typealias UserServiceFailureResponse = (MugError?) -> Void
 
 public class UserService: MugchatService {
     
@@ -32,7 +32,7 @@ public class UserService: MugchatService {
     
     // MARK: - Sign-up
     
-    func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+    func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
@@ -66,9 +66,10 @@ public class UserService: MugchatService {
         return user
     }
     
+    
     // MARK: - Sign-in
     
-    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNIN_URL
@@ -91,7 +92,7 @@ public class UserService: MugchatService {
         )
     }
     
-    func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFaiureResponse) {
+    func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + FACEBOOK_SIGNIN_URL
