@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        let loginViewController = LoginViewController()
+        let loginViewController = VerificationCodeViewController(phoneNumber: "415-234-5678")
         let navigationViewControler = UINavigationController(rootViewController: loginViewController)
        
         self.window?.rootViewController = navigationViewControler

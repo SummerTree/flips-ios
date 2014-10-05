@@ -16,6 +16,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"
+    private let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
     
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
@@ -27,7 +28,6 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         verificationCodeView.delegate = self
         self.view = verificationCodeView
     }
-    
     
     // MARK: - VerificationCodeViewDelegate Methods
     
@@ -95,9 +95,12 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 self.navigationController?.pushViewController(inboxViewController, animated: true)
             },
             failure: { (mugError) in
-                println("Error trying to resend verification code to device: " + mugError!.error!)
-                self.verificationCodeView.resetVerificationCodeField()
-                self.verificationCodeView.focusKeyboardOnCodeField()
+                if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+                    self.verificationCodeView.didEnterWrongVerificationCode()
+                } else {
+                    println("Device code verification error: " + mugError!.error!)
+                    self.verificationCodeView.resetVerificationCodeField()
+                }
             })
     }
     
@@ -117,12 +120,12 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         self.phoneNumber = phoneNumber
         
         
-        let userId = AuthenticationHelper.sharedInstance.userInSession.id!
-        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
-        
-        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
+//        let userId = AuthenticationHelper.sharedInstance.userInSession.id!
+//        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+//        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
+//        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
+//        
+//        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
     }
     
 }
