@@ -162,12 +162,11 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     func handlePan(recognizer:UIPanGestureRecognizer) {
         
         let translation = recognizer.translationInView(self)
-        if (recognizer.view!.center.y <= self.messagesTopView.center.y) {
+        if ((recognizer.view!.center.y <= self.messagesTopView.center.y) && (recognizer.view!.center.y + translation.y <= (recognizer.view!.frame.size.height/2))) {
             // Don't move to bottom
             recognizer.view!.center = CGPoint(x:recognizer.view!.center.x, y:recognizer.view!.center.y + translation.y)
-        } else {
-            return
         }
+        
         recognizer.setTranslation(CGPointZero, inView: self)
         
         if (recognizer.state == UIGestureRecognizerState.Ended) {
