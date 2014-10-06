@@ -240,6 +240,10 @@ class UserFormView : UIView, UITextFieldDelegate {
             if (self.isNewDateInformedValid(stringWithDigitsOnly)) {
                 textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
             }
+            
+            if (countElements(stringWithDigitsOnly) == 8) {
+                self.validateFields()
+            }
         }
         
         return shouldChangeTextFieldText
