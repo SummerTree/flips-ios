@@ -12,6 +12,8 @@
 
 class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     
+    private var statusBarHidden = false
+    
     // MARK: - Overriden Methods
     
     override func loadView() {
@@ -21,6 +23,10 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
         self.view = signUpView
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return statusBarHidden
+    }
+
     
     // MARK: - SignUpViewDelegate
 
@@ -31,12 +37,7 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         println("didTapNextButtonWithUser with \(firstName)")
         
-        let dateStringFormatter = NSDateFormatter()
-        dateStringFormatter.dateFormat = "MM-dd-yyyy"
-        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
-        
-        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthdayDate, nickname: firstName, success: { (user) -> Void in
+        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
             AuthenticationHelper.sharedInstance.userInSession = user
             var phoneNumberViewController = PhoneNumberViewController()
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
@@ -45,5 +46,10 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
             var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
             alertView.show()
         }
+    }
+    
+    func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool) {
+        statusBarHidden = hidden
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 }

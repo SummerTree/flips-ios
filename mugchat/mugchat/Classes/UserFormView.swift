@@ -24,11 +24,13 @@ class UserFormView : UIView, UITextFieldDelegate {
     private let BIRTHDAY_FIRST_SEPARATOR_POSITION = 2
     private let BIRTHDAY_SECOND_SEPARATOR_POSITION = 5
     private let BIRTHDAY_MONTH_CHARACTER = NSLocalizedString("M", comment: "Month Abreviation")
-    private let BIRTHDAY_DAY_CHARACTER = NSLocalizedString("D", comment: "Month Abreviation")
-    private let BIRTHDAY_YEAR_CHARACTER = NSLocalizedString("Y", comment: "Month Abreviation")
+    private let BIRTHDAY_DAY_CHARACTER = NSLocalizedString("D", comment: "Day Abreviation")
+    private let BIRTHDAY_YEAR_CHARACTER = NSLocalizedString("Y", comment: "Year Abreviation")
+    
+    var delegate: UserFormViewDelegate?
     
     private var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
-    
+    private var isPaddingAdjusted: Bool = false
     
     //MARK: - Initialization Methods
     
@@ -81,6 +83,10 @@ class UserFormView : UIView, UITextFieldDelegate {
         textField.leftViewMode = UITextFieldViewMode.Always
         textField.autocorrectionType = UITextAutocorrectionType.No
         textField.returnKeyType = .Next
+        textField.rightViewMode = UITextFieldViewMode.Always
+        textField.rightView = UIImageView(image: UIImage(named: "Error"))
+        textField.rightView?.hidden = true
+        
         textField.delegate = self
         
         if (leftImage != nil) {
@@ -135,19 +141,20 @@ class UserFormView : UIView, UITextFieldDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        println("layoutSubviews")
-        
-        self.adjustInternalPadding(firstNameTextField)
-        self.adjustInternalPadding(lastNameTextField)
-        self.adjustInternalPadding(emailTextField)
-        self.adjustInternalPadding(passwordTextField)
-        self.adjustInternalPadding(birthdayTextField)
+        if (!isPaddingAdjusted) {
+            isPaddingAdjusted = true
+            self.adjustInternalPadding(firstNameTextField)
+            self.adjustInternalPadding(lastNameTextField)
+            self.adjustInternalPadding(emailTextField, adjustForRightView: true)
+            self.adjustInternalPadding(passwordTextField, adjustForRightView: true)
+            self.adjustInternalPadding(birthdayTextField, adjustForRightView: true)
+        }
     }
     
     
     // MARK: - UITextFields helper methods
     
-    private func adjustInternalPadding(textField: UITextField) {
+    private func adjustInternalPadding(textField: UITextField, adjustForRightView: Bool = false) {
         if (textField.leftView != nil) {
             var frame: CGRect! = textField.leftView?.frame
             textField.leftView?.contentMode = UIViewContentMode.Center
@@ -155,6 +162,15 @@ class UserFormView : UIView, UITextFieldDelegate {
                 CGRectGetMinY(frame),
                 CGRectGetWidth(frame) + CELL_WITH_ICON_TOTAL_MARGIN,
                 CGRectGetHeight(frame))
+            
+            if (adjustForRightView) {
+                var rightFrame: CGRect! = textField.rightView?.frame
+                textField.rightView?.contentMode = UIViewContentMode.Center
+                textField.rightView?.frame = CGRectMake(CGRectGetMinX(rightFrame),
+                    CGRectGetMinY(rightFrame),
+                    CGRectGetWidth(rightFrame) + CELL_WITH_ICON_TOTAL_MARGIN,
+                    CGRectGetHeight(rightFrame))
+            }
         } else {
             var paddingView = UIView(frame: CGRectMake(0, 0, CELL_WITHOUT_ICON_TOTAL_MARGIN, CELL_HEIGHT))
             textField.leftView = paddingView
@@ -220,10 +236,15 @@ class UserFormView : UIView, UITextFieldDelegate {
             } else if (numberOfDigitsProvided < BIRTHDAY_MAX_NUMBER_OF_DIGITS) {
                 stringWithDigitsOnly = "\(stringWithDigitsOnly)\(string)"
             }
-            textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
+            
+            if (self.isNewDateInformedValid(stringWithDigitsOnly)) {
+                textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
+            }
+            
+            if (countElements(stringWithDigitsOnly) == 8) {
+                self.validateFields()
+            }
         }
-        
-        // TODO: validate all fields and show next if everything is ok
         
         return shouldChangeTextFieldText
     }
@@ -244,26 +265,139 @@ class UserFormView : UIView, UITextFieldDelegate {
                 textField.text = ""
             }
         }
+        
+        self.validateFields()
     }
     
     
     // MARK: - Validation Methods
     
-    private func validateFields() -> (success: Bool, errors: NSArray) {
-        var validated = true
-        var errorsMessage = NSMutableArray()
+    private func validateFields() -> Bool {
+        var allFieldsAreValid = true
         
-        if (firstNameTextField.text.isEmpty) {
-            validated = false
-            errorsMessage.addObject(NSLocalizedString("First Name is required", comment: "First Name is required"))
+        if (firstNameTextField.text.isEmpty ||
+            lastNameTextField.text.isEmpty ||
+            emailTextField.text.isEmpty ||
+            passwordTextField.text.isEmpty ||
+            birthdayTextField.text.isEmpty) {
+                allFieldsAreValid = false
         }
-
-        if (lastNameTextField.text.isEmpty) {
-            validated = false
-            errorsMessage.addObject(NSLocalizedString("Last Name is required", comment: "First Name is required"))
+        
+        if (!emailTextField.text.isEmpty) {
+            if (emailTextField.text.isValidEmail()) {
+                emailTextField.rightView?.hidden = true
+                delegate?.userFormView(self, didValidateEmailWithSuccess: true)
+            } else {
+                emailTextField.rightView?.hidden = false
+                allFieldsAreValid = false
+                delegate?.userFormView(self, didValidateEmailWithSuccess: false)
+            }
+        } else {
+            // To hide messages in the top messages view.
+            delegate?.userFormView(self, didValidateEmailWithSuccess: true)
         }
-
-        return (validated, errorsMessage)
+        
+        if (!passwordTextField.text.isEmpty) {
+            if (passwordTextField.text.isValidPassword()) {
+                passwordTextField.rightView?.hidden = true
+                delegate?.userFormView(self, didValidatePasswordWithSuccess: true)
+            } else {
+                passwordTextField.rightView?.hidden = false
+                allFieldsAreValid = false
+                delegate?.userFormView(self, didValidatePasswordWithSuccess: false)
+            }
+        } else {
+            // To hide messages in the top messages view.
+            delegate?.userFormView(self, didValidatePasswordWithSuccess: true)
+        }
+        
+        if (!birthdayTextField.text.isEmpty) {
+            if (self.isBirthdayValid(birthdayTextField.text)) {
+                birthdayTextField.rightView?.hidden = true
+                delegate?.userFormView(self, didValidateBirthdayWithSuccess: true)
+            } else {
+                birthdayTextField.rightView?.hidden = false
+                allFieldsAreValid = false
+                delegate?.userFormView(self, didValidateBirthdayWithSuccess: false)
+            }
+        } else {
+            // To hide messages in the top messages view.
+            delegate?.userFormView(self, didValidateBirthdayWithSuccess: true)
+        }
+        
+        delegate?.userFormView(self, didValidateAllFieldsWithSuccess: allFieldsAreValid)
+        
+        return allFieldsAreValid
+    }
+    
+    func isBirthdayValid(birthday: String) -> Bool {
+        var birthdayDate = birthday.dateValue()
+        if (birthdayDate == nil) {
+            return false
+        }
+        
+        var now = NSDate()
+        var ageComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.CalendarUnitYear, fromDate: birthdayDate, toDate: now, options: NSCalendarOptions.allZeros)
+        
+        return (ageComponents.year >= 13)
+    }
+    
+    func isNewDateInformedValid(newDateString: String) -> Bool {
+        var position = 0
+        var lastCharacter = ""
+        for character in newDateString {
+            var characterDoubleValue = String(character).doubleValue()
+            if (position == 0) {
+                if (characterDoubleValue > 1) {
+                    return false
+                }
+            } else if (position == 1) {
+                if (lastCharacter == "0") {
+                    if (characterDoubleValue == 0) {
+                        return false
+                    }
+                } else {
+                    if (characterDoubleValue > 2) {
+                        return false
+                    }
+                }
+            } else if (position == 2) {
+                if (characterDoubleValue > 3) {
+                    return false
+                }
+            } else if (position == 3) {
+                if (lastCharacter == "0") {
+                    if (characterDoubleValue == 0) {
+                        return false
+                    }
+                } else if (lastCharacter == "3") {
+                    if (characterDoubleValue > 1) {
+                        return false
+                    }
+                }
+            } else if (position == 4) {
+                if (characterDoubleValue < 1 || characterDoubleValue > 2) {
+                    return false
+                }
+            } else if (position == 5) {
+                if (lastCharacter == "1") {
+                    if (characterDoubleValue != 9) {
+                        return false
+                    }
+                } else {
+                    if (characterDoubleValue != 0) {
+                        return false
+                    }
+                }
+            } else if (position == 6) {
+                // any value is possible
+            } else if (position == 7) {
+                // any value is possible
+            }
+            lastCharacter = String(character)
+            position++
+        }
+        return true
     }
     
     
@@ -271,5 +405,9 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func getUserData() -> (firstName: String, lastName: String, email: String, password: String, birthday:String) {
         return (firstNameTextField.text, lastNameTextField.text, emailTextField.text, passwordTextField.text, birthdayTextField.text)
+    }
+    
+    func isAllFieldsValids() -> Bool {
+        return self.validateFields()
     }
 }
