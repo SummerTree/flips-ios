@@ -10,13 +10,37 @@
 // the license agreement.
 //
 
-public struct Device {
+public class Device {
     
-    var id: String? = nil
-    var user: User? = nil
-    var phoneNumber: String? = nil
-    var platform: String? = nil
-    var uuid: String? = nil
-    var isVerified: Bool? = nil
+    private let ID = "id"
+    private let USER = "user"
+    private let PHONE_NUMBER = "phoneNumber"
+    private let PLATFORM = "platform"
+    private let UUID = "uuid"
+    private let IS_VERIFIED = "isVerified"
+    private let RETRY_COUNT = "retryCount"
+    private let VERIFICATION_CODE = "verificationCode"
+    
+    var id: String?
+    var user: User?
+    var phoneNumber: String?
+    var platform: String?
+    var uuid: String?
+    var isVerified: Bool?
+    var retryCount: Int?
+    var verificationCode: String?
+    
+    convenience init(object : AnyObject) {
+        self.init()
+        let json = JSON(object: object)
+        self.id = json[ID].stringValue
+        self.user = User(id: json[USER].stringValue!)
+        self.phoneNumber = json[PHONE_NUMBER].stringValue
+        self.platform = json[PLATFORM].stringValue
+        self.uuid = json[UUID].stringValue
+        self.isVerified = json[IS_VERIFIED].integerValue == 0 ? false : true
+        self.retryCount = json[RETRY_COUNT].integerValue
+        self.verificationCode = json[VERIFICATION_CODE].stringValue
+    }
     
 }
