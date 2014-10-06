@@ -12,6 +12,8 @@
 
 class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     
+    private var statusBarHidden = false
+    
     // MARK: - Overriden Methods
     
     override func loadView() {
@@ -21,6 +23,11 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
         self.view = signUpView
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        println("prefersStatusBarHidden: \(statusBarHidden)")
+        return statusBarHidden
+    }
+
     
     // MARK: - SignUpViewDelegate
 
@@ -45,5 +52,10 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
             var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
             alertView.show()
         }
+    }
+    
+    func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool) {
+        statusBarHidden = hidden
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 }

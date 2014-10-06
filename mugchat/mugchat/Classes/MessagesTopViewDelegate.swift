@@ -10,13 +10,8 @@
 // the license agreement.
 //
 
-protocol UserFormViewDelegate {
+protocol MessagesTopViewDelegate {
     
-    func userFormView(userFormView: UserFormView, didValidateEmailWithSuccess success: Bool)
- 
-    func userFormView(userFormView: UserFormView, didValidatePasswordWithSuccess success: Bool)
+    func dismissMessagesTopView(messageTopView: MessagesTopView)
     
-    func userFormView(userFormView: UserFormView, didValidateBirthdayWithSuccess success: Bool)
-    
-    func userFormView(userFormView: UserFormView, didValidateAllFieldsWithSuccess success: Bool)
 }
