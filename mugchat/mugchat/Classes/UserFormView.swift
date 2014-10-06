@@ -30,7 +30,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     var delegate: UserFormViewDelegate?
     
     private var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
-    
+    private var isPaddingAdjusted: Bool = false
     
     //MARK: - Initialization Methods
     
@@ -86,7 +86,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         textField.rightViewMode = UITextFieldViewMode.Always
         textField.rightView = UIImageView(image: UIImage(named: "Error"))
         textField.rightView?.hidden = true
-
+        
         textField.delegate = self
         
         if (leftImage != nil) {
@@ -140,11 +140,15 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.adjustInternalPadding(firstNameTextField)
-        self.adjustInternalPadding(lastNameTextField)
-        self.adjustInternalPadding(emailTextField, adjustForRightView: true)
-        self.adjustInternalPadding(passwordTextField, adjustForRightView: true)
-        self.adjustInternalPadding(birthdayTextField, adjustForRightView: true)
+        
+        if (!isPaddingAdjusted) {
+            isPaddingAdjusted = true
+            self.adjustInternalPadding(firstNameTextField)
+            self.adjustInternalPadding(lastNameTextField)
+            self.adjustInternalPadding(emailTextField, adjustForRightView: true)
+            self.adjustInternalPadding(passwordTextField, adjustForRightView: true)
+            self.adjustInternalPadding(birthdayTextField, adjustForRightView: true)
+        }
     }
     
     
@@ -232,7 +236,14 @@ class UserFormView : UIView, UITextFieldDelegate {
             } else if (numberOfDigitsProvided < BIRTHDAY_MAX_NUMBER_OF_DIGITS) {
                 stringWithDigitsOnly = "\(stringWithDigitsOnly)\(string)"
             }
-            textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
+            
+            if (self.isNewDateInformedValid(stringWithDigitsOnly)) {
+                textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
+            }
+            
+            if (countElements(stringWithDigitsOnly) == 8) {
+                self.validateFields()
+            }
         }
         
         return shouldChangeTextFieldText
@@ -320,11 +331,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func isBirthdayValid(birthday: String) -> Bool {
-        let dateStringFormatter = NSDateFormatter()
-        dateStringFormatter.dateFormat = "MM/dd/yyyy"
-        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
-
+        var birthdayDate = birthday.dateValue()
         if (birthdayDate == nil) {
             return false
         }
@@ -333,6 +340,64 @@ class UserFormView : UIView, UITextFieldDelegate {
         var ageComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.CalendarUnitYear, fromDate: birthdayDate, toDate: now, options: NSCalendarOptions.allZeros)
         
         return (ageComponents.year >= 13)
+    }
+    
+    func isNewDateInformedValid(newDateString: String) -> Bool {
+        var position = 0
+        var lastCharacter = ""
+        for character in newDateString {
+            var characterDoubleValue = String(character).doubleValue()
+            if (position == 0) {
+                if (characterDoubleValue > 1) {
+                    return false
+                }
+            } else if (position == 1) {
+                if (lastCharacter == "0") {
+                    if (characterDoubleValue == 0) {
+                        return false
+                    }
+                } else {
+                    if (characterDoubleValue > 2) {
+                        return false
+                    }
+                }
+            } else if (position == 2) {
+                if (characterDoubleValue > 3) {
+                    return false
+                }
+            } else if (position == 3) {
+                if (lastCharacter == "0") {
+                    if (characterDoubleValue == 0) {
+                        return false
+                    }
+                } else if (lastCharacter == "3") {
+                    if (characterDoubleValue > 1) {
+                        return false
+                    }
+                }
+            } else if (position == 4) {
+                if (characterDoubleValue < 1 || characterDoubleValue > 2) {
+                    return false
+                }
+            } else if (position == 5) {
+                if (lastCharacter == "1") {
+                    if (characterDoubleValue != 9) {
+                        return false
+                    }
+                } else {
+                    if (characterDoubleValue != 0) {
+                        return false
+                    }
+                }
+            } else if (position == 6) {
+                // any value is possible
+            } else if (position == 7) {
+                // any value is possible
+            }
+            lastCharacter = String(character)
+            position++
+        }
+        return true
     }
     
     

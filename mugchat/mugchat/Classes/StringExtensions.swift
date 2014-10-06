@@ -32,5 +32,16 @@ extension String {
         var passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
         return passwordTest.evaluateWithObject(self)
     }
+    
+    func doubleValue() -> Double? {
+        return NSNumberFormatter().numberFromString(self)!.doubleValue
+    }
 
+    func dateValue(format: String = "MM/dd/yyyy") -> NSDate! {
+        let dateStringFormatter = NSDateFormatter()
+        dateStringFormatter.dateFormat = format
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let date : NSDate? = dateStringFormatter.dateFromString(self)
+        return date
+    }
 }

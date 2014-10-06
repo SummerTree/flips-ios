@@ -24,7 +24,6 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     }
     
     override func prefersStatusBarHidden() -> Bool {
-        println("prefersStatusBarHidden: \(statusBarHidden)")
         return statusBarHidden
     }
 
@@ -36,15 +35,8 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     }
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
-        println("didTapNextButtonWithUser with \(firstName)")
         
-        let dateStringFormatter = NSDateFormatter()
-        dateStringFormatter.dateFormat = "MM/dd/yyyy"
-        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
-
-        
-        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthdayDate, nickname: firstName, success: { (user) -> Void in
+        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
             AuthenticationHelper.sharedInstance.userInSession = user
             var phoneNumberViewController = PhoneNumberViewController()
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
