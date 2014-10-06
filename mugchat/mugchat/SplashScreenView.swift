@@ -29,7 +29,7 @@ class SplashScreenView: UIView {
     
     func addSubviews() {
         self.backgroundImage = UIImageView(image: UIImage(named: "SplashScreen"))
-        self.backgroundImage.contentMode = UIViewContentMode.ScaleToFill
+        self.backgroundImage.contentMode = UIViewContentMode.Center
         self.addSubview(self.backgroundImage)
     }
     
