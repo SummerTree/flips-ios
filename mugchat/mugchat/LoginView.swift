@@ -191,21 +191,6 @@ class LoginView : UIView, UITextFieldDelegate {
         mugchatWordImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(mugchatWordImageView)
         
-        forgotPasswordImage = UIImage(named: "ForgotPassword")
-        forgotPasswordButton = UIButton()
-        forgotPasswordButton.addTarget(self, action: "forgotPasswordButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
-        forgotPasswordButton.alpha = 0.0
-        forgotPasswordButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
-        forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
-        forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
-        forgotPasswordButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
-        forgotPasswordButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Forgot Password", comment: "Forgot Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
-        forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Normal)
-        forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Highlighted)
-        forgotPasswordButton.setTitle(NSLocalizedString("Forgot Password", comment: "Forgot Password"), forState: UIControlState.Normal)
-        self.addSubview(forgotPasswordButton)
-        
-        
         spaceBetweenMugchatAndCredentials = UIView()
         self.addSubview(spaceBetweenMugchatAndCredentials)
         
@@ -302,6 +287,20 @@ class LoginView : UIView, UITextFieldDelegate {
         privacyPolicy.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         privacyPolicy.setTitle(NSLocalizedString("Privacy Policy", comment: "Privacy Policy"), forState: UIControlState.Normal)
         acceptanceView.addSubview(privacyPolicy)
+        
+        forgotPasswordImage = UIImage(named: "ForgotPassword")
+        forgotPasswordButton = UIButton()
+        forgotPasswordButton.addTarget(self, action: "forgotPasswordButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        forgotPasswordButton.alpha = 0.0
+        forgotPasswordButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
+        forgotPasswordButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        forgotPasswordButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Forgot Password", comment: "Forgot Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
+        forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
+        forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
+        forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Normal)
+        forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Highlighted)
+        forgotPasswordButton.setTitle(NSLocalizedString("Forgot Password", comment: "Forgot Password"), forState: UIControlState.Normal)
+        self.addSubview(forgotPasswordButton)
     }
     
     func updateBubbleChatConstraints() {
@@ -500,7 +499,7 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func forgotPasswordButtonTapped(sender: AnyObject?) {
-        self.delegate?.loginViewDidTapForgotPassword(self)
+        self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text)
     }
     
     func signUpButtonTapped(sender: AnyObject?) {

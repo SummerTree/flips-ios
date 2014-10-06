@@ -70,6 +70,7 @@
 		A2DAC16619E2C5BB009BDCBD /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC16419E2C5BB009BDCBD /* NewPasswordView.swift */; };
 		A2DAC16719E2C5BB009BDCBD /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC16519E2C5BB009BDCBD /* NewPasswordViewDelegate.swift */; };
 		A2DAC16919E2C5C9009BDCBD /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC16819E2C5C9009BDCBD /* ForgotPasswordVerificationCodeViewController.swift */; };
+		A2DAC16B19E2C66A009BDCBD /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DAC16A19E2C66A009BDCBD /* NewPasswordViewController.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -146,6 +147,7 @@
 		A2DAC16419E2C5BB009BDCBD /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
 		A2DAC16519E2C5BB009BDCBD /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		A2DAC16819E2C5C9009BDCBD /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
+		A2DAC16A19E2C66A009BDCBD /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -291,6 +293,7 @@
 		704E110D19D0934700D2BB88 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				A2DAC16A19E2C66A009BDCBD /* NewPasswordViewController.swift */,
 				A2DAC16819E2C5C9009BDCBD /* ForgotPasswordVerificationCodeViewController.swift */,
 				70FD4E7A19D064450024EBDB /* LoginViewController.swift */,
 				A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */,
@@ -678,6 +681,7 @@
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
+				A2DAC16B19E2C66A009BDCBD /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */,
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,

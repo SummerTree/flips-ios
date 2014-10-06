@@ -16,6 +16,17 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
     
     var forgotPasswordView: ForgotPasswordView!
     
+    private var username: String!
+    
+    init(username: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.username = username;
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,8 +38,14 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
     
     // MARK: - ForgotPasswordViewDelegate Methods
     func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
-        var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
-        self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+        
+        UserService.sharedInstance.forgot(username, phoneNumber: mobileNumber, success: { (user) -> Void in
+            var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
+            self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+        }) { (mugError) -> Void in
+            println(mugError!.error)
+            //self.forgotPasswordView.showValidationErrorInCredentialFields()
+        }
     }
     
     func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!) {
