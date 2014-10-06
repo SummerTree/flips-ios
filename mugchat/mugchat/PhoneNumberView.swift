@@ -32,7 +32,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     private var hintText: UILabel!
     private var mobileNumberView: UIView!
     private var phoneImageView: UIImageView!
-     var mobileNumberField: UITextField!
+    private var mobileNumberField: UITextField!
     private var spamView: UIView!
     private var spamText: UILabel!
     private var keyboardFillerView: UIView!
@@ -200,7 +200,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         }
     }
     
-    func showKeyboard() {
+    func focusKeyboardOnMobileNumberField() {
         mobileNumberField.becomeFirstResponder()
     }
     
@@ -225,11 +225,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
         self.delegate?.phoneNumberViewDidTapBackButton(self)
-    }
-    
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
-        // Do nothing
-        println("customNavigationBarDidTapRightButton")
     }
     
     

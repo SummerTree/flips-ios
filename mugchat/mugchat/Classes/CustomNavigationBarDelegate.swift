@@ -10,12 +10,11 @@
 // the license agreement.
 //
 
-import Foundation
-
-protocol CustomNavigationBarDelegate {
+@objc protocol CustomNavigationBarDelegate {
 
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
     
+    optional func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
+    optional func customNavigationBarDidTapAvatarButton(navBar : CustomNavigationBar)
 }
 

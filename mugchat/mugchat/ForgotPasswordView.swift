@@ -190,6 +190,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     
     // MARK: - Notifications
+    
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
             let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
@@ -200,23 +201,21 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     
     // MARK: - Buttons delegate
+    
     func finishTypingMobileNumber(sender: AnyObject?) {
         self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text)
     }
     
     
     // MARK: - CustomNavigationBarDelegate Methods
+    
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
         self.delegate?.forgotPasswordViewDidTapBackButton(self)
     }
     
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
-        // Do nothing
-        println("customNavigationBarDidTapRightButton")
-    }
-    
     
     // MARK: - Required methods
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

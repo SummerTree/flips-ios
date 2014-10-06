@@ -68,7 +68,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapSignUpButton(loginView: LoginView!) {
-        self.navigationController?.pushViewController(InboxViewController(), animated: true) // TODO: just for tests
+        self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
     func loginViewDidTapForgotPassword(loginView: LoginView!) {
@@ -79,7 +79,8 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     func loginViewDidTapFacebookSignInButton(loginView: LoginView!) {
 
         // If the session state is any of the two "open" states when the button is clicked
-        if (FBSession.activeSession().state == FBSessionState.Open || FBSession.activeSession().state == FBSessionState.OpenTokenExtended) {
+        if (FBSession.activeSession().state == FBSessionState.Open
+         || FBSession.activeSession().state == FBSessionState.OpenTokenExtended) {
             
             println("User is already authenticated with session = \(FBSession.activeSession().accessTokenData.accessToken)")
             

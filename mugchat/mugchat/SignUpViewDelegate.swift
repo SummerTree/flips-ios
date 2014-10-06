@@ -10,8 +10,10 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
+protocol SignUpViewDelegate {
+
+    func signUpViewDidTapBackButton(signUpView: SignUpView)
     
-    let HOST: String = "http://mugchat-dev.arctouch.com"
+    func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
     
 }

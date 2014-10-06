@@ -12,6 +12,15 @@
 
 public class Device {
     
+    private let ID = "id"
+    private let USER = "user"
+    private let PHONE_NUMBER = "phoneNumber"
+    private let PLATFORM = "platform"
+    private let UUID = "uuid"
+    private let IS_VERIFIED = "isVerified"
+    private let RETRY_COUNT = "retryCount"
+    private let VERIFICATION_CODE = "verificationCode"
+    
     var id: String?
     var user: User?
     var phoneNumber: String?
@@ -24,16 +33,14 @@ public class Device {
     convenience init(object : AnyObject) {
         self.init()
         let json = JSON(object: object)
-        self.id = json["id"].stringValue
-        var newUser = User()
-        newUser.id = json["user"].stringValue
-        self.user = newUser
-        self.phoneNumber = json["phoneNumber"].stringValue
-        self.platform = json["platform"].stringValue
-        self.uuid = json["uuid"].stringValue
-        self.isVerified = json["isVerified"].integerValue == 0 ? false : true
-        self.retryCount = json["retryCount"].integerValue
-        self.verificationCode = json["verificationCode"].stringValue
+        self.id = json[ID].stringValue
+        self.user = User(id: json[USER].stringValue!)
+        self.phoneNumber = json[PHONE_NUMBER].stringValue
+        self.platform = json[PLATFORM].stringValue
+        self.uuid = json[UUID].stringValue
+        self.isVerified = json[IS_VERIFIED].integerValue == 0 ? false : true
+        self.retryCount = json[RETRY_COUNT].integerValue
+        self.verificationCode = json[VERIFICATION_CODE].stringValue
     }
     
 }

@@ -240,11 +240,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         if (numberOfDigitsProvided == 4) {
             self.didFinishTypingVerificationCode(textField)
-            
         }
     }
     
-    func showKeyboard() {
+    func focusKeyboardOnCodeField() {
         codeField.becomeFirstResponder()
     }
     
@@ -281,11 +280,6 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
         self.delegate?.verificationCodeViewDidTapBackButton(self)
-    }
-    
-    func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
-        // Do nothing
-        println("customNavigationBarDidTapRightButton")
     }
     
 }

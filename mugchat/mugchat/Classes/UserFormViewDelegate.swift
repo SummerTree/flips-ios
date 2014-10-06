@@ -10,8 +10,10 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
+protocol UserFormViewDelegate {
     
-    let HOST: String = "http://mugchat-dev.arctouch.com"
+    func userFormView(userFormView: UserFormView, didFailValidationWithErrorMessages errorMessages: NSArray)
+
+    func userFormViewDidValidateAllFieldsSuccessfully(userFormView: UserFormView)
     
 }

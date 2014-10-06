@@ -20,10 +20,17 @@ class CustomBadgeView : UIView {
 
     var badgeLabel : UILabel!
     
+    
+    //MARK: - Initialization Methods
+    
     convenience override init() {
         self.init(frame: CGRect.zeroRect)
     }
     
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -48,11 +55,10 @@ class CustomBadgeView : UIView {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
-    func setBagdeValue(value : String) {
+    //MARK: - Setters Methods
+    
+    func setBagdeValue(value: String) {
         badgeLabel.text = value
         self.layoutIfNeeded()
     }

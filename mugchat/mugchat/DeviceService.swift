@@ -21,8 +21,8 @@ public class DeviceService: MugchatService {
     let RESEND_URL: String = "/user/{{user_id}}/devices/{{device_id}}/resend"
     
     public class var sharedInstance : DeviceService {
-    struct Static {
-        static let instance : DeviceService = DeviceService()
+        struct Static {
+            static let instance : DeviceService = DeviceService()
         }
         return Static.instance
     }
@@ -30,16 +30,17 @@ public class DeviceService: MugchatService {
     
     // MARK: - Create Device
     
-    func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+    func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + createURL
-        let params = [
+        var params = [
             RequestParams.PHONE_NUMBER : phoneNumber,
-            RequestParams.PLATFORM : platform,
-            RequestParams.UUID : uuid]
-        
+            RequestParams.PLATFORM : platform]
+        if (uuid != nil) {
+            params[RequestParams.UUID] = uuid?
+        }
         request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
@@ -49,7 +50,7 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
                     failure(MugError(error: error.localizedDescription, details:nil))
                 }
@@ -63,12 +64,9 @@ public class DeviceService: MugchatService {
     }
     
     
-    // MARK: - Find a Device
-    
-    
     // MARK: - Verify a Device
     
-    func verifyDevice(userId: String, deviceId: String, verificationCode: String, success: UserServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+    func verifyDevice(userId: String, deviceId: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -79,23 +77,18 @@ public class DeviceService: MugchatService {
         request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let user = self.parseUserResponse(responseObject)
-                success(user)
+                let device = self.parseDeviceResponse(responseObject)
+                success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
                     failure(MugError(error: error.localizedDescription, details:nil))
                 }
             }
         )
-    }
-    
-    private func parseUserResponse(response: AnyObject) -> User? {
-        var user = User(object: response)
-        return user
     }
     
     
@@ -117,7 +110,7 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(MugError(error: response["error"] as String!, details: response["error"] as String?))
                 } else {
                     failure(MugError(error: error.localizedDescription, details:nil))
                 }

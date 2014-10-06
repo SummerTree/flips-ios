@@ -48,15 +48,23 @@ public class DeviceHelper: NSObject {
     
     // MARK: - Save Device Data on User Defaults
     
-    func saveDeviceToken(token: String) {
+    func saveDeviceToken(token: String?) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setValue(token, forKey: DEVICE_TOKEN)
+        if (token == nil) {
+            userDefaults.removeObjectForKey(DEVICE_TOKEN)
+        } else {
+            userDefaults.setValue(token, forKey: DEVICE_TOKEN)
+        }
         userDefaults.synchronize()
     }
     
-    func saveDeviceId(deviceId: String) {
+    func saveDeviceId(deviceId: String?) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setValue(deviceId, forKey: DEVICE_ID)
+        if (deviceId == nil) {
+            userDefaults.removeObjectForKey(DEVICE_ID)
+        } else {
+            userDefaults.setValue(deviceId, forKey: DEVICE_ID)
+        }
         userDefaults.synchronize()
     }
     
