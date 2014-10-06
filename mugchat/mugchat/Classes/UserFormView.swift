@@ -30,7 +30,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     var delegate: UserFormViewDelegate?
     
     private var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
-    
+    private var isPaddingAdjusted: Bool = false
     
     //MARK: - Initialization Methods
     
@@ -140,11 +140,15 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.adjustInternalPadding(firstNameTextField)
-        self.adjustInternalPadding(lastNameTextField)
-        self.adjustInternalPadding(emailTextField, adjustForRightView: true)
-        self.adjustInternalPadding(passwordTextField, adjustForRightView: true)
-        self.adjustInternalPadding(birthdayTextField, adjustForRightView: true)
+        
+        if (!isPaddingAdjusted) {
+            isPaddingAdjusted = true
+            self.adjustInternalPadding(firstNameTextField)
+            self.adjustInternalPadding(lastNameTextField)
+            self.adjustInternalPadding(emailTextField, adjustForRightView: true)
+            self.adjustInternalPadding(passwordTextField, adjustForRightView: true)
+            self.adjustInternalPadding(birthdayTextField, adjustForRightView: true)
+        }
     }
     
     
@@ -233,7 +237,7 @@ class UserFormView : UIView, UITextFieldDelegate {
                 stringWithDigitsOnly = "\(stringWithDigitsOnly)\(string)"
             }
             
-            if (self.isNewDateInformedValie(stringWithDigitsOnly)) {
+            if (self.isNewDateInformedValid(stringWithDigitsOnly)) {
                 textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
             }
         }
@@ -323,11 +327,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func isBirthdayValid(birthday: String) -> Bool {
-        let dateStringFormatter = NSDateFormatter()
-        dateStringFormatter.dateFormat = "MM-dd-yyyy"
-        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
-        
+        var birthdayDate = birthday.dateValue()
         if (birthdayDate == nil) {
             return false
         }
@@ -338,7 +338,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         return (ageComponents.year >= 13)
     }
     
-    func isNewDateInformedValie(newDateString: String) -> Bool {
+    func isNewDateInformedValid(newDateString: String) -> Bool {
         var position = 0
         var lastCharacter = ""
         for character in newDateString {
