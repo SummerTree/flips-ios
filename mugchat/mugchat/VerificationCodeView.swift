@@ -94,56 +94,17 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeViewLeadingSpace = UIView()
         codeView.addSubview(codeViewLeadingSpace)
         
-        codeField0 = UITextField()
-        codeField0.textAlignment = NSTextAlignment.Center
-        codeField0.sizeToFit()
-        codeField0.layoutIfNeeded()
+        codeField0 = makeCodeField()
         codeField0.becomeFirstResponder()
-        codeField0.delegate = self
-        codeField0.textColor = UIColor.whiteColor()
-        codeField0.tintColor = UIColor.clearColor()
-        codeField0.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        codeField0.keyboardType = UIKeyboardType.PhonePad
-        codeField0.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
         codeView.addSubview(codeField0)
         
-        codeField1 = UITextField()
-        codeField1.textAlignment = NSTextAlignment.Center
-        codeField1.sizeToFit()
-        codeField1.layoutIfNeeded()
-        codeField1.becomeFirstResponder()
-        codeField1.delegate = self
-        codeField1.textColor = UIColor.whiteColor()
-        codeField1.tintColor = UIColor.clearColor()
-        codeField1.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        codeField1.keyboardType = UIKeyboardType.PhonePad
-        codeField1.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        codeField1 = makeCodeField()
         codeView.addSubview(codeField1)
         
-        codeField2 = UITextField()
-        codeField2.textAlignment = NSTextAlignment.Center
-        codeField2.sizeToFit()
-        codeField2.layoutIfNeeded()
-        codeField2.becomeFirstResponder()
-        codeField2.delegate = self
-        codeField2.textColor = UIColor.whiteColor()
-        codeField2.tintColor = UIColor.clearColor()
-        codeField2.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        codeField2.keyboardType = UIKeyboardType.PhonePad
-        codeField2.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        codeField2 = makeCodeField()
         codeView.addSubview(codeField2)
         
-        codeField3 = UITextField()
-        codeField3.textAlignment = NSTextAlignment.Center
-        codeField3.sizeToFit()
-        codeField3.layoutIfNeeded()
-        codeField3.becomeFirstResponder()
-        codeField3.delegate = self
-        codeField3.textColor = UIColor.whiteColor()
-        codeField3.tintColor = UIColor.clearColor()
-        codeField3.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        codeField3.keyboardType = UIKeyboardType.PhonePad
-        codeField3.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        codeField3 = makeCodeField()
         codeField3.addTarget(self, action: "codeFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         codeView.addSubview(codeField3)
         
@@ -259,7 +220,6 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         let textFieldLength = countElements(textField.text)
-        println("textfieldlength: \(textFieldLength)")
         let replacementStringLength = countElements(string)
         if (replacementStringLength == 0) { //backspace
             if (textField == codeField3) {
@@ -314,6 +274,20 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             }
         }
         return false
+    }
+    
+    func makeCodeField() -> UITextField {
+        var codeField = UITextField()
+        codeField.textAlignment = NSTextAlignment.Center
+        codeField.sizeToFit()
+        codeField.layoutIfNeeded()
+        codeField.delegate = self
+        codeField.textColor = UIColor.whiteColor()
+        codeField.tintColor = UIColor.clearColor()
+        codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
+        codeField.keyboardType = UIKeyboardType.PhonePad
+        codeField.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        return codeField
     }
     
     func resetVerificationCodeField() {

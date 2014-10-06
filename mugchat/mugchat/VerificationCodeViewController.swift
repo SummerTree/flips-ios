@@ -90,7 +90,6 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     println("Error verifying device")
                     return ()
                 }
-                // go to inbox
                 var inboxViewController = InboxViewController()
                 self.navigationController?.pushViewController(inboxViewController, animated: true)
             },

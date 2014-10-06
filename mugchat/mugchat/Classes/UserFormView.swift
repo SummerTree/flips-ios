@@ -321,7 +321,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func isBirthdayValid(birthday: String) -> Bool {
         let dateStringFormatter = NSDateFormatter()
-        dateStringFormatter.dateFormat = "MM-dd-yyyy"
+        dateStringFormatter.dateFormat = "MM/dd/yyyy"
         dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
 
