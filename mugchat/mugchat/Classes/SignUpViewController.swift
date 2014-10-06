@@ -35,7 +35,6 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     }
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
-        println("didTapNextButtonWithUser with \(firstName)")
         
         UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
             AuthenticationHelper.sharedInstance.userInSession = user

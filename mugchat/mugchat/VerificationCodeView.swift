@@ -18,8 +18,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
-    private let CODE_VIEW_MARGIN_LEFT: CGFloat = 25.0
-    private let CODE_VIEW_MARGIN_RIGHT: CGFloat = 25.0
+    private let CODE_VIEW_MARGIN_LEFT: CGFloat = 12.5
+    private let CODE_VIEW_MARGIN_RIGHT: CGFloat = 12.5
     private let CODE_VIEW_HEIGHT: CGFloat = 60.0
     private let CODE_FIELD_KERNEL_ADJUSTMENT_VALUE: CGFloat = 20.0
     private let MAX_NUMBER_OF_DIGITS = 4
@@ -35,10 +35,16 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     private var hintText: UILabel!
     private var phoneNumberLabel: UILabel!
     private var codeView: UIView!
-    private var codeField: UITextField!
+    private var codeViewLeadingSpace: UIView!
+    private var codeField0: UITextField!
+    private var codeField1: UITextField!
+    private var codeField2: UITextField!
+    private var codeField3: UITextField!
+    private var codeViewTrailingSpace: UIView!
     private var resendButtonView: UIView!
     private var resendButton: UIButton!
     private var keyboardFillerView: UIView!
+    private var errorSignView: UIImageView!
     
     private var keyboardHeight: CGFloat = 0.0
     private var phoneNumber: String = ""
@@ -81,21 +87,29 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         labelsView.addSubview(phoneNumberLabel)
         
         codeView = UIView()
+        codeView.contentMode = UIViewContentMode.Center
         codeView.backgroundColor = UIColor.lightSemitransparentBackground()
         self.addSubview(codeView)
         
-        codeField = UITextField()
-        codeField.textAlignment = NSTextAlignment.Center
-        codeField.sizeToFit()
-        codeField.delegate = self
-        codeField.becomeFirstResponder()
-        codeField.textColor = UIColor.whiteColor()
-        codeField.tintColor = UIColor.clearColor()
-        codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        codeField.keyboardType = UIKeyboardType.PhonePad
-        codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
-        codeField.addTarget(self, action: "codeFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
-        codeView.addSubview(codeField)
+        codeViewLeadingSpace = UIView()
+        codeView.addSubview(codeViewLeadingSpace)
+        
+        codeField0 = makeCodeField()
+        codeField0.becomeFirstResponder()
+        codeView.addSubview(codeField0)
+        
+        codeField1 = makeCodeField()
+        codeView.addSubview(codeField1)
+        
+        codeField2 = makeCodeField()
+        codeView.addSubview(codeField2)
+        
+        codeField3 = makeCodeField()
+        codeField3.addTarget(self, action: "codeFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        codeView.addSubview(codeField3)
+        
+        codeViewTrailingSpace = UIView()
+        codeView.addSubview(codeViewTrailingSpace)
         
         resendButtonView = UIView()
         resendButtonView.contentMode = .Center
@@ -150,11 +164,35 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             make.right.equalTo()(self)
         }
         
-        codeField.mas_updateConstraints { (make) in
+        codeViewLeadingSpace.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self.codeView)
+            make.width.equalTo()(self.codeViewTrailingSpace.mas_width)
+        })
+        
+        codeField0.mas_updateConstraints { (make) in
             make.centerY.equalTo()(self.codeView)
-            make.centerX.equalTo()(self.codeView)
-            make.width.equalTo()(UIFont.HeadingSize.h1 * 4 + self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE * 3)
+            make.left.equalTo()(self.codeViewLeadingSpace.mas_right)
         }
+        
+        codeField1.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.codeView)
+            make.left.equalTo()(self.codeField0.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
+        }
+        
+        codeField2.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.codeView)
+            make.left.equalTo()(self.codeField1.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
+        }
+        
+        codeField3.mas_updateConstraints { (make) in
+            make.centerY.equalTo()(self.codeView)
+            make.left.equalTo()(self.codeField2.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
+        }
+        
+        codeViewTrailingSpace.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self.codeField3.mas_right)
+            make.right.equalTo()(self.codeView)
+        })
         
         resendButtonView.mas_updateConstraints({ (make) in
             make.top.equalTo()(self.codeView.mas_bottom)
@@ -181,51 +219,112 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
-        let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
-        
-        var newText = textField.text
-        if (string == "" ) {
-            if (numberOfDigitsProvided > 0) {
-                // Is removing the digit. We need to add the bullet back
-                var nsStringText = textField.text as NSString
-                nsStringText.sizeWithAttributes([NSFontAttributeName: textField.font])
-                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided-1, 1), withString: BULLET)
+        let textFieldLength = countElements(textField.text)
+        let replacementStringLength = countElements(string)
+        if (replacementStringLength == 0) { //backspace
+            if (textField == codeField3) {
+                codeField3.text = ""
+                codeField2.becomeFirstResponder()
+                return false
+            } else if (textField == codeField2) {
+                codeField2.text = ""
+                codeField1.becomeFirstResponder()
+                return false
+            } else if (textField == codeField1) {
+                codeField1.text = ""
+                codeField0.becomeFirstResponder()
+                return false
+            } else if (textField == codeField0) {
+                codeField0.text = ""
+                codeField0.becomeFirstResponder()
+                return false
             }
-            
         } else {
-            if (numberOfDigitsProvided < MAX_NUMBER_OF_DIGITS) {
-                // Is adding a new digit. We need to replace the bullet
-                var nsStringText = textField.text as NSString
-                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
+            if (textFieldLength <= 0) {
+                if (textField == codeField0) {
+                    codeField0.text = string
+                    return false
+                } else if (textField == codeField1) {
+                    codeField1.text = string
+                    return false
+                } else if (textField == codeField2) {
+                    codeField2.text = string
+                    codeField3.becomeFirstResponder()
+                    return false
+                } else {
+                    codeField3.text = string
+                    codeField3.resignFirstResponder()
+                    return true
+                }
+            } else if (textFieldLength == 1) {
+                if (textField == codeField0) {
+                    codeField1.text = string
+                    codeField1.becomeFirstResponder()
+                    return false
+                } else if (textField == codeField1) {
+                    codeField2.text = string
+                    codeField2.becomeFirstResponder()
+                    return false
+                } else if (textField == codeField2) {
+                    codeField3.becomeFirstResponder()
+                    return true
+                }
+            } else {
+                return false
             }
         }
-        
-        textField.attributedText = makeVerificatioCodeAttributedString(newText)
-        
-        return false;
+        return false
     }
     
-    private func makeVerificatioCodeAttributedString(code : String) -> NSMutableAttributedString {
-        var verificationCodeAttributedString = NSMutableAttributedString(string: code)
-        verificationCodeAttributedString.addAttribute(NSKernAttributeName, value: CODE_FIELD_KERNEL_ADJUSTMENT_VALUE, range: NSMakeRange(0, 3))
-        return verificationCodeAttributedString
+    func makeCodeField() -> UITextField {
+        var codeField = UITextField()
+        codeField.textAlignment = NSTextAlignment.Center
+        codeField.sizeToFit()
+        codeField.layoutIfNeeded()
+        codeField.delegate = self
+        codeField.textColor = UIColor.whiteColor()
+        codeField.tintColor = UIColor.clearColor()
+        codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
+        codeField.keyboardType = UIKeyboardType.PhonePad
+        codeField.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
+        return codeField
     }
     
     func resetVerificationCodeField() {
-        codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
+        codeField0.text = ""
+        codeField1.text = ""
+        codeField2.text = ""
+        codeField3.text = ""
+        focusKeyboardOnCodeField()
     }
     
-    private func codeFieldDidChange(textField: UITextField) {
-        let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
+    func codeFieldDidChange(textField: UITextField) {
+        let verificationCode = codeField0.text + codeField1.text + codeField2.text + codeField3.text
+        let stringWithDigitsOnly = verificationCode.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
         let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         if (numberOfDigitsProvided == 4) {
-            self.didFinishTypingVerificationCode(textField)
+            self.didFinishTypingVerificationCode(verificationCode)
         }
     }
     
     func focusKeyboardOnCodeField() {
-        codeField.becomeFirstResponder()
+        codeField0.becomeFirstResponder()
+    }
+    
+    func didEnterWrongVerificationCode() {
+        resetVerificationCodeField()
+        codeView.backgroundColor = UIColor.deepSea()
+        errorSignView = UIImageView(image: UIImage(named: "Error"))
+        errorSignView.contentMode = .Center
+        codeView.addSubview(errorSignView)
+        
+        errorSignView.mas_updateConstraints( { (make) in
+            make.width.equalTo()(self.errorSignView.image?.size.width)
+            make.centerY.equalTo()(self.codeView)
+            make.right.equalTo()(self.codeView.mas_right).with().offset()(-self.CODE_VIEW_MARGIN_RIGHT)
+        })
+        
+        super.updateConstraints()
     }
     
     
@@ -252,8 +351,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     // MARK: - Buttons delegate
     
-    func didFinishTypingVerificationCode(sender: AnyObject?) {
-        self.delegate?.verificationCodeView(self, didFinishTypingVerificationCode: (sender as UITextField).text)
+    func didFinishTypingVerificationCode(code: String) {
+        self.delegate?.verificationCodeView(self, didFinishTypingVerificationCode: code)
     }
     
     
