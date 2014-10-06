@@ -18,8 +18,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
-    private let CODE_VIEW_MARGIN_LEFT: CGFloat = 25.0
-    private let CODE_VIEW_MARGIN_RIGHT: CGFloat = 25.0
+    private let CODE_VIEW_MARGIN_LEFT: CGFloat = 12.5
+    private let CODE_VIEW_MARGIN_RIGHT: CGFloat = 12.5
     private let CODE_VIEW_HEIGHT: CGFloat = 60.0
     private let CODE_FIELD_KERNEL_ADJUSTMENT_VALUE: CGFloat = 20.0
     private let MAX_NUMBER_OF_DIGITS = 4
@@ -39,6 +39,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     private var resendButtonView: UIView!
     private var resendButton: UIButton!
     private var keyboardFillerView: UIView!
+    private var errorSignView: UIImageView!
     
     private var keyboardHeight: CGFloat = 0.0
     private var phoneNumber: String = ""
@@ -94,7 +95,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
         codeField.keyboardType = UIKeyboardType.PhonePad
         codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
-        codeField.addTarget(self, action: "codeFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "codeFieldDidChange:", name: "UITextViewDidChangeNotification", object: codeField)
         codeView.addSubview(codeField)
         
         resendButtonView = UIView()
@@ -180,20 +181,6 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         super.updateConstraints()
     }
     
-    func viewDidAppear() {
-        codeField.becomeFirstResponder()
-    }
-    
-    
-    //new
-    private var didFinishTypingMobileNumber: Bool = false {
-        didSet {
-            if didFinishTypingMobileNumber  {
-                didFinishTypingVerificationCode(codeField);
-            }
-        }
-    }
-    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
         let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
@@ -208,16 +195,20 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             }
             
         } else {
-            if (numberOfDigitsProvided < MAX_NUMBER_OF_DIGITS) {
-                // Is adding a new digit. We need to replace the bullet
-                var nsStringText = textField.text as NSString
-                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
-                
-                println("numberOfDigitsProvided: \(numberOfDigitsProvided)")
-                if (numberOfDigitsProvided == 3) { //New (TODO: ver com Ecil pq o codeFieldDidChange não funciona5
-                    didFinishTypingMobileNumber = true;
-                }
+            var nsStringText = textField.text as NSString
+            newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
+            if (numberOfDigitsProvided == MAX_NUMBER_OF_DIGITS - 1) {
+                let queue = dispatch_queue_create("com.mugchat.queue", nil)
+                dispatch_async(queue, {
+                    self.didFinishTypingVerificationCode(textField)
+                })
             }
+            
+//            if (numberOfDigitsProvided < MAX_NUMBER_OF_DIGITS) {
+//                // Is adding a new digit. We need to replace the bullet
+//                var nsStringText = textField.text as NSString
+//                newText = nsStringText.stringByReplacingCharactersInRange(NSMakeRange(numberOfDigitsProvided, 1), withString: string)
+//            }
         }
         
         textField.attributedText = makeVerificatioCodeAttributedString(newText)
@@ -233,9 +224,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func resetVerificationCodeField() {
         codeField.attributedText = makeVerificatioCodeAttributedString("\(BULLET)\(BULLET)\(BULLET)\(BULLET)")
+        focusKeyboardOnCodeField()
     }
     
-    private func codeFieldDidChange(textField: UITextField) {
+    func codeFieldDidChange(textField: UITextField) {
         let stringWithDigitsOnly = textField.text.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
         let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
         if (numberOfDigitsProvided == 4) {
@@ -245,6 +237,22 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func focusKeyboardOnCodeField() {
         codeField.becomeFirstResponder()
+    }
+    
+    func didEnterWrongVerificationCode() {
+        resetVerificationCodeField()
+        codeView.backgroundColor = UIColor.deepSea()
+        errorSignView = UIImageView(image: UIImage(named: "Error"))
+        errorSignView.contentMode = .Center
+        codeView.addSubview(errorSignView)
+        
+        errorSignView.mas_updateConstraints( { (make) in
+            make.width.equalTo()(self.errorSignView.image?.size.width)
+            make.centerY.equalTo()(self.codeView)
+            make.right.equalTo()(self.codeView.mas_right).with().offset()(-self.CODE_VIEW_MARGIN_RIGHT)
+        })
+        
+        super.updateConstraints()
     }
     
     

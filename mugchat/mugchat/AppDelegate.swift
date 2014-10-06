@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        let loginViewController = ForgotPasswordViewController(); //LoginViewController()
+        let loginViewController = LoginViewController();
         let navigationViewControler = UINavigationController(rootViewController: loginViewController)
        
         self.window?.rootViewController = navigationViewControler
