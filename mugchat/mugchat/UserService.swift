@@ -122,6 +122,33 @@ public class UserService: MugchatService {
         return user
     }
     
+    
+    // MARK: - Forgot password
+    
+    func forgot(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        let url = HOST + FORGOT_URL
+        let params = [RequestParams.EMAIL : email, RequestParams.PHONE_NUMBER : phoneNumber]
+        
+        request.POST(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                println("AFHttpRequestOperation: \(operation)");
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    
     struct RequestHeaders {
         static let FACEBOOK_ACCESS_TOKEN = "facebook_access_token"
         static let TOKEN = "token"
@@ -134,31 +161,9 @@ public class UserService: MugchatService {
         static let LASTNAME = "lastName"
         static let BIRTHDAY = "birthday"
         static let NICKNAME = "nickname"
-    }
-    
-    
-    // MARK: - Forgot password
-    
-    func forgot(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
-        let url = HOST + FORGOT_URL
-        let params = ["email" : email, "phone_number" : phoneNumber]
+        static let EMAIL = "email"
+        static let PHONE_NUMBER = "phone_number"
         
-        request.POST(url,
-            parameters: params,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                success(nil)
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
-                } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
-                }
-            }
-        )
     }
     
 }
