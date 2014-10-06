@@ -24,7 +24,6 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     }
     
     override func prefersStatusBarHidden() -> Bool {
-        println("prefersStatusBarHidden: \(statusBarHidden)")
         return statusBarHidden
     }
 

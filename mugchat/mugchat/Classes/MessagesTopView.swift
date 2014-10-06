@@ -30,6 +30,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     var delegate: MessagesTopViewDelegate?
     
+    
     // MARK: - Initialization Methods
     
     convenience override init() {
@@ -53,8 +54,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
         self.backgroundColor = UIColor.whiteColor()
         
         backgroundBlurImageView = UIImageView()
-        backgroundBlurImageView.contentMode = UIViewContentMode.Top
-        backgroundBlurImageView.backgroundColor = UIColor.purpleColor()
+        backgroundBlurImageView.contentMode = UIViewContentMode.Center
         self.addSubview(backgroundBlurImageView)
         
         tableView = UITableView()
@@ -173,8 +173,5 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     func setMessagesTopViewBackgroundImage(image: UIImage) {
         backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.whiteColor())
-//        backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.banana())
-        // backgroundBlurImageView.image = image.applyLightEffect()
-//         backgroundBlurImageView.image = image.applyDarkEffect()
     }
 }
