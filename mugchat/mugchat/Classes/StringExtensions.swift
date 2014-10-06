@@ -32,5 +32,9 @@ extension String {
         var passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
         return passwordTest.evaluateWithObject(self)
     }
+    
+    func doubleValue() -> Double? {
+        return NSNumberFormatter().numberFromString(self)!.doubleValue
+    }
 
 }

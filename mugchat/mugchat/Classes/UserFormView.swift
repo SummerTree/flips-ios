@@ -86,7 +86,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         textField.rightViewMode = UITextFieldViewMode.Always
         textField.rightView = UIImageView(image: UIImage(named: "Error"))
         textField.rightView?.hidden = true
-
+        
         textField.delegate = self
         
         if (leftImage != nil) {
@@ -232,7 +232,10 @@ class UserFormView : UIView, UITextFieldDelegate {
             } else if (numberOfDigitsProvided < BIRTHDAY_MAX_NUMBER_OF_DIGITS) {
                 stringWithDigitsOnly = "\(stringWithDigitsOnly)\(string)"
             }
-            textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
+            
+            if (self.isNewDateInformedValie(stringWithDigitsOnly)) {
+                textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
+            }
         }
         
         return shouldChangeTextFieldText
@@ -324,7 +327,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         dateStringFormatter.dateFormat = "MM-dd-yyyy"
         dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         let birthdayDate : NSDate! = dateStringFormatter.dateFromString(birthday)
-
+        
         if (birthdayDate == nil) {
             return false
         }
@@ -333,6 +336,64 @@ class UserFormView : UIView, UITextFieldDelegate {
         var ageComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.CalendarUnitYear, fromDate: birthdayDate, toDate: now, options: NSCalendarOptions.allZeros)
         
         return (ageComponents.year >= 13)
+    }
+    
+    func isNewDateInformedValie(newDateString: String) -> Bool {
+        var position = 0
+        var lastCharacter = ""
+        for character in newDateString {
+            var characterDoubleValue = String(character).doubleValue()
+            if (position == 0) {
+                if (characterDoubleValue > 1) {
+                    return false
+                }
+            } else if (position == 1) {
+                if (lastCharacter == "0") {
+                    if (characterDoubleValue == 0) {
+                        return false
+                    }
+                } else {
+                    if (characterDoubleValue > 2) {
+                        return false
+                    }
+                }
+            } else if (position == 2) {
+                if (characterDoubleValue > 3) {
+                    return false
+                }
+            } else if (position == 3) {
+                if (lastCharacter == "0") {
+                    if (characterDoubleValue == 0) {
+                        return false
+                    }
+                } else if (lastCharacter == "3") {
+                    if (characterDoubleValue > 1) {
+                        return false
+                    }
+                }
+            } else if (position == 4) {
+                if (characterDoubleValue < 1 || characterDoubleValue > 2) {
+                    return false
+                }
+            } else if (position == 5) {
+                if (lastCharacter == "1") {
+                    if (characterDoubleValue != 9) {
+                        return false
+                    }
+                } else {
+                    if (characterDoubleValue != 0) {
+                        return false
+                    }
+                }
+            } else if (position == 6) {
+                // any value is possible
+            } else if (position == 7) {
+                // any value is possible
+            }
+            lastCharacter = String(character)
+            position++
+        }
+        return true
     }
     
     
