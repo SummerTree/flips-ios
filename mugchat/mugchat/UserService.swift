@@ -143,13 +143,12 @@ public class UserService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + FORGOT_URL
-        let params = ["email" : email, "phoneNumber" : phoneNumber]
+        let params = ["email" : email, "phone_number" : phoneNumber]
         
         request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                //let user = self.parseForgotResponse(responseObject)
-                //success()
+                success(nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {

@@ -14,6 +14,8 @@ import UIKit
 
 class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate {
     
+    private let US_CODE = "+1"
+    
     var forgotPasswordView: ForgotPasswordView!
     
     private var username: String!
@@ -38,6 +40,8 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
     
     // MARK: - ForgotPasswordViewDelegate Methods
     func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
+        let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
         
         UserService.sharedInstance.forgot(username, phoneNumber: mobileNumber, success: { (user) -> Void in
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
