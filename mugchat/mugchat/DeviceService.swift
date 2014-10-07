@@ -70,7 +70,7 @@ public class DeviceService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        verifyURL = verifyURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + verifyURL
         let params = [RequestParams.VERIFICATION_CODE : verificationCode]
         

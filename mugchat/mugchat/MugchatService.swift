@@ -12,6 +12,6 @@
 
 public class MugchatService : NSObject {
     
+    //let HOST: String = "http://192.168.40.181:1337"
     let HOST: String = "http://mugchat-dev.arctouch.com"
-    
 }

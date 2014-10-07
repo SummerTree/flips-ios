@@ -90,7 +90,6 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     println("Error verifying device")
                     return ()
                 }
-                // go to inbox
                 var inboxViewController = InboxViewController()
                 self.navigationController?.pushViewController(inboxViewController, animated: true)
             },
@@ -120,12 +119,12 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         self.phoneNumber = phoneNumber
         
         
-//        let userId = AuthenticationHelper.sharedInstance.userInSession.id!
-//        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-//        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-//        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
-//        
-//        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
+        let userId = AuthenticationHelper.sharedInstance.userInSession.id!
+        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
+        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
+        
+        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
     }
     
 }

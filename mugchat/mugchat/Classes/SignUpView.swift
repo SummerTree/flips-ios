@@ -90,6 +90,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         if (userFormView.isAllFieldsValids()) {
+            self.dismissKeyboard()
             var userData = userFormView.getUserData()
             delegate?.signUpView(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
         }
@@ -114,7 +115,6 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             messagesTopView.showInvalidPasswordMessage()
             self.showTopMessagesView()
         }
-        
     }
     
     func userFormView(userFormView: UserFormView, didValidateBirthdayWithSuccess success: Bool) {
@@ -162,7 +162,8 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     func handlePan(recognizer:UIPanGestureRecognizer) {
         
         let translation = recognizer.translationInView(self)
-        if ((recognizer.view!.center.y <= self.messagesTopView.center.y) && (recognizer.view!.center.y + translation.y <= (recognizer.view!.frame.size.height/2))) {
+        let isMessagesTopViewAboveMaximumY = (recognizer.view!.center.y + translation.y) <= (recognizer.view!.frame.size.height/2)
+        if (isMessagesTopViewAboveMaximumY) {
             // Don't move to bottom
             recognizer.view!.center = CGPoint(x:recognizer.view!.center.x, y:recognizer.view!.center.y + translation.y)
         }
@@ -187,6 +188,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             }
             self.layoutIfNeeded()
         })
+    }
+    
+    func dismissKeyboard() {
+        userFormView.dismissKeyboard()
     }
     
     

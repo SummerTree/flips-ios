@@ -118,7 +118,15 @@ class LoginView : UIView, UITextFieldDelegate {
         self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
     }
     
+    func viewWillAppear() {
+        self.isInformedWrongPassword = false
+        self.forgotPasswordButton.alpha = 0.0
+        self.emailTextField.rightView?.alpha = 0.0
+        self.passwordTextField.rightView?.alpha = 0.0
+    }
+    
     func viewWillDisappear() {
+        
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
@@ -599,4 +607,17 @@ class LoginView : UIView, UITextFieldDelegate {
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
+}
+
+
+// MARK: View Delegate
+
+protocol LoginViewDelegate {
+    
+    func loginViewDidTapTermsOfUse(loginView: LoginView!)
+    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
+    func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String)
+    func loginViewDidTapFacebookSignInButton(loginView: LoginView!)
+    func loginViewDidTapSignUpButton(loginView: LoginView!)
+    func loginViewDidTapForgotPassword(loginView: LoginView!, username: String)
 }
