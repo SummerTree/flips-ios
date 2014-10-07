@@ -21,8 +21,6 @@ public class AuthenticationHelper: NSObject {
             if (newUser != nil) {
                 self.userInSession = newUser
                 saveAuthenticatedUsername(newUser.username!)
-            } else {
-                removeAuthenticatedUsername()
             }
         }
     }
