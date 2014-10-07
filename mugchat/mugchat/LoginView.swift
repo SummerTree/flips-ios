@@ -118,7 +118,15 @@ class LoginView : UIView, UITextFieldDelegate {
         self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
     }
     
+    func viewWillAppear() {
+        self.isInformedWrongPassword = false
+        self.forgotPasswordButton.alpha = 0.0
+        self.emailTextField.rightView?.alpha = 0.0
+        self.passwordTextField.rightView?.alpha = 0.0
+    }
+    
     func viewWillDisappear() {
+        
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
