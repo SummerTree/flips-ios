@@ -31,7 +31,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        verificationCodeView.willDisappear()
+        verificationCodeView.viewWillDisappear()
     }
     
     // MARK: - VerificationCodeViewDelegate Methods
