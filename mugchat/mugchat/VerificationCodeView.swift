@@ -54,8 +54,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         self.phoneNumber = phoneNumber
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {

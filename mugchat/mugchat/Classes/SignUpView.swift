@@ -90,6 +90,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         if (userFormView.isAllFieldsValids()) {
+            self.dismissKeyboard()
             var userData = userFormView.getUserData()
             delegate?.signUpView(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
         }
@@ -187,6 +188,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             }
             self.layoutIfNeeded()
         })
+    }
+    
+    func dismissKeyboard() {
+        userFormView.dismissKeyboard()
     }
     
     
