@@ -15,6 +15,7 @@ import UIKit
 class SettingsView: UIView {
     
     private let logoutButton = UIButton()
+    private let LOGOUT_BUTTON_HEIGHT:CGFloat = 92.0
     
     var delegate: SettingsViewDelegate?
     
@@ -43,7 +44,7 @@ class SettingsView: UIView {
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
             make.bottom.equalTo()(self)
-            make.height.equalTo()(92)
+            make.height.equalTo()(self.LOGOUT_BUTTON_HEIGHT)
         }
     }
     

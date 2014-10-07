@@ -16,6 +16,7 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     
     let settingsView = SettingsView()
     
+    
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {
@@ -30,6 +31,7 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     
     
     // MARK: - Settings View Delegate
+    
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
         AuthenticationHelper.sharedInstance.userInSession = nil
         FBSession.activeSession().closeAndClearTokenInformation()
