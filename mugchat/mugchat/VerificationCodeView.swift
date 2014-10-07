@@ -57,6 +57,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+    }
+    
     func addSubviews() {
         
         navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Verification Code", showBackButton: true)
