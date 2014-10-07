@@ -26,6 +26,7 @@
 		57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
 		70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
 		7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
+		7033584619E4160B0030CF11 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584519E4160B0030CF11 /* SettingsView.swift */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
 		7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */; };
@@ -94,6 +95,7 @@
 		57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeView.swift; sourceTree = "<group>"; };
 		70057E9319DADF59004343ED /* DeviceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHelper.swift; sourceTree = "<group>"; };
+		7033584519E4160B0030CF11 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
 		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
@@ -243,6 +245,14 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		7033584419E415E60030CF11 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7033584519E4160B0030CF11 /* SettingsView.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,8 +263,8 @@
 				704E110D19D0934700D2BB88 /* Login */,
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
 				7A0D6CEC19D4961700E39A1B /* Settings */,
-				70BD0E7019E30C5100FE8652 /* Splash Screen */,
 				7A9619E419DC2A55005E4343 /* SignUp */,
+				70BD0E7019E30C5100FE8652 /* Splash Screen */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
 				57A3A6BF19D5E4C00043790E /* Verification */,
 				70B560A019D995D500FE4C34 /* Web View */,
@@ -269,8 +279,9 @@
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
 				7056FE5719D8822F00BD6571 /* Privacy Policy */,
-				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
+				7033584419E415E60030CF11 /* Settings */,
 				7A9619E719DC2CD9005E4343 /* SignUp */,
+				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
 				57A3A6BC19D5E2E70043790E /* Verification */,
 				70B560A319D996B900FE4C34 /* Web View */,
@@ -672,6 +683,7 @@
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				5707186119D1A8FC0069064F /* Room.swift in Sources */,
 				5707186719D1AF110069064F /* UserService.swift in Sources */,
+				7033584619E4160B0030CF11 /* SettingsView.swift in Sources */,
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */,
 				7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */,
