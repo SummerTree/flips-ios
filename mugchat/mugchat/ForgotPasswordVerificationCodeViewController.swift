@@ -41,8 +41,13 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
             failure: { (mugError) in
-                println("Device code verification error: " + mugError!.error!)
-        })
+                if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+                    self.verificationCodeView.didEnterWrongVerificationCode()
+                } else {
+                    println("Device code verification error: " + mugError!.error!)
+                    self.verificationCodeView.resetVerificationCodeField()
+                }
+            })
     }
     
     

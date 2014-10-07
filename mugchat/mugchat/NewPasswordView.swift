@@ -157,9 +157,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             //make.height.equalTo()(self.hintView)
         })
         
-        //self.bottomView.backgroundColor = UIColor.redColor()
-        //self.doneButton.backgroundColor = UIColor.greenColor()
-        
         doneButton.mas_updateConstraints { (make) in
             make.centerX.equalTo()(self.bottomView)
             //make.centerY.equalTo()(self.bottomView)
