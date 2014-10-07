@@ -596,3 +596,15 @@ class LoginView : UIView, UITextFieldDelegate {
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
 }
+
+
+// MARK: View Delegate
+
+protocol LoginViewDelegate {
+    
+    func loginViewDidTapTermsOfUse(loginView: LoginView!)
+    func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
+    func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String)
+    func loginViewDidTapFacebookSignInButton(loginView: LoginView!)
+    func loginViewDidTapSignUpButton(loginView: LoginView!)
+}
