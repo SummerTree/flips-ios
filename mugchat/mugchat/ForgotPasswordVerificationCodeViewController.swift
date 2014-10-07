@@ -16,31 +16,45 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
     override init(phoneNumber: String!) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
-        
-        
-        //let userId = AuthenticationHelper.sharedInstance.userInSession.id!
-        //let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: //NSStringCompareOptions.LiteralSearch, range: nil)
-        //let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-        //let token = DeviceHelper.sharedInstance.retrieveDeviceToken()!
-        
-        //createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
     }
     
     
+    // MARK: - VerificationCodeViewDelegate Methods
+    
     override func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
-        
-        //TODO: extract method on the superclass:
-        /*if (verificationCode != self.verificationCode) {
-            self.retryCount++
-            verificationCodeView.resetVerificationCodeField()
-            verificationCodeView.showKeyboard()
-            if (self.retryCount > 2) {
-                self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
-            }
-        } else {*/
-            var newPasswordViewController = NewPasswordViewController()
-            self.navigationController?.pushViewController(newPasswordViewController, animated: true)
-        //}
+        self.verifyUserDevice(self.phoneNumber, verificationCode: verificationCode)
+    }
+    
+    //TODO
+    //func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
+        //verificationCodeView.resetVerificationCodeField()
+        //verificationCodeView.focusKeyboardOnCodeField()
+        //self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
+    //}
+    
+    private func verifyUserDevice(phoneNumber: String, verificationCode: String) {
+        UserService.sharedInstance.verifyDevice(phoneNumber,
+            verificationCode: verificationCode,
+            success: { (device) in
+                if (device == nil) {
+                    println("Error verifying device")
+                    return ()
+                }
+                
+                var userDevice: Device! = device;
+                var user: User! = userDevice.user
+                
+                var newPasswordViewController = NewPasswordViewController(user: user)
+                self.navigationController?.pushViewController(newPasswordViewController, animated: true)
+            },
+            failure: { (mugError) in
+                //if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+                    //self.verificationCodeView.didEnterWrongVerificationCode()
+                //} else {
+                    println("Device code verification error: " + mugError!.error!)
+                    //self.verificationCodeView.resetVerificationCodeField()
+                //}
+        })
     }
     
     

@@ -16,8 +16,19 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
     
     var newPasswordView: NewPasswordView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private var user: User!
+    
+    init(user: User) {
+        super.init(nibName: nil, bundle: nil)
+        self.user = user
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        super.loadView()
         
         newPasswordView = NewPasswordView()
         newPasswordView.delegate = self
@@ -28,8 +39,14 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
     // MARK: - NewPasswordViewDelegate Methods
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
         //TODO: save new password to the back-end, and return user to login window to sign in with email address and new password.
-        //var loginViewController = LoginViewController()
-        //self.navigationController?.pushViewController(loginViewController, animated: true)
+        UserService.sharedInstance.updatePassword(user,
+            success: { (user) -> Void in
+                //var loginViewController = LoginViewController()
+                //self.navigationController?.pushViewController(loginViewController, animated: true)
+                println("updatePassword success")
+            }) { (mugError) -> Void in
+                println(mugError!.error)
+        }
     }
   
     func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!) {

@@ -32,11 +32,10 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     var hintView: UIView!
     var hintText: UILabel!
-    var mobileNumberView: UIView!
+    var passwordView: UIView!
     var phoneImageView: UIImageView!
     var passwordField: UITextField!
     var bottomView: UIView!
-    //var spamText: UILabel!
     var doneButton: UIButton!
     var keyboardFillerView: UIView!
     var keyboardHeight: CGFloat = 0.0
@@ -72,25 +71,26 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         hintText.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         hintView.addSubview(hintText)
         
-        mobileNumberView = UIView()
-        mobileNumberView.contentMode = .Center
-        mobileNumberView.backgroundColor = UIColor.lightSemitransparentBackground()
-        self.addSubview(mobileNumberView)
+        passwordView = UIView()
+        passwordView.contentMode = .Center
+        passwordView.backgroundColor = UIColor.lightSemitransparentBackground()
+        self.addSubview(passwordView)
         
         phoneImageView = UIImageView(image: UIImage(named: "Password"))
         phoneImageView.contentMode = .Center
-        mobileNumberView.addSubview(phoneImageView)
+        passwordView.addSubview(phoneImageView)
         
         passwordField = UITextField()
         passwordField.delegate = self
         passwordField.secureTextEntry = true;
-        passwordField.becomeFirstResponder()
+        //passwordField.becomeFirstResponder()
+        passwordField.sizeToFit()
         passwordField.textColor = UIColor.whiteColor()
         passwordField.tintColor = UIColor.whiteColor()
         passwordField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         passwordField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Password", comment: "New Password"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         passwordField.keyboardType = UIKeyboardType.Default
-        mobileNumberView.addSubview(passwordField)
+        passwordView.addSubview(passwordField)
         
         bottomView = UIView()
         bottomView.contentMode = .Center
@@ -101,7 +101,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         doneButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Done", comment: "Done"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
         doneButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
         doneButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
-        doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
+        //doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
         doneButton.addTarget(self, action: "didTapDoneButton", forControlEvents: .TouchUpInside)
         bottomView.addSubview(doneButton)
         
@@ -122,15 +122,16 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
+            //make.height.equalTo()(self.HINT_VIEW_HEIGHT)
         }
         
         hintText.mas_updateConstraints { (make) in
-            make.centerY.equalTo()(self.hintView)
             make.centerX.equalTo()(self.hintView)
+            //make.centerY.equalTo()(self.hintView)
+            make.top.equalTo()(self.hintView)
         }
         
-        mobileNumberView.mas_updateConstraints { (make) in
+        passwordView.mas_updateConstraints { (make) in
             make.top.equalTo()(self.hintView.mas_bottom)
             make.height.equalTo()(self.MOBILE_NUMBER_VIEW_HEIGHT)
             make.left.equalTo()(self)
@@ -138,21 +139,23 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         }
         
         phoneImageView.mas_updateConstraints { (make) in
-            make.left.equalTo()(self.mobileNumberView).with().offset()(self.MOBILE_NUMBER_MARGIN_LEFT)
-            make.centerY.equalTo()(self.mobileNumberView)
+            make.left.equalTo()(self.passwordView).with().offset()(self.MOBILE_NUMBER_MARGIN_LEFT)
+            make.centerY.equalTo()(self.passwordView)
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
         passwordField.mas_updateConstraints { (make) in
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
-            make.centerY.equalTo()(self.mobileNumberView)
+            make.right.equalTo()(self).with().offset()(-self.MOBILE_TEXT_FIELD_LEADING)
+            make.centerY.equalTo()(self.passwordView)
         }
         
         bottomView.mas_updateConstraints({ (make) in
-            make.top.equalTo()(self.mobileNumberView.mas_bottom)
+            make.top.equalTo()(self.passwordView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
             //make.height.equalTo()(self.HINT_VIEW_HEIGHT)
+            make.height.equalTo()(self.hintView)
         })
         
         //self.bottomView.backgroundColor = UIColor.redColor()
@@ -160,8 +163,8 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         
         doneButton.mas_updateConstraints { (make) in
             make.centerX.equalTo()(self.bottomView)
-            //make.centerY.equalTo()(self.bottomView)
-            make.top.equalTo()(self.DONE_BUTTON_MARGIN_TOP)
+            make.centerY.equalTo()(self.bottomView)
+            //make.top.equalTo()(self.DONE_BUTTON_MARGIN_TOP)
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in

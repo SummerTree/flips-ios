@@ -21,6 +21,7 @@ public class UserService: MugchatService {
     let FORGOT_URL: String = "/user/forgot"
     let VERIFY_URL: String = "/user/verify"
     let UPLOAD_PHOTO_URL: String = "/user/{{user_id}}/photo"
+    let UPDATE_USER_URL: String = "/user/{{user_id}}"
     
     public class var sharedInstance : UserService {
     struct Static {
@@ -137,7 +138,6 @@ public class UserService: MugchatService {
                 success(nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                println("AFHttpRequestOperation: \(operation)");
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     failure(MugError(error: response["error"] as String!, details:nil))
@@ -148,6 +148,77 @@ public class UserService: MugchatService {
         )
     }
     
+    
+    // MARK: - Verify a Device
+    
+    func verifyDevice(phoneNumber: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        
+        var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{phone_number}}", withString: phoneNumber, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{verification_code}}", withString: verificationCode, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        
+        let url = HOST + verifyURL
+        let params = [RequestParams.VERIFICATION_CODE : verificationCode]
+        
+        request.POST(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let device = self.parseDeviceResponse(responseObject)
+                success(device)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    private func parseDeviceResponse(response: AnyObject) -> Device? {
+        var device = Device(object: response)
+        return device
+    }
+    
+    
+    // MARK: - UPDATE password
+    
+    func updatePassword(user: User, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+
+        let updateURL = UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: user.id!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let url = HOST + updateURL
+        
+        let params = []
+        
+        //TODO:
+        //body:
+        //{
+        //    "password": "newpassword"
+        //}
+        
+        request.PUT(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(MugError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    
+    // MARK: - Requests constants
     
     struct RequestHeaders {
         static let FACEBOOK_ACCESS_TOKEN = "facebook_access_token"
@@ -163,6 +234,7 @@ public class UserService: MugchatService {
         static let NICKNAME = "nickname"
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
+        static let VERIFICATION_CODE = "verification_code"
         
     }
     
