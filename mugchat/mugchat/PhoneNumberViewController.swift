@@ -16,16 +16,30 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     var phoneNumberView: PhoneNumberView!
         
-    override func loadView() {
-        super.loadView()
+//    override func loadView() {
+//        super.loadView()
+//        phoneNumberView = PhoneNumberView()
+//        phoneNumberView.delegate = self
+//        self.view = phoneNumberView
+//    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         phoneNumberView = PhoneNumberView()
         phoneNumberView.delegate = self
         self.view = phoneNumberView
     }
+
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        phoneNumberView.viewDidAppear()
         phoneNumberView.focusKeyboardOnMobileNumberField()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        phoneNumberView.viewWillDisappear()
     }
     
     

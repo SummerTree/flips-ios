@@ -43,8 +43,15 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        self.updateConstraints()
+    }
+    
+    func viewDidAppear() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {
@@ -102,7 +109,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     override func updateConstraints() {
         
-        navigationBar.mas_makeConstraints { (make) -> Void in
+        navigationBar.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -151,6 +158,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in
+            println(self.keyboardHeight)
             make.top.equalTo()(self.spamView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -206,12 +214,11 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     // MARK: - Notifications
     
-    func keyboardOnScreen(notification: NSNotification) {
-        if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            keyboardHeight = keyboardFrame.height
-            updateConstraints()
-        }
+    func keyboardDidShow(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        keyboardHeight = keyboardFrame.height
+        updateConstraints()
     }
     
     // MARK: - Buttons delegate
