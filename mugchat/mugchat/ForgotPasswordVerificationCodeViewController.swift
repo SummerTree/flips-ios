@@ -25,13 +25,6 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
         self.verifyUserDevice(self.phoneNumber, verificationCode: verificationCode)
     }
     
-    //TODO
-    //func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
-        //verificationCodeView.resetVerificationCodeField()
-        //verificationCodeView.focusKeyboardOnCodeField()
-        //self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.id!, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
-    //}
-    
     private func verifyUserDevice(phoneNumber: String, verificationCode: String) {
         UserService.sharedInstance.verifyDevice(phoneNumber,
             verificationCode: verificationCode,
@@ -48,12 +41,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
             failure: { (mugError) in
-                //if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
-                    //self.verificationCodeView.didEnterWrongVerificationCode()
-                //} else {
-                    println("Device code verification error: " + mugError!.error!)
-                    //self.verificationCodeView.resetVerificationCodeField()
-                //}
+                println("Device code verification error: " + mugError!.error!)
         })
     }
     

@@ -48,7 +48,6 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (mugError) -> Void in
             println(mugError!.error)
-            //self.forgotPasswordView.showValidationErrorInCredentialFields()
         }
     }
     
