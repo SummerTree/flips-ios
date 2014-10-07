@@ -410,4 +410,15 @@ class UserFormView : UIView, UITextFieldDelegate {
     func isAllFieldsValids() -> Bool {
         return self.validateFields()
     }
+    
+    
+    // MARK: - Keyboard handler
+    
+    func dismissKeyboard() {
+        firstNameTextField.resignFirstResponder()
+        lastNameTextField.resignFirstResponder()
+        emailTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
+        birthdayTextField.resignFirstResponder()
+    }
 }

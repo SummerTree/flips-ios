@@ -43,8 +43,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {
@@ -99,6 +98,9 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         keyboardFillerView = UIView()
         self.addSubview(keyboardFillerView)
     }
+    
+    
+    // MARK: - Overridden Methods
     
     override func updateConstraints() {
         
@@ -204,6 +206,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         mobileNumberField.becomeFirstResponder()
     }
     
+    
     // MARK: - Notifications
     
     func keyboardOnScreen(notification: NSNotification) {
@@ -213,6 +216,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
             updateConstraints()
         }
     }
+    
     
     // MARK: - Buttons delegate
     
