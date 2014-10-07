@@ -176,7 +176,7 @@ public class UserService: MugchatService {
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        var device = Device(object: response)
+        var device = Device(userDevice: response)
         return device
     }
     
