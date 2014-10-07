@@ -23,8 +23,13 @@ class SplashScreenView: UIView {
         self.makeConstraints()
     }
     
-    func viewDidLoad() {
-        self.delegate?.splashScreenViewAttemptLoginWithFacebook(self)
+    func viewWillAppear() {
+        if (FBSession.activeSession().state == FBSessionState.CreatedTokenLoaded) {
+            self.delegate?.splashScreenViewAttemptLoginWithFacebook(self)
+        } else {
+            self.delegate?.splashScreenViewAttemptLogin(self)
+        }
+        
     }
     
     func addSubviews() {
@@ -56,4 +61,5 @@ class SplashScreenView: UIView {
 
 protocol SplashScreenViewDelegate {
     func splashScreenViewAttemptLoginWithFacebook(sender: SplashScreenView)
+    func splashScreenViewAttemptLogin(sender: SplashScreenView)
 }

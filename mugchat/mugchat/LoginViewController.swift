@@ -16,6 +16,11 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        loginView.viewWillAppear()
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         loginView.viewWillDisappear()
@@ -81,10 +86,11 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             
             authenticateWithFacebook(FBSession.activeSession().accessTokenData.accessToken)
         }
+        
         // If the session state is not any of the two "open" states when the button is clicked
-        else {
-        // Open a session showing the user the login UI
-        // You must ALWAYS ask for public_profile permissions when opening a session
+        if (FBSession.activeSession().state != FBSessionState.Closed) {
+            // Open a session showing the user the login UI
+            // You must ALWAYS ask for public_profile permissions when opening a session
             var scope = ["public_profile", "email", "user_birthday", "user_friends"]
             FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
                 completionHandler: { (session, state, error) -> Void in

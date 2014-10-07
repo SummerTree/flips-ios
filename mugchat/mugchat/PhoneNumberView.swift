@@ -107,6 +107,9 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         self.addSubview(keyboardFillerView)
     }
     
+    
+    // MARK: - Overridden Methods
+    
     override func updateConstraints() {
         
         navigationBar.mas_updateConstraints { (make) -> Void in
@@ -212,6 +215,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         mobileNumberField.becomeFirstResponder()
     }
     
+    
     // MARK: - Notifications
     
     func keyboardDidShow(notification: NSNotification) {
@@ -220,6 +224,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         keyboardHeight = keyboardFrame.height
         updateConstraints()
     }
+    
     
     // MARK: - Buttons delegate
     
