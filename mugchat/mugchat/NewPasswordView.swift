@@ -83,7 +83,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         passwordField = UITextField()
         passwordField.delegate = self
         passwordField.secureTextEntry = true;
-        //passwordField.becomeFirstResponder()
         passwordField.sizeToFit()
         passwordField.textColor = UIColor.whiteColor()
         passwordField.tintColor = UIColor.whiteColor()
@@ -101,7 +100,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         doneButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Done", comment: "Done"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
         doneButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
         doneButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
-        //doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
+        doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
         doneButton.addTarget(self, action: "didTapDoneButton", forControlEvents: .TouchUpInside)
         bottomView.addSubview(doneButton)
         
@@ -122,13 +121,13 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-            //make.height.equalTo()(self.HINT_VIEW_HEIGHT)
+            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
         }
         
         hintText.mas_updateConstraints { (make) in
             make.centerX.equalTo()(self.hintView)
-            //make.centerY.equalTo()(self.hintView)
-            make.top.equalTo()(self.hintView)
+            make.centerY.equalTo()(self.hintView)
+            //make.top.equalTo()(self.hintView)
         }
         
         passwordView.mas_updateConstraints { (make) in
@@ -154,8 +153,8 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
             make.top.equalTo()(self.passwordView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-            //make.height.equalTo()(self.HINT_VIEW_HEIGHT)
-            make.height.equalTo()(self.hintView)
+            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
+            //make.height.equalTo()(self.hintView)
         })
         
         //self.bottomView.backgroundColor = UIColor.redColor()
@@ -163,8 +162,8 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         
         doneButton.mas_updateConstraints { (make) in
             make.centerX.equalTo()(self.bottomView)
-            make.centerY.equalTo()(self.bottomView)
-            //make.top.equalTo()(self.DONE_BUTTON_MARGIN_TOP)
+            //make.centerY.equalTo()(self.bottomView)
+            make.top.equalTo()(self.DONE_BUTTON_MARGIN_TOP)
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in

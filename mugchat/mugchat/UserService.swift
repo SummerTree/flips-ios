@@ -183,20 +183,14 @@ public class UserService: MugchatService {
     
     // MARK: - UPDATE password
     
-    func updatePassword(user: User, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func updatePassword(userId: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
 
-        let updateURL = UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: user.id!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let updateURL = UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + updateURL
         
-        let params = []
-        
-        //TODO:
-        //body:
-        //{
-        //    "password": "newpassword"
-        //}
+        let params = ["password" : "Password3"]
         
         request.PUT(url,
             parameters: params,
