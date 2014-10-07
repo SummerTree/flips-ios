@@ -21,6 +21,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.navigationBarHidden = true
+        splashScreenView.viewWillAppear()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -31,7 +32,6 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         super.viewDidLoad()
         
         splashScreenView.delegate = self
-        splashScreenView.viewDidLoad()
         
         self.view = splashScreenView
     }
@@ -40,17 +40,14 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     // MARK: SplashScreenViewDelegate methods
     
     func splashScreenViewAttemptLoginWithFacebook(sender: SplashScreenView) {
-        // Whenever a person opens the app, check for a cached session
-        if (FBSession.activeSession().state == FBSessionState.CreatedTokenLoaded) {
-            
-            var success = FBSession.openActiveSessionWithAllowLoginUI(false)
-            println("User is already authenticated with Facebook? \(success)")
-            if (success) {
-                openInboxViewController()
-                return
-            }
+        var success = FBSession.openActiveSessionWithAllowLoginUI(false)
+        println("User is already authenticated with Facebook? \(success)")
+        if (success) {
+            openInboxViewController()
         }
-        
+    }
+    
+    func splashScreenViewAttemptLogin(sender: SplashScreenView) {
         openLoginViewController()
     }
     

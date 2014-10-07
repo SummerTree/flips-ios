@@ -12,17 +12,33 @@
 
 import Foundation
 
-class SettingsViewController : MugChatViewController {
+class SettingsViewController : MugChatViewController, SettingsViewDelegate {
+    
+    let settingsView = SettingsView()
     
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view = settingsView
+        self.settingsView.delegate = self
         self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
-        self.view.backgroundColor = UIColor.deepSea()
         
         self.setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    
+    // MARK: - Settings View Delegate
+    func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
+        AuthenticationHelper.sharedInstance.userInSession = nil
+        FBSession.activeSession().closeAndClearTokenInformation()
+        FBSession.activeSession().close()
+        FBSession.setActiveSession(nil)
+        
+        var navigationController: UINavigationController = self.presentingViewController as UINavigationController
+        navigationController.popViewControllerAnimated(false)
+        self.dismissViewControllerAnimated(true, completion:nil)
     }
     
     override func viewWillAppear(animated: Bool) {
