@@ -48,6 +48,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func viewDidAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        mobileNumberField.becomeFirstResponder()
     }
     
     func viewWillDisappear() {
@@ -82,7 +83,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         mobileNumberField = UITextField()
         mobileNumberField.delegate = self
-        mobileNumberField.becomeFirstResponder()
         mobileNumberField.textColor = UIColor.whiteColor()
         mobileNumberField.tintColor = UIColor.whiteColor()
         mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
