@@ -155,11 +155,8 @@ public class UserService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         
-        var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{phone_number}}", withString: phoneNumber, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{verification_code}}", withString: verificationCode, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        
-        let url = HOST + verifyURL
-        let params = [RequestParams.VERIFICATION_CODE : verificationCode]
+        let url = HOST + VERIFY_URL
+        let params = [RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode]
         
         request.POST(url,
             parameters: params,
