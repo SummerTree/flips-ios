@@ -59,7 +59,6 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
     var runtimeErrorHandlingObserver: AnyObject!
     
     
-    
     // MARK: - Initialization Methods
     
     init(interfaceOrientation: AVCaptureVideoOrientation) {

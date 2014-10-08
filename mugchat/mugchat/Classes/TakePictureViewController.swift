@@ -12,7 +12,7 @@
 
 import AVFoundation
 
-class TakePictureViewController : MugChatViewController, TakePictureViewDelegate, ConfirmPictureViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class TakePictureViewController : MugChatViewController, TakePictureViewDelegate, ConfirmPictureViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private var takePictureView: TakePictureView!
     private var confirmPictureView: ConfirmPictureView!
@@ -77,12 +77,21 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
     func takePictureViewDidTapGalleryButton(takePictureView: TakePictureView) {
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
             var imagePickerController = UIImagePickerController()
+            var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            imagePickerController.navigationBar.barTintColor = UIColor.mugOrange()
+            imagePickerController.navigationBar.translucent = false
+            imagePickerController.navigationBar.tintColor = UIColor.whiteColor()
+            imagePickerController.navigationBar.titleTextAttributes = textAttributes
             imagePickerController.delegate = self
             imagePickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
             imagePickerController.allowsEditing = false
             
             self.presentViewController(imagePickerController, animated: true, completion: nil)
         }
+    }
+    
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
