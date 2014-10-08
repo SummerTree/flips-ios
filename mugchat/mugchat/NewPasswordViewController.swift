@@ -17,10 +17,14 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
     var newPasswordView: NewPasswordView!
     
     private var user: User!
+    private var phoneNumber: String!;
+    private var verificationCode: String!
     
-    init(user: User) {
+    init(user: User, phoneNumber: String, verificationCode: String) {
         super.init(nibName: nil, bundle: nil)
         self.user = user
+        self.verificationCode = verificationCode;
+        self.phoneNumber = phoneNumber;
     }
     
     required init(coder: NSCoder) {
@@ -38,12 +42,11 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
     
     // MARK: - NewPasswordViewDelegate Methods
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
-        //TODO: save new password to the back-end, and return user to login window to sign in with email address and new password.
-        UserService.sharedInstance.updatePassword(user.id!, newPassword: newPasswordView.passwordField.text!,
+        UserService.sharedInstance.updatePassword(self.user, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
             success: { (user) -> Void in
-                //var loginViewController = LoginViewController()
-                //self.navigationController?.pushViewController(loginViewController, animated: true)
                 println("updatePassword success")
+                var loginViewController = LoginViewController()
+                self.navigationController?.pushViewController(loginViewController, animated: true)
             }) { (mugError) -> Void in
                 println(mugError!.error)
         }

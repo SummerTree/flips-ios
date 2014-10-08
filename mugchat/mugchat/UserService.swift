@@ -21,7 +21,7 @@ public class UserService: MugchatService {
     let FORGOT_URL: String = "/user/forgot"
     let VERIFY_URL: String = "/user/verify"
     let UPLOAD_PHOTO_URL: String = "/user/{{user_id}}/photo"
-    let UPDATE_USER_URL: String = "/user/{{user_id}}"
+    let UPDATE_PASSWORD_URL: String = "/user/password"
     
     public class var sharedInstance : UserService {
     struct Static {
@@ -126,7 +126,7 @@ public class UserService: MugchatService {
     
     // MARK: - Forgot password
     
-    func forgot(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func forgotPassword(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + FORGOT_URL
@@ -183,14 +183,12 @@ public class UserService: MugchatService {
     
     // MARK: - UPDATE password
     
-    func updatePassword(userId: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func updatePassword(user: User, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
 
-        let updateURL = UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let url = HOST + updateURL
-        
-        let params = ["password" : "Password3"]
+        let url = HOST + UPDATE_PASSWORD_URL
+        let params = [RequestParams.EMAIL : user.username!, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
         
         request.PUT(url,
             parameters: params,
@@ -226,7 +224,6 @@ public class UserService: MugchatService {
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
         static let VERIFICATION_CODE = "verification_code"
-        
     }
     
 }

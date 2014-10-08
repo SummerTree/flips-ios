@@ -96,8 +96,8 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         self.addSubview(bottomView)
         
         doneButton = UIButton()
-        doneButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        doneButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Done", comment: "Done"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
+        doneButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        doneButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Done", comment: "Done"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
         doneButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
         doneButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
         doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
