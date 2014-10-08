@@ -25,7 +25,13 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        phoneNumberView.viewDidAppear()
         phoneNumberView.focusKeyboardOnMobileNumberField()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        phoneNumberView.viewWillDisappear()
     }
     
     

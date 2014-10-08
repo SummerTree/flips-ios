@@ -57,6 +57,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+    }
+    
     func addSubviews() {
         
         navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Verification Code", showBackButton: true)
@@ -115,6 +119,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         self.addSubview(resendButtonView)
         
         resendButton = UIButton()
+        resendButton.addTarget(self, action: "resendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         resendButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Resend Code", comment: "Resend Code"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
         resendButton.setBackgroundImage(UIImage(named: "Resend_button_normal"), forState: UIControlState.Normal)
         resendButton.setBackgroundImage(UIImage(named: "Resend_button_tap"), forState: UIControlState.Highlighted)
@@ -294,6 +299,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeField1.text = ""
         codeField2.text = ""
         codeField3.text = ""
+        codeView.backgroundColor = UIColor.lightSemitransparentBackground()
+        if (errorSignView != nil) {
+            errorSignView.removeFromSuperview()
+        }
         focusKeyboardOnCodeField()
     }
     
@@ -324,6 +333,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         })
         
         super.updateConstraints()
+    }
+    
+    func resendButtonTapped(sender: AnyObject) {
+        self.delegate?.verificationCodeViewDidTapResendButton(self)
     }
     
     
