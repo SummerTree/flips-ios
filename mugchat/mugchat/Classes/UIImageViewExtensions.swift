@@ -46,5 +46,4 @@ extension UIImageView {
         self.layer.borderColor = UIColor.whiteColor().CGColor
         self.layer.borderWidth = borderWidth
     }
-
 }

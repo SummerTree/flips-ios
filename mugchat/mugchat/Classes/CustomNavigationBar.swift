@@ -139,7 +139,6 @@ class CustomNavigationBar : UIView {
         
         backgroundImageView = UIImageView(frame: frame)
         backgroundImageView.backgroundColor = UIColor.mugOrange()
-        backgroundImageView.alpha = 0.9
         self.addSubview(backgroundImageView)
     }
     
@@ -298,6 +297,16 @@ class CustomNavigationBar : UIView {
     
     func setLeftButtonEnabled(enabled: Bool) {
         leftButton.enabled = enabled
+    }
+    
+    func setAvatarImage(image: UIImage) {
+        if (avatarButton != nil) {
+            avatarButton.setImage(image, forState: .Normal)
+            avatarButton.setImage(image, forState: UIControlState.Highlighted)
+            avatarButton.contentMode = .ScaleAspectFill
+        } else if (avatarImageView != nil) {
+            avatarImageView.image = image
+        }
     }
     
     

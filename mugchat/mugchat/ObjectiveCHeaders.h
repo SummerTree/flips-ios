@@ -13,5 +13,6 @@
 #import <Masonry/Masonry.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "UIImage+ImageEffects.h"
+#import "AVCamPreviewView.h"
 
 #endif

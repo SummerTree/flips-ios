@@ -96,6 +96,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         }
     }
     
+    func customNavigationBarDidTapAvatarButton(navBar : CustomNavigationBar) {
+        delegate?.signUpViewDidTapTakePictureButton(self)
+    }
+    
     
     // MARK: - UserFormViewDelegate
     
@@ -199,5 +203,12 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     func dismissMessagesTopView(messageTopView: MessagesTopView) {
         self.dismissMessagesTopView()
+    }
+    
+    
+    // MARK: - Setters
+    
+    func setUserPicture(picture: UIImage) {
+        self.navigationBar.setAvatarImage(picture)
     }
 }

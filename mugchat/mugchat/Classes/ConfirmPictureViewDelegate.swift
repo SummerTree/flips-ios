@@ -10,13 +10,8 @@
 // the license agreement.
 //
 
-protocol SignUpViewDelegate {
-
-    func signUpViewDidTapBackButton(signUpView: SignUpView)
+protocol ConfirmPictureViewDelegate {
     
-    func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
- 
-    func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool)
-    
-    func signUpViewDidTapTakePictureButton(signUpView: SignUpView)
+    func confirmPictureViewDidTapBackButton(confirmPictureView: ConfirmPictureView)
+    func confirmPictureViewDidApprovePicture(confirmPictureView: ConfirmPictureView)
 }

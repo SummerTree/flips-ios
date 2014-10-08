@@ -10,15 +10,16 @@
 // the license agreement.
 //
 
-class SignUpViewController : MugChatViewController, SignUpViewDelegate {
+class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePictureViewControllerDelegate {
     
     private var statusBarHidden = false
+    private var signUpView: SignUpView!
     
     // MARK: - Overriden Methods
     
     override func loadView() {
         super.loadView()
-        var signUpView = SignUpView()
+        signUpView = SignUpView()
         signUpView.delegate = self
         self.view = signUpView
     }
@@ -50,5 +51,19 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate {
     func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool) {
         statusBarHidden = hidden
         self.setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    func signUpViewDidTapTakePictureButton(signUpView: SignUpView) {
+        var takePictureViewController = TakePictureViewController()
+        takePictureViewController.delegate = self
+        self.navigationController?.pushViewController(takePictureViewController, animated: true)
+    }
+    
+    
+    // MARK: - TakePictureViewControllerDelegate
+    
+    func takePictureViewController(viewController: TakePictureViewController, didFinishWithPicture picture: UIImage) {
+        signUpView.setUserPicture(picture)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }
