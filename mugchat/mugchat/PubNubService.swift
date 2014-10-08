@@ -41,7 +41,6 @@ public class PubNubService: MugchatService, PNDelegate {
     }
     
     func connect() {
-        
         if (!PubNub.sharedInstance().isConnected()) {
             PubNub.connect()
             self.subscribeOnOwnChannel()
