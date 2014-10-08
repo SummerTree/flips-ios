@@ -76,6 +76,11 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
+    func loginViewDidTapForgotPassword(loginView: LoginView!, username: String) {
+        var forgotPasswordViewController = ForgotPasswordViewController(username: username)
+        self.navigationController?.pushViewController(forgotPasswordViewController, animated: true)
+    }
+    
     func loginViewDidTapFacebookSignInButton(loginView: LoginView!) {
 
         // If the session state is any of the two "open" states when the button is clicked
@@ -119,4 +124,5 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                 alertView.show()
         })
     }
+
 }
