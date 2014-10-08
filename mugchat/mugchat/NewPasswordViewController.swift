@@ -42,7 +42,6 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
     
     // MARK: - NewPasswordViewDelegate Methods
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
-        //TODO: save new password to the back-end, and return user to login window to sign in with email address and new password.
         UserService.sharedInstance.updatePassword(self.user, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
             success: { (user) -> Void in
                 println("updatePassword success")
