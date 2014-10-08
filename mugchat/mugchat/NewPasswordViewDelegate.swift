@@ -12,10 +12,10 @@
 
 import UIKit
 
-protocol ForgotPasswordViewDelegate {
+protocol NewPasswordViewDelegate {
     
-    func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!)
+    func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!)
     
-    func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!)
+    func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!)
     
 }

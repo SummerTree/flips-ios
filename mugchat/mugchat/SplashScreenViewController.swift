@@ -43,7 +43,16 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         var success = FBSession.openActiveSessionWithAllowLoginUI(false)
         println("User is already authenticated with Facebook? \(success)")
         if (success) {
-            openInboxViewController()
+            UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
+                success: { (user) -> Void in
+                    AuthenticationHelper.sharedInstance.userInSession = user
+                    self.openInboxViewController()
+                    
+                }, failure: { (mugError) -> Void in
+                    println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
+                    var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                    alertView.show()
+            })
         }
     }
     

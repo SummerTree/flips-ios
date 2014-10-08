@@ -16,7 +16,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"
-    private let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
+    let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
     
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
@@ -27,6 +27,11 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         verificationCodeView = VerificationCodeView(phoneNumber: phoneNumber)
         verificationCodeView.delegate = self
         self.view = verificationCodeView
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        verificationCodeView.viewWillDisappear()
     }
     
     // MARK: - VerificationCodeViewDelegate Methods
