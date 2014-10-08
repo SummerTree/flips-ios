@@ -14,6 +14,8 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!
+    private var avatar: UIImage!
+
     
     // MARK: - Overriden Methods
     
@@ -37,12 +39,12 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         
-        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
+        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
             AuthenticationHelper.sharedInstance.userInSession = user
             var phoneNumberViewController = PhoneNumberViewController()
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }) { (mugError) -> Void in
-            println("Error in the sing up [error=\(mugError!.error), details=\(mugError!.details)]")
+            println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
             var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
             alertView.show()
         }
@@ -64,6 +66,7 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     
     func takePictureViewController(viewController: TakePictureViewController, didFinishWithPicture picture: UIImage) {
         signUpView.setUserPicture(picture)
+        self.avatar = picture
         self.navigationController?.popViewControllerAnimated(true)
     }
 }
