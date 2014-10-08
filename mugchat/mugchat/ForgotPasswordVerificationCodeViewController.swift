@@ -37,7 +37,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 var userDevice: Device! = device;
                 var user: User! = userDevice.user
                 
-                var newPasswordViewController = NewPasswordViewController(user: user)
+                var newPasswordViewController = NewPasswordViewController(user: user, phoneNumber: self.phoneNumber, verificationCode: verificationCode)
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
             failure: { (mugError) in
