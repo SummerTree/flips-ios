@@ -137,6 +137,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
     
     
     // MARK: - Overridden Method
+    
     override func updateConstraints() {
         super.updateConstraints()
         
@@ -471,7 +472,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
     }
     
     func galleryButtonTapped() {
-        println("galleryButtonTapped")
+        self.delegate?.takePictureViewDidTapGalleryButton(self)
     }
     
     func focusAndExposeTap(gestureRecognizer: UIGestureRecognizer) {
