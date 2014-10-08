@@ -43,7 +43,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        self.updateConstraints()
     }
     
     func viewDidAppear() {
@@ -110,58 +109,57 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     // MARK: - Overridden Methods
     
-    override func updateConstraints() {
+    func makeConstraints() {
         
-        navigationBar.mas_updateConstraints { (make) -> Void in
+        navigationBar.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
             make.height.equalTo()(self.navigationBar.frame.size.height)
        }
                 
-        hintView.mas_updateConstraints { (make) in
+        hintView.mas_makeConstraints { (make) in
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
         }
         
-        hintText.mas_updateConstraints { (make) in
+        hintText.mas_makeConstraints { (make) in
             make.centerY.equalTo()(self.hintView)
             make.centerX.equalTo()(self.hintView)
         }
         
-        mobileNumberView.mas_updateConstraints { (make) in
+        mobileNumberView.mas_makeConstraints { (make) in
             make.top.equalTo()(self.hintView.mas_bottom)
             make.height.equalTo()(self.MOBILE_NUMBER_VIEW_HEIGHT)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
         }
         
-        phoneImageView.mas_updateConstraints { (make) in
+        phoneImageView.mas_makeConstraints { (make) in
             make.left.equalTo()(self.mobileNumberView).with().offset()(self.MOBILE_NUMBER_MARGIN_LEFT)
             make.centerY.equalTo()(self.mobileNumberView)
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
-        mobileNumberField.mas_updateConstraints { (make) in
+        mobileNumberField.mas_makeConstraints { (make) in
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
             make.centerY.equalTo()(self.mobileNumberView)
         }
         
-        spamView.mas_updateConstraints({ (make) in
+        spamView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.mobileNumberView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
             make.height.equalTo()(self.hintView)
         })
         
-        spamText.mas_updateConstraints { (make) in
+        spamText.mas_makeConstraints { (make) in
             make.centerY.equalTo()(self.spamView)
             make.centerX.equalTo()(self.spamView)
         }
         
-        keyboardFillerView.mas_updateConstraints( { (make) in
-            println(self.keyboardHeight)
+        keyboardFillerView.mas_makeConstraints( { (make) in
             make.top.equalTo()(self.spamView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -222,7 +220,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
         keyboardHeight = keyboardFrame.height
-        updateConstraints()
+        self.makeConstraints()
     }
     
     

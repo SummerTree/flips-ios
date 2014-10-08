@@ -16,20 +16,12 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     var phoneNumberView: PhoneNumberView!
         
-//    override func loadView() {
-//        super.loadView()
-//        phoneNumberView = PhoneNumberView()
-//        phoneNumberView.delegate = self
-//        self.view = phoneNumberView
-//    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         phoneNumberView = PhoneNumberView()
         phoneNumberView.delegate = self
         self.view = phoneNumberView
     }
-
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
