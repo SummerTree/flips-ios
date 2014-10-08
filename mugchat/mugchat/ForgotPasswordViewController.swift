@@ -14,10 +14,23 @@ import UIKit
 
 class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate {
     
+    private let US_CODE = "+1"
+    
     var forgotPasswordView: ForgotPasswordView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private var username: String!
+    
+    init(username: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.username = username;
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        super.loadView()
         
         forgotPasswordView = ForgotPasswordView()
         forgotPasswordView.delegate = self
@@ -26,10 +39,16 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
     
     
     // MARK: - ForgotPasswordViewDelegate Methods
-    func forgotPasswordViewDidFinishTypingMobileNumber(forgotPassword: ForgotPasswordView!) {
-        //TODO: open VerificationCode screen (story 7153)
-        //var verificationCodeViewController = VerificationCodeViewController()
-        //self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+    func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
+        let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
+        
+        UserService.sharedInstance.forgot(username, phoneNumber: intlPhoneNumber, success: { (user) -> Void in
+            var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: intlPhoneNumber)
+            self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+        }) { (mugError) -> Void in
+            println(mugError!.error)
+        }
     }
     
     func forgotPasswordViewDidTapBackButton(forgotPassword: ForgotPasswordView!) {

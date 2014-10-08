@@ -80,6 +80,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         mobileNumberField.tintColor = UIColor.whiteColor()
         mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
         mobileNumberView.addSubview(mobileNumberField)
         
@@ -178,6 +179,13 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         return shouldReplace;
     }
     
+    func mobileNumberFieldDidChange(textField: UITextField) {
+        if (countElements(textField.text) == 12) {
+            textField.resignFirstResponder()
+            self.finishTypingMobileNumber(self)
+        }
+    }
+    
     
     // MARK: - Notifications
     
@@ -193,7 +201,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.forgotPasswordViewDidFinishTypingMobileNumber(self)
+        self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text)
     }
     
     
