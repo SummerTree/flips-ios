@@ -12,14 +12,14 @@
 
 import AVFoundation
 
-class TakePictureViewController : MugChatViewController, TakePictureViewDelegate, ConfirmPictureViewDelegate {
+class TakePictureViewController : MugChatViewController, TakePictureViewDelegate, ConfirmPictureViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private var takePictureView: TakePictureView!
     private var confirmPictureView: ConfirmPictureView!
-    
     private var picture: UIImage!
     
     var delegate: TakePictureViewControllerDelegate?
+    
     
     // MARK: - Overriden Methods
     
@@ -72,6 +72,33 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
         self.picture = picture
         confirmPictureView.setPicture(picture)
         self.showConfirmPictureView()
+    }
+    
+    func takePictureViewDidTapGalleryButton(takePictureView: TakePictureView) {
+        if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
+            var imagePickerController = UIImagePickerController()
+            var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            imagePickerController.navigationBar.barTintColor = UIColor.mugOrange()
+            imagePickerController.navigationBar.translucent = false
+            imagePickerController.navigationBar.tintColor = UIColor.whiteColor()
+            imagePickerController.navigationBar.titleTextAttributes = textAttributes
+            imagePickerController.delegate = self
+            imagePickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
+            imagePickerController.allowsEditing = false
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+        }
+    }
+    
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        self.picture = image
+        confirmPictureView.setPicture(picture)
+        self.showConfirmPictureView()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     

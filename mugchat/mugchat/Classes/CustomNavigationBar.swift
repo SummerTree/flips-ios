@@ -155,6 +155,7 @@ class CustomNavigationBar : UIView {
             titleTextView.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
             titleTextView.textColor = UIColor.whiteColor()
             titleTextView.text = title
+            titleTextView.userInteractionEnabled = false
             titleTextView.backgroundColor = UIColor.clearColor()
             titleTextView.sizeToFit()
             self.addSubview(titleTextView)
