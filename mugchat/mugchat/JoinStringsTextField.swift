@@ -18,7 +18,7 @@ class JoinStringsTextField : UITextField {
         super.init()
         
         let menuController = UIMenuController.sharedMenuController()
-        let lookupMenu = UIMenuItem(title: "Join", action: "joinStrings")
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
         menuController.menuItems = NSArray(array: [lookupMenu])
         
         menuController.update();
@@ -40,7 +40,6 @@ class JoinStringsTextField : UITextField {
         self.joinStringsTextFieldDelegate?.didJoinedWords(self, finalString: selectedText)
     }
     
-    // Overide, disable the "Define" contextual menu item
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {
         
         if action == "cut:" {
