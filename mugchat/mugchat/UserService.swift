@@ -182,7 +182,7 @@ public class UserService: MugchatService {
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        var device = Device(userDevice: response)
+        var device = Device(object: response)
         return device
     }
     
