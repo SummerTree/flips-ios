@@ -76,7 +76,7 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
     
     func takePictureViewDidTapGalleryButton(takePictureView: TakePictureView) {
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
-            var imagePickerController = UIImagePickerController()
+            var imagePickerController = UIImagePickerControllerWithLightStatusBar()
             var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
             imagePickerController.navigationBar.barTintColor = UIColor.mugOrange()
             imagePickerController.navigationBar.translucent = false
