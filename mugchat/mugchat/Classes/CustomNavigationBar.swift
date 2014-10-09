@@ -139,7 +139,6 @@ class CustomNavigationBar : UIView {
         
         backgroundImageView = UIImageView(frame: frame)
         backgroundImageView.backgroundColor = UIColor.mugOrange()
-        backgroundImageView.alpha = 0.9
         self.addSubview(backgroundImageView)
     }
     
@@ -156,6 +155,7 @@ class CustomNavigationBar : UIView {
             titleTextView.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
             titleTextView.textColor = UIColor.whiteColor()
             titleTextView.text = title
+            titleTextView.userInteractionEnabled = false
             titleTextView.backgroundColor = UIColor.clearColor()
             titleTextView.sizeToFit()
             self.addSubview(titleTextView)
@@ -298,6 +298,15 @@ class CustomNavigationBar : UIView {
     
     func setLeftButtonEnabled(enabled: Bool) {
         leftButton.enabled = enabled
+    }
+    
+    func setAvatarImage(image: UIImage) {
+        if (avatarButton != nil) {
+            avatarButton.setAvatarImage(image, forState: .Normal)
+            avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
+        } else if (avatarImageView != nil) {
+            avatarImageView.setAvatarImage(image)
+        }
     }
     
     

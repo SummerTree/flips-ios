@@ -21,6 +21,8 @@ public class UserService: MugchatService {
     let FORGOT_URL: String = "/user/forgot"
     let VERIFY_URL: String = "/user/verify"
     let UPLOAD_PHOTO_URL: String = "/user/{{user_id}}/photo"
+    let UPDATE_USER_URL: String = "/user/{{user_id}}"
+    let IMAGE_COMPRESSION: CGFloat = 0.3
     let UPDATE_PASSWORD_URL: String = "/user/password"
     
     public class var sharedInstance : UserService {
@@ -33,7 +35,7 @@ public class UserService: MugchatService {
     
     // MARK: - Sign-up
     
-    func signUp(username: String, password: String, firstName: String, lastName: String, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
         let url = HOST + SIGNUP_URL
@@ -45,16 +47,20 @@ public class UserService: MugchatService {
                 RequestParams.BIRTHDAY : birthday,
                 RequestParams.NICKNAME : nickname!]
         
+        // first create user
         request.POST(url,
             parameters: params,
+            constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
+                formData.appendPartWithFileData(UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION), name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+            },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let user = self.parseSignupResponse(responseObject)
+                var user = self.parseSignupResponse(responseObject)
                 success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
                 } else {
                     failure(MugError(error: error.localizedDescription, details:nil))
                 }
@@ -224,6 +230,6 @@ public class UserService: MugchatService {
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
         static let VERIFICATION_CODE = "verification_code"
+        static let PHOTO = "photo"
     }
-    
 }

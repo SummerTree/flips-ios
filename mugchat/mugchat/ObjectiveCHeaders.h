@@ -18,5 +18,6 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import <PubNub/PNImports.h>
 #import "UIImage+ImageEffects.h"
+#import "AVCamPreviewView.h"
 
 #endif

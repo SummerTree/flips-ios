@@ -17,4 +17,6 @@ protocol SignUpViewDelegate {
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
  
     func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool)
+    
+    func signUpViewDidTapTakePictureButton(signUpView: SignUpView)
 }
