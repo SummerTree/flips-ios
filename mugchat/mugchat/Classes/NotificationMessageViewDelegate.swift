@@ -10,8 +10,9 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
-    
-    let HOST: String = "http://mugchat-dev.arctouch.com"
 
+protocol NotificationMessageViewDelegate {
+
+    func notificationMessageViewShouldBeDismissed(view: NotificationMessageView)
+    
 }

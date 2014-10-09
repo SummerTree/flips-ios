@@ -10,8 +10,8 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
+protocol ConfirmPictureViewDelegate {
     
-    let HOST: String = "http://mugchat-dev.arctouch.com"
-
+    func confirmPictureViewDidTapBackButton(confirmPictureView: ConfirmPictureView)
+    func confirmPictureViewDidApprovePicture(confirmPictureView: ConfirmPictureView)
 }

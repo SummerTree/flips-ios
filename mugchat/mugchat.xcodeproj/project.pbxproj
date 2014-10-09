@@ -36,6 +36,7 @@
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */; };
 		70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A419D996F000FE4C34 /* MugChatWebView.swift */; };
+		70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */; };
 		70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */; };
 		70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
@@ -63,9 +64,21 @@
 		7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E819DC2CF0005E4343 /* SignUpView.swift */; };
 		7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
 		7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
+		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
+		7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
+		7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */; };
+		7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1685719E32CD2004E2162 /* AVCamPreviewView.m */; };
+		7AB1685A19E32DE3004E2162 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1685919E32DE3004E2162 /* AVFoundation.framework */; };
 		7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946D719DED95900779C73 /* StringExtensions.swift */; };
 		7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946D919DEF1CC00779C73 /* UserFormViewDelegate.swift */; };
 		7AB946DC19DF35E700779C73 /* MessagesTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946DB19DF35E700779C73 /* MessagesTopView.swift */; };
+		7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */; };
+		7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
+		7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */; };
+		7AD93F9419E574B6009CC59A /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */; };
+		7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */; };
+		7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */; };
+		7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
 		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
@@ -111,6 +124,7 @@
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebViewController.swift; sourceTree = "<group>"; };
 		70B560A419D996F000FE4C34 /* MugChatWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebView.swift; sourceTree = "<group>"; };
+		70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+StatusBarLight.swift"; sourceTree = "<group>"; };
 		70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
@@ -142,9 +156,22 @@
 		7A9619E819DC2CF0005E4343 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpView.swift; path = Classes/SignUpView.swift; sourceTree = "<group>"; };
 		7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewDelegate.swift; sourceTree = "<group>"; };
 		7A9619EF19DC3F01005E4343 /* UserFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormView.swift; path = Classes/UserFormView.swift; sourceTree = "<group>"; };
+		7AB1683719E3196E004E2162 /* TakePictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewController.swift; path = Classes/TakePictureViewController.swift; sourceTree = "<group>"; };
+		7AB1683A19E319DB004E2162 /* TakePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureView.swift; path = Classes/TakePictureView.swift; sourceTree = "<group>"; };
+		7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewDelegate.swift; path = Classes/TakePictureViewDelegate.swift; sourceTree = "<group>"; };
+		7AB1685619E32CD2004E2162 /* AVCamPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AVCamPreviewView.h; path = Classes/AVCamPreviewView.h; sourceTree = "<group>"; };
+		7AB1685719E32CD2004E2162 /* AVCamPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AVCamPreviewView.m; path = Classes/AVCamPreviewView.m; sourceTree = "<group>"; };
+		7AB1685919E32DE3004E2162 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		7AB946D719DED95900779C73 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = Classes/StringExtensions.swift; sourceTree = "<group>"; };
 		7AB946D919DEF1CC00779C73 /* UserFormViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormViewDelegate.swift; path = Classes/UserFormViewDelegate.swift; sourceTree = "<group>"; };
 		7AB946DB19DF35E700779C73 /* MessagesTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopView.swift; path = Classes/MessagesTopView.swift; sourceTree = "<group>"; };
+		7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfirmPictureView.swift; path = Classes/ConfirmPictureView.swift; sourceTree = "<group>"; };
+		7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfirmPictureViewDelegate.swift; path = Classes/ConfirmPictureViewDelegate.swift; sourceTree = "<group>"; };
+		7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewControllerDelegate.swift; path = Classes/TakePictureViewControllerDelegate.swift; sourceTree = "<group>"; };
+		7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Classes/UIImageExtensions.swift; sourceTree = "<group>"; };
+		7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageView.swift; path = Classes/NotificationMessageView.swift; sourceTree = "<group>"; };
+		7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageViewDelegate.swift; path = Classes/NotificationMessageViewDelegate.swift; sourceTree = "<group>"; };
+		7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CropOverlayView.swift; path = Classes/CropOverlayView.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +190,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AB1685A19E32DE3004E2162 /* AVFoundation.framework in Frameworks */,
 				ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,7 +295,6 @@
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
@@ -276,9 +303,11 @@
 				7A0D6CEC19D4961700E39A1B /* Settings */,
 				7A9619E419DC2A55005E4343 /* SignUp */,
 				70BD0E7019E30C5100FE8652 /* Splash Screen */,
+				7AB1683619E31951004E2162 /* Take a Picture */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
 				57A3A6BF19D5E4C00043790E /* Verification */,
 				70B560A019D995D500FE4C34 /* Web View */,
+				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -286,6 +315,7 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
 				7A28ADC019D4428A00887831 /* Custom */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
@@ -293,6 +323,7 @@
 				7033584419E415E60030CF11 /* Settings */,
 				7A9619E719DC2CD9005E4343 /* SignUp */,
 				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
+				7AB1683919E319C7004E2162 /* Take a Picture */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
 				57A3A6BC19D5E2E70043790E /* Verification */,
 				70B560A319D996B900FE4C34 /* Web View */,
@@ -345,6 +376,8 @@
 				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
 				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
 				7AB946D719DED95900779C73 /* StringExtensions.swift */,
+				7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */,
+				70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -436,6 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7519D064450024EBDB /* AppDelegate.swift */,
+				7AB1685519E32CB0004E2162 /* Camera */,
 				704E110A19D08E3C00D2BB88 /* Controller */,
 				704E110C19D08E7B00D2BB88 /* CoreData */,
 				704E111519D0ACAF00D2BB88 /* Extensions */,
@@ -502,9 +536,11 @@
 		7A28ADC019D4428A00887831 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				7A9619EE19DC3EEF005E4343 /* UserForm */,
 				7A9619ED19DC3EE3005E4343 /* Badge */,
 				7A9619EC19DC3ED5005E4343 /* NavigationBar */,
+				7AD93FA119E62535009CC59A /* Notification Messages */,
+				7A9619EE19DC3EEF005E4343 /* UserForm */,
+				7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -555,9 +591,55 @@
 			name = UserForm;
 			sourceTree = "<group>";
 		};
+		7AB1683619E31951004E2162 /* Take a Picture */ = {
+			isa = PBXGroup;
+			children = (
+				7AB1683719E3196E004E2162 /* TakePictureViewController.swift */,
+				7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */,
+			);
+			name = "Take a Picture";
+			sourceTree = "<group>";
+		};
+		7AB1683919E319C7004E2162 /* Take a Picture */ = {
+			isa = PBXGroup;
+			children = (
+				7AB1683A19E319DB004E2162 /* TakePictureView.swift */,
+				7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */,
+			);
+			name = "Take a Picture";
+			sourceTree = "<group>";
+		};
+		7AB1685519E32CB0004E2162 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				7AB1685619E32CD2004E2162 /* AVCamPreviewView.h */,
+				7AB1685719E32CD2004E2162 /* AVCamPreviewView.m */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		7AD93F8C19E4B677009CC59A /* Confirm Picture */ = {
+			isa = PBXGroup;
+			children = (
+				7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */,
+				7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */,
+			);
+			name = "Confirm Picture";
+			sourceTree = "<group>";
+		};
+		7AD93FA119E62535009CC59A /* Notification Messages */ = {
+			isa = PBXGroup;
+			children = (
+				7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */,
+				7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */,
+			);
+			name = "Notification Messages";
+			sourceTree = "<group>";
+		};
 		EC5A81A5795A49A3B7523B70 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7AB1685919E32DE3004E2162 /* AVFoundation.framework */,
 				57D2A0A019D3240E00FA729D /* Foundation.framework */,
 				C3E055BF9E4B434289F06FD3 /* libPods.a */,
 			);
@@ -676,16 +758,22 @@
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				5707185D19D1A7230069064F /* Mug.swift in Sources */,
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
+				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
+				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,
 				7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */,
+				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
+				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
 				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
+				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
 				7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */,
+				7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */,
 				7AB946DC19DF35E700779C73 /* MessagesTopView.swift in Sources */,
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
@@ -700,11 +788,14 @@
 				5707186119D1A8FC0069064F /* Room.swift in Sources */,
 				5707186719D1AF110069064F /* UserService.swift in Sources */,
 				7033584619E4160B0030CF11 /* SettingsView.swift in Sources */,
+				70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */,
 				7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */,
+				7AD93F9419E574B6009CC59A /* UIImageExtensions.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
+				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
@@ -715,6 +806,7 @@
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
+				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */,
@@ -732,7 +824,9 @@
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
+				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
+				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
 				5784778F19DDB9530063A543 /* DeviceService.swift in Sources */,
 				7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */,
@@ -894,8 +988,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mugchat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

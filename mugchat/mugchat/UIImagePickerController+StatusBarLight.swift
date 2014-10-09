@@ -10,8 +10,11 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
-    
-    let HOST: String = "http://mugchat-dev.arctouch.com"
+import UIKit
 
+class UIImagePickerControllerWithLightStatusBar: UIImagePickerController {
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
 }
