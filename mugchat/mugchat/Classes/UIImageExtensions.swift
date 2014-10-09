@@ -10,11 +10,34 @@
 // the license agreement.
 //
 
+private let REFERENCE_SCREEN_WIDTH: CGFloat = 320
+
 extension UIImage {
+    
+    private func rad(deg: Double) -> CGFloat {
+        var result = deg / 180.0 * M_PI
+        return CGFloat(result)
+    }
 
     func cropImageToRect(rect: CGRect) -> UIImage {
-        var scaledRect = CGRectMake(rect.origin.x * self.scale, rect.origin.y * self.scale, rect.width * self.scale, rect.height * self.scale)
-        var imageRef = CGImageCreateWithImageInRect(self.CGImage, scaledRect)
+        var rectTransform: CGAffineTransform
+        switch (self.imageOrientation) {
+        case UIImageOrientation.Left:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(self.rad(90)), 0, -self.size.height)
+            break
+        case UIImageOrientation.Right:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(self.rad(-90)), -self.size.width, 0)
+            break
+        case UIImageOrientation.Down:
+            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(self.rad(-180)), -self.size.width, -self.size.height)
+            break
+        default:
+            rectTransform = CGAffineTransformIdentity
+        }
+        
+        rectTransform = CGAffineTransformScale(rectTransform, self.scale, self.scale)
+        
+        var imageRef = CGImageCreateWithImageInRect(self.CGImage, CGRectApplyAffineTransform(rect, rectTransform));
         var croppedImage = UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
         return croppedImage
     }
@@ -34,6 +57,7 @@ extension UIImage {
         return newImage
     }
     
+    // Used by the take a picture
     func avararA1Image(cropRectFrameInView: CGRect) -> UIImage {
         // Resize to device size. So we are sure that we will crop correctly
         var screenWidth = UIScreen.mainScreen().bounds.width
@@ -53,6 +77,23 @@ extension UIImage {
             return croppedImage
         } else {
             return squaredImage
+        }
+    }
+    
+    func avatarProportional() -> UIImage {
+        var expectedImageWidth = REFERENCE_SCREEN_WIDTH
+        if (self.size.width > expectedImageWidth) {
+            var expectedCropSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
+            
+            var proportionalCropSize = expectedCropSize * self.size.width / expectedImageWidth
+            
+            var cropX : CGFloat = (self.size.width / 2) - (proportionalCropSize / 2)
+            var cropY : CGFloat = (self.size.height / 2) - (proportionalCropSize / 2)
+            var cropRect = CGRectMake( ceil(cropX), ceil(cropY), proportionalCropSize, proportionalCropSize)
+            
+            return self.cropImageToRect(cropRect)
+        } else {
+            return self
         }
     }
 }

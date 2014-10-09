@@ -209,6 +209,6 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     // MARK: - Setters
     
     func setUserPicture(picture: UIImage) {
-        self.navigationBar.setAvatarImage(picture)
+        self.navigationBar.setAvatarImage(picture.avatarProportional())
     }
 }
