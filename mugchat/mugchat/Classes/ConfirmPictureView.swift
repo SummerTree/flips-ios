@@ -78,7 +78,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     override func updateConstraints() {
         super.updateConstraints()
         
-        navigationBar.mas_makeConstraints { (make) -> Void in
+        navigationBar.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -86,7 +86,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
             make.height.equalTo()(self.navigationBar.frame.size.height)
         }
         
-        pictureContainerView.mas_makeConstraints { (make) -> Void in
+        pictureContainerView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.centerX.equalTo()(self)
@@ -94,14 +94,14 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
             make.height.equalTo()(self.frame.width)
         }
         
-        pictureImageView.mas_makeConstraints { (make) -> Void in
+        pictureImageView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.center.equalTo()(self.pictureContainerView)
             make.width.equalTo()(self.pictureImageView.frame.width)
             make.height.equalTo()(self.pictureImageView.frame.height)
         }
         
-        bottomButtonsContainerView.mas_makeConstraints { (make) -> Void in
+        bottomButtonsContainerView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self.pictureContainerView.mas_bottom)
             make.leading.equalTo()(self)
@@ -109,7 +109,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
             make.bottom.equalTo()(self)
         }
         
-        rejectButton.mas_makeConstraints { (make) -> Void in
+        rejectButton.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self.bottomButtonsContainerView)
             make.bottom.equalTo()(self.bottomButtonsContainerView)
@@ -117,7 +117,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
             make.width.equalTo()(self.bottomButtonsContainerView.frame.width / 2)
         }
         
-        acceptButton.mas_makeConstraints { (make) -> Void in
+        acceptButton.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self.bottomButtonsContainerView)
             make.bottom.equalTo()(self.bottomButtonsContainerView)
