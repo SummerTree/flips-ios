@@ -12,6 +12,8 @@
 
 class JoinStringsTextField : UITextField {
     
+    var joinStringsTextFieldDelegate : JoinStringsTextFieldDelegate?
+    
     override init() {
         super.init()
         
@@ -21,7 +23,6 @@ class JoinStringsTextField : UITextField {
         
         menuController.update();
         
-        // This makes the menu item visible.
         menuController.setMenuVisible(true, animated: true)
     }
     
@@ -31,6 +32,12 @@ class JoinStringsTextField : UITextField {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func joinStrings() {
+        var selectedRange: UITextRange = self.selectedTextRange!
+        var selectedText = self.textInRange(selectedRange)
+        self.joinStringsTextFieldDelegate?.didJoinedWords(self, finalString: selectedText)
     }
     
     // Overide, disable the "Define" contextual menu item
@@ -53,15 +60,16 @@ class JoinStringsTextField : UITextField {
         }
         
         else if action == "Join" {
-            //TODO
             return true;
         }
         
         return super.canPerformAction(action, withSender: sender)
     }
     
-    func joinStrings() {
-        println("Join............");
-    }
+}
+
+protocol JoinStringsTextFieldDelegate {
+    
+    func didJoinedWords(joinStringsTextField: JoinStringsTextField!, finalString: String!)
     
 }
