@@ -80,18 +80,17 @@ extension UIImage {
         }
     }
     
-    // Used by get picture from gallery
-    func avararA1Proportional() -> UIImage {
+    func avatarProportional() -> UIImage {
         var expectedImageWidth = REFERENCE_SCREEN_WIDTH
         if (self.size.width > expectedImageWidth) {
             var expectedCropSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
-
+            
             var proportionalCropSize = expectedCropSize * self.size.width / expectedImageWidth
             
             var cropX : CGFloat = (self.size.width / 2) - (proportionalCropSize / 2)
             var cropY : CGFloat = (self.size.height / 2) - (proportionalCropSize / 2)
             var cropRect = CGRectMake( ceil(cropX), ceil(cropY), proportionalCropSize, proportionalCropSize)
-
+            
             return self.cropImageToRect(cropRect)
         } else {
             return self

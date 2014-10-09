@@ -96,7 +96,7 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         self.picture = image
-        confirmPictureView.setPicture(image.avararA1Proportional())
+        confirmPictureView.setPicture(image.avatarProportional())
         self.showConfirmPictureView()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
