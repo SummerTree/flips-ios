@@ -60,7 +60,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
+                    // TODO: we need to identify what was the problem to show the appropriate message
+                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(MugError(error: response["error"] as String!, details: nil))
                 } else {
                     failure(MugError(error: error.localizedDescription, details:nil))
                 }
