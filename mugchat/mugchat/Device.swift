@@ -32,28 +32,15 @@ public class Device {
     
     convenience init(object : AnyObject) {
         self.init()
-        let json = JSON(object: object)
-        self.id = json[ID].stringValue
-        self.user = User(id: json[USER].stringValue!)
-        self.phoneNumber = json[PHONE_NUMBER].stringValue
-        self.platform = json[PLATFORM].stringValue
-        self.uuid = json[UUID].stringValue
-        self.isVerified = json[IS_VERIFIED].integerValue == 0 ? false : true
-        self.retryCount = json[RETRY_COUNT].integerValue
-        self.verificationCode = json[VERIFICATION_CODE].stringValue
-    }
-    
-    convenience init(userDevice : AnyObject) {
-        self.init()
-        let json = JSON(object: userDevice)
-        self.id = json[ID].stringValue
-        self.user = User(json: json[USER])
-        self.phoneNumber = json[PHONE_NUMBER].stringValue
-        self.platform = json[PLATFORM].stringValue
-        self.uuid = json[UUID].stringValue
-        self.isVerified = json[IS_VERIFIED].integerValue == 0 ? false : true
-        self.retryCount = json[RETRY_COUNT].integerValue
-        self.verificationCode = json[VERIFICATION_CODE].stringValue
+        let json = JSON(object)
+        self.id = json[ID].string
+        self.user = User(id: json[USER].string!)
+        self.phoneNumber = json[PHONE_NUMBER].string
+        self.platform = json[PLATFORM].string
+        self.uuid = json[UUID].string
+        self.isVerified = json[IS_VERIFIED].intValue == 0 ? false : true
+        self.retryCount = json[RETRY_COUNT].intValue
+        self.verificationCode = json[VERIFICATION_CODE].string
     }
     
 }

@@ -10,13 +10,28 @@
 // the license agreement.
 //
 
-public struct Mug {
+public class Mug {
     
-    var id: String? = nil
-    var word: String? = nil
-    var backgroundURL: String? = nil
-    var soundURL: String? = nil
-    var owner: User? = nil
-    var isPrivate: Bool? = nil
-    var category: String? = nil
+    var id: String!
+    var word: String!
+    var backgroundURL: String!
+    var soundURL: String?
+    var owner: User?
+    var isPrivate: Bool?
+    var category: String?
+    
+    init(json: JSON) {
+        self.id = json[JsonParams.ID].stringValue
+        self.word = json[JsonParams.WORD].stringValue
+        self.backgroundURL = json[JsonParams.BACKGROUND_URL].stringValue
+        self.soundURL = json[JsonParams.SOUND_URL].stringValue
+    }
+    
+}
+
+private struct JsonParams {
+    static let ID = "id"
+    static let WORD = "word"
+    static let BACKGROUND_URL = "backgroundURL"
+    static let SOUND_URL = "soundURL"
 }
