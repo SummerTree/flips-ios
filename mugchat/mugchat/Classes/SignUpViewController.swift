@@ -110,6 +110,8 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
                 update.trailing.equalTo()(self.view)
                 update.height.equalTo()(self.view)
             }
+            self.statusBarHidden = true
+            self.setNeedsStatusBarAppearanceUpdate()
             self.view.layoutIfNeeded()
         })
     }
@@ -124,13 +126,16 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
                 update.trailing.equalTo()(self.view)
                 update.height.equalTo()(self.view)
             }
+            self.statusBarHidden = false
+            self.setNeedsStatusBarAppearanceUpdate()
             self.view.layoutIfNeeded()
         }) { (finished) -> Void in
-            self.notificationMessageView.hidden = true
+                self.notificationMessageView.hidden = true
         }
     }
     
 
+    
     // MARK: - NotificationMessageViewDelegate
     
     func notificationMessageViewShouldBeDismissed(view: NotificationMessageView) {
