@@ -33,10 +33,10 @@ public class PubNubService: MugchatService, PNDelegate {
     }
     
     public class var sharedInstance : PubNubService {
-        struct Static {
-            static let instance : PubNubService = PubNubService()
+    struct Static {
+        static let instance : PubNubService = PubNubService()
         }
-
+        
         return Static.instance
     }
     
@@ -60,13 +60,14 @@ public class PubNubService: MugchatService, PNDelegate {
         println("Error connecting \(client) with error \(error)")
     }
     
-    public func pubnubClient(client: PubNub!, didReceiveMessage message: PNMessage!) {
-        println("Did receive message")
-        println("Client = \(client) and message = \(message)")
-        self.delegate?.pubnubClient(client, didReceiveMessage:message)
+    public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
+        println("Did receive message. Forwading it to delegate.")
+        var message: JSON = JSON(pnMessage.message)
+        let mugMessage = MugMessage(json: message)
+        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
     }
 }
 
 protocol PubNubServiceDelegate {
-    func pubnubClient(client: PubNub!, didReceiveMessage message: PNMessage!)
+    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!)
 }

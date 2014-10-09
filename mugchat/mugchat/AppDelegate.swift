@@ -20,6 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        
+        // Registering for receive messages
+        MessageReceiver.sharedInstance.startListeningMessages()
+        
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
 
         let splashScreenViewController = SplashScreenViewController()
