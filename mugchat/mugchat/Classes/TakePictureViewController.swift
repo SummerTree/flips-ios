@@ -124,5 +124,6 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
 
     func confirmPictureViewDidApprovePicture(confirmPictureView: ConfirmPictureView) {
         delegate?.takePictureViewController(self, didFinishWithPicture: self.picture)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }

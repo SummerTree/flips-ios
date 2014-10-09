@@ -10,11 +10,12 @@
 // the license agreement.
 //
 
-class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePictureViewControllerDelegate {
+class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePictureViewControllerDelegate, NotificationMessageViewDelegate {
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!
     private var avatar: UIImage!
+    private var notificationMessageView: NotificationMessageView!
     
     
     // MARK: - Overriden Methods
@@ -39,18 +40,22 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         
-        self.showActivityIndicator()
-        
-        UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
-            self.hideActivityIndicator()
-            AuthenticationHelper.sharedInstance.userInSession = user
-            var phoneNumberViewController = PhoneNumberViewController()
-            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
-        }) { (mugError) -> Void in
-            self.hideActivityIndicator()
-            println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
-            var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
-            alertView.show()
+        if (self.avatar == nil) {
+            self.showNoPictureMessage()
+        } else {
+            self.showActivityIndicator()
+            
+            UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
+                self.hideActivityIndicator()
+                AuthenticationHelper.sharedInstance.userInSession = user
+                var phoneNumberViewController = PhoneNumberViewController()
+                self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+                }) { (mugError) -> Void in
+                    self.hideActivityIndicator()
+                    println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
+                    var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                    alertView.show()
+            }
         }
     }
     
@@ -71,6 +76,64 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     func takePictureViewController(viewController: TakePictureViewController, didFinishWithPicture picture: UIImage) {
         signUpView.setUserPicture(picture)
         self.avatar = picture
-        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    
+    // MARK: - NotificationMessageView Methods
+    
+    func setupNotificationMessage() {
+        notificationMessageView = NotificationMessageView(message: NSLocalizedString("Hey, faceless wonder!  Looks like your Mug is missin!", comment: "Hey, faceless wonder!  Looks like your Mug is missin!"))
+        notificationMessageView.backgroundColor = UIColor.clearColor()
+        notificationMessageView.delegate = self
+        self.view.addSubview(notificationMessageView)
+        
+        notificationMessageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.view).with().offset()(-self.notificationMessageView.getMessageAreaHeight())
+            make.leading.equalTo()(self.view)
+            make.trailing.equalTo()(self.view)
+            make.height.equalTo()(self.view)
+        }
+    }
+    
+    func showNoPictureMessage() {
+        if (notificationMessageView == nil) {
+            self.setupNotificationMessage()
+        }
+        self.notificationMessageView.hidden = false
+        
+        self.view.layoutIfNeeded()
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.notificationMessageView.mas_updateConstraints { (update) -> Void in
+                update.removeExisting = true
+                update.top.equalTo()(self.view)
+                update.leading.equalTo()(self.view)
+                update.trailing.equalTo()(self.view)
+                update.height.equalTo()(self.view)
+            }
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    func hideNoPictureMessage() {
+        self.view.layoutIfNeeded()
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.notificationMessageView.mas_updateConstraints { (update) -> Void in
+                update.removeExisting = true
+                update.top.equalTo()(self.view).with().offset()(-self.notificationMessageView.getMessageAreaHeight())
+                update.leading.equalTo()(self.view)
+                update.trailing.equalTo()(self.view)
+                update.height.equalTo()(self.view)
+            }
+            self.view.layoutIfNeeded()
+        }) { (finished) -> Void in
+            self.notificationMessageView.hidden = true
+        }
+    }
+    
+
+    // MARK: - NotificationMessageViewDelegate
+    
+    func notificationMessageViewShouldBeDismissed(view: NotificationMessageView) {
+        self.hideNoPictureMessage()
     }
 }
