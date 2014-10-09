@@ -130,7 +130,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     // MARK: - Setters
     
     func setPicture(picture: UIImage) {
-        pictureImageView.image = picture
+        pictureImageView.setAvatarImage(picture)
         self.updateConstraints()
     }
     
@@ -151,5 +151,4 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     func acceptButtonTapped() {
         delegate?.confirmPictureViewDidApprovePicture(self)
     }
-    
 }

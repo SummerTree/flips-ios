@@ -13,7 +13,9 @@
 protocol TakePictureViewDelegate {
     
     func takePictureViewDidTapBackButton(takePictureView: TakePictureView)
-    func takePictureViewDidTapGalleryButton(takePictureView: TakePictureView)    
+    
+    func takePictureViewDidTapGalleryButton(takePictureView: TakePictureView)
+    
     func takePictureView(takePictureView: TakePictureView, didTakePicture picture: UIImage)
 
 }

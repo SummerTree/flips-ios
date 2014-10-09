@@ -15,7 +15,7 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     private var statusBarHidden = false
     private var signUpView: SignUpView!
     private var avatar: UIImage!
-
+    
     
     // MARK: - Overriden Methods
     
@@ -29,21 +29,25 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     override func prefersStatusBarHidden() -> Bool {
         return statusBarHidden
     }
-
+    
     
     // MARK: - SignUpViewDelegate
-
+    
     func signUpViewDidTapBackButton(signUpView: SignUpView) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         
+        self.showActivityIndicator()
+        
         UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
+            self.hideActivityIndicator()
             AuthenticationHelper.sharedInstance.userInSession = user
             var phoneNumberViewController = PhoneNumberViewController()
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }) { (mugError) -> Void in
+            self.hideActivityIndicator()
             println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
             var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
             alertView.show()

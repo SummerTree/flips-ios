@@ -39,11 +39,20 @@ extension UIImageView {
     
     convenience init(frame: CGRect, borderWidth : CGFloat) {
         self.init(frame: frame)
-        self.contentMode = UIViewContentMode.ScaleAspectFill
+        self.contentMode = UIViewContentMode.ScaleAspectFit
         self.layer.cornerRadius = CGRectGetWidth(frame) / 2;
         self.clipsToBounds = true
         
         self.layer.borderColor = UIColor.whiteColor().CGColor
         self.layer.borderWidth = borderWidth
+    }
+    
+    func setAvatarImage(image: UIImage) {
+        if ((image.size.width > self.frame.size.width) || (image.size.height > self.frame.size.height)) {
+            var resizedImage = image.resizedImageWithWidth(self.frame.size.width, andHeight: self.frame.size.height)
+            self.image = resizedImage
+        } else {
+            self.image = image
+        }
     }
 }

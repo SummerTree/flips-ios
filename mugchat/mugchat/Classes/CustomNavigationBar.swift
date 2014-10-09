@@ -302,11 +302,10 @@ class CustomNavigationBar : UIView {
     
     func setAvatarImage(image: UIImage) {
         if (avatarButton != nil) {
-            avatarButton.setImage(image, forState: .Normal)
-            avatarButton.setImage(image, forState: UIControlState.Highlighted)
-            avatarButton.contentMode = .ScaleAspectFill
+            avatarButton.setAvatarImage(image, forState: .Normal)
+            avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
         } else if (avatarImageView != nil) {
-            avatarImageView.image = image
+            avatarImageView.setAvatarImage(image)
         }
     }
     

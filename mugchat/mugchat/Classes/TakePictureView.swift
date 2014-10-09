@@ -23,8 +23,9 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
     private let CAPTURING_STILL_IMAGE_KEY_PATH = "stillImageOutput.capturingStillImage"
     private let RECORDING_KEY_PATH = "movieFileOutput.recording"
     
-    private let CAMERA_BUTTON_RIGHT_MARGIN : CGFloat = -10
-    private let CAMERA_BUTTON_VERTICAL_MARGIN : CGFloat = 10
+    private let VIDEO_SCALE_AND_CROP_FACTOR: CGFloat = 1.5
+    private let CAMERA_BUTTON_RIGHT_MARGIN: CGFloat = -10
+    private let CAMERA_BUTTON_VERTICAL_MARGIN: CGFloat = 10
     
     private var navigationBar: CustomNavigationBar!
     private var currentInterfaceOrientation: AVCaptureVideoOrientation!
@@ -254,6 +255,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
                     // Note: As an exception to the above rule, it is not necessary to serialize video orientation changes on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
                     
                     var previewViewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+                    previewViewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                     previewViewLayer.connection.videoOrientation = self.currentInterfaceOrientation
                 })
             }
@@ -333,20 +335,15 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
             if (context == CapturingStillImageContext) {
                 if let isCapturingStillImage = changes[NSKeyValueChangeNewKey] {
                     if (isCapturingStillImage) {
-                        self.runStillImageCaptureAnimation()
+                        self.runTakePictureAnimation()
                     }
                 }
             } else if (context == RecordingContext) {
                 if let isRecording = changes[NSKeyValueChangeNewKey] {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        // TODO: we aren't recording yet
                         if (isRecording) {
-//                            self.cameraButton.enabled = false
-//                            self.recordButton.setTitle(NSLocalizedString("Stop", comment: "Stop"), forState: .Normal)
-//                            self.recordButton.enabled = true
                         } else {
-//                            self.cameraButton.enabled = true
-//                            self.recordButton.setTitle(NSLocalizedString("Record", comment: "Record"), forState: .Normal)
-//                            self.recordButton.enabled = true
                         }
                     })
                 }
@@ -355,14 +352,10 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (isRunning) {
                             self.takePictureButton.enabled = true
-//                            self.cameraButton.enabled = true
-//                            self.recordButton.enabled = true
-//                            self.stillButton.enabled = true
+                            self.toggleCameraButton.enabled = true
                         } else {
                             self.takePictureButton.enabled = false
-//                            self.cameraButton.enabled = false
-//                            self.recordButton.enabled = false
-//                            self.stillButton.enabled = false
+                            self.toggleCameraButton.enabled = false
                         }
                     })
                 }
@@ -447,6 +440,8 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
             let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
             let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
             videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
+            
+            videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
 
             TakePictureView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
             
@@ -456,13 +451,10 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
                     var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     var image = UIImage(data: imageData)
                     
-                    println("image: \(image.size)")
-                    println("UIScreen.mainScreen().bounds.width: \(UIScreen.mainScreen().bounds.width)")
-                    var squaredImage = image.squareImageWithSize(UIScreen.mainScreen().bounds.width)
-                    println("squaredImage: \(squaredImage.size)")
+                    var avatarImage = image.avararA1Image(self.cropAreaView.frame)
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.delegate?.takePictureView(self, didTakePicture: squaredImage)
+                        self.delegate?.takePictureView(self, didTakePicture: avatarImage)
                         return ()
                     })
                 }
@@ -490,7 +482,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
     
     // MARK: - UI
     
-    func runStillImageCaptureAnimation() {
+    func runTakePictureAnimation() {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.previewView.layer.opacity = 0.0
             UIView.animateWithDuration(0.25, animations: { () -> Void in
@@ -573,6 +565,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
         
         return captureDevice
     }
+    
     
     // MARK: - Utility Methods
     
