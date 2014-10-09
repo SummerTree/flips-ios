@@ -37,6 +37,8 @@
 		70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */; };
 		70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A419D996F000FE4C34 /* MugChatWebView.swift */; };
 		70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */; };
+		70B7695C19E6EEA400CAA9A9 /* MugMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695B19E6EEA400CAA9A9 /* MugMessage.swift */; };
+		70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7696119E706B100CAA9A9 /* MessageReceiver.swift */; };
 		70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */; };
 		70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
@@ -127,6 +129,8 @@
 		70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebViewController.swift; sourceTree = "<group>"; };
 		70B560A419D996F000FE4C34 /* MugChatWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebView.swift; sourceTree = "<group>"; };
 		70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+StatusBarLight.swift"; sourceTree = "<group>"; };
+		70B7695B19E6EEA400CAA9A9 /* MugMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugMessage.swift; sourceTree = "<group>"; };
+		70B7696119E706B100CAA9A9 /* MessageReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageReceiver.swift; sourceTree = "<group>"; };
 		70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
@@ -226,6 +230,8 @@
 		5707185819D19D600069064F /* PubNub */ = {
 			isa = PBXGroup;
 			children = (
+				70B7695A19E6EE9700CAA9A9 /* Model */,
+				70B7696019E7069F00CAA9A9 /* Receiver */,
 				7033584719E462A20030CF11 /* PubNubService.swift */,
 			);
 			name = PubNub;
@@ -369,7 +375,7 @@
 		704E111519D0ACAF00D2BB88 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				574156A919D4A05F006F0A2F /* SwiftyJSON.swift */,
+				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
 				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
 				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
 				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
@@ -432,6 +438,30 @@
 				70B560A419D996F000FE4C34 /* MugChatWebView.swift */,
 			);
 			name = "Web View";
+			sourceTree = "<group>";
+		};
+		70B7695A19E6EE9700CAA9A9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				70B7695B19E6EEA400CAA9A9 /* MugMessage.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */ = {
+			isa = PBXGroup;
+			children = (
+				574156A919D4A05F006F0A2F /* SwiftyJSON.swift */,
+			);
+			name = SwiftyJSON;
+			sourceTree = "<group>";
+		};
+		70B7696019E7069F00CAA9A9 /* Receiver */ = {
+			isa = PBXGroup;
+			children = (
+				70B7696119E706B100CAA9A9 /* MessageReceiver.swift */,
+			);
+			name = Receiver;
 			sourceTree = "<group>";
 		};
 		70BD0E6D19E30A3A00FE8652 /* Splash Screen */ = {
@@ -774,7 +804,9 @@
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
+				70B7695C19E6EEA400CAA9A9 /* MugMessage.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
+				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,

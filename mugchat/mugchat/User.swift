@@ -38,12 +38,12 @@ public class User {
     
     convenience init(object : AnyObject) {
         self.init()
-        let json = JSON(object: object)
+        let json = JSON(object)
         self.id = json[ID].stringValue
         self.username = json[USERNAME].stringValue
         self.firstName = json[FIRST_NAME].stringValue
         self.lastName = json[LAST_NAME].stringValue
-        self.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue!)
+        self.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue)
         self.nickname = json[NICKNAME].stringValue
         self.facebookID = json[FACEBOOK_ID].stringValue
         self.photoUrl = json[PHOTO_URL].stringValue
@@ -61,7 +61,7 @@ public class User {
         self.username = json[USERNAME].stringValue
         self.firstName = json[FIRST_NAME].stringValue
         self.lastName = json[LAST_NAME].stringValue
-        self.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue!)
+        self.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue)
         self.nickname = json[NICKNAME].stringValue
         self.facebookID = json[FACEBOOK_ID].stringValue
         self.photoUrl = json[PHOTO_URL].stringValue
