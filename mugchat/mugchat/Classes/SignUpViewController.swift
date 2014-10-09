@@ -130,11 +130,10 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
             self.setNeedsStatusBarAppearanceUpdate()
             self.view.layoutIfNeeded()
         }) { (finished) -> Void in
-                self.notificationMessageView.hidden = true
+            self.notificationMessageView.hidden = true
         }
     }
     
-
     
     // MARK: - NotificationMessageViewDelegate
     

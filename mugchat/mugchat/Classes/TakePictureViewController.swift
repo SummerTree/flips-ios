@@ -95,7 +95,12 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        self.picture = image
+        var cropSquareSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
+        var cropX: CGFloat = (UIScreen.mainScreen().bounds.width / 2) - (cropSquareSize / 2)
+        var cropY = (UIScreen.mainScreen().bounds.height / 2) - (cropSquareSize / 2)
+        var cropRect = CGRectMake(cropX, cropY, cropSquareSize, cropSquareSize)
+        
+        self.picture = image.avararA1Image(cropRect)
         confirmPictureView.setPicture(picture)
         self.showConfirmPictureView()
         self.dismissViewControllerAnimated(true, completion: nil)

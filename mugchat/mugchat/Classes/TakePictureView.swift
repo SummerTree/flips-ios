@@ -31,8 +31,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
     private var currentInterfaceOrientation: AVCaptureVideoOrientation!
     
     private var previewView: AVCamPreviewView!
-    private var cropAreaView: UIView!
-    private var cropAreaBackgroundImageView: UIImageView!
+    private var cropAreaView: CropOverlayView!
     private var flashLabel: UILabel!
     private var flashButton: UIButton!
     private var toggleCameraButton: UIButton!
@@ -86,14 +85,10 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
         navigationBar.delegate = self
         self.addSubview(navigationBar)
         
-        cropAreaView = UIView()
+        cropAreaView = CropOverlayView(cropHoleSize: CGSizeMake(A1_AVATAR_SIZE - A1_BORDER_WIDTH, A1_AVATAR_SIZE - A1_BORDER_WIDTH))
         cropAreaView.backgroundColor = UIColor.clearColor()
         cropAreaView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
         self.addSubview(cropAreaView)
-        
-        cropAreaBackgroundImageView = UIImageView(image: UIImage(named: "Crop_Overlay"))
-        cropAreaBackgroundImageView.contentMode = UIViewContentMode.ScaleAspectFill
-        cropAreaView.addSubview(cropAreaBackgroundImageView)
         
         flashLabel = UILabel()
         flashLabel.text = NSLocalizedString("Auto", comment: "Auto")
@@ -163,14 +158,6 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
             make.centerX.equalTo()(self)
             make.width.equalTo()(self.mas_width)
             make.height.equalTo()(self.mas_width)
-        }
-        
-        cropAreaBackgroundImageView.mas_makeConstraints { (make) -> Void in
-            make.removeExisting = true
-            make.top.equalTo()(self.cropAreaView)
-            make.centerX.equalTo()(self.cropAreaView)
-            make.width.equalTo()(self.cropAreaView)
-            make.height.equalTo()(self.cropAreaView)
         }
         
         flashButton.mas_makeConstraints { (make) -> Void in
@@ -450,6 +437,11 @@ class TakePictureView : UIView, CustomNavigationBarDelegate {
                 if (imageDataSampleBuffer != nil) {
                     var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     var image = UIImage(data: imageData)
+                    
+                    if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
+                        // We need to flip the image
+                        image = UIImage(CGImage: image.CGImage, scale: image.scale, orientation: UIImageOrientation.LeftMirrored)
+                    }
                     
                     var avatarImage = image.avararA1Image(self.cropAreaView.frame)
                     

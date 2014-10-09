@@ -77,6 +77,7 @@
 		7AD93F9419E574B6009CC59A /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */; };
 		7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */; };
 		7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */; };
+		7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
 		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
@@ -168,6 +169,7 @@
 		7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Classes/UIImageExtensions.swift; sourceTree = "<group>"; };
 		7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageView.swift; path = Classes/NotificationMessageView.swift; sourceTree = "<group>"; };
 		7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageViewDelegate.swift; path = Classes/NotificationMessageViewDelegate.swift; sourceTree = "<group>"; };
+		7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CropOverlayView.swift; path = Classes/CropOverlayView.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 				7A9619EC19DC3ED5005E4343 /* NavigationBar */,
 				7AD93FA119E62535009CC59A /* Notification Messages */,
 				7A9619EE19DC3EEF005E4343 /* UserForm */,
+				7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -817,6 +820,7 @@
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
+				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
@@ -980,8 +984,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mugchat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -24,11 +24,7 @@ extension UIImage {
         var widthRatio = newSize.width / self.size.width
         var heightRatio = newSize.height / self.size.height
         
-        if (widthRatio > heightRatio) {
-            newSize = CGSizeMake(self.size.width * heightRatio, self.size.height * heightRatio)
-        } else {
-            newSize=CGSizeMake(self.size.width * widthRatio, self.size.height * widthRatio)
-        }
+        newSize = CGSizeMake(self.size.width * heightRatio, self.size.height * heightRatio)
         
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         self.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height))
