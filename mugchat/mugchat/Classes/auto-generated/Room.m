@@ -12,9 +12,9 @@
 
 @implementation Room
 
-@dynamic objectId;
 @dynamic name;
 @dynamic pubnubID;
+@dynamic roomID;
 @dynamic admin;
 @dynamic participants;
 

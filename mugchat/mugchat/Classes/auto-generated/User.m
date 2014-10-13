@@ -18,9 +18,9 @@
 @dynamic birthday;
 @dynamic facebookID;
 @dynamic firstName;
-@dynamic objectId;
 @dynamic lastName;
 @dynamic nickname;
+@dynamic userID;
 @dynamic photoURL;
 @dynamic pubnubID;
 @dynamic username;

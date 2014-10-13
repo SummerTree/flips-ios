@@ -16,9 +16,9 @@
 @property (nonatomic, retain) NSDate * birthday;
 @property (nonatomic, retain) NSString * facebookID;
 @property (nonatomic, retain) NSString * firstName;
-@property (nonatomic, retain) NSString * objectId;
 @property (nonatomic, retain) NSString * lastName;
 @property (nonatomic, retain) NSString * nickname;
+@property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * photoURL;
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * username;

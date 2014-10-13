@@ -13,9 +13,9 @@
 
 @interface Room : NSManagedObject
 
-@property (nonatomic, retain) NSString * objectId;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * pubnubID;
+@property (nonatomic, retain) NSString * roomID;
 @property (nonatomic, retain) User *admin;
 @property (nonatomic, retain) NSSet *participants;
 @end

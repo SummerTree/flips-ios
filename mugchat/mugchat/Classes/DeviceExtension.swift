@@ -17,7 +17,7 @@ private let PLATFORM = "platform"
 private let UUID = "uuid"
 private let IS_VERIFIED = "isVerified"
 private let RETRY_COUNT = "retryCount"
-private let VERIFICATION_CODE = "verificationCode"
+
 
 extension Device {
    
@@ -32,7 +32,6 @@ extension Device {
         entity.uuid = json[UUID].string!
         entity.isVerified = json[IS_VERIFIED].intValue == 0 ? false : true
         entity.retryCount = json[RETRY_COUNT].intValue
-        entity.verificationCode = json[VERIFICATION_CODE].string!
         
         return entity
     }

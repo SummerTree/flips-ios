@@ -15,8 +15,8 @@
 
 @property (nonatomic, retain) NSString * backgroundURL;
 @property (nonatomic, retain) NSString * category;
-@property (nonatomic, retain) NSString * objectId;
 @property (nonatomic, retain) NSNumber * isPrivate;
+@property (nonatomic, retain) NSString * mugID;
 @property (nonatomic, retain) NSString * soundURL;
 @property (nonatomic, retain) NSString * word;
 @property (nonatomic, retain) User *owner;

@@ -14,8 +14,8 @@
 
 @dynamic backgroundURL;
 @dynamic category;
-@dynamic objectId;
 @dynamic isPrivate;
+@dynamic mugID;
 @dynamic soundURL;
 @dynamic word;
 @dynamic owner;

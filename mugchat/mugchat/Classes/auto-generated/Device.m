@@ -12,13 +12,12 @@
 
 @implementation Device
 
-@dynamic objectId;
 @dynamic isVerified;
+@dynamic deviceID;
 @dynamic phoneNumber;
 @dynamic platform;
 @dynamic retryCount;
 @dynamic uuid;
-@dynamic verificationCode;
 @dynamic user;
 
 @end
