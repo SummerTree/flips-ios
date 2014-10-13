@@ -20,7 +20,11 @@ private let FACEBOOK_ID = "facebookID"
 private let PHOTO_URL = "photoUrl"
 private let PUBNUB_ID = "pubnubId"
 
+private let LOGGED_USER_ATTRIBUTE = "me"
+
 extension User {
+    
+    // MARK: - Static Methods
     
     class func createEntityWithObject(object : AnyObject) -> User {
         let json = JSON(object)
@@ -51,5 +55,15 @@ extension User {
     
     class func save() {
         NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
+    }
+    
+    class func loggedUser() -> User {
+        var loggedUser: User! = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as User
+        return loggedUser
+    }
+
+    class func isUserLoggedIn() -> Bool {
+        var loggedUser = User.loggedUser() as User?
+        return (loggedUser != nil)
     }
 }

@@ -12,7 +12,7 @@
 
 import Foundation
 
-class MugChatHandler : NSObject, PubNubServiceDelegate {
+public class MugChatHandler : NSObject, PubNubServiceDelegate {
     
     
     // MARK: - Singleton method
