@@ -24,6 +24,7 @@
 @dynamic photoURL;
 @dynamic pubnubID;
 @dynamic username;
+@dynamic me;
 @dynamic contacts;
 @dynamic devices;
 @dynamic mugs;

@@ -21,7 +21,7 @@ extension Mug {
 
     class func createEntityWithJson(json: JSON) -> Mug {
         var entity: Mug! = self.createEntity() as Mug
-        entity.objectId = json[JsonParams.ID].stringValue
+        entity.mugID = json[JsonParams.ID].stringValue
         entity.word = json[JsonParams.WORD].stringValue
         entity.backgroundURL = json[JsonParams.BACKGROUND_URL].stringValue
         entity.soundURL = json[JsonParams.SOUND_URL].stringValue

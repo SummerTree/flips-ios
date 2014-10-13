@@ -69,7 +69,7 @@
 		7A9DE1F519EC817C00F3E0C2 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9DE1F419EC817C00F3E0C2 /* Room.m */; };
 		7A9DE1F819EC817D00F3E0C2 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9DE1F719EC817D00F3E0C2 /* Device.m */; };
 		7A9DE1FB19EC817D00F3E0C2 /* Mug.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9DE1FA19EC817D00F3E0C2 /* Mug.m */; };
-		7A9DE1FE19EC817D00F3E0C2 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9DE1FD19EC817D00F3E0C2 /* User.m */; };
+		7A9DE20119EC863C00F3E0C2 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9DE20019EC863C00F3E0C2 /* User.m */; };
 		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
 		7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
 		7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */; };
@@ -173,8 +173,8 @@
 		7A9DE1F719EC817D00F3E0C2 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Device.m; path = "Classes/auto-generated/Device.m"; sourceTree = "<group>"; };
 		7A9DE1F919EC817D00F3E0C2 /* Mug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mug.h; path = "Classes/auto-generated/Mug.h"; sourceTree = "<group>"; };
 		7A9DE1FA19EC817D00F3E0C2 /* Mug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mug.m; path = "Classes/auto-generated/Mug.m"; sourceTree = "<group>"; };
-		7A9DE1FC19EC817D00F3E0C2 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = "Classes/auto-generated/User.h"; sourceTree = "<group>"; };
-		7A9DE1FD19EC817D00F3E0C2 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = "Classes/auto-generated/User.m"; sourceTree = "<group>"; };
+		7A9DE1FF19EC863C00F3E0C2 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = "Classes/auto-generated/User.h"; sourceTree = "<group>"; };
+		7A9DE20019EC863C00F3E0C2 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = "Classes/auto-generated/User.m"; sourceTree = "<group>"; };
 		7AB1683719E3196E004E2162 /* TakePictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewController.swift; path = Classes/TakePictureViewController.swift; sourceTree = "<group>"; };
 		7AB1683A19E319DB004E2162 /* TakePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureView.swift; path = Classes/TakePictureView.swift; sourceTree = "<group>"; };
 		7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewDelegate.swift; path = Classes/TakePictureViewDelegate.swift; sourceTree = "<group>"; };
@@ -588,8 +588,8 @@
 		7A556DD719E764E0003CC308 /* auto-generated */ = {
 			isa = PBXGroup;
 			children = (
-				7A9DE1FC19EC817D00F3E0C2 /* User.h */,
-				7A9DE1FD19EC817D00F3E0C2 /* User.m */,
+				7A9DE1FF19EC863C00F3E0C2 /* User.h */,
+				7A9DE20019EC863C00F3E0C2 /* User.m */,
 				7A9DE1F919EC817D00F3E0C2 /* Mug.h */,
 				7A9DE1FA19EC817D00F3E0C2 /* Mug.m */,
 				7A9DE1F619EC817D00F3E0C2 /* Device.h */,
@@ -888,7 +888,7 @@
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
-				7A9DE1FE19EC817D00F3E0C2 /* User.m in Sources */,
+				7A9DE20119EC863C00F3E0C2 /* User.m in Sources */,
 				7A556DE219E767EE003CC308 /* UserExtension.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,

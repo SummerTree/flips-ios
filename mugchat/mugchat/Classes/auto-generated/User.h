@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSString * photoURL;
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * me;
 @property (nonatomic, retain) NSOrderedSet *contacts;
 @property (nonatomic, retain) NSSet *devices;
 @property (nonatomic, retain) NSSet *mugs;

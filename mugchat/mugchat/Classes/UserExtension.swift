@@ -30,7 +30,7 @@ extension User {
     class func createEntityWithJson(json: JSON) -> User {
         var entity: User! = self.MR_createEntity() as User
         
-        entity.objectId = json[ID].stringValue
+        entity.userID = json[ID].stringValue
         entity.username = json[USERNAME].stringValue
         entity.firstName = json[FIRST_NAME].stringValue
         entity.lastName = json[LAST_NAME].stringValue
@@ -45,7 +45,7 @@ extension User {
     
     class func createEntityWithId(id: String) -> User {
         var entity: User! = self.createEntity() as User
-        entity.objectId = id
+        entity.userID = id
         return entity
     }
     

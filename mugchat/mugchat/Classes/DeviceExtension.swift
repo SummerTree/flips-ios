@@ -25,7 +25,7 @@ extension Device {
         var entity: Device! = self.createEntity() as Device
         
         var json = JSON(object)
-        entity.objectId = json[_ID].string!
+        entity.deviceID = json[_ID].string!
         entity.user = User.createEntityWithId(json[USER].string!) // TODO: it seems to be wrong
         entity.phoneNumber = json[PHONE_NUMBER].string!
         entity.platform = json[PLATFORM].string!

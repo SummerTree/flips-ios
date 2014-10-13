@@ -30,10 +30,11 @@
         <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="me" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photoURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pubnubID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userID" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="User" syncable="YES"/>
         <relationship name="devices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
@@ -44,6 +45,6 @@
         <element name="Device" positionX="-1674" positionY="-199" width="128" height="150"/>
         <element name="Mug" positionX="-1674" positionY="-31" width="128" height="148"/>
         <element name="Room" positionX="-1676" positionY="125" width="128" height="120"/>
-        <element name="User" positionX="-1386" positionY="9" width="128" height="240"/>
+        <element name="User" positionX="-1386" positionY="9" width="128" height="253"/>
     </elements>
 </model>
