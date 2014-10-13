@@ -10,28 +10,26 @@
 // the license agreement.
 //
 
-public class Mug {
-    
-    var id: String!
-    var word: String!
-    var backgroundURL: String!
-    var soundURL: String?
-    var owner: User?
-    var isPrivate: Bool?
-    var category: String?
-    
-    init(json: JSON) {
-        self.id = json[JsonParams.ID].stringValue
-        self.word = json[JsonParams.WORD].stringValue
-        self.backgroundURL = json[JsonParams.BACKGROUND_URL].stringValue
-        self.soundURL = json[JsonParams.SOUND_URL].stringValue
-    }
-    
-}
-
 private struct JsonParams {
     static let ID = "id"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
     static let SOUND_URL = "soundURL"
+}
+
+extension Mug {
+
+    class func createEntityWithJson(json: JSON) -> Mug {
+        var entity: Mug! = self.createEntity() as Mug
+        entity.objectId = json[JsonParams.ID].stringValue
+        entity.word = json[JsonParams.WORD].stringValue
+        entity.backgroundURL = json[JsonParams.BACKGROUND_URL].stringValue
+        entity.soundURL = json[JsonParams.SOUND_URL].stringValue
+        
+        return entity
+    }
+    
+    class func save() {
+        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
+    }
 }

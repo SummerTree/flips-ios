@@ -20,8 +20,9 @@ public class AuthenticationHelper: NSObject {
         willSet(newUser) {
             if (newUser != nil) {
                 self.userInSession = newUser
+                println("User pubnubId: '\(newUser.pubnubID)'")
                 PubNubService.sharedInstance.connect()
-                saveAuthenticatedUsername(newUser.username!)
+                saveAuthenticatedUsername(newUser.username)
             }
         }
     }
