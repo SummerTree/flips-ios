@@ -72,6 +72,10 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
     
+    //test
+    private var mugTextsContainer : MugTextsContainer!
+    
+    
     private var isInformedWrongPassword: Bool = false
     
     private var animator: UIDynamicAnimator!
@@ -207,6 +211,15 @@ class LoginView : UIView, UITextFieldDelegate {
         
         spaceBetweenCredentialsAndFacebook = UIView()
         self.addSubview(spaceBetweenCredentialsAndFacebook)
+        
+        
+        //test
+        let stringTest = "San Francisco!?" as String
+        var arrayOfMugs : [String] = MugStringsUtil.splitMugString(stringTest);
+        mugTextsContainer = MugTextsContainer(texts: arrayOfMugs)
+        //mugTextsContainer.backgroundColor = UIColor.whiteColor()
+        spaceBetweenCredentialsAndFacebook.addSubview(mugTextsContainer)
+        
         
         emailImageView = UIImageView(image: UIImage(named: "Mail"));
         emailImageView.contentMode = .Center
@@ -376,6 +389,16 @@ class LoginView : UIView, UITextFieldDelegate {
             make.top.equalTo()(self.spaceBetweenMugchatAndCredentials.mas_bottom)
             make.bottom.equalTo()(self.passwordImageView)
         }
+        
+        //test
+        mugTextsContainer.mas_makeConstraints { (make) -> Void in
+            make.leading.equalTo()(self.spaceBetweenCredentialsAndFacebook)
+            make.trailing.equalTo()(self.spaceBetweenCredentialsAndFacebook)
+            make.top.equalTo()(self.spaceBetweenCredentialsAndFacebook)
+            //make.bottom.equalTo()(self.spaceBetweenCredentialsAndFacebook) //.mas_bottom)
+            make.height.equalTo()(50)
+        }
+        
         
         emailImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.credentialsView)

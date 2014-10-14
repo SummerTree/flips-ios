@@ -10,34 +10,32 @@
 // the license agreement.
 //
 
-class MugTextsContainer : UIScrollView {
+
+// UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+// http://stackoverflow.com/questions/26233999/uiscrollview-and-its-children-why-are-they-placed-on-top-of-each-other-autol
+
+class MugTextsContainer : UIView { //UIScrollView
     
-    var mugTexts: [MugText]?
+    var mugTexts: [MugText]! = [MugText]()
     
-    private var texts : [String]! //Mugs?
+    private var texts : [String]! //TODO: use object Mug instead of string
     
     
     // MARK: - Initialization Methods
     
     convenience init(texts : [String]) {
-        self.init(frame: CGRect.zeroRect) //TODO
+        self.init(frame: CGRect.zeroRect)
         
         self.texts = texts
         
-        self.scrollEnabled = true;
-        self.pagingEnabled = true;
-        //self.contentSize = CGSizeMake(320, 50); //CGSizeMake(self.view.frame.size.width * numberOfViews, self.view.frame.size.height);
-        //self.contentSize = CGSize(width:320, height: 50)
-        //self.contentOffset = CGPoint(x: 10, y: 20)
+        self.backgroundColor = UIColor.whiteColor()
 
         self.initSubviews()
-        
-        self.updateConstraintsIfNeeded()
+        //self.updateConstraintsIfNeeded()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -45,14 +43,48 @@ class MugTextsContainer : UIScrollView {
     }
     
     func initSubviews() {
+        
+        var leadingValue : CGFloat = 5.0
+        var lastMugText: MugText?
+        
         for text in self.texts {
-            var mugText = MugText(mugText: text, status: "default")
+            //var mugText : UITextField = UITextField();
+            //mugText.text = text
+            
+            var mugText : MugText = MugText(mugText: text, status: "default")
+            mugTexts?.append(mugText)
+            
+            //mugText.sizeToFit()
             self.addSubview(mugText)
+            
             mugText.mas_makeConstraints { (make) -> Void in
                 make.height.equalTo()(40)
-                make.width.equalTo()(40)
+                make.centerY.equalTo()(self.mas_centerY)
+                make.left.equalTo()(lastMugText?.mas_right)
             }
+            
+            //make.leading.equalTo()(self).with().offset()(leadingValue)
+            //make.left.equalTo()(lastMugText?.mas_right).with().offset()(12)
+
+            lastMugText = mugText;
+            //leadingValue += mugText.frame.size.width + 12;
         }
     }
+    
+    /*override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        var leadingValue : CGFloat = 5.0
+    
+        for mugText in self.mugTexts {
+            mugText.mas_makeConstraints { (make) -> Void in
+                make.height.equalTo()(40)
+                make.centerY.equalTo()(self.mas_centerY)
+                make.leading.equalTo()(self).with().offset()(leadingValue)
+            }
+            
+            leadingValue += mugText.frame.size.width + 12;
+        }
+    }*/
     
 }
