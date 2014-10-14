@@ -56,7 +56,7 @@ Scenario: Touching Done with no value on the Email field
   And The Email field is not filled
   And The Password field is filled
   When I touch "Done" button
-  Then I should see a message: "Please completed both fields."
+  Then I should see a message: "Please complete both fields."
 
 @7171
 Scenario Outline: Invalid values
@@ -85,7 +85,7 @@ Scenario: Login with right email and wrong password
   And I fill "Password" with the value: "Mugchat2"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  And I should see the icon "!" between the fields
+  And I should see the icon "!" for each field
 
 @7171
 Scenario: Login with wrong email and right password
@@ -94,7 +94,7 @@ Scenario: Login with wrong email and right password
   And I fill "Password" with the value: "Mugchat1"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  And I should see the icon "!" between the fields
+  And I should see the icon "!" for each field
 
 @7171
 Scenario: Showing Email keyboard

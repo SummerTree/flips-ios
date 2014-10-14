@@ -3,93 +3,108 @@ Feature: Microphone recorder
   I want to recorder a voice
   So, I can send a MugChat to my friends with image and voice
 
-Scenario: Acception a take picture by Recorder screen
-  Given I am on the "Recorder" screen
-  When I take a picture
-  And I confirm it
+@7453
+Scenario: Accessing Microphone screen
+  Given I am on the "Compose" screen
+  And I'm seeing "Yellow" button
+  When I touch "<option>" button
   Then I should see "Microphone" screen
+  | option     |
+  | Yellow     |
+  | Microphone |
 
-Scenario: Micriphone screen
+@7453
+Scenario: Microphone screen
   Given I am on the "Microphone" screen
   Then I should see "Microphone Recorder" icon
   And I should see "Cancel recorder" icon
 
-#Ben, this message will be showed just on MugBoys Chat? Or at first time for any mug?
-Scenario: Showing a message on MugBoys mug
-  Given I am on the "Microphone" screen
-  When The selected mug is MugBoys
-  Then I should see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+@7453
+Scenario: It is the first time that I am accessing Microphone screen
+  Given I am never access "Microphone" screen in this device
+  When I go to "Microphone" screen
+  Then I should see a message: ""MugChat" Would Like to Access Your Microphone" buttons: "Don't Allow", "Allow"
 
-Scenario: Showing a message on any mug
-  Given I am on the "Microphone" screen
-  When The selected mug is not MugBoys
-  Then I should not see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+@7453
+Scenario: It is not the first time that I am accessing Microphone screen
+  Given I am already access "Microphone" screen in this device
+  When I go to "Microphone" screen
+  Then I should not see a message: ""MugChat" Would Like to Access Your Microphone" buttons: "Don't Allow", "Allow"
 
-#waiting for Ben
-Scenario: Preview button
-  Given I am on the "Microphone" screen
-  Then I should see "Preview" button disable
-
-Scenario: Touching microphone recorder icon for the first time
-  Given I am on the "Microphone" screen
-  And It is the first time that I'll recorder a voice
-  When I touch the "Microphone Recorder" icon
-  Then I should see the a message: ""MugChat" Woud Like to Access your Microphone"
-  And I should see buttons:"Don't Allow" and "OK"
-
-#Ben, what should happen in this scenario?
+@7453
 Scenario: Don't allow the microphone
   Given I am on the "Microphone" screen
   And I touch "Microphone Recorder" icon
   When I touch "Don't Allow"
-  Then I should see "Recorder" screen
+  Then I should see "Compose" screen
 
+@7453
 Scenario: Allow the microphone
   Given I am on the "Microphone" screen
   And I touch "Microphone Recorder" icon
   When I touch "OK"
   Then I should keeps seing "Microphone" screen
 
-Scenario: Recording a voice
+@7453
+Scenario: Touching X button witouth recorder
   Given I am on the "Microphone" screen
-  And I tap and holp "Microphone Recorder" icon
-  Then The recorder voice should starts
-  And I should see a thermometer with the progress
+  And I didn't recorder anything
+  When I touch "X" button
+  Then I should see "Confirm Photo" screen
+  And The audio shouldn't be saved
 
-Scenario: Touching microphone recorder icon for the second time when it was allowed on the first time
+@7453
+Scenario: Touching X button with recorder
   Given I am on the "Microphone" screen
-  And It is the second time that I'll recorder a vonce
-  And I allowed it on my first time
-  When I touch the "Microphone Recorder" icon
-  Then The recorder voice should starts
+  And I recorder an audio
+  When I touch "X" button
+  Then I should see "Confirm Photo" screen
+  And The audio shouldn't be saved
 
-Scenario: Touching microphone recorder icon for the second time when it doesn't allowed on the first time
+@7453
+Scenario: Holding Microphone button more than one second
   Given I am on the "Microphone" screen
-  And It is the second time that I'll recorder a vonce
-  And I don't allowed it on my first time
-  When I touch the "Microphone Recorder" icon
-  Then I should see the a message: ""MugChat" Woud Like to Access your Microphone"
-  And I should see buttons:"Don't Allow" and "OK"
+  When I hold "Yellow Microphone" button for 4 seconds
+  Then An audio should be recorder with 1 second
 
-Scenario: Recording a voice
-  Given I am on "Microphone" screen
-  And I touch the "Microphone Recorder" icon
-  When 1 second is gone
-  Then I should see "Confirm" screen
-
-Scenario: Canceling the voice recorder
+@7453
+Scenario: Holding Microphone button for one second
   Given I am on the "Microphone" screen
-  When I touch the "Cancel Microphone Recoder" icon
-  Then I should see "Confirm" screen
+  When I hold "Yellow Microphone" button for 1 second
+  Then An audio should be recorder with 1 second
 
-Scenario: Verifying title screen when the mug has only one person
+@7453
+Scenario: Showing progress bar
   Given I am on the "Microphone" screen
-  When I have a mug with only one person
-  Then I should see person's name who send me the mug as a title
+  When I hold "Yellow Microphone" button
+  Then I should see a progress bar across the top of the frame
 
-Scenario: Verifying title screen when the mug has more than one person
+@7453
+Scenario: Finishing audio recorder
   Given I am on the "Microphone" screen
-  When I have a mug with only more than one person
+  When I touch "Yellow Microphone" button
+  And 1 second is gone
+  Then I should see "Confirm Photo" screen
+  And The audio should be saved
+
+Scenario: Showing a message on MugBoys conversation
+  Given I am on the "Microphone" screen
+  When The selected message is MugBoys
+  Then I should see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+
+Scenario: Showing a message on any conversation
+  Given I am on the "Microphone" screen
+  When The selected conversation is not MugBoys
+  Then I should not see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+
+Scenario: Verifying title screen when the message has only one person
+  Given I am on the "Microphone" screen
+  When I have a message with only one person
+  Then I should see person's name who send me the message as a title
+
+Scenario: Verifying title screen when the message has more than one person
+  Given I am on the "Microphone" screen
+  When I have a message with more than one person
   Then I should see "Group Chat" as a title
 
 Scenario: Verifying design screen
