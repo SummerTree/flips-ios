@@ -5,7 +5,7 @@ Feature: New Mug
 
 Scenario: Creating a new Mug
   Given I am on the "Inbox" screen
-  When I touch "pencil" icon
+  When I touch "Pencil" icon
   Then I should see "New Mug" screen
 
 Scenario: Canceling a new mug
@@ -54,7 +54,7 @@ Scenario: Creating a new mug
   Given I am on the "New Mug" screen
   When I type a text on the text field
   And I touch "Next" button
-  Then I should see "Join Word Photo" screen
+  Then I should see "Compose" screen
   And The first word should be selected
 
 Scenario: Picking up more than one person

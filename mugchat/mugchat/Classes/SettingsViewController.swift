@@ -27,16 +27,37 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
         
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        // Just for test. Can be removed.
+        let loggedUserNameLabel = UILabel()
+        loggedUserNameLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h3)
+        loggedUserNameLabel.textColor = UIColor.mugOrange()
+        loggedUserNameLabel.numberOfLines = 2
+        loggedUserNameLabel.textAlignment = NSTextAlignment.Center
+        self.view.addSubview(loggedUserNameLabel)
+        
+        loggedUserNameLabel.mas_makeConstraints { (make) -> Void in
+            make.leading.equalTo()(self.view)
+            make.trailing.equalTo()(self.view)
+            make.center.equalTo()(self.view)
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let loggedUser: User! = User.loggedUser()
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if (loggedUser != nil) {
+                    loggedUserNameLabel.text = "Logged as \n\(loggedUser.firstName) \(loggedUser.lastName)"
+                }
+            })
+        })
     }
     
     
     // MARK: - Settings View Delegate
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
-        AuthenticationHelper.sharedInstance.userInSession = nil
-        FBSession.activeSession().closeAndClearTokenInformation()
-        FBSession.activeSession().close()
-        FBSession.setActiveSession(nil)
+        AuthenticationHelper.sharedInstance.logout()
         
         var navigationController: UINavigationController = self.presentingViewController as UINavigationController
         navigationController.popViewControllerAnimated(false)
@@ -47,7 +68,7 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
-
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
