@@ -15,17 +15,19 @@ import Foundation
 class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     var mugs = [
-        MugVideo(message: "Welcome to MugChat 1", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 2", videoPath: "welcome_mugchat", timestamp: "8:24 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 3", videoPath: "welcome_mugchat", timestamp: "8:25 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 4", videoPath: "welcome_mugchat", timestamp: "8:26 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 5", videoPath: "welcome_mugchat", timestamp: "8:27 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 6", videoPath: "welcome_mugchat", timestamp: "8:28 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 7", videoPath: "welcome_mugchat", timestamp: "8:29 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 8", videoPath: "welcome_mugchat", timestamp: "8:30 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 9", videoPath: "welcome_mugchat", timestamp: "8:31 am", avatarPath: "tmp_homer", received: false),
-        MugVideo(message: "Welcome to MugChat 10", videoPath: "welcome_mugchat", timestamp: "8:32 am", avatarPath: "tmp_homer", received: false)
+        MugVideo(message: "Welcome to MugChat", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+        MugVideo(message: "Bollywood!!!", videoPath: "bollywood", timestamp: "8:24 am", avatarPath: "tmp_homer", thumbnailPath: "bollywood_thumbnail.jpeg", received: false),
+        MugVideo(message: "Wanna coffee?", videoPath: "wanna_coffee", timestamp: "8:25 am", avatarPath: "tmp_homer", thumbnailPath: "coffee_thumbnail.png", received: false)
+//        MugVideo(message: "Welcome to MugChat 4", videoPath: "welcome_mugchat", timestamp: "8:26 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+//        MugVideo(message: "Welcome to MugChat 5", videoPath: "welcome_mugchat", timestamp: "8:27 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+//        MugVideo(message: "Welcome to MugChat 6", videoPath: "welcome_mugchat", timestamp: "8:28 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+//        MugVideo(message: "Welcome to MugChat 7", videoPath: "welcome_mugchat", timestamp: "8:29 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+//        MugVideo(message: "Welcome to MugChat 8", videoPath: "welcome_mugchat", timestamp: "8:30 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+//        MugVideo(message: "Welcome to MugChat 9", videoPath: "welcome_mugchat", timestamp: "8:31 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
+//        MugVideo(message: "Welcome to MugChat 10", videoPath: "welcome_mugchat", timestamp: "8:32 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false)
     ]
+    
+    var oldestUnreadMessageIndex = 1
     
     private let CELL_IDENTIFIER = "mugChatCell"
     private let REPLY_BUTTON_TOP_MARGIN : CGFloat = 18.0
@@ -48,11 +50,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         self.addSubviews()
         self.makeConstraints()
-        self.backgroundColor = UIColor.whiteColor()
-
+        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: oldestUnreadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
     }
    
     required init(coder aDecoder: NSCoder) {
@@ -64,19 +64,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func addSubviews() {
         tableView = UITableView(frame: self.frame, style: .Plain)
-        tableView.backgroundColor = UIColor.greenColor()
+        tableView.backgroundColor = UIColor.whiteColor()
         tableView.registerClass(ChatTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
         tableView.separatorStyle = .None
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.contentOffset = CGPointMake(0, 0)
         tableView.dataSource = self
         tableView.delegate = self
-        
-//        tableView.contentInset = UIEdgeInsetsMake(self.delegate?.navigationController?.navigationBar.getNavigationBarHeight(), 0, 0, 0)
-//        tableView.contentOffset = CGPointMake(0, -self.delegate?.navigationController?.navigationBar.getNavigationBarHeight())
-        
         self.addSubview(tableView)
-        
         
         separatorView = UIView()
         separatorView.backgroundColor = UIColor.blueColor()
@@ -152,13 +147,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mugs.count;
     }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 40.0;
-    }
-    
+        
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 396; //TODO: it works for mock data
     }
     
     func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String! {
@@ -170,6 +165,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
             mugs.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
         }
+    }
+    
+    
+    // MARK: - UITableViewDelegate
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
 }

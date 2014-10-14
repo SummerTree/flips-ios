@@ -32,6 +32,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        //self.chatView.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
