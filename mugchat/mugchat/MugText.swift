@@ -28,8 +28,6 @@ class MugText : UIView {
         self.status = status
         
         self.initSubviews()
-        
-        //self.updateConstraintsIfNeeded()
     }
     
     override init(frame: CGRect) {
@@ -42,10 +40,8 @@ class MugText : UIView {
     }
     
     func initSubviews() {
-        //self.innerView = UIView()
-        //self.innerView.sizeToFit()
-        
         mugButton = UIButton()
+        //mugButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
         //mugButton.addTarget(self, action: "mugButtonTapped:", forControlEvents: .TouchUpInside)
         mugButton.layer.borderWidth = 1.0
         mugButton.layer.borderColor = UIColor.avacado().CGColor
@@ -53,23 +49,22 @@ class MugText : UIView {
         mugButton.setTitle(self.mugText, forState: UIControlState.Normal)
         mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         mugButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-
-        mugButton.sizeToFit()
-        
-        //self.backgroundColor = UIColor.yellowColor()
-        self.sizeToFit()
-        
         self.addSubview(self.mugButton)
         
         mugButton?.mas_makeConstraints { (make) -> Void in
-//            make.centerX.equalTo()(self)
-//            make.centerY.equalTo()(self)
+            //make.width.equalTo()(self.badgeView.frame.size.width)
             make.top.equalTo()(self)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
-
         }
+    }
+    
+    func getTextWidth() -> CGFloat{
+        let myString: NSString = mugText as NSString
+        var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
+        return size.width
     }
     
 }

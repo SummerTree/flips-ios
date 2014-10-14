@@ -14,6 +14,8 @@
 // UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 // http://stackoverflow.com/questions/26233999/uiscrollview-and-its-children-why-are-they-placed-on-top-of-each-other-autol
 
+private let MIN_BUTTON_WIDTH : CGFloat = 70.0
+
 class MugTextsContainer : UIView { //UIScrollView
     
     var mugTexts: [MugText]! = [MugText]()
@@ -31,7 +33,6 @@ class MugTextsContainer : UIView { //UIScrollView
         self.backgroundColor = UIColor.whiteColor()
 
         self.initSubviews()
-        //self.updateConstraintsIfNeeded()
     }
     
     override init(frame: CGRect) {
@@ -43,7 +44,6 @@ class MugTextsContainer : UIView { //UIScrollView
     }
     
     func initSubviews() {
-        
         var leadingValue : CGFloat = 5.0
         var lastMugText: MugText!
         
@@ -54,18 +54,14 @@ class MugTextsContainer : UIView { //UIScrollView
             
             self.addSubview(mugText)
             
-            if (lastMugText == nil) {
-                mugText.mas_makeConstraints { (make) -> Void in
-                    make.height.equalTo()(40)
-                    make.centerY.equalTo()(self.mas_centerY)
-                    make.left.equalTo()(self)
-                }
-            } else {
-                mugText.mas_makeConstraints { (make) -> Void in
-                    make.height.equalTo()(36)
-                    make.centerY.equalTo()(self.mas_centerY)
-                    make.left.equalTo()(lastMugText.mas_right).with().offset()(12)
-                }
+            var textWidth : CGFloat = mugText.getTextWidth()
+            var buttonWidth : CGFloat = textWidth + 20;
+
+            mugText.mas_makeConstraints { (make) -> Void in
+                make.height.equalTo()(36)
+                make.centerY.equalTo()(self.mas_centerY)
+                make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(12)
+                make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }
 
             lastMugText = mugText;
