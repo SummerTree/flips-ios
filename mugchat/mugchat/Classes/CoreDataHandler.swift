@@ -14,6 +14,8 @@ import Foundation
 
 public class CoreDataHandler: NSObject {
     
+    private let databaseStoreName = "mugchat"
+    
     public class var sharedInstance : CoreDataHandler {
     struct Static {
         static let instance : CoreDataHandler = CoreDataHandler()
@@ -25,29 +27,20 @@ public class CoreDataHandler: NSObject {
     // MARK: - Database Handlers
     
     func setupDatabase() {
-        MagicalRecord.setupAutoMigratingCoreDataStack()
+        MagicalRecord.setupCoreDataStackWithAutoMigratingSqliteStoreNamed(databaseStoreName)
     }
 
     func resetDatabase() {
-        var databaseStore = self.getDatabasePath()
         var error: NSError?
-        var storeURL = NSPersistentStore.MR_urlForStoreName(databaseStore)
+        var storeURL = NSPersistentStore.MR_urlForStoreName(databaseStoreName)
         
         MagicalRecord.cleanUp()
         
         if (NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &error)) {
             self.setupDatabase()
         } else {
-            println("An error has occurred while deleting \(databaseStore)")
+            println("An error has occurred while deleting \(databaseStoreName)")
             println("Error description: \(error?.description)")
         }
-    }
-    
-    
-    // MARK: - Database Getters
-
-    private func getDatabasePath() -> String {
-        var bundleID: AnyObject! = NSBundle.mainBundle().objectForInfoDictionaryKey(String(kCFBundleIdentifierKey))
-        return "\(bundleID).sqlite"
     }
 }
