@@ -57,9 +57,9 @@ extension User {
         NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
     }
     
-    class func loggedUser() -> User {
-        var loggedUser: User! = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as User
-        return loggedUser
+    class func loggedUser() -> User? {
+        var loggedAttributeUser: User? = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as? User
+        return loggedAttributeUser
     }
 
     class func isUserLoggedIn() -> Bool {
