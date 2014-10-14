@@ -18,16 +18,6 @@ Scenario: Access Inbox screen by New password screen
   And I touch "Done" button
   Then I should see "Inbox" screen
 
-Scenario: Seeing MugBoys message
-  Given It is the first time that I log in on the app
-  When I am on the "Inbox" screen
-  Then I should see "MugBoys" conversation
-
-Scenario: Visualizing Inbox screen for the first time
-  Given It is the first time that I log in on the app
-  When I am on the "Inbox" screen
-  Then I should see a purple ballon with the message: "Welcome to MugChat You have a message. Must be nice to be so popular."
-
 @7223
 Scenario: Having one or more messages unread
   Given I am on the "Inbox" screen
@@ -77,11 +67,18 @@ Scenario: Background's photo when the conversation has more than one person and 
   Then I should see the first frame of the video of the most recent message mug sent to me as background
 
 @7223
+Scenario: Reciving a conversation to a person from another country
+  Given I am on "Brasil"
+  And It's 10am
+  When I send a message to "San Francisco"
+  Then The time showed on "Inbox" for the recipient screen should be 6am
+
+@7223
 Scenario: Sending a conversation to a person from another country
   Given I am on "Brasil"
   And It's 10am
-  When I send a mug to "EUA"
-  Then The time showed on "Inbox" screen should be 6am
+  When I send a message to "San Francisco"
+  Then The time showed on "Inbox" for the sender screen should be 10am
 
 @7223
 Scenario: Time when I have read and unread messages
@@ -96,16 +93,16 @@ Scenario: Time when I have only read messages
   Then I should see the time for the most recent message was sent to me
 
 @7223
-Scenario: Text on the bottom of the mug when I have read and unread messages
+Scenario: Text on the bottom of the conversation when I have read and unread messages
   Given I am on the "Inbox" screen
   When I have a conversation on the list that has unread messages
   Then I should see the text: "Tap to Play" on the bottom of the mug
 
 @7223
-Scenario: Text on the bottom of the mug when I have just read messages
+Scenario: Text on the bottom of the conversation when I have just read messages
   Given I am on the "Inbox" screen
   When I have a conversation on the list that has just read messages
-  Then I should see the beginning of most recently message read on the bottom of the mug
+  Then I should see the beginning of most recent message read on the bottom of the conversation
 
 @7225
 Scenario: Swiping a conversation
@@ -130,16 +127,17 @@ Scenario: Deleting all my conversations
 @7223
 Scenario: Receiving a new conversation
   Given I am on the "Inbox" screen
-  And I have Mugs on my list
-  When I receive a new mug
+  And I have conversations on my list
+  When I receive a new message
   Then It should be on the top of the list
-  And The other mugs should be sorted by time stamp descending order
+  And The other conversations should be sorted by time stamp descending order
 
 @7223
 Scenario: So much conversations on my list
   Given I am on the "Inbox" screen
   And I have a lot of conversations
   When I have no space to so much conversations
+  And I scrolling the screen
   Then A scroll bar should be showed
 
 Scenario: Touching Construction icon
