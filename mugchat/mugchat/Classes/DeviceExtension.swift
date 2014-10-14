@@ -25,11 +25,11 @@ extension Device {
         var entity: Device! = self.createEntity() as Device
         
         var json = JSON(object)
-        entity.deviceID = json[_ID].string!
-        entity.user = User.createEntityWithId(json[USER].string!) // TODO: it seems to be wrong
-        entity.phoneNumber = json[PHONE_NUMBER].string!
-        entity.platform = json[PLATFORM].string!
-        entity.uuid = json[UUID].string!
+        entity.deviceID = json[_ID].stringValue
+        entity.user = User.createEntityWithId(json[USER].stringValue) // TODO: it seems to be wrong
+        entity.phoneNumber = json[PHONE_NUMBER].stringValue
+        entity.platform = json[PLATFORM].stringValue
+        entity.uuid = json[UUID].stringValue
         entity.isVerified = json[IS_VERIFIED].intValue == 0 ? false : true
         entity.retryCount = json[RETRY_COUNT].intValue
         
