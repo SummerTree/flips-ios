@@ -47,6 +47,8 @@ class ChatTableViewCell: UITableViewCell {
             videoView = player.view
             messageView.addSubview(videoView)
             
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackStateDidChange:", name: "MPMoviePlayerPlaybackStateDidChangeNotification", object: player)
+            
             thumbnail = UIImage(named: message.thumbnailPath)
             thumbnailView = UIImageView(image: thumbnail)
             thumbnailView.userInteractionEnabled = true
@@ -93,7 +95,7 @@ class ChatTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.whiteColor()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackStateDidChange:", name: "MPMoviePlayerPlaybackStateDidChangeNotification", object: nil)
+        
     }
     
     required init(coder aDecoder: NSCoder) {
