@@ -20,13 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        
         // Registering for receive messages
         MessageReceiver.sharedInstance.startListeningMessages()
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        MagicalRecord.setupAutoMigratingCoreDataStack()
+        CoreDataHandler.sharedInstance.setupDatabase()
 
         let splashScreenViewController = SplashScreenViewController()
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
@@ -42,7 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             application.registerForRemoteNotificationTypes(UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound | UIRemoteNotificationType.Badge)
         }
-        
         
         return true;
     }

@@ -126,7 +126,10 @@ public class UserService: MugchatService {
     }
     
     func parseSigninResponse(response: AnyObject) -> User? {
-        return User.createEntityWithObject(response)
+        var user = User.createEntityWithObject(response)
+        user.me = true
+        User.save()
+        return user
     }
     
     

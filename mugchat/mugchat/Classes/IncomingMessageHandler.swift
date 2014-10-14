@@ -12,14 +12,14 @@
 
 import Foundation
 
-class MugChatHandler : NSObject, PubNubServiceDelegate {
+public class IncomingMessageHandler : NSObject, PubNubServiceDelegate {
     
     
     // MARK: - Singleton method
     
-    public class var sharedInstance : MugChatHandler {
+    public class var sharedInstance : IncomingMessageHandler {
     struct Static {
-        static let instance : MugChatHandler = MugChatHandler()
+        static let instance : IncomingMessageHandler = IncomingMessageHandler()
         }
         return Static.instance
     }

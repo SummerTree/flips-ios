@@ -22,6 +22,8 @@ public class AuthenticationHelper: NSObject {
                 self.userInSession = newUser
                 println("User pubnubId: '\(newUser.pubnubID)'")
                 PubNubService.sharedInstance.connect()
+                
+                // Used to auto-fill the field in the login screen
                 saveAuthenticatedUsername(newUser.username)
             }
         }
@@ -32,18 +34,22 @@ public class AuthenticationHelper: NSObject {
         userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
         userDefaults.synchronize()
     }
-    
-    private func removeAuthenticatedUsername() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey(LOGIN_USERNAME_KEY)
-        userDefaults.synchronize()
-    }
-    
+
     func retrieveAuthenticatedUsernameIfExists() -> String? {
+        var loggedUserInfo = User.isUserLoggedIn()
         var userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(LOGIN_USERNAME_KEY) as String?
     }
     
+    func logout() {
+        self.userInSession = nil
+        FBSession.activeSession().closeAndClearTokenInformation()
+        FBSession.activeSession().close()
+        FBSession.setActiveSession(nil)
+        
+        CoreDataHandler.sharedInstance.resetDatabase()
+    }
+
     
     // MARK: - Singleton method
     
