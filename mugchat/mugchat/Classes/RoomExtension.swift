@@ -10,12 +10,5 @@
 // the license agreement.
 //
 
-public struct Room {
-    
-    var id: String? = nil
-    var name: String? = nil
-    var admin: User? = nil
-    var participants: [User]? = nil
-    var pubnubId: String? = nil
-    
+extension Room {
 }
