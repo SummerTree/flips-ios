@@ -34,7 +34,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                     return ()
                 }
                 
-                var userDevice: Device! = device;
+                var userDevice: Device! = device as Device;
                 var user: User! = userDevice.user
                 
                 var newPasswordViewController = NewPasswordViewController(user: user, phoneNumber: self.phoneNumber, verificationCode: verificationCode)

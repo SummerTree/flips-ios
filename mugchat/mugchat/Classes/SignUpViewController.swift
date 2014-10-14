@@ -47,7 +47,7 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
             
             UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
                 self.hideActivityIndicator()
-                AuthenticationHelper.sharedInstance.userInSession = user
+                AuthenticationHelper.sharedInstance.userInSession = user as User
                 var phoneNumberViewController = PhoneNumberViewController()
                 self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
                 }) { (mugError) -> Void in
