@@ -14,37 +14,37 @@ Scenario: Access Compose screen
 @7448
 Scenario: Showing words
   Given I am on the "Compose" screen
-  Then I should see all words that I typed on the previous screen
+  Then The row should contain all words that I typed on the previous screen
 
 @7448
 Scenario: Words that have photos available on the user's dictionary
   Given I am on the "Compose" screen
-  When There are photos available on the user's dictionary
-  Then I should see "..." icon on the top of word
+  When There are photos available on the user's dictionary for some of those words
+  Then I should see "..." icon on the top of those words
 
 @7448
 Scenario: Words that have videos available on the user's dictionary
   Given I am on the "Compose" screen
-  When There are videos available on the user's dictionary
-  Then I should see "..." icon on the top of word
+  When There are videos available on the user's dictionary for some of those words
+  Then I should see "..." icon on the top of those words
 
 @7448
-Scenario: Words that have photos available on the Stok Mug
+Scenario: Words that have photos available on the Stock Mug
   Given I am on the "Compose" screen
-  When There are photos available on the Stok Mugs
-  Then I should see "..." icon on the top of word
+  When There are photos available on the Stock Mugs for some of those words
+  Then I should see "..." icon on the top of those words
 
 @7448
-Scenario: Words that have videos available on the Stok Mugs
+Scenario: Words that have videos available on the Stock Mugs
   Given I am on the "Compose" screen
-  When There are videos available on the Stok Mugs
-  Then I should see "..." icon on the top of word
+  When There are videos available on the Stock Mugs for some of those words
+  Then I should see "..." icon on the top of those words
 
 @7448
-Scenario: Words that do not have videos or photos available on the user's distionary or Stok Mugs option
+Scenario: Words that do not have videos or photos available on the user's distionary or Stock Mugs option
   Given I am on the "Compose" screen
-  When There are not videos or photos available on the user's dictionary or Stok Mugs option
-  Then I shouldn't see "..." icon on the top of word
+  When There are not videos or photos available on the user's dictionary or Stock Mugs option for some of those words
+  Then I shouldn't see "..." icon on the top of those words
 
 @7448
 Scenario: Words that are assigned
@@ -56,7 +56,7 @@ Scenario: Words that are assigned
 Scenario: Words that are not assigned
   Given I am on the "Compose" screen
   When The word is not assigned
-  Then I should see the word within only a green circle
+  Then I should see the word within only a green outline circle
 
 @7448
 Scenario: Seeing Punctuation on Compose screen
@@ -76,9 +76,9 @@ Scenario: Updating a text
 Scenario: Selecting other words
   Given I am on the "Compose" screen
   And I don't have a video or photo to any word
-  When I touch a word didn't select automatically
+  When I swipe to word that wasn't selected automatically
   Then I should see the this word selected
-  And I should see the word selected automatically deselected  
+  And I should see the word selected automatically deselected
 
 @7447
 Scenario: Showing joined words
@@ -100,15 +100,15 @@ Scenario: Showing split words
   Then I should see 2 words
 
 @7449
-Scenario: Swiping words to the right
+Scenario: Swiping words left to right
   Given I am on the "Compose" screen
-  When I swipe the words to the right
+  When I swipe the words left to right
   Then I should see the first words
 
 @7449
-Scenario: Swiping words to the left
+Scenario: Swiping words right to left
   Given I am on the "Compose" screen
-  When I swipe the words to the left
+  When I swipe the words right to left
   Then I should see the last words
 
 @7449
@@ -130,8 +130,9 @@ Scenario: Compose screen when the word selected has previous mugs available from
   Given I am on the "Compose" screen
   When I select a word that has previous mugs available from user's dictionary
   But Doesn't have previous mugs available from Stock Mugs
-  Then I should see: "My Mugs" string, "Stock Mugs" string, "+" button and user's dictionary image from this word
+  Then I should see: "My Mugs" string, "+" button and user's dictionary image from this word
   And Above the words I should see a green background
+  And I shouldn't see "Stock Mugs" string
 
 @7450
 Scenario: Compose screen when the word selected has previous mugs available from Stock Mug
@@ -158,11 +159,11 @@ Scenario: Touching My Mugs/Stock Mugs image
   And I should see a check on the image
 
 @7450
-Scenario: Deselectiong a mug on the My Mugs/Stock Mugs list
+Scenario: Deselecting a mug on the My Mugs/Stock Mugs list
   Given I am on the "Compose" screen
   And I have a My Mugs/Stock Mugs selected
   When I touch this image
-  Then I should see this image desalected
+  Then I should see this image deselected
   And I should see a green background above the words
 
 @7450
@@ -171,7 +172,8 @@ Scenario: Touching Available Mugs icon when the word selected doesn't have avail
   And I selected a word without available mugs
   When I touch "Available Mugs" icon
   Then I shouldn't see: "Available Mugs" icon, "Yellow" button, "Photo" icon
-  And I should see: "My Mugs" string, "Stock Mugs" string, "+" button
+  And I should see: "My Mugs" string, "+" button
+  And I shouldn't see "Stock Mugs" string
 
 @7450
 Scenario: Touching + icon
@@ -195,7 +197,8 @@ Scenario: Touching a word with available mugs after selecting a word with no ava
   And I selected a word with no available mugs
   When I touch another word with available mugs
   Then I shouldn't see: "Available Mugs" icon, "Yellow" button, "Photo" icon
-  And I should see: "My Mugs" string, "Stock Mugs" string, "+" button
+  And I should see: "My Mugs" string, "+" button
+  And If there are mugs available on the Stock Mugs I should see "Stock Mugs" string
 
 @7451
 Scenario: Touching yellow button
@@ -223,7 +226,7 @@ Scenario: Holding yellow button for 1 second
   And I selected a word without available mugs
   When I hold "Yellow" button for 1 second
   Then A video should be recorded with 1 second
-  And I should see "Confirm Photo" screen
+  And I should see "Confirm Mug" screen
 
 @7452
 Scenario: Holding yellow button for more than 1 second
@@ -231,7 +234,7 @@ Scenario: Holding yellow button for more than 1 second
   And I selected a word without available mugs
   When I hold "Yellow" button for 4 seconds
   Then A video should be recorded with 1 second
-  And I should see "Confirm Photo" screen
+  And I should see "Confirm Mug" screen
 
 @7452
 Scenario: Seeing progress bar
@@ -239,16 +242,6 @@ Scenario: Seeing progress bar
   And I selected a word without available mugs
   When I hold "Yellow" button
   Then I should see a progress bar across the top of the frame
-
-Scenario: Showing Message when is MugBoys mug
-  Given I am on the "Compose" screen
-  When The mug selected is MugBoys mug
-  Then I should see the message: "This is where the magic happens. Tap the + to record the first word."
-
-Scenario: Showing Message when is not MugBoys mug
-  Given I am on the "Compose" screen
-  When The mug selected is not MugBoys mug
-  Then I shouldn't see the message: "This is where the magic happens. Tap the + to record the first word."
 
 @7448
 Scenario: Touching Back button
@@ -258,15 +251,15 @@ Scenario: Touching Back button
   And I should see what I typed before
 
 @7448
-Scenario: Verifying title screen when the mug has only one person
+Scenario: Verifying title screen when the conversation has only one person
   Given I am on the "Compose" screen
-  When I have a mug with only one person
-  Then I should see person's name who send me the mug as a title
+  When I have a conversation with only one person
+  Then I should see person's name who send me the message as a title
 
 @7448
-Scenario: Verifying title screen when the mug has more than one person
+Scenario: Verifying title screen when the conversation has more than one person
   Given I am on the "Compose" screen
-  When I have a mug with only more than one person
+  When I have a conversation with only more than one person
   Then I should see "Group Chat" as a title
 
 @7448
