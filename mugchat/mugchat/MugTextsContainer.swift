@@ -58,8 +58,8 @@ class MugTextsContainer : UIView { //UIScrollView
             var buttonWidth : CGFloat = textWidth + 20;
 
             mugText.mas_makeConstraints { (make) -> Void in
-                make.height.equalTo()(36)
-                make.centerY.equalTo()(self.mas_centerY)
+                make.height.equalTo()(40)
+                make.bottom.equalTo()(-5) //make.centerY.equalTo()(self.mas_centerY)
                 make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(12)
                 make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }

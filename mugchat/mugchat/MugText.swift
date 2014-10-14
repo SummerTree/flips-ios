@@ -16,7 +16,9 @@ class MugText : UIView {
     private var status : String? //TODO: create enum
     
     var mugButton: UIButton!
-    var extrasView: UIView? // "(...)"
+    
+    var hasExtrasImageView: UIImageView! // "(...)"
+    var hasExtrasImage : UIImage!
     
     
     // MARK: - Initialization Methods
@@ -49,14 +51,34 @@ class MugText : UIView {
         mugButton.setTitle(self.mugText, forState: UIControlState.Normal)
         mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         mugButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        self.addSubview(self.mugButton)
+        self.addSubview(mugButton)
         
-        mugButton?.mas_makeConstraints { (make) -> Void in
+        //if status == ...
+        hasExtrasImageView = UIImageView()
+        hasExtrasImage = UIImage(named: "mug_options")
+        hasExtrasImageView.image = hasExtrasImage
+        self.addSubview(self.hasExtrasImageView)
+        
+        mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        mugButton.backgroundColor = UIColor.avacado()
+        
+        initConstraints()
+    }
+    
+    private func initConstraints() {
+        mugButton.mas_makeConstraints { (make) -> Void in
             //make.width.equalTo()(self.badgeView.frame.size.width)
-            make.top.equalTo()(self)
+            make.top.equalTo()(7)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
+        }
+        
+        hasExtrasImageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.trailing.equalTo()(self)
+            make.width.equalTo()(20)
+            make.height.equalTo()(20)
         }
     }
     
