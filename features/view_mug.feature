@@ -3,59 +3,94 @@ Feature: View Mug screen
   I want to see all my received mugs
   So, I can read my received mugs
 
-
-Scenario: Touching a mug
+@7444
+Scenario: Touching a conversation on the list
   Given I am on the "Inbox" screen
-  When I touch a mug on the list
+  When I touch a conversation on the list
   Then I should see "View Mug" screen
 
-Scenario: Watching an unread mug
+@7444
+Scenario: Watching an unread mug when I have read messages in the same conversation
   Given I am on the "Inbox" screen
-  When I touch an unread mug on the list
-  Then The mug video should start to play
-  And I shouldn't see the all the words
+  When I touch a conversation on the list that has read and unread mugs
+  Then I should see the oldest unread mug at the top of the screen
+  And This mug video should starts to play automatically
+  And I shouldn't see the all the words beneath the video
 
-#Ben, is it right?
-Scenario: Watching a read mug
+@7444
+Scenario: Watching a conversation with only read mugs
   Given I am on the "Inbox" screen
-  When I touch a read mug on the list
-  Then The video shouldn't start to play
-  And I should see the message sent to me
+  When I touch a conversation on the list that has only read mugs
+  Then The video for the newest message should start to play
+  And I should see beneath the video the text sent to me on the video
 
-#Ben, is it right?
-Scenario: Watching a mug when there is a read and an unread message
-  Given I am on the "Inbox" screen
-  When I touch a mug that has a read and an unread message
-  Then The mug video for the unread message should start
+@7444
+Scenario: Watching a video
+  Given I am on the "View Mug" screen
+  And I am watching an unread video
+  When The video finish
+  Then I should see beneath the video the text sent to me on the video
 
-Scenario: Watching a mug when there is two or more unread messages sent by different people
+@7445
+Scenario: Scrolling a conversation when the video is playing
   Given I am on the "Inbox" screen
-  When I touch a mug that has more than 2 unread messages
-  Then I should see the first unread message sent to me
-  And At the end of this message I should see the other oldest unread message sent to me
-  And The photo's person should change according to the message being viewed
-  And The time should change according to the message being viewed too
+  And There is a conversation with unread messages
+  When I touch this conversation
+  And Before the video finished I scroll the screen to view new messages
+  Then The video should stops
+  And The text for the videos is not shown
+
+@7445
+Scenario: Scrolling a conversation when there are 2 unread messages in sequence and the first mug is playing
+  Given I am on the "Inbox" screen
+  And There is a conversation with 2 unread messages in sequence
+  When I touch this conversation
+  And The video is still playing and I scroll up
+  Then The first mug should stop
+  And The second one should start
+
+@7445
+Scenario: Scrolling a conversation when there are 2 unread messages in sequence and the first mug finished
+  Given I am on the "Inbox" screen
+  And There is a conversation with 2 unread messages in sequence
+  And I touch this conversation
+  When The first message ends
+  And I scroll up
+  Then The second mug should starts
+
+@7445
+Scenario: Pause a video
+  Given I am on the "Inbox" screen
+  And I tap a conversation
+  When I am watching a mug video
+  And I touch the video
+  Then The video mug should stops
+
+@7445
+Scenario: Un-Pause a video mug
+  Given I am on the "Inbox" screen
+  And I tap a conversation
+  When I am watching a mug video
+  And I touch the video
+  And The video stops
+  And I touch it again
+  Then The video should starts where it left off
 
 Scenario: Watching a mug in a group
   Given I am on the "View Mug" screen
-  When The mug has more than one person
+  When The conversation has more than one person
   Then I should see "People list" icon
 
 Scenario: Touching People list option
   Given I am on the "View Mug" screen
-  And The mug has more than one person
+  And The conversation has more than one person
   When I touch "People list" option
   Then I should see all people in this group
 
-Scenario: Miss people list
+Scenario: Dismiss people list
   Given I am seeing "People list" list
   When I touch "People list" icon
   Then I shouldn't see "People list" list
-
-Scenario: Showing words after the mug video
-  Given I am watching a mug video
-  When The mug video finished
-  Then I should see all words below the video
 
 Scenario: Time for each word with video
   Given I am on the "View Mug" screen
@@ -72,66 +107,37 @@ Scenario: Time for each word with picture and voice
   When I am watching a mug video that has more than one photo with voice recorded
   Then I should see each word and photo with voice for 1 seconds
 
-Scenario: Touching Reply button
-  Given I am on the "View Mug" screen
-  When I touch "Reply" icon
-  Then I should see a text field
-  And I should see "Next" button disable
-
-Scenario: Writing a message to reply
-  Given I am on the "View Mug" screen
-  And I am seeing the text field to reply a mug
-  When I write a character
-  Then I should see "Next" button enable
-
-#waiting for Ben
-Scenario: Writing a message with a lot of characters
-  Given I am on the "View Mug" screen
-  And I am seeing the text field to reply a mug
-  When I write ?? characters
-  And I touch "Next" button
-  Then ???
-
-#waiting for Ben
-Scenario: Writing a message and I don't have memory
-  Given I am on the "View Mug" screen
-  And I am seeing the text field to reply a mug
-  When I write some words
-  And My cellphone's memory finish
-  Then ???
-
 Scenario: Showing the time when the message was send from another country
   Given My friend sent a message to me from Brasil
   And In Brasil it's 10am
+  And I am in San Francisco
   When I go to "View Mug"
   And I watch the mug
   Then The time showed should be 6am
 
-#Ben, the purple ballon will be showed on MugBoys mug or only the first time in anyone mug?
 Scenario: Showing user message for the first time watching a message sent by MugBoys
   Given I am on the "View Mug" screen
-  When I am watching MugBoys mug
+  When I am watching MugBoys message
   Then I should see a purple ballon with the message: Pretty cool, huh? Now it's your turn.
 
-#Ben, the purple ballon will be showed on MugBoys mug or only the first time in anyone mug?
 Scenario: Showing user message for the first time watching a message didn't send by MugChat
   Given I am on the "View Mug" screen
-  When I am watching MugBoys mug
-  Then I should see a purple ballon with the message: Pretty cool, huh? Now it's your turn.
+  When I am watching a mug that was not sent by MugBoys
+  Then I should not see a purple ballon with the message: Pretty cool, huh? Now it's your turn.
 
 Scenario: Touching Back button
   Given I am on the "View Mug" screen
   When I touch "Back" button
   Then I should see "Inbox" screen
 
-Scenario: Verifying title screen when the mug has only one person
+Scenario: Verifying title screen when the conversation has only one person
   Given I am on the "View Mug" screen
-  When I have a mug with only one person
-  Then I should see person's name who send me the mug as a title
+  When I have a conversation with only one person
+  Then I should see person's name who send me the message as a title
 
-Scenario: Verifying title screen when the mug has more than one person
+Scenario: Verifying title screen when the conversation has more than one person
   Given I am on the "View Mug" screen
-  When I have a mug with only more than one person
+  When I have a conversation with only more than one person
   Then I should see "Group Chat" as a title
 
 Scenario: Verifying design screen

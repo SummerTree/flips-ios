@@ -29,7 +29,7 @@ class MugMessage: NSObject {
         var sender = json[MessageParams.SENDER].stringValue
         var content = json[MessageParams.CONTENT]
         for (index: String, mug: JSON) in content {
-            mugs.append(Mug(json: mug))
+            mugs.append(Mug.createEntityWithJson(mug))
         }
         
         self.sender = sender

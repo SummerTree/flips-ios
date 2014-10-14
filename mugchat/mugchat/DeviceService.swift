@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias DeviceServiceSuccessResponse = (Device?) -> Void
+public typealias DeviceServiceSuccessResponse = (AnyObject?) -> Void
 public typealias DeviceServiceFailureResponse = (MugError?) -> Void
 
 public class DeviceService: MugchatService {
@@ -59,8 +59,7 @@ public class DeviceService: MugchatService {
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        var device = Device(object: response)
-        return device
+        return Device.createEntityWithObject(response)
     }
     
     

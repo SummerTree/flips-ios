@@ -61,7 +61,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             }
             
             var authenticatedUser: User = user as User!
-            AuthenticationHelper.sharedInstance.userInSession = user
+            AuthenticationHelper.sharedInstance.userInSession = user as User
 
             var inboxViewController = InboxViewController()
             self.navigationController?.pushViewController(inboxViewController, animated: true)
@@ -114,7 +114,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     private func authenticateWithFacebook(token: String) {
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
-                AuthenticationHelper.sharedInstance.userInSession = user
+                AuthenticationHelper.sharedInstance.userInSession = user as User
                 var inboxViewController = InboxViewController()
                 self.navigationController?.pushViewController(inboxViewController, animated: true)
                 

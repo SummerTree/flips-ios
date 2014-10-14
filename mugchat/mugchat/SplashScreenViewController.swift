@@ -45,7 +45,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         if (success) {
             UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
                 success: { (user) -> Void in
-                    AuthenticationHelper.sharedInstance.userInSession = user
+                    AuthenticationHelper.sharedInstance.userInSession = user as User
                     self.openInboxViewController()
                     
                 }, failure: { (mugError) -> Void in
