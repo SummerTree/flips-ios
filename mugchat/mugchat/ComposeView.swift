@@ -153,7 +153,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         myMugsLabel = UILabel()
         myMugsLabel.numberOfLines = 1
         myMugsLabel.sizeToFit()
-        myMugsLabel.text = "My Mugs"
+        myMugsLabel.text = NSLocalizedString("My Mugs", comment: "My Mugs")
         myMugsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
         myMugsLabel.textColor = UIColor.plum()
         mugsView.addSubview(myMugsLabel)
@@ -323,6 +323,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     func wordTapped(sender: UIButton!) {
         println("tapped \(sender.titleLabel?.text)")
     }
+    
 
     // MARK: - Required inits
     
@@ -333,8 +334,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
+
 
 // MARK: - View Delegate
 
