@@ -42,13 +42,13 @@ class ChatTableViewCell: UITableViewCell {
     var player : MPMoviePlayerController!
     
     
-    // MARK: - Initializers
+    // MARK: - Required initializers
     
-    init(message: MugVideo) {
-        super.init()
-        self.message = message
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         contentView.backgroundColor = UIColor.whiteColor()
-
+        
         messageView = UIView()
         self.addSubview(messageView)
         
@@ -75,11 +75,7 @@ class ChatTableViewCell: UITableViewCell {
         messageView.addSubview(messageTextLabel)
         
         self.updateConstraintsIfNeeded()
-        
     }
-    
-    
-    // MARK: - Required initializers
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

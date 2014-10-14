@@ -12,9 +12,22 @@
 
 import Foundation
 
-class ChatView: UIView {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     
-    private let CELL_IDENTIFIER = "mugCell"
+    var mugs = [
+        MugVideo(message: "Welcome to MugChat 1", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 2", videoPath: "welcome_mugchat", timestamp: "8:24 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 3", videoPath: "welcome_mugchat", timestamp: "8:25 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 4", videoPath: "welcome_mugchat", timestamp: "8:26 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 5", videoPath: "welcome_mugchat", timestamp: "8:27 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 6", videoPath: "welcome_mugchat", timestamp: "8:28 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 7", videoPath: "welcome_mugchat", timestamp: "8:29 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 8", videoPath: "welcome_mugchat", timestamp: "8:30 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 9", videoPath: "welcome_mugchat", timestamp: "8:31 am", avatarPath: "tmp_homer", received: false),
+        MugVideo(message: "Welcome to MugChat 10", videoPath: "welcome_mugchat", timestamp: "8:32 am", avatarPath: "tmp_homer", received: false)
+    ]
+    
+    private let CELL_IDENTIFIER = "mugChatCell"
     private let REPLY_BUTTON_TOP_MARGIN : CGFloat = 18.0
     private let REPLY_BUTTON_OFFSET : CGFloat = 16.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
@@ -56,6 +69,8 @@ class ChatView: UIView {
         tableView.separatorStyle = .None
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.contentOffset = CGPointMake(0, 0)
+        tableView.dataSource = self
+        tableView.delegate = self
         
 //        tableView.contentInset = UIEdgeInsetsMake(self.delegate?.navigationController?.navigationBar.getNavigationBarHeight(), 0, 0, 0)
 //        tableView.contentOffset = CGPointMake(0, -self.delegate?.navigationController?.navigationBar.getNavigationBarHeight())
@@ -87,6 +102,7 @@ class ChatView: UIView {
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
+            make.bottom.equalTo()(self)
         })
         
         separatorView.mas_makeConstraints( { (make) in
@@ -124,6 +140,37 @@ class ChatView: UIView {
         delegate?.chatViewDidTapBackButton(self)
     }
     
+    
+    // MARK: - Table view data source
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell:ChatTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
+        cell.message = mugs[indexPath.row]
+        return cell;
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return mugs.count;
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 40.0;
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String! {
+        return NSLocalizedString("Delete", comment: "Delete")
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            mugs.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+        }
+    }
     
 }
 
