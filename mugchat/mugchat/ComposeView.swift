@@ -14,22 +14,44 @@ import UIKit
 
 class ComposeView : UIView, CustomNavigationBarDelegate {
     
+    private let MUG_CONTAINER_HEIGHT: CGFloat = 320.0
+    private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
+    private let MUGWORD_LIST_HEIGHT: CGFloat = 50.0
+    private let MUGS_OR_CAMERA_HEIGHT: CGFloat = 134.0
+    private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
+    private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
+    private let MY_MUGS_LABEL_MARGIN_TOP: CGFloat = 5.0
+    private let MY_MUGS_LABEL_MARGIN_LEFT: CGFloat = 10.0
+    private let ADD_MUG_BUTTON_MARGIN_TOP: CGFloat = 5.0
+    
     var delegate: ComposeViewDelegate?
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
     private var mugWordListView: UIView!
+    
     private var mugsOrCameraView: UIView!
+    
     private var cameraView: UIView!
-    private var mugsView: UIView!
     private var takePictureButton: UIButton!
     private var gridButton: UIButton!
     private var galleryButton: UIButton!
     
+    private var mugsView: UIView!
+    private var myMugsLabel: UILabel!
+    private var addMugButton: UIButton!
+    
+    func viewDidLoad() {
+        makeConstraints()
+        self.layoutIfNeeded()
+    }
+    
     override init() {
         super.init()
         addSubviews()
+        
+        // just for debugging, since we don't have integration between the views
         addMugWords(["I", "love", "Mugchat"])
     }
 
@@ -37,6 +59,44 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         self.init()
         addMugWords(words)
     }
+    
+    private func addMugWords(words: [String]) {
+        // this whole code will be replaced by Ghisi's view
+        // do not waste your time reviewing it
+        var button: UIButton!
+        var lastButton: UIButton!
+        for word in words {
+            button = UIButton()
+            button.addTarget(self, action: "wordTapped:", forControlEvents: .TouchUpInside)
+            button.layer.borderWidth = 1.0
+            button.layer.borderColor = UIColor.avacado().CGColor
+            button.layer.cornerRadius = 14.0
+            button.setTitle(word, forState: UIControlState.Normal)
+            button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            button.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+            mugWordListView.addSubview(button)
+            
+            if (lastButton == nil) {
+                button.mas_makeConstraints { (make) -> Void in
+                    make.centerX.equalTo()(self.mugWordListView)
+                    make.centerY.equalTo()(self.mugWordListView)
+                    make.height.equalTo()(30)
+                    make.width.greaterThanOrEqualTo()(50)
+                }
+                
+            } else {
+                button.mas_makeConstraints { (make) -> Void in
+                    make.left.equalTo()(lastButton.mas_right).with().offset()(12)
+                    make.centerY.equalTo()(self.mugWordListView)
+                    make.height.equalTo()(lastButton)
+                    make.width.greaterThanOrEqualTo()(lastButton)
+                }
+            }
+            
+            lastButton = button
+        }
+    }
+
     
     private func addSubviews() {
         mugContainerView = UIView()
@@ -87,58 +147,29 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     }
     
     private func addMugsViewSubviews() {
-//        mugsView
-    }
-    
-    private func addMugWords(words: [String]) {
-        var button: UIButton!
-        var lastButton: UIButton!
-        for word in words {
-            button = UIButton()
-            //iButton.backgroundColor = UIColor.avacado()
-            button.addTarget(self, action: "wordTapped:", forControlEvents: .TouchUpInside)
-            button.setTitle(word, forState: UIControlState.Normal)
-            
-            button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.avacado().CGColor
-            button.layer.cornerRadius = 14.0
-            button.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-            mugWordListView.addSubview(button)
-            
-            if (lastButton == nil) {
-                button.backgroundColor = UIColor.avacado()
-                button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-                button.mas_makeConstraints { (make) -> Void in
-                    make.centerX.equalTo()(self.mugWordListView)
-                    make.centerY.equalTo()(self.mugWordListView)
-                    make.height.equalTo()(30)
-                    make.width.greaterThanOrEqualTo()(50)
-                }
-                
-            } else {
-                button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-                button.mas_makeConstraints { (make) -> Void in
-                    make.left.equalTo()(lastButton.mas_right).with().offset()(12)
-                    make.centerY.equalTo()(self.mugWordListView)
-                    make.height.equalTo()(lastButton)
-                    make.width.greaterThanOrEqualTo()(lastButton)
-                }
-            }
-            
-            lastButton = button
-        }
-    }
-    
-    func viewDidLoad() {
-        makeConstraints()
-        self.layoutIfNeeded()
+        mugsView = UIView()
+        mugsOrCameraView.addSubview(mugsView)
+        
+        myMugsLabel = UILabel()
+        myMugsLabel.numberOfLines = 1
+        myMugsLabel.sizeToFit()
+        myMugsLabel.text = "My Mugs"
+        myMugsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
+        myMugsLabel.textColor = UIColor.plum()
+        mugsView.addSubview(myMugsLabel)
+        
+        addMugButton = UIButton()
+        addMugButton.addTarget(self, action: "addMugButtonTapped:", forControlEvents: .TouchUpInside)
+        addMugButton.setImage(UIImage(named: "AddMediaButton"), forState: .Normal)
+        addMugButton.sizeToFit()
+        mugsView.addSubview(addMugButton)
     }
     
     private func makeConstraints() {
         mugContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(320)
+            make.height.equalTo()(self.MUG_CONTAINER_HEIGHT)
         }
         
         // asking help to delegate to align the container with navigation bar
@@ -153,32 +184,37 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         mugWordLabel.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.mugContainerView)
-            make.bottom.equalTo()(self.mugContainerView).with().offset()(-40)
+            make.bottom.equalTo()(self.mugContainerView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
         }
         
         mugWordListView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.top.equalTo()(self.mugContainerView.mas_bottom)
-            make.height.equalTo()(50)
+            make.height.equalTo()(self.MUGWORD_LIST_HEIGHT)
         }
         
         mugsOrCameraView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.top.equalTo()(self.mugWordListView.mas_bottom)
-            make.height.equalTo()(134)
+            make.height.equalTo()(self.MUGS_OR_CAMERA_HEIGHT)
         }
         
+        makeCameraViewConstraints()
+        makeMugsViewConstraints()
+    }
+    
+    private func makeCameraViewConstraints() {
         cameraView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.mugsOrCameraView)
-            make.right.equalTo()(self.mugsOrCameraView)
+            make.left.equalTo()(self.mugsView.mas_right)
+            make.width.equalTo()(self.mugsOrCameraView)
             make.top.equalTo()(self.mugsOrCameraView)
             make.height.equalTo()(self.mugsOrCameraView)
         }
-
+        
         gridButton.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.cameraView).with().offset()(37.5)
+            make.left.equalTo()(self.cameraView).with().offset()(self.GRID_BUTTON_MARGIN_LEFT)
             make.centerY.equalTo()(self.cameraView)
             make.width.equalTo()(self.gridButton.frame.width)
             make.height.equalTo()(self.gridButton.frame.height)
@@ -192,12 +228,33 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         }
         
         galleryButton.mas_makeConstraints { (make) -> Void in
-            make.right.equalTo()(self.cameraView).with().offset()(-37.5)
+            make.right.equalTo()(self.cameraView).with().offset()(-self.GALLERY_BUTTON_MARGIN_RIGHT)
             make.centerY.equalTo()(self.cameraView)
             
             // intentional use of grid button width/height
             make.width.equalTo()(self.gridButton.frame.width)
             make.height.equalTo()(self.gridButton.frame.height)
+        }
+    }
+    
+    private func makeMugsViewConstraints() {
+        mugsView.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.mugsOrCameraView)
+            make.right.equalTo()(self.mugsOrCameraView)
+            make.top.equalTo()(self.mugsOrCameraView)
+            make.height.equalTo()(self.mugsOrCameraView)
+        }
+        
+        myMugsLabel.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.mugsView).with().offset()(self.MY_MUGS_LABEL_MARGIN_TOP)
+            make.left.equalTo()(self.mugsView).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
+        }
+        
+        addMugButton.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.myMugsLabel)
+            make.top.equalTo()(self.myMugsLabel.mas_bottom).with().offset()(self.ADD_MUG_BUTTON_MARGIN_TOP)
+            make.width.equalTo()(self.addMugButton.frame.width)
+            make.height.equalTo()(self.addMugButton.frame.height)
         }
     }
     
@@ -211,15 +268,55 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     
     // MARK: - Button actions
     
-    func takePictureButtonTapped(sender: AnyObject?) {
+    func addMugButtonTapped(sender: UIButton!) {
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.mugsView.mas_updateConstraints({ (make) -> Void in
+                make.removeExisting = true
+                make.width.equalTo()(self.mugsOrCameraView)
+                make.right.equalTo()(self.cameraView.mas_left)
+                make.top.equalTo()(self.mugsOrCameraView)
+                make.height.equalTo()(self.mugsOrCameraView)
+            })
+            
+            self.cameraView.mas_updateConstraints({ (make) -> Void in
+                make.removeExisting = true
+                make.left.equalTo()(self.mugsOrCameraView)
+                make.right.equalTo()(self.mugsOrCameraView)
+                make.top.equalTo()(self.mugsOrCameraView)
+                make.height.equalTo()(self.mugsOrCameraView)
+            })
+            
+            self.layoutIfNeeded()
+        })
+    }
+    
+    func takePictureButtonTapped(sender: UIButton!) {
         self.delegate?.composeViewDidTapTakePictureButton(self)
     }
     
-    func gridButtonTapped(sender: AnyObject?) {
-        self.delegate?.composeViewDidTapGridButton(self)
+    func gridButtonTapped(sender: UIButton!) {
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.mugsView.mas_updateConstraints({ (make) -> Void in
+                make.removeExisting = true
+                make.left.equalTo()(self.mugsOrCameraView)
+                make.right.equalTo()(self.mugsOrCameraView)
+                make.top.equalTo()(self.mugsOrCameraView)
+                make.height.equalTo()(self.mugsOrCameraView)
+            })
+            
+            self.cameraView.mas_updateConstraints({ (make) -> Void in
+                make.removeExisting = true
+                make.left.equalTo()(self.mugsView.mas_right)
+                make.width.equalTo()(self.mugsOrCameraView)
+                make.top.equalTo()(self.mugsOrCameraView)
+                make.height.equalTo()(self.mugsOrCameraView)
+            })
+            
+            self.layoutIfNeeded()
+        })
     }
     
-    func galleryButtonTapped(sender: AnyObject?) {
+    func galleryButtonTapped(sender: UIButton!) {
         self.delegate?.composeViewDidTapGalleryButton(self)
     }
     
@@ -244,7 +341,6 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
 protocol ComposeViewDelegate {
     func composeViewDidTapBackButton(composeView: ComposeView!)
     func composeViewDidTapTakePictureButton(composeView: ComposeView!)
-    func composeViewDidTapGridButton(composeView: ComposeView!)
     func composeViewDidTapGalleryButton(composeView: ComposeView!)
     func composeViewMakeConstraintToNavigationBarBottom(containerView: UIView!)
 }

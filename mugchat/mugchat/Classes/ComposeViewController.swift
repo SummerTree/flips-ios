@@ -39,7 +39,7 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate {
         
         self.setupWhiteNavBarWithBackButton(NSLocalizedString("MugChat", comment: "MugChat"))
         
-        var previewBarButton = UIBarButtonItem(title: "Preview", style: .Done, target: self, action: "previewButtonTapped:")
+        var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
         previewBarButton.tintColor = UIColor.orangeColor()
         self.navigationItem.rightBarButtonItem = previewBarButton
         
@@ -62,10 +62,6 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func composeViewDidTapGridButton(composeView: ComposeView!) {
-        println("Grid button tapped")
-    }
-    
     func composeViewDidTapGalleryButton(composeView: ComposeView!) {
         println("Gallery button tapped")
     }
@@ -80,7 +76,6 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate {
         composeView.mas_makeConstraints { (make) -> Void in
             var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
             make.top.equalTo()(topLayoutGuide.mas_bottom)
-            return ()
         }
     }
 }
