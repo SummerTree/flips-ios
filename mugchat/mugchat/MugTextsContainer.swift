@@ -45,46 +45,31 @@ class MugTextsContainer : UIView { //UIScrollView
     func initSubviews() {
         
         var leadingValue : CGFloat = 5.0
-        var lastMugText: MugText?
+        var lastMugText: MugText!
         
         for text in self.texts {
-            //var mugText : UITextField = UITextField();
-            //mugText.text = text
-            
+
             var mugText : MugText = MugText(mugText: text, status: "default")
-            mugTexts?.append(mugText)
+            mugTexts.append(mugText)
             
-            //mugText.sizeToFit()
             self.addSubview(mugText)
             
-            mugText.mas_makeConstraints { (make) -> Void in
-                make.height.equalTo()(40)
-                make.centerY.equalTo()(self.mas_centerY)
-                make.left.equalTo()(lastMugText?.mas_right)
+            if (lastMugText == nil) {
+                mugText.mas_makeConstraints { (make) -> Void in
+                    make.height.equalTo()(40)
+                    make.centerY.equalTo()(self.mas_centerY)
+                    make.left.equalTo()(self)
+                }
+            } else {
+                mugText.mas_makeConstraints { (make) -> Void in
+                    make.height.equalTo()(36)
+                    make.centerY.equalTo()(self.mas_centerY)
+                    make.left.equalTo()(lastMugText.mas_right).with().offset()(12)
+                }
             }
-            
-            //make.leading.equalTo()(self).with().offset()(leadingValue)
-            //make.left.equalTo()(lastMugText?.mas_right).with().offset()(12)
 
             lastMugText = mugText;
-            //leadingValue += mugText.frame.size.width + 12;
         }
     }
-    
-    /*override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        var leadingValue : CGFloat = 5.0
-    
-        for mugText in self.mugTexts {
-            mugText.mas_makeConstraints { (make) -> Void in
-                make.height.equalTo()(40)
-                make.centerY.equalTo()(self.mas_centerY)
-                make.leading.equalTo()(self).with().offset()(leadingValue)
-            }
-            
-            leadingValue += mugText.frame.size.width + 12;
-        }
-    }*/
     
 }
