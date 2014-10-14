@@ -55,12 +55,12 @@ Scenario: Log in on Facebook for the first time when my user doesn't have avatar
   Given I am on the facebook's message accept
   And My user doesn't have an avatar photo
   When I touch "OK" option on the message
-  Then I should see "Take Picture" screen
+  Then I should see "Camera View" screen
 
 @7169
 Scenario: Taking picture when the user doesn't have avatar photo on the facebook account
   Given I am on the facebook's message accept with a user that does not have an avatar photo on the facebook account
-  When I go to "Take Picture" screen
+  When I go to "Camera View" screen
   And I take a photo
   Then I should see "Phone Number" screen
 
@@ -96,7 +96,15 @@ Scenario: I tap on Facebook Login for the first time and I haven't the app insta
   Then I should see web browser Facebook's login screen
 
 @7169
-Scenario: I log in at facebook 
+Scenario: I tap on Facebook Login for the first time and I haven't the app installed and I have not an account set up on my cellphone
+  Given I am on the "Login" screen
+  And I don't have facebook app installed on my device
+  And I don't  have an account set up on my cellphone
+  When I touch "Login with Facebook" button
+  Then I should see web browser Facebook's login screen
+
+@7169
+Scenario: I log in at facebook
   Given I am on the Facebook's login screen
   When I fill out the fields and touch Login
   Then I should see a message: ""MugChat" would like to access our basic profile info and list of friends."
@@ -108,6 +116,3 @@ Scenario: I am log in at facebook again
   And I already loged in with facebook account
   When I touch "Login with Facebook" button
   Then I should see "Inbox" screen
-
-#I don't have the app installed and I don't have an account on my device, I'll see the web browser and I login on Facebook, then I should see Phone number screen
-#I have the app installed and I don't have an account on my device. I will see the facebook app
