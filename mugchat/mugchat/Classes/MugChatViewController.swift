@@ -52,7 +52,7 @@ class MugChatViewController : UIViewController {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        // Default is light - to applu black content you should override this method
+        // Default is light - to apply black content you should override this method
         return UIStatusBarStyle.LightContent
     }
     

@@ -12,40 +12,75 @@
 
 import Foundation
 
-class ComposeViewController : MugChatViewController, CustomNavigationBarDelegate {
+class ComposeViewController : MugChatViewController, ComposeViewDelegate {
+    
+    private let composeView = ComposeView()
+    
+    override func loadView() {
+        composeView.delegate = self
+        self.view = composeView
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.BlackOpaque
+    }
     
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Example
-        // self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Compose", comment: "Compose"))
-        // self.view.backgroundColor = UIColor.whiteColor()
-        
-        // Example
-        // var navBar = CustomNavigationBar.CustomNormalNavigationBar("Compose", showBackButton: true)
-        
-        // Example
-        var navBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "tmp_homer"), showBackButton: true, showSaveButton: true)
-        
-        navBar.delegate = self
-        self.view.addSubview(navBar)
-        
         self.view.backgroundColor = UIColor.whiteColor()
         
-        navBar.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.view)
-            make.leading.equalTo()(self.view)
-            make.trailing.equalTo()(self.view)
-            make.height.equalTo()(navBar.frame.size.height)
-        }
+        self.setupWhiteNavBarWithBackButton(NSLocalizedString("MugChat", comment: "MugChat"))
+        
+        var previewBarButton = UIBarButtonItem(title: "Preview", style: .Done, target: self, action: "previewButtonTapped:")
+        previewBarButton.tintColor = UIColor.orangeColor()
+        self.navigationItem.rightBarButtonItem = previewBarButton
+        
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        self.composeView.viewDidLoad()
     }
     
     
-    // MARK: - CustomNavigationBarDelegate Methods
+    // MARK: - Bar Buttons
     
-    func customNavigationBarDidTapLeftButton(navBar: CustomNavigationBar) {
+    func previewButtonTapped(sender: AnyObject?) {
+        println("Preview button tapped")
+    }
+    
+    
+    // MARK: - ComposeViewDelegate Methods
+    
+    func composeViewDidTapBackButton(composeView: ComposeView!) {
         self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func composeViewDidTapGridButton(composeView: ComposeView!) {
+        println("Grid button tapped")
+    }
+    
+    func composeViewDidTapGalleryButton(composeView: ComposeView!) {
+        println("Gallery button tapped")
+    }
+    
+    func composeViewDidTapTakePictureButton(composeView: ComposeView!) {
+        println("Take picture button tapped")
+    }
+    
+    func composeViewMakeConstraintToNavigationBarBottom(composeView: UIView!) {
+        // using Mansory strategy
+        // check here: https://github.com/Masonry/Masonry/issues/27
+        composeView.mas_makeConstraints { (make) -> Void in
+            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            return ()
+        }
     }
 }

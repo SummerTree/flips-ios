@@ -26,8 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
 
-        let splashScreenViewController = SplashScreenViewController()
-        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
+//        let splashScreenViewController = SplashScreenViewController()
+        let loginViewController = LoginViewController()
+        let navigationViewControler = UINavigationController(rootViewController: loginViewController)
        
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
