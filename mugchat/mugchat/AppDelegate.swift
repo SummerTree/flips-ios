@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
 
-        let splashScreenViewController = SplashScreenViewController()
+        let splashScreenViewController = ChatViewController(chatTitle: "MugBoys")
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
        
         self.window?.rootViewController = navigationViewControler
