@@ -13,7 +13,7 @@ Scenario: Access Album Galery screen
 Scenario: Selecting a picture
   Given I am on the "Album Galery" screen
   When I touch a photo
-  Then I should see "Confirm Photo" screen
+  Then I should see "Confirm Mug" screen
 
 @7174 @7454
 Scenario: Touching Back button on Album Galery screen

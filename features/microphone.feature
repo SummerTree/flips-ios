@@ -43,35 +43,34 @@ Scenario: Allow the microphone
   Given I am on the "Microphone" screen
   And I touch "Microphone Recorder" icon
   When I touch "OK"
-  Then I should keeps seing "Microphone" screen
+  Then I should keeps seeing "Microphone" screen
 
 @7453
-Scenario: Touching X button witouth recorder
+Scenario: Touching X button without record
   Given I am on the "Microphone" screen
-  And I didn't recorder anything
+  And I didn't record anything
   When I touch "X" button
-  Then I should see "Confirm Photo" screen
-  And The audio shouldn't be saved
-
-@7453
-Scenario: Touching X button with recorder
-  Given I am on the "Microphone" screen
-  And I recorder an audio
-  When I touch "X" button
-  Then I should see "Confirm Photo" screen
+  Then I should see "Confirm Mug" screen
   And The audio shouldn't be saved
 
 @7453
 Scenario: Holding Microphone button more than one second
   Given I am on the "Microphone" screen
   When I hold "Yellow Microphone" button for 4 seconds
-  Then An audio should be recorder with 1 second
+  Then An audio should be recorded with 1 second
+
+@7453
+Scenario: Tapping Microphone button
+  Given I am on the "Microphone" screen
+  When I tap "Yellow Microphone" button
+  Then Nothing should happen
+  And I should stay in the "Microphone" screen
 
 @7453
 Scenario: Holding Microphone button for one second
   Given I am on the "Microphone" screen
   When I hold "Yellow Microphone" button for 1 second
-  Then An audio should be recorder with 1 second
+  Then An audio should be recorded with 1 second
 
 @7453
 Scenario: Showing progress bar
@@ -80,22 +79,12 @@ Scenario: Showing progress bar
   Then I should see a progress bar across the top of the frame
 
 @7453
-Scenario: Finishing audio recorder
+Scenario: Finishing audio record
   Given I am on the "Microphone" screen
   When I touch "Yellow Microphone" button
   And 1 second is gone
-  Then I should see "Confirm Photo" screen
+  Then I should see "Confirm Mug" screen
   And The audio should be saved
-
-Scenario: Showing a message on MugBoys conversation
-  Given I am on the "Microphone" screen
-  When The selected message is MugBoys
-  Then I should see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
-
-Scenario: Showing a message on any conversation
-  Given I am on the "Microphone" screen
-  When The selected conversation is not MugBoys
-  Then I should not see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
 
 Scenario: Verifying title screen when the message has only one person
   Given I am on the "Microphone" screen
