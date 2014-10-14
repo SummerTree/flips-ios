@@ -73,7 +73,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapSignUpButton(loginView: LoginView!) {
-        self.navigationController?.pushViewController(ComposeViewController(), animated: true)
+        self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
     func loginViewDidTapForgotPassword(loginView: LoginView!, username: String) {
