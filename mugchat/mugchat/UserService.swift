@@ -128,7 +128,9 @@ public class UserService: MugchatService {
     func parseSigninResponse(response: AnyObject) -> User? {
         var user = User.createEntityWithObject(response)
         user.me = true
-        User.save()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            User.save()
+        })
         return user
     }
     
