@@ -38,10 +38,6 @@
 		70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7696119E706B100CAA9A9 /* MessageReceiver.swift */; };
 		70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */; };
 		70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
-		70F1525219EDBD3B00323AD2 /* Mug.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F1525119EDBD3B00323AD2 /* Mug.m */; };
-		70F1525519EDBD3B00323AD2 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F1525419EDBD3B00323AD2 /* Device.m */; };
-		70F1525819EDBD3B00323AD2 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F1525719EDBD3B00323AD2 /* User.m */; };
-		70F1525B19EDBD3B00323AD2 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F1525A19EDBD3B00323AD2 /* Room.m */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
@@ -136,14 +132,6 @@
 		70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
-		70F1525019EDBD3B00323AD2 /* Mug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mug.h; sourceTree = "<group>"; };
-		70F1525119EDBD3B00323AD2 /* Mug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mug.m; sourceTree = "<group>"; };
-		70F1525319EDBD3B00323AD2 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
-		70F1525419EDBD3B00323AD2 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
-		70F1525619EDBD3B00323AD2 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		70F1525719EDBD3B00323AD2 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		70F1525919EDBD3B00323AD2 /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
-		70F1525A19EDBD3B00323AD2 /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -356,14 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */,
-				70F1525919EDBD3B00323AD2 /* Room.h */,
-				70F1525A19EDBD3B00323AD2 /* Room.m */,
-				70F1525619EDBD3B00323AD2 /* User.h */,
-				70F1525719EDBD3B00323AD2 /* User.m */,
-				70F1525319EDBD3B00323AD2 /* Device.h */,
-				70F1525419EDBD3B00323AD2 /* Device.m */,
-				70F1525019EDBD3B00323AD2 /* Mug.h */,
-				70F1525119EDBD3B00323AD2 /* Mug.m */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -831,7 +811,6 @@
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				70B7695C19E6EEA400CAA9A9 /* MugMessage.swift in Sources */,
-				70F1525819EDBD3B00323AD2 /* User.m in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
@@ -839,7 +818,6 @@
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,
 				7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */,
 				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
-				70F1525B19EDBD3B00323AD2 /* Room.m in Sources */,
 				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
 				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
@@ -873,7 +851,6 @@
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
-				70F1525519EDBD3B00323AD2 /* Device.m in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
@@ -899,7 +876,6 @@
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
-				70F1525219EDBD3B00323AD2 /* Mug.m in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
