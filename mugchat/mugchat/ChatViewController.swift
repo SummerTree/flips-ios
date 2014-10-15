@@ -27,13 +27,11 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
         self.view = chatView
         
         self.setupWhiteNavBarWithBackButton(chatTitle)
-//        self.setNeedsStatusBarAppearanceUpdate()
     }
         
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        //self.chatView.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -47,12 +45,6 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
         self.navigationController?.popViewControllerAnimated(true)
     }
    
-    
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        var size = CGSizeMake(CGRectGetWidth(self.navigationController?.navigationBar.frame), CGRectGetHeight(self.navigationController?.navigationBar.frame))
-//        navigationBar.setBackgroundImage(tableView.getImageWithSize(size))
-//    }
-    
     
     // MARK: - Required initializers
     

@@ -58,14 +58,14 @@ class ChatTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.whiteColor()
-        self.initSubviews()
+        self.addSubviews()
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initSubviews() {
+    func addSubviews() {
         videoView = UIView()
         contentView.addSubview(videoView)
         
@@ -164,7 +164,21 @@ class ChatTableViewCell: UITableViewCell {
     
     // MARK: - Mug interaction handlers
     
-    func didTapOnMug(sender: AnyObject?) {
+     func playbackFinished(sender: AnyObject?) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.thumbnailView.alpha = 1.0
+            self.messageTextLabel.text = self.message.message
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                self.messageTextLabel.alpha = 1
+            })
+        })
+        self.player.currentPlaybackTime = 0
+    }
+    
+    
+    // MARK: - Button Handler
+    
+    func buttonTapped() {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             switch self.player.playbackState {
             case MPMoviePlaybackState.Stopped:
@@ -183,24 +197,6 @@ class ChatTableViewCell: UITableViewCell {
                 ()
             }
         })
-    }
-    
-    func playbackFinished(sender: AnyObject?) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.thumbnailView.alpha = 1.0
-            self.messageTextLabel.text = self.message.message
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self.messageTextLabel.alpha = 1
-            })
-        })
-        self.player.currentPlaybackTime = 0
-    }
-    
-    
-    // MARK: - Button Handler
-    
-    func buttonTapped() {
-        self.didTapOnMug(self)
     }
     
 }
