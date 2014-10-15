@@ -40,6 +40,7 @@ extension UIImageView {
     convenience init(frame: CGRect, borderWidth : CGFloat) {
         self.init(frame: frame)
         self.contentMode = UIViewContentMode.ScaleAspectFit
+        self.backgroundColor = UIColor.whiteColor()
         self.layer.cornerRadius = CGRectGetWidth(frame) / 2;
         self.clipsToBounds = true
         
