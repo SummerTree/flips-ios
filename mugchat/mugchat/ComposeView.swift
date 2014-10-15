@@ -96,7 +96,6 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
             lastButton = button
         }
     }
-
     
     private func addSubviews() {
         mugContainerView = UIView()
@@ -169,7 +168,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         mugContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.MUG_CONTAINER_HEIGHT)
+            make.bottom.equalTo()(self.mugWordListView.mas_top)
         }
         
         // asking help to delegate to align the container with navigation bar
@@ -190,14 +189,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         mugWordListView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.top.equalTo()(self.mugContainerView.mas_bottom)
+            make.bottom.equalTo()(self.mugsOrCameraView.mas_top)
             make.height.equalTo()(self.MUGWORD_LIST_HEIGHT)
         }
         
         mugsOrCameraView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.top.equalTo()(self.mugWordListView.mas_bottom)
+            make.bottom.equalTo()(self)
             make.height.equalTo()(self.MUGS_OR_CAMERA_HEIGHT)
         }
         
