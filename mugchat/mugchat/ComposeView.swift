@@ -42,6 +42,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     private var mugsView: UIView!
     private var myMugsLabel: UILabel!
     private var addMugButton: UIButton!
+    private var arrowToCurrentMug: UIButton!
     
     func viewDidLoad() {
         makeConstraints()
@@ -94,7 +95,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         mugImageView = UIImageView.imageWithColor(UIColor.avacado())
 //        mugImageView = UIImageView(image: UIImage(named: "Church"))
-        mugImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        mugImageView.sizeToFit()
+        mugImageView.contentMode = UIViewContentMode.Redraw
         mugContainerView.addSubview(mugImageView)
         
         mugWordLabel = UILabel()
@@ -107,7 +109,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         self.addSubview(mugTextsContainer)
         
         mugsOrCameraView = UIView()
-        mugsOrCameraView.backgroundColor = UIColor.lightGreyF2()
+        mugsOrCameraView.backgroundColor = UIColor.sand()
         self.addSubview(mugsOrCameraView)
         
         addCameraViewSubviews()
@@ -139,6 +141,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     private func addMugsViewSubviews() {
         mugsView = UIView()
         mugsOrCameraView.addSubview(mugsView)
+        
+        arrowToCurrentMug = UIButton()
+        arrowToCurrentMug.userInteractionEnabled = false
+        arrowToCurrentMug.setImage(UIImage(named: "Triangle"), forState: .Normal)
+        arrowToCurrentMug.sizeToFit()
+        mugsView.addSubview(arrowToCurrentMug)
         
         myMugsLabel = UILabel()
         myMugsLabel.numberOfLines = 1
@@ -181,7 +189,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         mugWordLabel.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.mugContainerView)
-            make.bottom.equalTo()(self.mugContainerView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
+            make.bottom.equalTo()(self.mugImageView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
         }
         
         mugTextsContainer.mas_makeConstraints { (make) -> Void in
@@ -242,6 +250,11 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
             make.height.equalTo()(self.mugsOrCameraView)
         }
         
+        arrowToCurrentMug.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self.mugsView)
+            make.centerY.equalTo()(self.mugsView.mas_top)
+        }
+        
         myMugsLabel.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.mugsView).with().offset()(self.MY_MUGS_LABEL_MARGIN_TOP)
             make.left.equalTo()(self.mugsView).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
@@ -259,6 +272,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
                 make.height.equalTo()(self.addMugButton.frame.height)
             }
         }
+    }
+    
+    func setPicture(image: UIImage!) {
+        println(UIScreen.mainScreen().bounds.width)
+        self.mugImageView.image = image
+        self.updateConstraintsIfNeeded()
     }
     
     

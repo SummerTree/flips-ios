@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ComposeViewController : MugChatViewController, ComposeViewDelegate {
+class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private let composeView = ComposeView()
     
@@ -63,7 +63,19 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate {
     }
     
     func composeViewDidTapGalleryButton(composeView: ComposeView!) {
-        println("Gallery button tapped")
+        if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
+            var imagePickerController = UIImagePickerControllerWithLightStatusBar()
+            var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            imagePickerController.navigationBar.barTintColor = UIColor.mugOrange()
+            imagePickerController.navigationBar.translucent = false
+            imagePickerController.navigationBar.tintColor = UIColor.whiteColor()
+            imagePickerController.navigationBar.titleTextAttributes = textAttributes
+            imagePickerController.delegate = self
+            imagePickerController.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
+            imagePickerController.allowsEditing = false
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+        }
     }
     
     func composeViewDidTapTakePictureButton(composeView: ComposeView!) {
@@ -77,5 +89,18 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate {
             var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
             make.top.equalTo()(topLayoutGuide.mas_bottom)
         }
+    }
+
+    
+    // MARK: - Gallery control
+    
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        composeView.setPicture(image)
+        //self.showConfirmPictureView()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
