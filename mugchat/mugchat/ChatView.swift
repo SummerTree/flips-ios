@@ -74,7 +74,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         self.addSubview(tableView)
         
         separatorView = UIView()
-        separatorView.backgroundColor = UIColor.blueColor()
+        separatorView.backgroundColor = UIColor.whiteColor()
         self.addSubview(separatorView)
         
         darkHorizontalRulerView = UIView()
@@ -82,11 +82,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         self.addSubview(darkHorizontalRulerView)
         
         replyButtonView = UIView()
+        replyButtonView.backgroundColor = UIColor.whiteColor()
         self.addSubview(replyButtonView)
         
         replyButton = UIButton()
         replyButton.contentMode = .Center
-        replyButton.addTarget(self, action: "replyButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        replyButton.addTarget(self, action: "didTapReplyButton:", forControlEvents: UIControlEvents.TouchUpInside)
         replyButton.setImage(UIImage(named: "Reply"), forState: UIControlState.Normal)
         replyButtonView.addSubview(replyButton)
     }
@@ -97,7 +98,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self)
+            make.bottom.equalTo()(self.separatorView.mas_top)
         })
         
         separatorView.mas_makeConstraints( { (make) in
@@ -118,6 +119,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
             make.top.equalTo()(self.darkHorizontalRulerView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
+            make.bottom.equalTo()(self)
             make.height.equalTo()(self.replyButton.imageForState(UIControlState.Normal)!.size.height + (self.REPLY_BUTTON_OFFSET * 2.0))
         })
         
@@ -172,6 +174,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    
+    // MARK: Button events
+    
+    func didTapReplyButton(sender: AnyObject?) {
+        return ()
     }
     
 }
