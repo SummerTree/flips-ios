@@ -116,10 +116,6 @@
 
 /* Begin PBXFileReference section */
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
-		5707185A19D1A1060069064F /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		5707185C19D1A7230069064F /* Mug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mug.swift; sourceTree = "<group>"; };
-		5707185E19D1A7FD0069064F /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
-		5707186019D1A8FC0069064F /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* MugchatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugchatService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		5741569E19D33F30006F0A2F /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
@@ -266,7 +262,6 @@
 		5707185719D19D580069064F /* Backend */ = {
 			isa = PBXGroup;
 			children = (
-				5707185919D19ECF0069064F /* Models */,
 				574156A119D34F2B006F0A2F /* MugError.swift */,
 				5707186419D1AEBB0069064F /* MugchatService.swift */,
 				5707186619D1AF110069064F /* UserService.swift */,
@@ -283,17 +278,6 @@
 				7033584719E462A20030CF11 /* PubNubService.swift */,
 			);
 			name = PubNub;
-			sourceTree = "<group>";
-		};
-		5707185919D19ECF0069064F /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				5707185A19D1A1060069064F /* User.swift */,
-				5707185C19D1A7230069064F /* Mug.swift */,
-				5707185E19D1A7FD0069064F /* Device.swift */,
-				5707186019D1A8FC0069064F /* Room.swift */,
-			);
-			name = Models;
 			sourceTree = "<group>";
 		};
 		5786B2CA19EEADBC00021DD3 /* Chat */ = {
