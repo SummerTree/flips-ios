@@ -25,10 +25,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     
     var delegate: ComposeViewDelegate?
     
+    var mugs : [MugText] = [MugText]()
+    
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
-    private var mugWordListView: UIView!
+    private var mugTextsContainer : MugTextsContainer!
     
     private var mugsOrCameraView: UIView!
     
@@ -48,49 +50,41 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     
     override init() {
         super.init()
-        addSubviews()
         
         // just for debugging, since we don't have integration between the views
-        addMugWords(["I", "love", "Mugchat"])
+        let stringTest = "I love San Francisco!" as String
+        var texts : [String] = MugStringsUtil.splitMugString(stringTest);
+        createMugs(texts)
+        
+        addSubviews()
     }
 
     convenience init(words: [String]) {
         self.init()
-        addMugWords(words)
+        createMugs(words)
     }
     
-    private func addMugWords(words: [String]) {
-        // this whole code will be replaced by Ghisi's view
-        // do not waste your time reviewing it
-        var button: UIButton!
-        var lastButton: UIButton!
-        for word in words {
-            button = UIButton()
-            button.addTarget(self, action: "wordTapped:", forControlEvents: .TouchUpInside)
-            button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.avacado().CGColor
-            button.layer.cornerRadius = 14.0
-            button.setTitle(word, forState: UIControlState.Normal)
-            button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            button.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-            mugWordListView.addSubview(button)
+    func createMugs(texts: [String]) {
+        var i: Int
+        for i=0; i < texts.count; i++ {
+            var text = texts[i]
+            var mugText: MugText
             
-            if (lastButton == nil) {
-                button.mas_makeConstraints { (make) -> Void in
-                    make.centerX.equalTo()(self.mugWordListView)
-                    make.centerY.equalTo()(self.mugWordListView)
-                    make.height.equalTo()(30)
-                }
-                
-            } else {
-                button.mas_makeConstraints { (make) -> Void in
-                    make.left.equalTo()(lastButton.mas_right).with().offset()(12)
-                    make.centerY.equalTo()(self.mugWordListView)
-                    make.height.equalTo()(lastButton)
-                }
+            //TEMP (for tests)
+            switch i {
+            case 0:
+                mugText = MugText(mugId: i, text: text, state: MugState.Default)
+            case 1:
+                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
+            case 2:
+                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideo)
+            case 3:
+                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedWord)
+            default:
+                mugText = MugText(mugId: i, text: text, state: MugState.Default)
             }
             
-            lastButton = button
+            self.mugs.append(mugText)
         }
     }
     
@@ -109,8 +103,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         mugWordLabel.text = "I"
         mugContainerView.addSubview(mugWordLabel)
         
-        mugWordListView = UIView()
-        self.addSubview(mugWordListView)
+        mugTextsContainer = MugTextsContainer(texts: self.mugs)
+        self.addSubview(mugTextsContainer)
         
         mugsOrCameraView = UIView()
         mugsOrCameraView.backgroundColor = UIColor.lightGreyF2()
@@ -190,7 +184,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
             make.bottom.equalTo()(self.mugContainerView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
         }
         
-        mugWordListView.mas_makeConstraints { (make) -> Void in
+        mugTextsContainer.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.top.equalTo()(self.mugContainerView.mas_bottom)
@@ -200,7 +194,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         mugsOrCameraView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.top.equalTo()(self.mugWordListView.mas_bottom)
+            make.top.equalTo()(self.mugTextsContainer.mas_bottom)
             make.bottom.equalTo()(self)
         }
         
