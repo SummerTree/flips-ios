@@ -63,8 +63,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             var authenticatedUser: User = user as User!
             AuthenticationHelper.sharedInstance.userInSession = user as User
 
-            ///var inboxViewController = InboxViewController()
-            var inboxViewController = TempMugTextInputTestViewController(teste: "teste")
+            var inboxViewController = InboxViewController()
             self.navigationController?.pushViewController(inboxViewController, animated: true)
             
         }) { (mugError) -> Void in
