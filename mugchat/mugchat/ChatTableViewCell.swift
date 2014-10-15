@@ -35,68 +35,66 @@ class ChatTableViewCell: UITableViewCell {
     
     var message : MugVideo! {
         didSet {
-            if (player != nil) {
-                NSNotificationCenter.defaultCenter().removeObserver(self, name: "MPMoviePlayerPlaybackDidFinishNotification", object: player)
-                
-                player.view.removeFromSuperview()
-                player = nil
-            }
             
             let bundle = NSBundle.mainBundle()
             let moviePath = bundle.pathForResource(message.videoPath, ofType: "mov")
-            player = MPMoviePlayerController(contentURL: NSURL.fileURLWithPath(moviePath!))
-            player.view.backgroundColor = UIColor.greenColor()
-            
+//            player = MPMoviePlayerController(contentURL: NSURL.fileURLWithPath(moviePath!))
+//            player.view.backgroundColor = UIColor.greenColor()
+            player.contentURL = NSURL.fileURLWithPath(moviePath!)
             //        player.view.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: self.frame.width)
-            player.controlStyle = MPMovieControlStyle.None
             
-            videoView.addSubview(player.view)
-            player.view.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self.videoView)
-                make.bottom.equalTo()(self.videoView)
-                make.leading.equalTo()(self.videoView)
-                make.trailing.equalTo()(self.videoView)
-            }
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: "MPMoviePlayerPlaybackDidFinishNotification", object: player)
+//            videoView.addSubview(player.view)
+//            player.view.mas_makeConstraints { (make) -> Void in
+//                make.top.equalTo()(self.videoView)
+//                make.bottom.equalTo()(self.videoView)
+//                make.leading.equalTo()(self.videoView)
+//                make.trailing.equalTo()(self.videoView)
+//            }
+//            player.shouldAutoplay = false
+//            player.currentPlaybackTime = 0
             
-//            videoView = player.view
-//            contentView.addSubview(videoView)
-
-
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
+            
+            //            videoView = player.view
+            //            contentView.addSubview(videoView)
+            
+            
             
             thumbnailView.image = UIImage(named: message.thumbnailPath)
-//            thumbnailView.frame = videoView.frame
-//            thumbnail = UIImage(named: message.thumbnailPath)
-//            thumbnailView = UIImageView(image: thumbnail)
-//            thumbnailView.userInteractionEnabled = true
-//            thumbnailView.frame = videoView.frame
-//            messageView.addSubview(thumbnailView)
+            //            thumbnailView.frame = videoView.frame
+            //            thumbnail = UIImage(named: message.thumbnailPath)
+            //            thumbnailView = UIImageView(image: thumbnail)
+            //            thumbnailView.userInteractionEnabled = true
+            //            thumbnailView.frame = videoView.frame
+            //            messageView.addSubview(thumbnailView)
             
-//            let tap = UITapGestureRecognizer(target: self, action: "didTapOnMug:")
-//            tap.numberOfTapsRequired = 1
-//            thumbnailView.addGestureRecognizer(tap)
+            //            let tap = UITapGestureRecognizer(target: self, action: "didTapOnMug:")
+            //            tap.numberOfTapsRequired = 1
+            //            thumbnailView.addGestureRecognizer(tap)
             
-//            timestampLabel = UILabel()
+            //            timestampLabel = UILabel()
             timestampLabel.text = message.timestamp
-//            timestampLabel.contentMode = .Center
-//            timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-//            timestampLabel.textColor = UIColor.deepSea()
-//            messageView.addSubview(timestampLabel)
+            //            timestampLabel.contentMode = .Center
+            //            timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+            //            timestampLabel.textColor = UIColor.deepSea()
+            //            messageView.addSubview(timestampLabel)
             
-//            messageTextLabel = UILabel()
-//            messageTextLabel.contentMode = .Center
-//            messageTextLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
-//            messageTextLabel.textColor = UIColor.deepSea()
-//            messageView.addSubview(messageTextLabel)
-
-//            avatarView = UIImageView.avatarA3()
+            //            messageTextLabel = UILabel()
+            //            messageTextLabel.contentMode = .Center
+            //            messageTextLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
+            //            messageTextLabel.textColor = UIColor.deepSea()
+            //            messageView.addSubview(messageTextLabel)
+            
+            //            avatarView = UIImageView.avatarA3()
             avatarView.image = UIImage(named: message.avatarPath)
-//            messageView.addSubview(avatarView)
+            //            messageView.addSubview(avatarView)
             
-//            self.updateConstraints()
+            //            self.updateConstraints()
         }
     }
+    
+    var index: Int!
     
     var videoView : UIView!
     var messageView : UIView!
@@ -123,30 +121,40 @@ class ChatTableViewCell: UITableViewCell {
     }
     
     func initSubviews() {
-//        player = MPMoviePlayerController(contentURL: NSURL.fileURLWithPath(moviePath!))
-//        player = MPMoviePlayerController()
-//        player.view.backgroundColor = UIColor.greenColor()
-//        player.view.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: self.frame.width)
-//        player.controlStyle = MPMovieControlStyle.None
-//        videoView = player.view
+        //        player = MPMoviePlayerController(contentURL: NSURL.fileURLWithPath(moviePath!))
+        //        player = MPMoviePlayerController()
+        //        player.view.backgroundColor = UIColor.greenColor()
+        //        player.view.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: self.frame.width)
+        //        player.controlStyle = MPMovieControlStyle.None
+        //        videoView = player.view
         videoView = UIView()
         contentView.addSubview(videoView)
+        
+        player = MPMoviePlayerController()
+        player.controlStyle = MPMovieControlStyle.None
+        videoView.addSubview(player.view)
+        player.view.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.videoView)
+            make.bottom.equalTo()(self.videoView)
+            make.leading.equalTo()(self.videoView)
+            make.trailing.equalTo()(self.videoView)
+        }
         
         messageView = UIView()
         contentView.addSubview(messageView)
         
-//        thumbnail = UIImage(named: message.thumbnailPath)
+        //        thumbnail = UIImage(named: message.thumbnailPath)
         thumbnailView = UIImageView()
         thumbnailView.userInteractionEnabled = true
         thumbnailView.frame = videoView.frame
         messageView.addSubview(thumbnailView)
         
-        let tap = UITapGestureRecognizer(target: self, action: "didTapOnMug:")
-        tap.numberOfTapsRequired = 1
-        contentView.addGestureRecognizer(tap)
+//        let tap = UITapGestureRecognizer(target: self, action: "didTapOnMug:")
+//        tap.numberOfTapsRequired = 1
+//        contentView.addGestureRecognizer(tap)
         
         timestampLabel = UILabel()
-//        timestampLabel.text = message.timestamp
+        //        timestampLabel.text = message.timestamp
         timestampLabel.contentMode = .Center
         timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         timestampLabel.textColor = UIColor.deepSea()
@@ -160,8 +168,18 @@ class ChatTableViewCell: UITableViewCell {
         messageView.addSubview(messageTextLabel)
         
         avatarView = UIImageView.avatarA3()
-//        avatarView.image = UIImage(named: message.avatarPath)
+        //        avatarView.image = UIImage(named: message.avatarPath)
         messageView.addSubview(avatarView)
+        
+        var button = UIButton()
+        button.backgroundColor = UIColor.clearColor()
+        button.addTarget(self, action: "buttonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        contentView.addSubview(button)
+        
+        button.mas_makeConstraints { (make) -> Void in
+            make.center.equalTo()(self.contentView)
+            make.size.equalTo()(self.contentView)
+        }
         
         self.updateConstraintsIfNeeded()
     }
@@ -169,8 +187,10 @@ class ChatTableViewCell: UITableViewCell {
     
     // MARK: - Overridden Methods
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    override func willTransitionToState(state: UITableViewCellStateMask) {
+        super.willTransitionToState(state)
+        println("willTransitionToState: \(state)")
+        didTapOnMug(self)
     }
     
     override func updateConstraints() {
@@ -196,7 +216,7 @@ class ChatTableViewCell: UITableViewCell {
             make.left.equalTo()(self.contentView)
             make.right.equalTo()(self.contentView)
         })
-
+        
         avatarView.mas_updateConstraints { (make) -> Void in
             make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.videoView.mas_bottom)
@@ -219,34 +239,43 @@ class ChatTableViewCell: UITableViewCell {
     // MARK: - Mug interaction handlers
     
     func didTapOnMug(sender: AnyObject?) {
-        switch player.playbackState {
-        case MPMoviePlaybackState.Stopped:
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            UIView.beginAnimations(nil, context: nil)
-//            UIView.setAnimationDuration(0.2)
-                self.thumbnailView.alpha = 0.0
-//            UIView.commitAnimations()
-            })
-            player.play() // NOT SURE IF IT CAN BE EXECUTED OUTSIDE OF THE MAIN QUEUE. Please confirm it.
-        case MPMoviePlaybackState.Playing:
-            player.pause() // NOT SURE IF IT CAN BE EXECUTED OUTSIDE OF THE MAIN QUEUE. Please confirm it.
-        case MPMoviePlaybackState.Paused:
-            player.play() // NOT SURE IF IT CAN BE EXECUTED OUTSIDE OF THE MAIN QUEUE. Please confirm it.
-        default:
-            ()
-        }
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            switch self.player.playbackState {
+            case MPMoviePlaybackState.Stopped:
+                UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    self.thumbnailView.alpha = 0.0
+                })
+                self.player.play()
+            case MPMoviePlaybackState.Playing:
+                self.player.pause()
+            case MPMoviePlaybackState.Paused:
+                UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    self.thumbnailView.alpha = 0.0
+                })
+                self.player.play()
+            default:
+                ()
+            }
+        })
     }
     
     func playbackFinished(sender: AnyObject?) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            println("showing message")
             self.thumbnailView.alpha = 1.0
             self.messageTextLabel.text = self.message.message
             
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
                 self.messageTextLabel.alpha = 1
             })
         })
+        self.player.currentPlaybackTime = 0
+    }
+    
+    
+    // MARK: - Button Handler
+    
+    func buttonTapped() {
+        self.didTapOnMug(self)
     }
     
 }

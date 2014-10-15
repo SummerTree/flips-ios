@@ -17,7 +17,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     var mugs = [
         MugVideo(message: "Welcome to MugChat", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
         MugVideo(message: "Bollywood!!!", videoPath: "bollywood", timestamp: "8:24 am", avatarPath: "tmp_homer", thumbnailPath: "bollywood_thumbnail.jpeg", received: false),
-        MugVideo(message: "Wanna coffee?", videoPath: "wanna_coffee", timestamp: "8:25 am", avatarPath: "tmp_homer", thumbnailPath: "coffee_thumbnail.png", received: false)
+        MugVideo(message: "Wanna coffee?", videoPath: "wanna_coffee", timestamp: "8:25 am", avatarPath: "tmp_homer", thumbnailPath: "coffee_thumbnail.jpeg", received: false)
         //        MugVideo(message: "Welcome to MugChat 4", videoPath: "welcome_mugchat", timestamp: "8:26 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
         //        MugVideo(message: "Welcome to MugChat 5", videoPath: "welcome_mugchat", timestamp: "8:27 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
         //        MugVideo(message: "Welcome to MugChat 6", videoPath: "welcome_mugchat", timestamp: "8:28 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
@@ -75,6 +75,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.contentOffset = CGPointMake(0, 0)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.allowsSelection = false
         self.addSubview(tableView)
         
         separatorView = UIView()
