@@ -11,6 +11,11 @@ Scenario: Seeing Forgot Password screen
   When I touch "Forgot Password" button
   Then I should see "Forgot Password" screen
 
+@7592
+Scenario: Seeing message on the Forgot Password screen
+  Given I am on the "Forgot Password" screen
+  Then I should see a message: "Enter the phone number associated with <email address> below to reset your password."
+
 @7172
 Scenario: Auto-formatted when the user types a number
   Given I am on the "Forgot Password" screen

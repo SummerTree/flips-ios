@@ -52,7 +52,7 @@ public class PubNubService: MugchatService, PNDelegate {
     }
     
     func subscribeOnOwnChannel() {
-        var ownChannel: PNChannel = PNChannel.channelWithName(AuthenticationHelper.sharedInstance.userInSession.pubnubId) as PNChannel
+        var ownChannel: PNChannel = PNChannel.channelWithName(AuthenticationHelper.sharedInstance.userInSession.pubnubID) as PNChannel
         PubNub.subscribeOnChannel(ownChannel)
     }
     

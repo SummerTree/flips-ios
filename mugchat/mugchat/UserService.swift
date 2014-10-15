@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias UserServiceSuccessResponse = (User?) -> Void
+public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
 public typealias UserServiceFailureResponse = (MugError?) -> Void
 
 public class UserService: MugchatService {
@@ -71,8 +71,7 @@ public class UserService: MugchatService {
     }
     
     func parseSignupResponse(response: AnyObject) -> User? {
-        var user = User(object: response)
-        return user
+        return User.createEntityWithObject(response)
     }
     
     
@@ -127,7 +126,11 @@ public class UserService: MugchatService {
     }
     
     func parseSigninResponse(response: AnyObject) -> User? {
-        var user = User(object: response)
+        var user = User.createEntityWithObject(response)
+        user.me = true
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            User.save()
+        })
         return user
     }
     
@@ -184,8 +187,7 @@ public class UserService: MugchatService {
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        var device = Device(object: response)
-        return device
+        return Device.createEntityWithObject(response)
     }
     
     
@@ -196,7 +198,7 @@ public class UserService: MugchatService {
         request.responseSerializer = AFJSONResponseSerializer()
 
         let url = HOST + UPDATE_PASSWORD_URL
-        let params = [RequestParams.EMAIL : user.username!, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
+        let params = [RequestParams.EMAIL : user.username, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
         
         request.PUT(url,
             parameters: params,
