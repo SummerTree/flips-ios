@@ -36,6 +36,8 @@ class ChatTableViewCell: UITableViewCell {
     var message : MugVideo! {
         didSet {
             if (player != nil) {
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: "MPMoviePlayerPlaybackDidFinishNotification", object: player)
+                
                 player.view.removeFromSuperview()
                 player = nil
             }
@@ -56,8 +58,8 @@ class ChatTableViewCell: UITableViewCell {
                 make.trailing.equalTo()(self.videoView)
             }
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackStateDidChange:", name: "MPMoviePlayerPlaybackStateDidChangeNotification", object: player)
-
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: "MPMoviePlayerPlaybackDidFinishNotification", object: player)
+            
 //            videoView = player.view
 //            contentView.addSubview(videoView)
 
@@ -169,8 +171,6 @@ class ChatTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: "MPMoviePlayerPlaybackStateDidChangeNotification", object: player)
     }
     
     override func updateConstraints() {
@@ -237,36 +237,16 @@ class ChatTableViewCell: UITableViewCell {
         }
     }
     
-    func playbackStateDidChange(sender: AnyObject?) {
-        println("player.playbackState: \(player.playbackState)")
-        switch player.playbackState {
-        case MPMoviePlaybackState.Stopped:
-            //            thumbnailView.alpha = 1.0
-            // DO NOT USE IT. FOR ANIMATIONS, ALWAYS USE BLOCKS. ANYWAYS, I DIDN'T GET THE REASON OF THE ANIMATION.
-            // IN THE BLOCK BELOW I WILL MAKE IT FADE IN. TO DO IT, THE TEXTVIEW WILL INIT WITH ALPHA = 0
-        
-            //            UIView.beginAnimations(nil, context: nil)
-            //            UIView.setAnimationDuration(0.5)
-            //            messageTextLabel.text = message.message
-            //            self.updateConstraints()
-            //            UIView.commitAnimations()
-
-            // ALSO, EVERY TIME THAT YOU ARE GONNA CHANGE SOMETHING IN THE UI, YOU NEED TO MAKE SURE THAT YOU
-            // ARE IN THE MAIN QUEUE. YOU CANNOT CHANGE UI IN A BACKGROUND QUEUE. AND NORMALY, CALLBACKS ARE IN BACKGROUND
-            // QUEUES.
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                println("showing message")
-                self.thumbnailView.alpha = 1.0
-                self.messageTextLabel.text = self.message.message
-                
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    self.messageTextLabel.alpha = 1
-                })
-            })
+    func playbackFinished(sender: AnyObject?) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            println("showing message")
+            self.thumbnailView.alpha = 1.0
+            self.messageTextLabel.text = self.message.message
             
-        default:
-            ()
-        }
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.messageTextLabel.alpha = 1
+            })
+        })
     }
     
 }
