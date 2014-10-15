@@ -68,7 +68,22 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         var i: Int
         for i=0; i < texts.count; i++ {
             var text = texts[i]
-            var mugText: MugText = MugText(mugId: i, text: text, state: MugState.Default)
+            var mugText: MugText
+            
+            //TEMP (for tests)
+            switch i {
+            case 0:
+                mugText = MugText(mugId: i, text: text, state: MugState.Default)
+            case 1:
+                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
+            case 2:
+                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideo)
+            case 3:
+                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedWord)
+            default:
+                mugText = MugText(mugId: i, text: text, state: MugState.Default)
+            }
+            
             self.mugs.append(mugText)
         }
     }

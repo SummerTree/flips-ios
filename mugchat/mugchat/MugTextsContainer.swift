@@ -62,7 +62,7 @@ class MugTextsContainer : UIView {
 
             mugTextView.mas_makeConstraints { (make) -> Void in
                 make.height.equalTo()(MUG_TEXT_HEIGHT)
-                make.bottom.equalTo()(-MUG_TEXT_BOTTOM_MARGIN) //make.centerY.equalTo()(self.mas_centerY)
+                make.centerY.equalTo()(self) //make.bottom.equalTo()(-MUG_TEXT_BOTTOM_MARGIN)
                 make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
                 make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }
