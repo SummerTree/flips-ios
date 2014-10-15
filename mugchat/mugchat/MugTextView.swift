@@ -10,6 +10,9 @@
 // the license agreement.
 //
 
+private let BUTTON_MARGIN_TOP : CGFloat = 7.0
+private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
+
 class MugTextView : UIView {
     
     private var mugText : MugText!
@@ -81,7 +84,7 @@ class MugTextView : UIView {
     
     private func initConstraints() {
         mugButton.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(7)
+            make.top.equalTo()(BUTTON_MARGIN_TOP)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -91,8 +94,8 @@ class MugTextView : UIView {
             hasExtrasImageView.mas_makeConstraints { (make) -> Void in
                 make.top.equalTo()(self)
                 make.trailing.equalTo()(self)
-                make.width.equalTo()(20)
-                make.height.equalTo()(20)
+                make.width.equalTo()(EXTRAS_IMAGE_SIZE)
+                make.height.equalTo()(EXTRAS_IMAGE_SIZE)
             }
         }
     }

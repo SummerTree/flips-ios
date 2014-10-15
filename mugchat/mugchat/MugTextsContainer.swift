@@ -15,6 +15,10 @@
 // http://stackoverflow.com/questions/26233999/uiscrollview-and-its-children-why-are-they-placed-on-top-of-each-other-autol
 
 private let MIN_BUTTON_WIDTH : CGFloat = 70.0
+private let MUG_TEXT_ADDITIONAL_WIDTH : CGFloat = 20.0
+private let MUG_TEXT_HEIGHT : CGFloat = 40.0
+private let MUG_TEXT_BOTTOM_MARGIN : CGFloat = 5.0
+private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
 
 class MugTextsContainer : UIView {
     
@@ -44,7 +48,6 @@ class MugTextsContainer : UIView {
     }
     
     func initSubviews() {
-        var leadingValue : CGFloat = 5.0
         var lastMugText: MugTextView!
         
         for mugText in self.texts {
@@ -55,12 +58,12 @@ class MugTextsContainer : UIView {
             self.addSubview(mugTextView)
             
             var textWidth : CGFloat = mugTextView.getTextWidth()
-            var buttonWidth : CGFloat = textWidth + 20;
+            var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
 
             mugTextView.mas_makeConstraints { (make) -> Void in
-                make.height.equalTo()(40)
-                make.bottom.equalTo()(-5) //make.centerY.equalTo()(self.mas_centerY)
-                make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(12)
+                make.height.equalTo()(MUG_TEXT_HEIGHT)
+                make.bottom.equalTo()(-MUG_TEXT_BOTTOM_MARGIN) //make.centerY.equalTo()(self.mas_centerY)
+                make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
                 make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }
 
