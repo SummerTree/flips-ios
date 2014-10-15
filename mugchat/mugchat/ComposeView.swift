@@ -40,6 +40,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     private var mugsView: UIView!
     private var myMugsLabel: UILabel!
     private var addMugButton: UIButton!
+    private var arrowToCurrentMug: UIButton!
     
     func viewDidLoad() {
         makeConstraints()
@@ -114,7 +115,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         self.addSubview(mugWordListView)
         
         mugsOrCameraView = UIView()
-        mugsOrCameraView.backgroundColor = UIColor.lightGreyF2()
+        mugsOrCameraView.backgroundColor = UIColor.sand()
         self.addSubview(mugsOrCameraView)
         
         addCameraViewSubviews()
@@ -146,6 +147,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     private func addMugsViewSubviews() {
         mugsView = UIView()
         mugsOrCameraView.addSubview(mugsView)
+        
+        arrowToCurrentMug = UIButton()
+        arrowToCurrentMug.userInteractionEnabled = false
+        arrowToCurrentMug.setImage(UIImage(named: "Triangle"), forState: .Normal)
+        arrowToCurrentMug.sizeToFit()
+        mugsView.addSubview(arrowToCurrentMug)
         
         myMugsLabel = UILabel()
         myMugsLabel.numberOfLines = 1
@@ -247,6 +254,11 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
             make.right.equalTo()(self.mugsOrCameraView)
             make.top.equalTo()(self.mugsOrCameraView)
             make.height.equalTo()(self.mugsOrCameraView)
+        }
+        
+        arrowToCurrentMug.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self.mugsView)
+            make.centerY.equalTo()(self.mugsView.mas_top)
         }
         
         myMugsLabel.mas_makeConstraints { (make) -> Void in
