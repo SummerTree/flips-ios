@@ -34,6 +34,10 @@ public class DeviceHelper: NSObject {
         return DeviceScreenSize.screenRect.size.height <= 568
     }
     
+    func isDeviceModelLessOrEqualThaniPhone4S() -> Bool {
+        return DeviceScreenSize.screenRect.size.height <= 480
+    }
+    
     struct DeviceScreenSize {
         static let screenRect: CGRect = UIScreen.mainScreen().bounds
     }

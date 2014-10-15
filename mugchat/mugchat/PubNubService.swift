@@ -75,10 +75,10 @@ public class PubNubService: MugchatService, PNDelegate {
         @property (nonatomic, retain) NSSet *participants;
 */
         
-        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage, atRoom: <#Room!#>)
+        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
     }
 }
 
 protocol PubNubServiceDelegate {
-    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!, atRoom room: Room!)
+    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!)
 }
