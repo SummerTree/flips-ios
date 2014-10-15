@@ -69,7 +69,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         var i: Int
         for i=0; i < texts.count; i++ {
             var text = texts[i]
-            var mugText: MugText = MugText(mugId: i, text: text, state: "default")
+            var mugText: MugText = MugText(mugId: i, text: text, state: MugState.Default)
             self.mugs.append(mugText)
         }
     }

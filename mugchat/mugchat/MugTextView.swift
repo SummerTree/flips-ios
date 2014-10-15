@@ -12,8 +12,7 @@
 
 class MugTextView : UIView {
     
-    private var mugText : String!
-    private var status : String? //TODO: create enum
+    private var mugText : MugText!
     
     var mugButton: UIButton!
     
@@ -23,11 +22,10 @@ class MugTextView : UIView {
     
     // MARK: - Initialization Methods
     
-    convenience init(mugText : String, status : String) {
+    convenience init(mugText : MugText) {
         self.init(frame: CGRect.zeroRect)
         
         self.mugText = mugText
-        self.status = status
         
         self.initSubviews()
     }
@@ -43,47 +41,64 @@ class MugTextView : UIView {
     
     func initSubviews() {
         mugButton = UIButton()
-        //mugButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        //TODO: story 7584
         //mugButton.addTarget(self, action: "mugButtonTapped:", forControlEvents: .TouchUpInside)
         mugButton.layer.borderWidth = 1.0
         mugButton.layer.borderColor = UIColor.avacado().CGColor
         mugButton.layer.cornerRadius = 14.0
-        mugButton.setTitle(self.mugText, forState: UIControlState.Normal)
+        mugButton.setTitle(self.mugText.text, forState: UIControlState.Normal)
         mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         mugButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         self.addSubview(mugButton)
         
-        //if status == ...
-        hasExtrasImageView = UIImageView()
-        hasExtrasImage = UIImage(named: "mug_options")
-        hasExtrasImageView.image = hasExtrasImage
-        self.addSubview(self.hasExtrasImageView)
-        
-        mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        mugButton.backgroundColor = UIColor.avacado()
+        var status : MugState = self.mugText.state
+        switch status {
+        case MugState.Default:
+            mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            mugButton.backgroundColor = UIColor.whiteColor()
+        case MugState.AssociatedImageOrVideo:
+            mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            mugButton.backgroundColor = UIColor.whiteColor()
+            addExtrasImage()
+        case MugState.AssociatedWord:
+            mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            mugButton.backgroundColor = UIColor.avacado()
+        case MugState.AssociatedImageOrVideoWithAdditionalResources:
+            mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            mugButton.backgroundColor = UIColor.avacado()
+            addExtrasImage()
+        }
         
         initConstraints()
     }
     
+    private func addExtrasImage() {
+        hasExtrasImageView = UIImageView()
+        hasExtrasImage = UIImage(named: "mug_options")
+        hasExtrasImageView.image = hasExtrasImage
+        self.addSubview(self.hasExtrasImageView)
+    }
+    
     private func initConstraints() {
         mugButton.mas_makeConstraints { (make) -> Void in
-            //make.width.equalTo()(self.badgeView.frame.size.width)
             make.top.equalTo()(7)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
         }
         
-        hasExtrasImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.trailing.equalTo()(self)
-            make.width.equalTo()(20)
-            make.height.equalTo()(20)
+        if (hasExtrasImageView != nil) {
+            hasExtrasImageView.mas_makeConstraints { (make) -> Void in
+                make.top.equalTo()(self)
+                make.trailing.equalTo()(self)
+                make.width.equalTo()(20)
+                make.height.equalTo()(20)
+            }
         }
     }
     
     func getTextWidth() -> CGFloat{
-        let myString: NSString = mugText as NSString
+        let myString: NSString = self.mugText.text as NSString
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width

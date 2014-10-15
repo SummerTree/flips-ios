@@ -49,7 +49,7 @@ class MugTextsContainer : UIView {
         
         for mugText in self.texts {
 
-            var mugTextView : MugTextView = MugTextView(mugText: mugText.text, status: "default")
+            var mugTextView : MugTextView = MugTextView(mugText: mugText)
             mugTextViews.append(mugTextView)
             
             self.addSubview(mugTextView)
