@@ -24,9 +24,10 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     
     override func loadView() {
         self.chatView = ChatView()
-        self.setupWhiteNavBarWithBackButton(chatTitle)
-        self.setNeedsStatusBarAppearanceUpdate()
         self.view = chatView
+        
+        self.setupWhiteNavBarWithBackButton(chatTitle)
+//        self.setNeedsStatusBarAppearanceUpdate()
     }
         
     override func viewWillAppear(animated: Bool) {
