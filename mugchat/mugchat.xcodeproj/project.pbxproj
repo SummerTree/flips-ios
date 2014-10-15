@@ -14,6 +14,15 @@
 		574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A919D4A05F006F0A2F /* SwiftyJSON.swift */; };
 		5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
 		5784778F19DDB9530063A543 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5784778E19DDB9530063A543 /* DeviceService.swift */; };
+		5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2C819EEADB700021DD3 /* ChatViewController.swift */; };
+		5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */; };
+		5786B2CE19EEADD400021DD3 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2CC19EEADD400021DD3 /* ChatView.swift */; };
+		5786B2D619EEAE0200021DD3 /* bollywood_thumbnail.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5786B2D019EEAE0200021DD3 /* bollywood_thumbnail.jpeg */; };
+		5786B2D719EEAE0200021DD3 /* bollywood.mov in Resources */ = {isa = PBXBuildFile; fileRef = 5786B2D119EEAE0200021DD3 /* bollywood.mov */; };
+		5786B2D819EEAE0200021DD3 /* coffee_thumbnail.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5786B2D219EEAE0200021DD3 /* coffee_thumbnail.jpeg */; };
+		5786B2D919EEAE0200021DD3 /* movie_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 5786B2D319EEAE0200021DD3 /* movie_thumbnail.png */; };
+		5786B2DA19EEAE0200021DD3 /* wanna_coffee.mov in Resources */ = {isa = PBXBuildFile; fileRef = 5786B2D419EEAE0200021DD3 /* wanna_coffee.mov */; };
+		5786B2DB19EEAE0200021DD3 /* welcome_mugchat.mov in Resources */ = {isa = PBXBuildFile; fileRef = 5786B2D519EEAE0200021DD3 /* welcome_mugchat.mov */; };
 		57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */; };
 		57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */; };
 		57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */; };
@@ -94,10 +103,10 @@
 		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
 		A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */; };
 		A216D3DA19E708E800AD10DB /* JoinStringsTextFieldDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D819E708E800AD10DB /* JoinStringsTextFieldDemo.swift */; };
-		A2392BEF19EEA3050037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BED19EEA3050037B0C0 /* MugTextView.swift */; };
-		A2392BF019EEA3050037B0C0 /* MugTextsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BEE19EEA3050037B0C0 /* MugTextsContainer.swift */; };
-		A2392BF219EEA3350037B0C0 /* MugStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF119EEA3350037B0C0 /* MugStringsUtil.swift */; };
-		A2392BF419EEAD130037B0C0 /* MugText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF319EEAD130037B0C0 /* MugText.swift */; };
+		A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */; };
+		A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* MugText.swift */; };
+		A2392BFB19EEE7C70037B0C0 /* MugTextsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */; };
+		A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* MugTextView.swift */; };
 		A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
@@ -117,6 +126,15 @@
 		574156A119D34F2B006F0A2F /* MugError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugError.swift; sourceTree = "<group>"; };
 		574156A919D4A05F006F0A2F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		5784778E19DDB9530063A543 /* DeviceService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
+		5786B2C819EEADB700021DD3 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		5786B2CC19EEADD400021DD3 /* ChatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		5786B2D019EEAE0200021DD3 /* bollywood_thumbnail.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bollywood_thumbnail.jpeg; sourceTree = "<group>"; };
+		5786B2D119EEAE0200021DD3 /* bollywood.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = bollywood.mov; sourceTree = "<group>"; };
+		5786B2D219EEAE0200021DD3 /* coffee_thumbnail.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = coffee_thumbnail.jpeg; sourceTree = "<group>"; };
+		5786B2D319EEAE0200021DD3 /* movie_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = movie_thumbnail.png; sourceTree = "<group>"; };
+		5786B2D419EEAE0200021DD3 /* wanna_coffee.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = wanna_coffee.mov; sourceTree = "<group>"; };
+		5786B2D519EEAE0200021DD3 /* welcome_mugchat.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = welcome_mugchat.mov; sourceTree = "<group>"; };
 		57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
 		57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
 		57D2A09119D310C000FA729D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -211,10 +229,10 @@
 		A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStringsTextField.swift; sourceTree = "<group>"; };
 		A216D3D819E708E800AD10DB /* JoinStringsTextFieldDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStringsTextFieldDemo.swift; sourceTree = "<group>"; };
-		A2392BED19EEA3050037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
-		A2392BEE19EEA3050037B0C0 /* MugTextsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextsContainer.swift; sourceTree = "<group>"; };
-		A2392BF119EEA3350037B0C0 /* MugStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugStringsUtil.swift; sourceTree = "<group>"; };
-		A2392BF319EEAD130037B0C0 /* MugText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugText.swift; sourceTree = "<group>"; };
+		A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugStringsUtil.swift; sourceTree = "<group>"; };
+		A2392BF619EEE7C70037B0C0 /* MugText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugText.swift; sourceTree = "<group>"; };
+		A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextsContainer.swift; sourceTree = "<group>"; };
+		A2392BF819EEE7C70037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
 		A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
@@ -278,6 +296,23 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		5786B2CA19EEADBC00021DD3 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				5786B2C819EEADB700021DD3 /* ChatViewController.swift */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
+		5786B2CF19EEADD900021DD3 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */,
+				5786B2CC19EEADD400021DD3 /* ChatView.swift */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
 		57A3A6BC19D5E2E70043790E /* Verification */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +370,7 @@
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				5786B2CA19EEADBC00021DD3 /* Chat */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
@@ -355,6 +391,7 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
 				7A28ADC019D4428A00887831 /* Custom */,
@@ -461,10 +498,11 @@
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
 			isa = PBXGroup;
 			children = (
-				A2392BED19EEA3050037B0C0 /* MugTextView.swift */,
-				A2392BEE19EEA3050037B0C0 /* MugTextsContainer.swift */,
+				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
+				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
+				A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */,
+				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
 				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
-				A2392BF319EEAD130037B0C0 /* MugText.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -564,6 +602,12 @@
 		70FD4E7319D064450024EBDB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5786B2D019EEAE0200021DD3 /* bollywood_thumbnail.jpeg */,
+				5786B2D119EEAE0200021DD3 /* bollywood.mov */,
+				5786B2D219EEAE0200021DD3 /* coffee_thumbnail.jpeg */,
+				5786B2D319EEAE0200021DD3 /* movie_thumbnail.png */,
+				5786B2D419EEAE0200021DD3 /* wanna_coffee.mov */,
+				5786B2D519EEAE0200021DD3 /* welcome_mugchat.mov */,
 				70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */,
 				70FD4E7419D064450024EBDB /* Info.plist */,
 			);
@@ -746,7 +790,6 @@
 		A216D3D619E708A900AD10DB /* TextView */ = {
 			isa = PBXGroup;
 			children = (
-				A2392BF119EEA3350037B0C0 /* MugStringsUtil.swift */,
 				A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */,
 				A216D3D819E708E800AD10DB /* JoinStringsTextFieldDemo.swift */,
 			);
@@ -825,6 +868,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5786B2D819EEAE0200021DD3 /* coffee_thumbnail.jpeg in Resources */,
+				5786B2D719EEAE0200021DD3 /* bollywood.mov in Resources */,
+				5786B2DB19EEAE0200021DD3 /* welcome_mugchat.mov in Resources */,
+				5786B2D619EEAE0200021DD3 /* bollywood_thumbnail.jpeg in Resources */,
+				5786B2D919EEAE0200021DD3 /* movie_thumbnail.png in Resources */,
+				5786B2DA19EEAE0200021DD3 /* wanna_coffee.mov in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -880,12 +929,14 @@
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
+				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				70B7695C19E6EEA400CAA9A9 /* MugMessage.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
+				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
+				A2392BFB19EEE7C70037B0C0 /* MugTextsContainer.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
-				A2392BF219EEA3350037B0C0 /* MugStringsUtil.swift in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,
 				7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */,
 				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
@@ -894,7 +945,6 @@
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
 				A216D3DA19E708E800AD10DB /* JoinStringsTextFieldDemo.swift in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
-				A2392BEF19EEA3050037B0C0 /* MugTextView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
 				7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */,
@@ -909,6 +959,7 @@
 				7A2A7E2519EDBFB800033164 /* DeviceExtension.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
+				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				5707186719D1AF110069064F /* UserService.swift in Sources */,
@@ -917,10 +968,10 @@
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */,
 				7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */,
-				A2392BF419EEAD130037B0C0 /* MugText.swift in Sources */,
 				7AD93F9419E574B6009CC59A /* UIImageExtensions.swift in Sources */,
-				A2392BF019EEA3050037B0C0 /* MugTextsContainer.swift in Sources */,
+				5786B2CE19EEADD400021DD3 /* ChatView.swift in Sources */,
 				7066E0A519EC4D610009BCF2 /* ComposeView.swift in Sources */,
+				A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
@@ -961,6 +1012,7 @@
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
 				5784778F19DDB9530063A543 /* DeviceService.swift in Sources */,
+				5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */,
 				7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -14,10 +14,9 @@ import UIKit
 
 class ComposeView : UIView, CustomNavigationBarDelegate {
     
-    private let MUG_CONTAINER_HEIGHT: CGFloat = 320.0
+    private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
     private let MUGWORD_LIST_HEIGHT: CGFloat = 50.0
-    private let MUGS_OR_CAMERA_HEIGHT: CGFloat = 134.0
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
     private let MY_MUGS_LABEL_MARGIN_TOP: CGFloat = 5.0
@@ -79,8 +78,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         self.addSubview(mugContainerView)
         
         mugImageView = UIImageView.imageWithColor(UIColor.avacado())
-        mugImageView.contentMode = UIViewContentMode.ScaleToFill
-        mugImageView.sizeToFit()
+//        mugImageView = UIImageView(image: UIImage(named: "Church"))
+        mugImageView.contentMode = UIViewContentMode.ScaleAspectFit
         mugContainerView.addSubview(mugImageView)
         
         mugWordLabel = UILabel()
@@ -145,7 +144,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         mugContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self.mugTextsContainer.mas_top)
+            make.bottom.equalTo()(self.mugImageView)
         }
         
         // asking help to delegate to align the container with navigation bar
@@ -153,9 +152,16 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         mugImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.mugContainerView)
-            make.left.equalTo()(self.mugContainerView)
-            make.right.equalTo()(self.mugContainerView)
-            make.bottom.equalTo()(self.mugContainerView)
+            
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.centerX.equalTo()(self.mugContainerView)
+                make.width.equalTo()(self.MUG_IMAGE_WIDTH)
+            } else {
+                make.left.equalTo()(self.mugContainerView)
+                make.right.equalTo()(self.mugContainerView)
+            }
+            
+            make.height.equalTo()(self.mugImageView.mas_width)
         }
         
         mugWordLabel.mas_makeConstraints { (make) -> Void in
@@ -166,15 +172,15 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         mugTextsContainer.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self.mugsOrCameraView.mas_top)
+            make.top.equalTo()(self.mugContainerView.mas_bottom)
             make.height.equalTo()(self.MUGWORD_LIST_HEIGHT)
         }
         
         mugsOrCameraView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
+            make.top.equalTo()(self.mugTextsContainer.mas_bottom)
             make.bottom.equalTo()(self)
-            make.height.equalTo()(self.MUGS_OR_CAMERA_HEIGHT)
         }
         
         makeCameraViewConstraints()
@@ -229,8 +235,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         addMugButton.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.myMugsLabel)
             make.top.equalTo()(self.myMugsLabel.mas_bottom).with().offset()(self.ADD_MUG_BUTTON_MARGIN_TOP)
-            make.width.equalTo()(self.addMugButton.frame.width)
-            make.height.equalTo()(self.addMugButton.frame.height)
+            
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.width.equalTo()(self.addMugButton.frame.width / 3 * 2)
+                make.height.equalTo()(self.addMugButton.mas_width)
+            } else {
+                make.width.equalTo()(self.addMugButton.frame.width)
+                make.height.equalTo()(self.addMugButton.frame.height)
+            }
         }
     }
     
