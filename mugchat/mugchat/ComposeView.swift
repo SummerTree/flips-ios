@@ -100,7 +100,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         mugImageView = UIImageView.imageWithColor(UIColor.avacado())
 //        mugImageView = UIImageView(image: UIImage(named: "Church"))
-        mugImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        mugImageView.sizeToFit()
+        mugImageView.contentMode = UIViewContentMode.Redraw
         mugContainerView.addSubview(mugImageView)
         
         mugWordLabel = UILabel()
@@ -187,7 +188,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         mugWordLabel.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.mugContainerView)
-            make.bottom.equalTo()(self.mugContainerView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
+            make.bottom.equalTo()(self.mugImageView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
         }
         
         mugWordListView.mas_makeConstraints { (make) -> Void in
@@ -265,6 +266,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
                 make.height.equalTo()(self.addMugButton.frame.height)
             }
         }
+    }
+    
+    func setPicture(image: UIImage!) {
+        println(UIScreen.mainScreen().bounds.width)
+        self.mugImageView.image = image
+        self.updateConstraintsIfNeeded()
     }
     
     
