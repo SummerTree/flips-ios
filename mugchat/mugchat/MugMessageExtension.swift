@@ -10,21 +10,25 @@
 // the license agreement.
 //
 
-private struct MugJsonParams {
-    static let ID = "id"
-    static let WORD = "word"
-    static let BACKGROUND_URL = "backgroundURL"
-    static let SOUND_URL = "soundURL"
+import Foundation
+
+private enum MessageParams {
+    static let FROM = "from"
+    static let CONTENT = "content"
 }
 
-extension Mug {
-
-    class func createEntityWithJson(json: JSON) -> Mug {
-        var entity: Mug! = self.createEntity() as Mug
-        entity.mugID = json[MugJsonParams.ID].stringValue
-        entity.word = json[MugJsonParams.WORD].stringValue
-        entity.backgroundURL = json[MugJsonParams.BACKGROUND_URL].stringValue
-        entity.soundURL = json[MugJsonParams.SOUND_URL].stringValue
+extension MugMessage {
+    
+    class func createEntityWithJson(json: JSON) -> MugMessage {
+        var entity: MugMessage! = self.createEntity() as MugMessage
+        
+        var senderId = json[MessageParams.FROM].stringValue
+        var content = json[MessageParams.CONTENT]
+        for (index: String, mug: JSON) in content {
+            entity.addMugsObject(Mug.createEntityWithJson(mug))
+        }
+        
+        entity.userFrom = UserDataSource().retrieveUserWithId(senderId)
         
         return entity
     }

@@ -61,13 +61,24 @@ public class PubNubService: MugchatService, PNDelegate {
     }
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
+//        pnMessage.channel.name
         println("Did receive message. Forwading it to delegate.")
         var message: JSON = JSON(pnMessage.message)
-        let mugMessage = MugMessage(json: message)
-        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
+        let mugMessage = MugMessage.createEntityWithJson(message)
+        
+        
+        /*
+        @property (nonatomic, retain) NSString * name;
+        @property (nonatomic, retain) NSString * pubnubID;
+        @property (nonatomic, retain) NSString * roomID;
+        @property (nonatomic, retain) User *admin;
+        @property (nonatomic, retain) NSSet *participants;
+*/
+        
+        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage, atRoom: <#Room!#>)
     }
 }
 
 protocol PubNubServiceDelegate {
-    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!)
+    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!, atRoom room: Room!)
 }

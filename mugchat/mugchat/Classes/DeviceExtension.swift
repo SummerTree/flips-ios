@@ -26,7 +26,7 @@ extension Device {
         
         var json = JSON(object)
         entity.deviceID = json[_ID].stringValue
-        entity.user = User.createEntityWithId(json[USER].stringValue) // TODO: it seems to be wrong
+        entity.user = UserDataSource().retrieveUserWithId(json[USER].stringValue)
         entity.phoneNumber = json[PHONE_NUMBER].stringValue
         entity.platform = json[PLATFORM].stringValue
         entity.uuid = json[UUID].stringValue

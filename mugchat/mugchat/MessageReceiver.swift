@@ -26,7 +26,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!) {
         println("Message received.")
-        println("Sender = \(message.sender)")
+        println("Sender = \(message.userFrom.firstName)")
         println("Mugs = \(message.mugs)")
     }
     

@@ -34,15 +34,7 @@ extension User {
     class func createEntityWithJson(json: JSON) -> User {
         var entity: User! = self.MR_createEntity() as User
         
-        entity.userID = json[ID].stringValue
-        entity.username = json[USERNAME].stringValue
-        entity.firstName = json[FIRST_NAME].stringValue
-        entity.lastName = json[LAST_NAME].stringValue
-        entity.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue)
-        entity.nickname = json[NICKNAME].stringValue
-        entity.facebookID = json[FACEBOOK_ID].stringValue
-        entity.photoURL = json[PHOTO_URL].stringValue
-        entity.pubnubID = json[PUBNUB_ID].stringValue
+        User.fillUser(entity, withJsonData: json)
         
         return entity
     }
@@ -53,7 +45,30 @@ extension User {
         return entity
     }
     
+    class func createEntityInAnotherContextWithJson(json: JSON) -> User {
+        var newContext = NSManagedObjectContext.MR_contextWithParent(NSManagedObjectContext.MR_context())
+        println("Creating entity in new context: \(newContext)")
+        var entity: User! = self.MR_createInContext(newContext) as User
+        
+        User.fillUser(entity, withJsonData: json)
+        
+        return entity
+    }
+    
+    private class func fillUser(user: User, withJsonData json: JSON) {
+        user.userID = json[ID].stringValue
+        user.username = json[USERNAME].stringValue
+        user.firstName = json[FIRST_NAME].stringValue
+        user.lastName = json[LAST_NAME].stringValue
+        user.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue)
+        user.nickname = json[NICKNAME].stringValue
+        user.facebookID = json[FACEBOOK_ID].stringValue
+        user.photoURL = json[PHOTO_URL].stringValue
+        user.pubnubID = json[PUBNUB_ID].stringValue
+    }
+    
     class func save() {
+        println("Saving entity in default context: \(NSManagedObjectContext.MR_defaultContext())")
         NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
     }
     
