@@ -70,6 +70,7 @@
 		7A2A7E2719EDBFB800033164 /* MugExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E2119EDBFB800033164 /* MugExtension.swift */; };
 		7A2A7E2819EDBFB800033164 /* RoomExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E2219EDBFB800033164 /* RoomExtension.swift */; };
 		7A2A7E2919EDBFB800033164 /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E2319EDBFB800033164 /* UserExtension.swift */; };
+		7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E4C19EEF4E600033164 /* CameraView.swift */; };
 		7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
@@ -193,6 +194,7 @@
 		7A2A7E2119EDBFB800033164 /* MugExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MugExtension.swift; path = Classes/MugExtension.swift; sourceTree = "<group>"; };
 		7A2A7E2219EDBFB800033164 /* RoomExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoomExtension.swift; path = Classes/RoomExtension.swift; sourceTree = "<group>"; };
 		7A2A7E2319EDBFB800033164 /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
+		7A2A7E4C19EEF4E600033164 /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIButtonExtensions.swift; path = Classes/UIButtonExtensions.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
@@ -765,6 +767,7 @@
 			children = (
 				7AB1685619E32CD2004E2162 /* AVCamPreviewView.h */,
 				7AB1685719E32CD2004E2162 /* AVCamPreviewView.m */,
+				7A2A7E4C19EEF4E600033164 /* CameraView.swift */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -1000,6 +1003,7 @@
 				7033584819E462A20030CF11 /* PubNubService.swift in Sources */,
 				7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
+				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
