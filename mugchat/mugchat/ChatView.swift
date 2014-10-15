@@ -80,7 +80,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         replyButton = UIButton()
         replyButton.contentMode = .Center
         replyButton.backgroundColor = UIColor.whiteColor()
-        replyButton.addTarget(self, action: "didTapReplyButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        replyButton.addTarget(self, action: "didTapReplyButton", forControlEvents: UIControlEvents.TouchUpInside)
         replyButton.setImage(UIImage(named: "Reply"), forState: UIControlState.Normal)
         replyButton.sizeToFit()
         self.addSubview(replyButton)

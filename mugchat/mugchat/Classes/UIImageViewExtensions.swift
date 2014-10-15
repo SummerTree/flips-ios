@@ -37,6 +37,20 @@ extension UIImageView {
         return UIImageView(frame: CGRectMake(0, 0, A4_AVATAR_SIZE, A4_AVATAR_SIZE), borderWidth: A4_BORDER_WIDTH)
     }
     
+    class func imageWithColor(color: UIColor) -> UIImageView {
+        let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()
+        
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextFillRect(context, rect)
+        
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return UIImageView(image: image)
+    }
+    
     convenience init(frame: CGRect, borderWidth : CGFloat) {
         self.init(frame: frame)
         self.contentMode = UIViewContentMode.ScaleAspectFit

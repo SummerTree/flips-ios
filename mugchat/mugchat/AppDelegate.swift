@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         CoreDataHandler.sharedInstance.setupDatabase()
 
-        let splashScreenViewController = ChatViewController(chatTitle: "MugBoys")
+        let splashScreenViewController = SplashScreenViewController()
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
        
         self.window?.rootViewController = navigationViewControler

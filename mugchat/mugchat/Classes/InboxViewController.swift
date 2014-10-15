@@ -61,6 +61,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
         println("tap at cell \(index)")
+        self.navigationController?.pushViewController(ChatViewController(chatTitle: "MugBoys"), animated: true)
     }
 }
 
