@@ -26,7 +26,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
     
     var delegate: ComposeViewDelegate?
     
-    var mugs : [String]!
+    var mugs : [MugText] = [MugText]()
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
@@ -54,14 +54,24 @@ class ComposeView : UIView, CustomNavigationBarDelegate {
         
         // just for debugging, since we don't have integration between the views
         let stringTest = "I love San Francisco!" as String
-        self.mugs = MugStringsUtil.splitMugString(stringTest);
+        var texts : [String] = MugStringsUtil.splitMugString(stringTest);
+        createMugs(texts)
         
         addSubviews()
     }
 
     convenience init(words: [String]) {
         self.init()
-        self.mugs = words
+        createMugs(words)
+    }
+    
+    func createMugs(texts: [String]) {
+        var i: Int
+        for i=0; i < texts.count; i++ {
+            var text = texts[i]
+            var mugText: MugText = MugText(mugId: i, text: text, state: "default")
+            self.mugs.append(mugText)
+        }
     }
     
     private func addSubviews() {

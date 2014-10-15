@@ -11,21 +11,21 @@
 //
 
 
-// UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+// TODO: scrollView (use UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout)
 // http://stackoverflow.com/questions/26233999/uiscrollview-and-its-children-why-are-they-placed-on-top-of-each-other-autol
 
 private let MIN_BUTTON_WIDTH : CGFloat = 70.0
 
-class MugTextsContainer : UIView { //UIScrollView
+class MugTextsContainer : UIView {
     
-    var mugTexts: [MugText]! = [MugText]()
+    var mugTextViews: [MugTextView]! = [MugTextView]()
     
-    private var texts : [String]! //TODO: use object Mug instead of string
+    private var texts : [MugText]!
     
     
     // MARK: - Initialization Methods
     
-    convenience init(texts : [String]) {
+    convenience init(texts : [MugText]) {
         self.init(frame: CGRect.zeroRect)
         
         self.texts = texts
@@ -45,26 +45,26 @@ class MugTextsContainer : UIView { //UIScrollView
     
     func initSubviews() {
         var leadingValue : CGFloat = 5.0
-        var lastMugText: MugText!
+        var lastMugText: MugTextView!
         
-        for text in self.texts {
+        for mugText in self.texts {
 
-            var mugText : MugText = MugText(mugText: text, status: "default")
-            mugTexts.append(mugText)
+            var mugTextView : MugTextView = MugTextView(mugText: mugText.text, status: "default")
+            mugTextViews.append(mugTextView)
             
-            self.addSubview(mugText)
+            self.addSubview(mugTextView)
             
-            var textWidth : CGFloat = mugText.getTextWidth()
+            var textWidth : CGFloat = mugTextView.getTextWidth()
             var buttonWidth : CGFloat = textWidth + 20;
 
-            mugText.mas_makeConstraints { (make) -> Void in
+            mugTextView.mas_makeConstraints { (make) -> Void in
                 make.height.equalTo()(40)
                 make.bottom.equalTo()(-5) //make.centerY.equalTo()(self.mas_centerY)
                 make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(12)
                 make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }
 
-            lastMugText = mugText;
+            lastMugText = mugTextView;
         }
     }
     
