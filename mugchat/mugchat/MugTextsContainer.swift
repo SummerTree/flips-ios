@@ -17,7 +17,7 @@
 private let MIN_BUTTON_WIDTH : CGFloat = 70.0
 private let MUG_TEXT_ADDITIONAL_WIDTH : CGFloat = 20.0
 private let MUG_TEXT_HEIGHT : CGFloat = 40.0
-private let MUG_TEXT_BOTTOM_MARGIN : CGFloat = 5.0
+private let MUG_TEXT_TOP_MARGIN : CGFloat = 5.0
 private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
 
 class MugTextsContainer : UIView, MugTextViewDelegate {
@@ -66,7 +66,7 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
 
             mugTextView.mas_makeConstraints { (make) -> Void in
                 make.height.equalTo()(MUG_TEXT_HEIGHT)
-                make.centerY.equalTo()(self) //make.bottom.equalTo()(-MUG_TEXT_BOTTOM_MARGIN)
+                make.top.equalTo()(0)
                 make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
                 make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }
@@ -95,15 +95,17 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
         menuController.setMenuVisible(true, animated: true)
     }
     
-    func splitText() {
+    func splitText() { //(mugText : MugText!) {
         println(">>>>> splitText")
+        //var texts : [String] = MugStringsUtil.splitMugString(stringTest);
+        //createMugs(texts)
     }
     
     override func canBecomeFirstResponder() -> Bool {
         return true;
     }
     
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {   
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
         if action == "cut:" {
             return false;
         }
