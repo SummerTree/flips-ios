@@ -10,6 +10,8 @@
 // the license agreement.
 //
 
+import Foundation
+
 private struct MugJsonParams {
     static let ID = "id"
     static let WORD = "word"
@@ -17,19 +19,18 @@ private struct MugJsonParams {
     static let SOUND_URL = "soundURL"
 }
 
-extension Mug {
-
-    class func createEntityWithJson(json: JSON) -> Mug {
-        var entity: Mug! = self.createEntity() as Mug
+class MugDataSource : BaseDataSource {
+    
+    func createEntityWithJson(json: JSON) -> Mug {
+        var entity: Mug! = Mug.createEntity() as Mug
+        
         entity.mugID = json[MugJsonParams.ID].stringValue
         entity.word = json[MugJsonParams.WORD].stringValue
         entity.backgroundURL = json[MugJsonParams.BACKGROUND_URL].stringValue
         entity.soundURL = json[MugJsonParams.SOUND_URL].stringValue
         
+        self.save()
+        
         return entity
-    }
-    
-    class func save() {
-        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
     }
 }

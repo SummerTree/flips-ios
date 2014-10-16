@@ -10,8 +10,11 @@
 // the license agreement.
 //
 
-import Foundation
-
-class MessagesDataSource {
+class BaseDataSource {
+    
+    func save() {
+        println("Saving in context \(NSManagedObjectContext.MR_defaultContext())")
+        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
+    }
     
 }

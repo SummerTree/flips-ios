@@ -10,13 +10,39 @@
 // the license agreement.
 //
 
-import Foundation
+private struct RoomJsonParams {
+    static let NAME = "name"
+    static let PUBNUB_ID = ""
+    static let ROOM_ID = ""
+    static let ADMIN_ID = ""
+    static let PARTICIPANTS = ""
+}
 
-class RoomDataSource {
-   
+class RoomDataSource : BaseDataSource {
+    
+    func createEntityWithJson(json: JSON) -> Room {
+        let userDataSource = UserDataSource()
+        
+        var entity: Room! = Room.createEntity() as Room
+        
+        entity.name = json[RoomJsonParams.NAME].stringValue
+        entity.pubnubID = json[RoomJsonParams.PUBNUB_ID].stringValue
+        entity.roomID = json[RoomJsonParams.ROOM_ID].stringValue
+
+        // TODO: need to check if the server is returning the admin info - maybe we don't have it in the database yet
+        entity.admin = userDataSource.retrieveUserWithId(json[RoomJsonParams.ADMIN_ID].stringValue)
+        
+        var content = json[RoomJsonParams.PARTICIPANTS]
+        for (index: String, json: JSON) in content {
+            entity.addParticipantsObject(userDataSource.retrieveUserWithId(json["userID"].stringValue))
+        }
+        
+        self.save()
+        
+        return entity
+    }
+    
     func retriveRoomWithName(name: String) {
-        
-        
-        
+        // TODO:
     }
 }

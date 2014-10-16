@@ -10,51 +10,90 @@
 // the license agreement.
 //
 
+private let ID = "id"
+private let USERNAME = "username"
+private let FIRST_NAME = "firstName"
+private let LAST_NAME = "lastName"
+private let BIRTHDAY = "birthday"
+private let NICKNAME = "nickname"
+private let FACEBOOK_ID = "facebookID"
+private let PHOTO_URL = "photoUrl"
+private let PUBNUB_ID = "pubnubId"
+
 private let USER_ID_ATTRIBUTE = "userID"
 
-class UserDataSource {
+class UserDataSource : BaseDataSource {
     
-    func createOrUpdateUserWithJson(json: JSON) -> User! {
-        // This user won't be saved in the current context. It is temporary.
-        var temporaryUser = User.createEntityInAnotherContextWithJson(json)
+    // MARK: - CoreData Creator Methods
+    
+    private func createEntityWithJson(json: JSON) -> User {
+        var entity: User! = User.MR_createEntity() as User
         
-        var savedUser = self.userFromId(temporaryUser.userID)
-        if (savedUser == nil) {
-            savedUser = User.createEntityWithJson(json)
-        } else {
-            // Update User
-            savedUser?.birthday = temporaryUser.birthday
-            savedUser?.facebookID = temporaryUser.facebookID
-            savedUser?.firstName = temporaryUser.firstName
-            savedUser?.lastName = temporaryUser.lastName
-            savedUser?.me = temporaryUser.me
-            savedUser?.nickname = temporaryUser.nickname
-            savedUser?.photoURL = temporaryUser.photoURL
-            savedUser?.pubnubID = temporaryUser.pubnubID
-            savedUser?.userID = temporaryUser.userID
-            savedUser?.username = temporaryUser.username
-        }
-        User.save()
+        self.fillUser(entity, withJsonData: json)
         
-        return savedUser
+        return entity
     }
     
-    func retrieveUserWithId(id: String) -> User {
-        var user = self.userFromId(id)
-
-        if (user == nil) {
-            println("MugChat failed to retrive user, because User(\(id)) not found in Database. It cannot happen. You need to check why it wasn't added previously.")
+    // Entities in diferent context are not saved in the database. To save it, you need to merge the context where it was created.
+    // Not sure if it will be used. Is here just like an example.
+    private func createEntityInAnotherContextWithJson(json: JSON) -> User {
+        var newContext = NSManagedObjectContext.MR_contextWithParent(NSManagedObjectContext.MR_context())
+        
+        println("Creating entity in new context: \(newContext)")
+        var entity: User! = User.MR_createInContext(newContext) as User
+        
+        self.fillUser(entity, withJsonData: json)
+        
+        return entity
+    }
+    
+    private func fillUser(user: User, withJsonData json: JSON) {
+        if (user.userID != json[ID].stringValue) {
+            println("Possible error. Will change user id from (\(user.userID)) to (\(json[ID].stringValue))")
         }
-
+        
+        user.userID = json[ID].stringValue
+        user.username = json[USERNAME].stringValue
+        user.firstName = json[FIRST_NAME].stringValue
+        user.lastName = json[LAST_NAME].stringValue
+        user.birthday = NSDate(dateTimeString: json[BIRTHDAY].stringValue)
+        user.nickname = json[NICKNAME].stringValue
+        user.facebookID = json[FACEBOOK_ID].stringValue
+        user.photoURL = json[PHOTO_URL].stringValue
+        user.pubnubID = json[PUBNUB_ID].stringValue
+    }
+    
+    
+    // MARK - Public Methods
+    
+    func createOrUpdateUserWithJson(json: JSON) -> User {
+        let userID = json[ID].stringValue
+        var user = self.getUserById(userID)
+        
+        if (user == nil) {
+            user = self.createEntityWithJson(json)
+        } else {
+            self.fillUser(user!, withJsonData: json)
+            self.save()
+        }
+        
         return user!
     }
     
-    private func userFromId(id: String?) -> User? {
-        if (id == nil) {
-            return nil
+    func retrieveUserWithId(id: String) -> User {
+        var user = self.getUserById(id)
+        
+        if (user == nil) {
+            println("User (\(id)) not found in the database and it mustn't happen. Check why he wasn't added to database yet.")
         }
         
-        return User.findFirstByAttribute(USER_ID_ATTRIBUTE, withValue: id) as User?
+        return user!
     }
-
+    
+    
+    // MARK: - Private Getters Methods
+    
+    private func getUserById(id: String) -> User? {
+        return User.findFirstByAttribute(USER_ID_ATTRIBUTE, withValue: id) as? User
+    }
 }

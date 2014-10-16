@@ -17,22 +17,17 @@
 
 @interface MugMessage : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * notRead;
 @property (nonatomic, retain) NSDate * sentDate;
-@property (nonatomic, retain) NSNumber * isRead;
-@property (nonatomic, retain) NSOrderedSet *mugs;
-@property (nonatomic, retain) User *userFrom;
+@property (nonatomic, retain) User *from;
+@property (nonatomic, retain) NSSet *mugs;
 @end
 
 @interface MugMessage (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(Mug *)value inMugsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromMugsAtIndex:(NSUInteger)idx;
-- (void)insertMugs:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeMugsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInMugsAtIndex:(NSUInteger)idx withObject:(Mug *)value;
-- (void)replaceMugsAtIndexes:(NSIndexSet *)indexes withMugs:(NSArray *)values;
 - (void)addMugsObject:(Mug *)value;
 - (void)removeMugsObject:(Mug *)value;
-- (void)addMugs:(NSOrderedSet *)values;
-- (void)removeMugs:(NSOrderedSet *)values;
+- (void)addMugs:(NSSet *)values;
+- (void)removeMugs:(NSSet *)values;
+
 @end
