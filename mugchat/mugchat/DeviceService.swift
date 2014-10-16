@@ -59,7 +59,8 @@ public class DeviceService: MugchatService {
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        return Device.createEntityWithObject(response)
+        let deviceDataSource = DeviceDataSource()
+        return deviceDataSource.createEntityWithObject(response)
     }
     
     

@@ -62,8 +62,10 @@ public class PubNubService: MugchatService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
         println("Did receive message. Forwading it to delegate.")
-        var message: JSON = JSON(pnMessage.message)
-        let mugMessage = MugMessage(json: message)
+        var messageJSON: JSON = JSON(pnMessage.message)
+//        let mugMessage = MugMessage(json: message)
+        let mugMessageDataSource = MugMessageDataSource()
+        let mugMessage = mugMessageDataSource.createEntityWithJson(messageJSON)
         self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
     }
 }

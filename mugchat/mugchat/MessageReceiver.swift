@@ -25,9 +25,9 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     // MARK: - PubnubServiceDelegate
     
     func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!) {
-        println("Message received.")
-        println("Sender = \(message.sender)")
-        println("Mugs = \(message.mugs)")
+//        println("Message received.")
+//        println("Sender = \(message.sender)")
+//        println("Mugs = \(message.mugs)")
     }
     
     func startListeningMessages() {

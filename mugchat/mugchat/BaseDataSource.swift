@@ -10,17 +10,11 @@
 // the license agreement.
 //
 
-private let LOGGED_USER_ATTRIBUTE = "me"
-
-extension User {
+class BaseDataSource {
     
-    class func loggedUser() -> User? {
-        var loggedAttributeUser: User? = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as? User
-        return loggedAttributeUser
+    func save() {
+        println("Saving in context \(NSManagedObjectContext.MR_defaultContext())")
+        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
     }
-
-    class func isUserLoggedIn() -> Bool {
-        var loggedUser = User.loggedUser() as User?
-        return (loggedUser != nil)
-    }
+    
 }
