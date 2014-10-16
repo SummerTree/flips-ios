@@ -20,7 +20,7 @@ private let MUG_TEXT_HEIGHT : CGFloat = 40.0
 private let MUG_TEXT_BOTTOM_MARGIN : CGFloat = 5.0
 private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
 
-class MugTextsContainer : UIView {
+class MugTextsContainer : UIView, MugTextViewDelegate {
     
     var mugTextViews: [MugTextView]! = [MugTextView]()
     
@@ -37,6 +37,8 @@ class MugTextsContainer : UIView {
         self.backgroundColor = UIColor.whiteColor()
 
         self.initSubviews()
+        
+        self.becomeFirstResponder()
     }
     
     override init(frame: CGRect) {
@@ -55,6 +57,8 @@ class MugTextsContainer : UIView {
             var mugTextView : MugTextView = MugTextView(mugText: mugText)
             mugTextViews.append(mugTextView)
             
+            mugTextView.delegate = self
+            
             self.addSubview(mugTextView)
             
             var textWidth : CGFloat = mugTextView.getTextWidth()
@@ -69,6 +73,58 @@ class MugTextsContainer : UIView {
 
             lastMugText = mugTextView;
         }
+    }
+    
+    func didTapMugText(mugText : MugText!) {
+        let menuController = UIMenuController.sharedMenuController()
+        
+        var mugTextView : MugTextView
+        for mugTextView in mugTextViews {
+            if (mugTextView.mugText.mugId == mugText.mugId) {
+                var selectionRect : CGRect = CGRectMake(mugTextView.frame.origin.x, mugTextView.frame.origin.y + 10, mugTextView.frame.size.width, mugTextView.frame.size.height);
+                menuController.setTargetRect(selectionRect, inView: self)
+                break;
+            }
+        }
+    
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: "splitText")
+        menuController.menuItems = NSArray(array: [lookupMenu])
+    
+        menuController.update();
+    
+        menuController.setMenuVisible(true, animated: true)
+    }
+    
+    func splitText() {
+        println(">>>>> splitText")
+    }
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true;
+    }
+    
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {   
+        if action == "cut:" {
+            return false;
+        }
+            
+        else if action == "copy:" {
+            return false;
+        }
+            
+        else if action == "paste:" {
+            return false;
+        }
+            
+        else if action == "_define:" {
+            return false;
+        }
+            
+        else if action == "Split" {
+            return true;
+        }
+        
+        return super.canPerformAction(action, withSender: sender)
     }
     
 }
