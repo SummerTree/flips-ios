@@ -129,8 +129,8 @@ class CameraView : UIView {
         previewView.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.center.equalTo()(self)
-            make.width.equalTo()(UIScreen.mainScreen().bounds.width)
-            make.height.equalTo()(UIScreen.mainScreen().bounds.height)
+            make.width.equalTo()(self)
+            make.height.equalTo()(self.previewView.mas_width)
         }
         
         if (showAvatarCropArea) {
