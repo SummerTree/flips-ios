@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let splashScreenViewController = SplashScreenViewController()
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
-       
+        
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
         
