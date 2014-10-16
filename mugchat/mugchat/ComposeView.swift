@@ -174,7 +174,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         mugContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.mugContainerView.mas_width)
+            make.bottom.equalTo()(self.cameraPreview)
         }
         
         // asking help to delegate to align the container with navigation bar
@@ -182,9 +182,16 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         
         cameraPreview.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.mugContainerView)
-            make.left.equalTo()(self.mugContainerView)
-            make.right.equalTo()(self.mugContainerView)
-            make.bottom.equalTo()(self.mugContainerView)
+            
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.centerX.equalTo()(self.mugContainerView)
+                make.width.equalTo()(self.MUG_IMAGE_WIDTH)
+            } else {
+                make.left.equalTo()(self.mugContainerView)
+                make.right.equalTo()(self.mugContainerView)
+            }
+
+            make.height.equalTo()(self.mugImageView.mas_width)
         }
         
         mugImageView.mas_makeConstraints { (make) -> Void in
