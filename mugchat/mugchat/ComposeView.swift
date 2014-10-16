@@ -402,6 +402,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         // Take a picture button should be disabled
         takePictureButton.enabled = available
     }
+    
+    func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
+        println("starting recording microphone")
+    }
 }
 
 
