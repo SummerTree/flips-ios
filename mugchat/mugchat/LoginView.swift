@@ -71,7 +71,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenCredentialsAndFacebook: UIView!
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
-    
+ 
     private var isInformedWrongPassword: Bool = false
     
     private var animator: UIDynamicAnimator!

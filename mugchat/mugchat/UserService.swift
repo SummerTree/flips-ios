@@ -76,7 +76,7 @@ public class UserService: MugchatService {
         user.me = true
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            User.save()
+            userDataSource.save()
         })
         
         return user
@@ -139,7 +139,7 @@ public class UserService: MugchatService {
         user.me = true
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            User.save()
+            userDataSource.save()
         })
         
         return user

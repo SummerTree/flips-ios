@@ -48,13 +48,13 @@ class TakePictureViewController : MugChatViewController, TakePictureViewDelegate
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        takePictureView.registerObservers()
+        takePictureView.viewWillAppear(animated)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        takePictureView.removeObservers()
+        takePictureView.viewWillDisappear(animated)
     }
     
     override func shouldAutorotate() -> Bool {

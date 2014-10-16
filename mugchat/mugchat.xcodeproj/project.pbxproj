@@ -60,6 +60,7 @@
 		7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */; };
 		7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */; };
 		7A2A7E2419EDBFB800033164 /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E1E19EDBFB800033164 /* CoreDataHandler.swift */; };
+		7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E4C19EEF4E600033164 /* CameraView.swift */; };
 		7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
@@ -105,6 +106,10 @@
 		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
 		A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */; };
 		A216D3DA19E708E800AD10DB /* JoinStringsTextFieldDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D819E708E800AD10DB /* JoinStringsTextFieldDemo.swift */; };
+		A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */; };
+		A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* MugText.swift */; };
+		A2392BFB19EEE7C70037B0C0 /* MugTextsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */; };
+		A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* MugTextView.swift */; };
 		A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
@@ -177,6 +182,7 @@
 		7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConversationTableViewCell.swift; path = Classes/ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = Classes/CustomNavigationBar.swift; sourceTree = "<group>"; };
 		7A2A7E1E19EDBFB800033164 /* CoreDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataHandler.swift; path = Classes/CoreDataHandler.swift; sourceTree = "<group>"; };
+		7A2A7E4C19EEF4E600033164 /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIButtonExtensions.swift; path = Classes/UIButtonExtensions.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
@@ -230,6 +236,10 @@
 		A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStringsTextField.swift; sourceTree = "<group>"; };
 		A216D3D819E708E800AD10DB /* JoinStringsTextFieldDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStringsTextFieldDemo.swift; sourceTree = "<group>"; };
+		A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugStringsUtil.swift; sourceTree = "<group>"; };
+		A2392BF619EEE7C70037B0C0 /* MugText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugText.swift; sourceTree = "<group>"; };
+		A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextsContainer.swift; sourceTree = "<group>"; };
+		A2392BF819EEE7C70037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
 		A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
@@ -494,6 +504,10 @@
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
 			isa = PBXGroup;
 			children = (
+				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
+				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
+				A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */,
+				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
 				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
 			);
 			name = Compose;
@@ -761,6 +775,7 @@
 			children = (
 				7AB1685619E32CD2004E2162 /* AVCamPreviewView.h */,
 				7AB1685719E32CD2004E2162 /* AVCamPreviewView.m */,
+				7A2A7E4C19EEF4E600033164 /* CameraView.swift */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -923,7 +938,9 @@
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
+				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
+				A2392BFB19EEE7C70037B0C0 /* MugTextsContainer.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,
@@ -950,6 +967,7 @@
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
+				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				5707186719D1AF110069064F /* UserService.swift in Sources */,
@@ -965,6 +983,7 @@
 				7AF82DFF19EFEC5800D0393F /* UserDataSource.swift in Sources */,
 				5786B2CE19EEADD400021DD3 /* ChatView.swift in Sources */,
 				7066E0A519EC4D610009BCF2 /* ComposeView.swift in Sources */,
+				A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
@@ -994,6 +1013,7 @@
 				7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */,
 				7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
+				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
