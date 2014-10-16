@@ -71,7 +71,15 @@ public class UserService: MugchatService {
     }
     
     func parseSignupResponse(response: AnyObject) -> User? {
-        return User.createEntityWithObject(response)
+        let userDataSource = UserDataSource()
+        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
+        user.me = true
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            userDataSource.save()
+        })
+        
+        return user
     }
     
     
@@ -126,11 +134,14 @@ public class UserService: MugchatService {
     }
     
     func parseSigninResponse(response: AnyObject) -> User? {
-        var user = User.createEntityWithObject(response)
+        let userDataSource = UserDataSource()
+        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
         user.me = true
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            User.save()
+            userDataSource.save()
         })
+        
         return user
     }
     
@@ -187,7 +198,8 @@ public class UserService: MugchatService {
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        return Device.createEntityWithObject(response)
+        let deviceDataSource = DeviceDataSource()
+        return deviceDataSource.createEntityWithObject(response)
     }
     
     

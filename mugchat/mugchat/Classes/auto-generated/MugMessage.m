@@ -10,5 +10,16 @@
 // the license agreement.
 //
 
-extension Room {
-}
+#import "MugMessage.h"
+#import "Mug.h"
+#import "User.h"
+
+
+@implementation MugMessage
+
+@dynamic notRead;
+@dynamic sentDate;
+@dynamic from;
+@dynamic mugs;
+
+@end
