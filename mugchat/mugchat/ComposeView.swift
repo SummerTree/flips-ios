@@ -369,7 +369,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     }
     
     func takePictureButtonTapped(sender: UIButton!) {
-        self.delegate?.composeViewDidTapTakePictureButton(self)
+        self.delegate?.composeViewDidTapTakePictureButton(self, withCamera: self.cameraPreview)
     }
     
     func gridButtonTapped(sender: UIButton!) {
@@ -409,7 +409,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
 
 protocol ComposeViewDelegate {
     func composeViewDidTapBackButton(composeView: ComposeView!)
-    func composeViewDidTapTakePictureButton(composeView: ComposeView!)
+    func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!)
     func composeViewDidTapGalleryButton(composeView: ComposeView!)
     func composeViewMakeConstraintToNavigationBarBottom(containerView: UIView!)
 }
