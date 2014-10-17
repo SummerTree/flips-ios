@@ -39,6 +39,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     var replyButton: UIButton!
     var shouldPlayUnreadMessage: Bool = true
     
+    
     // MARK: - Required initializers
     
     convenience override init() {
@@ -171,28 +172,26 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
-            for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-                if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
-                    if (self.shouldPlayUnreadMessage) {
-                        self.shouldPlayUnreadMessage = false
-                        cell.player.prepareToPlay()
-                        UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
-                            delay: 0.5,
-                            options: nil,
-                            animations: { () -> Void in
-                                cell.thumbnailView.alpha = 0.0
-                            },
-                            completion: { (animationsFinished) -> Void in
-                                cell.player.play()
-                        })
-                    }
-                } else {
-                    cell.player.stop()
+        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
+                if (self.shouldPlayUnreadMessage) {
+                    self.shouldPlayUnreadMessage = false
+                    cell.player.prepareToPlay()
+                    UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
+                        delay: 0.5,
+                        options: nil,
+                        animations: { () -> Void in
+                            cell.thumbnailView.alpha = 0.0
+                        },
+                        completion: { (animationsFinished) -> Void in
+                            cell.player.play()
+                    })
                 }
+            } else {
+                cell.player.stop()
             }
-        })
+        }
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -240,10 +239,21 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
     }
     
+    
     // MARK: - Button Handlers
     
     func didTapReplyButton() {
         println("replyButtonTapped")
+    }
+    
+    
+    // MARK: - View Events
+    
+    func viewWillDisappear() {
+        let visibleCells = tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            cell.viewWillDisappear()
+        }
     }
 }
 

@@ -34,6 +34,11 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.chatView.viewWillDisappear()
+    }
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
