@@ -36,6 +36,7 @@ class CameraView : UIView {
     private var cameraButtonView: UIView!
     private var flashLabel: UILabel!
     private var flashButton: UIButton!
+    private var microphoneButton: UIButton!
     private var toggleCameraButton: UIButton!
     
     private var flashMode: AVCaptureFlashMode!
@@ -118,6 +119,12 @@ class CameraView : UIView {
         toggleCameraButton.sizeToFit()
         toggleCameraButton.addTarget(self, action: "toggleCameraButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonView.addSubview(toggleCameraButton)
+        
+        microphoneButton = UIButton()
+        microphoneButton.setImage(UIImage(named: "Audio"), forState: .Normal)
+        microphoneButton.sizeToFit()
+        microphoneButton.addTarget(self, action: "microphoneButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        cameraButtonView.addSubview(microphoneButton)
     }
     
     
@@ -129,8 +136,8 @@ class CameraView : UIView {
         previewView.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.center.equalTo()(self)
-            make.width.equalTo()(UIScreen.mainScreen().bounds.width)
-            make.height.equalTo()(UIScreen.mainScreen().bounds.height)
+            make.width.equalTo()(self)
+            make.height.equalTo()(self.previewView.mas_width)
         }
         
         if (showAvatarCropArea) {
@@ -153,7 +160,7 @@ class CameraView : UIView {
         
         flashButton.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
-            make.bottom.equalTo()(self.cameraButtonView.mas_centerY).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
+            make.bottom.equalTo()(self.toggleCameraButton.mas_top).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
             make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
             make.width.equalTo()(self.flashButton.frame.width)
             make.height.equalTo()(self.flashButton.frame.height)
@@ -169,10 +176,18 @@ class CameraView : UIView {
         
         toggleCameraButton.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
-            make.top.equalTo()(self.cameraButtonView.mas_centerY).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
+            make.centerY.equalTo()(self.cameraButtonView)
             make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
             make.width.equalTo()(self.toggleCameraButton.frame.width)
             make.height.equalTo()(self.toggleCameraButton.frame.height)
+        }
+        
+        microphoneButton.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
+            make.top.equalTo()(self.toggleCameraButton.mas_bottom).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
+            make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+            make.width.equalTo()(self.microphoneButton.frame.width)
+            make.height.equalTo()(self.microphoneButton.frame.height)
         }
     }
     
@@ -387,6 +402,10 @@ class CameraView : UIView {
         CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
     }
     
+    func microphoneButtonTapped() {
+        self.delegate?.cameraViewDidTapMicrophoneButton!(self)
+    }
+    
     func capturePictureWithCompletion(success: CapturePictureSuccess, fail: CapturePictureFail) {
         dispatch_async(self.sessionQueue, { () -> Void in
             let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
@@ -545,8 +564,8 @@ class CameraView : UIView {
 }
 
 
-protocol CameraViewDelegate {
+@objc protocol CameraViewDelegate {
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool) // Take a picture button should be disabled
-    
+    optional func cameraViewDidTapMicrophoneButton(cameraView: CameraView)
 }

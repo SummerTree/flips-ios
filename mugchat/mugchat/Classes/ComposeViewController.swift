@@ -78,8 +78,21 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
         }
     }
     
-    func composeViewDidTapTakePictureButton(composeView: ComposeView!) {
-        println("Take picture button tapped")
+    func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!) {
+        cameraView.capturePictureWithCompletion({ (image) -> Void in
+            if (image != nil) {
+                var receivedImage = image as UIImage!
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    composeView.setPicture(receivedImage)
+                    return ()
+                })
+            } else {
+                println("Capturing picture problem. Image is nil")
+            }
+            }, fail: { (error) -> Void in
+                println("Error capturing picture: \(error)")
+        })
     }
     
     func composeViewMakeConstraintToNavigationBarBottom(composeView: UIView!) {
