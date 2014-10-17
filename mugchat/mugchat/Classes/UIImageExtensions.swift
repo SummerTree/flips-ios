@@ -47,7 +47,7 @@ extension UIImage {
         var widthRatio = newSize.width / self.size.width
         var heightRatio = newSize.height / self.size.height
         
-        newSize = CGSizeMake(self.size.width * heightRatio, self.size.height * heightRatio)
+        newSize = CGSizeMake(self.size.width * widthRatio, self.size.height * widthRatio)
         
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         self.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height))
@@ -68,11 +68,11 @@ extension UIImage {
         var squaredImage = resizedImage.cropImageToRect(cropRectFrameInView)
 
         var avatarImageSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
-        if ((squaredImage.size.width > avatarImageSize) || (squaredImage.size.height > avatarImageSize)) {
-            var cropX = (squaredImage.size.width / 2) - (avatarImageSize / 2)
-            var cropY = (squaredImage.size.height / 2) - (avatarImageSize / 2)
+        if ((resizedImage.size.width > avatarImageSize) || (resizedImage.size.height > avatarImageSize)) {
+            var cropX = (resizedImage.size.width / 2) - (avatarImageSize / 2)
+            var cropY = (resizedImage.size.height / 2) - (avatarImageSize / 2)
             var cropRect = CGRectMake(cropX, cropY, avatarImageSize, avatarImageSize)
-            var croppedImage = squaredImage.cropImageToRect(cropRect)
+            var croppedImage = resizedImage.cropImageToRect(cropRect)
             
             return croppedImage
         } else {

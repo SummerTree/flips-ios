@@ -10,17 +10,16 @@
 // the license agreement.
 //
 
-private let LOGGED_USER_ATTRIBUTE = "me"
+#import "MugMessage.h"
+#import "Mug.h"
+#import "User.h"
 
-extension User {
-    
-    class func loggedUser() -> User? {
-        var loggedAttributeUser: User? = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as? User
-        return loggedAttributeUser
-    }
 
-    class func isUserLoggedIn() -> Bool {
-        var loggedUser = User.loggedUser() as User?
-        return (loggedUser != nil)
-    }
-}
+@implementation MugMessage
+
+@dynamic notRead;
+@dynamic sentDate;
+@dynamic from;
+@dynamic mugs;
+
+@end

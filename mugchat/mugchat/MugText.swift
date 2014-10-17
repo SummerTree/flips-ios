@@ -10,5 +10,23 @@
 // the license agreement.
 //
 
-extension Room {
+class MugText { //Temporary data structure
+    
+    var mugId: Int!
+    var text: String!
+    var state: MugState!
+    
+    init(mugId: Int, text: String, state: MugState) {
+        self.mugId = mugId
+        self.text = text
+        self.state = state
+    }
+    
+}
+
+enum MugState {
+    case Default
+    case AssociatedWord
+    case AssociatedImageOrVideo
+    case AssociatedImageOrVideoWithAdditionalResources
 }
