@@ -262,18 +262,22 @@ class CameraView : UIView {
                 })
             }
             
-            error = nil
             
-            var audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as AVCaptureDevice
-            var audioDeviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error)
             
-            if (error != nil) {
-                // Microphone is not available.
-                self.isMicrophoneAvailable = false
-            } else {
-                self.isMicrophoneAvailable = true
-                if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
-                    self.session.addInput(audioDeviceInput as AVCaptureInput)
+            if (self.showMicrophoneButton) {
+                error = nil
+                
+                // We should ask for audio access if we aren't showing the button to record audio.
+                var audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as AVCaptureDevice
+                var audioDeviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error)
+                
+                if (error != nil) {
+                    self.isMicrophoneAvailable = false
+                } else {
+                    self.isMicrophoneAvailable = true
+                    if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
+                        self.session.addInput(audioDeviceInput as AVCaptureInput)
+                    }
                 }
             }
             
