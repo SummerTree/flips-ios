@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     var mugs = [
         MugVideo(message: "Welcome to MugChat", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
@@ -20,7 +20,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         MugVideo(message: "Wanna coffee?", videoPath: "wanna_coffee", timestamp: "8:25 am", avatarPath: "tmp_homer", thumbnailPath: "coffee_thumbnail.jpeg", received: false)
     ]
     
-    var oldestUnreadMessageIndex = 1
+    var oldestUnreadMessageIndex = 2
     
     private let CELL_IDENTIFIER = "mugChatCell"
     private let REPLY_BUTTON_TOP_MARGIN : CGFloat = 18.0
@@ -30,11 +30,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
     private let CELL_MUG_AREA_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.width
     private let CELL_MUG_TEXT_AREA_HEIGHT: CGFloat = 62
     
+    private let THUMBNAIL_FADE_DURATION: NSTimeInterval = 0.2
+    
     var delegate: ChatViewController!
     var tableView: UITableView!
     var separatorView: UIView!
     var darkHorizontalRulerView: UIView!
     var replyButton: UIButton!
+    var shouldPlayUnreadMessage: Bool = true
     
     // MARK: - Required initializers
     
@@ -47,7 +50,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         
         self.addSubviews()
         self.makeConstraints()
-        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: oldestUnreadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        let indexPath = NSIndexPath(forRow: oldestUnreadMessageIndex, inSection: 0)
+        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -100,7 +104,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
             make.right.equalTo()(self)
             make.height.equalTo()(self.REPLY_BUTTON_TOP_MARGIN)
             make.bottom.equalTo()(self.darkHorizontalRulerView.mas_top)
-
+            
         })
         
         darkHorizontalRulerView.mas_makeConstraints( { (make) in
@@ -164,6 +168,90 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
+    
+    // MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+            for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+                if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
+                    if (self.shouldPlayUnreadMessage) {
+                        self.shouldPlayUnreadMessage = false
+                        cell.player.prepareToPlay()
+                        UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
+                            delay: 0.5,
+                            options: nil,
+                            animations: { () -> Void in
+                                cell.thumbnailView.alpha = 0.0
+                            },
+                            completion: { (animationsFinished) -> Void in
+                                cell.player.play()
+                        })
+                    }
+                } else {
+                    cell.player.stop()
+                }
+            }
+        })
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if (!decelerate) {
+                let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+                for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+                    if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
+                        cell.player.prepareToPlay()
+                        UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
+                            delay: 0.5,
+                            options: nil,
+                            animations: { () -> Void in
+                                cell.thumbnailView.alpha = 0.0
+                            },
+                            completion: { (animationsFinished) -> Void in
+                                cell.player.play()
+                        })
+                    } else {
+                        cell.player.stop()
+                    }
+                }
+            }
+        })
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+            for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+                if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
+                    cell.player.prepareToPlay()
+                    UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
+                        delay: 0.5,
+                        options: nil,
+                        animations: { () -> Void in
+                            cell.thumbnailView.alpha = 0.0
+                        },
+                        completion: { (animationsFinished) -> Void in
+                            cell.player.play()
+                    })
+                } else {
+                    cell.player.stop()
+                }
+            }
+        })
+    }
+    
+    func isCell(cell: ChatTableViewCell, totallyVisibleInScrollView aScrollView: UIScrollView) -> Bool {
+        var thumbnailRect = cell.convertRect(cell.thumbnailView.frame, toView: cell.superview)
+        thumbnailRect.origin.y = thumbnailRect.origin.y + (thumbnailRect.height - CELL_MUG_TEXT_AREA_HEIGHT)
+        let convertedRect = aScrollView.convertRect(thumbnailRect, toView: aScrollView.superview)
+        if (CGRectContainsRect(aScrollView.frame, convertedRect)) {
+            return true
+        } else {
+            return false
+        }
+    }
     
     // MARK: - Button Handlers
     
