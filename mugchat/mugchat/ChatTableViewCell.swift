@@ -74,7 +74,6 @@ class ChatTableViewCell: UITableViewCell {
         videoView.addSubview(player.view)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
-        println("addSubviews \(self)")
         
         messageView = UIView()
         contentView.addSubview(messageView)
