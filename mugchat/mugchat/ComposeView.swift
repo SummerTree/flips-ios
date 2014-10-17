@@ -97,7 +97,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         mugContainerView = UIView()
         self.addSubview(mugContainerView)
         
-        cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false)
+        cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false, showMicrophoneButton: true)
         cameraPreview.alpha = 0.0
         cameraPreview.delegate = self
         self.addSubview(cameraPreview)
