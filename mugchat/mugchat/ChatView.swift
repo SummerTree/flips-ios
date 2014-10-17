@@ -104,7 +104,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.right.equalTo()(self)
             make.height.equalTo()(self.REPLY_BUTTON_TOP_MARGIN)
             make.bottom.equalTo()(self.darkHorizontalRulerView.mas_top)
-            
         })
         
         darkHorizontalRulerView.mas_makeConstraints( { (make) in
