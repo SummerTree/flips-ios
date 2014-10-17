@@ -198,46 +198,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             if (!decelerate) {
-                let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
-                for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-                    if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
-                        cell.player.prepareToPlay()
-                        UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
-                            delay: 0.5,
-                            options: nil,
-                            animations: { () -> Void in
-                                cell.thumbnailView.alpha = 0.0
-                            },
-                            completion: { (animationsFinished) -> Void in
-                                cell.player.play()
-                        })
-                    } else {
-                        cell.player.stop()
-                    }
-                }
+                self.playVideoForVisibleCellOnScrollView(scrollView)
             }
         })
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
-            for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-                if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
-                    cell.player.prepareToPlay()
-                    UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
-                        delay: 0.5,
-                        options: nil,
-                        animations: { () -> Void in
-                            cell.thumbnailView.alpha = 0.0
-                        },
-                        completion: { (animationsFinished) -> Void in
-                            cell.player.play()
-                    })
-                } else {
-                    cell.player.stop()
-                }
-            }
+            self.playVideoForVisibleCellOnScrollView(scrollView)
         })
     }
     
@@ -249,6 +217,26 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             return true
         } else {
             return false
+        }
+    }
+    
+    private func playVideoForVisibleCellOnScrollView(scrollView: UIScrollView) {
+        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
+                cell.player.prepareToPlay()
+                UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
+                    delay: 0.5,
+                    options: nil,
+                    animations: { () -> Void in
+                        cell.thumbnailView.alpha = 0.0
+                    },
+                    completion: { (animationsFinished) -> Void in
+                        cell.player.play()
+                })
+            } else {
+                cell.player.stop()
+            }
         }
     }
     
