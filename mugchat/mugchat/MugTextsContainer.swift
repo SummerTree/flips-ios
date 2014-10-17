@@ -17,22 +17,21 @@
 private let MIN_BUTTON_WIDTH : CGFloat = 70.0
 private let MUG_TEXT_ADDITIONAL_WIDTH : CGFloat = 20.0
 private let MUG_TEXT_HEIGHT : CGFloat = 40.0
-private let MUG_TEXT_TOP_MARGIN : CGFloat = 5.0
 private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
 
 class MugTextsContainer : UIView, MugTextViewDelegate {
     
     var mugTextViews: [MugTextView]! = [MugTextView]()
     
-    private var texts : [MugText]!
-    
+    private var mugTexts : [MugText]!
+    private var tappedMugTextView: MugTextView?
     
     // MARK: - Initialization Methods
     
     convenience init(texts : [MugText]) {
         self.init(frame: CGRect.zeroRect)
         
-        self.texts = texts
+        self.mugTexts = texts
         
         self.backgroundColor = UIColor.whiteColor()
 
@@ -52,7 +51,7 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
     func initSubviews() {
         var lastMugText: MugTextView!
         
-        for mugText in self.texts {
+        for mugText in self.mugTexts {
 
             var mugTextView : MugTextView = MugTextView(mugText: mugText)
             mugTextViews.append(mugTextView)
@@ -66,7 +65,6 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
 
             mugTextView.mas_makeConstraints { (make) -> Void in
                 make.height.equalTo()(MUG_TEXT_HEIGHT)
-                make.top.equalTo()(0)
                 make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
                 make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
             }
@@ -81,13 +79,14 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
         var mugTextView : MugTextView
         for mugTextView in mugTextViews {
             if (mugTextView.mugText.mugId == mugText.mugId) {
+                self.tappedMugTextView = mugTextView;
                 var selectionRect : CGRect = CGRectMake(mugTextView.frame.origin.x, mugTextView.frame.origin.y + 10, mugTextView.frame.size.width, mugTextView.frame.size.height);
                 menuController.setTargetRect(selectionRect, inView: self)
                 break;
             }
         }
     
-        let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: "splitText")
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: NSSelectorFromString("splitText"))
         menuController.menuItems = NSArray(array: [lookupMenu])
     
         menuController.update();
@@ -95,10 +94,70 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
         menuController.setMenuVisible(true, animated: true)
     }
     
-    func splitText() { //(mugText : MugText!) {
-        println(">>>>> splitText")
-        //var texts : [String] = MugStringsUtil.splitMugString(stringTest);
-        //createMugs(texts)
+    func splitText() {
+        let text = self.tappedMugTextView?.mugText.text
+
+        println(">>>>> splitText: \(text!)")
+       
+        var texts : [String] = MugStringsUtil.splitMugString(text!);
+        
+        var lastMugText: MugTextView!
+        var mugTextView: MugTextView
+        var foundMug: Bool = false
+        for mugTextView in self.mugTextViews {
+            if (mugTextView.mugText.text == text) {
+                foundMug = true
+                
+                //Update the original MugText with the first string and a smaller size
+                mugTextView.mugText.text = texts[0]
+                
+                var textWidth : CGFloat = mugTextView.getTextWidth()
+                var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
+                mugTextView.mas_updateConstraints { (make) -> Void in
+                    make.height.equalTo()(MUG_TEXT_HEIGHT)
+                    make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
+                    make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
+                }
+                
+                lastMugText = mugTextView
+                
+                var newMugTextView : MugTextView
+                for var i=1; i < texts.count; i++ {
+                    newMugTextView = MugTextView(mugText: MugText(mugId: 1000, text: texts[i], state: MugState.Default))
+                    mugTextViews.append(newMugTextView) //TODO: fazer append no índice certo, não no final
+                    
+                    newMugTextView.delegate = self
+                    self.addSubview(newMugTextView)
+                    
+                    var textWidth : CGFloat = newMugTextView.getTextWidth()
+                    var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
+                    
+                    newMugTextView.mas_makeConstraints { (make) -> Void in
+                        make.height.equalTo()(MUG_TEXT_HEIGHT)
+                        make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
+                        make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
+                    }
+                    
+                    lastMugText = newMugTextView
+                }
+
+                //break;
+            } else {
+                if (foundMug) { //só considera elementos após o match
+                    //TODO: reposicionar mugTextView depois do elemento alterado a partir do lastMugText.mas_right
+                    var textWidth : CGFloat = mugTextView.getTextWidth()
+                    var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
+                    mugTextView.mas_updateConstraints { (make) -> Void in
+                        make.height.equalTo()(MUG_TEXT_HEIGHT)
+                        make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
+                        make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
+                    }
+                }
+            }
+        }
+        
+        self.updateConstraints();
+ 
     }
     
     override func canBecomeFirstResponder() -> Bool {
@@ -122,7 +181,7 @@ class MugTextsContainer : UIView, MugTextViewDelegate {
             return false;
         }
             
-        else if action == "Split" {
+        else if action == "splitText" {
             return true;
         }
         
