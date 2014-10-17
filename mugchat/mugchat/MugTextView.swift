@@ -13,7 +13,7 @@
 private let BUTTON_MARGIN_TOP : CGFloat = 7.0
 private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
 
-class MugTextView : UIView {
+class MugTextView : UICollectionViewCell {
     
     var mugText : MugText!
     
@@ -32,6 +32,8 @@ class MugTextView : UIView {
         
         self.mugText = mugText
         
+        self.backgroundColor = UIColor.greenColor()
+        
         self.initSubviews()
     }
     
@@ -43,10 +45,14 @@ class MugTextView : UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setMugText(mugText : MugText) {
+        self.mugText = mugText
+        initSubviews()
+    }
+    
     func initSubviews() {
         mugButton = UIButton()
         
-        //TODO: story 7584
         mugButton.addTarget(self, action: "mugButtonTapped", forControlEvents: .TouchUpInside)
         
         mugButton.layer.borderWidth = 1.0
