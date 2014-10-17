@@ -43,7 +43,6 @@ class ChatTableViewCell: UITableViewCell {
         }
     }
     
-    var isVisible: Bool
     var videoView : UIView!
     var messageView : UIView!
     var avatarView : UIImageView!
@@ -56,8 +55,6 @@ class ChatTableViewCell: UITableViewCell {
     // MARK: - Required initializers
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        self.isVisible = true
-        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.whiteColor()
         self.addSubviews()
@@ -169,11 +166,9 @@ class ChatTableViewCell: UITableViewCell {
     
     func playbackFinished(sender: AnyObject?) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            if (self.isVisible) {
                 self.thumbnailView.alpha = 1.0
                 self.messageTextLabel.text = self.message.message
                 self.messageTextLabel.alpha = 1
-            }
         })
         self.player.currentPlaybackTime = 0
     }
@@ -206,7 +201,6 @@ class ChatTableViewCell: UITableViewCell {
     // MARK - View handler
     
     func viewWillDisappear() {
-        self.isVisible = false
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
     }
 }
