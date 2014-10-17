@@ -57,7 +57,14 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     }
     
     func splashScreenViewAttemptLogin(sender: SplashScreenView) {
-        openLoginViewController()
+        // TODO: we need to validate the cookies to se if the it is expired or not. And in the logout, it will be good to delete it.
+        var loggedUser = User.loggedUser()
+        if (loggedUser != nil) {
+            AuthenticationHelper.sharedInstance.userInSession = loggedUser
+            self.openInboxViewController()
+        } else {
+            openLoginViewController()
+        }
     }
     
     private func openInboxViewController() {
