@@ -41,10 +41,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     var replyButton: UIButton!
     var replyTextField: JoinStringsTextField!
     var nextButton: UIButton!
-    var keyboardFillerView: UIView!
     
     var shouldPlayUnreadMessage: Bool = true
     var keyboardHeight: CGFloat = 0.0
+    var words: [String] = []
+    
     
     // MARK: - Required initializers
     
@@ -65,13 +66,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         fatalError("init(coder:) has not been implemented")
     }
     
-    func viewDidAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
-    }
-    
-    func viewWillDisappear() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-    }
 
     // MARK: - Layout
     
@@ -102,6 +96,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyButton = UIButton()
         replyButton.contentMode = .Center
         replyButton.backgroundColor = UIColor.whiteColor()
+        replyButton.contentEdgeInsets = UIEdgeInsetsMake(REPLY_VIEW_OFFSET / 2, REPLY_VIEW_OFFSET * 2, REPLY_VIEW_OFFSET / 2, REPLY_VIEW_OFFSET * 2)
         replyButton.addTarget(self, action: "didTapReplyButton", forControlEvents: UIControlEvents.TouchUpInside)
         replyButton.setImage(UIImage(named: "Reply"), forState: UIControlState.Normal)
         replyButton.sizeToFit()
@@ -114,14 +109,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.addSubview(replyTextField)
         
         nextButton = UIButton()
+        nextButton.contentEdgeInsets = UIEdgeInsetsMake(REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET)
         nextButton.hidden = true
-        nextButton.addTarget(self, action: "didTapNextButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        nextButton.addTarget(self, action: "didTapNextButton", forControlEvents: UIControlEvents.TouchUpInside)
         nextButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Next", comment: "Next"), attributes:[NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextDemiBold(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
         nextButton.sizeToFit()
         replyView.addSubview(nextButton)
         
-        keyboardFillerView = UIView()
-        self.addSubview(keyboardFillerView)
     }
     
     func makeConstraints() {
@@ -151,7 +145,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.REPLY_BUTTON_HEIGHT)
-            make.bottom.equalTo()(self.keyboardFillerView.mas_top)
+            make.bottom.equalTo()(self)
         })
 
         replyButton.mas_makeConstraints( { (make) in
@@ -168,20 +162,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         })
         
         nextButton.mas_makeConstraints( { (make) in
-            make.right.equalTo()(self.replyView).with().offset()(-self.REPLY_VIEW_OFFSET)
+            make.right.equalTo()(self.replyView)//.with().offset()(-self.REPLY_VIEW_OFFSET)
             make.top.equalTo()(self.replyView)
             make.bottom.equalTo()(self.replyView)
             make.width.equalTo()(self.nextButton.frame.width)
         })
-        
-        keyboardFillerView.mas_makeConstraints( { (make) in
-            make.top.equalTo()(self.replyView.mas_bottom)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
-            make.height.equalTo()(self.keyboardHeight)
-            make.bottom.equalTo()(self)
-        })
-
         
     }
     
@@ -234,28 +219,26 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
-            for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-                if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
-                    if (self.shouldPlayUnreadMessage) {
-                        self.shouldPlayUnreadMessage = false
-                        cell.player.prepareToPlay()
-                        UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
-                            delay: 0.5,
-                            options: nil,
-                            animations: { () -> Void in
-                                cell.thumbnailView.alpha = 0.0
-                            },
-                            completion: { (animationsFinished) -> Void in
-                                cell.player.play()
-                        })
-                    }
-                } else {
-                    cell.player.stop()
+        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
+                if (self.shouldPlayUnreadMessage) {
+                    self.shouldPlayUnreadMessage = false
+                    cell.player.prepareToPlay()
+                    UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
+                        delay: 0.5,
+                        options: nil,
+                        animations: { () -> Void in
+                            cell.thumbnailView.alpha = 0.0
+                        },
+                        completion: { (animationsFinished) -> Void in
+                            cell.player.play()
+                    })
                 }
+            } else {
+                cell.player.stop()
             }
-        })
+        }
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -303,6 +286,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
     }
     
+    
     // MARK: - Button Handlers
     
     func didTapReplyButton() {
@@ -310,8 +294,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.replyTextField.becomeFirstResponder()
     }
 
-    private func didTapNextButton() {
-        println("nextButtonTapped")
+    func didTapNextButton() {
+        self.words = self.replyTextField.text.componentsSeparatedByString(" ")
+        self.delegate?.chatView(self, didTapNextButtonWithWords: words)
     }
     
     private func hideReplyButtonAndShowTextField() {
@@ -332,13 +317,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func keyboardDidShow(notification: NSNotification) {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-        keyboardHeight = keyboardFrame.height
-        keyboardFillerView.mas_updateConstraints( { (make) in
-            make.height.equalTo()(self.keyboardHeight)
-            return ()
-        })
+        keyboardHeight = keyboardFrame.height as CGFloat
+        let indexPath = NSIndexPath(forRow: mugs.count - 1, inSection: 0)
+        self.frame.size.height -= keyboardHeight
         super.updateConstraints()
         self.layoutIfNeeded()
+        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
     }
 
     
@@ -347,6 +331,22 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func didJoinedWords(joinStringsTextField: JoinStringsTextField!, finalString: String!) {
         println("didJoinedWords: '\(finalString)'");
     }
+
+    
+    // MARK: - View Events
+    
+    func viewWillAppear() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        let visibleCells = tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            cell.viewWillDisappear()
+        }
+    }
+    
 
 }
 

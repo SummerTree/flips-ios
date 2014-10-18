@@ -14,7 +14,21 @@ import Foundation
 
 class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    private let composeView = ComposeView()
+    private let composeView : ComposeView
+    
+    init() {
+        composeView = ComposeView()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(words : [String]) {
+        composeView = ComposeView(words: words)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         composeView.delegate = self
