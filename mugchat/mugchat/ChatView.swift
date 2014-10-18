@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate {
     
     var mugs = [
         MugVideo(message: "Welcome to MugChat", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
@@ -24,6 +24,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     private let CELL_IDENTIFIER = "mugChatCell"
     private let REPLY_BUTTON_TOP_MARGIN : CGFloat = 18.0
+    private let REPLY_VIEW_OFFSET : CGFloat = 18.0
     private let REPLY_BUTTON_HEIGHT : CGFloat = 64.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     
@@ -36,8 +37,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     var tableView: UITableView!
     var separatorView: UIView!
     var darkHorizontalRulerView: UIView!
+    var replyView: UIView!
     var replyButton: UIButton!
+    var replyTextField: JoinStringsTextField!
+    var nextButton: UIButton!
+    var keyboardFillerView: UIView!
+    
     var shouldPlayUnreadMessage: Bool = true
+    var keyboardHeight: CGFloat = 0.0
     
     // MARK: - Required initializers
     
@@ -58,7 +65,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         fatalError("init(coder:) has not been implemented")
     }
     
+    func viewDidAppear() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+    }
     
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+    }
+
     // MARK: - Layout
     
     func addSubviews() {
@@ -81,13 +95,33 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         darkHorizontalRulerView.backgroundColor = UIColor.grayColor()
         self.addSubview(darkHorizontalRulerView)
         
+        replyView = UIView()
+        replyView.backgroundColor = UIColor.whiteColor()
+        self.addSubview(replyView)
+
         replyButton = UIButton()
         replyButton.contentMode = .Center
         replyButton.backgroundColor = UIColor.whiteColor()
         replyButton.addTarget(self, action: "didTapReplyButton", forControlEvents: UIControlEvents.TouchUpInside)
         replyButton.setImage(UIImage(named: "Reply"), forState: UIControlState.Normal)
         replyButton.sizeToFit()
-        self.addSubview(replyButton)
+        replyView.addSubview(replyButton)
+        
+        replyTextField = JoinStringsTextField()
+        replyTextField.hidden = true
+        replyTextField.joinStringsTextFieldDelegate = self
+        replyTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Type your message here", comment: "Type your message here"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        replyView.addSubview(replyTextField)
+        
+        nextButton = UIButton()
+        nextButton.hidden = true
+        nextButton.addTarget(self, action: "didTapNextButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        nextButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Next", comment: "Next"), attributes:[NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextDemiBold(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
+        nextButton.sizeToFit()
+        replyView.addSubview(nextButton)
+        
+        keyboardFillerView = UIView()
+        self.addSubview(keyboardFillerView)
     }
     
     func makeConstraints() {
@@ -110,15 +144,44 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.HORIZONTAL_RULER_HEIGHT)
-            make.bottom.equalTo()(self.replyButton.mas_top)
+            make.bottom.equalTo()(self.replyView.mas_top)
         })
         
-        replyButton.mas_makeConstraints( { (make) in
+        replyView.mas_makeConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.REPLY_BUTTON_HEIGHT)
+            make.bottom.equalTo()(self.keyboardFillerView.mas_top)
+        })
+
+        replyButton.mas_makeConstraints( { (make) in
+            make.centerX.equalTo()(self.replyView)
+            make.centerY.equalTo()(self.replyView)
+            //make.height.equalTo()(self.REPLY_BUTTON_HEIGHT)
+        })
+        
+        replyTextField.mas_makeConstraints( { (make) in
+            make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
+            make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
+            make.top.equalTo()(self.replyView)
+            make.bottom.equalTo()(self.replyView)
+        })
+        
+        nextButton.mas_makeConstraints( { (make) in
+            make.right.equalTo()(self.replyView).with().offset()(-self.REPLY_VIEW_OFFSET)
+            make.top.equalTo()(self.replyView)
+            make.bottom.equalTo()(self.replyView)
+            make.width.equalTo()(self.nextButton.frame.width)
+        })
+        
+        keyboardFillerView.mas_makeConstraints( { (make) in
+            make.top.equalTo()(self.replyView.mas_bottom)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.keyboardHeight)
             make.bottom.equalTo()(self)
         })
+
         
     }
     
@@ -243,8 +306,48 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Button Handlers
     
     func didTapReplyButton() {
-        println("replyButtonTapped")
+        hideReplyButtonAndShowTextField()
+        self.replyTextField.becomeFirstResponder()
     }
+
+    private func didTapNextButton() {
+        println("nextButtonTapped")
+    }
+    
+    private func hideReplyButtonAndShowTextField() {
+        self.replyButton.hidden = true
+        self.replyTextField.hidden = false
+        self.nextButton.hidden = false
+    }
+    
+    private func hideTextFieldAndShowReplyButton() {
+        self.replyButton.hidden = false
+        self.replyTextField.hidden = true
+        self.nextButton.hidden = true
+    }
+    
+
+    // MARK: - Notifications
+    
+    func keyboardDidShow(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        keyboardHeight = keyboardFrame.height
+        keyboardFillerView.mas_updateConstraints( { (make) in
+            make.height.equalTo()(self.keyboardHeight)
+            return ()
+        })
+        super.updateConstraints()
+        self.layoutIfNeeded()
+    }
+
+    
+    // MARK: - Join Strings Delegate
+    
+    func didJoinedWords(joinStringsTextField: JoinStringsTextField!, finalString: String!) {
+        println("didJoinedWords: '\(finalString)'");
+    }
+
 }
 
 protocol ChatViewDelegate {
