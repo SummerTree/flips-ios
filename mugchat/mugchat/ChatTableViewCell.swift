@@ -117,15 +117,15 @@ class ChatTableViewCell: UITableViewCell {
         videoView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.contentView)
             make.left.equalTo()(self.contentView)
-            make.width.equalTo()(self.contentView.frame.size.width)
-            make.height.equalTo()(self.contentView.frame.size.width)
+            make.width.equalTo()(self.contentView.mas_width)
+            make.height.equalTo()(self.contentView.mas_width)
         })
         
         thumbnailView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.videoView)
             make.left.equalTo()(self.videoView)
-            make.width.equalTo()(self.contentView.frame.size.width)
-            make.height.equalTo()(self.contentView.frame.size.width)
+            make.width.equalTo()(self.contentView.mas_width)
+            make.height.equalTo()(self.contentView.mas_width)
         }
         
         player.view.mas_makeConstraints { (make) -> Void in
