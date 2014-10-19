@@ -54,39 +54,10 @@ class MugTextsContainer : UICollectionView, UICollectionViewDelegateFlowLayout, 
     }
     
     
-//    func collectionView(collectionView: UICollectionView!, layout collectionViewLayout: UICollectionViewLayout!, referenceSizeForHeaderInSection section: Int) -> CGSize  {
-//        let size: CGSize = CGSizeMake(0, 0)
-//        return size
-//    }
-    
-    
     // NOTE: This delegate method requires you to disable UICollectionView's `pagingEnabled` property.
-//    func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: UnsafePointer<CGPoint>) {
-//        //targetContentOffset.memory = CGPointMake( CGFloat( 156.0 ) , CGFloat( 0.0 ) )
-//        //scrollView.setContentOffset( CGPointMake( CGFloat( 156.0 ) , CGFloat( 0.0 ) ), animated: false )
-//    
-//        var targetContentOffset2 : CGPoint = targetContentOffset.memory
-//        
-//        var point : CGPoint = targetContentOffset.memory;
-//    
-//        var layout : UICollectionViewFlowLayout = self.collectionViewLayout as UICollectionViewFlowLayout;
-//    
-//        // This assumes that the values of `layout.sectionInset.left` and
-//        // `layout.sectionInset.right` are the same with `layout.minimumInteritemSpacing`.
-//        // Remember that we're trying to snap to one item at a time. So one
-//        // visible item comprises of its width plus the left margin.
-//        var visibleWidth : CGFloat = layout.minimumInteritemSpacing + layout.itemSize.width;
-//    
-//        // It's either we go forwards or backwards.
-//        var indexOfItemToSnap : Int = Int(point.x / visibleWidth) //round(point.x / visibleWidth);
-//    
-//        // The only exemption is the last item.
-//        if (indexOfItemToSnap + 1 == self.numberOfItemsInSection(0) ) { // last item
-//            targetContentOffset2 = CGPointMake(self.contentSize.width - self.bounds.size.width, 0);
-//        } else {
-//            targetContentOffset2 = CGPointMake(CGFloat(indexOfItemToSnap) * visibleWidth, 0);
-//        }
-//    }
+    func scrollViewWillEndDragging(scrollView: UIScrollView!, withVelocity velocity: CGPoint, targetContentOffset: UnsafePointer<CGPoint>) {
+        //TODO
+    }
     
     
     //Mark: UICollectionViewDataSource protocol
@@ -155,63 +126,6 @@ class MugTextsContainer : UICollectionView, UICollectionViewDelegateFlowLayout, 
         println(">>>>> splitText: \(text!)")
        
         var texts : [String] = MugStringsUtil.splitMugString(text!);
-        
-        var lastMugText: MugTextView!
-        var mugTextView: MugTextView
-        var foundMug: Bool = false
-        for mugTextView in self.mugTextViews {
-            if (mugTextView.mugText.text == text) {
-                foundMug = true
-                
-                //Update the original MugText with the first string and a smaller size
-                mugTextView.mugText.text = texts[0]
-                
-                var textWidth : CGFloat = mugTextView.getTextWidth()
-                var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
-                mugTextView.mas_updateConstraints { (make) -> Void in
-                    make.height.equalTo()(MUG_TEXT_HEIGHT)
-                    make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
-                    make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
-                }
-                
-                lastMugText = mugTextView
-                
-                var newMugTextView : MugTextView
-                for var i=1; i < texts.count; i++ {
-                    newMugTextView = MugTextView(mugText: MugText(mugId: 1000, text: texts[i], state: MugState.Default))
-                    mugTextViews.append(newMugTextView) //TODO: fazer append no índice certo, não no final
-                    
-                    newMugTextView.delegate = self
-                    self.addSubview(newMugTextView)
-                    
-                    var textWidth : CGFloat = newMugTextView.getTextWidth()
-                    var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
-                    
-                    newMugTextView.mas_makeConstraints { (make) -> Void in
-                        make.height.equalTo()(MUG_TEXT_HEIGHT)
-                        make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
-                        make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
-                    }
-                    
-                    lastMugText = newMugTextView
-                }
-
-                //break;
-            } else {
-                if (foundMug) { //só considera elementos após o match
-                    //TODO: reposicionar mugTextView depois do elemento alterado a partir do lastMugText.mas_right
-                    var textWidth : CGFloat = mugTextView.getTextWidth()
-                    var buttonWidth : CGFloat = textWidth + MUG_TEXT_ADDITIONAL_WIDTH;
-                    mugTextView.mas_updateConstraints { (make) -> Void in
-                        make.height.equalTo()(MUG_TEXT_HEIGHT)
-                        make.left.equalTo()(lastMugText != nil ? lastMugText.mas_right : self).with().offset()(SPACE_BETWEEN_MUG_TEXTS)
-                        make.width.equalTo()(buttonWidth > MIN_BUTTON_WIDTH ? buttonWidth : MIN_BUTTON_WIDTH)
-                    }
-                }
-            }
-        }
-        
-        self.updateConstraints();
  
     }
     
