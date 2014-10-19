@@ -33,7 +33,8 @@ class CameraView : UIView {
     
     private var previewView: AVCamPreviewView!
     private var avatarCropAreaView: CropOverlayView!
-    private var cameraButtonView: UIView!
+    private var frontCameraButtonView: UIView!
+    private var backCameraButtonView: UIView!
     private var flashLabel: UILabel!
     private var flashButton: UIButton!
     private var microphoneButton: UIButton!
@@ -44,6 +45,8 @@ class CameraView : UIView {
     private var showAvatarCropArea: Bool
     private var showMicrophoneButton: Bool
     private var isMicrophoneAvailable: Bool
+    
+    private var showingFrontCamera: Bool
     
     var delegate: CameraViewDelegate?
     
@@ -65,6 +68,7 @@ class CameraView : UIView {
     // MARK: - Initialization Methods
     
     init(interfaceOrientation: AVCaptureVideoOrientation, showAvatarCropArea: Bool = false, showMicrophoneButton: Bool = false) {
+        self.showingFrontCamera = true
         self.showAvatarCropArea = showAvatarCropArea
         self.showMicrophoneButton = showMicrophoneButton
         self.isMicrophoneAvailable = false
@@ -84,7 +88,7 @@ class CameraView : UIView {
     }
     
     private func initSubviews() {
-        self.backgroundColor = UIColor.deepSea()
+        self.backgroundColor = UIColor.blackColor()
         
         previewView = AVCamPreviewView()
         self.addSubview(previewView)
@@ -95,11 +99,16 @@ class CameraView : UIView {
             self.addSubview(avatarCropAreaView)
         }
         
-        cameraButtonView = UIView()
-        cameraButtonView.backgroundColor = UIColor.clearColor()
-        cameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
-        self.addSubview(cameraButtonView)
-
+        frontCameraButtonView = UIView()
+        frontCameraButtonView.backgroundColor = UIColor.clearColor()
+        frontCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
+        self.addSubview(frontCameraButtonView)
+        
+        backCameraButtonView = UIView()
+        backCameraButtonView.alpha = 0
+        backCameraButtonView.backgroundColor = UIColor.clearColor()
+        backCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
+        self.addSubview(backCameraButtonView)
         
         flashLabel = UILabel()
         flashLabel.text = NSLocalizedString("Auto", comment: "Auto")
@@ -109,27 +118,27 @@ class CameraView : UIView {
         flashLabel.textAlignment = NSTextAlignment.Center
         flashLabel.sizeToFit()
         flashLabel.hidden = true
-        cameraButtonView.addSubview(flashLabel)
+        self.addSubview(flashLabel)
         
         flashButton = UIButton()
         flashButton.setImage(UIImage(named: "Flash_Button"), forState: .Normal)
         flashButton.sizeToFit()
         flashButton.addTarget(self, action: "flashButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         flashButton.enabled = false
-        cameraButtonView.addSubview(flashButton)
+        self.addSubview(flashButton)
         
         toggleCameraButton = UIButton()
         toggleCameraButton.setImage(UIImage(named: "Front_Back"), forState: .Normal)
         toggleCameraButton.sizeToFit()
         toggleCameraButton.addTarget(self, action: "toggleCameraButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
-        cameraButtonView.addSubview(toggleCameraButton)
+        self.addSubview(toggleCameraButton)
         
         if (self.showMicrophoneButton) {
             microphoneButton = UIButton()
             microphoneButton.setImage(UIImage(named: "Audio"), forState: .Normal)
             microphoneButton.sizeToFit()
             microphoneButton.addTarget(self, action: "microphoneButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
-            cameraButtonView.addSubview(microphoneButton)
+            self.addSubview(microphoneButton)
         }
     }
     
@@ -156,7 +165,15 @@ class CameraView : UIView {
             }
         }
         
-        cameraButtonView.mas_makeConstraints { (make) -> Void in
+        frontCameraButtonView.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
+            make.top.equalTo()(self)
+            make.centerX.equalTo()(self)
+            make.width.equalTo()(self.mas_width)
+            make.height.equalTo()(self.mas_width)
+        }
+        
+        backCameraButtonView.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self)
             make.centerX.equalTo()(self)
@@ -168,7 +185,7 @@ class CameraView : UIView {
             flashButton.mas_makeConstraints { (make) -> Void in
                 make.removeExisting = true
                 make.bottom.equalTo()(self.toggleCameraButton.mas_top).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
-                make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
                 make.width.equalTo()(self.flashButton.frame.width)
                 make.height.equalTo()(self.flashButton.frame.height)
             }
@@ -183,8 +200,8 @@ class CameraView : UIView {
             
             toggleCameraButton.mas_makeConstraints { (make) -> Void in
                 make.removeExisting = true
-                make.centerY.equalTo()(self.cameraButtonView)
-                make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.centerY.equalTo()(self)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
                 make.width.equalTo()(self.toggleCameraButton.frame.width)
                 make.height.equalTo()(self.toggleCameraButton.frame.height)
             }
@@ -192,15 +209,15 @@ class CameraView : UIView {
             microphoneButton.mas_makeConstraints { (make) -> Void in
                 make.removeExisting = true
                 make.top.equalTo()(self.toggleCameraButton.mas_bottom).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
-                make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
                 make.width.equalTo()(self.microphoneButton.frame.width)
                 make.height.equalTo()(self.microphoneButton.frame.height)
             }
         } else {
             flashButton.mas_makeConstraints { (make) -> Void in
                 make.removeExisting = true
-                make.bottom.equalTo()(self.cameraButtonView.mas_centerY).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
-                make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.bottom.equalTo()(self.mas_centerY).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
                 make.width.equalTo()(self.flashButton.frame.width)
                 make.height.equalTo()(self.flashButton.frame.height)
             }
@@ -215,8 +232,8 @@ class CameraView : UIView {
             
             toggleCameraButton.mas_makeConstraints { (make) -> Void in
                 make.removeExisting = true
-                make.top.equalTo()(self.cameraButtonView.mas_centerY).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
-                make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.top.equalTo()(self.mas_centerY).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
                 make.width.equalTo()(self.toggleCameraButton.frame.width)
                 make.height.equalTo()(self.toggleCameraButton.frame.height)
             }
@@ -376,10 +393,20 @@ class CameraView : UIView {
     
     // MARK: - Button Actions
     
+    func bringButtonsToFront() {
+        self.bringSubviewToFront(flashButton)
+        self.bringSubviewToFront(flashLabel)
+        self.bringSubviewToFront(toggleCameraButton)
+        
+        if (showMicrophoneButton) {
+            self.bringSubviewToFront(microphoneButton)
+        }
+    }
+    
     func toggleCameraButtonTapped() {
         self.delegate?.cameraView(self, cameraAvailable: false)
         self.toggleCameraButton.enabled = false
-        
+
         dispatch_async(self.sessionQueue, { () -> Void in
             var currentVideoDevice = self.videoDeviceInput.device
             var preferredPosition = AVCaptureDevicePosition.Unspecified
@@ -413,6 +440,23 @@ class CameraView : UIView {
             } else {
                 self.session.addInput(self.videoDeviceInput)
             }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if (self.showingFrontCamera) {
+                    UIView.transitionFromView(self.frontCameraButtonView, toView: self.backCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromRight, completion: { (finished) -> Void in
+                        self.frontCameraButtonView.alpha = 0
+                        self.backCameraButtonView.alpha = 1
+                        self.bringButtonsToFront()
+                    })
+                } else {
+                    UIView.transitionFromView(self.backCameraButtonView, toView: self.frontCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromLeft, completion: { (finished) -> Void in
+                        self.frontCameraButtonView.alpha = 1
+                        self.backCameraButtonView.alpha = 0
+                        self.bringButtonsToFront()
+                    })
+                }
+                self.showingFrontCamera = !self.showingFrontCamera
+            })
             
             self.session.commitConfiguration()
             
