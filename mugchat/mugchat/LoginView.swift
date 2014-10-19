@@ -217,6 +217,7 @@ class LoginView : UIView, UITextFieldDelegate {
         emailTextField.autocapitalizationType = UITextAutocapitalizationType.None
         emailTextField.delegate = self
         emailTextField.keyboardType = UIKeyboardType.EmailAddress
+        emailTextField.adjustsFontSizeToFitWidth = true
         emailTextField.rightViewMode = UITextFieldViewMode.Always
         emailTextField.textColor = UIColor.whiteColor()
         emailTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)

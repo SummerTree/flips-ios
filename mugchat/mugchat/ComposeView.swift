@@ -40,6 +40,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     
     private var cameraButtonsView: UIView!
     private var takePictureButton: UIButton!
+    private var captureAudioButton: UIButton!
+    private var cancelCaptureAudioButton: UIButton!
     private var gridButton: UIButton!
     private var galleryButton: UIButton!
     
@@ -97,7 +99,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         mugContainerView = UIView()
         self.addSubview(mugContainerView)
         
-        cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false)
+        cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false, showMicrophoneButton: true)
         cameraPreview.alpha = 0.0
         cameraPreview.delegate = self
         self.addSubview(cameraPreview)
@@ -131,6 +133,20 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     private func addCameraButtonsViewSubviews() {
         cameraButtonsView = UIView()
         mugsOrCameraButtonsView.addSubview(cameraButtonsView)
+        
+        captureAudioButton = UIButton()
+        captureAudioButton.hidden = true
+        captureAudioButton.setImage(UIImage(named: "Capture_Audio"), forState: .Normal)
+        captureAudioButton.sizeToFit()
+        captureAudioButton.addTarget(self, action: "captureAudioButtonTapped:", forControlEvents: .TouchUpInside)
+        cameraButtonsView.addSubview(captureAudioButton)
+        
+        cancelCaptureAudioButton = UIButton()
+        cancelCaptureAudioButton.hidden = true
+        cancelCaptureAudioButton.setImage(UIImage(named: "Cancel_Audio"), forState: .Normal)
+        cancelCaptureAudioButton.sizeToFit()
+        cancelCaptureAudioButton.addTarget(self, action: "cancelCaptureAudioButtonTapped:", forControlEvents: .TouchUpInside)
+        cameraButtonsView.addSubview(cancelCaptureAudioButton)
         
         takePictureButton = UIButton()
         takePictureButton.setImage(UIImage(named: "Capture"), forState: .Normal)
@@ -251,11 +267,25 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             make.height.equalTo()(self.mugsOrCameraButtonsView)
         }
         
+        cancelCaptureAudioButton.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.cameraButtonsView).with().offset()(self.GRID_BUTTON_MARGIN_LEFT)
+            make.centerY.equalTo()(self.cameraButtonsView)
+            make.width.equalTo()(self.cancelCaptureAudioButton.frame.width)
+            make.height.equalTo()(self.cancelCaptureAudioButton.frame.height)
+        }
+        
         gridButton.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.cameraButtonsView).with().offset()(self.GRID_BUTTON_MARGIN_LEFT)
             make.centerY.equalTo()(self.cameraButtonsView)
             make.width.equalTo()(self.gridButton.frame.width)
             make.height.equalTo()(self.gridButton.frame.height)
+        }
+        
+        captureAudioButton.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self.cameraButtonsView)
+            make.centerY.equalTo()(self.cameraButtonsView)
+            make.width.equalTo()(self.captureAudioButton.frame.width)
+            make.height.equalTo()(self.captureAudioButton.frame.height)
         }
         
         takePictureButton.mas_makeConstraints { (make) -> Void in
@@ -308,39 +338,25 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     }
     
     func setPicture(image: UIImage!) {
-        self.slideToMyMugsView()
         self.mugImageView.image = image
-        self.updateConstraintsIfNeeded()
+        hideCameraShowPicture()
+        self.showRecordingView()
     }
     
-    func slideToMyMugsView() {
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            
-            self.mugsView.alpha = 1.0
-            self.cameraPreview.alpha = 0.0
-            self.cameraPreview.removeObservers()
-            
-            self.mugImageView.alpha = 1.0
-            
-            self.mugsView.mas_updateConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.left.equalTo()(self.mugsOrCameraButtonsView)
-                make.right.equalTo()(self.mugsOrCameraButtonsView)
-                make.top.equalTo()(self.mugsOrCameraButtonsView)
-                make.height.equalTo()(self.mugsOrCameraButtonsView)
-            })
-            
-            self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.left.equalTo()(self.mugsView.mas_right)
-                make.width.equalTo()(self.mugsOrCameraButtonsView)
-                make.top.equalTo()(self.mugsOrCameraButtonsView)
-                make.height.equalTo()(self.mugsOrCameraButtonsView)
-            })
-            
-            self.layoutIfNeeded()
-        })
-
+    func showRecordingView() {
+        self.captureAudioButton.hidden = false
+        self.cancelCaptureAudioButton.hidden = false
+        self.takePictureButton.hidden = true
+        self.galleryButton.hidden = true
+        self.gridButton.hidden = true
+    }
+    
+    func hideRecordingView() {
+        self.captureAudioButton.hidden = true
+        self.cancelCaptureAudioButton.hidden = true
+        self.takePictureButton.hidden = false
+        self.galleryButton.hidden = false
+        self.gridButton.hidden = false
     }
     
     
@@ -381,7 +397,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     }
     
     func takePictureButtonTapped(sender: UIButton!) {
-        self.delegate?.composeViewDidTapTakePictureButton(self)
+        self.delegate?.composeViewDidTapTakePictureButton(self, withCamera: self.cameraPreview)
     }
     
     func gridButtonTapped(sender: UIButton!) {
@@ -392,8 +408,39 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         self.delegate?.composeViewDidTapGalleryButton(self)
     }
     
-    func wordTapped(sender: UIButton!) {
-        println("tapped \(sender.titleLabel?.text)")
+    func cancelCaptureAudioButtonTapped(sender: UIButton!) {
+        self.showCameraHidePicture()
+        self.hideRecordingView()
+    }
+    
+    func captureAudioButtonTapped(sender: UIButton!) {
+        println("Starting recording ..")
+    }
+    
+    func slideToMyMugsView() {
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            
+            self.mugsView.alpha = 1.0
+            self.hideCameraShowPicture()
+            
+            self.mugsView.mas_updateConstraints({ (make) -> Void in
+                make.removeExisting = true
+                make.left.equalTo()(self.mugsOrCameraButtonsView)
+                make.right.equalTo()(self.mugsOrCameraButtonsView)
+                make.top.equalTo()(self.mugsOrCameraButtonsView)
+                make.height.equalTo()(self.mugsOrCameraButtonsView)
+            })
+            
+            self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
+                make.removeExisting = true
+                make.left.equalTo()(self.mugsView.mas_right)
+                make.width.equalTo()(self.mugsOrCameraButtonsView)
+                make.top.equalTo()(self.mugsOrCameraButtonsView)
+                make.height.equalTo()(self.mugsOrCameraButtonsView)
+            })
+            
+            self.layoutIfNeeded()
+        })
     }
     
 
@@ -414,6 +461,24 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         // Take a picture button should be disabled
         takePictureButton.enabled = available
     }
+    
+    func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
+        println("starting recording microphone")
+    }
+    
+    func hideCameraShowPicture() {
+        self.cameraPreview.alpha = 0.0
+        self.cameraPreview.removeObservers()
+        
+        self.mugImageView.alpha = 1.0
+    }
+    
+    func showCameraHidePicture() {
+        self.cameraPreview.alpha = 1.0
+        self.cameraPreview.registerObservers()
+        
+        self.mugImageView.alpha = 0.0
+    }
 }
 
 
@@ -421,7 +486,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
 
 protocol ComposeViewDelegate {
     func composeViewDidTapBackButton(composeView: ComposeView!)
-    func composeViewDidTapTakePictureButton(composeView: ComposeView!)
+    func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!)
     func composeViewDidTapGalleryButton(composeView: ComposeView!)
     func composeViewMakeConstraintToNavigationBarBottom(containerView: UIView!)
 }
