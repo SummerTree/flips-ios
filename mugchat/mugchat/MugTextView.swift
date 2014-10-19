@@ -32,8 +32,6 @@ class MugTextView : UICollectionViewCell {
         
         self.mugText = mugText
         
-        self.backgroundColor = UIColor.greenColor()
-        
         self.initSubviews()
     }
     
