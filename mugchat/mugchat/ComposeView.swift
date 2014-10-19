@@ -229,7 +229,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.top.equalTo()(self.mugTextsContainer.mas_bottom)
-            make.height.equalTo()(MUGWORD_LIST_SEPARATOR_HEIGHT)
+            make.height.equalTo()(self.MUGWORD_LIST_SEPARATOR_HEIGHT)
         }
         
         mugsOrCameraButtonsView.mas_makeConstraints { (make) -> Void in
