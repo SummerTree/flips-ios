@@ -218,7 +218,7 @@ class CustomNavigationBar : UIView {
         if (avatarImageView != nil) {
             avatarImageView.mas_updateConstraints { (update) -> Void in
                 update.centerX.equalTo()(self)
-                update.centerY.equalTo()(self)
+                update.centerY.equalTo()(self.mas_centerY).with().offset()(STATUS_BAR_HEIGHT / 2)
                 update.width.equalTo()(self.avatarImageView.frame.size.width)
                 update.height.equalTo()(self.avatarImageView.frame.size.height)
             }
