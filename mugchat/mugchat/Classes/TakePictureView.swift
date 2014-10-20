@@ -40,7 +40,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     }
     
     private func initSubviewsWithInterfaceOrientation(orientation: AVCaptureVideoOrientation) {
-        self.backgroundColor = UIColor.deepSea()
+        self.backgroundColor = UIColor.blackColor()
         
         cameraView = CameraView(interfaceOrientation: orientation, showAvatarCropArea: true)
         cameraView.delegate = self
