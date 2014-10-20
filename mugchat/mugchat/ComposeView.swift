@@ -66,9 +66,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         addSubviews()
     }
 
-    convenience init(words: [String]) {
-        self.init()
+    init(words: [String]) {
+        super.init()
         createMugs(words)
+        addSubviews()
     }
     
     func createMugs(texts: [String]) {
