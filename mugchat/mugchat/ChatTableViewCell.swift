@@ -71,6 +71,7 @@ class ChatTableViewCell: UITableViewCell {
         
         player = MPMoviePlayerController()
         player.controlStyle = MPMovieControlStyle.None
+        player.scalingMode = MPMovieScalingMode.AspectFill
         videoView.addSubview(player.view)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
