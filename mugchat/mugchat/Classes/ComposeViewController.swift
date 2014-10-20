@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate {
     
     private let composeView : ComposeView
     
@@ -92,6 +92,11 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
         }
     }
     
+    func composeViewDidTapCaptureAudioButton(composeView: ComposeView!) {
+        AudioRecorderService.sharedInstance.delegate = self
+        AudioRecorderService.sharedInstance.startRecording()
+    }
+    
     func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!) {
         cameraView.capturePictureWithCompletion({ (image) -> Void in
             if (image != nil) {
@@ -127,7 +132,13 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         composeView.setPicture(image)
-        //self.showConfirmPictureView()
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    // MARK: - Audio Recorder Service Delegate
+    
+    func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL fileURL: NSURL?, success: Bool!) {
+        audioRecorderService.playLastRecordedAudio()
     }
 }
