@@ -151,7 +151,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyButton.mas_makeConstraints( { (make) in
             make.centerX.equalTo()(self.replyView)
             make.centerY.equalTo()(self.replyView)
-            //make.height.equalTo()(self.REPLY_BUTTON_HEIGHT)
         })
         
         replyTextField.mas_makeConstraints( { (make) in
@@ -162,13 +161,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         })
         
         nextButton.mas_makeConstraints( { (make) in
-            make.right.equalTo()(self.replyView)//.with().offset()(-self.REPLY_VIEW_OFFSET)
+            make.right.equalTo()(self.replyView)
             make.top.equalTo()(self.replyView)
             make.bottom.equalTo()(self.replyView)
             make.width.equalTo()(self.nextButton.frame.width)
         })
         
     }
+    
     
     // MARK: - CustomNavigationBarDelegate
     
