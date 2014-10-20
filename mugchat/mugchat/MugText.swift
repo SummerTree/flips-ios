@@ -21,7 +21,6 @@ class MugText { //Temporary data structure
         self.text = text
         self.state = state
     }
-    
 }
 
 enum MugState {

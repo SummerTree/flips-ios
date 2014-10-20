@@ -17,12 +17,13 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
-    private let MUGWORD_LIST_HEIGHT: CGFloat = 50.0
+    private let MUGWORD_LIST_HEIGHT: CGFloat = 40.0
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
     private let MY_MUGS_LABEL_MARGIN_TOP: CGFloat = 5.0
     private let MY_MUGS_LABEL_MARGIN_LEFT: CGFloat = 10.0
     private let ADD_MUG_BUTTON_MARGIN_TOP: CGFloat = 5.0
+    private let MUGWORD_LIST_SEPARATOR_HEIGHT: CGFloat = 10.0
     
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
     
@@ -34,6 +35,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
     private var mugTextsContainer : MugTextsContainer!
+    private var mugTextsContainerSeparator : UIView!
     private var mugsOrCameraButtonsView: UIView!
     
     private var cameraPreview: CameraView!
@@ -66,9 +68,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         addSubviews()
     }
 
-    convenience init(words: [String]) {
-        self.init()
+    init(words: [String]) {
+        super.init()
         createMugs(words)
+        addSubviews()
     }
     
     func createMugs(texts: [String]) {
@@ -80,7 +83,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             //TEMP (for tests)
             switch i {
             case 0:
-                mugText = MugText(mugId: i, text: text, state: MugState.Default)
+                mugText = MugText(mugId: i, text: text + " Teste!", state: MugState.Default)
             case 1:
                 mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
             case 2:
@@ -103,7 +106,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         captureAudioProgressBar.backgroundColor = UIColor.avacado()
         self.addSubview(captureAudioProgressBar)
         
-        cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false)
+        cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false, showMicrophoneButton: true)
         cameraPreview.alpha = 0.0
         cameraPreview.delegate = self
         self.addSubview(cameraPreview)
@@ -121,6 +124,9 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         
         mugTextsContainer = MugTextsContainer(texts: self.mugs)
         self.addSubview(mugTextsContainer)
+        
+        mugTextsContainerSeparator = UIView()
+        self.addSubview(mugTextsContainerSeparator)
         
         mugsOrCameraButtonsView = UIView()
         mugsOrCameraButtonsView.backgroundColor = UIColor.sand()
@@ -248,10 +254,17 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             make.height.equalTo()(self.MUGWORD_LIST_HEIGHT)
         }
         
-        mugsOrCameraButtonsView.mas_makeConstraints { (make) -> Void in
+        mugTextsContainerSeparator.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.top.equalTo()(self.mugTextsContainer.mas_bottom)
+            make.height.equalTo()(self.MUGWORD_LIST_SEPARATOR_HEIGHT)
+        }
+        
+        mugsOrCameraButtonsView.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.top.equalTo()(self.mugTextsContainerSeparator.mas_bottom)
             make.bottom.equalTo()(self)
         }
         

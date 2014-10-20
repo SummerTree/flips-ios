@@ -24,12 +24,12 @@ struct MugVideo {
 
 class ChatTableViewCell: UITableViewCell {
     
-    
     // MARK: - Constants
     
     private let MESSAGE_TOP_MARGIN: CGFloat = 18.0
     private let MESSAGE_BOTTOM_MARGIN: CGFloat = 18.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
+    
     
     // MARK: - Instance variables
     
@@ -37,7 +37,6 @@ class ChatTableViewCell: UITableViewCell {
         didSet {
             let moviePath = NSBundle.mainBundle().pathForResource(message.videoPath, ofType: "mov")
             player.contentURL = NSURL.fileURLWithPath(moviePath!)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
             thumbnailView.image = UIImage(named: message.thumbnailPath)
             timestampLabel.text = message.timestamp
             avatarView.image = UIImage(named: message.avatarPath)
@@ -59,6 +58,7 @@ class ChatTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.whiteColor()
         self.addSubviews()
+        self.addConstraints()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -71,13 +71,10 @@ class ChatTableViewCell: UITableViewCell {
         
         player = MPMoviePlayerController()
         player.controlStyle = MPMovieControlStyle.None
+        player.scalingMode = MPMovieScalingMode.AspectFill
         videoView.addSubview(player.view)
-        player.view.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.videoView)
-            make.bottom.equalTo()(self.videoView)
-            make.leading.equalTo()(self.videoView)
-            make.trailing.equalTo()(self.videoView)
-        }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
         
         messageView = UIView()
         contentView.addSubview(messageView)
@@ -112,50 +109,53 @@ class ChatTableViewCell: UITableViewCell {
             make.center.equalTo()(self.contentView)
             make.size.equalTo()(self.contentView)
         }
-        
-        self.updateConstraintsIfNeeded()
     }
     
     
     // MARK: - Overridden Methods
     
-    override func updateConstraints() {
-        super.updateConstraints()
-        
-        videoView.mas_updateConstraints({ (make) in
+    func addConstraints() {
+        videoView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.contentView)
             make.left.equalTo()(self.contentView)
-            make.width.equalTo()(self.contentView.frame.size.width)
-            make.height.equalTo()(self.contentView.frame.size.width)
+            make.width.equalTo()(self.contentView.mas_width)
+            make.height.equalTo()(self.contentView.mas_width)
         })
         
-        thumbnailView.mas_updateConstraints { (make) -> Void in
+        thumbnailView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.videoView)
             make.left.equalTo()(self.videoView)
-            make.width.equalTo()(self.contentView.frame.size.width)
-            make.height.equalTo()(self.contentView.frame.size.width)
+            make.width.equalTo()(self.contentView.mas_width)
+            make.height.equalTo()(self.contentView.mas_width)
         }
         
-        messageView.mas_updateConstraints({ (make) in
+        player.view.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.videoView)
+            make.bottom.equalTo()(self.videoView)
+            make.leading.equalTo()(self.videoView)
+            make.trailing.equalTo()(self.videoView)
+        }
+        
+        messageView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.videoView.mas_bottom)
             make.bottom.equalTo()(self.contentView)
             make.left.equalTo()(self.contentView)
             make.right.equalTo()(self.contentView)
         })
         
-        avatarView.mas_updateConstraints { (make) -> Void in
+        avatarView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.videoView.mas_bottom)
             make.width.equalTo()(self.avatarView.frame.size.width)
             make.height.equalTo()(self.avatarView.frame.size.height)
         }
         
-        timestampLabel.mas_updateConstraints({ (make) in
+        timestampLabel.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.videoView.mas_bottom).with().offset()(self.MESSAGE_TOP_MARGIN)
             make.centerX.equalTo()(self.messageView)
         })
         
-        messageTextLabel.mas_updateConstraints({ (make) in
+        messageTextLabel.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.timestampLabel.mas_bottom)
             make.centerX.equalTo()(self.messageView)
         })
@@ -164,13 +164,11 @@ class ChatTableViewCell: UITableViewCell {
     
     // MARK: - Mug interaction handlers
     
-     func playbackFinished(sender: AnyObject?) {
+    func playbackFinished(sender: AnyObject?) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.thumbnailView.alpha = 1.0
-            self.messageTextLabel.text = self.message.message
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                self.thumbnailView.alpha = 1.0
+                self.messageTextLabel.text = self.message.message
                 self.messageTextLabel.alpha = 1
-            })
         })
         self.player.currentPlaybackTime = 0
     }
@@ -199,4 +197,10 @@ class ChatTableViewCell: UITableViewCell {
         })
     }
     
+    
+    // MARK - View handler
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
+    }
 }

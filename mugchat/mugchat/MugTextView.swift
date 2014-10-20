@@ -13,15 +13,17 @@
 private let BUTTON_MARGIN_TOP : CGFloat = 7.0
 private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
 
-class MugTextView : UIView {
+class MugTextView : UICollectionViewCell {
     
-    private var mugText : MugText!
+    var mugText : MugText!
+    
+    var delegate : MugTextViewDelegate?
     
     var mugButton: UIButton!
     
     var hasExtrasImageView: UIImageView! // "(...)"
     var hasExtrasImage : UIImage!
-    
+
     
     // MARK: - Initialization Methods
     
@@ -35,17 +37,22 @@ class MugTextView : UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setMugText(mugText : MugText) {
+        self.mugText = mugText
+        initSubviews()
+    }
+    
     func initSubviews() {
         mugButton = UIButton()
-        //TODO: story 7584
-        //mugButton.addTarget(self, action: "mugButtonTapped:", forControlEvents: .TouchUpInside)
+        
+        mugButton.addTarget(self, action: "mugButtonTapped", forControlEvents: .TouchUpInside)
+        
         mugButton.layer.borderWidth = 1.0
         mugButton.layer.borderColor = UIColor.avacado().CGColor
         mugButton.layer.cornerRadius = 14.0
@@ -73,6 +80,13 @@ class MugTextView : UIView {
         }
         
         initConstraints()
+    }
+    
+    func mugButtonTapped() {
+        //TODO: When implementing scroll, see UICollectionViewDelegate Methods of this article (http://iphonedev.tv/blog/2014/4/17/show-the-uimenucontroller-and-display-custom-edit-menus-for-uiviewcontroller-uitableviewcontroller-and-uicollectionview-on-ios-7)
+        
+        self.delegate?.didTapMugText(self.mugText)
+
     }
     
     private func addExtrasImage() {
@@ -106,5 +120,14 @@ class MugTextView : UIView {
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
     }
+    
+}
+
+
+// MARK: View Delegate
+
+protocol MugTextViewDelegate {
+    
+    func didTapMugText(mugText : MugText!)
     
 }
