@@ -81,7 +81,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             //TEMP (for tests)
             switch i {
             case 0:
-                mugText = MugText(mugId: i, text: text + " Teste!", state: MugState.Default)
+                mugText = MugText(mugId: i, text: text, state: MugState.Default)
             case 1:
                 mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
             case 2:
