@@ -87,7 +87,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         for textRange in self.joinedTextRanges {
             var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
             var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
-            if (posInit <= charIndex && charIndex <= posEnd) {
+            if (posInit <= charIndex && charIndex < posEnd) {
                 return true
             }
         }
