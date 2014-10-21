@@ -12,8 +12,6 @@
 
 class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
-    //var joinStringsTextFieldDelegate : JoinStringsTextFieldDelegate?
-    //var mugTexts : [String] = [String]()
     var joinedTextRanges : [UITextRange] = [UITextRange]()
     
     override init() {
@@ -39,17 +37,14 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
     func joinStrings() {
         var selectedRange: UITextRange = self.selectedTextRange!
-        
-        var selectedText = self.textInRange(selectedRange)
-        println(">>> Joined: \(selectedText)")
-        
+
         self.joinedTextRanges.append(selectedRange)
         
-        //self.joinStringsTextFieldDelegate?.didJoinedWords(self, finalString: selectedText)
-        //TODO
+        //debug
+        //var selectedText = self.textInRange(selectedRange)
+        //println(">>> Joined: \(selectedText)")
     }
     
-    //TODO: consider joined words (self.joinedTextRanges ([UITextRange]))
     func getMugTexts() -> [String] {
         var mugTexts : [String] = [String]()
         
@@ -58,18 +53,24 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         let whitespace: Character = " "
         
         for character in self.text {
-            println(">>> charIndex: \(charIndex); char: \(character)")
-            
             if (character == whitespace) {
-                mugTexts.append(lastWord)
-                lastWord = ""
-            } else if (isSpecialCharacter(character)) {
-                if (hasSpecialCharacters(lastWord)) {
+                if (isPartOfJoinedTextRanges(charIndex)) {
                     lastWord.append(character)
                 } else {
                     mugTexts.append(lastWord)
                     lastWord = ""
+                }
+            } else if (isSpecialCharacter(character)) {
+                if (hasSpecialCharacters(lastWord)) {
                     lastWord.append(character)
+                } else {
+                    if (isPartOfJoinedTextRanges(charIndex)) {
+                        lastWord.append(character)
+                    } else {
+                        mugTexts.append(lastWord)
+                        lastWord = ""
+                        lastWord.append(character)
+                    }
                 }
             } else {
                 lastWord.append(character)
@@ -80,6 +81,17 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         mugTexts.append(lastWord)
         
         return mugTexts
+    }
+    
+    func isPartOfJoinedTextRanges(charIndex: Int) -> Bool {
+        for textRange in self.joinedTextRanges {
+            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
+            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
+            if (posInit <= charIndex && charIndex <= posEnd) {
+                return true
+            }
+        }
+        return false
     }
     
     func hasSpecialCharacters(text : String) -> Bool {
@@ -125,15 +137,9 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         print(self.text)
         
-        //TODO: delete
+        //TODO: handle delete (what to do when user removes part of a joined text?)
         
         return true
     }
     
 }
-
-//protocol JoinStringsTextFieldDelegate {
-//    
-//    func didJoinedWords(joinStringsTextField: JoinStringsTextField!, finalString: String!)
-//    
-//}
