@@ -56,6 +56,7 @@
 		7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11791C19DA03980086A66B /* CustomNavigationBarDelegate.swift */; };
 		7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792119DA07F30086A66B /* ComposeViewController.swift */; };
 		7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792319DA08800086A66B /* InboxViewDelegate.swift */; };
+		7A12B8D219F5C6E900DE955E /* CenteredMugsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12B8D119F5C6E900DE955E /* CenteredMugsView.swift */; };
 		7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CB19D1E97A0026E641 /* InboxViewController.swift */; };
 		7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */; };
 		7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */; };
@@ -173,6 +174,7 @@
 		7A11791C19DA03980086A66B /* CustomNavigationBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBarDelegate.swift; path = Classes/CustomNavigationBarDelegate.swift; sourceTree = "<group>"; };
 		7A11792119DA07F30086A66B /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ComposeViewController.swift; path = Classes/ComposeViewController.swift; sourceTree = "<group>"; };
 		7A11792319DA08800086A66B /* InboxViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxViewDelegate.swift; path = Classes/InboxViewDelegate.swift; sourceTree = "<group>"; };
+		7A12B8D119F5C6E900DE955E /* CenteredMugsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenteredMugsView.swift; sourceTree = "<group>"; };
 		7A1892CB19D1E97A0026E641 /* InboxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxViewController.swift; path = Classes/InboxViewController.swift; sourceTree = "<group>"; };
 		7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConversationTableViewCell.swift; path = Classes/ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = Classes/CustomNavigationBar.swift; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 				A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */,
 				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
 				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
+				7A12B8D119F5C6E900DE955E /* CenteredMugsView.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -995,6 +998,7 @@
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
 				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
+				7A12B8D219F5C6E900DE955E /* CenteredMugsView.swift in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
