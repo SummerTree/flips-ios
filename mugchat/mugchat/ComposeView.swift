@@ -13,7 +13,7 @@
 import UIKit
 import AVFoundation
 
-class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
+class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsViewDelegate {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
@@ -114,10 +114,11 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         mugWordLabel = UILabel()
         mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
         mugWordLabel.textColor = UIColor.whiteColor()
-        mugWordLabel.text = "I"
+        mugWordLabel.text = mugs[0].text
         mugContainerView.addSubview(mugWordLabel)
         
         centeredMugsView = CenteredMugsView(mugTexts: self.mugs)
+        centeredMugsView.delegate = self
         self.addSubview(centeredMugsView)
         
         mugTextsContainerSeparator = UIView()
@@ -368,6 +369,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     }
     
     
+    // MARK: - Mugs View Delegate
+    
+    func composeViewDidSelectMugText(mugText: MugText!) {
+        mugWordLabel.text = mugText.text
+        //TODO: update MyMugs... (substories of 7942)
+    }
+    
+    
     // MARK: - Button actions
     
     func addMugButtonTapped(sender: UIButton!) {
@@ -408,7 +417,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     func galleryButtonTapped(sender: UIButton!) {
         self.delegate?.composeViewDidTapGalleryButton(self)
     }
-    
+
     func cancelCaptureAudioButtonTapped(sender: UIButton!) {
         self.showCameraHidePicture()
         self.hideRecordingView()

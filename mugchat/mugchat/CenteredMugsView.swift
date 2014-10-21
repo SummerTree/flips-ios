@@ -25,6 +25,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     private var mugTextViews: [MugTextView]!
     private var tappedMugTextView: MugTextView?
     
+    var delegate: MugsViewDelegate?
     
     // MARK: - Initializers
     
@@ -68,6 +69,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
         self.centerScrollViewAtView(gesture.view!)
+        self.delegate?.composeViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
     
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
@@ -208,6 +210,8 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         } else {
             scrollView.scrollEnabled = true
         }
+        
+        self.delegate?.composeViewDidSelectMugText(mugTextViewToBeCentered.mugText)
     }
     
     private func centerScrollViewAtView(view: UIView) {
@@ -262,4 +266,12 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         
         return super.canPerformAction(action, withSender: sender)
     }
+}
+
+// MARK: - View Delegate
+
+protocol MugsViewDelegate {
+
+    func composeViewDidSelectMugText(mugText: MugText!)
+    
 }
