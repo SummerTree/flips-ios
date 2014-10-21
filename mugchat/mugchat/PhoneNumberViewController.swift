@@ -15,6 +15,7 @@ import Foundation
 class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
     
     var phoneNumberView: PhoneNumberView!
+    var userId: String!
         
     override func loadView() {
         super.loadView()
@@ -38,7 +39,7 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     // MARK: - PhoneNumberViewDelegate Methods
     
     func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
-        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber)
+        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: self.userId)
         self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
     }
     
@@ -57,5 +58,9 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
+    init(userId: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.userId = userId
+    }
     
 }

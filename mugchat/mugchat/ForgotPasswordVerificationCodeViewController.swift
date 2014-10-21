@@ -13,7 +13,7 @@ import UIKit
 
 class ForgotPasswordVerificationCodeViewController: VerificationCodeViewController {
 
-    override init(phoneNumber: String!) {
+    init(phoneNumber: String!) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
     }

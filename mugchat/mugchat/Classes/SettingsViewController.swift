@@ -60,7 +60,7 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         AuthenticationHelper.sharedInstance.logout()
         
         var navigationController: UINavigationController = self.presentingViewController as UINavigationController
-        navigationController.popViewControllerAnimated(false)
+        navigationController.popToRootViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion:nil)
     }
     

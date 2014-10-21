@@ -20,6 +20,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
+    var userId: String!
     var verificationCode: String = "XXXX"
     
     override func loadView() {
@@ -37,7 +38,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     // MARK: - VerificationCodeViewDelegate Methods
     
     func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
-        self.verifyDevice(AuthenticationHelper.sharedInstance.userInSession.userID, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!, verificationCode: verificationCode)
+        self.verifyDevice(userId, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!, verificationCode: verificationCode)
     }
     
     func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!) {
@@ -47,7 +48,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
         verificationCodeView.resetVerificationCodeField()
         verificationCodeView.focusKeyboardOnCodeField()
-        self.resendVerificationCode(AuthenticationHelper.sharedInstance.userInSession.userID, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
+        self.resendVerificationCode(userId, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
     }
     
     
@@ -95,6 +96,13 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     println("Error verifying device")
                     return ()
                 }
+                var deviceEntity = device as Device
+                var user = deviceEntity.user
+                user.me = true
+                UserDataSource().save()
+                
+                AuthenticationHelper.sharedInstance.userInSession = user
+                
                 var inboxViewController = InboxViewController()
                 self.navigationController?.pushViewController(inboxViewController, animated: true)
             },
@@ -119,12 +127,11 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
-    init(phoneNumber: String!) {
+    init(phoneNumber: String!, userId: String!) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
+        self.userId = userId
         
-        
-        let userId = AuthenticationHelper.sharedInstance.userInSession.userID
         let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
         let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
