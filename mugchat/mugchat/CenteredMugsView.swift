@@ -23,6 +23,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     
     private var mugTexts: [MugText]!
     private var mugTextViews: [MugTextView]!
+    private var tappedMugTextView: MugTextView?
     
     
     // MARK: - Initializers
@@ -34,6 +35,8 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         
         self.addSubviews()
         self.addConstraints()
+        
+        self.becomeFirstResponder()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -57,11 +60,49 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
             
             var tapGesture = UITapGestureRecognizer(target: self, action: "mugButtonTapped:")
             mugTextView.addGestureRecognizer(tapGesture)
+            
+            var holdGesture = UILongPressGestureRecognizer(target: self, action: "mugButtonLongPress:")
+            mugTextView.addGestureRecognizer(holdGesture)
         }
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
         self.centerScrollViewAtView(gesture.view!)
+    }
+    
+    func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
+        if (gesture.state == UIGestureRecognizerState.Began) {
+            gesture.view?.alpha = 0.5
+            self.didTapMugText(gesture.view! as MugTextView)
+        } else if (gesture.state == UIGestureRecognizerState.Ended) {
+            gesture.view?.alpha = 1
+        }
+    }
+    
+    func didTapMugText(mugTextView : MugTextView!) {
+        let menuController = UIMenuController.sharedMenuController()
+        
+        self.tappedMugTextView = mugTextView;
+        
+        var scrollViewCurrentMinX: CGFloat = self.scrollView.bounds.minX
+        var selectionRect : CGRect = CGRectMake(mugTextView.frame.origin.x - scrollViewCurrentMinX, mugTextView.frame.origin.y + 10, mugTextView.frame.size.width, mugTextView.frame.size.height);
+        menuController.setTargetRect(selectionRect, inView: self)
+        
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: NSSelectorFromString("splitText"))
+        menuController.menuItems = NSArray(array: [lookupMenu])
+        
+        menuController.update();
+        
+        menuController.setMenuVisible(true, animated: true)
+    }
+    
+    //TODO: under construction
+    func splitText() {
+        let text = self.tappedMugTextView?.mugText.text
+        
+        println(">>>>> splitText: \(text!)")
+        
+        //TODO
     }
     
     private func addConstraints() {
@@ -186,5 +227,34 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         let size: CGSize = mugTextString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
+    }
+    
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true;
+    }
+    
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        if action == "cut:" {
+            return false;
+        }
+            
+        else if action == "copy:" {
+            return false;
+        }
+            
+        else if action == "paste:" {
+            return false;
+        }
+            
+        else if action == "_define:" {
+            return false;
+        }
+            
+        else if action == "splitText" {
+            return true;
+        }
+        
+        return super.canPerformAction(action, withSender: sender)
     }
 }
