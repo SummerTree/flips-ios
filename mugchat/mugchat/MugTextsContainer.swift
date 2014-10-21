@@ -15,7 +15,7 @@ private let MUG_TEXT_ADDITIONAL_WIDTH : CGFloat = 20.0
 private let MUG_TEXT_HEIGHT : CGFloat = 40.0
 private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
 
-class MugTextsContainer : UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, MugTextViewDelegate {
+class MugTextsContainer : UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     var mugTextViews: [MugTextView]! = [MugTextView]()
     
@@ -91,13 +91,14 @@ class MugTextsContainer : UICollectionView, UICollectionViewDelegateFlowLayout, 
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let mugTextViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MugTextView
-        mugTextViewCell.delegate = self
-        self.mugTextViews.append(mugTextViewCell)
-        
-        mugTextViewCell.setMugText(mugTexts[indexPath.item])
-
-        return mugTextViewCell
+//        let mugTextViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MugTextView
+//        mugTextViewCell.delegate = self
+//        self.mugTextViews.append(mugTextViewCell)
+//        
+//        mugTextViewCell.setMugText(mugTexts[indexPath.item])
+//
+//        return mugTextViewCell
+        return UICollectionViewCell()
     }
     
     func collectionView(collectionView: UICollectionView!, layout collectionViewLayout: UICollectionViewLayout!, sizeForItemAtIndexPath indexPath: NSIndexPath!) -> CGSize {
@@ -172,7 +173,7 @@ class MugTextsContainer : UICollectionView, UICollectionViewDelegateFlowLayout, 
                     newMugTextView = MugTextView(mugText: MugText(mugId: 1000, text: texts[i], state: MugState.Default))
                     mugTextViews.append(newMugTextView) //TODO: fazer append no índice certo, não no final
                     
-                    newMugTextView.delegate = self
+//                    newMugTextView.delegate = self
                     self.addSubview(newMugTextView)
                     
                     var textWidth : CGFloat = newMugTextView.getTextWidth()

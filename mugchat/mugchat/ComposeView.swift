@@ -33,7 +33,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
     private var cameraPreview: CameraView!
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
-    private var mugTextsContainer : MugTextsContainer!
+    private var centeredMugsView: CenteredMugsView!
     private var mugTextsContainerSeparator : UIView!
     
     private var mugsOrCameraButtonsView: UIView!
@@ -80,7 +80,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             //TEMP (for tests)
             switch i {
             case 0:
-                mugText = MugText(mugId: i, text: text + " Teste!", state: MugState.Default)
+                mugText = MugText(mugId: i, text: text + " Test!", state: MugState.Default)
             case 1:
                 mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
             case 2:
@@ -116,8 +116,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         mugWordLabel.text = "I"
         mugContainerView.addSubview(mugWordLabel)
         
-        mugTextsContainer = MugTextsContainer(texts: self.mugs)
-        self.addSubview(mugTextsContainer)
+        centeredMugsView = CenteredMugsView(mugTexts: self.mugs)
+        self.addSubview(centeredMugsView)
         
         mugTextsContainerSeparator = UIView()
         self.addSubview(mugTextsContainerSeparator)
@@ -234,7 +234,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
             make.bottom.equalTo()(self.mugImageView).with().offset()(-self.MUGWORD_MARGIN_BOTTOM)
         }
         
-        mugTextsContainer.mas_makeConstraints { (make) -> Void in
+        centeredMugsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.top.equalTo()(self.mugContainerView.mas_bottom)
@@ -244,7 +244,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate {
         mugTextsContainerSeparator.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.top.equalTo()(self.mugTextsContainer.mas_bottom)
+            make.top.equalTo()(self.centeredMugsView.mas_bottom)
             make.height.equalTo()(self.MUGWORD_LIST_SEPARATOR_HEIGHT)
         }
         

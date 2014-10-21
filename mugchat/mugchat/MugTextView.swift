@@ -10,16 +10,13 @@
 // the license agreement.
 //
 
-private let BUTTON_MARGIN_TOP : CGFloat = 7.0
+private let LABEL_MARGIN_TOP : CGFloat = 7.0
 private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
 
-class MugTextView : UICollectionViewCell {
+class MugTextView : UIView {
     
     var mugText : MugText!
-    
-    var delegate : MugTextViewDelegate?
-    
-    var mugButton: UIButton!
+    var textLabel: UILabel!
     
     var hasExtrasImageView: UIImageView! // "(...)"
     var hasExtrasImage : UIImage!
@@ -49,47 +46,41 @@ class MugTextView : UICollectionViewCell {
     }
     
     func initSubviews() {
-        mugButton = UIButton()
+        self.backgroundColor = UIColor.clearColor()
         
-        mugButton.addTarget(self, action: "mugButtonTapped", forControlEvents: .TouchUpInside)
-        
-        mugButton.layer.borderWidth = 1.0
-        mugButton.layer.borderColor = UIColor.avacado().CGColor
-        mugButton.layer.cornerRadius = 14.0
-        mugButton.setTitle(self.mugText.text, forState: UIControlState.Normal)
-        mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        mugButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        self.addSubview(mugButton)
+        textLabel = UILabel()
+        textLabel.layer.borderWidth = 1.0
+        textLabel.layer.borderColor = UIColor.avacado().CGColor
+        textLabel.layer.cornerRadius = 14.0
+        textLabel.textAlignment = NSTextAlignment.Center
+        textLabel.text = self.mugText.text
+        textLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        textLabel.textColor = UIColor.blackColor()
+        textLabel.sizeToFit()
+        self.addSubview(textLabel)
         
         var status : MugState = self.mugText.state
         switch status {
         case MugState.Default:
-            mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.whiteColor()
+            textLabel.textColor = UIColor.blackColor()
+            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
         case MugState.AssociatedImageOrVideo:
-            mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.whiteColor()
+            textLabel.textColor = UIColor.blackColor()
+            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
             addExtrasImage()
         case MugState.AssociatedWord:
-            mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.avacado()
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
         case MugState.AssociatedImageOrVideoWithAdditionalResources:
-            mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.avacado()
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             addExtrasImage()
         }
         
         initConstraints()
     }
     
-    func mugButtonTapped() {
-        //TODO: When implementing scroll, see UICollectionViewDelegate Methods of this article (http://iphonedev.tv/blog/2014/4/17/show-the-uimenucontroller-and-display-custom-edit-menus-for-uiviewcontroller-uitableviewcontroller-and-uicollectionview-on-ios-7)
-        
-        self.delegate?.didTapMugText(self.mugText)
-
-    }
-    
-    private func addExtrasImage() {
+   private func addExtrasImage() {
         hasExtrasImageView = UIImageView()
         hasExtrasImage = UIImage(named: "mug_options")
         hasExtrasImageView.image = hasExtrasImage
@@ -97,8 +88,8 @@ class MugTextView : UICollectionViewCell {
     }
     
     private func initConstraints() {
-        mugButton.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(BUTTON_MARGIN_TOP)
+        textLabel.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(LABEL_MARGIN_TOP)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -120,14 +111,4 @@ class MugTextView : UICollectionViewCell {
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
     }
-    
-}
-
-
-// MARK: View Delegate
-
-protocol MugTextViewDelegate {
-    
-    func didTapMugText(mugText : MugText!)
-    
 }
