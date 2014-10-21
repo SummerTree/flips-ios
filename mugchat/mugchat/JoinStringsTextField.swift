@@ -37,12 +37,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
     func joinStrings() {
         var selectedRange: UITextRange = self.selectedTextRange!
-
         self.joinedTextRanges.append(selectedRange)
-        
-        //debug
-        //var selectedText = self.textInRange(selectedRange)
-        //println(">>> Joined: \(selectedText)")
     }
     
     func getMugTexts() -> [String] {

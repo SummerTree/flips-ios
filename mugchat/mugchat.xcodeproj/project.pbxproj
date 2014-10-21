@@ -108,7 +108,6 @@
 		A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */; };
 		A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */; };
 		A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* MugText.swift */; };
-		A2392BFB19EEE7C70037B0C0 /* MugTextsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */; };
 		A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* MugTextView.swift */; };
 		A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
@@ -234,7 +233,6 @@
 		A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStringsTextField.swift; sourceTree = "<group>"; };
 		A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugStringsUtil.swift; sourceTree = "<group>"; };
 		A2392BF619EEE7C70037B0C0 /* MugText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugText.swift; sourceTree = "<group>"; };
-		A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextsContainer.swift; sourceTree = "<group>"; };
 		A2392BF819EEE7C70037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
 		A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
@@ -490,7 +488,6 @@
 			children = (
 				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
 				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
-				A2392BF719EEE7C70037B0C0 /* MugTextsContainer.swift */,
 				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
 				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
 				7A12B8D119F5C6E900DE955E /* CenteredMugsView.swift */,
@@ -924,7 +921,6 @@
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
-				A2392BFB19EEE7C70037B0C0 /* MugTextsContainer.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,

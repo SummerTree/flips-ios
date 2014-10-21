@@ -30,7 +30,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     init(mugTexts: [MugText]) {
         super.init(frame: CGRect.zeroRect)
         self.mugTexts = mugTexts
-        self.mugTextViews = Array()
+        self.mugTextViews = [MugTextView]()
         
         self.addSubviews()
         self.addConstraints()
@@ -188,9 +188,9 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     // MARK: - Font Helper Methods
     
     func getTextWidth(mugText: MugText) -> CGFloat{
-        let myString: NSString = mugText.text as NSString
+        let mugTextString: NSString = mugText.text as NSString
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
+        let size: CGSize = mugTextString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
     }
 }
