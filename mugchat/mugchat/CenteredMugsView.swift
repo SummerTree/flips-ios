@@ -55,19 +55,13 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
             
             mugTextView.userInteractionEnabled = true
             
-            var holdGesture = UILongPressGestureRecognizer(target: self, action: "mugButtonTapped:")
-            holdGesture.minimumPressDuration = 0.1 // It is required to avoid conflict with the swipe in the scrollView
-            mugTextView.addGestureRecognizer(holdGesture)
+            var tapGesture = UITapGestureRecognizer(target: self, action: "mugButtonTapped:")
+            mugTextView.addGestureRecognizer(tapGesture)
         }
     }
     
-    func mugButtonTapped(gesture: UILongPressGestureRecognizer) {
-        if (gesture.state == UIGestureRecognizerState.Began) {
-            gesture.view?.alpha = 0.5
-            self.centerScrollViewAtView(gesture.view!)
-        } else if (gesture.state == UIGestureRecognizerState.Ended) {
-            gesture.view?.alpha = 1
-        }
+    func mugButtonTapped(gesture : UIGestureRecognizer) {
+        self.centerScrollViewAtView(gesture.view!)
     }
     
     private func addConstraints() {
