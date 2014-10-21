@@ -158,6 +158,11 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     
     // MARK: - UIScrollViewDelegate
     
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        let menuController = UIMenuController.sharedMenuController()
+        menuController.setMenuVisible(false, animated: true)
+    }
+    
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
             self.centerScrollViewAtClosestItem(scrollView)
