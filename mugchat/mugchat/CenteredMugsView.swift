@@ -96,19 +96,17 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         menuController.setMenuVisible(true, animated: true)
     }
     
-    //TODO: under construction
     func splitText() {
         let text = self.tappedMugTextView?.mugText.text
         
-        println(">>>>> splitText: \(text!)")
-        
-        var texts : [String] = MugStringsUtil.splitMugString(text!);
+        var texts: [String] = MugStringsUtil.splitMugString(text!);
         var lastMugText: MugTextView!
         
         var mugTextView: MugTextView
         var splitMugTextView: MugTextView!
         var foundMug: Bool = false
         var contentOffset: CGFloat = 0.0
+        var scrollViewWidth: CGFloat = self.scrollView.contentSize.width
         
         var textViewY = (CGRectGetHeight(self.frame) / 2) - (MUG_TEXT_HEIGHT / 2)
         
@@ -121,7 +119,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                 if (mugTextView.mugText.text == text) {
                     foundMug = true
                     
-                    var oldTextWidth : CGFloat = mugTextView.getTextWidth()
+                    var oldMugTextViewWidth : CGFloat = mugTextView.frame.width
                     
                     //Update the original MugText with the first string of the splitted text
                     mugTextView.mugText.text = texts[0]
@@ -133,9 +131,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                     var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
                     mugTextView.frame = CGRectMake(mugTextView.frame.origin.x, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
                     
-                    //var scrollViewCurrentMinX: CGFloat = self.scrollView.bounds.minX
-                    //var currentXTest = mugTextView.frame.origin.x + scrollViewCurrentMinX
-                    //mugTextView.frame = CGRectMake(mugTextView.frame.origin.x - (oldTextWidth - textWidth), textViewY, buttonWidth, MUG_TEXT_HEIGHT)
+                    scrollViewWidth = scrollViewWidth - oldMugTextViewWidth + mugTextViewWidth
                     
                     splitMugTextView = mugTextView
                     lastMugText = mugTextView
@@ -160,10 +156,10 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                         lastMugText = newMugTextView
                         
                         contentOffset += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-                        
-                        //TODO: update scrollview size
-                        //scrollView.contentSize = CGSizeMake(contentOffset, mugTextView.frame.size.height)
+                        scrollViewWidth += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
                     }
+                    
+                    self.scrollView.contentSize = CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)
                 } else {
                     if (foundMug) { //texts after the split one must be moved to the right
                         var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
@@ -184,6 +180,8 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                         self.mugTextViews.insert(MugTextView(mugText: mugText), atIndex: i)
                     }
                 }
+                
+                //TODO: call delegate (parent) to update mugTexts
                 
                 self.centerScrollViewAtView(splitMugTextView)
                 self.delegate?.composeViewDidSelectMugText(splitMugTextView.mugText)
