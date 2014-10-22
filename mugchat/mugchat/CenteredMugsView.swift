@@ -143,15 +143,13 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                     contentOffset = lastMugText.frame.origin.x + lastMugText.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
                     
                     var newMugTextView : MugTextView
-                    for var i=1; i < texts.count; i++ { //creating new MugTextViews
+                    for var i=1; i < texts.count; i++ { //creating and positioning new MugTextViews
                         index++
                         
-                        var mugText = MugText(mugId: 1000, text: texts[i], state: MugState.Default) //TODO: new mugId
+                        var mugText = MugText(mugId: self.mugTexts.count, text: texts[i], state: MugState.Default)
                         self.mugTexts.insert(mugText, atIndex: index)
                         
                         newMugTextView = MugTextView(mugText: mugText)
-                        
-                        //mugTextViews.insert(newMugTextView, atIndex: index) //TODO: deixar pra inserir depois, pra não atrapalhar o looping (armazenar em array temporário)
                         self.scrollView.addSubview(newMugTextView)
                         
                         var requiredWidth = newMugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
