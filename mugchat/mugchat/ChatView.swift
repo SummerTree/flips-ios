@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     var mugs = [
         MugVideo(message: "Welcome to MugChat", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
@@ -104,7 +104,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         replyTextField = JoinStringsTextField()
         replyTextField.hidden = true
-        replyTextField.joinStringsTextFieldDelegate = self
         replyTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Type your message here", comment: "Type your message here"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         replyView.addSubview(replyTextField)
         
@@ -295,7 +294,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
 
     func didTapNextButton() {
-        self.words = self.replyTextField.text.componentsSeparatedByString(" ")
+        self.words = replyTextField.getMugTexts()
         self.delegate?.chatView(self, didTapNextButtonWithWords: words)
     }
     
@@ -323,13 +322,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         super.updateConstraints()
         self.layoutIfNeeded()
         self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-    }
-
-    
-    // MARK: - Join Strings Delegate
-    
-    func didJoinedWords(joinStringsTextField: JoinStringsTextField!, finalString: String!) {
-        println("didJoinedWords: '\(finalString)'");
     }
 
     
