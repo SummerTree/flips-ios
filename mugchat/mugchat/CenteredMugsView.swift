@@ -100,21 +100,24 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         let text = self.tappedMugTextView?.mugText.text
         
         var texts: [String] = MugStringsUtil.splitMugString(text!);
-        var lastMugText: MugTextView!
         
         var mugTextView: MugTextView
+        var lastMugText: MugTextView!
         var splitMugTextView: MugTextView!
+        
         var foundMug: Bool = false
         var contentOffset: CGFloat = 0.0
         var scrollViewWidth: CGFloat = self.scrollView.contentSize.width
-        
         var textViewY = (CGRectGetHeight(self.frame) / 2) - (MUG_TEXT_HEIGHT / 2)
         
         var index = -1
-
+        var mugTextViewsUpdated = [MugTextView]()
+        
         UIView.animateWithDuration(1.0, delay: 0.0, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: { () -> Void in
+            
             for mugTextView in self.mugTextViews {
                 index++
+                mugTextViewsUpdated.append(mugTextView)
                 
                 if (mugTextView.mugText.text == text) {
                     foundMug = true
@@ -152,6 +155,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                         var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
                         
                         newMugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
+                        mugTextViewsUpdated.append(newMugTextView)
                         
                         lastMugText = newMugTextView
                         
@@ -174,10 +178,10 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
             
             }, completion: { (value: Bool) in
                 //Updating mugTextViews with new mugTexts
-                for var i=0; i < self.mugTexts.count; i++ {
-                    var mugText = self.mugTexts[i]
-                    if (self.mugTextViews[i].mugText.mugId != mugText.mugId) {
-                        self.mugTextViews.insert(MugTextView(mugText: mugText), atIndex: i)
+                for var i=0; i < mugTextViewsUpdated.count; i++ {
+                    var mugTextView = mugTextViewsUpdated[i]
+                    if (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId) {
+                        self.mugTextViews.insert(mugTextView, atIndex: i)
                     }
                 }
                 
