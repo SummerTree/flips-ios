@@ -29,7 +29,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     var delegate: ComposeViewDelegate?
     
-    private var mugs : [MugText] = [MugText]()
+    private var mugTexts : [MugText] = [MugText]()
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
@@ -94,7 +94,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
                 mugText = MugText(mugId: i, text: text, state: MugState.Default)
             }
             
-            self.mugs.append(mugText)
+            self.mugTexts.append(mugText)
         }
     }
     
@@ -119,10 +119,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         mugWordLabel = UILabel()
         mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
         mugWordLabel.textColor = UIColor.whiteColor()
-        mugWordLabel.text = mugs[0].text
+        mugWordLabel.text = mugTexts[0].text
         mugContainerView.addSubview(mugWordLabel)
         
-        centeredMugsView = CenteredMugsView(mugTexts: self.mugs)
+        centeredMugsView = CenteredMugsView(mugTexts: self.mugTexts)
         centeredMugsView.delegate = self
         self.addSubview(centeredMugsView)
         
@@ -414,6 +414,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         //TODO: update MyMugs... (substories of 7942)
     }
     
+    func composeViewDidSplitMugText(mugTexts: [MugText]) {
+        self.mugTexts = mugTexts
+    }
+
     
     // MARK: - Button actions
     

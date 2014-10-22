@@ -188,7 +188,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                     }
                 }
                 
-                //TODO: call delegate (parent) to update mugTexts
+                self.delegate?.composeViewDidSplitMugText(self.mugTexts)
                 
                 self.centerScrollViewAtView(splitMugTextView)
                 self.delegate?.composeViewDidSelectMugText(splitMugTextView.mugText)
@@ -362,5 +362,6 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
 protocol MugsViewDelegate {
 
     func composeViewDidSelectMugText(mugText: MugText!)
+    func composeViewDidSplitMugText(mugTexts: [MugText])
     
 }
