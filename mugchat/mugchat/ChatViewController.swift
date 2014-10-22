@@ -24,6 +24,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     
     override func loadView() {
         self.chatView = ChatView()
+        self.chatView.delegate = self
         self.view = chatView
         
         self.setupWhiteNavBarWithBackButton(chatTitle)
@@ -32,6 +33,12 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.chatView.viewWillAppear()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.chatView.viewWillDisappear()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -44,6 +51,11 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     func chatViewDidTapBackButton(view: ChatView) {
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    func chatView(view: ChatView, didTapNextButtonWithWords words : [String]) {
+        var composeViewController = ComposeViewController(words: words)
+        self.navigationController?.pushViewController(composeViewController, animated: true)
+    }
    
     
     // MARK: - Required initializers
@@ -51,7 +63,5 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-
     
 }

@@ -12,9 +12,23 @@
 
 import Foundation
 
-class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate {
     
-    private let composeView = ComposeView()
+    private let composeView : ComposeView
+    
+    init() {
+        composeView = ComposeView()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(words : [String]) {
+        composeView = ComposeView(words: words)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         composeView.delegate = self
@@ -78,8 +92,26 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
         }
     }
     
-    func composeViewDidTapTakePictureButton(composeView: ComposeView!) {
-        println("Take picture button tapped")
+    func composeViewDidTapCaptureAudioButton(composeView: ComposeView!) {
+        AudioRecorderService.sharedInstance.delegate = self
+        AudioRecorderService.sharedInstance.startRecording()
+    }
+    
+    func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!) {
+        cameraView.capturePictureWithCompletion({ (image) -> Void in
+            if (image != nil) {
+                var receivedImage = image as UIImage!
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    composeView.setPicture(receivedImage)
+                    return ()
+                })
+            } else {
+                println("Capturing picture problem. Image is nil")
+            }
+            }, fail: { (error) -> Void in
+                println("Error capturing picture: \(error)")
+        })
     }
     
     func composeViewMakeConstraintToNavigationBarBottom(composeView: UIView!) {
@@ -100,7 +132,13 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         composeView.setPicture(image)
-        //self.showConfirmPictureView()
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    // MARK: - Audio Recorder Service Delegate
+    
+    func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL fileURL: NSURL?, success: Bool!) {
+        audioRecorderService.playLastRecordedAudio()
     }
 }

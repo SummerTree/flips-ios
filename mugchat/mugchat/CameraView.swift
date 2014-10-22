@@ -33,14 +33,20 @@ class CameraView : UIView {
     
     private var previewView: AVCamPreviewView!
     private var avatarCropAreaView: CropOverlayView!
-    private var cameraButtonView: UIView!
+    private var frontCameraButtonView: UIView!
+    private var backCameraButtonView: UIView!
     private var flashLabel: UILabel!
     private var flashButton: UIButton!
+    private var microphoneButton: UIButton!
     private var toggleCameraButton: UIButton!
     
     private var flashMode: AVCaptureFlashMode!
     
     private var showAvatarCropArea: Bool
+    private var showMicrophoneButton: Bool
+    private var isMicrophoneAvailable: Bool
+    
+    private var showingFrontCamera: Bool
     
     var delegate: CameraViewDelegate?
     
@@ -61,8 +67,11 @@ class CameraView : UIView {
     
     // MARK: - Initialization Methods
     
-    init(interfaceOrientation: AVCaptureVideoOrientation, showAvatarCropArea: Bool = false) {
+    init(interfaceOrientation: AVCaptureVideoOrientation, showAvatarCropArea: Bool = false, showMicrophoneButton: Bool = false) {
+        self.showingFrontCamera = true
         self.showAvatarCropArea = showAvatarCropArea
+        self.showMicrophoneButton = showMicrophoneButton
+        self.isMicrophoneAvailable = false
 
         super.init(frame: CGRect.zeroRect)
         
@@ -79,7 +88,7 @@ class CameraView : UIView {
     }
     
     private func initSubviews() {
-        self.backgroundColor = UIColor.deepSea()
+        self.backgroundColor = UIColor.blackColor()
         
         previewView = AVCamPreviewView()
         self.addSubview(previewView)
@@ -90,11 +99,16 @@ class CameraView : UIView {
             self.addSubview(avatarCropAreaView)
         }
         
-        cameraButtonView = UIView()
-        cameraButtonView.backgroundColor = UIColor.clearColor()
-        cameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
-        self.addSubview(cameraButtonView)
-
+        frontCameraButtonView = UIView()
+        frontCameraButtonView.backgroundColor = UIColor.clearColor()
+        frontCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
+        self.addSubview(frontCameraButtonView)
+        
+        backCameraButtonView = UIView()
+        backCameraButtonView.alpha = 0
+        backCameraButtonView.backgroundColor = UIColor.clearColor()
+        backCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
+        self.addSubview(backCameraButtonView)
         
         flashLabel = UILabel()
         flashLabel.text = NSLocalizedString("Auto", comment: "Auto")
@@ -104,20 +118,28 @@ class CameraView : UIView {
         flashLabel.textAlignment = NSTextAlignment.Center
         flashLabel.sizeToFit()
         flashLabel.hidden = true
-        cameraButtonView.addSubview(flashLabel)
+        self.addSubview(flashLabel)
         
         flashButton = UIButton()
         flashButton.setImage(UIImage(named: "Flash_Button"), forState: .Normal)
         flashButton.sizeToFit()
         flashButton.addTarget(self, action: "flashButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         flashButton.enabled = false
-        cameraButtonView.addSubview(flashButton)
+        self.addSubview(flashButton)
         
         toggleCameraButton = UIButton()
         toggleCameraButton.setImage(UIImage(named: "Front_Back"), forState: .Normal)
         toggleCameraButton.sizeToFit()
         toggleCameraButton.addTarget(self, action: "toggleCameraButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
-        cameraButtonView.addSubview(toggleCameraButton)
+        self.addSubview(toggleCameraButton)
+        
+        if (self.showMicrophoneButton) {
+            microphoneButton = UIButton()
+            microphoneButton.setImage(UIImage(named: "Audio"), forState: .Normal)
+            microphoneButton.sizeToFit()
+            microphoneButton.addTarget(self, action: "microphoneButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+            self.addSubview(microphoneButton)
+        }
     }
     
     
@@ -129,8 +151,8 @@ class CameraView : UIView {
         previewView.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.center.equalTo()(self)
-            make.width.equalTo()(UIScreen.mainScreen().bounds.width)
-            make.height.equalTo()(UIScreen.mainScreen().bounds.height)
+            make.width.equalTo()(self)
+            make.height.equalTo()(self.previewView.mas_width)
         }
         
         if (showAvatarCropArea) {
@@ -143,7 +165,7 @@ class CameraView : UIView {
             }
         }
         
-        cameraButtonView.mas_makeConstraints { (make) -> Void in
+        frontCameraButtonView.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.top.equalTo()(self)
             make.centerX.equalTo()(self)
@@ -151,29 +173,72 @@ class CameraView : UIView {
             make.height.equalTo()(self.mas_width)
         }
         
-        flashButton.mas_makeConstraints { (make) -> Void in
+        backCameraButtonView.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
-            make.bottom.equalTo()(self.cameraButtonView.mas_centerY).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
-            make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
-            make.width.equalTo()(self.flashButton.frame.width)
-            make.height.equalTo()(self.flashButton.frame.height)
+            make.top.equalTo()(self)
+            make.centerX.equalTo()(self)
+            make.width.equalTo()(self.mas_width)
+            make.height.equalTo()(self.mas_width)
         }
         
-        flashLabel.mas_makeConstraints { (make) -> Void in
-            make.removeExisting = true
-            make.bottom.equalTo()(self.flashButton.mas_top)
-            make.centerX.equalTo()(self.flashButton)
-            make.width.equalTo()(self.flashButton)
-            make.height.equalTo()(self.flashLabel.frame.height)
+        if (self.showMicrophoneButton) {
+            flashButton.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.bottom.equalTo()(self.toggleCameraButton.mas_top).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.width.equalTo()(self.flashButton.frame.width)
+                make.height.equalTo()(self.flashButton.frame.height)
+            }
+
+            flashLabel.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.bottom.equalTo()(self.flashButton.mas_top)
+                make.centerX.equalTo()(self.flashButton)
+                make.width.equalTo()(self.flashButton)
+                make.height.equalTo()(self.flashLabel.frame.height)
+            }
+            
+            toggleCameraButton.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.centerY.equalTo()(self)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.width.equalTo()(self.toggleCameraButton.frame.width)
+                make.height.equalTo()(self.toggleCameraButton.frame.height)
+            }
+            
+            microphoneButton.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.top.equalTo()(self.toggleCameraButton.mas_bottom).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.width.equalTo()(self.microphoneButton.frame.width)
+                make.height.equalTo()(self.microphoneButton.frame.height)
+            }
+        } else {
+            flashButton.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.bottom.equalTo()(self.mas_centerY).with().offset()(-self.CAMERA_BUTTON_VERTICAL_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.width.equalTo()(self.flashButton.frame.width)
+                make.height.equalTo()(self.flashButton.frame.height)
+            }
+            
+            flashLabel.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.bottom.equalTo()(self.flashButton.mas_top)
+                make.centerX.equalTo()(self.flashButton)
+                make.width.equalTo()(self.flashButton)
+                make.height.equalTo()(self.flashLabel.frame.height)
+            }
+            
+            toggleCameraButton.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.top.equalTo()(self.mas_centerY).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
+                make.trailing.equalTo()(self).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
+                make.width.equalTo()(self.toggleCameraButton.frame.width)
+                make.height.equalTo()(self.toggleCameraButton.frame.height)
+            }
         }
         
-        toggleCameraButton.mas_makeConstraints { (make) -> Void in
-            make.removeExisting = true
-            make.top.equalTo()(self.cameraButtonView.mas_centerY).with().offset()(self.CAMERA_BUTTON_VERTICAL_MARGIN)
-            make.trailing.equalTo()(self.cameraButtonView).with().offset()(self.CAMERA_BUTTON_RIGHT_MARGIN)
-            make.width.equalTo()(self.toggleCameraButton.frame.width)
-            make.height.equalTo()(self.toggleCameraButton.frame.height)
-        }
     }
     
     private func initCamera() {
@@ -214,17 +279,23 @@ class CameraView : UIView {
                 })
             }
             
-            error = nil
             
-            var audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as AVCaptureDevice
-            var audioDeviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error)
             
-            if (error != nil) {
-                println("TakePicture error 2: \(error)")
-            }
-            
-            if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
-                self.session.addInput(audioDeviceInput as AVCaptureInput)
+            if (self.showMicrophoneButton) {
+                error = nil
+                
+                // We should ask for audio access if we aren't showing the button to record audio.
+                var audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as AVCaptureDevice
+                var audioDeviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error)
+                
+                if (error != nil) {
+                    self.isMicrophoneAvailable = false
+                } else {
+                    self.isMicrophoneAvailable = true
+                    if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
+                        self.session.addInput(audioDeviceInput as AVCaptureInput)
+                    }
+                }
             }
             
             var movieOutput = AVCaptureMovieFileOutput()
@@ -322,10 +393,20 @@ class CameraView : UIView {
     
     // MARK: - Button Actions
     
+    func bringButtonsToFront() {
+        self.bringSubviewToFront(flashButton)
+        self.bringSubviewToFront(flashLabel)
+        self.bringSubviewToFront(toggleCameraButton)
+        
+        if (showMicrophoneButton) {
+            self.bringSubviewToFront(microphoneButton)
+        }
+    }
+    
     func toggleCameraButtonTapped() {
         self.delegate?.cameraView(self, cameraAvailable: false)
         self.toggleCameraButton.enabled = false
-        
+
         dispatch_async(self.sessionQueue, { () -> Void in
             var currentVideoDevice = self.videoDeviceInput.device
             var preferredPosition = AVCaptureDevicePosition.Unspecified
@@ -360,6 +441,23 @@ class CameraView : UIView {
                 self.session.addInput(self.videoDeviceInput)
             }
             
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if (self.showingFrontCamera) {
+                    UIView.transitionFromView(self.frontCameraButtonView, toView: self.backCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromRight, completion: { (finished) -> Void in
+                        self.frontCameraButtonView.alpha = 0
+                        self.backCameraButtonView.alpha = 1
+                        self.bringButtonsToFront()
+                    })
+                } else {
+                    UIView.transitionFromView(self.backCameraButtonView, toView: self.frontCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromLeft, completion: { (finished) -> Void in
+                        self.frontCameraButtonView.alpha = 1
+                        self.backCameraButtonView.alpha = 0
+                        self.bringButtonsToFront()
+                    })
+                }
+                self.showingFrontCamera = !self.showingFrontCamera
+            })
+            
             self.session.commitConfiguration()
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -385,6 +483,15 @@ class CameraView : UIView {
         }
         
         CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
+    }
+    
+    func microphoneButtonTapped() {
+        if (self.isMicrophoneAvailable) {
+            self.delegate?.cameraViewDidTapMicrophoneButton!(self)
+        } else {
+            var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            alertMessage.show()
+        }
     }
     
     func capturePictureWithCompletion(success: CapturePictureSuccess, fail: CapturePictureFail) {
@@ -545,8 +652,8 @@ class CameraView : UIView {
 }
 
 
-protocol CameraViewDelegate {
+@objc protocol CameraViewDelegate {
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool) // Take a picture button should be disabled
-    
+    optional func cameraViewDidTapMicrophoneButton(cameraView: CameraView)
 }

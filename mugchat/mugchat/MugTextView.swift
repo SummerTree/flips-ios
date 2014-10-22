@@ -10,18 +10,17 @@
 // the license agreement.
 //
 
-private let BUTTON_MARGIN_TOP : CGFloat = 7.0
+private let LABEL_MARGIN_TOP : CGFloat = 7.0
 private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
 
 class MugTextView : UIView {
     
-    private var mugText : MugText!
-    
-    var mugButton: UIButton!
+    var mugText : MugText!
+    var textLabel: UILabel!
     
     var hasExtrasImageView: UIImageView! // "(...)"
     var hasExtrasImage : UIImage!
-    
+
     
     // MARK: - Initialization Methods
     
@@ -35,47 +34,53 @@ class MugTextView : UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setMugText(mugText : MugText) {
+        self.mugText = mugText
+        initSubviews()
+    }
+    
     func initSubviews() {
-        mugButton = UIButton()
-        //TODO: story 7584
-        //mugButton.addTarget(self, action: "mugButtonTapped:", forControlEvents: .TouchUpInside)
-        mugButton.layer.borderWidth = 1.0
-        mugButton.layer.borderColor = UIColor.avacado().CGColor
-        mugButton.layer.cornerRadius = 14.0
-        mugButton.setTitle(self.mugText.text, forState: UIControlState.Normal)
-        mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        mugButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        self.addSubview(mugButton)
+        self.backgroundColor = UIColor.clearColor()
+        
+        textLabel = UILabel()
+        textLabel.layer.borderWidth = 1.0
+        textLabel.layer.borderColor = UIColor.avacado().CGColor
+        textLabel.layer.cornerRadius = 14.0
+        textLabel.textAlignment = NSTextAlignment.Center
+        textLabel.text = self.mugText.text
+        textLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        textLabel.textColor = UIColor.blackColor()
+        textLabel.sizeToFit()
+        self.addSubview(textLabel)
         
         var status : MugState = self.mugText.state
         switch status {
         case MugState.Default:
-            mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.whiteColor()
+            textLabel.textColor = UIColor.blackColor()
+            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
         case MugState.AssociatedImageOrVideo:
-            mugButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.whiteColor()
+            textLabel.textColor = UIColor.blackColor()
+            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
             addExtrasImage()
         case MugState.AssociatedWord:
-            mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.avacado()
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
         case MugState.AssociatedImageOrVideoWithAdditionalResources:
-            mugButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-            mugButton.backgroundColor = UIColor.avacado()
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             addExtrasImage()
         }
         
         initConstraints()
     }
     
-    private func addExtrasImage() {
+   private func addExtrasImage() {
         hasExtrasImageView = UIImageView()
         hasExtrasImage = UIImage(named: "mug_options")
         hasExtrasImageView.image = hasExtrasImage
@@ -83,8 +88,8 @@ class MugTextView : UIView {
     }
     
     private func initConstraints() {
-        mugButton.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(BUTTON_MARGIN_TOP)
+        textLabel.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(LABEL_MARGIN_TOP)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -106,5 +111,4 @@ class MugTextView : UIView {
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
     }
-    
 }
