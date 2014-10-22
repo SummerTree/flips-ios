@@ -29,6 +29,8 @@
 @dynamic pubnubID;
 @dynamic userID;
 @dynamic username;
+@dynamic isContact;
+@dynamic isMugChatUser;
 @dynamic contacts;
 @dynamic devices;
 @dynamic mugs;

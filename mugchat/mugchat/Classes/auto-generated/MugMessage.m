@@ -12,14 +12,17 @@
 
 #import "MugMessage.h"
 #import "Mug.h"
+#import "Room.h"
 #import "User.h"
 
 
 @implementation MugMessage
 
 @dynamic notRead;
-@dynamic sentDate;
+@dynamic createdAt;
+@dynamic receivedAt;
 @dynamic from;
 @dynamic mugs;
+@dynamic room;
 
 @end

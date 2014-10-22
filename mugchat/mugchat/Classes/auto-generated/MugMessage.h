@@ -13,14 +13,16 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Mug, User;
+@class Mug, Room, User;
 
 @interface MugMessage : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * notRead;
-@property (nonatomic, retain) NSDate * sentDate;
+@property (nonatomic, retain) NSDate * createdAt;
+@property (nonatomic, retain) NSDate * receivedAt;
 @property (nonatomic, retain) User *from;
 @property (nonatomic, retain) NSSet *mugs;
+@property (nonatomic, retain) Room *room;
 @end
 
 @interface MugMessage (CoreDataGeneratedAccessors)

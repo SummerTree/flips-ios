@@ -27,6 +27,8 @@
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * isContact;
+@property (nonatomic, retain) NSNumber * isMugChatUser;
 @property (nonatomic, retain) NSOrderedSet *contacts;
 @property (nonatomic, retain) NSSet *devices;
 @property (nonatomic, retain) NSSet *mugs;

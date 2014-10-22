@@ -22,6 +22,8 @@ private let PUBNUB_ID = "pubnubId"
 
 private let USER_ID_ATTRIBUTE = "userID"
 
+public typealias UserSyncFinished = (Bool, NSError?) -> Void
+
 class UserDataSource : BaseDataSource {
     
     // MARK: - CoreData Creator Methods
@@ -90,10 +92,56 @@ class UserDataSource : BaseDataSource {
         return user!
     }
     
+    func syncUserData(callback: UserSyncFinished) {
+        println("mugsJSON: \(mugsJSON)")
+        // TODO: sync my mugs with API
+
+        var mug   = Mug.createEntity() as Mug
+        mug.mugID = "2"
+        mug.word = "I"
+        mug.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/09212b08-2904-4576-a93d-d686e9a3cba1.jpg"
+        mug.owner = User.loggedUser()
+        mug.isPrivate = true
+    
+    
+        
+        // TODO: sync my contacts with API
+        var user: User! = User.MR_createEntity() as User
+        user.userID = "138"
+        user.firstName = "Bruno"
+        user.lastName = "Brüggemann"
+        User.loggedUser()?.addContactsObject(user)
+        
+        var user2: User! = User.MR_createEntity() as User
+        user2.userID = "138"
+        user2.firstName = "Fernando"
+        user2.lastName = "Ghisi"
+        User.loggedUser()?.addContactsObject(user2)
+        
+        // TODO: sync my rooms with API
+        for roomJson in roomsJSON["rooms"] {
+            println("roomJson: \(roomJson)")
+            println(" ")
+        }
+        
+        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
+        
+        callback(true, nil)
+    }
     
     // MARK: - Private Getters Methods
     
     private func getUserById(id: String) -> User? {
         return User.findFirstByAttribute(USER_ID_ATTRIBUTE, withValue: id) as? User
     }
+    
+    
+    /// JUST FOR TEST. IT WILL BE REMOVED
+    
+    let mugsJSON: JSON = JSON("{\"owner\": 8,        \"word\": \"I\",        \"backgroundURL\": \"https://s3.amazonaws.com/mugchat-pictures/09212b08-2904-4576-a93d-d686e9a3cba1.jpg\",\"soundURL\": null,        \"isPrivate\": true,        \"category\": null,        \"id\": 2,        \"createdAt\": \"2014-10-10T14:25:15.000Z\",        \"updatedAt\": \"2014-10-10T14:25:15.000Z\"}, {    \"owner\": 8,    \"word\": \"love\",    \"backgroundURL\": \"https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg\",    \"soundURL\": null,    \"isPrivate\": true,    \"category\": null,    \"id\": 3,    \"createdAt\": \"2014-10-10T14:26:17.000Z\",    \"updatedAt\": \"2014-10-10T14:26:17.000Z\"}, {    \"owner\": 8,    \"word\": \"Mugchat\",    \"backgroundURL\": \"https://s3.amazonaws.com/mugchat-pictures/Screen+Shot+2014-10-10+at+11.27.00+AM.png\",    \"soundURL\": null,    \"isPrivate\": true,    \"category\": null,    \"id\":4,    \"createdAt\": \"2014-10-10T14:28:30.000Z\",    \"updatedAt\": \"2014-10-10T14:28:30.000Z\"}")
+    
+    let roomsJSON = JSON("{        'rooms': [{        'name': 'test',        'admin': 8,        'pubnubId': '',        'id': '1',        'createdAt': '2014-10-10T16:02:29.000Z',        'updatedAt': '2014-10-10T16:02:29.000Z',        'participants': [{        'userID': 8}, {    'userID': 138}, {    'userID': 23}]}]}")
+
+    let contactsJSON = JSON("\"contacts\": [{        \"owner\": 8,        \"firstName\" : \"Bruno\",        \"lastName\" : \"Brüggemann\",        \"isMugChatUserWithId\" : 138,        \"createdAt\" : \"2014-10-09T16:02:29.000Z\",        \"updatedAt\" : \"2014-10-09T16:02:29.000Z\"}, {    \"owner\": 8,    \"firstName\" : \"Fernando\",    \"lastName\" : \"Ghisi\",    \"isMugChatUserWithId\" : 23,    \"createdAt\" : \"2014-10-10T16:02:29.000Z\",    \"updatedAt\" : \"2014-10-10T16:02:29.000Z\"}]")
+
 }

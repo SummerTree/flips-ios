@@ -20,14 +20,15 @@ private let CONTENT = "content"
 
 class MugMessageDataSource : BaseDataSource {
     
-    func createEntityWithJson(json: JSON) -> MugMessage {
+    private func createEntityWithJson(json: JSON) -> MugMessage {
         let userDataSource = UserDataSource()
         
         var entity: MugMessage! = MugMessage.createEntity() as MugMessage
         
         entity.from = userDataSource.retrieveUserWithId(json[FROM].stringValue)
 //        entity.from = User.createEntityWithId(json[FROM].stringValue)
-        
+        entity.notRead = true
+        entity.receivedAt = NSDate()
         // TODO:
         //        var mugs = [Mug]()
         //        var sender = json[MessageParams.SENDER].stringValue
@@ -42,5 +43,12 @@ class MugMessageDataSource : BaseDataSource {
         self.save()
         
         return entity
+    }
+    
+    func createMugMessageIfNotExistWithJson(json: JSON) -> MugMessage {
+        
+        var mugMessage = self.createEntityWithJson(json)
+        
+        return mugMessage
     }
 }

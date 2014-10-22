@@ -61,15 +61,30 @@ public class PubNubService: MugchatService, PNDelegate {
     }
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
-        println("Did receive message. Forwading it to delegate.")
+//        println("Did receive message. Forwading it to delegate.")
+//        println("pnMessage.channel.name: \(pnMessage.channel.name)")
+//        println("pnMessage.channel.participants: \(pnMessage.channel.participants)")
+//        println("pnMessage.date: \(pnMessage.date)")
+//        println("pnMessage.receiveDate: \(pnMessage.receiveDate)")
+//        PubNub.requestFullHistoryForChannel(pnMessage.channel, withCompletionBlock: { (anyObject, pnChannel, date, date2, error) -> Void in
+//            println("anyObject: \(anyObject)")
+//            println("pnChannel: \(pnChannel)")
+//            println("date: \(date)")
+//            println("date2: \(date2)")
+//            println("error: \(error)")
+//        })
+        
+        
         var messageJSON: JSON = JSON(pnMessage.message)
 //        let mugMessage = MugMessage(json: message)
-        let mugMessageDataSource = MugMessageDataSource()
-        let mugMessage = mugMessageDataSource.createEntityWithJson(messageJSON)
-        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
+//        let mugMessageDataSource = MugMessageDataSource()
+//        let mugMessage = mugMessageDataSource.createEntityWithJson(messageJSON)
+        self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, channelName: pnMessage.channel.name)
     }
 }
 
 protocol PubNubServiceDelegate {
-    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!)
+    
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, channelName: String)
+    
 }

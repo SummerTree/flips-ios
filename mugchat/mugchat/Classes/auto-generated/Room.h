@@ -13,7 +13,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class User;
+@class MugMessage, User;
 
 @interface Room : NSManagedObject
 
@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSString * roomID;
 @property (nonatomic, retain) User *admin;
 @property (nonatomic, retain) NSSet *participants;
+@property (nonatomic, retain) NSOrderedSet *mugMessages;
 @end
 
 @interface Room (CoreDataGeneratedAccessors)
@@ -31,4 +32,14 @@
 - (void)addParticipants:(NSSet *)values;
 - (void)removeParticipants:(NSSet *)values;
 
+- (void)insertObject:(MugMessage *)value inMugMessagesAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromMugMessagesAtIndex:(NSUInteger)idx;
+- (void)insertMugMessages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeMugMessagesAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInMugMessagesAtIndex:(NSUInteger)idx withObject:(MugMessage *)value;
+- (void)replaceMugMessagesAtIndexes:(NSIndexSet *)indexes withMugMessages:(NSArray *)values;
+- (void)addMugMessagesObject:(MugMessage *)value;
+- (void)removeMugMessagesObject:(MugMessage *)value;
+- (void)addMugMessages:(NSOrderedSet *)values;
+- (void)removeMugMessages:(NSOrderedSet *)values;
 @end

@@ -20,7 +20,7 @@ private struct RoomJsonParams {
 
 class RoomDataSource : BaseDataSource {
     
-    func createEntityWithJson(json: JSON) -> Room {
+    private func createEntityWithJson(json: JSON) -> Room {
         let userDataSource = UserDataSource()
         
         var entity: Room! = Room.createEntity() as Room
@@ -40,6 +40,10 @@ class RoomDataSource : BaseDataSource {
         self.save()
         
         return entity
+    }
+    
+    func createOrUpdateWithId(roomID: String, roomName: String, pubnubID: String, adminID: String, participantsIDs: [String]) {
+        
     }
     
     func retriveRoomWithName(name: String) {

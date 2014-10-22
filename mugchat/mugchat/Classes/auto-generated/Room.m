@@ -11,6 +11,7 @@
 //
 
 #import "Room.h"
+#import "MugMessage.h"
 #import "User.h"
 
 
@@ -21,5 +22,6 @@
 @dynamic roomID;
 @dynamic admin;
 @dynamic participants;
+@dynamic mugMessages;
 
 @end
