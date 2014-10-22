@@ -52,17 +52,21 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         for mugText in mugTexts {
             var mugTextView = MugTextView(mugText: mugText)
             mugTextView.sizeToFit()
+            addGestureRecognizers(mugTextView)
             scrollView.addSubview(mugTextView)
+            
             mugTextViews.append(mugTextView)
-            
-            mugTextView.userInteractionEnabled = true
-            
-            var tapGesture = UITapGestureRecognizer(target: self, action: "mugButtonTapped:")
-            mugTextView.addGestureRecognizer(tapGesture)
-            
-            var holdGesture = UILongPressGestureRecognizer(target: self, action: "mugButtonLongPress:")
-            mugTextView.addGestureRecognizer(holdGesture)
         }
+    }
+    
+    func addGestureRecognizers(mugTextView: MugTextView) {
+        mugTextView.userInteractionEnabled = true
+        
+        var tapGesture = UITapGestureRecognizer(target: self, action: "mugButtonTapped:")
+        mugTextView.addGestureRecognizer(tapGesture)
+        
+        var holdGesture = UILongPressGestureRecognizer(target: self, action: "mugButtonLongPress:")
+        mugTextView.addGestureRecognizer(holdGesture)
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
@@ -149,16 +153,15 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                         self.mugTexts.insert(mugText, atIndex: index)
                         
                         newMugTextView = MugTextView(mugText: mugText)
+                        self.addGestureRecognizers(newMugTextView)
                         self.scrollView.addSubview(newMugTextView)
                         
                         var requiredWidth = newMugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
                         var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-                        
                         newMugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
                         mugTextViewsUpdated.append(newMugTextView)
                         
                         lastMugText = newMugTextView
-                        
                         contentOffset += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
                         scrollViewWidth += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
                     }
