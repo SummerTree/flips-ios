@@ -29,7 +29,7 @@ class DeviceDataSource : BaseDataSource {
         
         var json = JSON(object)
         self.fillDevice(entity, withJson: json)
-        entity.user = userDataSource.createOrUpdateUserWithJson(json[USER])
+        entity.user = userDataSource.retrieveUserWithId(json[USER].stringValue)
 
         self.save()
         

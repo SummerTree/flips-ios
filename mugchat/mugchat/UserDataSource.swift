@@ -74,8 +74,8 @@ class UserDataSource : BaseDataSource {
             user = self.createEntityWithJson(json)
         } else {
             self.fillUser(user!, withJsonData: json)
-            self.save()
         }
+        self.save()
         
         return user!
     }
