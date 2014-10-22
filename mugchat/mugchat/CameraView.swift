@@ -355,7 +355,7 @@ class CameraView : UIView {
     
     // MARK: - Overridden Method
     
-    override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if let changes = change as? [NSString: Bool] {
             if (context == CapturingStillImageContext) {
                 if let isCapturingStillImage = changes[NSKeyValueChangeNewKey] {
@@ -511,19 +511,19 @@ class CameraView : UIView {
                     var image = UIImage(data: imageData)
                     
                     var squaredRect : CGRect
-                    if (image.size.width > image.size.height) {
-                        var cropX = (image.size.width / 2) - (image.size.height / 2)
-                        squaredRect = CGRectMake(cropX, 0, image.size.height, image.size.height)
+                    if (image!.size.width > image!.size.height) {
+                        var cropX = (image!.size.width / 2) - (image!.size.height / 2)
+                        squaredRect = CGRectMake(cropX, 0, image!.size.height, image!.size.height)
                     } else {
-                        var cropY = (image.size.height / 2) - (image.size.width / 2)
-                        squaredRect = CGRectMake(0, cropY, image.size.width, image.size.width)
+                        var cropY = (image!.size.height / 2) - (image!.size.width / 2)
+                        squaredRect = CGRectMake(0, cropY, image!.size.width, image!.size.width)
                     }
                     
-                    var squaredImage = image.cropImageToRect(squaredRect)
+                    var squaredImage = image!.cropImageToRect(squaredRect)
                     
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
                         // We need to flip the image captured by the front camera
-                        squaredImage = UIImage(CGImage: squaredImage.CGImage, scale: squaredImage.scale, orientation: UIImageOrientation.LeftMirrored)
+                        squaredImage = UIImage(CGImage: squaredImage.CGImage, scale: squaredImage.scale, orientation: UIImageOrientation.LeftMirrored)!
                     }
                     success(squaredImage)
                 } else {

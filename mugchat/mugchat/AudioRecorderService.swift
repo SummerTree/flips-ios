@@ -52,7 +52,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         format.dateFormat="yyyy-MM-dd"
         
         // TODO - which name should we use?
-        var currentFileName = "recording-\(format.stringFromDate(NSDate.date())).m4a"
+        var currentFileName = "recording-\(format.stringFromDate(NSDate())).m4a"
         println(currentFileName)
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -67,7 +67,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         
         var recordSettings = [
             AVFormatIDKey: kAudioFormatAppleLossless,
-            AVEncoderAudioQualityKey : AVAudioQuality.Max.toRaw(),
+            AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
             AVEncoderBitRateKey : 320000,
             AVNumberOfChannelsKey: 2,
             AVSampleRateKey : 44100.0

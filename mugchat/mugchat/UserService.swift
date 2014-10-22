@@ -37,7 +37,7 @@ public class UserService: MugchatService {
     
     func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNUP_URL
         let params = [
                 RequestParams.USERNAME : username,
@@ -87,7 +87,7 @@ public class UserService: MugchatService {
     
     func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNIN_URL
         let params = [RequestParams.USERNAME : username, RequestParams.PASSWORD : password]
         
@@ -110,7 +110,7 @@ public class UserService: MugchatService {
     
     func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FACEBOOK_SIGNIN_URL
 
         request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
@@ -150,7 +150,7 @@ public class UserService: MugchatService {
     
     func forgotPassword(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FORGOT_URL
         let params = [RequestParams.EMAIL : email, RequestParams.PHONE_NUMBER : phoneNumber]
         
@@ -175,7 +175,7 @@ public class UserService: MugchatService {
     
     func verifyDevice(phoneNumber: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
         let url = HOST + VERIFY_URL
         let params = [RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode]
@@ -207,7 +207,7 @@ public class UserService: MugchatService {
     
     func updatePassword(user: User, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
 
         let url = HOST + UPDATE_PASSWORD_URL
         let params = [RequestParams.EMAIL : user.username, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]

@@ -50,7 +50,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     private func initSubviews() {
-        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "tmp_homer"), showSettingsButton: true, showBuiderButton: true)
+        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "tmp_homer")!, showSettingsButton: true, showBuiderButton: true)
         navigationBar.delegate = self
         
         

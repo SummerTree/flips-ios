@@ -15,23 +15,23 @@ import Foundation
 extension UIFont {
     
     class func avenirNextUltraLight(size: CGFloat) -> UIFont {
-        return UIFont(name: "AvenirNext-UltraLight", size: size)
+        return UIFont(name: "AvenirNext-UltraLight", size: size)!
     }
     
     class func avenirNextRegular(size: CGFloat) -> UIFont {
-        return UIFont(name: "AvenirNext-Regular", size: size)
+        return UIFont(name: "AvenirNext-Regular", size: size)!
     }
     
     class func avenirNextMedium(size: CGFloat) -> UIFont {
-        return UIFont(name: "AvenirNext-Medium", size: size)
+        return UIFont(name: "AvenirNext-Medium", size: size)!
     }
     
     class func avenirNextDemiBold(size: CGFloat) -> UIFont {
-        return UIFont(name: "AvenirNext-DemiBold", size: size)
+        return UIFont(name: "AvenirNext-DemiBold", size: size)!
     }
     
     class func avenirNextBold(size: CGFloat) -> UIFont {
-        return UIFont(name: "AvenirNext-Bold", size: size)
+        return UIFont(name: "AvenirNext-Bold", size: size)!
     }
     
     struct HeadingSize {

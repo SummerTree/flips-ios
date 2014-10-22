@@ -44,7 +44,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     private func initSubviews() {
         self.backgroundColor = UIColor.deepSea()
         
-        navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto"), isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
+        navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
         navigationBar.setRightButtonEnabled(false)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
