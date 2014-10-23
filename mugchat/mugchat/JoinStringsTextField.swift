@@ -147,10 +147,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        print(self.text)
-        print("Range: \(range.location), \(range.length)")
-        
-        //For now, to simplify, the user can only type new text in the end of the text view
+        //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
         if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
             updateColorOnJoinedTexts(UIColor.blackColor())
