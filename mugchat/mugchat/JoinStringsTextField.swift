@@ -38,6 +38,23 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     func joinStrings() {
         var selectedRange: UITextRange = self.selectedTextRange!
         self.joinedTextRanges.append(selectedRange)
+
+        self.updateColorOnJoinedTexts(UIColor.mugOrange())
+    }
+    
+    func updateColorOnJoinedTexts(color: UIColor) {
+        var attributedString = NSMutableAttributedString(string:self.text)
+        
+        for joinedTextRange in joinedTextRanges {
+            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: joinedTextRange.start)
+            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: joinedTextRange.end)
+            var selectionLength : Int = posEnd - posInit
+            
+            var range = NSMakeRange(posInit, selectionLength)
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+        }
+        
+        self.attributedText = attributedString
     }
     
     func getMugTexts() -> [String] {
@@ -130,9 +147,32 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        print(self.text)
+        //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
+        //If the user removes or inserts characters changing the current text, the previously joined texts are lost
+        if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
+            updateColorOnJoinedTexts(UIColor.blackColor())
+            joinedTextRanges.removeAll(keepCapacity: false)
+        }
         
-        //TODO: handle delete (what to do when user removes part of a joined text?)
+        //handling when user changes (delete or replace) parts of a previously joined text
+        /*var deprecatedJoinedTextRange : UITextRange?
+        var index : Int = 0
+        for textRange in joinedTextRanges {
+            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
+            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
+            
+            if (range.location >= posInit && range.location < posEnd) {
+                deprecatedJoinedTextRange = textRange
+                break
+            }
+            index++
+        }
+        
+        if (deprecatedJoinedTextRange != nil) {
+            joinedTextRanges.removeAtIndex(index)
+            //If the position of this character is part of a joined text, this text should have its color changed to black again.
+            self.setColorOnTextRange(deprecatedJoinedTextRange!, color: UIColor.blackColor())
+        }*/
         
         return true
     }
