@@ -17,8 +17,6 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     private let MUG_TEXT_HEIGHT : CGFloat = 40.0
     private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
     
-    private let ITEMS_SPACING: CGFloat = 20
-    
     var scrollView: UIScrollView!
     
     private var mugTexts: [MugText]!
@@ -54,17 +52,21 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         for mugText in mugTexts {
             var mugTextView = MugTextView(mugText: mugText)
             mugTextView.sizeToFit()
+            addGestureRecognizers(mugTextView)
             scrollView.addSubview(mugTextView)
+            
             mugTextViews.append(mugTextView)
-            
-            mugTextView.userInteractionEnabled = true
-            
-            var tapGesture = UITapGestureRecognizer(target: self, action: "mugButtonTapped:")
-            mugTextView.addGestureRecognizer(tapGesture)
-            
-            var holdGesture = UILongPressGestureRecognizer(target: self, action: "mugButtonLongPress:")
-            mugTextView.addGestureRecognizer(holdGesture)
         }
+    }
+    
+    func addGestureRecognizers(mugTextView: MugTextView) {
+        mugTextView.userInteractionEnabled = true
+        
+        var tapGesture = UITapGestureRecognizer(target: self, action: "mugButtonTapped:")
+        mugTextView.addGestureRecognizer(tapGesture)
+        
+        var holdGesture = UILongPressGestureRecognizer(target: self, action: "mugButtonLongPress:")
+        mugTextView.addGestureRecognizer(holdGesture)
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
@@ -75,13 +77,13 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
             gesture.view?.alpha = 0.5
-            self.didTapMugText(gesture.view! as MugTextView)
+            self.showJoinMenuAtView(gesture.view! as MugTextView)
         } else if (gesture.state == UIGestureRecognizerState.Ended) {
             gesture.view?.alpha = 1
         }
     }
     
-    func didTapMugText(mugTextView : MugTextView!) {
+    func showJoinMenuAtView(mugTextView : MugTextView!) {
         let menuController = UIMenuController.sharedMenuController()
         
         self.tappedMugTextView = mugTextView;
@@ -98,13 +100,100 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         menuController.setMenuVisible(true, animated: true)
     }
     
-    //TODO: under construction
     func splitText() {
         let text = self.tappedMugTextView?.mugText.text
         
-        println(">>>>> splitText: \(text!)")
+        var texts: [String] = MugStringsUtil.splitMugString(text!);
         
-        //TODO
+        var mugTextView: MugTextView
+        var lastMugText: MugTextView!
+        var splitMugTextView: MugTextView!
+        
+        var foundMug: Bool = false
+        var contentOffset: CGFloat = 0.0
+        var scrollViewWidth: CGFloat = self.scrollView.contentSize.width
+        var textViewY = (CGRectGetHeight(self.frame) / 2) - (MUG_TEXT_HEIGHT / 2)
+        
+        var index = -1
+        var mugTextViewsUpdated = [MugTextView]()
+        
+        UIView.animateWithDuration(1.0, delay: 0.0, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: { () -> Void in
+            
+            for mugTextView in self.mugTextViews {
+                index++
+                mugTextViewsUpdated.append(mugTextView)
+                
+                if (mugTextView.mugText.text == text) {
+                    foundMug = true
+                    
+                    var oldMugTextViewWidth : CGFloat = mugTextView.frame.width
+                    
+                    //Update the original MugText with the first string of the splitted text
+                    mugTextView.mugText.text = texts[0]
+                    mugTextView.textLabel.text = texts[0]
+                    self.mugTexts[index].text = texts[0]
+                    
+                    //update mugTextView size to fit the smaller text
+                    var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
+                    var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
+                    mugTextView.frame = CGRectMake(mugTextView.frame.origin.x, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
+                    
+                    scrollViewWidth = scrollViewWidth - oldMugTextViewWidth + mugTextViewWidth
+                    
+                    splitMugTextView = mugTextView
+                    lastMugText = mugTextView
+                    
+                    contentOffset = lastMugText.frame.origin.x + lastMugText.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
+                    
+                    var newMugTextView : MugTextView
+                    for var i=1; i < texts.count; i++ { //creating and positioning new MugTextViews
+                        index++
+                        
+                        var mugText = MugText(mugId: self.mugTexts.count, text: texts[i], state: MugState.Default)
+                        self.mugTexts.insert(mugText, atIndex: index)
+                        
+                        newMugTextView = MugTextView(mugText: mugText)
+                        self.addGestureRecognizers(newMugTextView)
+                        self.scrollView.addSubview(newMugTextView)
+                        
+                        var requiredWidth = newMugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
+                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
+                        newMugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
+                        mugTextViewsUpdated.append(newMugTextView)
+                        
+                        lastMugText = newMugTextView
+                        contentOffset += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
+                        scrollViewWidth += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
+                    }
+                    
+                    self.scrollView.contentSize = CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)
+                } else {
+                    if (foundMug) { //texts after the split one must be moved to the right
+                        var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
+                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
+                        
+                        mugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
+                        
+                        contentOffset += mugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
+                    }
+                }
+            }
+            
+            }, completion: { (value: Bool) in
+                //Updating mugTextViews with new mugTexts
+                for var i=0; i < mugTextViewsUpdated.count; i++ {
+                    var mugTextView = mugTextViewsUpdated[i]
+                    if (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId) {
+                        self.mugTextViews.insert(mugTextView, atIndex: i)
+                    }
+                }
+                
+                self.delegate?.composeViewDidSplitMugText(self.mugTexts)
+                
+                self.centerScrollViewAtView(splitMugTextView)
+                self.delegate?.composeViewDidSelectMugText(splitMugTextView.mugText)
+            ()})
+
     }
     
     private func addConstraints() {
@@ -148,7 +237,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
             
             if (rightMargin == 0) {
                 // The last item already has his rightMargin
-                rightMargin = ITEMS_SPACING
+                rightMargin = SPACE_BETWEEN_MUG_TEXTS
             }
             contentOffset += mugTextView.frame.size.width + rightMargin
             scrollView.contentSize = CGSizeMake(contentOffset, mugTextView.frame.size.height)
@@ -273,5 +362,6 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
 protocol MugsViewDelegate {
 
     func composeViewDidSelectMugText(mugText: MugText!)
+    func composeViewDidSplitMugText(mugTexts: [MugText])
     
 }
