@@ -39,18 +39,20 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         var selectedRange: UITextRange = self.selectedTextRange!
         self.joinedTextRanges.append(selectedRange)
 
-        self.setColorOnTextRange(selectedRange, color: UIColor.mugOrange())
+        self.updateColorOnJoinedTexts(UIColor.mugOrange())
     }
     
-    func setColorOnTextRange(textRange: UITextRange, color: UIColor) {
-        var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
-        var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
-        var selectionLength : Int = posEnd - posInit
-        
-        var range = NSMakeRange(posInit, selectionLength)
-        
+    func updateColorOnJoinedTexts(color: UIColor) {
         var attributedString = NSMutableAttributedString(string:self.text)
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+        
+        for joinedTextRange in joinedTextRanges {
+            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: joinedTextRange.start)
+            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: joinedTextRange.end)
+            var selectionLength : Int = posEnd - posInit
+            
+            var range = NSMakeRange(posInit, selectionLength)
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+        }
         
         self.attributedText = attributedString
     }
@@ -148,15 +150,21 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         print(self.text)
         print("Range: \(range.location), \(range.length)")
         
+        //For now, to simplify, the user can only type new text in the end of the text view
+        //If the user removes or inserts characters changing the current text, the previously joined texts are lost
+        if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
+            updateColorOnJoinedTexts(UIColor.blackColor())
+            joinedTextRanges.removeAll(keepCapacity: false)
+        }
+        
         //handling when user changes (delete or replace) parts of a previously joined text
-        var deprecatedJoinedTextRange : UITextRange?
+        /*var deprecatedJoinedTextRange : UITextRange?
         var index : Int = 0
         for textRange in joinedTextRanges {
             var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
             var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
             
             if (range.location >= posInit && range.location < posEnd) {
-                print("Deleting part of joined text")
                 deprecatedJoinedTextRange = textRange
                 break
             }
@@ -167,7 +175,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
             joinedTextRanges.removeAtIndex(index)
             //If the position of this character is part of a joined text, this text should have its color changed to black again.
             self.setColorOnTextRange(deprecatedJoinedTextRange!, color: UIColor.blackColor())
-        }
+        }*/
         
         return true
     }
