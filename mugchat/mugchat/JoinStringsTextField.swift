@@ -12,7 +12,7 @@
 
 class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
-    var joinedTextRanges : [UITextRange] = [UITextRange]()
+    var joinedTextRanges : [NSRange] = [NSRange]()
     
     override init() {
         super.init()
@@ -36,8 +36,14 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     }
     
     func joinStrings() {
-        var selectedRange: UITextRange = self.selectedTextRange!
-        self.joinedTextRanges.append(selectedRange)
+        var selectedTextRange: UITextRange = self.selectedTextRange!
+        
+        var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
+        var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
+        var selectionLength : Int = posEnd - posInit
+        var joinedTextRange = NSMakeRange(posInit, selectionLength)
+        
+        self.joinedTextRanges.append(joinedTextRange)
 
         self.updateColorOnJoinedTexts(UIColor.mugOrange())
     }
@@ -46,14 +52,15 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         var attributedString = NSMutableAttributedString(string:self.text)
         
         for joinedTextRange in joinedTextRanges {
-            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: joinedTextRange.start)
-            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: joinedTextRange.end)
-            var selectionLength : Int = posEnd - posInit
-            
-            var range = NSMakeRange(posInit, selectionLength)
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: joinedTextRange)
         }
         
+        self.attributedText = attributedString
+    }
+    
+    func resetTextColor() {
+        var attributedString = NSMutableAttributedString(string:self.text)
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
         self.attributedText = attributedString
     }
     
@@ -97,8 +104,8 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
     func isPartOfJoinedTextRanges(charIndex: Int) -> Bool {
         for textRange in self.joinedTextRanges {
-            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
-            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
+            var posInit : Int = textRange.location
+            var posEnd : Int = textRange.location + textRange.length
             if (posInit <= charIndex && charIndex < posEnd) {
                 return true
             }
@@ -150,7 +157,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
         if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
-            updateColorOnJoinedTexts(UIColor.blackColor())
+            self.resetTextColor()
             joinedTextRanges.removeAll(keepCapacity: false)
         }
         
@@ -158,8 +165,8 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         /*var deprecatedJoinedTextRange : UITextRange?
         var index : Int = 0
         for textRange in joinedTextRanges {
-            var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.start)
-            var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: textRange.end)
+            var posInit : Int = textRange.location
+            var posEnd : Int = textRange.location + textRange.length
             
             if (range.location >= posInit && range.location < posEnd) {
                 deprecatedJoinedTextRange = textRange
