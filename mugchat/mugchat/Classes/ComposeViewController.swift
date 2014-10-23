@@ -38,6 +38,7 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.composeView.viewWillAppear()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -131,7 +132,7 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        composeView.setPicture(image)
+        composeView.setPicture(image.cropImageInCenter())
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -139,6 +140,7 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     // MARK: - Audio Recorder Service Delegate
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL fileURL: NSURL?, success: Bool!) {
-        audioRecorderService.playLastRecordedAudio()
+        let confirmFlipViewController = ConfirmFlipViewController(flipPicture: self.composeView.getMugImageView().image!, flipWord: self.composeView.getMugWord())
+        self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
     }
 }
