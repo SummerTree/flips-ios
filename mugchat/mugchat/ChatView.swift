@@ -104,7 +104,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         replyTextField = JoinStringsTextField()
         replyTextField.hidden = true
-        replyTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Type your message here", comment: "Type your message here"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        replyTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        //replyTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Type your message here", comment: "Type your message here"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         replyView.addSubview(replyTextField)
         
         nextButton = UIButton()
@@ -155,8 +156,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyTextField.mas_makeConstraints( { (make) in
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
-            make.top.equalTo()(self.replyView)
-            make.bottom.equalTo()(self.replyView)
+            make.centerY.equalTo()(self.replyView)
+            make.height.equalTo()(self.getTextHeight())
+            
+            //make.top.equalTo()(self.replyView) //TODO: ver hight correto pra duas linhas da fonte a ser utilizada
+            //make.bottom.equalTo()(self.replyView)
         })
         
         nextButton.mas_makeConstraints( { (make) in
@@ -166,6 +170,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.width.equalTo()(self.nextButton.frame.width)
         })
         
+    }
+    
+    func getTextHeight() -> CGFloat{
+        let myString: NSString = self.replyTextField.text as NSString
+        var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
+        return size.height * 2 + 5
     }
     
     

@@ -10,13 +10,13 @@
 // the license agreement.
 //
 
-class JoinStringsTextField : UITextField, UITextFieldDelegate {
+class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     var joinedTextRanges : [NSRange] = [NSRange]()
     
     override init() {
-        super.init()
-        self.delegate = self
+        //super.init()
+        //self.delegate = self
         
         let menuController = UIMenuController.sharedMenuController()
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
@@ -25,10 +25,16 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         menuController.update();
         
         menuController.setMenuVisible(true, animated: true)
+        
+        super.init(frame: CGRectMake(0,0,0,0), textContainer: nil)
+        
+        self.delegate = self
+        
+        //self.backgroundColor = UIColor.redColor()
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, textContainer: NSTextContainer!) {
+        super.init(frame: frame, textContainer: textContainer)
     }
     
     required init(coder: NSCoder) {
@@ -153,6 +159,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         return super.canPerformAction(action, withSender: sender)
     }
     
+    //func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
