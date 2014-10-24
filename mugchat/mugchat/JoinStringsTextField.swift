@@ -66,6 +66,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     func resetTextColor() {
         var attributedString = NSMutableAttributedString(string:self.text)
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
         self.attributedText = attributedString
     }
@@ -159,8 +160,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return super.canPerformAction(action, withSender: sender)
     }
     
-    //func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
         if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
