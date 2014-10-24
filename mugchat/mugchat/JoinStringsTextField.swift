@@ -15,20 +15,11 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     var joinedTextRanges : [NSRange] = [NSRange]()
     
     override init() {
-        //super.init()
-        //self.delegate = self
-        
-        let menuController = UIMenuController.sharedMenuController()
-        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
-        menuController.menuItems = NSArray(array: [lookupMenu])
-        
-        menuController.update();
-        
-        menuController.setMenuVisible(true, animated: true)
-        
-        super.init(frame: CGRectMake(0,0,0,0), textContainer: nil)
+        super.init(frame: CGRect.zeroRect, textContainer: nil)
         
         self.delegate = self
+        
+        self.setUpMenu()
         
         //self.backgroundColor = UIColor.redColor()
     }
@@ -39,6 +30,14 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setUpMenu() {
+        let menuController = UIMenuController.sharedMenuController()
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
+        menuController.menuItems = NSArray(array: [lookupMenu])
+        menuController.update();
+        menuController.setMenuVisible(true, animated: true)
     }
     
     func joinStrings() {
