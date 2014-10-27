@@ -14,14 +14,14 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     var joinedTextRanges : [NSRange] = [NSRange]()
     
+    var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
+    
     override init() {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
         
         self.delegate = self
         
         self.setUpMenu()
-        
-        //self.backgroundColor = UIColor.redColor()
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer!) {
@@ -160,6 +160,15 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return super.canPerformAction(action, withSender: sender)
     }
     
+    func textViewDidChange(textView: UITextView) {
+        var currentFrameHeight: CGFloat = self.frame.size.height;
+        var neededFrameHeight = self.contentSize.height;
+
+        if (neededFrameHeight != currentFrameHeight) {
+            joinStringsTextFieldDelegate?.joinStringsTextFieldNeedsToHaveItsHeightUpdated(self)
+        }
+    }
+    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
@@ -191,4 +200,12 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return true
     }
     
+}
+
+// MARK: - View Delegate
+
+protocol JoinStringsTextFieldDelegate {
+    
+    func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
+
 }
