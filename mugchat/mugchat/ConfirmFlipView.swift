@@ -128,6 +128,17 @@ public class ConfirmFlipView : UIView {
     func acceptButtonTapped() {
         self.delegate?.confirmFlipViewDidTapAcceptButton(self)
     }
+    
+    
+    // MARK: - Getters
+    
+    func getWord() -> String! {
+        return self.flipWordLabel.text
+    }
+    
+    func getImage() -> UIImage! {
+        return self.flipImageView.image
+    }
 }
 
 protocol ConfirmFlipViewDelegate {

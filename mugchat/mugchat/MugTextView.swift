@@ -59,32 +59,37 @@ class MugTextView : UIView {
         textLabel.sizeToFit()
         self.addSubview(textLabel)
         
-        var status : MugState = self.mugText.state
-        switch status {
-        case MugState.Default:
-            textLabel.textColor = UIColor.blackColor()
-            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
-        case MugState.AssociatedImageOrVideo:
-            textLabel.textColor = UIColor.blackColor()
-            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
-            addExtrasImage()
-        case MugState.AssociatedWord:
-            textLabel.textColor = UIColor.whiteColor()
-            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
-        case MugState.AssociatedImageOrVideoWithAdditionalResources:
-            textLabel.textColor = UIColor.whiteColor()
-            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
-            addExtrasImage()
-        }
-        
-        initConstraints()
-    }
-    
-   private func addExtrasImage() {
         hasExtrasImageView = UIImageView()
+        hasExtrasImageView.alpha = 0.0
         hasExtrasImage = UIImage(named: "mug_options")
         hasExtrasImageView.image = hasExtrasImage
         self.addSubview(self.hasExtrasImageView)
+
+        initConstraints()
+    }
+    
+    override func layoutSubviews() {
+        var status : MugState = self.mugText.state
+        switch status {
+        case MugState.NewWord:
+            textLabel.textColor = UIColor.blackColor()
+            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
+            hasExtrasImageView.alpha = 0.0
+        case MugState.NotAssociatedWithResources:
+            textLabel.textColor = UIColor.blackColor()
+            textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
+            hasExtrasImageView.alpha = 1.0
+        case MugState.AssociatedWithoutOtherResources:
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
+            hasExtrasImageView.alpha = 0.0
+        case MugState.AssociatedWithOtherResources:
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.backgroundColor = UIColor.avacado().CGColor
+            hasExtrasImageView.alpha = 1.0
+        }
+
+        super.layoutSubviews()
     }
     
     private func initConstraints() {
