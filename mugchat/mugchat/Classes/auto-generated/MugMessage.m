@@ -18,8 +18,9 @@
 
 @implementation MugMessage
 
-@dynamic notRead;
 @dynamic createdAt;
+@dynamic deleted;
+@dynamic notRead;
 @dynamic receivedAt;
 @dynamic from;
 @dynamic mugs;

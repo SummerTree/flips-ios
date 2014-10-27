@@ -10,21 +10,19 @@
 // the license agreement.
 //
 
-#import "Mug.h"
-#import "MugMessage.h"
+#import "Contact.h"
 #import "User.h"
 
 
-@implementation Mug
+@implementation Contact
 
-@dynamic backgroundURL;
-@dynamic category;
-@dynamic deleted;
-@dynamic isPrivate;
-@dynamic mugID;
-@dynamic soundURL;
-@dynamic word;
-@dynamic messages;
-@dynamic owner;
+@dynamic contactID;
+@dynamic createdAt;
+@dynamic firstName;
+@dynamic lastName;
+@dynamic phoneNumber;
+@dynamic phoneType;
+@dynamic updatedAt;
+@dynamic contactUser;
 
 @end

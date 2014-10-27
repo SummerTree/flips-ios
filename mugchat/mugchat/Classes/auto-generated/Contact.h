@@ -15,13 +15,15 @@
 
 @class User;
 
-@interface Device : NSManagedObject
+@interface Contact : NSManagedObject
 
-@property (nonatomic, retain) NSString * deviceID;
-@property (nonatomic, retain) NSNumber * isVerified;
-@property (nonatomic, retain) NSString * platform;
-@property (nonatomic, retain) NSNumber * retryCount;
-@property (nonatomic, retain) NSString * uuid;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, retain) NSString * contactID;
+@property (nonatomic, retain) NSDate * createdAt;
+@property (nonatomic, retain) NSString * firstName;
+@property (nonatomic, retain) NSString * lastName;
+@property (nonatomic, retain) NSString * phoneNumber;
+@property (nonatomic, retain) NSString * phoneType;
+@property (nonatomic, retain) NSDate * updatedAt;
+@property (nonatomic, retain) User *contactUser;
 
 @end

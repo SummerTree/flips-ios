@@ -17,20 +17,17 @@
 
 @interface Room : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSDate * lastMessageReceivedAt;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * roomID;
 @property (nonatomic, retain) User *admin;
-@property (nonatomic, retain) NSSet *participants;
 @property (nonatomic, retain) NSOrderedSet *mugMessages;
+@property (nonatomic, retain) NSSet *participants;
 @end
 
 @interface Room (CoreDataGeneratedAccessors)
-
-- (void)addParticipantsObject:(User *)value;
-- (void)removeParticipantsObject:(User *)value;
-- (void)addParticipants:(NSSet *)values;
-- (void)removeParticipants:(NSSet *)values;
 
 - (void)insertObject:(MugMessage *)value inMugMessagesAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromMugMessagesAtIndex:(NSUInteger)idx;
@@ -42,4 +39,9 @@
 - (void)removeMugMessagesObject:(MugMessage *)value;
 - (void)addMugMessages:(NSOrderedSet *)values;
 - (void)removeMugMessages:(NSOrderedSet *)values;
+- (void)addParticipantsObject:(User *)value;
+- (void)removeParticipantsObject:(User *)value;
+- (void)addParticipants:(NSSet *)values;
+- (void)removeParticipants:(NSSet *)values;
+
 @end

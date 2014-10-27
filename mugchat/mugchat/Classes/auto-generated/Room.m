@@ -17,11 +17,13 @@
 
 @implementation Room
 
+@dynamic deleted;
+@dynamic lastMessageReceivedAt;
 @dynamic name;
 @dynamic pubnubID;
 @dynamic roomID;
 @dynamic admin;
-@dynamic participants;
 @dynamic mugMessages;
+@dynamic participants;
 
 @end
