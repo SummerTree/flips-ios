@@ -24,8 +24,8 @@ class MugText { //Temporary data structure
 }
 
 enum MugState {
-    case Default
-    case AssociatedWord
-    case AssociatedImageOrVideo
-    case AssociatedImageOrVideoWithAdditionalResources
+    case NewWord
+    case AssociatedWithoutOtherResources
+    case NotAssociatedWithResources
+    case AssociatedWithOtherResources
 }

@@ -14,6 +14,8 @@ import Foundation
 
 class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
+    var delegate: ConfirmFlipViewControllerDelegate?
+    
     private var confirmFlipView: ConfirmFlipView!
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
@@ -80,10 +82,14 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
+        let mugDataSource = MugDataSource()
+        let newMug = mugDataSource.createMugWithWord(flipView.getWord(), backgroundURL: "http://no-image-yet.jpg", soundURL: "http://no-sound-yet.m4a")
+        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: newMug)
         self.navigationController?.popViewControllerAnimated(false)
     }
     
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!) {
+        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
         self.navigationController?.popViewControllerAnimated(false)
     }
     
@@ -97,4 +103,8 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         
         self.isPlaying = !self.isPlaying
     }
+}
+
+protocol ConfirmFlipViewControllerDelegate {
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, mug: Mug?)
 }
