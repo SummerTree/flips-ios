@@ -25,6 +25,9 @@ struct MugAttributes {
     static let WORD = "word"
 }
 
+public typealias CreateMugSuccess = (Mug) -> Void
+public typealias CreateMugFail = (String) -> Void
+
 class MugDataSource : BaseDataSource {
     
     private func createEntityWithJson(json: JSON) -> Mug {
@@ -63,16 +66,14 @@ class MugDataSource : BaseDataSource {
         return mug!
     }
     
-    func createMugWithWord(word: String, backgroundURL: String, soundURL: String?) -> Mug {
-        var mug: Mug! = Mug.createEntity() as Mug
-        mug.word = word
-        mug.backgroundURL = backgroundURL
-        mug.soundURL = soundURL
-        
-        // TODO: send to server to get mugID
-        // Not saving yet
-        
-        return mug
+    func createMugWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+        let mugService = MugService()
+        mugService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (mug) -> Void in
+            createMugSuccess(mug)
+        }) { (mugError) -> Void in
+            var message = mugError?.error as String!
+            createMugFail(message)
+        }
     }
     
     func retrieveMugWithId(id: String) -> Mug {
