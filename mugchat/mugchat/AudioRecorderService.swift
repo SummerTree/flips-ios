@@ -13,7 +13,7 @@
 import AVFoundation
 
 public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
-
+    
     private var recorder: AVAudioRecorder!
     private var player: AVAudioPlayer!
     private var soundFileURL:NSURL?
@@ -52,7 +52,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         format.dateFormat="yyyy-MM-dd"
         
         // TODO - which name should we use?
-        var currentFileName = "recording-\(format.stringFromDate(NSDate.date())).m4a"
+        var currentFileName = "recording-\(format.stringFromDate(NSDate())).m4a"
         println(currentFileName)
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)

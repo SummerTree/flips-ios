@@ -42,6 +42,19 @@ extension UIImage {
         return croppedImage
     }
     
+    func cropImageInCenter() -> UIImage {
+        var squaredRect : CGRect
+        if (self.size.width > self.size.height) {
+            var cropX = (self.size.width / 2) - (self.size.height / 2)
+            squaredRect = CGRectMake(cropX, 0, self.size.height, self.size.height)
+        } else {
+            var cropY = (self.size.height / 2) - (self.size.width / 2)
+            squaredRect = CGRectMake(0, cropY, self.size.width, self.size.width)
+        }
+        
+        return self.cropImageToRect(squaredRect)
+    }
+    
     func resizedImageWithWidth(width: CGFloat, andHeight height: CGFloat) -> UIImage {
         var newSize = CGSizeMake(width, height)
         var widthRatio = newSize.width / self.size.width
