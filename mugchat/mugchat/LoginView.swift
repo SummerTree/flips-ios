@@ -239,6 +239,9 @@ class LoginView : UIView, UITextFieldDelegate {
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         passwordTextField.secureTextEntry = true
+        #if DEBUG
+        passwordTextField.text = "Password1"
+        #endif
         passwordTextField.attributedPlaceholder = NSAttributedString(string:NSLocalizedString("Password", comment: "Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
         credentialsView.addSubview(passwordTextField)
         

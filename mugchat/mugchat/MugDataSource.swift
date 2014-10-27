@@ -19,18 +19,107 @@ private struct MugJsonParams {
     static let SOUND_URL = "soundURL"
 }
 
+struct MugAttributes {
+    static let MUG_ID = "mugID"
+    static let MUG_OWNER = "owner"
+    static let WORD = "word"
+}
+
 class MugDataSource : BaseDataSource {
     
-    func createEntityWithJson(json: JSON) -> Mug {
+    private func createEntityWithJson(json: JSON) -> Mug {
         var entity: Mug! = Mug.createEntity() as Mug
-        
-        entity.mugID = json[MugJsonParams.ID].stringValue
-        entity.word = json[MugJsonParams.WORD].stringValue
-        entity.backgroundURL = json[MugJsonParams.BACKGROUND_URL].stringValue
-        entity.soundURL = json[MugJsonParams.SOUND_URL].stringValue
-        
+        self.fillMug(entity, withJsonData: json)
         self.save()
         
         return entity
+    }
+    
+    private func fillMug(mug: Mug, withJsonData json: JSON) {
+        if (mug.mugID != json[MugJsonParams.ID].stringValue) {
+            println("Possible error. Will update mug id from (\(mug.mugID)) to (\(json[MugJsonParams.ID].stringValue))")
+        }
+        
+        mug.mugID = json[MugJsonParams.ID].stringValue
+        mug.word = json[MugJsonParams.WORD].stringValue
+        mug.backgroundURL = json[MugJsonParams.BACKGROUND_URL].stringValue
+        mug.soundURL = json[MugJsonParams.SOUND_URL].stringValue
+    }
+    
+    
+    // MARK: - Public Methods
+    
+    func createOrUpdateMugsWithJson(json: JSON) -> Mug {
+        var mugID = json[MugJsonParams.ID].stringValue
+        var mug = self.getMugById(mugID)
+        
+        if (mug == nil) {
+            mug = self.createEntityWithJson(json)
+        } else {
+            self.fillMug(mug!, withJsonData: json)
+            self.save()
+        }
+        
+        return mug!
+    }
+    
+    func createMugWithWord(word: String, backgroundURL: String, soundURL: String?) -> Mug {
+        var mug: Mug! = Mug.createEntity() as Mug
+        mug.word = word
+        mug.backgroundURL = backgroundURL
+        mug.soundURL = soundURL
+        
+        // TODO: send to server to get mugID
+        // Not saving yet
+        
+        return mug
+    }
+    
+    func retrieveMugWithId(id: String) -> Mug {
+        var mug = self.getMugById(id)
+        
+        if (mug == nil) {
+            println("Mug (\(id)) not found in the database and it mustn't happen. Check why it wasn't added to database yet.")
+        }
+        
+        return mug!
+    }
+    
+    func getMyMugs() -> [Mug] {
+        return Mug.findAllSortedBy(MugAttributes.MUG_ID, ascending: true, withPredicate: NSPredicate(format: "(\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))")) as [Mug]
+    }
+    
+    func getMyMugsForWord(word: String) -> [Mug] {
+        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@))", word)) as [Mug]
+    }
+    
+    func getMyMugsForWords(words: [String]) -> Dictionary<String, [Mug]> {
+        var resultDictionary = Dictionary<String, [Mug]>()
+        
+        if (words.count == 0) {
+            return resultDictionary
+        }
+        
+        for word in words {
+            resultDictionary[word] = Array<Mug>()
+            
+            // I didn't find a way to use a NSPredicate case-insensitive with an IN clause
+            // I've tried in many diffent ways with NSPredicate or NSCompoundPredicate, but none of it worked and for some of it returned an weird error about a selector not found.
+            // The error happened when I tried to use: NSPredicate(format: <#String#>, argumentArray: <#[AnyObject]?#>)
+            // Error: swift predicate reason: '-[Swift._NSContiguousString countByEnumeratingWithState:objects:count:]: unrecognized selector
+            var mugs = self.getMyMugsForWord(word)
+            for mug in mugs {
+                resultDictionary[word]?.append(mug)
+            }
+        }
+        
+        return resultDictionary
+    }
+
+    
+    // MARK: - Private Getters Methods
+    
+    private func getMugById(id: String) -> Mug? {
+        return Mug.findFirstByAttribute(MugAttributes.MUG_ID, withValue: id) as? Mug
     }
 }

@@ -34,6 +34,9 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         splashScreenView.delegate = self
         
         self.view = splashScreenView
+
+        // TODO: Only for tests. Cleaning the data. It will be removed later.
+        CoreDataHandler.sharedInstance.resetDatabase()
     }
     
     
@@ -46,8 +49,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
             UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
                 success: { (user) -> Void in
                     AuthenticationHelper.sharedInstance.userInSession = user as User
-                    self.openInboxViewController()
                     
+                    var userDataSource = UserDataSource()
+                    userDataSource.syncUserData({ (success, error) -> Void in
+                        if (success) {
+                            self.openInboxViewController()
+                        }
+                    })
                 }, failure: { (mugError) -> Void in
                     println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
                     var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
@@ -61,7 +69,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         var loggedUser = User.loggedUser()
         if (loggedUser != nil) {
             AuthenticationHelper.sharedInstance.userInSession = loggedUser
-            self.openInboxViewController()
+            var userDataSource = UserDataSource()
+            userDataSource.syncUserData({ (success, error) -> Void in
+                if (success) {
+                    self.openInboxViewController()
+                }
+            })
         } else {
             openLoginViewController()
         }

@@ -33,5 +33,6 @@
 #import "Room.h"
 #import "Mug.h"
 #import "MugMessage.h"
+#import "Contact.h"
 
 #endif

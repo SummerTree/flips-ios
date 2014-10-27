@@ -10,37 +10,43 @@
 // the license agreement.
 //
 
-import Foundation
-
-private let FROM = "from"
-private let USER_ID = "userID"
-private let TO = "to"
-private let ROOM_ID = "roomID"
-private let CONTENT = "content"
+private struct MugMessageJsonParams {
+    static let FROM_USER_ID = "fromUserId"
+    static let CONTENT = "content"
+}
 
 class MugMessageDataSource : BaseDataSource {
     
-    func createEntityWithJson(json: JSON) -> MugMessage {
+    private func createEntityWithJson(json: JSON) -> MugMessage {
         let userDataSource = UserDataSource()
         
         var entity: MugMessage! = MugMessage.createEntity() as MugMessage
         
-        entity.from = userDataSource.retrieveUserWithId(json[FROM].stringValue)
-//        entity.from = User.createEntityWithId(json[FROM].stringValue)
+        entity.from = userDataSource.retrieveUserWithId(json[MugMessageJsonParams.FROM_USER_ID].stringValue)
+        entity.notRead = true
+        entity.receivedAt = NSDate()
+
+        let mugDataSource = MugDataSource()
+        let content = json[MugMessageJsonParams.CONTENT]
         
-        // TODO:
-        //        var mugs = [Mug]()
-        //        var sender = json[MessageParams.SENDER].stringValue
-        //        var content = json[MessageParams.CONTENT]
-        //        for (index: String, mug: JSON) in content {
-        //            mugs.append(Mug.createEntityWithJson(mug))
-        //        }
-        //
-        //        self.sender = sender
-        //        self.mugs = mugs
+        for (index: String, mugJson: JSON) in content {
+            var mug = mugDataSource.createOrUpdateMugsWithJson(mugJson)
+            entity.addMug(mug)
+        }
+        
+        return entity
+    }
+    
+    func createMugMessageWithJson(json: JSON, receivedAtChannel pubnubID: String, sentAt sentDate: NSDate) -> MugMessage {
+        let roomDataSource = RoomDataSource()
+        let room = roomDataSource.getRoomWithPubnubID(pubnubID)
+        
+        let mugMessage = self.createEntityWithJson(json)
+        mugMessage.createdAt = sentDate
+        mugMessage.room = room
         
         self.save()
         
-        return entity
+        return mugMessage
     }
 }

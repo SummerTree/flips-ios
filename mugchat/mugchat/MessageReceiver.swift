@@ -10,7 +10,18 @@
 // the license agreement.
 //
 
-import Foundation
+private struct ChatMessageJsonParams {
+    static let FROM = "from"
+    static let USER_ID = "userID"
+    static let NAME = "name"
+    static let PARTICIPANTS = "participants"
+    static let ROOM_ID = "roomID"
+    static let CONTENT = "content"
+    static let CONTENT_ID = "id"
+    static let CONTENT_WORD = "word"
+    static let CONTENT_BACKGROUND_URL = "backgroundURL"
+    static let CONTENT_SOUND_URL = "soundURL"
+}
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
@@ -21,13 +32,25 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         return Static.instance
     }
     
+    private func onMessageReceived(mugMessage: MugMessage) {
+        // Notify any screen that there is a new message
+        println("New Message Received")
+        println("   From: \(mugMessage.from.firstName)")
+        println("   Sent at: \(mugMessage.createdAt)")
+        println("   #mugs: \(mugMessage.mugs.count)")
+        
+        for var i = 0; i < mugMessage.mugs.count; i++ {
+            println("       mug #\(mugMessage.mugs.objectAtIndex(i).mugID)")
+        }
+    }
+    
     
     // MARK: - PubnubServiceDelegate
     
-    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!) {
-//        println("Message received.")
-//        println("Sender = \(message.sender)")
-//        println("Mugs = \(message.mugs)")
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String, sentAt: NSDate) {
+        let mugMessageDataSource = MugMessageDataSource()
+        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName, sentAt: sentAt)
+        self.onMessageReceived(mugMessage)
     }
     
     func startListeningMessages() {

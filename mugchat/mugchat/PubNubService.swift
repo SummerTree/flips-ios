@@ -62,14 +62,18 @@ public class PubNubService: MugchatService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
         println("Did receive message. Forwading it to delegate.")
-        var messageJSON: JSON = JSON(pnMessage.message)
-//        let mugMessage = MugMessage(json: message)
-        let mugMessageDataSource = MugMessageDataSource()
-        let mugMessage = mugMessageDataSource.createEntityWithJson(messageJSON)
-        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
+        println("pnMessage.channel.name: \(pnMessage.channel.name)")
+        println("pnMessage.date: \(pnMessage.receiveDate)")
+        println("pnMessage date: \(pnMessage.date)")
+
+        let messageJSON: JSON = JSON(pnMessage.message)
+        // pnMessage.date is nil. Maybe we will need to send it inside of the JSON
+        self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, fromChannelName: pnMessage.channel.name, sentAt: pnMessage.receiveDate.date)
     }
 }
 
 protocol PubNubServiceDelegate {
-    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!)
+    
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String, sentAt: NSDate)
+    
 }

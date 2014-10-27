@@ -11,10 +11,11 @@
 //
 
 #import "User.h"
+#import "Contact.h"
 #import "Device.h"
 #import "Mug.h"
+#import "MugMessage.h"
 #import "Room.h"
-#import "User.h"
 
 
 @implementation User
@@ -25,13 +26,15 @@
 @dynamic lastName;
 @dynamic me;
 @dynamic nickname;
+@dynamic phoneNumber;
 @dynamic photoURL;
 @dynamic pubnubID;
 @dynamic userID;
 @dynamic username;
-@dynamic contacts;
-@dynamic devices;
+@dynamic device;
 @dynamic mugs;
+@dynamic mugsSent;
 @dynamic rooms;
+@dynamic userContact;
 
 @end

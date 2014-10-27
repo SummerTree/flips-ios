@@ -10,15 +10,16 @@
 // the license agreement.
 //
 
-import Foundation
 
-private let _ID = "id"
-private let USER = "user"
-private let PHONE_NUMBER = "phoneNumber"
-private let PLATFORM = "platform"
-private let UUID = "uuid"
-private let IS_VERIFIED = "isVerified"
-private let RETRY_COUNT = "retryCount"
+private struct DeviceJsonParams {
+    static let ID = "id"
+    static let USER = "user"
+    static let PLATFORM = "platform"
+    static let UUID = "uuid"
+    static let IS_VERIFIED = "isVerified"
+    static let RETRY_COUNT = "retryCount"
+}
+
 
 class DeviceDataSource : BaseDataSource {
     
@@ -29,7 +30,7 @@ class DeviceDataSource : BaseDataSource {
         
         var json = JSON(object)
         self.fillDevice(entity, withJson: json)
-        entity.user = userDataSource.retrieveUserWithId(json[USER].stringValue)
+        entity.user = userDataSource.retrieveUserWithId(json[DeviceJsonParams.USER].stringValue)
 
         self.save()
         
@@ -37,11 +38,10 @@ class DeviceDataSource : BaseDataSource {
     }
     
     private func fillDevice(device: Device, withJson json : JSON) {
-        device.deviceID = json[_ID].stringValue
-        device.phoneNumber = json[PHONE_NUMBER].stringValue
-        device.platform = json[PLATFORM].stringValue
-        device.uuid = json[UUID].stringValue
-        device.isVerified = json[IS_VERIFIED].intValue == 0 ? false : true
-        device.retryCount = json[RETRY_COUNT].intValue
+        device.deviceID = json[DeviceJsonParams.ID].stringValue
+        device.platform = json[DeviceJsonParams.PLATFORM].stringValue
+        device.uuid = json[DeviceJsonParams.UUID].stringValue
+        device.isVerified = json[DeviceJsonParams.IS_VERIFIED].intValue == 0 ? false : true
+        device.retryCount = json[DeviceJsonParams.RETRY_COUNT].intValue
     }
 }

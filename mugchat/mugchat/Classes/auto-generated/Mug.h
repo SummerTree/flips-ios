@@ -13,16 +13,26 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class User;
+@class MugMessage, User;
 
 @interface Mug : NSManagedObject
 
 @property (nonatomic, retain) NSString * backgroundURL;
 @property (nonatomic, retain) NSString * category;
+@property (nonatomic, retain) NSNumber * deleted;
 @property (nonatomic, retain) NSNumber * isPrivate;
 @property (nonatomic, retain) NSString * mugID;
 @property (nonatomic, retain) NSString * soundURL;
 @property (nonatomic, retain) NSString * word;
+@property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) User *owner;
+@end
+
+@interface Mug (CoreDataGeneratedAccessors)
+
+- (void)addMessagesObject:(MugMessage *)value;
+- (void)removeMessagesObject:(MugMessage *)value;
+- (void)addMessages:(NSSet *)values;
+- (void)removeMessages:(NSSet *)values;
 
 @end

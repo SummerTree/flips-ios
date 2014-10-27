@@ -62,10 +62,14 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             
             var authenticatedUser: User = user as User!
             AuthenticationHelper.sharedInstance.userInSession = user as User
-
-            var inboxViewController = InboxViewController()
-            self.navigationController?.pushViewController(inboxViewController, animated: true)
             
+            var userDataSource = UserDataSource()
+            userDataSource.syncUserData({ (success, error) -> Void in
+                if (success) {
+                    var inboxViewController = InboxViewController()
+                    self.navigationController?.pushViewController(inboxViewController, animated: true)
+                }
+            })
         }) { (mugError) -> Void in
             println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
@@ -115,9 +119,14 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.userInSession = user as User
-                var inboxViewController = InboxViewController()
-                self.navigationController?.pushViewController(inboxViewController, animated: true)
                 
+                var userDataSource = UserDataSource()
+                userDataSource.syncUserData({ (success, error) -> Void in
+                    if (success) {
+                        var inboxViewController = InboxViewController()
+                        self.navigationController?.pushViewController(inboxViewController, animated: true)
+                    }
+                })
             }, failure: { (mugError) -> Void in
                 println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
                 var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")

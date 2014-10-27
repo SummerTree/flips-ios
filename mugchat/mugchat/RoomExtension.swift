@@ -10,21 +10,4 @@
 // the license agreement.
 //
 
-#import "Mug.h"
-#import "MugMessage.h"
-#import "User.h"
-
-
-@implementation Mug
-
-@dynamic backgroundURL;
-@dynamic category;
-@dynamic deleted;
-@dynamic isPrivate;
-@dynamic mugID;
-@dynamic soundURL;
-@dynamic word;
-@dynamic messages;
-@dynamic owner;
-
-@end
+import Foundation

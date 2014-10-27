@@ -141,7 +141,6 @@ class ConversationTableViewCell : UITableViewCell {
             make.width.equalTo()(self.userImageView.frame.size.width)
             make.height.equalTo()(self.userImageView.frame.size.height)
         }
-        userImageView.backgroundColor = UIColor.blueColor()
         
         badgeView.mas_updateConstraints { (make) -> Void in
             make.bottom.equalTo()(self.userImageView.mas_centerY)
