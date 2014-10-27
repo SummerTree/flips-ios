@@ -209,8 +209,6 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     // MARK: - Overridden Methods
     
     override func layoutSubviews() {
-        super.layoutSubviews()
-        
         var contentOffset: CGFloat = 0.0
         var index = 0
         
@@ -244,6 +242,8 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
             
             index++
         }
+        
+        super.layoutSubviews()
     }
     
     

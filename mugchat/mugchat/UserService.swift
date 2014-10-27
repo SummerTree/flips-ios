@@ -225,12 +225,12 @@ public class UserService: MugchatService {
     
     // MARK: - Requests constants
     
-    struct RequestHeaders {
+    private struct RequestHeaders {
         static let FACEBOOK_ACCESS_TOKEN = "facebook_access_token"
         static let TOKEN = "token"
     }
     
-    struct RequestParams {
+    private struct RequestParams {
         static let USERNAME = "username"
         static let PASSWORD = "password"
         static let FIRSTNAME = "firstName"
