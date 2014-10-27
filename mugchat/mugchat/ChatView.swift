@@ -27,7 +27,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
     private let REPLY_BUTTON_HEIGHT : CGFloat = 64.0
     private let REPLY_VIEW_MARGIN : CGFloat = 10.0
-    private let TEXT_VIEW_MARGIN : CGFloat = 8.0
+    private let TEXT_VIEW_MARGIN : CGFloat = 3.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     
     private let CELL_MUG_AREA_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.width
@@ -160,7 +160,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.getTextHeight() - self.TEXT_VIEW_MARGIN)
+            make.height.equalTo()(self.getTextHeight())
         })
         
         nextButton.mas_makeConstraints( { (make) in
@@ -176,7 +176,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         let myString: NSString = self.replyTextField.text as NSString
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
-        return size.height * 2 + 5
+        return size.height * 2 - self.TEXT_VIEW_MARGIN
     }
     
     
@@ -375,7 +375,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.getTextHeight() - self.TEXT_VIEW_MARGIN)
+            make.height.equalTo()(self.getTextHeight())
         })
         self.updateConstraints()
     }
