@@ -132,7 +132,7 @@ public class MugService: MugchatService {
             )
         }
         else {
-            println("error: \(error!.localizedDescription)")
+            failCallback(MugError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
         }
     }
     
