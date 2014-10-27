@@ -32,48 +32,25 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         return Static.instance
     }
     
+    private func onMessageReceived(mugMessage: MugMessage) {
+        // Notify any screen that there is a new message
+        println("New Message Received")
+        println("   From: \(mugMessage.from.firstName)")
+        println("   Sent at: \(mugMessage.createdAt)")
+        println("   #mugs: \(mugMessage.mugs.count)")
+        
+        for var i = 0; i < mugMessage.mugs.count; i++ {
+            println("       mug #\(mugMessage.mugs.objectAtIndex(i).mugID)")
+        }
+    }
+    
     
     // MARK: - PubnubServiceDelegate
     
-//    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!) {
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, channelName: String) {
-        
-        //        "from": {
-        //            "userID": 138,
-        //            "name": "Bruno Brüggemann"
-        //        },
-        let userFromJson = messageJson[ChatMessageJsonParams.FROM]
-        let fromUserId = userFromJson[ChatMessageJsonParams.USER_ID]
-        let fromUserName = userFromJson[ChatMessageJsonParams.NAME]
-        
-//        "participants": [{
-//        "userID": 8,
-//        "name": "Diego Santiviago"
-//        }, {
-//        "userID": 138,
-//        "name": "Bruno Brüggemann"
-//        }],
-//        "roomID": 1,
-//        "content": [{
-//        "id": 1,
-//        "word": "I",
-//        "backgroundURL": "http://unbridledsuccess.co.uk/wp-content/uploads/2012/11/rainbow_letter_i_photosculpture-p153807374388565225bfr64_400.jpg",
-//        "soundURL": "http://"
-//        }, {
-//        "id": 2,
-//        "word": "love",
-//        "backgroundURL": "https://pbs.twimg.com/profile_images/2201498558/400x400-heart.jpg",
-//        "soundURL": "http://"
-//        }, {
-//        "id": 3,
-//        "word": "San Francisco",
-//        "backgroundURL": "https://pbs.twimg.com/profile_images/1386398483/sanfrancisco3_400x400.jpg",
-//        "soundURL": "http://"
-//        }]
-    
-//        println("Message received.")
-//        println("Sender = \(message.sender)")
-//        println("Mugs = \(message.mugs)")
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String, sentAt: NSDate) {
+        let mugMessageDataSource = MugMessageDataSource()
+        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName, sentAt: sentAt)
+        self.onMessageReceived(mugMessage)
     }
     
     func startListeningMessages() {

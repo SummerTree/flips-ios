@@ -103,8 +103,13 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 
                 AuthenticationHelper.sharedInstance.userInSession = user
                 
-                var inboxViewController = InboxViewController()
-                self.navigationController?.pushViewController(inboxViewController, animated: true)
+                var userDataSource = UserDataSource()
+                userDataSource.syncUserData({ (success, error) -> Void in
+                    if (success) {
+                        var inboxViewController = InboxViewController()
+                        self.navigationController?.pushViewController(inboxViewController, animated: true)
+                    }
+                })
             },
             failure: { (mugError) in
                 if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {

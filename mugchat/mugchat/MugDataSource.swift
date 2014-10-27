@@ -19,7 +19,11 @@ private struct MugJsonParams {
     static let SOUND_URL = "soundURL"
 }
 
-let MUG_ID_ATTRIBUTE = "mugID"
+struct MugAttributes {
+    static let MUG_ID = "mugID"
+    static let MUG_OWNER = "owner"
+    static let WORD = "word"
+}
 
 class MugDataSource : BaseDataSource {
     
@@ -59,6 +63,18 @@ class MugDataSource : BaseDataSource {
         return mug!
     }
     
+    func createMugWithWord(word: String, backgroundURL: String, soundURL: String?) -> Mug {
+        var mug: Mug! = Mug.createEntity() as Mug
+        mug.word = word
+        mug.backgroundURL = backgroundURL
+        mug.soundURL = soundURL
+        
+        // TODO: send to server to get mugID
+        // Not saving yet
+        
+        return mug
+    }
+    
     func retrieveMugWithId(id: String) -> Mug {
         var mug = self.getMugById(id)
         
@@ -68,11 +84,42 @@ class MugDataSource : BaseDataSource {
         
         return mug!
     }
+    
+    func getMyMugs() -> [Mug] {
+        return Mug.findAllSortedBy(MugAttributes.MUG_ID, ascending: true, withPredicate: NSPredicate(format: "(\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))")) as [Mug]
+    }
+    
+    func getMyMugsForWord(word: String) -> [Mug] {
+        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@))", word)) as [Mug]
+    }
+    
+    func getMyMugsForWords(words: [String]) -> Dictionary<String, [Mug]> {
+        var resultDictionary = Dictionary<String, [Mug]>()
+        
+        if (words.count == 0) {
+            return resultDictionary
+        }
+        
+        for word in words {
+            resultDictionary[word] = Array<Mug>()
+            
+            // I didn't find a way to use a NSPredicate case-insensitive with an IN clause
+            // I've tried in many diffent ways with NSPredicate or NSCompoundPredicate, but none of it worked and for some of it returned an weird error about a selector not found.
+            // The error happened when I tried to use: NSPredicate(format: <#String#>, argumentArray: <#[AnyObject]?#>)
+            // Error: swift predicate reason: '-[Swift._NSContiguousString countByEnumeratingWithState:objects:count:]: unrecognized selector
+            var mugs = self.getMyMugsForWord(word)
+            for mug in mugs {
+                resultDictionary[word]?.append(mug)
+            }
+        }
+        
+        return resultDictionary
+    }
 
     
     // MARK: - Private Getters Methods
     
     private func getMugById(id: String) -> Mug? {
-        return Mug.findFirstByAttribute(MUG_ID_ATTRIBUTE, withValue: id) as? Mug
+        return Mug.findFirstByAttribute(MugAttributes.MUG_ID, withValue: id) as? Mug
     }
 }
