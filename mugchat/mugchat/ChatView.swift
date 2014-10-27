@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate {
     
     var mugs = [
         MugVideo(message: "Welcome to MugChat", videoPath: "welcome_mugchat", timestamp: "8:23 am", avatarPath: "tmp_homer", thumbnailPath: "movie_thumbnail.png", received: false),
@@ -26,6 +26,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private let REPLY_BUTTON_TOP_MARGIN : CGFloat = 18.0
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
     private let REPLY_BUTTON_HEIGHT : CGFloat = 64.0
+    private let REPLY_VIEW_MARGIN : CGFloat = 10.0
+    private let TEXT_VIEW_MARGIN : CGFloat = 3.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     
     private let CELL_MUG_AREA_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.width
@@ -103,8 +105,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.addSubview(replyButton)
         
         replyTextField = JoinStringsTextField()
+        replyTextField.joinStringsTextFieldDelegate = self
         replyTextField.hidden = true
-        replyTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Type your message here", comment: "Type your message here"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        replyTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        //replyTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Type your message here", comment: "Type your message here"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         replyView.addSubview(replyTextField)
         
         nextButton = UIButton()
@@ -155,8 +159,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyTextField.mas_makeConstraints( { (make) in
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
-            make.top.equalTo()(self.replyView)
-            make.bottom.equalTo()(self.replyView)
+            make.centerY.equalTo()(self.replyView)
+            make.height.equalTo()(self.getTextHeight())
         })
         
         nextButton.mas_makeConstraints( { (make) in
@@ -166,6 +170,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.width.equalTo()(self.nextButton.frame.width)
         })
         
+    }
+    
+    func getTextHeight() -> CGFloat{
+        let myString: NSString = self.replyTextField.text as NSString
+        var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
+        return size.height * 2 - self.TEXT_VIEW_MARGIN
     }
     
     
@@ -302,6 +313,16 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.replyButton.hidden = true
         self.replyTextField.hidden = false
         self.nextButton.hidden = false
+        
+        replyView.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.bottom.equalTo()(self)
+        })
+        self.updateConstraints()
+        
+        
     }
     
     private func hideTextFieldAndShowReplyButton() {
@@ -339,6 +360,25 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
     }
     
+    
+    // MARK: JoinStringsTextFieldDelegate delegate
+    
+    func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!) {
+        replyView.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.bottom.equalTo()(self)
+        })
+        
+        replyTextField.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
+            make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
+            make.centerY.equalTo()(self.replyView)
+            make.height.equalTo()(self.getTextHeight())
+        })
+        self.updateConstraints()
+    }
 
 }
 

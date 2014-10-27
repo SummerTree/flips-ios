@@ -10,29 +10,34 @@
 // the license agreement.
 //
 
-class JoinStringsTextField : UITextField, UITextFieldDelegate {
+class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     var joinedTextRanges : [NSRange] = [NSRange]()
     
+    var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
+    
     override init() {
-        super.init()
+        super.init(frame: CGRect.zeroRect, textContainer: nil)
+        
         self.delegate = self
         
-        let menuController = UIMenuController.sharedMenuController()
-        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
-        menuController.menuItems = NSArray(array: [lookupMenu])
-        
-        menuController.update();
-        
-        menuController.setMenuVisible(true, animated: true)
+        self.setUpMenu()
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(frame: CGRect, textContainer: NSTextContainer!) {
+        super.init(frame: frame, textContainer: textContainer)
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setUpMenu() {
+        let menuController = UIMenuController.sharedMenuController()
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
+        menuController.menuItems = NSArray(array: [lookupMenu])
+        menuController.update()
+        menuController.setMenuVisible(true, animated: true)
     }
     
     func joinStrings() {
@@ -50,6 +55,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
     func updateColorOnJoinedTexts(color: UIColor) {
         var attributedString = NSMutableAttributedString(string:self.text)
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))) //looses the current font, if we don't set here explicitly
         
         for joinedTextRange in joinedTextRanges {
             attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: joinedTextRange)
@@ -60,6 +66,7 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
     func resetTextColor() {
         var attributedString = NSMutableAttributedString(string:self.text)
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
         self.attributedText = attributedString
     }
@@ -131,29 +138,38 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {
         if action == "cut:" {
-            return false;
+            return false
         }
             
         else if action == "copy:" {
-            return false;
+            return false
         }
             
         else if action == "paste:" {
-            return false;
+            return false
         }
             
         else if action == "_define:" {
-            return false;
+            return false
         }
         
         else if action == "Join" {
-            return true;
+            return true
         }
         
         return super.canPerformAction(action, withSender: sender)
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textViewDidChange(textView: UITextView) {
+        var currentFrameHeight: CGFloat = self.frame.size.height
+        var neededFrameHeight = self.contentSize.height
+
+        if (neededFrameHeight != currentFrameHeight) {
+            joinStringsTextFieldDelegate?.joinStringsTextFieldNeedsToHaveItsHeightUpdated(self)
+        }
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
         if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
@@ -184,4 +200,12 @@ class JoinStringsTextField : UITextField, UITextFieldDelegate {
         return true
     }
     
+}
+
+// MARK: - View Delegate
+
+protocol JoinStringsTextFieldDelegate {
+    
+    func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
+
 }
