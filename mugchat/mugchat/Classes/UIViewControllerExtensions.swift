@@ -16,15 +16,7 @@ extension UIViewController {
     // MARK: - Public Methods
     
     func setupWhiteNavBarWithCloseButton(title: String) {
-        self.setNavBarColor()
-        
-        var titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
-        titleLabel.textColor = UIColor.deepSea()
-        titleLabel.textAlignment = .Center
-        titleLabel.sizeToFit()
-        self.navigationItem.titleView = titleLabel
+        setupWhiteNavBarWithoutButtons(title)
         
         var closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: "closeButtonTapped")
         closeBarButton.tintColor = UIColor.orangeColor()
@@ -32,6 +24,14 @@ extension UIViewController {
     }
     
     func setupWhiteNavBarWithBackButton(title: String) {
+        setupWhiteNavBarWithoutButtons(title)
+        
+        var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
+        backBarButton.tintColor = UIColor.orangeColor()
+        self.navigationItem.leftBarButtonItem = backBarButton
+    }
+    
+    func setupWhiteNavBarWithoutButtons(title: String) {
         self.setNavBarColor()
         
         var titleLabel = UILabel()
@@ -42,9 +42,7 @@ extension UIViewController {
         titleLabel.sizeToFit()
         self.navigationItem.titleView = titleLabel
         
-        var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
-        backBarButton.tintColor = UIColor.orangeColor()
-        self.navigationItem.leftBarButtonItem = backBarButton
+        self.navigationItem.hidesBackButton = true
     }
     
     func setupOrangeNavBarWithBackButton(title: String) {
@@ -64,7 +62,7 @@ extension UIViewController {
         backBarButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }
-
+    
     
     // MARK: - Nav Button Actions
     

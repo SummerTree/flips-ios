@@ -29,7 +29,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     var delegate: ComposeViewDelegate?
     
-    private var mugs : [MugText] = [MugText]()
+    private var mugTexts : [MugText] = [MugText]()
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
@@ -52,9 +52,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     private var addMugButton: UIButton!
     private var arrowToCurrentMug: UIButton!
     
-    func viewDidLoad() {
-        makeConstraints()
-        self.layoutIfNeeded()
+    private var isAlreadyUsingAPicture = false
+    
+    init(words: [String]) {
+        super.init()
+        createMugs(words)
+        addSubviews()
     }
     
     override init() {
@@ -67,11 +70,18 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         
         addSubviews()
     }
-
-    init(words: [String]) {
-        super.init()
-        createMugs(words)
-        addSubviews()
+    
+    
+    func viewDidLoad() {
+        makeConstraints()
+    }
+    
+    func viewWillAppear() {
+        self.layoutIfNeeded()
+        
+        if (!isAlreadyUsingAPicture) {
+            self.slideToCameraView()
+        }
     }
     
     func createMugs(texts: [String]) {
@@ -94,7 +104,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
                 mugText = MugText(mugId: i, text: text, state: MugState.Default)
             }
             
-            self.mugs.append(mugText)
+            self.mugTexts.append(mugText)
         }
     }
     
@@ -107,22 +117,22 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         self.addSubview(captureAudioProgressBar)
         
         cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false, showMicrophoneButton: true)
-        cameraPreview.alpha = 0.0
+        cameraPreview.alpha = 1.0
         cameraPreview.delegate = self
         self.addSubview(cameraPreview)
         
         mugImageView = UIImageView.imageWithColor(UIColor.avacado())
-        mugImageView.sizeToFit()
-        mugImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        mugImageView.alpha = 0.0
+        mugImageView.contentMode = UIViewContentMode.ScaleAspectFit
         mugContainerView.addSubview(mugImageView)
         
         mugWordLabel = UILabel()
         mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
         mugWordLabel.textColor = UIColor.whiteColor()
-        mugWordLabel.text = mugs[0].text
+        mugWordLabel.text = mugTexts[0].text
         mugContainerView.addSubview(mugWordLabel)
         
-        centeredMugsView = CenteredMugsView(mugTexts: self.mugs)
+        centeredMugsView = CenteredMugsView(mugTexts: self.mugTexts)
         centeredMugsView.delegate = self
         self.addSubview(centeredMugsView)
         
@@ -175,6 +185,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     private func addMugsViewSubviews() {
         mugsView = UIView()
+        mugsView.alpha = 0.0
         mugsOrCameraButtonsView.addSubview(mugsView)
         
         arrowToCurrentMug = UIButton()
@@ -275,8 +286,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     private func makeCameraButtonsViewConstraints() {
         cameraButtonsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.mugsView.mas_right)
-            make.width.equalTo()(self.mugsOrCameraButtonsView)
+            make.left.equalTo()(self.mugsOrCameraButtonsView)
+            make.right.equalTo()(self.mugsOrCameraButtonsView)
             make.top.equalTo()(self.mugsOrCameraButtonsView)
             make.height.equalTo()(self.mugsOrCameraButtonsView)
         }
@@ -321,9 +332,9 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     private func makeMugsViewConstraints() {
         mugsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.mugsOrCameraButtonsView)
-            make.right.equalTo()(self.mugsOrCameraButtonsView)
+            make.left.equalTo()(self.cameraButtonsView.mas_right)
             make.top.equalTo()(self.mugsOrCameraButtonsView)
+            make.width.equalTo()(self.cameraButtonsView)
             make.height.equalTo()(self.mugsOrCameraButtonsView)
         }
         
@@ -353,7 +364,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     func setPicture(image: UIImage!) {
         self.mugImageView.image = image
-        hideCameraShowPicture()
+        self.isAlreadyUsingAPicture = true
+        self.hideCameraShowPicture()
         self.showRecordingView()
     }
     
@@ -399,25 +411,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         })
     }
     
-    
-    // MARK: - Nav Bar Delegate
-    
-    func customNavigationBarDidTapLeftButton(navBar: CustomNavigationBar) {
-        self.delegate?.composeViewDidTapBackButton(self)
-    }
-    
-    
-    // MARK: - Mugs View Delegate
-    
-    func composeViewDidSelectMugText(mugText: MugText!) {
-        mugWordLabel.text = mugText.text
-        //TODO: update MyMugs... (substories of 7942)
-    }
-    
-    
-    // MARK: - Button actions
-    
-    func addMugButtonTapped(sender: UIButton!) {
+    func slideToCameraView() {
+        hideRecordingView()
+        self.isAlreadyUsingAPicture = false
+        
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             self.cameraPreview.alpha = 1.0
             self.cameraPreview.registerObservers()
@@ -444,6 +441,32 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         })
     }
     
+    
+    // MARK: - Nav Bar Delegate
+    
+    func customNavigationBarDidTapLeftButton(navBar: CustomNavigationBar) {
+        self.delegate?.composeViewDidTapBackButton(self)
+    }
+    
+    
+    // MARK: - Mugs View Delegate
+    
+    func composeViewDidSelectMugText(mugText: MugText!) {
+        mugWordLabel.text = mugText.text
+        //TODO: update MyMugs... (substories of 7942)
+    }
+    
+    func composeViewDidSplitMugText(mugTexts: [MugText]) {
+        self.mugTexts = mugTexts
+    }
+
+    
+    // MARK: - Button actions
+    
+    func addMugButtonTapped(sender: UIButton!) {
+        slideToCameraView()
+    }
+    
     func takePictureButtonTapped(sender: UIButton!) {
         self.delegate?.composeViewDidTapTakePictureButton(self, withCamera: self.cameraPreview)
     }
@@ -462,6 +485,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     func captureAudioButtonTapped(sender: UIButton!) {
+        self.isAlreadyUsingAPicture = false
         self.delegate?.composeViewDidTapCaptureAudioButton(self)
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.captureAudioProgressBar.mas_updateConstraints({ (update) -> Void in
@@ -481,11 +505,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
                 update.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
                 update.width.equalTo()(0)
             })
-
+            
             self.layoutIfNeeded()
         }
     }
-    
 
     // MARK: - Required inits
     
@@ -521,6 +544,17 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         self.cameraPreview.registerObservers()
         
         self.mugImageView.alpha = 0.0
+    }
+    
+    
+    // MARK: - Getters
+    
+    func getMugImageView() -> UIImageView {
+        return self.mugImageView
+    }
+    
+    func getMugWord() -> String {
+        return self.mugWordLabel.text!
     }
 }
 

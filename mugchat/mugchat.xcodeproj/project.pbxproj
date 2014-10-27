@@ -39,6 +39,8 @@
 		7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */; };
 		7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */; };
 		7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */; };
+		705EF07A19F973A600D4CF74 /* ConfirmFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */; };
+		705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */; };
 		7066E0A519EC4D610009BCF2 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066E0A419EC4D610009BCF2 /* ComposeView.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */; };
@@ -159,6 +161,8 @@
 		7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfUseViewController.swift; sourceTree = "<group>"; };
 		7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyController.swift; sourceTree = "<group>"; };
+		705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipView.swift; sourceTree = "<group>"; };
+		705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipViewController.swift; sourceTree = "<group>"; };
 		7066E0A419EC4D610009BCF2 /* ComposeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebViewController.swift; sourceTree = "<group>"; };
@@ -373,9 +377,10 @@
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				5786B2CA19EEADBC00021DD3 /* Chat */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
+				5786B2CA19EEADBC00021DD3 /* Chat */,
 				7A11791E19DA07B60086A66B /* Compose */,
+				705EF07B19F9767800D4CF74 /* Confirm Flip */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
 				704E110D19D0934700D2BB88 /* Login */,
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
@@ -396,6 +401,7 @@
 			children = (
 				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
+				705EF07819F9738100D4CF74 /* Confirm Flip */,
 				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
 				7A28ADC019D4428A00887831 /* Custom */,
 				7A1892C919D1E9210026E641 /* Inbox */,
@@ -496,6 +502,22 @@
 				7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */,
 			);
 			name = "Privacy Policy";
+			sourceTree = "<group>";
+		};
+		705EF07819F9738100D4CF74 /* Confirm Flip */ = {
+			isa = PBXGroup;
+			children = (
+				705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */,
+			);
+			name = "Confirm Flip";
+			sourceTree = "<group>";
+		};
+		705EF07B19F9767800D4CF74 /* Confirm Flip */ = {
+			isa = PBXGroup;
+			children = (
+				705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */,
+			);
+			name = "Confirm Flip";
 			sourceTree = "<group>";
 		};
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
@@ -960,6 +982,7 @@
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
+				705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
 				7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */,
 				7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */,
@@ -984,6 +1007,7 @@
 				7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */,
 				7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */,
 				7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */,
+				705EF07A19F973A600D4CF74 /* ConfirmFlipView.swift in Sources */,
 				7AD93F9419E574B6009CC59A /* UIImageExtensions.swift in Sources */,
 				7AF82DFF19EFEC5800D0393F /* UserDataSource.swift in Sources */,
 				5786B2CE19EEADD400021DD3 /* ChatView.swift in Sources */,
