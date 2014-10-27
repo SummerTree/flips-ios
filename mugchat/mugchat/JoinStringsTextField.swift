@@ -36,7 +36,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         let menuController = UIMenuController.sharedMenuController()
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
         menuController.menuItems = NSArray(array: [lookupMenu])
-        menuController.update();
+        menuController.update()
         menuController.setMenuVisible(true, animated: true)
     }
     
@@ -138,31 +138,31 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {
         if action == "cut:" {
-            return false;
+            return false
         }
             
         else if action == "copy:" {
-            return false;
+            return false
         }
             
         else if action == "paste:" {
-            return false;
+            return false
         }
             
         else if action == "_define:" {
-            return false;
+            return false
         }
         
         else if action == "Join" {
-            return true;
+            return true
         }
         
         return super.canPerformAction(action, withSender: sender)
     }
     
     func textViewDidChange(textView: UITextView) {
-        var currentFrameHeight: CGFloat = self.frame.size.height;
-        var neededFrameHeight = self.contentSize.height;
+        var currentFrameHeight: CGFloat = self.frame.size.height
+        var neededFrameHeight = self.contentSize.height
 
         if (neededFrameHeight != currentFrameHeight) {
             joinStringsTextFieldDelegate?.joinStringsTextFieldNeedsToHaveItsHeightUpdated(self)
