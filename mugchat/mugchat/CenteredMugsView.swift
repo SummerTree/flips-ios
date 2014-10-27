@@ -226,7 +226,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
         
         for mugText in mugTexts {
             var mugTextView = self.mugTextViews[index]
-            mugTextView.layoutSubviews()
+            mugTextView.updateLayout()
             
             var requiredWidth = self.getTextWidth(mugText) + MUG_TEXT_ADDITIONAL_WIDTH
             var mugTextViewWidth = requiredWidth > MIN_BUTTON_WIDTH ? requiredWidth : MIN_BUTTON_WIDTH

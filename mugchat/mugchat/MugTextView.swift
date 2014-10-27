@@ -66,9 +66,10 @@ class MugTextView : UIView {
         self.addSubview(self.hasExtrasImageView)
 
         initConstraints()
+        updateLayout()
     }
     
-    override func layoutSubviews() {
+    func updateLayout() {
         var status : MugState = self.mugText.state
         switch status {
         case MugState.NewWord:
@@ -88,8 +89,6 @@ class MugTextView : UIView {
             textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             hasExtrasImageView.alpha = 1.0
         }
-
-        super.layoutSubviews()
     }
     
     private func initConstraints() {
