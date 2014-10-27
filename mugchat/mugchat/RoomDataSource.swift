@@ -67,7 +67,7 @@ class RoomDataSource : BaseDataSource {
     
     // MARK: - Getters
     
-    func retriveRoomWithId(roomId: String) -> Room {
+    func retrieveRoomWithId(roomId: String) -> Room {
         var room = self.getRoomById(roomId)
         
         if (room == nil) {
