@@ -19,7 +19,7 @@
 
 @dynamic backgroundURL;
 @dynamic category;
-@dynamic deleted;
+@dynamic removed;
 @dynamic isPrivate;
 @dynamic mugID;
 @dynamic soundURL;
