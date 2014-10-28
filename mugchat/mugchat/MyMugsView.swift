@@ -30,6 +30,8 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     var mugDataSource = MugDataSource()
     var myMugs: [Mug] = [Mug]()
     
+    var delegate: MyMugsViewViewDelegate?
+    
     override init() {
         super.init(frame: CGRect.zeroRect)
         addSubviews()
@@ -86,8 +88,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func addMugButtonTapped(sender: UIButton!) {
-        //slideToCameraView()
-        //TODO: delegate
+        delegate?.myMugsViewDidTapAddMug(self) //TODO: slideToCameraView()
     }
     
     func setWord(word: String) {
@@ -119,5 +120,15 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         
         return cell
     }
+    
+}
+
+
+// MARK: - View Delegate
+
+protocol MyMugsViewViewDelegate {
+    
+    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
+    func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!)
     
 }

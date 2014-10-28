@@ -13,7 +13,7 @@
 import UIKit
 import AVFoundation
 
-class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsViewDelegate {
+class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsTextsViewDelegate, MyMugsViewViewDelegate {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
@@ -31,7 +31,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
-    private var centeredMugsView: CenteredMugsView!
+    private var centeredMugsView: MugsTextsView!
     private var mugTextsContainerSeparator : UIView!
     private var mugsOrCameraButtonsView: UIView!
     
@@ -409,7 +409,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     
-    // MARK: - Mugs View Delegate
+    // MARK: - MugsTextsView Delegate
     
     func composeViewDidSelectMugText(mugText: MugText!) {
         mugWordLabel.text = mugText.text
@@ -421,13 +421,20 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func composeViewDidSplitMugText(mugTexts: [MugText]) {
         self.mugTexts = mugTexts
     }
+    
+    
+    // MARK: - MyMugsView Delegate
 
+    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!) {
+        slideToCameraView()
+    }
+    
+    func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
+        //TODO
+    }
+    
     
     // MARK: - Button actions
-    
-//    func addMugButtonTapped(sender: UIButton!) { //TODO: create delegate
-//        slideToCameraView()
-//    }
     
     func takePictureButtonTapped(sender: UIButton!) {
         self.delegate?.composeViewDidTapTakePictureButton(self, withCamera: self.cameraPreview)

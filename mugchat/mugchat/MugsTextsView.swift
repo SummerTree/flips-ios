@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class CenteredMugsView : UIView, UIScrollViewDelegate {
+class MugsTextsView : UIView, UIScrollViewDelegate {
     
     private let MIN_BUTTON_WIDTH : CGFloat = 70.0
     private let MUG_TEXT_ADDITIONAL_WIDTH : CGFloat = 20.0
@@ -23,7 +23,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     private var mugTextViews: [MugTextView]!
     private var tappedMugTextView: MugTextView?
     
-    var delegate: MugsViewDelegate?
+    var delegate: MugsTextsViewDelegate?
     
     // MARK: - Initializers
     
@@ -359,7 +359,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
 
 // MARK: - View Delegate
 
-protocol MugsViewDelegate {
+protocol MugsTextsViewDelegate {
 
     func composeViewDidSelectMugText(mugText: MugText!)
     func composeViewDidSplitMugText(mugTexts: [MugText])
