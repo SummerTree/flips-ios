@@ -676,12 +676,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     // MARK: Finish Record Output Delegate
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
-        println("didFinishRecordingToOutputFileAtURL")
         if (error != nil) {
-            println("Error while recoding")
             self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, withSuccess: false)
         } else {
-            println("Success recording")
             self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, withSuccess: true)
         }
     }
