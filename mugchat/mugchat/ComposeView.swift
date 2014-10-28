@@ -74,6 +74,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func viewWillAppear() {
         self.layoutIfNeeded()
         
+        self.centeredMugsView.selectText(self.mugTexts[userStep])
+        
         if (!isAlreadyUsingAPicture) {
             self.slideToCameraView()
         }
