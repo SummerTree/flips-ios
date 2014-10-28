@@ -78,7 +78,7 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
         for textView in mugTextViews {
             if (textView.mugText.mugId == text?.mugId) {
                 self.centerScrollViewAtView(textView)
-                self.delegate?.composeViewDidSelectMugText((textView as MugTextView).mugText)
+                self.delegate?.mugsTextsViewDidSelectMugText((textView as MugTextView).mugText)
                 break
             }
         }
