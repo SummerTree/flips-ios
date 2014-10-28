@@ -66,7 +66,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         myMugsCollectionView!.dataSource = self
         myMugsCollectionView!.delegate = self
         myMugsCollectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        myMugsCollectionView!.backgroundColor = UIColor.whiteColor()
+        myMugsCollectionView!.backgroundColor = self.backgroundColor
         myMugsCollectionView!.allowsSelection = true
         self.addSubview(myMugsCollectionView!)
         

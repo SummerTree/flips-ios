@@ -45,7 +45,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     private var galleryButton: UIButton!
     
     private var arrowToCurrentMug: UIButton!
-    private var myMugsView: MyMugsView! //UIView!
+    private var myMugsView: MyMugsView!
     
     private var isAlreadyUsingAPicture = false
     
