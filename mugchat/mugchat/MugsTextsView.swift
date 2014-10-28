@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class CenteredMugsView : UIView, UIScrollViewDelegate {
+class MugsTextsView : UIView, UIScrollViewDelegate {
     
     private let MIN_BUTTON_WIDTH : CGFloat = 70.0
     private let MUG_TEXT_ADDITIONAL_WIDTH : CGFloat = 20.0
@@ -23,7 +23,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     private var mugTextViews: [MugTextView]!
     private var tappedMugTextView: MugTextView?
     
-    var delegate: MugsViewDelegate?
+    var delegate: MugsTextsViewDelegate?
     
     // MARK: - Initializers
     
@@ -71,14 +71,14 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
         self.centerScrollViewAtView(gesture.view!)
-        self.delegate?.composeViewDidSelectMugText((gesture.view! as MugTextView).mugText)
+        self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
     
     func selectText(text: MugText?) {
         for textView in mugTextViews {
             if (textView.mugText.mugId == text?.mugId) {
                 self.centerScrollViewAtView(textView)
-                self.delegate?.composeViewDidSelectMugText((textView as MugTextView).mugText)
+                self.delegate?.mugsTextsViewDidSelectMugText((textView as MugTextView).mugText)
                 break
             }
         }
@@ -198,10 +198,10 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
                     }
                 }
                 
-                self.delegate?.composeViewDidSplitMugText(self.mugTexts)
+                self.delegate?.mugsTextsViewDidSplitMugText(self.mugTexts)
                 
                 self.centerScrollViewAtView(splitMugTextView)
-                self.delegate?.composeViewDidSelectMugText(splitMugTextView.mugText)
+                self.delegate?.mugsTextsViewDidSelectMugText(splitMugTextView.mugText)
             ()})
 
     }
@@ -311,7 +311,7 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
             scrollView.scrollEnabled = true
         }
         
-        self.delegate?.composeViewDidSelectMugText(mugTextViewToBeCentered.mugText)
+        self.delegate?.mugsTextsViewDidSelectMugText(mugTextViewToBeCentered.mugText)
     }
     
     private func centerScrollViewAtView(view: UIView) {
@@ -370,9 +370,9 @@ class CenteredMugsView : UIView, UIScrollViewDelegate {
 
 // MARK: - View Delegate
 
-protocol MugsViewDelegate {
+protocol MugsTextsViewDelegate {
 
-    func composeViewDidSelectMugText(mugText: MugText!)
-    func composeViewDidSplitMugText(mugTexts: [MugText])
+    func mugsTextsViewDidSelectMugText(mugText: MugText!)
+    func mugsTextsViewDidSplitMugText(mugTexts: [MugText])
     
 }
