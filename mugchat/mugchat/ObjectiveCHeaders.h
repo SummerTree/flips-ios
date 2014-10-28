@@ -35,4 +35,6 @@
 #import "MugMessage.h"
 #import "Contact.h"
 
+#import "UIImageView+AFNetworking.h"
+
 #endif

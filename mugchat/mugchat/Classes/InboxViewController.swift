@@ -23,57 +23,60 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        println("inbox - viewDidAppear")
-        
-        var userDataSource = UserDataSource()
-        var contactDataSource = ContactDataSource()
-        var mugDataSource = MugDataSource()
-        var roomDataSource = RoomDataSource()
-        
-        var myUserContacts = userDataSource.getMyUserContacts()
-        println("My Contacts on MugChat(\(myUserContacts.count))")
-        for user in myUserContacts {
-            println("   \(user.firstName) \(user.lastName)")
-        }
-        
-        var myContacts = contactDataSource.getMyContacts()
-        println("   ")
-        println("My Contacts not MugChat(\(myContacts.count))")
-        for contact in myContacts {
-            println("   \(contact.firstName) \(contact.lastName)")
-        }
-        
-        println("   ")
-        var myRooms = roomDataSource.getMyRooms()
-        println("My rooms (\(myRooms.count))")
-        for room in myRooms {
-            println("   RoomID: \(room.roomID)")
-            println("     Participants(\(room.participants.count))")
-            for user in room.participants {
+        if (AuthenticationHelper.sharedInstance.userInSession != nil) {
+            println("inbox - viewDidAppear")
+            
+            var userDataSource = UserDataSource()
+            var contactDataSource = ContactDataSource()
+            var mugDataSource = MugDataSource()
+            var roomDataSource = RoomDataSource()
+            
+            var myUserContacts = userDataSource.getMyUserContacts()
+            println("My Contacts on MugChat(\(myUserContacts.count))")
+            for user in myUserContacts {
                 println("   \(user.firstName) \(user.lastName)")
             }
-            println("    Messages (\(room.mugMessages.count))")
-            for (var i = 0; i < room.mugMessages.count; i++) {
-                var mugMessage: MugMessage = room.mugMessages.objectAtIndex(i) as MugMessage
-                println("       from: \(mugMessage.from.firstName)")
+            
+            var myContacts = contactDataSource.getMyContacts()
+            println("   ")
+            println("My Contacts not MugChat(\(myContacts.count))")
+            for contact in myContacts {
+                println("   \(contact.firstName) \(contact.lastName)")
             }
+            
+            println("   ")
+            var myRooms = roomDataSource.getMyRooms()
+            println("My rooms (\(myRooms.count))")
+            for room in myRooms {
+                println("   RoomID: \(room.roomID)")
+                println("     Participants(\(room.participants.count))")
+                for user in room.participants {
+                    println("   \(user.firstName) \(user.lastName)")
+                }
+                println("    Messages (\(room.mugMessages.count))")
+                for (var i = 0; i < room.mugMessages.count; i++) {
+                    var mugMessage: MugMessage = room.mugMessages.objectAtIndex(i) as MugMessage
+                    println("       from: \(mugMessage.from.firstName)")
+                }
+            }
+            
+            println("   ")
+            var myMugs = mugDataSource.getMyMugs()
+            println("My Mugs (\(myMugs.count))")
+            for mug in myMugs {
+                println("   \(mug.mugID)")
+            }
+            
+            println("   ")
+            var myMugsFiltered = mugDataSource.getMyMugsForWords(["I", "Love"])
+            println("My Mugs Filtered (\(myMugsFiltered.count))")
+            for (word, mugs) in myMugsFiltered {
+                println("   \(word) count: \(mugs.count)")
+            }
+            println("   ")
+            println("   Has cache for logged user photo: \(CacheHandler.sharedInstance.hasCachedFileForUrl(AuthenticationHelper.sharedInstance.userInSession.photoURL))")
+            println("   ")
         }
-        
-        println("   ")
-        var myMugs = mugDataSource.getMyMugs()
-        println("My Mugs (\(myMugs.count))")
-        for mug in myMugs {
-            println("   \(mug.mugID)")
-        }
-        
-        println("   ")
-        var myMugsFiltered = mugDataSource.getMyMugsForWords(["I", "Love"])
-        println("My Mugs Filtered (\(myMugsFiltered.count))")
-        for (word, mugs) in myMugsFiltered {
-            println("   \(word) count: \(mugs.count)")
-        }
-        println("")
-        println("")
     }
     
     
