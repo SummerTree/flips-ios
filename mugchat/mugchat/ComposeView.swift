@@ -141,6 +141,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         addCameraButtonsViewSubviews()
 
         myMugsView = MyMugsView()
+        myMugsView.delegate = self
         myMugsView.alpha = 0.0
         mugsOrCameraButtonsView.addSubview(myMugsView)
         
