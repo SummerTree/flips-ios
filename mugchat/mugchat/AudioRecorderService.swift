@@ -123,9 +123,9 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         self.recorder.stop()
     }
     
-    func playLastRecordedAudio() {
+    func playAudio(audioURL: NSURL!) {
         var error: NSError?
-        self.player = AVAudioPlayer(contentsOfURL: soundFileURL!, error: &error)
+        self.player = AVAudioPlayer(contentsOfURL: audioURL, error: &error)
         
         if player == nil {
             if let e = error {

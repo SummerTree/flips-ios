@@ -17,10 +17,27 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     private var confirmFlipView: ConfirmFlipView!
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
+    private var containsAudio = false
+    private var containsVideo = false
     
-    convenience init(flipPicture: UIImage!, flipWord: String!) {
+    convenience init(flipWord: String!, flipPicture: UIImage!, flipAudio: NSURL?) {
         self.init()
-        self.confirmFlipView = ConfirmFlipView(flipPicture: flipPicture, flipWord: flipWord)
+        
+        if (flipAudio != nil) {
+            self.containsAudio = true
+        }
+        
+        self.confirmFlipView = ConfirmFlipView(word: flipWord, background: flipPicture, audio: flipAudio)
+    }
+    
+    convenience init(flipWord: String!, flipVideo: NSURL?) {
+        self.init()
+        
+        if (flipVideo != nil) {
+            self.containsVideo = true
+        }
+        
+        self.confirmFlipView = ConfirmFlipView(word: flipWord, video: flipVideo)
     }
     
     override func loadView() {
@@ -48,19 +65,27 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        self.startPreview()
     }
     
     override func viewDidAppear(animated: Bool) {
-        AudioRecorderService.sharedInstance.playLastRecordedAudio()
-        self.previewFlipTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "startPreviewFlipTimer", userInfo: nil, repeats: true)
+        self.previewFlipTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "startPreview", userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(animated: Bool) {
         self.previewFlipTimer.invalidate()
     }
     
-    func startPreviewFlipTimer() {
-        AudioRecorderService.sharedInstance.playLastRecordedAudio()
+    func startPreview() {
+        self.isPlaying = true
+        if (self.containsAudio) {
+            self.confirmFlipView.playAudio()
+        }
+        
+        if (self.containsVideo) {
+            self.confirmFlipView.playVideo()
+        }
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -91,10 +116,10 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         if (isPlaying) {
             self.previewFlipTimer.invalidate()
         } else {
-            AudioRecorderService.sharedInstance.playLastRecordedAudio()
-            self.previewFlipTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "startPreviewFlipTimer", userInfo: nil, repeats: true)
+            self.startPreview()
+            self.previewFlipTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "startPreview", userInfo: nil, repeats: true)
         }
-        
+
         self.isPlaying = !self.isPlaying
     }
 }
