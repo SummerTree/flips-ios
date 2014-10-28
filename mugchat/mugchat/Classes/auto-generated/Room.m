@@ -17,7 +17,7 @@
 
 @implementation Room
 
-@dynamic deleted;
+@dynamic removed;
 @dynamic lastMessageReceivedAt;
 @dynamic name;
 @dynamic pubnubID;

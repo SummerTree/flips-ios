@@ -27,6 +27,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     var delegate: ComposeViewDelegate?
     
     private var mugTexts : [MugText] = [MugText]()
+    private var userStep = 0 // which word is working on
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
@@ -66,7 +67,6 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         addSubviews()
     }
     
-    
     func viewDidLoad() {
         makeConstraints()
     }
@@ -83,24 +83,24 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         var i: Int
         for i=0; i < texts.count; i++ {
             var text = texts[i]
-            var mugText: MugText
-            
-            //TEMP (for tests)
-            switch i {
-            case 0:
-                mugText = MugText(mugId: i, text: text, state: MugState.Default)
-            case 1:
-                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
-            case 2:
-                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideo)
-            case 3:
-                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedWord)
-            default:
-                mugText = MugText(mugId: i, text: text, state: MugState.Default)
-            }
-            
+            var mugText: MugText = MugText(mugId: i, text: text, state: MugState.NewWord)
             self.mugTexts.append(mugText)
         }
+    }
+    
+    func changeMugWordState(word: String!, state: MugState!) {
+        for mugText in self.mugTexts {
+            if (mugText.text == word) {
+                mugText.state = state
+                self.centeredMugsView.layoutIfNeeded()
+                break
+            }
+        }
+    }
+    
+    func navigateToNextWord() {
+        userStep++
+        self.centeredMugsView.selectText(self.mugTexts[userStep])
     }
     
     private func addSubviews() {

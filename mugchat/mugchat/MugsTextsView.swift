@@ -74,6 +74,16 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
         self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
     
+    func selectText(text: MugText?) {
+        for textView in mugTextViews {
+            if (textView.mugText.mugId == text?.mugId) {
+                self.centerScrollViewAtView(textView)
+                self.delegate?.composeViewDidSelectMugText((textView as MugTextView).mugText)
+                break
+            }
+        }
+    }
+    
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
             gesture.view?.alpha = 0.5
@@ -149,7 +159,7 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
                     for var i=1; i < texts.count; i++ { //creating and positioning new MugTextViews
                         index++
                         
-                        var mugText = MugText(mugId: self.mugTexts.count, text: texts[i], state: MugState.Default)
+                        var mugText = MugText(mugId: self.mugTexts.count, text: texts[i], state: MugState.NewWord)
                         self.mugTexts.insert(mugText, atIndex: index)
                         
                         newMugTextView = MugTextView(mugText: mugText)
@@ -209,13 +219,12 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     // MARK: - Overridden Methods
     
     override func layoutSubviews() {
-        super.layoutSubviews()
-        
         var contentOffset: CGFloat = 0.0
         var index = 0
         
         for mugText in mugTexts {
             var mugTextView = self.mugTextViews[index]
+            mugTextView.updateLayout()
             
             var requiredWidth = self.getTextWidth(mugText) + MUG_TEXT_ADDITIONAL_WIDTH
             var mugTextViewWidth = requiredWidth > MIN_BUTTON_WIDTH ? requiredWidth : MIN_BUTTON_WIDTH
@@ -244,6 +253,8 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
             
             index++
         }
+        
+        super.layoutSubviews()
     }
     
     

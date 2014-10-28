@@ -19,7 +19,7 @@
 
 @property (nonatomic, retain) NSString * backgroundURL;
 @property (nonatomic, retain) NSString * category;
-@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSNumber * isPrivate;
 @property (nonatomic, retain) NSString * mugID;
 @property (nonatomic, retain) NSString * soundURL;
