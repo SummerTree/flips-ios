@@ -127,7 +127,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         mugWordLabel.text = mugTexts[0].text
         mugContainerView.addSubview(mugWordLabel)
         
-        centeredMugsView = CenteredMugsView(mugTexts: self.mugTexts)
+        centeredMugsView = MugsTextsView(mugTexts: self.mugTexts)
         centeredMugsView.delegate = self
         self.addSubview(centeredMugsView)
         
@@ -411,14 +411,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     // MARK: - MugsTextsView Delegate
     
-    func composeViewDidSelectMugText(mugText: MugText!) {
+    func mugsTextsViewDidSelectMugText(mugText: MugText!) {
         mugWordLabel.text = mugText.text
-        //TODO: update MyMugs... (substories of 7942)
-        
         self.myMugsView.setWord(mugText.text)
     }
     
-    func composeViewDidSplitMugText(mugTexts: [MugText]) {
+    func mugsTextsViewDidSplitMugText(mugTexts: [MugText]) {
         self.mugTexts = mugTexts
     }
     

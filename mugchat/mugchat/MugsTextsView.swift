@@ -361,7 +361,7 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
 
 protocol MugsTextsViewDelegate {
 
-    func composeViewDidSelectMugText(mugText: MugText!)
-    func composeViewDidSplitMugText(mugTexts: [MugText])
+    func mugsTextsViewDidSelectMugText(mugText: MugText!)
+    func mugsTextsViewDidSplitMugText(mugTexts: [MugText])
     
 }
