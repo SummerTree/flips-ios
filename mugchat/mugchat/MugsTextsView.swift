@@ -71,7 +71,7 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
         self.centerScrollViewAtView(gesture.view!)
-        self.delegate?.composeViewDidSelectMugText((gesture.view! as MugTextView).mugText)
+        self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
     
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
@@ -188,10 +188,10 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
                     }
                 }
                 
-                self.delegate?.composeViewDidSplitMugText(self.mugTexts)
+                self.delegate?.mugsTextsViewDidSplitMugText(self.mugTexts)
                 
                 self.centerScrollViewAtView(splitMugTextView)
-                self.delegate?.composeViewDidSelectMugText(splitMugTextView.mugText)
+                self.delegate?.mugsTextsViewDidSelectMugText(splitMugTextView.mugText)
             ()})
 
     }
@@ -300,7 +300,7 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
             scrollView.scrollEnabled = true
         }
         
-        self.delegate?.composeViewDidSelectMugText(mugTextViewToBeCentered.mugText)
+        self.delegate?.mugsTextsViewDidSelectMugText(mugTextViewToBeCentered.mugText)
     }
     
     private func centerScrollViewAtView(view: UIView) {

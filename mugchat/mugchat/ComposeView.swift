@@ -428,7 +428,11 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
-        //TODO
+        //TODO: story 7638
+    }
+    
+    func myMugsViewDidDeselectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
+        //TODO: story 7638
     }
     
     

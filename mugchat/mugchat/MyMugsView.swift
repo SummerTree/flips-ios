@@ -88,7 +88,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func addMugButtonTapped(sender: UIButton!) {
-        delegate?.myMugsViewDidTapAddMug(self) //TODO: slideToCameraView()
+        delegate?.myMugsViewDidTapAddMug(self)
     }
     
     func setWord(word: String) {
@@ -121,6 +121,18 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        //TODO (story 7638): Selecting a mug from "My Mugs" or "Stock Mugs" should result in the selected mug being overlaid with a checkmark. (Check)
+        //self.delegate?.myMugsViewDidSelectMug()
+    }
+    
+    func collectionView(collectionView: UICollectionView!, didDeselectItemAtIndexPath indexPath: NSIndexPath!) {
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        // TODO (story 7638): Tapping a selected mug will de-select it, and will return the upper portion of the screen to displaying the default (green) background.
+        //self.delegate?.myMugsViewDidDeselectMug()
+    }
+    
 }
 
 
@@ -130,5 +142,6 @@ protocol MyMugsViewViewDelegate {
     
     func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
     func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!)
+    func myMugsViewDidDeselectMug(myMugsView: MyMugsView!, selectedMug: Mug!)
     
 }
