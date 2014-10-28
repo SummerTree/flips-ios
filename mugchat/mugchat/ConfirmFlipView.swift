@@ -11,25 +11,52 @@
 //
 
 import UIKit
+import MediaPlayer
 
-public class ConfirmFlipView : UIView {
+public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     var delegate: ConfirmFlipViewDelegate?
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
+    private let MUG_VIDEO_WIDTH: CGFloat = 240.0
     private let MUG_WORD_LABEL_MARGIN_BOTTOM: CGFloat = 40.0
     
     private var mugContainerView: UIView!
     private var flipImageView: UIImageView!
+    private var moviePlayer: MPMoviePlayerController!
     private var flipWordLabel: UILabel!
+    private var flipVideoURL: NSURL!
+    private var flipAudioURL: NSURL!
     private var rejectButton: UIButton!
     private var acceptButton: UIButton!
     
-    convenience init(flipPicture: UIImage!, flipWord: String!) {
+    convenience init(word: String!, background: UIImage!, audio: NSURL?) {
         self.init()
-        self.flipImageView = UIImageView(image: flipPicture)
+        
         self.flipWordLabel = UILabel()
-        self.flipWordLabel.text = flipWord
+        self.flipWordLabel.text = word
+        
+        self.flipImageView = UIImageView(image: background)
+        
+        if (audio != nil) {
+            self.flipAudioURL = audio!
+        }
+        
+        self.addSubviews()
+    }
+    
+    convenience init(word: String!, video: NSURL!) {
+        self.init()
+        
+        self.flipWordLabel = UILabel()
+        self.flipWordLabel.text = word
+        
+        self.flipImageView = UIImageView.imageWithColor(UIColor.avacado())
+        
+        if (video != nil) {
+            self.flipVideoURL = video!
+            self.moviePlayer = MPMoviePlayerController(contentURL: self.flipVideoURL)
+        }
         
         self.addSubviews()
     }
@@ -45,12 +72,23 @@ public class ConfirmFlipView : UIView {
     func addSubviews() {
         mugContainerView = UIView()
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
+        tapGestureRecognizer.delegate = self
         mugContainerView.addGestureRecognizer(tapGestureRecognizer)
         
         self.addSubview(mugContainerView)
         
-        flipImageView.contentMode = UIViewContentMode.ScaleAspectFit
-        mugContainerView.addSubview(self.flipImageView)
+        if (self.flipImageView != nil) {
+            flipImageView.contentMode = UIViewContentMode.ScaleAspectFit
+            mugContainerView.addSubview(self.flipImageView)
+        }
+        
+        if (self.moviePlayer != nil) {
+            self.moviePlayer.controlStyle = MPMovieControlStyle.None
+            self.moviePlayer.shouldAutoplay = false
+            self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
+            mugContainerView.addSubview(moviePlayer.view)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
+        }
         
         flipWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
         flipWordLabel.textColor = UIColor.whiteColor()
@@ -68,6 +106,12 @@ public class ConfirmFlipView : UIView {
         acceptButton.backgroundColor = UIColor.avacado()
         acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(acceptButton)
+    }
+    
+    func moviePlayerDidFinish(notification: NSNotification) {
+        let player = notification.object as MPMoviePlayerController
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
     }
     
     func playOrPausePreview() {
@@ -96,6 +140,22 @@ public class ConfirmFlipView : UIView {
             }
 
             make.height.equalTo()(self.flipImageView.mas_width)
+        }
+        
+        if (self.moviePlayer != nil) {
+            self.moviePlayer.view.mas_makeConstraints({ (make) -> Void in
+                make.top.equalTo()(self.mugContainerView)
+                
+                if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                    make.centerX.equalTo()(self.mugContainerView)
+                    make.width.equalTo()(self.MUG_VIDEO_WIDTH)
+                } else {
+                    make.left.equalTo()(self.mugContainerView)
+                    make.right.equalTo()(self.mugContainerView)
+                }
+                
+                make.height.equalTo()(self.moviePlayer.view.mas_width)
+            })
         }
         
         flipWordLabel.mas_makeConstraints { (make) -> Void in
@@ -127,6 +187,26 @@ public class ConfirmFlipView : UIView {
     
     func acceptButtonTapped() {
         self.delegate?.confirmFlipViewDidTapAcceptButton(self)
+    }
+    
+    func playVideo() {
+        self.moviePlayer.play()
+    }
+    
+    func playAudio() {
+        AudioRecorderService.sharedInstance.playAudio(flipAudioURL)
+    }
+    
+    
+    // MARK: - Gesture Recognizer Delegate
+    
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+
     }
     
     
