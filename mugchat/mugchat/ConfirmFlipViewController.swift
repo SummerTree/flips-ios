@@ -14,6 +14,8 @@ import Foundation
 
 class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
+    var delegate: ConfirmFlipViewControllerDelegate?
+    
     private var confirmFlipView: ConfirmFlipView!
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
@@ -105,10 +107,19 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
-        self.navigationController?.popViewControllerAnimated(false)
+        let mugDataSource = MugDataSource()
+        
+        mugDataSource.createMugWithWord(flipView.getWord(), backgroundImage: confirmFlipView.getImage(), soundURL: nil, createMugSuccess: { (mug) -> Void in
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
+            self.navigationController?.popViewControllerAnimated(false)
+        }) { (message) -> Void in
+            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            alertView.show()
+        }
     }
     
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!) {
+        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
         self.navigationController?.popViewControllerAnimated(false)
     }
     
@@ -122,4 +133,8 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
 
         self.isPlaying = !self.isPlaying
     }
+}
+
+protocol ConfirmFlipViewControllerDelegate {
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, mug: Mug?)
 }

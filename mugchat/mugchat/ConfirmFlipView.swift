@@ -206,6 +206,18 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+
+    }
+    
+    
+    // MARK: - Getters
+    
+    func getWord() -> String! {
+        return self.flipWordLabel.text
+    }
+    
+    func getImage() -> UIImage! {
+        return self.flipImageView.image
     }
 }
 

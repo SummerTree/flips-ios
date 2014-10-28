@@ -18,7 +18,7 @@
 @interface MugMessage : NSManagedObject
 
 @property (nonatomic, retain) NSDate * createdAt;
-@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSNumber * notRead;
 @property (nonatomic, retain) NSDate * receivedAt;
 @property (nonatomic, retain) User *from;
