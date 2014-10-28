@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate {
+class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate {
     
     private let composeView : ComposeView
     
@@ -115,6 +115,15 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
         })
     }
     
+    func composeViewDidHoldShutterButton(composeView: ComposeView!, withCamera cameraView: CameraView!) {
+        cameraView.captureVideo()
+    }
+    
+    func composeViewDidFinishRecordingView(composeView: ComposeView!, withURL videoURL: NSURL!) {
+        let confirmFlipViewController = ConfirmFlipViewController(flipWord: self.composeView.getMugWord(), flipVideo: videoURL)
+        self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+    }
+    
     func composeViewMakeConstraintToNavigationBarBottom(composeView: UIView!) {
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
@@ -140,7 +149,18 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     // MARK: - Audio Recorder Service Delegate
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL fileURL: NSURL?, success: Bool!) {
-        let confirmFlipViewController = ConfirmFlipViewController(flipPicture: self.composeView.getMugImageView().image!, flipWord: self.composeView.getMugWord())
+        let confirmFlipViewController = ConfirmFlipViewController(flipWord: self.composeView.getMugWord(), flipPicture: self.composeView.getMugImageView().image!, flipAudio: fileURL)
+        confirmFlipViewController.delegate = self
         self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+    }
+    
+    
+    // MARK: - ConfirmFlipViewController Delegate
+    
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, mug: Mug?) {
+        if (success) {
+            composeView.changeMugWordState(mug!.word, state: MugState.AssociatedWithoutOtherResources)
+            composeView.navigateToNextWord()
+        }
     }
 }

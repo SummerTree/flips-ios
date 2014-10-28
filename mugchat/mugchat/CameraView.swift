@@ -20,7 +20,8 @@ let SessionRunningAndDeviceAuthorizedContext = UnsafeMutablePointer<()>()
 public typealias CapturePictureSuccess = (UIImage?) -> Void
 public typealias CapturePictureFail = (NSError?) -> Void
 
-class CameraView : UIView {
+
+class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     private let DEVICE_AUTHORIZED_KEY_PATH = "sessionRunningAndDeviceAuthorized"
     private let CAPTURING_STILL_IMAGE_KEY_PATH = "stillImageOutput.capturingStillImage"
@@ -299,11 +300,13 @@ class CameraView : UIView {
             }
             
             var movieOutput = AVCaptureMovieFileOutput()
+            
             if (self.session.canAddOutput(movieOutput)) {
                 self.session.addOutput(movieOutput)
                 self.movieFileOutput = movieOutput
                 
                 var connection = self.movieFileOutput.connectionWithMediaType(AVMediaTypeVideo)
+                connection.videoMirrored = true
                 if (connection.videoStabilizationEnabled) {
                     connection.enablesVideoStabilizationWhenAvailable = true
                 }
@@ -524,6 +527,34 @@ class CameraView : UIView {
         })
     }
     
+    func captureVideo() {
+        let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+        let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
+        videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
+        
+        videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
+        
+        var format = NSDateFormatter()
+        format.dateFormat="yyyy-MM-dd"
+        
+        // TODO - which name should we use?
+        var currentFileName = "recording-\(format.stringFromDate(NSDate())).mov"
+        println("Recording video at: \(currentFileName)")
+        
+        var dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        var docsDir: AnyObject = dirPaths[0]
+        var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+        var videoURL = NSURL(fileURLWithPath: videoFilePath)
+        NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+        self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
+    }
+    
+    func stopRecording() {
+        self.movieFileOutput.stopRecording()
+    }
+    
     func focusAndExposeTap(gestureRecognizer: UIGestureRecognizer) {
         let layer = self.previewView.layer as AVCaptureVideoPreviewLayer
         let devicePoint = layer.captureDevicePointOfInterestForPoint(gestureRecognizer.locationInView(gestureRecognizer.view))
@@ -640,6 +671,17 @@ class CameraView : UIView {
             }
         })
     }
+    
+    
+    // MARK: Finish Record Output Delegate
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+        if (error != nil) {
+            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, withSuccess: false)
+        } else {
+            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, withSuccess: true)
+        }
+    }
 }
 
 
@@ -647,4 +689,5 @@ class CameraView : UIView {
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool) // Take a picture button should be disabled
     optional func cameraViewDidTapMicrophoneButton(cameraView: CameraView)
+    optional func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool)
 }

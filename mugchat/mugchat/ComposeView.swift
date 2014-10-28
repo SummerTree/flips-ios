@@ -12,17 +12,15 @@
 
 import UIKit
 import AVFoundation
+import AssetsLibrary
 
-class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsViewDelegate {
+class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsTextsViewDelegate, MyMugsViewViewDelegate {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
     private let MUGWORD_LIST_HEIGHT: CGFloat = 40.0
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
-    private let MY_MUGS_LABEL_MARGIN_TOP: CGFloat = 5.0
-    private let MY_MUGS_LABEL_MARGIN_LEFT: CGFloat = 10.0
-    private let ADD_MUG_BUTTON_MARGIN_TOP: CGFloat = 5.0
     private let MUGWORD_LIST_SEPARATOR_HEIGHT: CGFloat = 10.0
     
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
@@ -30,27 +28,26 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     var delegate: ComposeViewDelegate?
     
     private var mugTexts : [MugText] = [MugText]()
+    private var userStep = 0 // which word is working on
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
-    private var centeredMugsView: CenteredMugsView!
+    private var centeredMugsView: MugsTextsView!
     private var mugTextsContainerSeparator : UIView!
     private var mugsOrCameraButtonsView: UIView!
     
     private var cameraPreview: CameraView!
     private var cameraButtonsView: UIView!
-    private var captureAudioProgressBar: UIView!
+    private var captureProgressBar: UIView!
     private var takePictureButton: UIButton!
     private var captureAudioButton: UIButton!
     private var cancelCaptureAudioButton: UIButton!
     private var gridButton: UIButton!
     private var galleryButton: UIButton!
     
-    private var mugsView: UIView!
-    private var myMugsLabel: UILabel!
-    private var addMugButton: UIButton!
     private var arrowToCurrentMug: UIButton!
+    private var myMugsView: MyMugsView!
     
     private var isAlreadyUsingAPicture = false
     
@@ -71,13 +68,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         addSubviews()
     }
     
-    
     func viewDidLoad() {
         makeConstraints()
     }
     
     func viewWillAppear() {
         self.layoutIfNeeded()
+        
+        self.centeredMugsView.selectText(self.mugTexts[userStep])
         
         if (!isAlreadyUsingAPicture) {
             self.slideToCameraView()
@@ -88,38 +86,34 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         var i: Int
         for i=0; i < texts.count; i++ {
             var text = texts[i]
-            var mugText: MugText
-            
-            //TEMP (for tests)
-            switch i {
-            case 0:
-                mugText = MugText(mugId: i, text: text, state: MugState.Default)
-            case 1:
-                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideoWithAdditionalResources)
-            case 2:
-                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedImageOrVideo)
-            case 3:
-                mugText = MugText(mugId: i, text: text, state: MugState.AssociatedWord)
-            default:
-                mugText = MugText(mugId: i, text: text, state: MugState.Default)
-            }
-            
+            var mugText: MugText = MugText(mugId: i, text: text, state: MugState.NewWord)
             self.mugTexts.append(mugText)
         }
+    }
+    
+    func changeMugWordState(word: String!, state: MugState!) {
+        for mugText in self.mugTexts {
+            if (mugText.text == word) {
+                mugText.state = state
+                self.centeredMugsView.layoutIfNeeded()
+                break
+            }
+        }
+    }
+    
+    func navigateToNextWord() {
+        userStep++
+        self.centeredMugsView.selectText(self.mugTexts[userStep])
     }
     
     private func addSubviews() {
         mugContainerView = UIView()
         self.addSubview(mugContainerView)
         
-        captureAudioProgressBar = UIView()
-        captureAudioProgressBar.backgroundColor = UIColor.avacado()
-        self.addSubview(captureAudioProgressBar)
-        
         cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false, showMicrophoneButton: true)
         cameraPreview.alpha = 1.0
         cameraPreview.delegate = self
-        self.addSubview(cameraPreview)
+        mugContainerView.addSubview(cameraPreview)
         
         mugImageView = UIImageView.imageWithColor(UIColor.avacado())
         mugImageView.alpha = 0.0
@@ -132,7 +126,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         mugWordLabel.text = mugTexts[0].text
         mugContainerView.addSubview(mugWordLabel)
         
-        centeredMugsView = CenteredMugsView(mugTexts: self.mugTexts)
+        centeredMugsView = MugsTextsView(mugTexts: self.mugTexts)
         centeredMugsView.delegate = self
         self.addSubview(centeredMugsView)
         
@@ -143,8 +137,22 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         mugsOrCameraButtonsView.backgroundColor = UIColor.sand()
         self.addSubview(mugsOrCameraButtonsView)
         
+        captureProgressBar = UIView()
+        captureProgressBar.backgroundColor = UIColor.avacado()
+        self.addSubview(captureProgressBar)
+        
         addCameraButtonsViewSubviews()
-        addMugsViewSubviews()
+
+        myMugsView = MyMugsView()
+        myMugsView.delegate = self
+        myMugsView.alpha = 0.0
+        mugsOrCameraButtonsView.addSubview(myMugsView)
+        
+        arrowToCurrentMug = UIButton()
+        arrowToCurrentMug.userInteractionEnabled = false
+        arrowToCurrentMug.setImage(UIImage(named: "Triangle"), forState: .Normal)
+        arrowToCurrentMug.sizeToFit()
+        myMugsView.addSubview(arrowToCurrentMug)
     }
     
     private func addCameraButtonsViewSubviews() {
@@ -162,51 +170,33 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         cancelCaptureAudioButton.hidden = true
         cancelCaptureAudioButton.setImage(UIImage(named: "Cancel_Audio"), forState: .Normal)
         cancelCaptureAudioButton.sizeToFit()
-        cancelCaptureAudioButton.addTarget(self, action: "cancelCaptureAudioButtonTapped:", forControlEvents: .TouchUpInside)
+        cancelCaptureAudioButton.addTarget(self, action: "cancelCaptureAudioButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(cancelCaptureAudioButton)
         
         takePictureButton = UIButton()
         takePictureButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         takePictureButton.sizeToFit()
-        takePictureButton.addTarget(self, action: "takePictureButtonTapped:", forControlEvents: .TouchUpInside)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: "shutterButtonLongPressAction:")
+        longPress.minimumPressDuration = 0.5
+        longPress.allowableMovement = true
+        takePictureButton.addGestureRecognizer(longPress)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: "shutterButtonTapAction:")
+        takePictureButton.addGestureRecognizer(tapGesture)
+        
         cameraButtonsView.addSubview(takePictureButton)
         
         gridButton = UIButton()
         gridButton.setImage(UIImage(named: "Grid"), forState: .Normal)
         gridButton.sizeToFit()
-        gridButton.addTarget(self, action: "gridButtonTapped:", forControlEvents: .TouchUpInside)
+        gridButton.addTarget(self, action: "gridButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(gridButton)
         
         galleryButton = UIButton()
         galleryButton.setImage(UIImage(named: "Church"), forState: .Normal)
-        galleryButton.addTarget(self, action: "galleryButtonTapped:", forControlEvents: .TouchUpInside)
+        galleryButton.addTarget(self, action: "galleryButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(galleryButton)
-    }
-    
-    private func addMugsViewSubviews() {
-        mugsView = UIView()
-        mugsView.alpha = 0.0
-        mugsOrCameraButtonsView.addSubview(mugsView)
-        
-        arrowToCurrentMug = UIButton()
-        arrowToCurrentMug.userInteractionEnabled = false
-        arrowToCurrentMug.setImage(UIImage(named: "Triangle"), forState: .Normal)
-        arrowToCurrentMug.sizeToFit()
-        mugsView.addSubview(arrowToCurrentMug)
-        
-        myMugsLabel = UILabel()
-        myMugsLabel.numberOfLines = 1
-        myMugsLabel.sizeToFit()
-        myMugsLabel.text = NSLocalizedString("My Mugs", comment: "My Mugs")
-        myMugsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
-        myMugsLabel.textColor = UIColor.plum()
-        mugsView.addSubview(myMugsLabel)
-        
-        addMugButton = UIButton()
-        addMugButton.addTarget(self, action: "addMugButtonTapped:", forControlEvents: .TouchUpInside)
-        addMugButton.setImage(UIImage(named: "AddMediaButton"), forState: .Normal)
-        addMugButton.sizeToFit()
-        mugsView.addSubview(addMugButton)
     }
     
     private func makeConstraints() {
@@ -219,7 +209,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         // asking help to delegate to align the container with navigation bar
         self.delegate?.composeViewMakeConstraintToNavigationBarBottom(mugContainerView)
         
-        captureAudioProgressBar.mas_makeConstraints { (make) -> Void in
+        captureProgressBar.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.mugContainerView)
             make.left.equalTo()(self.mugContainerView)
             make.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
@@ -331,7 +321,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     private func makeMugsViewConstraints() {
-        mugsView.mas_makeConstraints { (make) -> Void in
+        myMugsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.cameraButtonsView.mas_right)
             make.top.equalTo()(self.mugsOrCameraButtonsView)
             make.width.equalTo()(self.cameraButtonsView)
@@ -339,32 +329,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         }
         
         arrowToCurrentMug.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self.mugsView)
-            make.centerY.equalTo()(self.mugsView.mas_top)
-        }
-        
-        myMugsLabel.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.mugsView).with().offset()(self.MY_MUGS_LABEL_MARGIN_TOP)
-            make.left.equalTo()(self.mugsView).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
-        }
-        
-        addMugButton.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.myMugsLabel)
-            make.top.equalTo()(self.myMugsLabel.mas_bottom).with().offset()(self.ADD_MUG_BUTTON_MARGIN_TOP)
-            
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.width.equalTo()(self.addMugButton.frame.width / 3 * 2)
-                make.height.equalTo()(self.addMugButton.mas_width)
-            } else {
-                make.width.equalTo()(self.addMugButton.frame.width)
-                make.height.equalTo()(self.addMugButton.frame.height)
-            }
+            make.centerX.equalTo()(self.myMugsView)
+            make.centerY.equalTo()(self.myMugsView.mas_top)
         }
     }
     
     func setPicture(image: UIImage!) {
         self.mugImageView.image = image
-        self.isAlreadyUsingAPicture = true
+        self.isAlreadyUsingAPicture = false
         self.hideCameraShowPicture()
         self.showRecordingView()
     }
@@ -388,10 +360,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func slideToMyMugsView() {
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             
-            self.mugsView.alpha = 1.0
+            self.myMugsView.alpha = 1.0
             self.hideCameraShowPicture()
             
-            self.mugsView.mas_updateConstraints({ (make) -> Void in
+            self.myMugsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.left.equalTo()(self.mugsOrCameraButtonsView)
                 make.right.equalTo()(self.mugsOrCameraButtonsView)
@@ -401,7 +373,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
             
             self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
-                make.left.equalTo()(self.mugsView.mas_right)
+                make.left.equalTo()(self.myMugsView.mas_right)
                 make.width.equalTo()(self.mugsOrCameraButtonsView)
                 make.top.equalTo()(self.mugsOrCameraButtonsView)
                 make.height.equalTo()(self.mugsOrCameraButtonsView)
@@ -420,8 +392,8 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
             self.cameraPreview.registerObservers()
             
             self.mugImageView.alpha = 0.0
-            self.mugsView.alpha = 0.0
-            self.mugsView.mas_updateConstraints({ (make) -> Void in
+            self.myMugsView.alpha = 0.0
+            self.myMugsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.width.equalTo()(self.mugsOrCameraButtonsView)
                 make.right.equalTo()(self.cameraButtonsView.mas_left)
@@ -449,25 +421,44 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     
-    // MARK: - Mugs View Delegate
+    // MARK: - MugsTextsView Delegate
     
-    func composeViewDidSelectMugText(mugText: MugText!) {
+    func mugsTextsViewDidSelectMugText(mugText: MugText!) {
         mugWordLabel.text = mugText.text
-        //TODO: update MyMugs... (substories of 7942)
+        self.myMugsView.setWord(mugText.text)
     }
     
-    func composeViewDidSplitMugText(mugTexts: [MugText]) {
+    func mugsTextsViewDidSplitMugText(mugTexts: [MugText]) {
         self.mugTexts = mugTexts
     }
+    
+    
+    // MARK: - MyMugsView Delegate
 
-    
-    // MARK: - Button actions
-    
-    func addMugButtonTapped(sender: UIButton!) {
+    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!) {
         slideToCameraView()
     }
     
-    func takePictureButtonTapped(sender: UIButton!) {
+    func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
+        //TODO: story 7638
+    }
+    
+    func myMugsViewDidDeselectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
+        //TODO: story 7638
+    }
+    
+    
+    // MARK: - Button actions
+    
+    func shutterButtonLongPressAction(gesture: UILongPressGestureRecognizer) {
+        if (gesture.state == .Began) {
+            self.delegate?.composeViewDidHoldShutterButton(self, withCamera: self.cameraPreview)
+            self.startRecordingProgressBar()
+            self.userInteractionEnabled = false
+        }
+    }
+    
+    func shutterButtonTapAction(gesture: UITapGestureRecognizer) {
         self.delegate?.composeViewDidTapTakePictureButton(self, withCamera: self.cameraPreview)
     }
     
@@ -487,8 +478,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func captureAudioButtonTapped(sender: UIButton!) {
         self.isAlreadyUsingAPicture = false
         self.delegate?.composeViewDidTapCaptureAudioButton(self)
+        self.startRecordingProgressBar()
+    }
+    
+    func startRecordingProgressBar() {
         UIView.animateWithDuration(1.0, animations: { () -> Void in
-            self.captureAudioProgressBar.mas_updateConstraints({ (update) -> Void in
+            self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
                 update.top.equalTo()(self.mugContainerView)
                 update.left.equalTo()(self.mugContainerView)
@@ -497,16 +492,16 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
             })
             
             self.layoutIfNeeded()
-        }) { (completed) -> Void in
-            self.captureAudioProgressBar.mas_updateConstraints({ (update) -> Void in
-                update.removeExisting = true
-                update.top.equalTo()(self.mugContainerView)
-                update.left.equalTo()(self.mugContainerView)
-                update.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
-                update.width.equalTo()(0)
-            })
-            
-            self.layoutIfNeeded()
+            }) { (completed) -> Void in
+                self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
+                    update.removeExisting = true
+                    update.top.equalTo()(self.mugContainerView)
+                    update.left.equalTo()(self.mugContainerView)
+                    update.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
+                    update.width.equalTo()(0)
+                })
+                
+                self.layoutIfNeeded()
         }
     }
 
@@ -526,6 +521,13 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool)  {
         // Take a picture button should be disabled
         takePictureButton.enabled = available
+    }
+    
+    func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool) {
+        self.userInteractionEnabled = true
+        if (success) {
+            self.delegate?.composeViewDidFinishRecordingView(self, withURL: videoURL)
+        }
     }
     
     func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
@@ -566,5 +568,7 @@ protocol ComposeViewDelegate {
     func composeViewDidTapCaptureAudioButton(composeView: ComposeView!)
     func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!)
     func composeViewDidTapGalleryButton(composeView: ComposeView!)
+    func composeViewDidHoldShutterButton(composeView: ComposeView!, withCamera cameraView: CameraView!)
+    func composeViewDidFinishRecordingView(composeView: ComposeView!, withURL videoURL: NSURL!)
     func composeViewMakeConstraintToNavigationBarBottom(containerView: UIView!)
 }

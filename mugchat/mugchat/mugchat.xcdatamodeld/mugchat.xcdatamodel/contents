@@ -21,9 +21,9 @@
     <entity name="Mug" representedClassName="Mug" syncable="YES">
         <attribute name="backgroundURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="isPrivate" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="mugID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="removed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="soundURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="word" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MugMessage" inverseName="mugs" inverseEntity="MugMessage" syncable="YES"/>
@@ -31,20 +31,20 @@
     </entity>
     <entity name="MugMessage" representedClassName="MugMessage" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="notRead" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="receivedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="removed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <relationship name="from" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="mugsSent" inverseEntity="User" syncable="YES"/>
         <relationship name="mugs" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Mug" inverseName="messages" inverseEntity="Mug" syncable="YES"/>
         <relationship name="room" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Room" inverseName="mugMessages" inverseEntity="Room" syncable="YES"/>
     </entity>
     <entity name="Room" representedClassName="Room" syncable="YES">
-        <attribute name="deleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="lastMessageReceivedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pubnubID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="removed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="roomID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="admin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" syncable="YES"/>
+        <relationship name="admin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="adminRooms" inverseEntity="User" syncable="YES"/>
         <relationship name="mugMessages" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MugMessage" inverseName="room" inverseEntity="MugMessage" syncable="YES"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="rooms" inverseEntity="User" syncable="YES"/>
     </entity>
@@ -60,6 +60,7 @@
         <attribute name="pubnubID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="adminRooms" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Room" inverseName="admin" inverseEntity="Room" syncable="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
         <relationship name="mugs" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Mug" inverseName="owner" inverseEntity="Mug" syncable="YES"/>
         <relationship name="mugsSent" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MugMessage" inverseName="from" inverseEntity="MugMessage" syncable="YES"/>
@@ -70,8 +71,8 @@
         <element name="Contact" positionX="-461" positionY="296" width="128" height="163"/>
         <element name="Device" positionX="-857" positionY="36" width="128" height="135"/>
         <element name="Mug" positionX="-675" positionY="324" width="128" height="180"/>
-        <element name="MugMessage" positionX="-144" positionY="470" width="128" height="148"/>
+        <element name="MugMessage" positionX="-144" positionY="470" width="128" height="150"/>
         <element name="Room" positionX="-974" positionY="428" width="128" height="163"/>
-        <element name="User" positionX="-623" positionY="-54" width="128" height="283"/>
+        <element name="User" positionX="-623" positionY="-54" width="128" height="298"/>
     </elements>
 </model>

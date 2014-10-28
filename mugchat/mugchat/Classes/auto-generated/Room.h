@@ -17,7 +17,7 @@
 
 @interface Room : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * deleted;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSDate * lastMessageReceivedAt;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * pubnubID;

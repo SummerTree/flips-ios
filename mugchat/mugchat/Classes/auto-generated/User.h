@@ -33,6 +33,7 @@
 @property (nonatomic, retain) NSOrderedSet *mugsSent;
 @property (nonatomic, retain) NSOrderedSet *rooms;
 @property (nonatomic, retain) NSSet *userContact;
+@property (nonatomic, retain) Room *adminRooms;
 @end
 
 @interface User (CoreDataGeneratedAccessors)
