@@ -25,7 +25,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     
     private var myMugsLabel: UILabel!
     private var addMugButton: UIButton!
-    private var collectionView: UICollectionView!
+    private var myMugsCollectionView: UICollectionView!
     
     var mugDataSource = MugDataSource()
     var myMugs: [Mug] = [Mug]()
@@ -60,15 +60,13 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: self.MY_MUGS_CELL_MARGIN_TOP, left: self.MY_MUGS_CELL_MARGIN_LEFT, bottom: self.MY_MUGS_CELL_MARGIN_BOTTOM, right: self.MY_MUGS_CELL_MARGIN_RIGHT)
         layout.itemSize = CGSize(width: self.MY_MUGS_CELL_WIDTH, height: self.MY_MUGS_CELL_HEIGHT)
-        collectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
-        collectionView!.dataSource = self
-        collectionView!.delegate = self
-        collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView!.backgroundColor = UIColor.whiteColor()
-        
-        collectionView!.allowsSelection = true
-        
-        self.addSubview(collectionView!)
+        myMugsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
+        myMugsCollectionView!.dataSource = self
+        myMugsCollectionView!.delegate = self
+        myMugsCollectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        myMugsCollectionView!.backgroundColor = UIColor.whiteColor()
+        myMugsCollectionView!.allowsSelection = true
+        self.addSubview(myMugsCollectionView!)
         
         makeConstraints()
     }
@@ -79,7 +77,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
             make.left.equalTo()(self).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
         }
 
-        collectionView.mas_makeConstraints { (make) -> Void in
+        myMugsCollectionView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.myMugsLabel.mas_bottom).with().offset()(self.MY_MUGS_LABEL_MARGIN_TOP)
             make.left.equalTo()(self).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.MY_MUGS_LABEL_MARGIN_LEFT)
@@ -92,20 +90,16 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         //TODO: delegate
     }
     
-    
     func setWord(word: String) {
         self.myMugs = mugDataSource.getMyMugsForWord(word)
-        println("My Mugs Filtered (\(self.myMugs.count))")
-        for mug in self.myMugs {
-            println("Mug: \(mug.backgroundURL)") //TODO: jogar no UIImageView
-        }
+        myMugsCollectionView.reloadData()
     }
     
     
     // MARK: - UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return self.myMugs.count + 1 //addMugButton
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -114,18 +108,13 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         if (indexPath.section == 0 && indexPath.row == 0) {
             cell.addSubview(addMugButton)
         } else {
-            var cellImageView: UIImageView = UIImageView()
-            
-            //cellImageView.setImageWithURL(NSURL(string: "http://www.quentinroussat.fr/assets/img/iOS%20icon's%20Style/ios8.png"))
-            var nextButtonImage : UIImage = UIImage(named: "Forward")
-            cellImageView.setImageWithURL(NSURL(string: "https://s3.amazonaws.com/mugchat-pictures/09212b08-2904-4576-a93d-d686e9a3cba1.jpg"), placeholderImage: nextButtonImage)
-            cellImageView.frame.size = CGSizeMake(self.MY_MUGS_CELL_WIDTH, self.MY_MUGS_CELL_HEIGHT)
-            
-            ///var url: NSURL = NSURL.URLWithString("http://www.quentinroussat.fr/assets/img/iOS%20icon's%20Style/ios8.png")
-            //var data: NSData = NSData.dataWithContentsOfURL(url, options: nil, error: nil)
-            //cellImageView.image = UIImage(data: data)
-            
-            cell.addSubview(cellImageView);
+            var currentMug: Mug? = self.myMugs[indexPath.row - 1]
+            if (currentMug != nil) {
+                var cellImageView: UIImageView = UIImageView()
+                cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
+                cellImageView.frame.size = CGSizeMake(self.MY_MUGS_CELL_WIDTH, self.MY_MUGS_CELL_HEIGHT)
+                cell.addSubview(cellImageView);
+           }
         }
         
         return cell
