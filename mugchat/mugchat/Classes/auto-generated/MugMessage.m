@@ -19,7 +19,7 @@
 @implementation MugMessage
 
 @dynamic createdAt;
-@dynamic deleted;
+@dynamic removed;
 @dynamic notRead;
 @dynamic receivedAt;
 @dynamic from;

@@ -36,5 +36,6 @@
 @dynamic mugsSent;
 @dynamic rooms;
 @dynamic userContact;
+@dynamic adminRooms;
 
 @end
