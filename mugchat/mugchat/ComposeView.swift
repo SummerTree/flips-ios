@@ -445,8 +445,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!) {
-        //TODO: story 7638
         self.mugTexts[userStep].associatedMug = mug
+        
+        self.mugImageView.setImageWithURL(NSURL(string: mug.backgroundURL))
+        self.isAlreadyUsingAPicture = true
     }
     
     
