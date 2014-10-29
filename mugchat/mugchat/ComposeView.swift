@@ -75,7 +75,9 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func viewWillAppear() {
         self.layoutIfNeeded()
         
-        self.centeredMugsView.selectText(self.mugTexts[userStep])
+        if (self.mugTexts.count > userStep) {
+            self.centeredMugsView.selectText(self.mugTexts[userStep])
+        }
         
         if (!isAlreadyUsingAPicture) {
             self.slideToCameraView()
@@ -439,11 +441,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         slideToCameraView()
     }
     
-    func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
-        //TODO: story 7638
-    }
-    
-    func myMugsViewDidDeselectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
+    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!, selected: Bool!) {
         //TODO: story 7638
     }
     

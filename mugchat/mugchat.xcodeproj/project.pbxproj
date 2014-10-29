@@ -119,6 +119,7 @@
 		A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* MugTextView.swift */; };
 		A2A5C6D719FEBC3500E4CB2C /* MyMugsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */; };
 		A2A5C6D91A001E7A00E4CB2C /* SelectedMugOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */; };
+		A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */; };
 		A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
@@ -255,6 +256,7 @@
 		A2392BF819EEE7C70037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
 		A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMugsView.swift; sourceTree = "<group>"; };
 		A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedMugOverlayView.swift; sourceTree = "<group>"; };
+		A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMugsViewCell.swift; sourceTree = "<group>"; };
 		A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
@@ -533,6 +535,7 @@
 				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
 				7A12B8D119F5C6E900DE955E /* MugsTextsView.swift */,
 				A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */,
+				A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */,
 				A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */,
 			);
 			name = Compose;
@@ -1038,6 +1041,7 @@
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
+				A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,

@@ -65,7 +65,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         myMugsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         myMugsCollectionView!.dataSource = self
         myMugsCollectionView!.delegate = self
-        myMugsCollectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        myMugsCollectionView.registerClass(MyMugsViewCell.self, forCellWithReuseIdentifier:"Cell");
         myMugsCollectionView!.backgroundColor = self.backgroundColor
         myMugsCollectionView!.allowsSelection = true
         self.addSubview(myMugsCollectionView!)
@@ -104,17 +104,15 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MyMugsViewCell
         
         if (indexPath.section == 0 && indexPath.row == 0) {
             cell.addSubview(addMugButton)
         } else {
             var currentMug: Mug? = self.myMugs[indexPath.row - 1]
             if (currentMug != nil) {
-                var cellImageView: UIImageView = UIImageView()
-                cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
-                cellImageView.frame.size = CGSizeMake(self.MY_MUGS_CELL_WIDTH, self.MY_MUGS_CELL_HEIGHT)
-                cell.addSubview(cellImageView);
+                cell.mug = currentMug
+                cell.cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
            }
         }
         
@@ -122,20 +120,15 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        var cell : UICollectionViewCell! = collectionView.cellForItemAtIndexPath(indexPath)
-        
-        var seletedOverlayView: SelectedMugOverlayView = SelectedMugOverlayView(frame: CGRectMake(0, 0, self.MY_MUGS_CELL_WIDTH, self.MY_MUGS_CELL_WIDTH))
-        
-        cell.addSubview(seletedOverlayView)
-        
-        //TODO (story 7638): Selecting a mug from "My Mugs" or "Stock Mugs" should result in the selected mug being overlaid with a checkmark. (Check)
-        //self.delegate?.myMugsViewDidSelectMug()
+        var cell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
+        cell.changeCellState(true)
+        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug, selected: true)
     }
     
     func collectionView(collectionView: UICollectionView!, didDeselectItemAtIndexPath indexPath: NSIndexPath!) {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
-        // TODO (story 7638): Tapping a selected mug will de-select it, and will return the upper portion of the screen to displaying the default (green) background.
-        //self.delegate?.myMugsViewDidDeselectMug()
+        var cell : MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
+        cell.changeCellState(false)
+        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug, selected: false)
     }
     
 }
@@ -146,7 +139,6 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
 protocol MyMugsViewViewDelegate {
     
     func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
-    func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!)
-    func myMugsViewDidDeselectMug(myMugsView: MyMugsView!, selectedMug: Mug!)
+    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!, selected: Bool!)
     
 }
