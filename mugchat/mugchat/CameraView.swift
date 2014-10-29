@@ -280,8 +280,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 })
             }
             
-            
-            
             if (self.showMicrophoneButton) {
                 error = nil
                 
@@ -304,7 +302,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             if (self.session.canAddOutput(movieOutput)) {
                 self.session.addOutput(movieOutput)
                 self.movieFileOutput = movieOutput
-                
                 var connection = self.movieFileOutput.connectionWithMediaType(AVMediaTypeVideo)
                 connection.videoMirrored = true
                 if (connection.videoStabilizationEnabled) {
@@ -547,11 +544,26 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         var docsDir: AnyObject = dirPaths[0]
         var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
         var videoURL = NSURL(fileURLWithPath: videoFilePath)
-        NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+        
+        var fileManager = NSFileManager.defaultManager()
+        
+        if (fileManager.fileExistsAtPath(videoURL.path!)) {
+            println("File already exists, removing it.")
+            fileManager.removeItemAtURL(videoURL, error: nil)
+        }
+        
+        let oneSecond = 1 * Double(NSEC_PER_SEC)
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+        
+        dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+            self.stopRecording()
+        }
+
         self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
     }
     
     func stopRecording() {
+        println("Stop recording video")
         self.movieFileOutput.stopRecording()
     }
     
@@ -677,6 +689,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         if (error != nil) {
+            println("An error happen while recording a video: error [\(error)] and userinfo[\(error.userInfo)]")
             self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, withSuccess: false)
         } else {
             self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, withSuccess: true)

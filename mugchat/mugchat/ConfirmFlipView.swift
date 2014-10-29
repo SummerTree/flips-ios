@@ -73,6 +73,12 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         self.layoutIfNeeded()
     }
     
+    func viewWillDisappear() {
+        if (self.moviePlayer != nil) {
+            self.moviePlayer.stop()
+        }
+    }
+    
     func addSubviews() {
         mugContainerView = UIView()
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
@@ -88,8 +94,9 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         
         if (self.moviePlayer != nil) {
             self.moviePlayer.controlStyle = MPMovieControlStyle.None
-            self.moviePlayer.shouldAutoplay = false
             self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
+            self.moviePlayer.shouldAutoplay = false
+            
             mugContainerView.addSubview(moviePlayer.view)
             NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
         }
