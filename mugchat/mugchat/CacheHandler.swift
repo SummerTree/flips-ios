@@ -20,8 +20,6 @@ public class CacheHandler : NSObject {
     var applicationCacheDirectory: String! // Uses a tmp folder that can be cleaned up by the operation system.
     var thumbnailsDirectory: String!
     
-    var temporaryCache: NSCache! // is the same that is being used by AFNetworking
-
     
     // MARK: - Singleton Implementation
     
@@ -37,60 +35,46 @@ public class CacheHandler : NSObject {
     
     override init() {
         super.init()
-        
+
+        self.initSupportDirectory()
+        self.initTemporaryDirectory()
+        self.initThumbnailsDirectory()
+    }
+    
+    private func initSupportDirectory() {
         var paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         var applicationSupportDirPath = paths.first! as String
         applicationSupportDirectory = "\(NSHomeDirectory())\(applicationSupportDirPath)/\(MUG_CHAT_CACHE_FOLDER)"
-        
-        let fileManager = NSFileManager.defaultManager()
-        var isDirectory: ObjCBool = true
-        
-        println("   ")
-        
-        if (fileManager.fileExistsAtPath(applicationSupportDirectory, isDirectory: &isDirectory)) {
-            println("Application Support Directory exists: \(applicationSupportDirectory)")
-        } else {
-            var error: NSError?
-            fileManager.createDirectoryAtPath(applicationSupportDirectory, withIntermediateDirectories: true, attributes: nil, error: &error)
-            if (error != nil) {
-                println("Error creating application support dir: \(error)")
-            } else {
-                println("Directory '\(applicationSupportDirectory)' created!")
-            }
-        }
-        
+        self.initDirectory(applicationSupportDirectory)
+    }
+    
+    private func initTemporaryDirectory() {
         var cachePaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         var cacheDirPath = cachePaths.first! as String
         applicationCacheDirectory = "\(NSHomeDirectory())\(cacheDirPath)/\(MUG_CHAT_CACHE_FOLDER)"
-        
-        if (fileManager.fileExistsAtPath(applicationCacheDirectory, isDirectory: &isDirectory)) {
-            println("Application Cache Directory exists: \(applicationCacheDirectory)")
-        } else {
-            var error: NSError?
-            fileManager.createDirectoryAtPath(applicationCacheDirectory, withIntermediateDirectories: true, attributes: nil, error: &error)
-            if (error != nil) {
-                println("Error creating cache dir: \(error)")
-            } else {
-                println("Directory '\(applicationCacheDirectory)' created!")
-            }
-        }
-        
+        self.initDirectory(applicationCacheDirectory)
+    }
+    
+    private func initThumbnailsDirectory() {
         thumbnailsDirectory = "\(applicationSupportDirectory)/\(MUG_CHAT_THUMBNAILS_FOLDER)"
-        if (fileManager.fileExistsAtPath(thumbnailsDirectory, isDirectory: &isDirectory)) {
-            println("Application Cache Directory exists: \(thumbnailsDirectory)")
+        self.initDirectory(thumbnailsDirectory)
+    }
+    
+    private func initDirectory(directoryPath: String) {
+        let fileManager = NSFileManager.defaultManager()
+        var isDirectory: ObjCBool = true
+        
+        if (fileManager.fileExistsAtPath(directoryPath, isDirectory: &isDirectory)) {
+            println("Directory exists: \(directoryPath)")
         } else {
             var error: NSError?
-            fileManager.createDirectoryAtPath(thumbnailsDirectory, withIntermediateDirectories: true, attributes: nil, error: &error)
+            fileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil, error: &error)
             if (error != nil) {
-                println("Error creating cache dir: \(error)")
+                println("Error creating application support dir: \(error)")
             } else {
-                println("Directory '\(thumbnailsDirectory)' created!")
+                println("Directory '\(directoryPath)' created!")
             }
         }
-        
-        temporaryCache = NSCache()
-        
-        println("   ")
     }
     
     
@@ -117,21 +101,17 @@ public class CacheHandler : NSObject {
     func hasCachedFileForUrl(url:String) -> Bool {
         var fileExists = false
         
-        if (self.temporaryCache.objectForKey(url) != nil) {
+        let fileManager = NSFileManager.defaultManager()
+        let formatedUrl = self.getFormatedUrl(url)
+        
+        let cacheDirectoryFilePath = "\(applicationCacheDirectory)/\(formatedUrl)"
+        if (fileManager.fileExistsAtPath(cacheDirectoryFilePath)) {
             fileExists = true
-        } else {
-            let fileManager = NSFileManager.defaultManager()
-            let formatedUrl = self.getFormatedUrl(url)
-            
-            let cacheDirectoryFilePath = "\(applicationCacheDirectory)/\(formatedUrl)"
-            if (fileManager.fileExistsAtPath(cacheDirectoryFilePath)) {
-                fileExists = true
-            }
-            
-            let supportDirectoryFilePath = "\(applicationSupportDirectory)/\(formatedUrl)"
-            if (fileManager.fileExistsAtPath(supportDirectoryFilePath)) {
-                fileExists = true
-            }
+        }
+        
+        let supportDirectoryFilePath = "\(applicationSupportDirectory)/\(formatedUrl)"
+        if (fileManager.fileExistsAtPath(supportDirectoryFilePath)) {
+            fileExists = true
         }
         
         return fileExists
@@ -139,27 +119,6 @@ public class CacheHandler : NSObject {
     
     
     // MARK: - Save/Load Methods
-    
-    func saveThumbnail(thumbnail: UIImage, forUrl url: String) {
-        self.saveData(UIImageJPEGRepresentation(thumbnail, defaultJPEGCompressionQuality), forUrl: url, atDirectoryPath: thumbnailsDirectory)
-    }
-    
-    func thumbnailForUrl(url: String) -> UIImage? {
-        let fileManager = NSFileManager.defaultManager()
-        
-        let formatedUrl = self.getFormatedUrl(url)
-        
-        let path = "\(thumbnailsDirectory)/\(formatedUrl)"
-        
-        if (fileManager.fileExistsAtPath(path)) {
-            let data = fileManager.contentsAtPath(path)
-            if (data != nil) {
-                return UIImage(data: data!)
-            }
-        }
-        
-        return nil
-    }
     
     func saveImage(image: UIImage, withUrl url: String, isTemporary: Bool = true) -> Bool {
         return self.save(UIImageJPEGRepresentation(image, defaultJPEGCompressionQuality), withUrl: url, isTemporary: isTemporary)
@@ -180,12 +139,23 @@ public class CacheHandler : NSObject {
     }
     
     func dataForUrl(url: String) -> NSData? {
-        if (self.temporaryCache.objectForKey(url) != nil) {
-            return self.temporaryCache.objectForKey(url) as NSData?
-        } else {
-            // Get from private cache
-            return self.loadDataForUrl(url)
+        let fileManager = NSFileManager.defaultManager()
+        
+        let formatedUrl = self.getFormatedUrl(url)
+        
+        let cacheDirectoryFilePath = "\(applicationCacheDirectory)/\(formatedUrl)"
+        
+        if (fileManager.fileExistsAtPath(cacheDirectoryFilePath)) {
+            return fileManager.contentsAtPath(cacheDirectoryFilePath)
         }
+        
+        let supportDirectoryFilePath = "\(applicationSupportDirectory)/\(formatedUrl)"
+        
+        if (fileManager.fileExistsAtPath(supportDirectoryFilePath)) {
+            return fileManager.contentsAtPath(supportDirectoryFilePath)
+        }
+        
+        return nil
     }
     
     private func saveData(data: NSData, forUrl url: String, atDirectoryPath directoryPath: String) {
@@ -200,21 +170,25 @@ public class CacheHandler : NSObject {
         }
     }
     
-    private func loadDataForUrl(url: String) -> NSData? {
+    
+    // MARK: - Thumbnail Save/Load Methods
+    
+    func saveThumbnail(thumbnail: UIImage, forUrl url: String) {
+        self.saveData(UIImageJPEGRepresentation(thumbnail, defaultJPEGCompressionQuality), forUrl: url, atDirectoryPath: thumbnailsDirectory)
+    }
+    
+    func thumbnailForUrl(url: String) -> UIImage? {
         let fileManager = NSFileManager.defaultManager()
         
         let formatedUrl = self.getFormatedUrl(url)
         
-        let cacheDirectoryFilePath = "\(applicationCacheDirectory)/\(formatedUrl)"
+        let path = "\(thumbnailsDirectory)/\(formatedUrl)"
         
-        if (fileManager.fileExistsAtPath(cacheDirectoryFilePath)) {
-            return fileManager.contentsAtPath(cacheDirectoryFilePath)
-        }
-
-        let supportDirectoryFilePath = "\(applicationSupportDirectory)/\(formatedUrl)"
-        
-        if (fileManager.fileExistsAtPath(supportDirectoryFilePath)) {
-            return fileManager.contentsAtPath(supportDirectoryFilePath)
+        if (fileManager.fileExistsAtPath(path)) {
+            let data = fileManager.contentsAtPath(path)
+            if (data != nil) {
+                return UIImage(data: data!)
+            }
         }
         
         return nil

@@ -44,6 +44,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         mugMessagesWaitingDownload = NSHashTable()
     }
     
+    
     // MARK: - Events Methods
     
     private func onMessageReceived(mugMessage: MugMessage) {

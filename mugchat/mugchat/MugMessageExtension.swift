@@ -27,12 +27,12 @@ extension MugMessage {
     }
     
     func messageThumbnail() -> UIImage? {
-        let firstMug = self.mugs.objectAtIndex(0) as Mug
+        let firstMug = self.mugs.firstObject as Mug
         return CacheHandler.sharedInstance.thumbnailForUrl(firstMug.backgroundURL)
     }
     
     func createThumbnail() {
-        let firstMug = self.mugs.objectAtIndex(0) as Mug
+        let firstMug = self.mugs.firstObject as Mug
         let cacheHandler = CacheHandler.sharedInstance
         if (firstMug.isBackgroundContentTypeImage()) {
             let backgroundImageData = cacheHandler.dataForUrl(firstMug.backgroundURL)
