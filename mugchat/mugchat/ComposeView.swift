@@ -339,7 +339,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     func setPicture(image: UIImage!) {
         self.mugImageView.image = image
-        self.isAlreadyUsingAPicture = false
+        self.isAlreadyUsingAPicture = true
         self.hideCameraShowPicture()
         self.showRecordingView()
     }
