@@ -108,13 +108,18 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
         let mugDataSource = MugDataSource()
-        
-        mugDataSource.createMugWithWord(flipView.getWord(), backgroundImage: confirmFlipView.getImage(), soundURL: nil, createMugSuccess: { (mug) -> Void in
-            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
-            self.navigationController?.popViewControllerAnimated(false)
-        }) { (message) -> Void in
-            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
-            alertView.show()
+        self.confirmFlipView.showActivityIndicator()
+        self.previewFlipTimer.invalidate()
+        mugDataSource.createMugWithWord(flipView.getWord(), backgroundImage: confirmFlipView.getImage(), soundURL: nil,
+            createMugSuccess: { (mug) -> Void in
+                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
+                self.navigationController?.popViewControllerAnimated(false)
+                self.confirmFlipView.hideActivityIndicator()
+            }) { (message) -> Void in
+                self.confirmFlipView.hideActivityIndicator()
+                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
+                var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+                alertView.show()
         }
     }
     

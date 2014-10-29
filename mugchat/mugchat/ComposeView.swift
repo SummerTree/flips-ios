@@ -95,6 +95,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         for mugText in self.mugTexts {
             if (mugText.text == word) {
                 mugText.state = state
+                self.centeredMugsView.setNeedsLayout()
                 self.centeredMugsView.layoutIfNeeded()
                 break
             }

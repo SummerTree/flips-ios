@@ -55,7 +55,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     func updateColorOnJoinedTexts(color: UIColor) {
         var attributedString = NSMutableAttributedString(string:self.text)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))) //looses the current font, if we don't set here explicitly
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text))) //looses the current font, if we don't set here explicitly
         
         for joinedTextRange in joinedTextRanges {
             attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: joinedTextRange)
@@ -66,8 +66,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     func resetTextColor() {
         var attributedString = NSMutableAttributedString(string:self.text)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)))
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text)))
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, countElements(self.text)))
         self.attributedText = attributedString
     }
     
@@ -172,7 +172,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
-        if (range.location < self.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)) {
+        if (range.location < countElements(self.text)) {
             self.resetTextColor()
             joinedTextRanges.removeAll(keepCapacity: false)
         }
