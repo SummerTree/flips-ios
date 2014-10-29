@@ -76,8 +76,8 @@ class MugChatViewController : UIViewController {
     }
     
     func showActivityIndicator() {
-        self.view.userInteractionEnabled = false
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.view.userInteractionEnabled = false
             self.activityIndicator.startAnimating()
             UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
                 self.activityIndicator.alpha = 0.8
@@ -86,8 +86,8 @@ class MugChatViewController : UIViewController {
     }
     
     func hideActivityIndicator() {
-        self.view.userInteractionEnabled = true
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.view.userInteractionEnabled = true
             self.activityIndicator.startAnimating()
             UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
                 self.activityIndicator.alpha = 0

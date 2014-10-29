@@ -41,7 +41,7 @@ extension Mug {
         }
         
         self.backgroundContentType = typeValue
-        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
+        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
     }
     
     func isBackgroundContentTypeDefined() -> Bool {

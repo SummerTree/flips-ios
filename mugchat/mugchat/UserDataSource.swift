@@ -103,87 +103,100 @@ class UserDataSource : BaseDataSource {
     }
     
     func syncUserData(callback: UserSyncFinished) {
-        
-        // TODO: sync my mugs with API
-        
-        // ONLY FOR TESTS
-        var mug = Mug.createEntity() as Mug
-        mug.mugID = "2"
-        mug.word = "I"
-        mug.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/09212b08-2904-4576-a93d-d686e9a3cba1.jpg"
-        mug.owner = User.loggedUser()
-        mug.isPrivate = true
-        
-        var mug2 = Mug.createEntity() as Mug
-        mug2.mugID = "3"
-        mug2.word = "Love"
-        mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
-        mug2.owner = User.loggedUser()
-        mug2.isPrivate = true
-        
-        var mug21 = Mug.createEntity() as Mug
-        mug21.mugID = "30"
-        mug21.word = "love"
-        mug21.backgroundURL = "http://www.missaodespertar.org.br/imagens/imagem-5d0c1c481c3f5ec35d7632644c2142bf.jpg"
-        mug21.owner = User.loggedUser()
-        mug21.isPrivate = true
-        
-        var mug3 = Mug.createEntity() as Mug
-        mug3.mugID = "4"
-        mug3.word = "San Francisco"
-        mug3.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/Screen+Shot+2014-10-10+at+11.27.00+AM.png"
-        mug3.owner = User.loggedUser()
-        mug3.isPrivate = true
-        
-        var user: User! = User.MR_createEntity() as User
-        user.userID = "3"
-        user.firstName = "Bruno"
-        user.lastName = "User"
-        user.phoneNumber = "+141512345678"
-        user.photoURL = "http://upload.wikimedia.org/wikipedia/pt/9/9d/Maggie_Simpson.png"
-        
-        var mug4 = Mug.createEntity() as Mug
-        mug4.mugID = "5"
-        mug4.word = "San Francisco"
-        mug4.backgroundURL = "http://baybridgeinfo.org/sites/default/files/images/background/ws/xws7.jpg.pagespeed.ic.ULYPGat4fH.jpg"
-        mug4.owner = user
-        mug4.isPrivate = true
-        
-        // NOT MY CONTACT
-        var user3: User! = User.MR_createEntity() as User
-        user3.userID = "5"
-        user3.firstName = "Ecil"
-        user3.lastName = "User"
-        user3.phoneNumber = "+144423455555"
-        user3.photoURL = "http://3.bp.blogspot.com/_339JZmAslb0/TG3x4LbfGeI/AAAAAAAAABU/QATFhgxPMvA/s200/Lisa_Simpson150.jpg"
-        
-        var contact: Contact! = Contact.MR_createEntity() as Contact
-        contact.contactID = "1"
-        contact.firstName = "Bruno"
-        contact.lastName = "Contact"
-        contact.phoneNumber = "+141512345678"
-        contact.contactUser = user
-        user.addUserContactObject(contact)
-        
-        // Simulating a user that is only contact on my agenda
-        var contact2: Contact! = Contact.MR_createEntity() as Contact
-        contact2.contactID = "2"
-        contact2.firstName = "Fernando"
-        contact2.lastName = "Contact"
-        contact2.phoneNumber = "+144423456789"
-        contact2.phoneType = "iPhone"
-
-        var room: Room! = Room.MR_createEntity() as Room
-        room.roomID = "1"
-        room.pubnubID = "$2a$10$kSUvCzXQb83UYgMrxc1nYuthA16coqzVRrwyO2KcUzuSALXwURFqm"
-        room.name = "Test"
-        room.addParticipantsObject(user)
-        room.addParticipantsObject(user3)
-        
-        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
-        // ONLY FOR TESTS
-        
-        callback(true, nil)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            // TODO: sync my mugs with API
+            
+            println("   ")
+            if (NSThread.currentThread() == NSThread.mainThread()) {
+                println("syncUserData IN MAIN THREAD")
+            } else {
+                println("syncUserData NOT IN MAIN THREAD")
+            }
+            println("   ")
+            
+            // ONLY FOR TESTS
+            var contacts = self.getMyUserContacts()
+            if (contacts.count == 0) {
+                var mug = Mug.createEntity() as Mug
+                mug.mugID = "2"
+                mug.word = "I"
+                mug.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/09212b08-2904-4576-a93d-d686e9a3cba1.jpg"
+                mug.owner = User.loggedUser()
+                mug.isPrivate = true
+                
+                var mug2 = Mug.createEntity() as Mug
+                mug2.mugID = "3"
+                mug2.word = "Love"
+                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
+                mug2.owner = User.loggedUser()
+                mug2.isPrivate = true
+                
+                var mug21 = Mug.createEntity() as Mug
+                mug21.mugID = "30"
+                mug21.word = "love"
+                mug21.backgroundURL = "http://www.missaodespertar.org.br/imagens/imagem-5d0c1c481c3f5ec35d7632644c2142bf.jpg"
+                mug21.owner = User.loggedUser()
+                mug21.isPrivate = true
+                
+                var mug3 = Mug.createEntity() as Mug
+                mug3.mugID = "4"
+                mug3.word = "San Francisco"
+                mug3.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/Screen+Shot+2014-10-10+at+11.27.00+AM.png"
+                mug3.owner = User.loggedUser()
+                mug3.isPrivate = true
+                
+                var user: User! = User.MR_createEntity() as User
+                user.userID = "3"
+                user.firstName = "Bruno"
+                user.lastName = "User"
+                user.phoneNumber = "+141512345678"
+                user.photoURL = "http://upload.wikimedia.org/wikipedia/pt/9/9d/Maggie_Simpson.png"
+                
+                var mug4 = Mug.createEntity() as Mug
+                mug4.mugID = "5"
+                mug4.word = "San Francisco"
+                mug4.backgroundURL = "http://baybridgeinfo.org/sites/default/files/images/background/ws/xws7.jpg.pagespeed.ic.ULYPGat4fH.jpg"
+                mug4.owner = user
+                mug4.isPrivate = true
+                
+                // NOT MY CONTACT
+                var user3: User! = User.MR_createEntity() as User
+                user3.userID = "5"
+                user3.firstName = "Ecil"
+                user3.lastName = "User"
+                user3.phoneNumber = "+144423455555"
+                user3.photoURL = "http://3.bp.blogspot.com/_339JZmAslb0/TG3x4LbfGeI/AAAAAAAAABU/QATFhgxPMvA/s200/Lisa_Simpson150.jpg"
+                
+                var contact: Contact! = Contact.MR_createEntity() as Contact
+                contact.contactID = "1"
+                contact.firstName = "Bruno"
+                contact.lastName = "Contact"
+                contact.phoneNumber = "+141512345678"
+                contact.contactUser = user
+                user.addUserContactObject(contact)
+                
+                // Simulating a user that is only contact on my agenda
+                var contact2: Contact! = Contact.MR_createEntity() as Contact
+                contact2.contactID = "2"
+                contact2.firstName = "Fernando"
+                contact2.lastName = "Contact"
+                contact2.phoneNumber = "+144423456789"
+                contact2.phoneType = "iPhone"
+                
+                var room: Room! = Room.MR_createEntity() as Room
+                room.roomID = "1"
+                room.pubnubID = "$2a$10$kSUvCzXQb83UYgMrxc1nYuthA16coqzVRrwyO2KcUzuSALXwURFqm"
+                room.name = "Test"
+                room.addParticipantsObject(user)
+                room.addParticipantsObject(user3)
+                
+                println("NSManagedObjectContext.MR_defaultContext(): \(NSManagedObjectContext.MR_defaultContext())")
+                NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
+            }
+            // ONLY FOR TESTS
+            
+            callback(true, nil)
+        })
     }
     
     // Users from the App that are my contacts

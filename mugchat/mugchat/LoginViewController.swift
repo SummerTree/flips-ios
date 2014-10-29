@@ -68,11 +68,13 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             
             var userDataSource = UserDataSource()
             userDataSource.syncUserData({ (success, error) -> Void in
-                self.hideActivityIndicator()
-                if (success) {
-                    var inboxViewController = InboxViewController()
-                    self.navigationController?.pushViewController(inboxViewController, animated: true)
-                }
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.hideActivityIndicator()
+                    if (success) {
+                        var inboxViewController = InboxViewController()
+                        self.navigationController?.pushViewController(inboxViewController, animated: true)
+                    }
+                })
             })
         }) { (mugError) -> Void in
             self.hideActivityIndicator()
@@ -128,11 +130,13 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                 
                 var userDataSource = UserDataSource()
                 userDataSource.syncUserData({ (success, error) -> Void in
-                    self.hideActivityIndicator()
-                    if (success) {
-                        var inboxViewController = InboxViewController()
-                        self.navigationController?.pushViewController(inboxViewController, animated: true)
-                    }
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.hideActivityIndicator()
+                        if (success) {
+                            var inboxViewController = InboxViewController()
+                            self.navigationController?.pushViewController(inboxViewController, animated: true)
+                        }
+                    })
                 })
             }, failure: { (mugError) -> Void in
                 println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
