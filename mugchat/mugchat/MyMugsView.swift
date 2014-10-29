@@ -122,7 +122,12 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        var cell : UICollectionViewCell! = collectionView.cellForItemAtIndexPath(indexPath)
+        
+        var seletedOverlayView: SelectedMugOverlayView = SelectedMugOverlayView(frame: CGRectMake(0, 0, self.MY_MUGS_CELL_WIDTH, self.MY_MUGS_CELL_WIDTH))
+        
+        cell.addSubview(seletedOverlayView)
+        
         //TODO (story 7638): Selecting a mug from "My Mugs" or "Stock Mugs" should result in the selected mug being overlaid with a checkmark. (Check)
         //self.delegate?.myMugsViewDidSelectMug()
     }
