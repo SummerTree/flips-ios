@@ -20,6 +20,8 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUG_VIDEO_WIDTH: CGFloat = 240.0
     private let MUG_WORD_LABEL_MARGIN_BOTTOM: CGFloat = 40.0
+    private let ACTIVITY_INDICATOR_SIZE: CGFloat = 100
+    private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
     
     private var mugContainerView: UIView!
     private var flipImageView: UIImageView!
@@ -29,6 +31,8 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     private var flipAudioURL: NSURL!
     private var rejectButton: UIButton!
     private var acceptButton: UIButton!
+    
+    private var activityIndicator: UIActivityIndicatorView!
     
     convenience init(word: String!, background: UIImage!, audio: NSURL?) {
         self.init()
@@ -106,6 +110,8 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         acceptButton.backgroundColor = UIColor.avacado()
         acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(acceptButton)
+        
+        self.setupActivityIndicator()
     }
     
     func moviePlayerDidFinish(notification: NSNotification) {
@@ -116,6 +122,21 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     func playOrPausePreview() {
         self.delegate?.confirmFlipViewDidTapPlayOrPausePreviewButton(self)
+    }
+    
+    private func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        activityIndicator.backgroundColor = UIColor.blackColor()
+        activityIndicator.alpha = 0
+        activityIndicator.layer.cornerRadius = 8
+        activityIndicator.layer.masksToBounds = true
+        self.addSubview(activityIndicator)
+        
+        activityIndicator.mas_makeConstraints { (make) -> Void in
+            make.center.equalTo()(self)
+            make.width.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+            make.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+        }
     }
     
     func makeConstraints() {
@@ -206,7 +227,27 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
-
+    }
+    
+    
+    // MARK: - Activity Indicator
+    
+    func showActivityIndicator() {
+        self.userInteractionEnabled = false
+        self.activityIndicator.startAnimating()
+        UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+            self.activityIndicator.alpha = 0.8
+        })
+    }
+    
+    func hideActivityIndicator() {
+        self.userInteractionEnabled = true
+        self.activityIndicator.startAnimating()
+        UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+            self.activityIndicator.alpha = 0
+            }, completion: { (finished) -> Void in
+                self.activityIndicator.stopAnimating()
+        })
     }
     
     

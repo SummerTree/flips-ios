@@ -40,6 +40,7 @@ class MugChatViewController : UIViewController {
         super.viewDidLoad()
         self.setNeedsStatusBarAppearanceUpdate()
         self.setupActivityIndicator()
+        self.view.bringSubviewToFront(self.activityIndicator)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -59,7 +60,7 @@ class MugChatViewController : UIViewController {
     
     // MARK: Activity Indicator Methods
     
-    private func setupActivityIndicator() {
+    internal func setupActivityIndicator() {
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
         activityIndicator.backgroundColor = UIColor.blackColor()
         activityIndicator.alpha = 0
@@ -75,6 +76,7 @@ class MugChatViewController : UIViewController {
     }
     
     func showActivityIndicator() {
+        self.view.userInteractionEnabled = false
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.activityIndicator.startAnimating()
             UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
@@ -84,6 +86,7 @@ class MugChatViewController : UIViewController {
     }
     
     func hideActivityIndicator() {
+        self.view.userInteractionEnabled = true
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.activityIndicator.startAnimating()
             UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
