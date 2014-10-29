@@ -14,7 +14,7 @@ public class CacheHandler : NSObject {
     
     let MUG_CHAT_CACHE_FOLDER = "mugs_resources"
     let MUG_CHAT_THUMBNAILS_FOLDER = "thumbnails"
-    let defaultJPEGCompressionQuality: CGFloat = 0.9
+    let DEFAULT_JPEG_COMPRESSION_QUALITY: CGFloat = 0.9
     
     var applicationSupportDirectory: String!
     var applicationCacheDirectory: String! // Uses a tmp folder that can be cleaned up by the operation system.
@@ -121,7 +121,7 @@ public class CacheHandler : NSObject {
     // MARK: - Save/Load Methods
     
     func saveImage(image: UIImage, withUrl url: String, isTemporary: Bool = true) -> Bool {
-        return self.save(UIImageJPEGRepresentation(image, defaultJPEGCompressionQuality), withUrl: url, isTemporary: isTemporary)
+        return self.save(UIImageJPEGRepresentation(image, DEFAULT_JPEG_COMPRESSION_QUALITY), withUrl: url, isTemporary: isTemporary)
     }
     
     func save(data: NSData, withUrl url: String, isTemporary: Bool = true) -> Bool {
@@ -174,7 +174,7 @@ public class CacheHandler : NSObject {
     // MARK: - Thumbnail Save/Load Methods
     
     func saveThumbnail(thumbnail: UIImage, forUrl url: String) {
-        self.saveData(UIImageJPEGRepresentation(thumbnail, defaultJPEGCompressionQuality), forUrl: url, atDirectoryPath: thumbnailsDirectory)
+        self.saveData(UIImageJPEGRepresentation(thumbnail, DEFAULT_JPEG_COMPRESSION_QUALITY), forUrl: url, atDirectoryPath: thumbnailsDirectory)
     }
     
     func thumbnailForUrl(url: String) -> UIImage? {
