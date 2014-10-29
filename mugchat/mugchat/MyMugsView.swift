@@ -112,6 +112,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
             var currentMug: Mug? = self.myMugs[indexPath.row - 1]
             if (currentMug != nil) {
                 cell.mug = currentMug
+                cell.cellIsSelected = false //TODO
                 cell.cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
            }
         }
@@ -123,13 +124,12 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         var cell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
         cell.toggleCellState()
-        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug, selected: true)
+        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug)
     }
     
     func collectionView(collectionView: UICollectionView!, didDeselectItemAtIndexPath indexPath: NSIndexPath!) {
         var cell : MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
         cell.deselectCell()
-        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug, selected: false)
     }
     
 }
@@ -140,6 +140,6 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
 protocol MyMugsViewViewDelegate {
     
     func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
-    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!, selected: Bool!)
+    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!)
     
 }

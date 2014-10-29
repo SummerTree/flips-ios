@@ -441,8 +441,9 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         slideToCameraView()
     }
     
-    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!, selected: Bool!) {
+    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!) {
         //TODO: story 7638
+        self.mugTexts[userStep].associatedMug = mug
     }
     
     
