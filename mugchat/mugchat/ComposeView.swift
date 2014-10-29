@@ -102,9 +102,11 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         }
     }
     
-    func navigateToNextWord() {
-        userStep++
-        self.centeredMugsView.selectText(self.mugTexts[userStep])
+    func navigateToNextWordIfNeeded() {
+        if ( (userStep + 1) < mugTexts.count) {
+            userStep++
+            self.centeredMugsView.selectText(self.mugTexts[userStep])
+        }
     }
     
     private func addSubviews() {

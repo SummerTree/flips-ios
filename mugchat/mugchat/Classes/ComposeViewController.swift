@@ -160,7 +160,7 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, mug: Mug?) {
         if (success) {
             composeView.changeMugWordState(mug!.word, state: MugState.AssociatedWithoutOtherResources)
-            composeView.navigateToNextWord()
+            composeView.navigateToNextWordIfNeeded()
         }
     }
 }
