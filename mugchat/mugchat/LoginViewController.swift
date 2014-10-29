@@ -34,10 +34,12 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginView = LoginView()
-        loginView.delegate = self
+        self.loginView = LoginView()
+        self.loginView.delegate = self
         self.view = loginView
-        loginView.viewDidLoad()
+        
+        setupActivityIndicator()
+        self.loginView.viewDidLoad()
     }
     
     
@@ -54,6 +56,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String) {
+        showActivityIndicator()
         UserService.sharedInstance.signIn(username, password: password, success: { (user) -> Void in
 
             if (user == nil) {
@@ -65,12 +68,14 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             
             var userDataSource = UserDataSource()
             userDataSource.syncUserData({ (success, error) -> Void in
+                self.hideActivityIndicator()
                 if (success) {
                     var inboxViewController = InboxViewController()
                     self.navigationController?.pushViewController(inboxViewController, animated: true)
                 }
             })
         }) { (mugError) -> Void in
+            self.hideActivityIndicator()
             println(mugError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
@@ -116,12 +121,14 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     // MARK: - Private methods
     
     private func authenticateWithFacebook(token: String) {
+        showActivityIndicator()
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.userInSession = user as User
                 
                 var userDataSource = UserDataSource()
                 userDataSource.syncUserData({ (success, error) -> Void in
+                    self.hideActivityIndicator()
                     if (success) {
                         var inboxViewController = InboxViewController()
                         self.navigationController?.pushViewController(inboxViewController, animated: true)
@@ -129,6 +136,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                 })
             }, failure: { (mugError) -> Void in
                 println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
+                self.hideActivityIndicator()
                 var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
                 alertView.show()
         })

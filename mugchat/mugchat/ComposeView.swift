@@ -97,15 +97,18 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         for mugText in self.mugTexts {
             if (mugText.text == word) {
                 mugText.state = state
+                self.centeredMugsView.setNeedsLayout()
                 self.centeredMugsView.layoutIfNeeded()
                 break
             }
         }
     }
     
-    func navigateToNextWord() {
-        userStep++
-        self.centeredMugsView.selectText(self.mugTexts[userStep])
+    func navigateToNextWordIfNeeded() {
+        if ( (userStep + 1) < mugTexts.count) {
+            userStep++
+            self.centeredMugsView.selectText(self.mugTexts[userStep])
+        }
     }
     
     private func addSubviews() {
@@ -338,7 +341,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     func setPicture(image: UIImage!) {
         self.mugImageView.image = image
-        self.isAlreadyUsingAPicture = false
+        self.isAlreadyUsingAPicture = true
         self.hideCameraShowPicture()
         self.showRecordingView()
     }
