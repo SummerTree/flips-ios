@@ -17,6 +17,8 @@ class SelectedMugOverlayView : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubviews()
+        
+        self.backgroundColor = UIColor.darkGray().colorWithAlphaComponent(0.8)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -40,10 +42,4 @@ class SelectedMugOverlayView : UIView {
         }
     }
     
-    override func drawRect(rect: CGRect) {
-        var context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, UIColor(RRGGBB: UInt(0x4A4A4A)).CGColor)
-        CGContextSetAlpha(context, 0.2)
-        CGContextFillRect(context, rect)
-    }
 }

@@ -19,6 +19,8 @@ class MyMugsViewCell : UICollectionViewCell {
     var cellImageView: UIImageView!
     var seletedOverlayView: SelectedMugOverlayView!
     
+    var cellIsSelected = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -35,11 +37,19 @@ class MyMugsViewCell : UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func changeCellState(selected: Bool) {
-        if (selected) {
-            self.seletedOverlayView.alpha = 1
-        } else {
+    func toggleCellState() {
+        if (self.cellIsSelected) {
             self.seletedOverlayView.alpha = 0
+        } else {
+            self.seletedOverlayView.alpha = 1
+        }
+        self.cellIsSelected = !self.cellIsSelected
+    }
+    
+    func deselectCell() {
+        if (self.cellIsSelected) {
+            self.seletedOverlayView.alpha = 0
+            self.cellIsSelected = false
         }
     }
     
