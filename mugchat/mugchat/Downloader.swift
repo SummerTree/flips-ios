@@ -11,7 +11,7 @@
 //
 
 public typealias MugDownloadFinished = (Mug, NSError?) -> Void
-private typealias DownloadFinished = (NSError?) -> Void
+private typealias DownloadFinished = (BackgroundContentType, NSError?) -> Void
 
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY: String = "download_finished_notification_param_mug_key"
@@ -30,14 +30,14 @@ public class Downloader : NSObject {
     struct Static {
         static let instance : Downloader = Downloader()
         }
-        Static.instance.initDownloader()
         return Static.instance
     }
     
     
     // MARK: - Initalization
     
-    private func initDownloader() {
+    override init() {
+        super.init()
         downloadInProgressURLs = NSHashTable()
     }
 
@@ -54,15 +54,19 @@ public class Downloader : NSObject {
         let request = NSMutableURLRequest(URL: url)
         request.timeoutInterval = TIME_OUT_INTERVAL
         
-        var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (url, urlResponse) -> NSURL! in
-            let path = CacheHandler.sharedInstance.getFilePathForUrl(url.absoluteString!, isTemporary: isTemporary)
-            return NSURL(string: path)
-        }) { (urlResponse, url, error) -> Void in
+        var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
+            let path = CacheHandler.sharedInstance.getFilePathForUrl(urlString, isTemporary: isTemporary)
+            return NSURL(fileURLWithPath: path)
+        }) { (response, filePath, error) -> Void in
             self.downloadInProgressURLs.removeObject(urlString)
             
-            println("url: \(url)")
-            println("urlResponse: \(urlResponse)")
-            completion(error)
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if let contentType = httpResponse.allHeaderFields["Content-Type"] as? NSString {
+                    completion(self.backgroundTypeForContentType(contentType), error)
+                }
+            } else {
+                completion(self.backgroundTypeForContentType(""), error)
+            }
         }
         
         downloadTask.resume()
@@ -74,7 +78,8 @@ public class Downloader : NSObject {
     func downloadDataForMug(mug: Mug, isTemporary: Bool = true) {
         if (self.isValidURL(mug.backgroundURL) && (!downloadInProgressURLs.containsObject(mug.backgroundURL))) {
             if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.backgroundURL)) {
-                self.downloadDataAndCacheForUrl(mug.backgroundURL, withCompletion: { (error) -> Void in
+                self.downloadDataAndCacheForUrl(mug.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                    mug.setBackgroundContentType(backgroundContentType)
                     self.sendDownloadFinishedBroadcastForMug(mug, error: error)
                 }, isTemporary: isTemporary)
             } else {
@@ -84,7 +89,7 @@ public class Downloader : NSObject {
         
         if (self.isValidURL(mug.soundURL) && (!downloadInProgressURLs.containsObject(mug.soundURL))) {
             if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.soundURL)) {
-                self.downloadDataAndCacheForUrl(mug.soundURL, withCompletion: { (error) -> Void in
+                self.downloadDataAndCacheForUrl(mug.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
                     self.sendDownloadFinishedBroadcastForMug(mug, error: error)
                 }, isTemporary: isTemporary)
             } else {
@@ -109,9 +114,21 @@ public class Downloader : NSObject {
     }
     
     
+    // MARK: - Helper Methods
+    
+    private func backgroundTypeForContentType(contentType: String) -> BackgroundContentType {
+        if (contentType.hasPrefix("image")) {
+            return BackgroundContentType.Image
+        } else if (contentType.hasPrefix("video")) {
+            return BackgroundContentType.Video
+        }
+
+        return BackgroundContentType.Undefined
+    }
+    
     // MARK: - Validation Methods
     
-    private func isValidURL(url: String) -> Bool {
-        return !url.isEmpty
+    private func isValidURL(url: String?) -> Bool {
+        return ((url != nil) && (url != ""))
     }
 }

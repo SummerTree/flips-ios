@@ -64,7 +64,9 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
             var myMugs = mugDataSource.getMyMugs()
             println("My Mugs (\(myMugs.count))")
             for mug in myMugs {
-                println("   \(mug.mugID)")
+                Downloader.sharedInstance.downloadDataForMug(mug, isTemporary: true) // should be false. But since it is only for tests lets use it as temporary
+                println("   id: \(mug.mugID)")
+                println("   backgroundContentType: \(mug.backgroundContentType)")
             }
             
             println("   ")
@@ -74,7 +76,6 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
                 println("   \(word) count: \(mugs.count)")
             }
             println("   ")
-            println("   Has cache for logged user photo: \(CacheHandler.sharedInstance.hasCachedFileForUrl(AuthenticationHelper.sharedInstance.userInSession.photoURL))")
             println("   ")
         }
     }

@@ -25,20 +25,23 @@ private struct ChatMessageJsonParams {
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
+    var mugMessagesWaitingDownload: NSHashTable!
+    
+    
     public class var sharedInstance : MessageReceiver {
     struct Static {
         static let instance : MessageReceiver = MessageReceiver()
         }
-        Static.instance.initMessageReceiver()
         return Static.instance
     }
     
     
     // MARK: - Initialization
     
-    private func initMessageReceiver() {
+    override init() {
+        super.init()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
-
+        mugMessagesWaitingDownload = NSHashTable()
     }
     
     // MARK: - Events Methods
@@ -50,6 +53,8 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         println("   Sent at: \(mugMessage.createdAt)")
         println("   #mugs: \(mugMessage.mugs.count)")
         
+        mugMessagesWaitingDownload.addObject(mugMessage)
+        
         let downloader = Downloader.sharedInstance
         for var i = 0; i < mugMessage.mugs.count; i++ {
             println("       mug #\(mugMessage.mugs.objectAtIndex(i).mugID)")
@@ -58,10 +63,19 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     private func onMugContentDownloadFinished(mug: Mug) {
-        if (self.isMugWithAllDataDownloaded(mug)) {
-            // create thumbnail - NOT TMP
+        if (self.isMugWithAllContentDownloaded(mug)) {
+            var mugMessagesToRemove = Array<MugMessage>()
             
-            // And That's is
+            for mugMessage: MugMessage in mugMessagesWaitingDownload.allObjects as [MugMessage] {
+                if (self.isMugMessageWithAllContentDownloaded(mugMessage)) {
+                    mugMessagesToRemove.append(mugMessage)
+                    mugMessage.createThumbnail()
+                }
+            }
+            
+            for mugMessage in mugMessagesToRemove {
+                mugMessagesWaitingDownload.removeObject(mugMessage)
+            }
         }
     }
     
@@ -71,12 +85,10 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
         var mug = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Mug
-//        var downloadFailed = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY]
-//            = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] as Bool
-        
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
             println("Download failed for mug: \(mug.mugID)")
         } else {
+            println("Download finished for mug: \(mug.mugID)")
             self.onMugContentDownloadFinished(mug)
         }
     }
@@ -84,23 +96,34 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     // MARK: - Utils Methods
     
-    func isMugWithAllDataDownloaded(mug: Mug) -> Bool {
+    func isMugWithAllContentDownloaded(mug: Mug) -> Bool {
         let cacheHanlder = CacheHandler.sharedInstance
-        var allDataReceived = true
+        var allContentReceived = true
         
-        if (!mug.backgroundURL.isEmpty) {
+        if ((mug.backgroundURL != nil) && (!mug.backgroundURL.isEmpty)) {
             if (!cacheHanlder.hasCachedFileForUrl(mug.backgroundURL)) {
-                allDataReceived = false
+                allContentReceived = false
             }
         }
 
-        if (!mug.soundURL.isEmpty) {
+        if ((mug.soundURL != nil) && (!mug.soundURL.isEmpty)) {
             if (!cacheHanlder.hasCachedFileForUrl(mug.soundURL)) {
-                allDataReceived = false
+                allContentReceived = false
             }
         }
         
-        return allDataReceived
+        return allContentReceived
+    }
+    
+    func isMugMessageWithAllContentDownloaded(mugMessage: MugMessage) -> Bool {
+        var allContentReceived = true
+        for var i = 0; i < mugMessage.mugs.count; i++ {
+            var mug = mugMessage.mugs.objectAtIndex(i) as Mug
+            if (!self.isMugWithAllContentDownloaded(mug)) {
+                allContentReceived = false
+            }
+        }
+        return allContentReceived
     }
     
     // MARK: - PubnubServiceDelegate
