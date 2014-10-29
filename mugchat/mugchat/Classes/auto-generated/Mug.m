@@ -19,11 +19,12 @@
 
 @dynamic backgroundURL;
 @dynamic category;
-@dynamic removed;
 @dynamic isPrivate;
 @dynamic mugID;
+@dynamic removed;
 @dynamic soundURL;
 @dynamic word;
+@dynamic backgroundContentType;
 @dynamic messages;
 @dynamic owner;
 

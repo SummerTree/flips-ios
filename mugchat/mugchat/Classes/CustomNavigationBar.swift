@@ -41,7 +41,7 @@ class CustomNavigationBar : UIView {
     
     // MARK: - Static Creator Method
     
-    class func CustomSmallNavigationBar(avatarImage: UIImage, showSettingsButton: Bool, showBuiderButton: Bool) -> CustomNavigationBar {
+    class func CustomSmallNavigationBar(avatarImage: UIImage, showSettingsButton: Bool, showBuilderButton: Bool) -> CustomNavigationBar {
         
         var settingsButtonImage : UIImage?
         if (showSettingsButton) {
@@ -49,7 +49,7 @@ class CustomNavigationBar : UIView {
         }
         
         var builderButtonImage : UIImage?
-        if (showBuiderButton) {
+        if (showBuilderButton) {
             builderButtonImage = UIImage(named: "Builder")
         }
         
@@ -98,7 +98,7 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
-
+        
         var imageButton = UIButton.avatarA2(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
@@ -122,7 +122,7 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
-
+        
         var imageButton = UIButton.avatarA2(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
@@ -214,7 +214,7 @@ class CustomNavigationBar : UIView {
                 update.height.equalTo()(self.avatarButton.frame.size.height)
             })
         }
-
+        
         if (avatarImageView != nil) {
             avatarImageView.mas_updateConstraints { (update) -> Void in
                 update.centerX.equalTo()(self)
@@ -306,6 +306,16 @@ class CustomNavigationBar : UIView {
             avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
         } else if (avatarImageView != nil) {
             avatarImageView.setAvatarImage(image)
+        }
+    }
+    
+    func setAvatarImageUrl(url: String) {
+        if (!url.isEmpty) {
+            if (avatarImageView != nil) {
+                avatarImageView.setImageWithURL(NSURL(string: url))
+            } else {
+                println("Avatar using button is not integrated with images from URLs yet.")
+            }
         }
     }
     

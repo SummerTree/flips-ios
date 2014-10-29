@@ -50,7 +50,9 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     private func initSubviews() {
-        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "tmp_homer"), showSettingsButton: true, showBuiderButton: true)
+        let loggedUser = AuthenticationHelper.sharedInstance.userInSession
+        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User"), showSettingsButton: true, showBuilderButton: true)
+        navigationBar.setAvatarImageUrl(loggedUser.photoURL)
         navigationBar.delegate = self
         
         

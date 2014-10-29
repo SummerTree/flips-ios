@@ -19,11 +19,12 @@
 
 @property (nonatomic, retain) NSString * backgroundURL;
 @property (nonatomic, retain) NSString * category;
-@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSNumber * isPrivate;
 @property (nonatomic, retain) NSString * mugID;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSString * soundURL;
 @property (nonatomic, retain) NSString * word;
+@property (nonatomic, retain) NSNumber * backgroundContentType;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) User *owner;
 @end
