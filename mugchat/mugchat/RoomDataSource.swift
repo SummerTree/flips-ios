@@ -77,8 +77,41 @@ class RoomDataSource : BaseDataSource {
         return room!
     }
     
-    func getMyRooms() -> [Room] {
+    func getAllRooms() -> [Room] {
         return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true) as [Room]
+    }
+    
+    func getMyRooms() -> [Room] {
+        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false) as [Room]
+        var roomsWithMessages = Array<Room>()
+        for room in rooms {
+            if (room.mugMessagesNotRemoved().count > 0) {
+                roomsWithMessages.append(room)
+            }
+        }
+        
+        return roomsWithMessages
+    }
+    
+    func getMyRoomsOrderedByOldestNotReadMessage() -> [Room] {
+        let now = NSDate()
+        
+        var myRooms = self.getMyRooms()
+        return myRooms.sorted { (room, nextRoom) -> Bool in
+            let roomOldestMessage = room.oldestNotReadMessage()
+            var roomDate = roomOldestMessage?.createdAt
+            if (roomDate == nil) {
+                roomDate = now
+            }
+            
+            let nextRoomOldestMessage = nextRoom.oldestNotReadMessage()
+            var nextRoomDate = nextRoomOldestMessage?.createdAt
+            if (nextRoomDate == nil) {
+                nextRoomDate = now
+            }
+            
+            return (roomDate!.compare(nextRoomDate!) != NSComparisonResult.OrderedDescending)
+        }
     }
     
     func getRoomWithPubnubID(pubnubID: String) -> Room {

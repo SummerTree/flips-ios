@@ -134,7 +134,7 @@ class UserDataSource : BaseDataSource {
                 var mug21 = Mug.createEntity() as Mug
                 mug21.mugID = "30"
                 mug21.word = "love"
-                mug21.backgroundURL = "http://www.missaodespertar.org.br/imagens/imagem-5d0c1c481c3f5ec35d7632644c2142bf.jpg"
+                mug21.backgroundURL = "http://lovesign.com.au/wp-content/uploads/2009/11/Stop-In-the-Name-of-Love-Alan-James-2003.jpg"
                 mug21.owner = User.loggedUser()
                 mug21.isPrivate = true
                 
@@ -185,10 +185,18 @@ class UserDataSource : BaseDataSource {
                 
                 var room: Room! = Room.MR_createEntity() as Room
                 room.roomID = "1"
-                room.pubnubID = "$2a$10$kSUvCzXQb83UYgMrxc1nYuthA16coqzVRrwyO2KcUzuSALXwURFqm"
+                room.pubnubID = "$2a$10$Rhq0o6l75GdKZepEUJ9nUO7iKxdEMbZ.jLy45qRLJYR.tjF0PXuEW"
                 room.name = "Test"
                 room.addParticipantsObject(user)
                 room.addParticipantsObject(user3)
+                PubNubService.sharedInstance.subscribeToChannel(room.pubnubID)
+                
+                var room2: Room! = Room.MR_createEntity() as Room
+                room2.roomID = "2"
+                room2.pubnubID = "$2a$10$LbkpRd14zxcSacF3kBnqTu8GHRDpI.LqHWOLQkx8qiL3n/H7vJci"
+                room2.name = "Chat"
+                room2.addParticipantsObject(user)
+                PubNubService.sharedInstance.subscribeToChannel(room2.pubnubID)
                 
                 println("NSManagedObjectContext.MR_defaultContext(): \(NSManagedObjectContext.MR_defaultContext())")
                 NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()

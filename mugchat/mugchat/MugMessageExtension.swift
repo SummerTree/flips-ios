@@ -26,6 +26,18 @@ extension MugMessage {
         self.mugs = mutableOrderedSet
     }
     
+    func messagePhrase() -> String {
+        var message = ""
+        var space = ""
+        for (var i: Int = 0; i < self.mugs.count; i++) {
+            let mug = self.mugs.objectAtIndex(i) as Mug
+            message = "\(message)\(space)\(mug.word)"
+            space = " "
+        }
+        
+        return message
+    }
+    
     func messageThumbnail() -> UIImage? {
         let firstMug = self.mugs.firstObject as Mug
         return CacheHandler.sharedInstance.thumbnailForUrl(firstMug.backgroundURL)
@@ -42,5 +54,16 @@ extension MugMessage {
         } else if (firstMug.isBackgroundContentTypeVideo()) {
             // TODO:
         }
+    }
+    
+    func hasAllContentDownloaded() -> Bool {
+        var allContentReceived = true
+        for var i = 0; i < self.mugs.count; i++ {
+            var mug = self.mugs.objectAtIndex(i) as Mug
+            if (!mug.hasAllContentDownloaded()) {
+                allContentReceived = false
+            }
+        }
+        return allContentReceived
     }
 }

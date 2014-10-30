@@ -13,7 +13,7 @@
 private struct ChatMessageJsonParams {
     static let FROM = "from"
     static let USER_ID = "userID"
-    static let NAME = "name"
+    static let SENT_AT = "sentAt"
     static let PARTICIPANTS = "participants"
     static let ROOM_ID = "roomID"
     static let CONTENT = "content"
@@ -64,11 +64,11 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     private func onMugContentDownloadFinished(mug: Mug) {
-        if (self.isMugWithAllContentDownloaded(mug)) {
+        if (mug.hasAllContentDownloaded()) {
             var mugMessagesToRemove = Array<MugMessage>()
             
             for mugMessage: MugMessage in mugMessagesWaitingDownload.allObjects as [MugMessage] {
-                if (self.isMugMessageWithAllContentDownloaded(mugMessage)) {
+                if (mugMessage.hasAllContentDownloaded()) {
                     mugMessagesToRemove.append(mugMessage)
                     mugMessage.createThumbnail()
                 }
@@ -95,43 +95,11 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     
-    // MARK: - Utils Methods
-    
-    func isMugWithAllContentDownloaded(mug: Mug) -> Bool {
-        let cacheHanlder = CacheHandler.sharedInstance
-        var allContentReceived = true
-        
-        if ((mug.backgroundURL != nil) && (!mug.backgroundURL.isEmpty)) {
-            if (!cacheHanlder.hasCachedFileForUrl(mug.backgroundURL)) {
-                allContentReceived = false
-            }
-        }
-
-        if ((mug.soundURL != nil) && (!mug.soundURL.isEmpty)) {
-            if (!cacheHanlder.hasCachedFileForUrl(mug.soundURL)) {
-                allContentReceived = false
-            }
-        }
-        
-        return allContentReceived
-    }
-    
-    func isMugMessageWithAllContentDownloaded(mugMessage: MugMessage) -> Bool {
-        var allContentReceived = true
-        for var i = 0; i < mugMessage.mugs.count; i++ {
-            var mug = mugMessage.mugs.objectAtIndex(i) as Mug
-            if (!self.isMugWithAllContentDownloaded(mug)) {
-                allContentReceived = false
-            }
-        }
-        return allContentReceived
-    }
-    
     // MARK: - PubnubServiceDelegate
     
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String, sentAt: NSDate) {
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String) {
         let mugMessageDataSource = MugMessageDataSource()
-        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName, sentAt: sentAt)
+        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName)
         self.onMessageReceived(mugMessage)
     }
     

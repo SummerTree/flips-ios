@@ -12,7 +12,14 @@
 
 private struct MugMessageJsonParams {
     static let FROM_USER_ID = "fromUserId"
+    static let SENT_AT = "sentAt"
     static let CONTENT = "content"
+}
+
+private struct MugMessageAttributes {
+    static let CREATED_AT = "createdAt"
+    static let NOT_READ = "notRead"
+    static let ROOM = "room"
 }
 
 class MugMessageDataSource : BaseDataSource {
@@ -23,6 +30,7 @@ class MugMessageDataSource : BaseDataSource {
         var entity: MugMessage! = MugMessage.createEntity() as MugMessage
         
         entity.from = userDataSource.retrieveUserWithId(json[MugMessageJsonParams.FROM_USER_ID].stringValue)
+        entity.createdAt = NSDate(dateTimeString: json[MugMessageJsonParams.SENT_AT].stringValue)
         entity.notRead = true
         entity.receivedAt = NSDate()
 
@@ -37,16 +45,35 @@ class MugMessageDataSource : BaseDataSource {
         return entity
     }
     
-    func createMugMessageWithJson(json: JSON, receivedAtChannel pubnubID: String, sentAt sentDate: NSDate) -> MugMessage {
+    func createMugMessageWithJson(json: JSON, receivedAtChannel pubnubID: String) -> MugMessage {
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.getRoomWithPubnubID(pubnubID)
         
         let mugMessage = self.createEntityWithJson(json)
-        mugMessage.createdAt = sentDate
         mugMessage.room = room
+        room.lastMessageReceivedAt = mugMessage.createdAt
         
         self.save()
         
         return mugMessage
+    }
+    
+    func oldestNotReadMugMessageForRoom(room: Room) -> MugMessage? {
+        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(room.roomID)) AND (\(MugMessageAttributes.NOT_READ) == true))")
+        var result = MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
+        return result.first
+
+    }
+    
+    func removeAllMugMessagesFromRoom(room: Room, completion: CompletionBlock) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            for (var i = 0; i < room.mugMessages.count; i++) {
+                let mugMessage = room.mugMessages.objectAtIndex(i) as MugMessage
+                mugMessage.removed = true
+            }
+            self.save()
+
+            completion(true)
+        })
     }
 }

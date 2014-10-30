@@ -55,4 +55,23 @@ extension Mug {
     func isBackgroundContentTypeVideo() -> Bool {
         return (self.backgroundContentType == BackgroundContentTypeValue.Video)
     }
+    
+    func hasAllContentDownloaded() -> Bool {
+        let cacheHanlder = CacheHandler.sharedInstance
+        var allContentReceived = true
+        
+        if ((self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)) {
+            if (!cacheHanlder.hasCachedFileForUrl(self.backgroundURL)) {
+                allContentReceived = false
+            }
+        }
+        
+        if ((self.soundURL != nil) && (!self.soundURL.isEmpty)) {
+            if (!cacheHanlder.hasCachedFileForUrl(self.soundURL)) {
+                allContentReceived = false
+            }
+        }
+        
+        return allContentReceived
+    }
 }
