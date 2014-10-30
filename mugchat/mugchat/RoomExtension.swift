@@ -68,7 +68,7 @@ extension Room {
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
         let mugMessageDataSource = MugMessageDataSource()
-        mugMessageDataSource.removeAllMugMessagesFromRoom(self, completion)
+        mugMessageDataSource.removeAllMugMessagesFromRoomID(self.roomID, completion)
     }
     
 }

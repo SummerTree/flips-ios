@@ -65,10 +65,12 @@ class MugMessageDataSource : BaseDataSource {
 
     }
     
-    func removeAllMugMessagesFromRoom(room: Room, completion: CompletionBlock) {
+    func removeAllMugMessagesFromRoomID(roomID: String, completion: CompletionBlock) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            for (var i = 0; i < room.mugMessages.count; i++) {
-                let mugMessage = room.mugMessages.objectAtIndex(i) as MugMessage
+            let roomDataSource = RoomDataSource()
+            let roomAtContext = roomDataSource.retrieveRoomWithId(roomID)
+            for (var i = 0; i < roomAtContext.mugMessages.count; i++) {
+                let mugMessage = roomAtContext.mugMessages.objectAtIndex(i) as MugMessage
                 mugMessage.removed = true
             }
             self.save()

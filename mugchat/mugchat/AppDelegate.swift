@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        CoreDataHandler.sharedInstance.resetDatabase()
+        //CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
         CoreDataHandler.sharedInstance.setupDatabase()
 
         let splashScreenViewController = SplashScreenViewController()

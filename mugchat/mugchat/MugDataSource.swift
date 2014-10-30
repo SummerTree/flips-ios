@@ -50,8 +50,10 @@ class MugDataSource : BaseDataSource {
         mug.soundURL = json[MugJsonParams.SOUND_URL].stringValue
         
         let mugOwnerID = json[MugJsonParams.OWNER].stringValue
-        let userDataSource = UserDataSource()
-        mug.owner = userDataSource.retrieveUserWithId(mugOwnerID)
+        if (!mugOwnerID.isEmpty) {
+            let userDataSource = UserDataSource()
+            mug.owner = userDataSource.retrieveUserWithId(mugOwnerID)
+        }
     }
     
     
