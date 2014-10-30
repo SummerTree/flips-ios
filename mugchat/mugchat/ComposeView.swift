@@ -14,7 +14,7 @@ import UIKit
 import AVFoundation
 import AssetsLibrary
 
-class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsTextsViewDelegate, MyMugsViewViewDelegate {
+class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsTextsViewDelegate, MyMugsViewDelegate {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
@@ -74,13 +74,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     func viewWillAppear() {
         self.layoutIfNeeded()
-        
-        if (self.mugTexts.count > userStep) {
-            self.centeredMugsView.selectText(self.mugTexts[userStep])
+        if(!isAlreadyUsingAPicture) {
+            self.selectWordFromCurrentStep()
         }
-        
-        if (!isAlreadyUsingAPicture) {
-            self.slideToCameraView()
+    }
+
+    func selectWordFromCurrentStep() {
+        if (self.mugTexts.count > self.userStep) {
+            self.centeredMugsView.selectText(self.mugTexts[self.userStep])
         }
     }
     
@@ -385,7 +386,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
             })
             
             self.layoutIfNeeded()
-        })
+       })
     }
     
     func slideToCameraView() {
@@ -468,6 +469,16 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         } else {
             self.mugTexts[userStep].associatedMug = mug
             self.mugImageView.setImageWithURL(NSURL(string: mug.backgroundURL))
+        }
+    }
+
+    func myMugsViewMugsForSelectedWord(myMugsView: MyMugsView!, hasMugs: Bool!) {
+        if (hasMugs!) {
+            self.slideToMyMugsView()
+        } else {
+            if (!isAlreadyUsingAPicture) {
+                self.slideToCameraView()
+            }
         }
     }
     

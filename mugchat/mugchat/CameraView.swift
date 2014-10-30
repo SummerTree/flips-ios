@@ -46,7 +46,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     private var showAvatarCropArea: Bool
     private var showMicrophoneButton: Bool
     private var isMicrophoneAvailable: Bool
-    
     private var showingFrontCamera: Bool
     
     var delegate: CameraViewDelegate?
@@ -64,7 +63,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     private var sessionRunningAndDeviceAuthorized: Bool!
     var lockInterfaceRotation: Bool!
     var runtimeErrorHandlingObserver: AnyObject!
-    
+    private var observersRegistered: Bool! = false
     
     // MARK: - Initialization Methods
     
@@ -336,6 +335,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 })
             })
             self.session.startRunning()
+            self.observersRegistered = true
         })
     }
     
@@ -343,12 +343,16 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
             
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
-            NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
-            
-            self.removeObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, context: SessionRunningAndDeviceAuthorizedContext)
-            self.removeObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, context: CapturingStillImageContext)
-            self.removeObserver(self, forKeyPath: self.RECORDING_KEY_PATH, context: RecordingContext)
+            if (self.observersRegistered!) {
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
+                NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
+                
+                self.removeObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, context: SessionRunningAndDeviceAuthorizedContext)
+                self.removeObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, context: CapturingStillImageContext)
+                self.removeObserver(self, forKeyPath: self.RECORDING_KEY_PATH, context: RecordingContext)
+                
+                self.observersRegistered = false
+            }
         })
     }
     
