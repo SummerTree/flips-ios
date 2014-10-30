@@ -118,7 +118,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
                 cell.deselectCell()
                 if (currentMug!.mugID == self.mugText.associatedMug?.mugID) {
                     cell.toggleCellState()
-                    self.delegate?.myMugsViewDidChangeMugSelection(self, mug: currentMug)
+                    //self.delegate?.myMugsViewDidChangeMugSelection(self, mug: currentMug)
                 }
                 
                 cell.cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))

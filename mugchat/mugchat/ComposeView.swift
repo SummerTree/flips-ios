@@ -439,6 +439,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         }
         
         mugWordLabel.text = self.mugTexts[self.userStep].text
+        
+        var currentMugText: MugText = self.mugTexts[userStep]
+        if (currentMugText.associatedMug != nil) {
+            self.mugImageView.setImageWithURL(NSURL(string: currentMugText.associatedMug!.backgroundURL))
+        } else {
+            self.mugImageView.image = UIImageView.imageWithColor(UIColor.avacado())
+        }
+        
         self.myMugsView.setMugText(self.mugTexts[self.userStep])
     }
     
