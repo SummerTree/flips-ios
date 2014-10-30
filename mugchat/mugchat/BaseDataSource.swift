@@ -10,10 +10,16 @@
 // the license agreement.
 //
 
+public typealias CompletionBlock = (Bool) -> Void
+
 class BaseDataSource {
     
     func save() {
-        println("Saving in context \(NSManagedObjectContext.MR_contextForCurrentThread())")
+        if (NSThread.currentThread() == NSThread.mainThread()) {
+            println("   ")
+            println("   SAVING IN MAIN THREAD!! FIX IT!")
+            println("   ")
+        }
         NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
     }
     

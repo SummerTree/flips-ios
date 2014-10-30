@@ -91,6 +91,8 @@
 		7AB946DC19DF35E700779C73 /* MessagesTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946DB19DF35E700779C73 /* MessagesTopView.swift */; };
 		7ACBBEC91A0026DF00A7109C /* MugExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBEC81A0026DF00A7109C /* MugExtension.swift */; };
 		7ACBBECF1A00290B00A7109C /* Mug.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBECE1A00290B00A7109C /* Mug.m */; };
+		7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBED01A024F4300A7109C /* DateHelper.swift */; };
+		7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */; };
 		7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */; };
 		7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
 		7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */; };
@@ -225,6 +227,8 @@
 		7ACBBEC81A0026DF00A7109C /* MugExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugExtension.swift; sourceTree = "<group>"; };
 		7ACBBECD1A00290B00A7109C /* Mug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mug.h; path = "Classes/auto-generated/Mug.h"; sourceTree = "<group>"; };
 		7ACBBECE1A00290B00A7109C /* Mug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Mug.m; path = "Classes/auto-generated/Mug.m"; sourceTree = "<group>"; };
+		7ACBBED01A024F4300A7109C /* DateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorHelper.swift; sourceTree = "<group>"; };
 		7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfirmPictureView.swift; path = Classes/ConfirmPictureView.swift; sourceTree = "<group>"; };
 		7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfirmPictureViewDelegate.swift; path = Classes/ConfirmPictureViewDelegate.swift; sourceTree = "<group>"; };
 		7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewControllerDelegate.swift; path = Classes/TakePictureViewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -376,6 +380,8 @@
 			children = (
 				7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */,
 				70057E9319DADF59004343ED /* DeviceHelper.swift */,
+				7ACBBED01A024F4300A7109C /* DateHelper.swift */,
+				7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1061,6 +1067,7 @@
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				7AFB71A41A00053C002695AC /* User.m in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
+				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7AFB719E1A000537002695AC /* Device.m in Sources */,
@@ -1071,6 +1078,7 @@
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
+				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,

@@ -105,10 +105,12 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 
                 var userDataSource = UserDataSource()
                 userDataSource.syncUserData({ (success, error) -> Void in
-                    if (success) {
-                        var inboxViewController = InboxViewController()
-                        self.navigationController?.pushViewController(inboxViewController, animated: true)
-                    }
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if (success) {
+                            var inboxViewController = InboxViewController()
+                            self.navigationController?.pushViewController(inboxViewController, animated: true)
+                        }
+                    })
                 })
             },
             failure: { (mugError) in
