@@ -44,13 +44,12 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
     override func loadView() {
         self.view = self.confirmFlipView
+        self.view.backgroundColor = UIColor.whiteColor()
         self.confirmFlipView.delegate = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.whiteColor()
         
         self.setupWhiteNavBarWithoutButtons(NSLocalizedString("MugBoys", comment: "MugBoys"))
         
@@ -77,6 +76,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
     override func viewWillDisappear(animated: Bool) {
         self.previewFlipTimer.invalidate()
+        self.confirmFlipView.viewWillDisappear()
     }
     
     func startPreview() {
