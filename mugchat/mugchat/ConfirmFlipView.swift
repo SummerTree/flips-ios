@@ -55,7 +55,7 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         self.flipWordLabel = UILabel()
         self.flipWordLabel.text = word
         
-        self.flipImageView = UIImageView.imageWithColor(UIColor.avacado())
+        self.flipImageView = UIImageView.imageViewWithColor(UIColor.avacado())
         
         if (video != nil) {
             self.flipVideoURL = video!

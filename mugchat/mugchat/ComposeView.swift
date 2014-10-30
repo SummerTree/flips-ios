@@ -75,7 +75,9 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func viewWillAppear() {
         self.layoutIfNeeded()
         
-        self.centeredMugsView.selectText(self.mugTexts[userStep])
+        if (self.mugTexts.count > userStep) {
+            self.centeredMugsView.selectText(self.mugTexts[userStep])
+        }
         
         if (!isAlreadyUsingAPicture) {
             self.slideToCameraView()
@@ -118,7 +120,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         cameraPreview.delegate = self
         mugContainerView.addSubview(cameraPreview)
         
-        mugImageView = UIImageView.imageWithColor(UIColor.avacado())
+        mugImageView = UIImageView.imageViewWithColor(UIColor.avacado())
         mugImageView.alpha = 0.0
         mugImageView.contentMode = UIViewContentMode.ScaleAspectFit
         mugContainerView.addSubview(mugImageView)
@@ -427,8 +429,25 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     // MARK: - MugsTextsView Delegate
     
     func mugsTextsViewDidSelectMugText(mugText: MugText!) {
-        mugWordLabel.text = mugText.text
-        self.myMugsView.setWord(mugText.text)
+        var index = 0
+        for storedMugText in self.mugTexts {
+            if (mugText.mugId == storedMugText.mugId) {
+                self.userStep = index
+                break;
+            }
+            index++
+        }
+        
+        mugWordLabel.text = self.mugTexts[self.userStep].text
+        
+        var currentMugText: MugText = self.mugTexts[userStep]
+        if (currentMugText.associatedMug != nil) {
+            self.mugImageView.setImageWithURL(NSURL(string: currentMugText.associatedMug!.backgroundURL))
+        } else {
+            self.mugImageView.image = UIImageView.imageWithColor(UIColor.avacado())
+        }
+        
+        self.myMugsView.setMugText(self.mugTexts[self.userStep])
     }
     
     func mugsTextsViewDidSplitMugText(mugTexts: [MugText]) {
@@ -442,12 +461,14 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         slideToCameraView()
     }
     
-    func myMugsViewDidSelectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
-        //TODO: story 7638
-    }
-    
-    func myMugsViewDidDeselectMug(myMugsView: MyMugsView!, selectedMug: Mug!) {
-        //TODO: story 7638
+    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!) {
+        if (self.mugTexts[userStep].associatedMug?.mugID == mug.mugID) { //same mug (so user is deselecting it)
+            self.mugTexts[userStep].associatedMug = nil
+            self.mugImageView.image = UIImageView.imageWithColor(UIColor.avacado())
+        } else {
+            self.mugTexts[userStep].associatedMug = mug
+            self.mugImageView.setImageWithURL(NSURL(string: mug.backgroundURL))
+        }
     }
     
     

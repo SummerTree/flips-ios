@@ -15,6 +15,7 @@ class MugText { //Temporary data structure
     var mugId: Int!
     var text: String!
     var state: MugState!
+    var associatedMug: Mug?
     
     init(mugId: Int, text: String, state: MugState) {
         self.mugId = mugId
