@@ -124,7 +124,7 @@ class UserDataSource : BaseDataSource {
         var mug21 = Mug.createEntity() as Mug
         mug21.mugID = "30"
         mug21.word = "love"
-        mug21.backgroundURL = "http://www.missaodespertar.org.br/imagens/imagem-5d0c1c481c3f5ec35d7632644c2142bf.jpg"
+        mug21.backgroundURL = "http://4.bp.blogspot.com/-r0J3X0sLvVg/UOwOPGP0zkI/AAAAAAAABSg/QNQmViWDnjU/s400/i+love+you+HD+wallpapers+(4).jpg"
         mug21.owner = User.loggedUser()
         mug21.isPrivate = true
         

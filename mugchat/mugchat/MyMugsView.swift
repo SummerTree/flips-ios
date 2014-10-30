@@ -27,6 +27,8 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     private var addMugButton: UIButton!
     private var myMugsCollectionView: UICollectionView!
     
+    var mugText : MugText!
+    
     var mugDataSource = MugDataSource()
     var myMugs: [Mug] = [Mug]()
     
@@ -91,8 +93,9 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         delegate?.myMugsViewDidTapAddMug(self)
     }
     
-    func setWord(word: String) {
-        self.myMugs = mugDataSource.getMyMugsForWord(word)
+    func setMugText(mugText: MugText) {
+        self.mugText = mugText
+        self.myMugs = mugDataSource.getMyMugsForWord(mugText.text)
         myMugsCollectionView.reloadData()
     }
     
@@ -112,7 +115,12 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
             var currentMug: Mug? = self.myMugs[indexPath.row - 1]
             if (currentMug != nil) {
                 cell.mug = currentMug
-                cell.cellIsSelected = false //TODO
+                cell.deselectCell()
+                if (currentMug!.mugID == self.mugText.associatedMug?.mugID) {
+                    cell.toggleCellState()
+                    self.delegate?.myMugsViewDidChangeMugSelection(self, mug: currentMug)
+                }
+                
                 cell.cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
            }
         }
