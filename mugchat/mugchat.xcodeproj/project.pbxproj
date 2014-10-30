@@ -537,10 +537,10 @@
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
 			isa = PBXGroup;
 			children = (
+				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
 				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
 				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
 				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
-				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
 				7A12B8D119F5C6E900DE955E /* MugsTextsView.swift */,
 				A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */,
 				A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */,
