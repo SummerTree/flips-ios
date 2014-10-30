@@ -118,7 +118,6 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
                 cell.deselectCell()
                 if (currentMug!.mugID == self.mugText.associatedMug?.mugID) {
                     cell.toggleCellState()
-                    //self.delegate?.myMugsViewDidChangeMugSelection(self, mug: currentMug)
                 }
                 
                 cell.cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
@@ -130,14 +129,14 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     
     //this delegate is called too when the user is tapping the cell to deselects it (not only for selection)
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
+        //didDeselectItemAtIndexPath doesn't work for all situations
+        for cell in self.myMugsCollectionView.visibleCells() as [MyMugsViewCell] {
+            cell.deselectCell()
+        }
+        
         var cell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
         cell.toggleCellState()
         self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug)
-    }
-    
-    func collectionView(collectionView: UICollectionView!, didDeselectItemAtIndexPath indexPath: NSIndexPath!) {
-        var cell : MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
-        cell.deselectCell()
     }
     
 }
