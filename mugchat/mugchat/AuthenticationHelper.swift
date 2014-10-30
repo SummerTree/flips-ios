@@ -35,6 +35,12 @@ public class AuthenticationHelper: NSObject {
         userDefaults.synchronize()
     }
 
+    private func removeAuthenticatedUsername() {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(LOGIN_USERNAME_KEY)
+        userDefaults.synchronize()
+    }
+    
     func retrieveAuthenticatedUsernameIfExists() -> String? {
         var loggedUserInfo = User.isUserLoggedIn()
         var userDefaults = NSUserDefaults.standardUserDefaults()
@@ -48,6 +54,9 @@ public class AuthenticationHelper: NSObject {
         FBSession.setActiveSession(nil)
         
         CoreDataHandler.sharedInstance.resetDatabase()
+        
+        // Removes username from user defaults
+        self.removeAuthenticatedUsername()
     }
 
     
