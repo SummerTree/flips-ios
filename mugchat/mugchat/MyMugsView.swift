@@ -32,7 +32,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     var mugDataSource = MugDataSource()
     var myMugs: [Mug] = [Mug]()
     
-    var delegate: MyMugsViewViewDelegate?
+    var delegate: MyMugsViewDelegate?
     
     override init() {
         super.init(frame: CGRect.zeroRect)
@@ -96,7 +96,12 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     func setMugText(mugText: MugText) {
         self.mugText = mugText
         self.myMugs = mugDataSource.getMyMugsForWord(mugText.text)
-        myMugsCollectionView.reloadData()
+        if (self.myMugs.count > 0) {
+            self.delegate?.myMugsViewMugsForSelectedWord(self, hasMugs: true)
+            myMugsCollectionView.reloadData()
+        } else {
+            self.delegate?.myMugsViewMugsForSelectedWord(self, hasMugs: false)
+        }
     }
     
     
@@ -144,9 +149,10 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
 
 // MARK: - View Delegate
 
-protocol MyMugsViewViewDelegate {
+protocol MyMugsViewDelegate {
     
     func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
     func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!)
+    func myMugsViewMugsForSelectedWord(myMugsView: MyMugsView!, hasMugs: Bool!)
     
 }

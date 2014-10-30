@@ -13,8 +13,8 @@
 class BaseDataSource {
     
     func save() {
-        println("Saving in context \(NSManagedObjectContext.MR_defaultContext())")
-        NSManagedObjectContext.MR_defaultContext().MR_saveToPersistentStoreAndWait()
+        println("Saving in context \(NSManagedObjectContext.MR_contextForCurrentThread())")
+        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
     }
     
 }
