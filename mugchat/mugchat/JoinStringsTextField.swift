@@ -81,9 +81,17 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         for character in self.text {
             if (character == whitespace) {
                 let result = isPartOfJoinedTextRanges(charIndex)
-                //Avoids that joining a word with a space before joins the previous word
-                let isTheFirstCharacterOfJoinedText = (charIndex == result.textRange?.location)
-                if (result.isPart && !isTheFirstCharacterOfJoinedText) {
+                //Avoids that joining a word with a space before or after to join the previous or next word respectivelly
+                var locationFirst: Int?
+                var locationLast: Int?
+                if (result.textRange != nil) {
+                    locationFirst = result.textRange!.location
+                    locationLast = locationFirst! + result.textRange!.length-1
+                }
+
+                let isTheFirstCharacterOfJoinedText = (charIndex == locationFirst)
+                let isTheLastCharacterOfJoinedText = (charIndex == locationLast)
+                if (result.isPart && !isTheFirstCharacterOfJoinedText && !isTheLastCharacterOfJoinedText) {
                     lastWord.append(character)
                 } else {
                     if (lastWord != "") {
