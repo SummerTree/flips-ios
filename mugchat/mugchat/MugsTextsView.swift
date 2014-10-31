@@ -197,12 +197,14 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
             }
             
             }, completion: { (value: Bool) in
-                //Updating mugTextViews with new mugTexts
+                //Inserting new mugTextViews in self.mugTextViews
                 for var i=0; i < mugTextViewsUpdated.count; i++ {
                     var mugTextView = mugTextViewsUpdated[i]
-                    if ((i < self.mugTextViews.count) && (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId)) {
-                        self.mugTextViews.insert(mugTextView, atIndex: i)
-                    } else {
+                    if (i < self.mugTextViews.count) {
+                        if (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId) {
+                            self.mugTextViews.insert(mugTextView, atIndex: i)
+                        }
+                    } else { //new mugText added in the end
                         self.mugTextViews.append(mugTextView)
                     }
                 }
