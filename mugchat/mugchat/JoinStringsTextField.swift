@@ -80,7 +80,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         for character in self.text {
             if (character == whitespace) {
-                if (isPartOfJoinedTextRanges(charIndex)) {
+                let result = isPartOfJoinedTextRanges(charIndex)
+                //Fix bug 8457 (Joining a word with a space after or before is joining two words)
+                let isTheFirstCharacterOfJoinedText = (charIndex == result.textRange?.location)
+                if (result.isPart && !isTheFirstCharacterOfJoinedText) {
                     lastWord.append(character)
                 } else {
                     if (lastWord != "") {
@@ -92,7 +95,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 if (hasSpecialCharacters(lastWord)) {
                     lastWord.append(character)
                 } else {
-                    if (isPartOfJoinedTextRanges(charIndex)) {
+                    let result = isPartOfJoinedTextRanges(charIndex)
+                    if (result.isPart) {
                         lastWord.append(character)
                     } else {
                         if (lastWord != "") {
@@ -116,15 +120,15 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return mugTexts
     }
     
-    func isPartOfJoinedTextRanges(charIndex: Int) -> Bool {
+    func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, textRange: NSRange?) {
         for textRange in self.joinedTextRanges {
             var posInit : Int = textRange.location
             var posEnd : Int = textRange.location + textRange.length
             if (posInit <= charIndex && charIndex < posEnd) {
-                return true
+                return (true, textRange)
             }
         }
-        return false
+        return (false, nil)
     }
     
     func hasSpecialCharacters(text : String) -> Bool {
