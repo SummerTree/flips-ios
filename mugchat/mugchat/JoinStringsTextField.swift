@@ -83,8 +83,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 if (isPartOfJoinedTextRanges(charIndex)) {
                     lastWord.append(character)
                 } else {
-                    mugTexts.append(lastWord)
-                    lastWord = ""
+                    if (lastWord != "") {
+                        mugTexts.append(lastWord)
+                        lastWord = ""
+                    }
                 }
             } else if (isSpecialCharacter(character)) {
                 if (hasSpecialCharacters(lastWord)) {
@@ -93,9 +95,11 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                     if (isPartOfJoinedTextRanges(charIndex)) {
                         lastWord.append(character)
                     } else {
-                        mugTexts.append(lastWord)
-                        lastWord = ""
-                        lastWord.append(character)
+                        if (lastWord != "") {
+                            mugTexts.append(lastWord)
+                            lastWord = ""
+                            lastWord.append(character)
+                        }
                     }
                 }
             } else {
@@ -104,7 +108,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             
             charIndex++
         }
-        mugTexts.append(lastWord)
+        
+        if (lastWord != "") {
+           mugTexts.append(lastWord)
+        }
         
         return mugTexts
     }
