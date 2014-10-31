@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E7873D8E-25DB-4E4C-8553-20A7F00D1F1B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>VideoCreator</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
+		<string>github.com:arctouch/flips-ios.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>spikes/VideoCreator/VideoCreator.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:arctouch/flips-ios.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>mugchat-ios</string>
+		</dict>
+	</array>
+</dict>
+</plist>
