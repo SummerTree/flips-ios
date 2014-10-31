@@ -664,6 +664,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         return captureDevice
     }
     
+    func getFontSizeMultiplierForDevice() -> CGFloat {
+        return self.frame.size.width / 240 // Where 240 is the camera view frame width for iPhone4S
+    }
     
     // MARK: - Utility Methods
     
