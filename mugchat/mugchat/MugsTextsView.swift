@@ -70,6 +70,9 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
+        let menuController = UIMenuController.sharedMenuController()
+        menuController.setMenuVisible(false, animated: true)
+
         self.centerScrollViewAtView(gesture.view!)
         self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
@@ -86,14 +89,18 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
-            gesture.view?.alpha = 0.5
-            self.showJoinMenuAtView(gesture.view! as MugTextView)
+            let mugTextView = gesture.view! as MugTextView
+            var arrayOfWords : [String] = MugStringsUtil.splitMugString(mugTextView.mugText.text)
+            if (arrayOfWords.count > 1) {
+                gesture.view?.alpha = 0.5
+                self.showSplitMenuAtView(gesture.view! as MugTextView)
+            }
         } else if (gesture.state == UIGestureRecognizerState.Ended) {
             gesture.view?.alpha = 1
         }
     }
     
-    func showJoinMenuAtView(mugTextView : MugTextView!) {
+    func showSplitMenuAtView(mugTextView : MugTextView!) {
         let menuController = UIMenuController.sharedMenuController()
         
         self.tappedMugTextView = mugTextView;
@@ -113,7 +120,7 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     func splitText() {
         let text = self.tappedMugTextView?.mugText.text
         
-        var texts: [String] = MugStringsUtil.splitMugString(text!);
+        var splittedTextWords: [String] = MugStringsUtil.splitMugString(text!);
         
         var mugTextView: MugTextView
         var lastMugText: MugTextView!
@@ -139,9 +146,9 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
                     var oldMugTextViewWidth : CGFloat = mugTextView.frame.width
                     
                     //Update the original MugText with the first string of the splitted text
-                    mugTextView.mugText.text = texts[0]
-                    mugTextView.textLabel.text = texts[0]
-                    self.mugTexts[index].text = texts[0]
+                    mugTextView.mugText.text = splittedTextWords[0]
+                    mugTextView.textLabel.text = splittedTextWords[0]
+                    self.mugTexts[index].text = splittedTextWords[0]
                     
                     //update mugTextView size to fit the smaller text
                     var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
@@ -156,10 +163,10 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
                     contentOffset = lastMugText.frame.origin.x + lastMugText.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
                     
                     var newMugTextView : MugTextView
-                    for var i=1; i < texts.count; i++ { //creating and positioning new MugTextViews
+                    for var i=1; i < splittedTextWords.count; i++ { //creating and positioning new MugTextViews
                         index++
                         
-                        var mugText = MugText(mugId: self.mugTexts.count, text: texts[i], state: MugState.NewWord)
+                        var mugText = MugText(mugId: self.mugTexts.count, text: splittedTextWords[i], state: MugState.NewWord)
                         self.mugTexts.insert(mugText, atIndex: index)
                         
                         newMugTextView = MugTextView(mugText: mugText)
@@ -190,11 +197,15 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
             }
             
             }, completion: { (value: Bool) in
-                //Updating mugTextViews with new mugTexts
+                //Inserting new mugTextViews in self.mugTextViews
                 for var i=0; i < mugTextViewsUpdated.count; i++ {
                     var mugTextView = mugTextViewsUpdated[i]
-                    if (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId) {
-                        self.mugTextViews.insert(mugTextView, atIndex: i)
+                    if (i < self.mugTextViews.count) {
+                        if (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId) {
+                            self.mugTextViews.insert(mugTextView, atIndex: i)
+                        }
+                    } else { //new mugText added in the end
+                        self.mugTextViews.append(mugTextView)
                     }
                 }
                 
