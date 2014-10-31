@@ -48,15 +48,19 @@ public class AuthenticationHelper: NSObject {
     }
     
     func logout() {
+        
+        if let facebookID = self.userInSession.facebookID {
+            if !self.userInSession.facebookID.isEmpty {
+                self.removeAuthenticatedUsername()
+            }
+        }
+        
         self.userInSession = nil
         FBSession.activeSession().closeAndClearTokenInformation()
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)
         
         CoreDataHandler.sharedInstance.resetDatabase()
-        
-        // Removes username from user defaults
-        self.removeAuthenticatedUsername()
         
         // Unregister for push notifications
         UIApplication.sharedApplication().unregisterForRemoteNotifications()
