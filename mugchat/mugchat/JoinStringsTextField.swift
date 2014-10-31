@@ -175,13 +175,32 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
         
         else if action == "joinStrings" {
-            if (countElements(self.text) > 0) {
+            if (self.selectedTextCanBeJoined()) {
                 return true
             }
             return false
         }
         
         return super.canPerformAction(action, withSender: sender)
+    }
+    
+    func selectedTextCanBeJoined() -> Bool {
+        var selectedTextRange: UITextRange = self.selectedTextRange!
+        
+        var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
+        var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
+        var selectionLength : Int = posEnd - posInit
+        var selectionTextRange = NSMakeRange(posInit, selectionLength)
+        
+        let textNSString = self.text as NSString
+        var stringFromSelection = textNSString.substringWithRange(selectionTextRange)
+        
+        var arrayOfWords : [String] = MugStringsUtil.splitMugString(stringFromSelection)
+        if (arrayOfWords.count > 1) {
+            return true
+        }
+        
+        return false
     }
     
     func textViewDidChange(textView: UITextView) {
