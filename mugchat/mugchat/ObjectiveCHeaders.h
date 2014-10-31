@@ -36,5 +36,6 @@
 #import "Contact.h"
 
 #import "UIImageView+AFNetworking.h"
+#import "VideoComposer.h"
 
 #endif
