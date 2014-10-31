@@ -88,7 +88,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         }
         
         composeButton.mas_makeConstraints { (make) -> Void in
-            make.bottom.lessThanOrEqualTo()(self).with().offset()(-self.COMPOSE_BUTTON_BOTTOM_MARGIN)
+            make.bottom.equalTo()(self).with().offset()(-self.COMPOSE_BUTTON_BOTTOM_MARGIN)
             make.centerX.equalTo()(self)
         }
     }
