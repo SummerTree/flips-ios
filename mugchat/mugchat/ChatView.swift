@@ -350,6 +350,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        self.replyTextField.viewWillAppear()
     }
     
     func viewWillDisappear() {
