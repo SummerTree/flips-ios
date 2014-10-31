@@ -506,8 +506,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
 
     func cancelCaptureAudioButtonTapped(sender: UIButton!) {
-        self.showCameraHidePicture()
-        self.hideRecordingView()
+        self.delegate?.composeViewDidTapCancelCaptureAudioButton(self)
     }
     
     func captureAudioButtonTapped(sender: UIButton!) {
@@ -593,6 +592,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func getMugWord() -> String {
         return self.mugWordLabel.text!
     }
+    
+    func getMugTexts() -> [MugText] {
+        return self.mugTexts
+    }
 }
 
 
@@ -600,6 +603,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
 
 protocol ComposeViewDelegate {
     func composeViewDidTapBackButton(composeView: ComposeView!)
+    func composeViewDidTapCancelCaptureAudioButton(composeView: ComposeView!)
     func composeViewDidTapCaptureAudioButton(composeView: ComposeView!)
     func composeViewDidTapTakePictureButton(composeView: ComposeView!, withCamera cameraView: CameraView!)
     func composeViewDidTapGalleryButton(composeView: ComposeView!)
