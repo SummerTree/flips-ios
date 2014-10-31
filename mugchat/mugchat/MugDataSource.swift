@@ -17,6 +17,7 @@ private struct MugJsonParams {
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
     static let SOUND_URL = "soundURL"
+    static let OWNER = "owner"
 }
 
 struct MugAttributes {
@@ -47,6 +48,12 @@ class MugDataSource : BaseDataSource {
         mug.word = json[MugJsonParams.WORD].stringValue
         mug.backgroundURL = json[MugJsonParams.BACKGROUND_URL].stringValue
         mug.soundURL = json[MugJsonParams.SOUND_URL].stringValue
+        
+        let mugOwnerID = json[MugJsonParams.OWNER].stringValue
+        if (!mugOwnerID.isEmpty) {
+            let userDataSource = UserDataSource()
+            mug.owner = userDataSource.retrieveUserWithId(mugOwnerID)
+        }
     }
     
     
@@ -69,6 +76,8 @@ class MugDataSource : BaseDataSource {
     func createMugWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
         let mugService = MugService()
         mugService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (mug) -> Void in
+            var userDataSource = UserDataSource()
+            mug.owner = User.loggedUser()
             createMugSuccess(mug)
         }) { (mugError) -> Void in
             var message = mugError?.error as String!

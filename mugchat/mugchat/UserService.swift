@@ -131,10 +131,7 @@ public class UserService: MugchatService {
         let userDataSource = UserDataSource()
         let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
         user.me = true
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            userDataSource.save()
-        })
+        userDataSource.save()
         
         return user
     }

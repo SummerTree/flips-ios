@@ -10,17 +10,11 @@
 // the license agreement.
 //
 
-public typealias CompletionBlock = (Bool) -> Void
+#import <UIKit/UIKit.h>
 
-class BaseDataSource {
-    
-    func save() {
-        if (NSThread.currentThread() == NSThread.mainThread()) {
-            println("   ")
-            println("   SAVING IN MAIN THREAD!! FIX IT!")
-            println("   ")
-        }
-        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
-    }
-    
-}
+@interface VideoCreator : NSObject 
+
+- (void) writeImagesAsMovie:(NSArray *)array toPath:(NSString*)path;
+
+@end
+
