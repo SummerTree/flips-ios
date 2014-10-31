@@ -134,14 +134,17 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     
     //this delegate is called too when the user is tapping the cell to deselects it (not only for selection)
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
+        var selectedCell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
+        
         //didDeselectItemAtIndexPath doesn't work for all situations
         for cell in self.myMugsCollectionView.visibleCells() as [MyMugsViewCell] {
-            cell.deselectCell()
+            if (cell.mug?.mugID != selectedCell.mug.mugID) {
+               cell.deselectCell()
+            }
         }
         
-        var cell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
-        cell.toggleCellState()
-        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: cell.mug)
+        selectedCell.toggleCellState()
+        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: selectedCell.mug)
     }
     
 }

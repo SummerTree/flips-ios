@@ -70,6 +70,9 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
+        let menuController = UIMenuController.sharedMenuController()
+        menuController.setMenuVisible(false, animated: true)
+
         self.centerScrollViewAtView(gesture.view!)
         self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
@@ -86,8 +89,12 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
-            gesture.view?.alpha = 0.5
-            self.showSplitMenuAtView(gesture.view! as MugTextView)
+            let mugTextView = gesture.view! as MugTextView
+            var arrayOfWords : [String] = MugStringsUtil.splitMugString(mugTextView.mugText.text)
+            if (arrayOfWords.count > 1) {
+                gesture.view?.alpha = 0.5
+                self.showSplitMenuAtView(gesture.view! as MugTextView)
+            }
         } else if (gesture.state == UIGestureRecognizerState.Ended) {
             gesture.view?.alpha = 1
         }
@@ -190,12 +197,14 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
             }
             
             }, completion: { (value: Bool) in
-                //Updating mugTextViews with new mugTexts
+                //Inserting new mugTextViews in self.mugTextViews
                 for var i=0; i < mugTextViewsUpdated.count; i++ {
                     var mugTextView = mugTextViewsUpdated[i]
-                    if ((i < self.mugTextViews.count) && (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId)) {
-                        self.mugTextViews.insert(mugTextView, atIndex: i)
-                    } else {
+                    if (i < self.mugTextViews.count) {
+                        if (self.mugTextViews[i].mugText.mugId != mugTextView.mugText.mugId) {
+                            self.mugTextViews.insert(mugTextView, atIndex: i)
+                        }
+                    } else { //new mugText added in the end
                         self.mugTextViews.append(mugTextView)
                     }
                 }

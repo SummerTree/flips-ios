@@ -180,7 +180,7 @@
 		70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
-		70FD4E7019D064450024EBDB /* mugchat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mugchat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70FD4E7819D064450024EBDB /* mugchat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mugchat.xcdatamodel; sourceTree = "<group>"; };
@@ -617,7 +617,7 @@
 		70FD4E7119D064450024EBDB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				70FD4E7019D064450024EBDB /* mugchat.app */,
+				70FD4E7019D064450024EBDB /* Flips.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -917,7 +917,7 @@
 			);
 			name = mugchat;
 			productName = mugchat;
-			productReference = 70FD4E7019D064450024EBDB /* mugchat.app */;
+			productReference = 70FD4E7019D064450024EBDB /* Flips.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1209,7 +1209,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
 			};
@@ -1226,7 +1226,7 @@
 				INFOPLIST_FILE = mugchat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
 			};
@@ -1278,7 +1278,7 @@
 				INFOPLIST_FILE = mugchat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
 			};

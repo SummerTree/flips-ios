@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-               BuildableName = "mugchat.app"
+               BuildableName = "Flips.app"
                BlueprintName = "mugchat"
                ReferencedContainer = "container:mugchat.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-            BuildableName = "mugchat.app"
+            BuildableName = "Flips.app"
             BlueprintName = "mugchat"
             ReferencedContainer = "container:mugchat.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-            BuildableName = "mugchat.app"
+            BuildableName = "Flips.app"
             BlueprintName = "mugchat"
             ReferencedContainer = "container:mugchat.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-            BuildableName = "mugchat.app"
+            BuildableName = "Flips.app"
             BlueprintName = "mugchat"
             ReferencedContainer = "container:mugchat.xcodeproj">
          </BuildableReference>
