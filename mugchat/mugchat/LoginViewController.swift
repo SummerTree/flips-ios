@@ -46,8 +46,11 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
     // MARK: - LoginViewDelegate Methods
     
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
-        var termsOfUseViewController = TermsOfUseViewController()
-        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
+        var videoComposer = VideoComposer()
+        videoComposer.testCreatingFourWordsVideo()
+
+//        var termsOfUseViewController = TermsOfUseViewController()
+//        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
     func loginViewDidTapPrivacyPolicy(loginView: LoginView!) {
