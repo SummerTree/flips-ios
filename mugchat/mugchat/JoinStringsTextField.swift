@@ -20,8 +20,6 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
         
         self.delegate = self
-        
-        self.setUpMenu()
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer!) {
@@ -30,6 +28,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+   func viewWillAppear() {
+        setUpMenu()
     }
     
     func setUpMenu() {
@@ -172,8 +174,11 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             return false
         }
         
-        else if action == "Join" {
-            return true
+        else if action == "joinStrings" {
+            if (countElements(self.text) > 0) {
+                return true
+            }
+            return false
         }
         
         return super.canPerformAction(action, withSender: sender)
