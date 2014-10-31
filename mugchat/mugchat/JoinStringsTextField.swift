@@ -174,8 +174,11 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             return false
         }
         
-        else if action == "Join" {
-            return true
+        else if action == "joinStrings" {
+            if (countElements(self.text) > 0) {
+                return true
+            }
+            return false
         }
         
         return super.canPerformAction(action, withSender: sender)
