@@ -70,6 +70,9 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
+        let menuController = UIMenuController.sharedMenuController()
+        menuController.setMenuVisible(false, animated: true)
+
         self.centerScrollViewAtView(gesture.view!)
         self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
@@ -86,8 +89,12 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     
     func mugButtonLongPress(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
-            gesture.view?.alpha = 0.5
-            self.showSplitMenuAtView(gesture.view! as MugTextView)
+            let mugTextView = gesture.view! as MugTextView
+            var arrayOfWords : [String] = MugStringsUtil.splitMugString(mugTextView.mugText.text)
+            if (arrayOfWords.count > 1) {
+                gesture.view?.alpha = 0.5
+                self.showSplitMenuAtView(gesture.view! as MugTextView)
+            }
         } else if (gesture.state == UIGestureRecognizerState.Ended) {
             gesture.view?.alpha = 1
         }
