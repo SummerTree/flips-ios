@@ -55,9 +55,6 @@ public class AuthenticationHelper: NSObject {
         
         CoreDataHandler.sharedInstance.resetDatabase()
         
-        // Removes username from user defaults
-        self.removeAuthenticatedUsername()
-        
         // Unregister for push notifications
         UIApplication.sharedApplication().unregisterForRemoteNotifications()
     }
