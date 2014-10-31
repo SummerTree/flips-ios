@@ -422,6 +422,7 @@
 				7ACBBF301A03A8C200A7109C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7ACBBF311A03A8C200A7109C /* Build configuration list for PBXNativeTarget "VideoCreatorTests" */ = {
 			isa = XCConfigurationList;
@@ -430,6 +431,7 @@
 				7ACBBF331A03A8C200A7109C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

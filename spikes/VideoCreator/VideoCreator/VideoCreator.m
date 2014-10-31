@@ -74,6 +74,14 @@
             NSString *filePath = [documents stringByAppendingPathComponent:filename];
             
             UIImage *imgFrame = [UIImage imageWithContentsOfFile:filePath] ;
+            if (i == 0) {
+                imgFrame = [self drawText:@"I" inImage:imgFrame];
+            } else if (i == 1) {
+                imgFrame = [self drawText:@"LOVE" inImage:imgFrame];
+            } else if (i == 2) {
+                imgFrame = [self drawText:@"COFFEE" inImage:imgFrame];
+            }
+            
             buffer = [self pixelBufferFromCGImage:[imgFrame CGImage]];
             
             BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
@@ -109,8 +117,6 @@
     NSString *documents = [NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
     NSLog(@"documents: %@", documents);
     documents = [documents stringByAppendingPathComponent:@""];
-    
-    
     
     NSURL    *outputFileUrl = [NSURL fileURLWithPath:path];
     //    NSString *filePath = [documents stringByAppendingPathComponent:@"newFile.m4a"];
@@ -185,6 +191,35 @@
     CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
     
     return pxbuffer;
+}
+
+-(UIImage*) drawText:(NSString*)text inImage:(UIImage*)image {
+    float expectedFontSize = 40;
+    float expectedScreenWidth = 320;
+    float multiplier = image.size.width / expectedScreenWidth;
+
+    UIFont *font = [UIFont boldSystemFontOfSize:expectedFontSize * multiplier];
+    
+    CGSize textSize = [text sizeWithAttributes:@{ NSFontAttributeName : font }];
+    
+    float x = (image.size.width / 2) - (textSize.width / 2);
+    float y = image.size.height - textSize.height - (20 * multiplier);
+    
+    CGPoint point = CGPointMake(x, y);
+    
+    UIGraphicsBeginImageContext(image.size);
+    
+    [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
+    CGRect rect = CGRectMake(point.x, point.y, image.size.width, image.size.height);
+    [[UIColor whiteColor] set];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetShadow(context, CGSizeMake(2.0f, 2.0f), 2.0f);
+    [text drawInRect:CGRectIntegral(rect) withAttributes:@{ NSFontAttributeName : font, NSForegroundColorAttributeName : [UIColor whiteColor] }];
+
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
 }
 
 @end
