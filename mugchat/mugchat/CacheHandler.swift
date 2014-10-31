@@ -98,8 +98,9 @@ public class CacheHandler : NSObject {
         return url.lastPathComponent
     }
     
-    func hasCachedFileForUrl(url:String) -> Bool {
+    func hasCachedFileForUrl(url:String) -> (hasCache: Bool, filePath: String?) {
         var fileExists = false
+        var filePath : String?
         
         let fileManager = NSFileManager.defaultManager()
         let formatedUrl = self.getFormatedUrl(url)
@@ -107,14 +108,16 @@ public class CacheHandler : NSObject {
         let cacheDirectoryFilePath = "\(applicationCacheDirectory)/\(formatedUrl)"
         if (fileManager.fileExistsAtPath(cacheDirectoryFilePath)) {
             fileExists = true
+            filePath = cacheDirectoryFilePath
         }
         
         let supportDirectoryFilePath = "\(applicationSupportDirectory)/\(formatedUrl)"
         if (fileManager.fileExistsAtPath(supportDirectoryFilePath)) {
             fileExists = true
+            filePath = supportDirectoryFilePath
         }
         
-        return fileExists
+        return (fileExists, filePath)
     }
     
     

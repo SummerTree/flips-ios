@@ -57,17 +57,19 @@ extension Mug {
     }
     
     func hasAllContentDownloaded() -> Bool {
-        let cacheHanlder = CacheHandler.sharedInstance
+        let cacheHandler = CacheHandler.sharedInstance
         var allContentReceived = true
         
         if ((self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)) {
-            if (!cacheHanlder.hasCachedFileForUrl(self.backgroundURL)) {
+            var result = cacheHandler.hasCachedFileForUrl(self.backgroundURL)
+            if (!result.hasCache) {
                 allContentReceived = false
             }
         }
         
         if ((self.soundURL != nil) && (!self.soundURL.isEmpty)) {
-            if (!cacheHanlder.hasCachedFileForUrl(self.soundURL)) {
+            var result = cacheHandler.hasCachedFileForUrl(self.soundURL)
+            if (!result.hasCache) {
                 allContentReceived = false
             }
         }

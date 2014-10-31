@@ -1,9 +1,13 @@
 //
-//  VideoCreator.m
-//  VideoCreator
+// Copyright 2014 ArcTouch, Inc.
+// All rights reserved.
 //
-//  Created by Bruno Bruggemann on 10/31/14.
-//  Copyright (c) 2014 Bruno Bruggemann. All rights reserved.
+// This file, its contents, concepts, methods, behavior, and operation
+// (collectively the "Software") are protected by trade secret, patent,
+// and copyright laws. The use of the Software is governed by a license
+// agreement. Disclosure of the Software to third parties, in any form,
+// in whole or in part, is expressly prohibited except as authorized by
+// the license agreement.
 //
 
 #import "VideoCreator.h"
@@ -11,24 +15,21 @@
 
 @implementation VideoCreator
 
-- (void) writeImagesAsMovie:(NSArray *)array toPath:(NSString*)path {
-    
-    NSString *documents = [NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
-    NSLog(@"documents: %@", documents);
-    documents = [documents stringByAppendingPathComponent:@""];
-    
-    //NSLog(path);
-    NSString *filename = [documents stringByAppendingPathComponent:[array objectAtIndex:0]];
-    UIImage *first = [UIImage imageWithContentsOfFile:filename];
-    CGSize frameSize = first.size;
+- (void)createVideoForWord:(NSString *)word withImage:(UIImage *)image andAudioPath:(NSString *)audioPath atPath:(NSString *)path {
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path]) {
+        [fileManager removeItemAtPath:path error:nil];
+    }
     
     NSError *error = nil;
-    NSString *tmpPath = [documents stringByAppendingPathComponent:@"tmp_mov.mov"];
-    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL: [NSURL fileURLWithPath:tmpPath] fileType:AVFileTypeQuickTimeMovie error:&error];
+    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL: [NSURL fileURLWithPath:path] fileType:AVFileTypeQuickTimeMovie error:&error];
     
     if(error) {
         NSLog(@"error creating AssetWriter: %@",[error description]);
     }
+    
+    CGSize frameSize = image.size;
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                    AVVideoCodecH264, AVVideoCodecKey,
                                    [NSNumber numberWithInt:frameSize.width], AVVideoWidthKey,
@@ -50,86 +51,66 @@
     
     [videoWriter addInput:writerVideoInput];
     
-    // fixes all errors
     writerVideoInput.expectsMediaDataInRealTime = YES;
     
-    //Start a session:
-    BOOL start = [videoWriter startWriting];
-    NSLog(@"Session started? %d", start);
+    [videoWriter startWriting];
     [videoWriter startSessionAtSourceTime:kCMTimeZero];
     
     CVPixelBufferRef buffer = NULL;
+    UIImage *imageFrame = [self drawText:word inImage:image];
+    buffer = [self pixelBufferFromCGImage:[imageFrame CGImage]];
     
-    int fps = 1;
-    int i = 0;
-    
-    for (NSString *filename in array) {
-        if (adaptor.assetWriterInput.readyForMoreMediaData) {
-            NSLog(@"inside for loop %d %@ ",i, filename);
-            
-            CMTime frameTime = CMTimeMakeWithSeconds(1, fps);
-            CMTime lastTime = CMTimeMakeWithSeconds(i-1, fps);
-            CMTime presentTime = CMTimeAdd(lastTime, frameTime);
-            
-            NSString *filePath = [documents stringByAppendingPathComponent:filename];
-            
-            UIImage *imgFrame = [UIImage imageWithContentsOfFile:filePath] ;
-            if (i == 0) {
-                imgFrame = [self drawText:@"I" inImage:imgFrame];
-            } else if (i == 1) {
-                imgFrame = [self drawText:@"LOVE" inImage:imgFrame];
-            } else if (i == 2) {
-                imgFrame = [self drawText:@"COFFEE" inImage:imgFrame];
-            }
-            
-            buffer = [self pixelBufferFromCGImage:[imgFrame CGImage]];
-            
-            BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:presentTime];
-            
-            if (result == NO) {
-                NSLog(@"failed to append buffer");
-                NSLog(@"The error is %@", [videoWriter error]);
-            }
-            
-            if (buffer) {
-                CVBufferRelease(buffer);
-            }
-            [NSThread sleepForTimeInterval:0.05];
-            fps = 1;
-            i++;
-        } else {
-            NSLog(@"error");
-            i--;
-        }
-        [NSThread sleepForTimeInterval:0.02];
+    BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:kCMTimeZero];
+    if (result == NO) { //failes on 3GS, but works on iphone 4
+        NSLog(@"failed to append buffer");
     }
+    
+    if(buffer) {
+        CVBufferRelease(buffer);
+    }
+    
+    [NSThread sleepForTimeInterval:0.05];
+    
+    if (adaptor.assetWriterInput.readyForMoreMediaData) {
+        buffer = [self pixelBufferFromCGImage:[imageFrame CGImage]];
+
+        BOOL result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(1, 2)]; // 1 second
+        
+        if (result == NO) {
+            NSLog(@"failed to append buffer");
+            NSLog(@"The error is %@", [videoWriter error]);
+        }
+        
+        if (buffer) {
+            CVBufferRelease(buffer);
+        }
+        [NSThread sleepForTimeInterval:0.05];
+    } else {
+        NSLog(@"error");
+    }
+    [NSThread sleepForTimeInterval:0.02];
     
     //Finish the session:
     [writerVideoInput markAsFinished];
     [videoWriter finishWriting];
     CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
     
-    [self addAudio:path];
+    if (audioPath) {
+        [self addAudio:audioPath toMovieAtPath:path];
+    }
+    
 }
 
-
-
-- (void) addAudio:(NSString*)path {
+- (void) addAudio:(NSString*)audioPath toMovieAtPath:(NSString *)moviePath {
+    NSURL    *outputFileUrl = [NSURL fileURLWithPath:moviePath];
     
-    NSString *documents = [NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
-    NSLog(@"documents: %@", documents);
-    documents = [documents stringByAppendingPathComponent:@""];
-    
-    NSURL    *outputFileUrl = [NSURL fileURLWithPath:path];
-    //    NSString *filePath = [documents stringByAppendingPathComponent:@"newFile.m4a"];
-    
-    NSString *filePath = [documents stringByAppendingPathComponent:@"audio.m4a"];
+//    NSString *filePath = [documents stringByAppendingPathComponent:@"audio.m4a"];
     AVMutableComposition* mixComposition = [AVMutableComposition composition];
     
-    NSURL    *audio_inputFileUrl = [NSURL fileURLWithPath:filePath];
+    NSURL *audio_inputFileUrl = [NSURL fileURLWithPath:audioPath];
     
-    NSString *tmpPath = [documents stringByAppendingPathComponent:@"tmp_mov.mov"];
-    NSURL    *video_inputFileUrl = [NSURL fileURLWithPath:tmpPath];
+//    NSString *tmpPath = [documents stringByAppendingPathComponent:@"tmp_mov.mov"];
+    NSURL *video_inputFileUrl = [NSURL fileURLWithPath:moviePath];
     
     CMTime nextClipStartTime = kCMTimeZero;
     
@@ -141,23 +122,38 @@
     
     AVURLAsset* audioAsset = [[AVURLAsset alloc]initWithURL:audio_inputFileUrl options:nil];
     CMTimeRange audio_timeRange = CMTimeRangeMake(kCMTimeZero, audioAsset.duration);
-
-    CMTime audioStartTime = CMTimeMakeWithSeconds(1, 1);
+    
+    CMTime audioStartTime = CMTimeMakeWithSeconds(0, 1); // One second audio
     
     AVMutableCompositionTrack *b_compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     [b_compositionAudioTrack insertTimeRange:audio_timeRange ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:audioStartTime error:nil];
     
     AVAssetExportSession* _assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetMediumQuality];
-    _assetExport.outputFileType = @"com.apple.quicktime-movie";
+    _assetExport.outputFileType = AVFileTypeQuickTimeMovie;
     _assetExport.outputURL = outputFileUrl;
     
     [_assetExport exportAsynchronouslyWithCompletionHandler:^(void ) {
-         if (_assetExport.status == AVAssetExportSessionStatusCompleted) {
-             //Write Code Here to Continue
-         } else {
-             //Write Fail Code here
-         }
-     }];
+        AVAssetExportSessionStatus status = [_assetExport status];
+        switch (status) {
+            case AVAssetExportSessionStatusFailed:
+                NSLog(@"Export Failed");
+                NSLog(@"Export Error: %@", [_assetExport.error localizedDescription]);
+                NSLog(@"Export Error Reason: %@", [_assetExport.error localizedFailureReason]);
+                break;
+            case AVAssetExportSessionStatusCompleted:
+                NSLog(@"Export Completed");
+                break;
+            case AVAssetExportSessionStatusUnknown:
+                NSLog(@"Export Unknown");
+                break;
+            case AVAssetExportSessionStatusExporting:
+                NSLog(@"Export Exporting");
+                break;
+            case AVAssetExportSessionStatusWaiting:
+                NSLog(@"Export Waiting");
+                break;
+        }
+    }];
 }
 
 - (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image
@@ -168,9 +164,7 @@
                              nil];
     CVPixelBufferRef pxbuffer = NULL;
     
-    CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image),
-                        CGImageGetHeight(image), kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
-                        &pxbuffer);
+    CVPixelBufferCreate(kCFAllocatorDefault, CGImageGetWidth(image), CGImageGetHeight(image), kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options, &pxbuffer);
     
     CVPixelBufferLockBaseAddress(pxbuffer, 0);
     void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
@@ -199,7 +193,7 @@
     float expectedFontSize = 40;
     float expectedScreenWidth = 320;
     float multiplier = image.size.width / expectedScreenWidth;
-
+    
     UIFont *font = [UIFont boldSystemFontOfSize:expectedFontSize * multiplier];
     
     CGSize textSize = [text sizeWithAttributes:@{ NSFontAttributeName : font }];
@@ -217,7 +211,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetShadow(context, CGSizeMake(2.0f, 2.0f), 2.0f);
     [text drawInRect:CGRectIntegral(rect) withAttributes:@{ NSFontAttributeName : font, NSForegroundColorAttributeName : [UIColor whiteColor] }];
-
+    
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     

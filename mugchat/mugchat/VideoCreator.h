@@ -11,14 +11,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AVFoundation/AVFoundation.h>
-#import "MugMessage.h"
+#import <UIKit/UIKit.h>
+#import "Mug.h"
 
-@interface VideoComposer : NSObject
+@interface VideoCreator : NSObject
 
-- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
-- (AVAsset *)videoFromMug:(Mug *)mug;
-
-- (void)testCreatingFourWordsVideo;
+- (void)createVideoForWord:(NSString *)word withImage:(UIImage *)image andAudioPath:(NSString *)audioPath atPath:(NSString *)path;
 
 @end

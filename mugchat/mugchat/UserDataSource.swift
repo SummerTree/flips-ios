@@ -128,6 +128,7 @@ class UserDataSource : BaseDataSource {
                 mug2.mugID = "3"
                 mug2.word = "Love"
                 mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
+                mug2.soundURL = "audio.m4a"
                 mug2.owner = User.loggedUser()
                 mug2.isPrivate = true
                 
