@@ -80,7 +80,18 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         for character in self.text {
             if (character == whitespace) {
-                if (isPartOfJoinedTextRanges(charIndex)) {
+                let result = isPartOfJoinedTextRanges(charIndex)
+                //Avoids that joining a word with a space before or after to join the previous or next word respectivelly
+                var locationFirst: Int?
+                var locationLast: Int?
+                if (result.textRange != nil) {
+                    locationFirst = result.textRange!.location
+                    locationLast = locationFirst! + result.textRange!.length-1
+                }
+
+                let isTheFirstCharacterOfJoinedText = (charIndex == locationFirst)
+                let isTheLastCharacterOfJoinedText = (charIndex == locationLast)
+                if (result.isPart && !isTheFirstCharacterOfJoinedText && !isTheLastCharacterOfJoinedText) {
                     lastWord.append(character)
                 } else {
                     if (lastWord != "") {
@@ -92,7 +103,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 if (hasSpecialCharacters(lastWord)) {
                     lastWord.append(character)
                 } else {
-                    if (isPartOfJoinedTextRanges(charIndex)) {
+                    let result = isPartOfJoinedTextRanges(charIndex)
+                    if (result.isPart) {
                         lastWord.append(character)
                     } else {
                         if (lastWord != "") {
@@ -116,15 +128,15 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return mugTexts
     }
     
-    func isPartOfJoinedTextRanges(charIndex: Int) -> Bool {
+    func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, textRange: NSRange?) {
         for textRange in self.joinedTextRanges {
             var posInit : Int = textRange.location
             var posEnd : Int = textRange.location + textRange.length
             if (posInit <= charIndex && charIndex < posEnd) {
-                return true
+                return (true, textRange)
             }
         }
-        return false
+        return (false, nil)
     }
     
     func hasSpecialCharacters(text : String) -> Bool {
