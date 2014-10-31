@@ -70,6 +70,9 @@ class MugsTextsView : UIView, UIScrollViewDelegate {
     }
     
     func mugButtonTapped(gesture : UIGestureRecognizer) {
+        let menuController = UIMenuController.sharedMenuController()
+        menuController.setMenuVisible(false, animated: true)
+
         self.centerScrollViewAtView(gesture.view!)
         self.delegate?.mugsTextsViewDidSelectMugText((gesture.view! as MugTextView).mugText)
     }
