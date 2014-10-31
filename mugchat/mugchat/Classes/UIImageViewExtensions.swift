@@ -11,7 +11,8 @@
 //
 
 let A1_BORDER_WIDTH : CGFloat = 3
-let A1_AVATAR_SIZE = 200 + A1_BORDER_WIDTH
+// Sets avatar capture width to be 90% of camera view's width
+let A1_AVATAR_SIZE = DeviceHelper.DeviceScreenSize.screenRect.width * 0.9 + A1_BORDER_WIDTH
 let A2_BORDER_WIDTH : CGFloat = 3
 let A2_AVATAR_SIZE = 90 + A2_BORDER_WIDTH
 let A3_BORDER_WIDTH : CGFloat = 2
