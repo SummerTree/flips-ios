@@ -15,6 +15,7 @@
 		7ACBBF1F1A03A8C200A7109C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7ACBBF1D1A03A8C200A7109C /* LaunchScreen.xib */; };
 		7ACBBF2B1A03A8C200A7109C /* VideoCreatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBF2A1A03A8C200A7109C /* VideoCreatorTests.m */; };
 		7ACBBF351A03A92D00A7109C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ACBBF341A03A92D00A7109C /* AVFoundation.framework */; };
+		7ACBBF371A03C70B00A7109C /* VideoCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBF361A03C70B00A7109C /* VideoCreator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,8 @@
 		7ACBBF291A03A8C200A7109C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7ACBBF2A1A03A8C200A7109C /* VideoCreatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VideoCreatorTests.m; sourceTree = "<group>"; };
 		7ACBBF341A03A92D00A7109C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		7ACBBF361A03C70B00A7109C /* VideoCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCreator.m; sourceTree = "<group>"; };
+		7ACBBF381A03C72800A7109C /* VideoCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCreator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,8 @@
 				7ACBBF1B1A03A8C200A7109C /* Images.xcassets */,
 				7ACBBF1D1A03A8C200A7109C /* LaunchScreen.xib */,
 				7ACBBF0E1A03A8C200A7109C /* Supporting Files */,
+				7ACBBF361A03C70B00A7109C /* VideoCreator.m */,
+				7ACBBF381A03C72800A7109C /* VideoCreator.h */,
 			);
 			path = VideoCreator;
 			sourceTree = "<group>";
@@ -223,6 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7ACBBF371A03C70B00A7109C /* VideoCreator.m in Sources */,
 				7ACBBF171A03A8C200A7109C /* ViewController.m in Sources */,
 				7ACBBF141A03A8C200A7109C /* AppDelegate.m in Sources */,
 				7ACBBF111A03A8C200A7109C /* main.m in Sources */,
