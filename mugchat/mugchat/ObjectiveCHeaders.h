@@ -37,6 +37,6 @@
 
 #import "UIImageView+AFNetworking.h"
 #import "VideoComposer.h"
-#import "VideoCreator.h"
+#import "ImageVideoCreator.h"
 
 #endif

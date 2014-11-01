@@ -19,9 +19,10 @@
 @implementation MugMessage
 
 @dynamic createdAt;
-@dynamic removed;
 @dynamic notRead;
 @dynamic receivedAt;
+@dynamic removed;
+@dynamic mugMessageID;
 @dynamic from;
 @dynamic mugs;
 @dynamic room;

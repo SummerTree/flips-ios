@@ -45,6 +45,7 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
         return UIStatusBarStyle.BlackOpaque
     }
     
+    
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {

@@ -14,11 +14,12 @@
 #import <AVFoundation/AVFoundation.h>
 #import "MugMessage.h"
 
+
 @interface VideoComposer : NSObject
 
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
 - (AVAsset *)videoFromMug:(Mug *)mug;
 
-- (void)testCreatingFourWordsVideo;
+//- (void)testCreatingFourWordsVideo;
 
 @end

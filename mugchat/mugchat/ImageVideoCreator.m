@@ -10,10 +10,24 @@
 // the license agreement.
 //
 
-#import "VideoCreator.h"
+#import "ImageVideoCreator.h"
 #import <AVFoundation/AVFoundation.h>
 
-@implementation VideoCreator
+#import "Flips-Swift.h"
+
+@implementation ImageVideoCreator
+
+- (NSString *)videoPathForMug:(Mug *)mug {
+    CacheHandler *cacheHandler = [CacheHandler sharedInstance];
+    UIImage *backgroundImage = [UIImage imageWithData:[cacheHandler dataForUrl:mug.backgroundContentLocalPath]];
+    
+    NSString *videoName = [NSString stringWithFormat:@"%@.mov", mug.mugID];
+    NSString *videoPath = [NSString stringWithFormat:@"%@/%@", cacheHandler.applicationCacheDirectory, videoName];
+
+    [self createVideoForWord:mug.word withImage:backgroundImage andAudioPath:mug.soundContentLocalPath atPath:videoPath];
+    
+    return videoPath;
+}
 
 - (void)createVideoForWord:(NSString *)word withImage:(UIImage *)image andAudioPath:(NSString *)audioPath atPath:(NSString *)path {
 
@@ -98,7 +112,6 @@
     if (audioPath) {
         [self addAudio:audioPath toMovieAtPath:path];
     }
-    
 }
 
 - (void) addAudio:(NSString*)audioPath toMovieAtPath:(NSString *)moviePath {
@@ -190,6 +203,8 @@
 }
 
 -(UIImage*) drawText:(NSString*)text inImage:(UIImage*)image {
+    
+    // TODO: ajdust it correct has it is in the others screens
     float expectedFontSize = 40;
     float expectedScreenWidth = 320;
     float multiplier = image.size.width / expectedScreenWidth;

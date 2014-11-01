@@ -14,8 +14,9 @@
 #import <UIKit/UIKit.h>
 #import "Mug.h"
 
-@interface VideoCreator : NSObject
 
-- (void)createVideoForWord:(NSString *)word withImage:(UIImage *)image andAudioPath:(NSString *)audioPath atPath:(NSString *)path;
+@interface ImageVideoCreator : NSObject
+
+- (NSString *)videoPathForMug:(Mug *)mug;
 
 @end

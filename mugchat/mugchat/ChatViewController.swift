@@ -37,43 +37,43 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
         
         // FOR TESTS ONLY - START
         
-        var mugDataSource = MugDataSource()
-        var mugs : [Mug] = Array<Mug>()
-        mugs.append(mugDataSource.retrieveMugWithId("90"))
-        mugs.append(mugDataSource.retrieveMugWithId("100"))
-        mugs.append(mugDataSource.retrieveMugWithId("101"))
-        
-        let videoCreator = VideoCreator()
-        let cacheHandler = CacheHandler.sharedInstance
-        for mug in mugs {
-            if (mug.backgroundURL != nil) {
-                if (mug.isBackgroundContentTypeImage()) {
-                    let videoPath = cacheHandler.getFilePathForUrl("\(mug.mugID).mov", isTemporary: true)
-                    let imageData = cacheHandler.dataForUrl(mug.backgroundURL)
-                    var mugImage: UIImage!
-                    if (imageData != nil) {
-                        mugImage = UIImage(data: imageData!)
-                    } else {
-                        // TODO use the green image
-                        //                        mugImage = UIImage.
-                    }
-                    
-                    var mugSoundPath: String?
-                    if ((mug.soundURL != nil) && (!mug.soundURL.isEmpty)) {
-                        var soundHasCacheResult = cacheHandler.hasCachedFileForUrl(mug.soundURL)
-                        if (soundHasCacheResult.hasCache) {
-                            mugSoundPath = soundHasCacheResult.filePath
-                        }
-                    }
-                    
-                    println("videoPath: \(videoPath)")
-                    videoCreator.createVideoForWord(mug.word, withImage: mugImage, andAudioPath: mugSoundPath, atPath: videoPath)
-                    
-                } else if (mug.isBackgroundContentTypeVideo()) {
-                    // TODO add the text to the video
-                }
-            }
-        }
+//        var mugDataSource = MugDataSource()
+//        var mugs : [Mug] = Array<Mug>()
+//        mugs.append(mugDataSource.retrieveMugWithId("90"))
+//        mugs.append(mugDataSource.retrieveMugWithId("100"))
+//        mugs.append(mugDataSource.retrieveMugWithId("101"))
+//        
+//        let videoCreator = ImageVideoCreator()
+//        let cacheHandler = CacheHandler.sharedInstance
+//        for mug in mugs {
+//            if (mug.backgroundURL != nil) {
+//                if (mug.isBackgroundContentTypeImage()) {
+//                    let videoPath = cacheHandler.getFilePathForUrl("\(mug.mugID).mov", isTemporary: true)
+//                    let imageData = cacheHandler.dataForUrl(mug.backgroundURL)
+//                    var mugImage: UIImage!
+//                    if (imageData != nil) {
+//                        mugImage = UIImage(data: imageData!)
+//                    } else {
+//                        // TODO use the green image
+//                        //                        mugImage = UIImage.
+//                    }
+//                    
+//                    var mugSoundPath: String?
+//                    if ((mug.soundURL != nil) && (!mug.soundURL.isEmpty)) {
+//                        var soundHasCacheResult = cacheHandler.hasCachedFileForUrl(mug.soundURL)
+//                        if (soundHasCacheResult.hasCache) {
+//                            mugSoundPath = soundHasCacheResult.filePath
+//                        }
+//                    }
+//                    
+//                    println("videoPath: \(videoPath)")
+//                    videoCreator.createVideoForWord(mug.word, withImage: mugImage, andAudioPath: mugSoundPath, atPath: videoPath)
+//                    
+//                } else if (mug.isBackgroundContentTypeVideo()) {
+//                    // TODO add the text to the video
+//                }
+//            }
+//        }
         
         
         

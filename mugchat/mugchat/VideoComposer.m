@@ -11,58 +11,57 @@
 //
 
 #import "VideoComposer.h"
+#import "Mug.h"
+#import <CoreData+MagicalRecord.h>
 
-#import "mugchat-Swift.h"
+#import "Flips-Swift.h"
 
 @implementation VideoComposer
 
 
-- (void)testCreatingFourWordsVideo
-{
-    NSURL *docsDir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-
-    NSManagedObjectContext *moc = [NSManagedObjectContext MR_defaultContext];
-
-    NSEntityDescription *messageDescription = [NSEntityDescription entityForName:@"MugMessage" inManagedObjectContext:moc];
-    NSEntityDescription *mugDescription = [NSEntityDescription entityForName:@"Mug" inManagedObjectContext:moc];
-
-    MugMessage *message = [[MugMessage alloc] initWithEntity:messageDescription insertIntoManagedObjectContext:moc];
-
-    Mug *mugOne = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugOne.mugID = @"id:one";
-    mugOne.word = @"One";
-    mugOne.backgroundContentType = @(2);
-    mugOne.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.1.mov"] absoluteString];
-    [message addMug:mugOne];
-
-    Mug *mugTwo = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugTwo.mugID = @"id:two";
-    mugTwo.word = @"Two";
-    mugTwo.backgroundContentType = @(2);
-    mugTwo.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.2.mov"] absoluteString];
-    [message addMug:mugTwo];
-
-    Mug *mugThree = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugThree.mugID = @"id:three";
-    mugThree.word = @"Three";
-    mugThree.backgroundContentType = @(2);
-    mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.3.mov"] absoluteString];
-    [message addMug:mugThree];
-
-    Mug *mugFour = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFour.mugID = @"id:four";
-    mugFour.word = @"Four";
-    mugFour.backgroundContentType = @(2);
-    mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.4.mov"] absoluteString];
-    [message addMug:mugFour];
-
-    NSLog(@"GENERATED VIDEO URL: %@", [self videoFromMugMessage:message]);
-
-    [moc rollback];
-}
-
-
-
+//- (void)testCreatingFourWordsVideo
+//{
+//    NSURL *docsDir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+//
+//    NSManagedObjectContext *moc = [NSManagedObjectContext MR_defaultContext];
+//
+//    NSEntityDescription *messageDescription = [NSEntityDescription entityForName:@"MugMessage" inManagedObjectContext:moc];
+//    NSEntityDescription *mugDescription = [NSEntityDescription entityForName:@"Mug" inManagedObjectContext:moc];
+//
+//    MugMessage *message = [[MugMessage alloc] initWithEntity:messageDescription insertIntoManagedObjectContext:moc];
+//
+//    Mug *mugOne = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
+//    mugOne.mugID = @"id:one";
+//    mugOne.word = @"One";
+//    mugOne.backgroundContentType = @(2);
+//    mugOne.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.1.mov"] absoluteString];
+//    [message addMug:mugOne];
+//
+//    Mug *mugTwo = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
+//    mugTwo.mugID = @"id:two";
+//    mugTwo.word = @"Two";
+//    mugTwo.backgroundContentType = @(2);
+//    mugTwo.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.2.mov"] absoluteString];
+//    [message addMug:mugTwo];
+//
+//    Mug *mugThree = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
+//    mugThree.mugID = @"id:three";
+//    mugThree.word = @"Three";
+//    mugThree.backgroundContentType = @(2);
+//    mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.3.mov"] absoluteString];
+//    [message addMug:mugThree];
+//
+//    Mug *mugFour = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
+//    mugFour.mugID = @"id:four";
+//    mugFour.word = @"Four";
+//    mugFour.backgroundContentType = @(2);
+//    mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.4.mov"] absoluteString];
+//    [message addMug:mugFour];
+//
+//    NSLog(@"GENERATED VIDEO URL: %@", [self videoFromMugMessage:message]);
+//
+//    [moc rollback];
+//}
 
 
 
@@ -81,20 +80,57 @@
     return [self videoJoiningParts:messageParts];
 }
 
-- (AVAsset *)videoFromMug:(Mug *)mug
-{
-    AVAsset *track;
 
+- (AVAsset *)videoFromMug:(Mug *)mug {
+    AVAsset *track;
+    
+    NSString *backgroundContentLocalPath = [mug backgroundContentLocalPath];
     if ([mug isBackgroundContentTypeVideo]) {
-        NSURL *videoURL = [NSURL URLWithString:[mug backgroundURL]];
+        NSURL *videoURL = [NSURL URLWithString:backgroundContentLocalPath];
         track = [AVAsset assetWithURL:videoURL];
         [self addText:mug.word overVideoTrack:track];
-    } else if (mug isBackgroundContentTypeImage) {
-        
+    } else if ([mug isBackgroundContentTypeImage]) {
+        ImageVideoCreator *imageVideoCreator = [[ImageVideoCreator alloc] init];
+        NSURL *videoURL = [NSURL URLWithString:[imageVideoCreator videoPathForMug:mug]];
+        track = [AVAsset assetWithURL:videoURL];
     }
 
     return track;
 }
+
+
+
+//let videoCreator = ImageVideoCreator()
+//let cacheHandler = CacheHandler.sharedInstance
+//for mug in mugs {
+//    if (mug.backgroundURL != nil) {
+//        if (mug.isBackgroundContentTypeImage()) {
+//            let videoPath = cacheHandler.getFilePathForUrl("\(mug.mugID).mov", isTemporary: true)
+//            let imageData = cacheHandler.dataForUrl(mug.backgroundURL)
+//            var mugImage: UIImage!
+//            if (imageData != nil) {
+//                mugImage = UIImage(data: imageData!)
+//            } else {
+//                // TODO use the green image
+//                //                        mugImage = UIImage.
+//            }
+//            
+//            var mugSoundPath: String?
+//            if ((mug.soundURL != nil) && (!mug.soundURL.isEmpty)) {
+//                var soundHasCacheResult = cacheHandler.hasCachedFileForUrl(mug.soundURL)
+//                if (soundHasCacheResult.hasCache) {
+//                    mugSoundPath = soundHasCacheResult.filePath
+//                }
+//            }
+//            
+//            println("videoPath: \(videoPath)")
+//            videoCreator.createVideoForWord(mug.word, withImage: mugImage, andAudioPath: mugSoundPath, atPath: videoPath)
+//            
+//        } else if (mug.isBackgroundContentTypeVideo()) {
+//            // TODO add the text to the video
+//        }
+//    }
+//}
 
 
 #pragma mark - Private
@@ -199,10 +235,6 @@
     videoComposition.instructions = @[passThroughInstruction];
 
 
-
-
-
-
     CALayer *textLayer = [self layerForText:text andSize:videoComposition.renderSize];
     CALayer *parentLayer = [CALayer layer];
     CALayer *videoLayer = [CALayer layer];
@@ -212,7 +244,6 @@
     textLayer.position = CGPointMake(videoComposition.renderSize.width/2, videoComposition.renderSize.height/4);
     [parentLayer addSublayer:textLayer];
     videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
-
 
 
 

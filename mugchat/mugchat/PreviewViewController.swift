@@ -12,10 +12,12 @@
 class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     private var previewView: PreviewView!
+//    private var mugMessage: MugMessage!
     private var words: [MugText]!
     
     convenience init(words: [MugText]) {
         self.init()
+//        self.mugMessage = self.mugMessageFromWords(words)
         self.words = words
     }
     
@@ -38,6 +40,13 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
         self.setNeedsStatusBarAppearanceUpdate()
         
         self.previewView.viewDidLoad()
+        
+        let videoComposer = VideoComposer()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let mugMessage = self.mugMessageFromWords(self.words)
+            let videoAsset = videoComposer.videoFromMugMessage(mugMessage)
+            self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!))
+        })
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -53,6 +62,39 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.previewView.viewWillDisappear()
+    }
+    
+    
+    // MARK: - Mugs Initialization
+    
+    private func mugMessageFromWords(words: [MugText]) -> MugMessage {
+        
+        
+        
+        
+        println("   ")
+        println("   mugMessageFromWords")
+        let mugDataSource = MugDataSource()
+        var mugs = Array<Mug>()
+        for mugText in words {
+            
+            var mug = mugDataSource.retrieveMugWithId("\(mugText.mugId)")
+            mugs.append(mug)
+//            println("       word: \(mugText.text)")
+//            if (mugText.associatedMug != nil) {
+//                println("       has mug associated")
+//                println("           mug.backgroundURL: \(mugText.associatedMug?.backgroundURL)")
+//                println("           mug.soundURL: \(mugText.associatedMug?.soundURL)")
+//                mugs.append(mugText.associatedMug!)
+//            } else {
+//                println("       create empty mug")
+//                var emptyMug = mugDataSource.createEmptyMugWithWord(mugText.text)
+//                mugs.append(emptyMug)
+//            }
+        }
+        
+        let mugMessageDataSource = MugMessageDataSource()
+        return mugMessageDataSource.createTemporaryMugMessageWithMugs(mugs)
     }
     
     // MARK: - ComposeViewDelegate Methods
