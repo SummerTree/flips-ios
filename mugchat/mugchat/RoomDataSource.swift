@@ -110,7 +110,7 @@ class RoomDataSource : BaseDataSource {
                 nextRoomDate = now
             }
             
-            return (roomDate!.compare(nextRoomDate!) != NSComparisonResult.OrderedDescending)
+            return (roomDate!.compare(nextRoomDate!) != NSComparisonResult.OrderedAscending)
         }
     }
     

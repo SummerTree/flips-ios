@@ -20,8 +20,6 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
         
         self.delegate = self
-        
-        self.setUpMenu()
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer!) {
@@ -30,6 +28,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+   func viewWillAppear() {
+        setUpMenu()
     }
     
     func setUpMenu() {
@@ -80,22 +82,38 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         for character in self.text {
             if (character == whitespace) {
-                if (isPartOfJoinedTextRanges(charIndex)) {
+                let result = isPartOfJoinedTextRanges(charIndex)
+                //Avoids that joining a word with a space before or after to join the previous or next word respectivelly
+                var locationFirst: Int?
+                var locationLast: Int?
+                if (result.textRange != nil) {
+                    locationFirst = result.textRange!.location
+                    locationLast = locationFirst! + result.textRange!.length-1
+                }
+
+                let isTheFirstCharacterOfJoinedText = (charIndex == locationFirst)
+                let isTheLastCharacterOfJoinedText = (charIndex == locationLast)
+                if (result.isPart && !isTheFirstCharacterOfJoinedText && !isTheLastCharacterOfJoinedText) {
                     lastWord.append(character)
                 } else {
-                    mugTexts.append(lastWord)
-                    lastWord = ""
+                    if (lastWord != "") {
+                        mugTexts.append(lastWord)
+                        lastWord = ""
+                    }
                 }
             } else if (isSpecialCharacter(character)) {
                 if (hasSpecialCharacters(lastWord)) {
                     lastWord.append(character)
                 } else {
-                    if (isPartOfJoinedTextRanges(charIndex)) {
+                    let result = isPartOfJoinedTextRanges(charIndex)
+                    if (result.isPart) {
                         lastWord.append(character)
                     } else {
-                        mugTexts.append(lastWord)
-                        lastWord = ""
-                        lastWord.append(character)
+                        if (lastWord != "") {
+                            mugTexts.append(lastWord)
+                            lastWord = ""
+                            lastWord.append(character)
+                        }
                     }
                 }
             } else {
@@ -104,20 +122,23 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             
             charIndex++
         }
-        mugTexts.append(lastWord)
+        
+        if (lastWord != "") {
+           mugTexts.append(lastWord)
+        }
         
         return mugTexts
     }
     
-    func isPartOfJoinedTextRanges(charIndex: Int) -> Bool {
+    func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, textRange: NSRange?) {
         for textRange in self.joinedTextRanges {
             var posInit : Int = textRange.location
             var posEnd : Int = textRange.location + textRange.length
             if (posInit <= charIndex && charIndex < posEnd) {
-                return true
+                return (true, textRange)
             }
         }
-        return false
+        return (false, nil)
     }
     
     func hasSpecialCharacters(text : String) -> Bool {
@@ -153,11 +174,33 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             return false
         }
         
-        else if action == "Join" {
-            return true
+        else if action == "joinStrings" {
+            if (self.selectedTextCanBeJoined()) {
+                return true
+            }
+            return false
         }
         
         return super.canPerformAction(action, withSender: sender)
+    }
+    
+    func selectedTextCanBeJoined() -> Bool {
+        var selectedTextRange: UITextRange = self.selectedTextRange!
+        
+        var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
+        var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
+        var selectionLength : Int = posEnd - posInit
+        var selectionTextRange = NSMakeRange(posInit, selectionLength)
+        
+        let textNSString = self.text as NSString
+        var stringFromSelection = textNSString.substringWithRange(selectionTextRange)
+        
+        var arrayOfWords : [String] = MugStringsUtil.splitMugString(stringFromSelection)
+        if (arrayOfWords.count > 1) {
+            return true
+        }
+        
+        return false
     }
     
     func textViewDidChange(textView: UITextView) {

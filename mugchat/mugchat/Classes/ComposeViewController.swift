@@ -67,7 +67,8 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     // MARK: - Bar Buttons
     
     func previewButtonTapped(sender: AnyObject?) {
-        println("Preview button tapped")
+        let previewViewController = PreviewViewController(words: self.composeView.getMugTexts())
+        self.navigationController?.pushViewController(previewViewController, animated: true)
     }
     
     
@@ -75,6 +76,12 @@ class ComposeViewController : MugChatViewController, ComposeViewDelegate, UIImag
     
     func composeViewDidTapBackButton(composeView: ComposeView!) {
         self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func composeViewDidTapCancelCaptureAudioButton(composeView: ComposeView!) {
+        let confirmFlipViewController = ConfirmFlipViewController(flipWord: self.composeView.getMugWord(), flipPicture: self.composeView.getMugImageView().image!, flipAudio: nil)
+        confirmFlipViewController.delegate = self
+        self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
     }
     
     func composeViewDidTapGalleryButton(composeView: ComposeView!) {
