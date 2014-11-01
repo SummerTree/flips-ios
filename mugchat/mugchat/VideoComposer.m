@@ -31,24 +31,28 @@
     Mug *mugOne = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
     mugOne.mugID = @"id:one";
     mugOne.word = @"One";
+    mugOne.backgroundContentType = @(2);
     mugOne.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.1.mov"] absoluteString];
     [message addMug:mugOne];
 
     Mug *mugTwo = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
     mugTwo.mugID = @"id:two";
     mugTwo.word = @"Two";
+    mugTwo.backgroundContentType = @(2);
     mugTwo.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.2.mov"] absoluteString];
     [message addMug:mugTwo];
 
     Mug *mugThree = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
     mugThree.mugID = @"id:three";
     mugThree.word = @"Three";
+    mugThree.backgroundContentType = @(2);
     mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.3.mov"] absoluteString];
     [message addMug:mugThree];
 
     Mug *mugFour = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
     mugFour.mugID = @"id:four";
     mugFour.word = @"Four";
+    mugFour.backgroundContentType = @(2);
     mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2014-10-29.4.mov"] absoluteString];
     [message addMug:mugFour];
 
@@ -79,8 +83,15 @@
 
 - (AVAsset *)videoFromMug:(Mug *)mug
 {
-    NSURL *videoURL = [NSURL URLWithString:[mug backgroundURL]];
-    AVAsset *track = [AVAsset assetWithURL:videoURL];
+    AVAsset *track;
+
+    if ([mug isBackgroundContentTypeVideo]) {
+        NSURL *videoURL = [NSURL URLWithString:[mug backgroundURL]];
+        track = [AVAsset assetWithURL:videoURL];
+        [self addText:mug.word overVideoTrack:track];
+    } else if (mug isBackgroundContentTypeImage) {
+        
+    }
 
     return track;
 }
@@ -116,44 +127,129 @@
         }
     }
 
+    AVAssetTrack *firstVideoTrack = [[[videoParts firstObject] tracksWithMediaType:AVMediaTypeVideo] firstObject];
+    AVMutableCompositionTrack *compositionVideoTrack = [[composition tracksWithMediaType:AVMediaTypeVideo] firstObject];
+    compositionVideoTrack.preferredTransform = firstVideoTrack.preferredTransform;
+
+//    AVMutableVideoCompositionLayerInstruction *cropInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionv];
+//    CGRect square = CGRectMake(0, 0, firstVideoTrack.naturalSize.height, firstVideoTrack.naturalSize.height);
+//    [cropInstruction setCropRectangle:square atTime:kCMTimeZero];
+
+
     NSURL *docsDir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    NSURL *videoUrl = [docsDir URLByAppendingPathComponent:@"generated-mug-message.mov"]; // Should get unique ID of mug message to use as filename
+    __block NSURL *videoUrl = [docsDir URLByAppendingPathComponent:@"generated-mug-message.mov"]; // Should get unique ID of mug message to use as filename
 
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
     exportSession.outputURL = videoUrl;
     exportSession.outputFileType = AVFileTypeQuickTimeMovie;
 
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter(group);
     [exportSession exportAsynchronouslyWithCompletionHandler:^{
-        if (exportSession.status == AVAssetExportSessionStatusCompleted) {
-            NSLog(@"SUCCESS");
-        }
-
         if (exportSession.status == AVAssetExportSessionStatusFailed) {
-            NSLog(@"FAIL");
+            videoUrl = nil;
+            NSLog(@"Could not create video composition.");
         }
+        dispatch_group_leave(group);
     }];
+
+    // 20 seconds timeout
+    dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC));
 
     return videoUrl;
 }
 
-- (UIInterfaceOrientation)orientationForTrack:(AVAsset *)asset
+- (void)addText:(NSString *)text overVideoTrack:(AVAsset *)track
 {
-    AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
-    CGSize size = [videoTrack naturalSize];
-    CGAffineTransform transform = [videoTrack preferredTransform];
+    AVAssetTrack *videoTrack = [[track tracksWithMediaType:AVMediaTypeVideo] firstObject];
+    AVAssetTrack *audioTrack = [[track tracksWithMediaType:AVMediaTypeAudio] firstObject];
 
-    if (size.width == transform.tx && size.height == transform.ty) {
-        return UIInterfaceOrientationLandscapeRight;
+    NSError *error = nil;
 
-    } else if (transform.tx == 0 && transform.ty == 0) {
-        return UIInterfaceOrientationLandscapeLeft;
+    AVMutableComposition *composition = [AVMutableComposition composition];
 
-    } else if (transform.tx == 0 && transform.ty == size.width) {
-        return UIInterfaceOrientationPortraitUpsideDown;
+    AVMutableCompositionTrack *compositionVideoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, [track duration])
+                                   ofTrack:videoTrack
+                                    atTime:kCMTimeZero
+                                     error:&error];
 
-    } else {
-        return UIInterfaceOrientationPortrait;
-    }
+    AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, [track duration])
+                                   ofTrack:audioTrack
+                                    atTime:kCMTimeZero
+                                     error:&error];
+
+
+
+
+    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoComposition];
+    videoComposition.frameDuration = CMTimeMake(1, 30); // 30 fps
+    videoComposition.renderSize = videoTrack.naturalSize;
+
+
+
+
+    AVMutableVideoCompositionInstruction *passThroughInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    passThroughInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, [composition duration]);
+
+    AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+
+    passThroughInstruction.layerInstructions = @[passThroughLayer];
+    videoComposition.instructions = @[passThroughInstruction];
+
+
+
+
+
+
+    CALayer *textLayer = [self layerForText:text andSize:videoComposition.renderSize];
+    CALayer *parentLayer = [CALayer layer];
+    CALayer *videoLayer = [CALayer layer];
+    parentLayer.frame = CGRectMake(0, 0, videoComposition.renderSize.width, videoComposition.renderSize.height);
+    videoLayer.frame = CGRectMake(0, 0, videoComposition.renderSize.width, videoComposition.renderSize.height);
+    [parentLayer addSublayer:videoLayer];
+    textLayer.position = CGPointMake(videoComposition.renderSize.width/2, videoComposition.renderSize.height/4);
+    [parentLayer addSublayer:textLayer];
+    videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
+
+
+
+
+//    UILabel *textLabel = [[UILabel alloc] init];
+//    textLabel.text = text;
+//    textLabel.layer.borderWidth = 1.0;
+//    textLabel.layer.borderColor = [UIColor avacado].CGColor;
+//    textLabel.layer.cornerRadius = 14.0;
+//    textLabel.textAlignment = NSTextAlignmentCenter;
+//    textLabel.font = [UIFont avenirNextRegular:18.0];
+//    textLabel.textColor = [UIColor blackColor];
+//    [textLabel sizeToFit];
+//
+//    CALayer *layer = [CALayer layer];
+//    layer.frame = CGRectMake(0, 0, videoTrack.naturalSize.height, videoTrack.naturalSize.height);
+//    layer.backgroundColor = [UIColor cyanColor].CGColor;
+//    layer.masksToBounds = YES;
+
+}
+
+- (CALayer *)layerForText:(NSString *)text andSize:(CGSize)size
+{
+    // Create a layer for the title
+    CALayer *_watermarkLayer = [CALayer layer];
+
+    // Create a layer for the text of the title.
+    CATextLayer *titleLayer = [CATextLayer layer];
+    titleLayer.string = text;
+    titleLayer.foregroundColor = [[UIColor whiteColor] CGColor];
+    titleLayer.shadowOpacity = 0.5;
+    titleLayer.alignmentMode = kCAAlignmentCenter;
+    titleLayer.bounds = CGRectMake(0, 0, size.width, size.height);
+
+    // Add it to the overall layer.
+    [_watermarkLayer addSublayer:titleLayer];
+
+    return _watermarkLayer;
 }
 
 @end
