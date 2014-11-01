@@ -29,6 +29,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     private let CAMERA_BUTTON_RIGHT_MARGIN: CGFloat = -10
     private let CAMERA_BUTTON_VERTICAL_MARGIN: CGFloat = 10
+
+    private let CAMERA_VIEW_FRAME_WIDTH_ON_IPHONE_4: CGFloat = 240
     
     private var currentInterfaceOrientation: AVCaptureVideoOrientation!
     
@@ -664,6 +666,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         return captureDevice
     }
     
+    func getFontSizeMultiplierForDevice() -> CGFloat {
+        return self.frame.size.width / self.CAMERA_VIEW_FRAME_WIDTH_ON_IPHONE_4
+    }
     
     // MARK: - Utility Methods
     

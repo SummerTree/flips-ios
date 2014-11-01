@@ -77,6 +77,9 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         if(!isAlreadyUsingAPicture) {
             self.selectWordFromCurrentStep()
         }
+        
+        // Updates the mugWord font size based on the camera's view frame size
+        self.mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1*cameraPreview.getFontSizeMultiplierForDevice())
     }
 
     func selectWordFromCurrentStep() {
