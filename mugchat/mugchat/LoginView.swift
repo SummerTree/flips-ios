@@ -89,6 +89,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func viewDidAppear() {
         if (!isInitialized) {
+            self.layoutIfNeeded()
             UIView.animateWithDuration(1.0, animations: {
                 self.updateBubbleChatConstraints()
                 self.layoutIfNeeded()
