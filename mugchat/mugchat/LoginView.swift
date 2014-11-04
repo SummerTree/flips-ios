@@ -20,13 +20,16 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MARGIN_LEFT:CGFloat = 40.0
 
     private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
-    private var MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat!
+    private var MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat! = 20.0
+    private var MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat!
+    private var MUGCHAT_WORD_MARGIN_BOTTOM:CGFloat! = 20.0
 
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
     private var LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
     private var MUGCHAT_WORD_LAST_CENTER_Y: CGFloat!
     private let MUGCHAT_WORD_OFFSET: CGFloat = 20.0
     private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
+    private var FORGOT_PASSWORD_ANIMATION_OFFSET: CGFloat!
 
     private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
     private let ANDWORD_MARGIN_LEFT: CGFloat = 2
@@ -147,14 +150,6 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.emailTextField.rightView?.alpha = 1.0
                 self.passwordTextField.rightView?.alpha = 1.0
                 self.forgotPasswordButton.alpha = 1.0
-                
-                if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
-                    UIView.animateWithDuration(0.5, animations: { () -> Void in
-                        self.mugchatWordImageView.frame.origin.y = (self.mugchatWordImageView.center.y / 2) - self.MUGCHAT_WORD_OFFSET
-                        self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR = self.mugchatWordImageView.frame.origin.y
-                        self.forgotPasswordButton.center.y = (self.credentialsView.center.y + self.mugchatWordImageView.center.y) / 2
-                    })
-                }
             })
         }
         
@@ -553,42 +548,33 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
-                if (self.isInformedWrongPassword) {
-                    self.forgotPasswordButton.alpha = 1.0
-                }
+                self.forgotPasswordButton.alpha = 1.0
                 
-                // positioning above keyboard
+                // positioning credentials above keyboard
                 var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
                 self.CREDENTIALS_ANIMATION_OFFSET = self.credentialsView.frame.origin.y - credentialsFinalPosition
                 self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
                 
-                // positioning the mug word between the credentials view and top the screen
-                var logoFinalPosition = (self.credentialsView.frame.origin.y / 2) - (self.logoView.frame.height / 2)
-                
-                if (logoFinalPosition < 0) {
-                    logoFinalPosition = 0
-                }
-                
-                self.LOGO_VIEW_ANIMATION_OFFSET = self.logoView.frame.origin.y - logoFinalPosition
-                self.logoView.frame.origin.y -= self.LOGO_VIEW_ANIMATION_OFFSET
-                
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
+                    // positioning mugChat word below the top of the screen with a defined offset
+                    var mugchatWordFinalPosition = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
+                    self.MUGCHAT_WORD_ANIMATION_OFFSET = self.mugchatWordImageView.frame.origin.y - mugchatWordFinalPosition
+                    self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET
                     self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                    self.MUGCHAT_WORD_LAST_CENTER_Y = self.mugchatWordImageView.center.y
-                    
-                    if (self.isInformedWrongPassword) {
-                        self.mugchatWordImageView.frame.origin.y = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
-                    } else {
-                        self.mugchatWordImageView.center.y = self.logoView.center.y
-                    }
                 }
+                
+                // positioning forgot password button between credentials and MugChat word
+                var forgotPasswordFinalPosition = (self.credentialsView.center.y + self.mugchatWordImageView.frame.origin.y) / 2
+                self.FORGOT_PASSWORD_ANIMATION_OFFSET = self.forgotPasswordButton.frame.origin.y - forgotPasswordFinalPosition
+                self.forgotPasswordButton.center.y -= self.FORGOT_PASSWORD_ANIMATION_OFFSET
+                
             } else {
                 self.forgotPasswordButton.alpha = 0.0
-                self.logoView.frame.origin.y += self.LOGO_VIEW_ANIMATION_OFFSET
                 self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
+                self.forgotPasswordButton.center.y += self.FORGOT_PASSWORD_ANIMATION_OFFSET
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                    self.mugchatWordImageView.center.y = self.MUGCHAT_WORD_LAST_CENTER_Y
+                    self.mugchatWordImageView.frame.origin.y += self.MUGCHAT_WORD_ANIMATION_OFFSET
                 }
             }
         })
