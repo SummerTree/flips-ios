@@ -548,9 +548,7 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
-                if (self.isInformedWrongPassword) {
-                    self.forgotPasswordButton.alpha = 1.0
-                }
+                self.forgotPasswordButton.alpha = 1.0
                 
                 // positioning credentials above keyboard
                 var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
