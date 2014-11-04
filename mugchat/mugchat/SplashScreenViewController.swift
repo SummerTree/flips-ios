@@ -101,10 +101,8 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     }
     
     private func openLoginViewController() {
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            var loginViewController = LoginViewController()
-            self.navigationController?.pushViewController(loginViewController, animated: false)
-//        })
+        var loginViewController = LoginViewController()
+        self.navigationController?.pushViewController(loginViewController, animated: false)
     }
     
     private func openPhoneNumberController(userID: String) {
