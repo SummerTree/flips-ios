@@ -10,49 +10,50 @@
 // the license agreement.
 //
 
+let SECONDS_IN_A_DAY:Double = 86400
+
 class DateHelper {
 
     class func formatDateToApresentationFormat(date: NSDate) -> String {
-        let now = NSDate()
+        
         let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy MM dd"
         
-        formatter.dateFormat = "yyyy"
-        let todayYear = formatter.stringFromDate(now).toInt()
-        let dateYear = formatter.stringFromDate(date).toInt()
-        var yearDif = todayYear! - dateYear!
-        if (yearDif > 0) {
-            if (yearDif == 1) {
-                return NSLocalizedString("last year", comment: "last year")
-            } else {
-                return NSLocalizedString("\(yearDif) years ago", comment: "\(yearDif) years ago")
-            }
+        let currentDate = NSDate()
+        var messageDate = date
+        
+        let currentDateString = formatter.stringFromDate(currentDate)
+        var messageDateString = formatter.stringFromDate(messageDate)
+        
+        var daysBetweenDates = 0
+        
+        while !(currentDateString as NSString).isEqualToString(messageDateString) && daysBetweenDates <= 7 {
+            messageDate = messageDate.dateByAddingTimeInterval(SECONDS_IN_A_DAY)
+            messageDateString = formatter.stringFromDate(messageDate)
+            daysBetweenDates++
         }
         
-        formatter.dateFormat = "MM"
-        let todayMonth = formatter.stringFromDate(now).toInt()
-        let dateMonth = formatter.stringFromDate(date).toInt()
-        var monthDif = todayMonth! - dateMonth!
-        if (monthDif > 0) {
-            if (monthDif == 1) {
-                return NSLocalizedString("last month", comment: "last month")
+        if daysBetweenDates <= 0 {
+            formatter.dateFormat = "hh:mm a"
+            return NSLocalizedString(formatter.stringFromDate(date), comment: formatter.stringFromDate(date))
+        } else if daysBetweenDates <= 1 {
+            formatter.dateFormat = "hh:mm a"
+            return NSLocalizedString("Yesterday, \(formatter.stringFromDate(date))", comment: "Yesterday, \(formatter.stringFromDate(date))")
+        } else if daysBetweenDates <= 7 {
+            formatter.dateFormat = "EEEE hh:mm a"
+            return NSLocalizedString("\(formatter.stringFromDate(date))", comment: "\(formatter.stringFromDate(date))")
+        } else {
+            formatter.dateFormat = "yyyy"
+            let currentYear = formatter.stringFromDate(currentDate).toInt()
+            let dateYear = formatter.stringFromDate(date).toInt()
+            let yearDif = currentYear! - dateYear!
+            if yearDif > 0 {
+                formatter.dateFormat = "MMM dd yyyy, hh:mm a"
+                return NSLocalizedString("\(formatter.stringFromDate(date))", comment: "\(formatter.stringFromDate(date))")
             } else {
-                return NSLocalizedString("\(monthDif) months ago", comment: "\(monthDif) months ago")
+                formatter.dateFormat = "EEE, MMM dd, hh:mm a"
+                return NSLocalizedString("\(formatter.stringFromDate(date))", comment: "\(formatter.stringFromDate(date))")
             }
         }
-        
-        formatter.dateFormat = "dd"
-        let todayDay = formatter.stringFromDate(now).toInt()
-        let dateDay = formatter.stringFromDate(date).toInt()
-        var dayDif = todayDay! - dateDay!
-        if (dayDif > 0) {
-            if (dayDif == 1) {
-                return NSLocalizedString("yesterday", comment: "yesterday")
-            } else {
-                return NSLocalizedString("\(dayDif) days ago", comment: "\(dayDif) days ago")
-            }
-        }
-
-        formatter.dateFormat = "hh:mm a"
-        return formatter.stringFromDate(date)
     }
 }
