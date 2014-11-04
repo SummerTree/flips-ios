@@ -33,7 +33,7 @@ class DateHelper {
             daysBetweenDates++
         }
         
-        if daysBetweenDates <= 0 {
+        if daysBetweenDates == 0 {
             formatter.dateFormat = "hh:mm a"
             return NSLocalizedString(formatter.stringFromDate(date), comment: formatter.stringFromDate(date))
         } else if daysBetweenDates <= 1 {
