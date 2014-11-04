@@ -23,18 +23,9 @@ class SplashScreenView: UIView {
         self.makeConstraints()
     }
     
-    func viewWillAppear() {
-        if (FBSession.activeSession().state == FBSessionState.CreatedTokenLoaded) {
-            self.delegate?.splashScreenViewAttemptLoginWithFacebook(self)
-        } else {
-            self.delegate?.splashScreenViewAttemptLogin(self)
-        }
-        
-    }
-    
     func addSubviews() {
         self.backgroundImage = UIImageView(image: UIImage(named: "SplashScreen"))
-        self.backgroundImage.contentMode = UIViewContentMode.ScaleToFill
+        self.backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
         self.addSubview(self.backgroundImage)
     }
     
@@ -60,6 +51,4 @@ class SplashScreenView: UIView {
 }
 
 protocol SplashScreenViewDelegate {
-    func splashScreenViewAttemptLoginWithFacebook(sender: SplashScreenView)
-    func splashScreenViewAttemptLogin(sender: SplashScreenView)
 }
