@@ -50,6 +50,34 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         self.dismissViewControllerAnimated(true, completion:nil)
     }
     
+    func settingsViewDidTapAbout(settingsView: SettingsView) {
+        println("settingsViewDidTapAbout")
+    }
+    
+    func settingsViewDidTapChangeProfile(settingsView: SettingsView) {
+        println("settingsViewDidTapChangeProfile")
+    }
+    
+    func settingsViewDidTapImportContacts(settingsView: SettingsView) {
+        println("settingsViewDidTapImportContacts")
+    }
+    
+    func settingsViewDidTapPhoneNumber(settingsView: SettingsView) {
+        println("settingsViewDidTapPhoneNumber")
+    }
+    
+    func settingsViewDidTapPrivacyPolicy(settingsView: SettingsView) {
+        println("settingsViewDidTapPrivacyPolicy")
+    }
+    
+    func settingsViewDidTapSendFeedback(settingsView: SettingsView) {
+        println("settingsViewDidTapSendFeedback")
+    }
+    
+    func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
+        println("settingsViewDidTapTermsOfUse")
+    }
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }

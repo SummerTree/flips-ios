@@ -91,6 +91,7 @@ class SettingsTableViewCell: UITableViewCell {
         if (actionDetailLabel != nil) {
             actionLabel.mas_makeConstraints { (make) -> Void in
                 make.left.equalTo()(self.imageContainerView.mas_right)
+                make.right.equalTo()(self.contentView)
                 make.bottom.equalTo()(self.mas_centerY)
             }
             
@@ -101,7 +102,8 @@ class SettingsTableViewCell: UITableViewCell {
         } else {
             actionLabel.mas_makeConstraints { (make) -> Void in
                 make.left.equalTo()(self.imageContainerView.mas_right)
-                make.center.equalTo()(self)
+                make.right.equalTo()(self.contentView)
+                make.centerY.equalTo()(self.contentView)
                 make.height.equalTo()(self)
             }
         }

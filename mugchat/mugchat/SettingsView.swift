@@ -20,6 +20,14 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
     
+    private let USER_PROFILE_CELL_POSITION          : Int = 0
+    private let ABOUT_CELL_POSITION                 : Int = 1
+    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 2
+    private let PRIVACY_POLICY_CELL_POSITION        : Int = 3
+    private let SEND_FEEDBACK_CELL_POSITION         : Int = 4
+    private let CHANGE_NUMBER_CELL_POSITION         : Int = 5
+    private let IMPORT_CONTACTS_CELL_POSITION       : Int = 6
+    
     var delegate: SettingsViewDelegate?
     
     private let tableView: UITableView! = UITableView()
@@ -113,24 +121,30 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch(indexPath.row) {
-        case 0:
+        case self.USER_PROFILE_CELL_POSITION:
             return self.userProfileCell
-        case 1:
+            
+        case self.ABOUT_CELL_POSITION:
             return self.aboutCell
-        case 2:
+            
+        case self.TERMS_OF_USE_PROFILE_CELL_POSITION:
             return self.termsOfUseCell
-        case 3:
+            
+        case self.PRIVACY_POLICY_CELL_POSITION:
             return self.privacyPolicyCell
-        case 4:
+            
+        case self.SEND_FEEDBACK_CELL_POSITION:
             return self.sendFeedbackCell
-        case 5:
+            
+        case self.CHANGE_NUMBER_CELL_POSITION:
             return self.changeNumberCell
-        case 6:
+            
+        case self.IMPORT_CONTACTS_CELL_POSITION:
             return self.importContactsCell
             
         default:
@@ -149,6 +163,37 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         }
         
         return self.ACTION_ROW_HEIGHT
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        switch(indexPath.row) {
+        case self.USER_PROFILE_CELL_POSITION:
+            self.delegate?.settingsViewDidTapChangeProfile(self)
+            
+        case self.ABOUT_CELL_POSITION:
+            self.delegate?.settingsViewDidTapAbout(self)
+            
+        case self.TERMS_OF_USE_PROFILE_CELL_POSITION:
+            self.delegate?.settingsViewDidTapTermsOfUse(self)
+            
+        case self.PRIVACY_POLICY_CELL_POSITION:
+            self.delegate?.settingsViewDidTapPrivacyPolicy(self)
+            
+        case self.SEND_FEEDBACK_CELL_POSITION:
+            self.delegate?.settingsViewDidTapSendFeedback(self)
+            
+        case self.CHANGE_NUMBER_CELL_POSITION:
+            self.delegate?.settingsViewDidTapPhoneNumber(self)
+            
+        case self.IMPORT_CONTACTS_CELL_POSITION:
+            self.delegate?.settingsViewDidTapImportContacts(self)
+            
+        default:
+            println("Error creating row number: \(indexPath.row)")
+            fatalError("Unknown row")
+        }
+
     }
     
     
@@ -206,11 +251,19 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private func createImportContactsCell() {
         
         if (self.importContactsCell == nil) {
-            self.changeNumberCell = SettingsTableViewCell(image: UIImage(named: "People"), labelText: NSLocalizedString("Import Contacts", comment: "Import Contacts"), detailLabel: nil)
+            self.importContactsCell = SettingsTableViewCell(image: UIImage(named: "People"), labelText: NSLocalizedString("Import Contacts", comment: "Import Contacts"), detailLabel: nil)
         }
     }
 }
 
 protocol SettingsViewDelegate {
     func settingsViewDidTapLogOutButton(settingsView: SettingsView)
+    func settingsViewDidTapChangeProfile(settingsView: SettingsView)
+    func settingsViewDidTapPhoneNumber(settingsView: SettingsView)
+    func settingsViewDidTapAbout(settingsView: SettingsView)
+    func settingsViewDidTapTermsOfUse(settingsView: SettingsView)
+    func settingsViewDidTapPrivacyPolicy(settingsView: SettingsView)
+    func settingsViewDidTapSendFeedback(settingsView: SettingsView)
+    func settingsViewDidTapImportContacts(settingsView: SettingsView)
+    
 }
