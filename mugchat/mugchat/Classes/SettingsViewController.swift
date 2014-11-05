@@ -14,43 +14,29 @@ import Foundation
 
 class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     
-    let settingsView = SettingsView()
+    private var settingsView: SettingsView!
     
     
     // MARK: - Overridden Methods
     
+    override func loadView() {
+        super.loadView()
+        self.settingsView = SettingsView()
+        self.settingsView.delegate = self
+        self.view = settingsView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view = settingsView
-        self.settingsView.delegate = self
         self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
-        
         self.setNeedsStatusBarAppearanceUpdate()
-        
-        // Just for test. Can be removed.
-        let loggedUserNameLabel = UILabel()
-        loggedUserNameLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h3)
-        loggedUserNameLabel.textColor = UIColor.mugOrange()
-        loggedUserNameLabel.numberOfLines = 2
-        loggedUserNameLabel.textAlignment = NSTextAlignment.Center
-        self.view.addSubview(loggedUserNameLabel)
-        
-        loggedUserNameLabel.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.view)
-            make.trailing.equalTo()(self.view)
-            make.center.equalTo()(self.view)
-        }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let loggedUser: User! = User.loggedUser()
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if (loggedUser != nil) {
-                    loggedUserNameLabel.text = "Logged as \n\(loggedUser.firstName) \(loggedUser.lastName)"
-                }
-            })
-        })
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.settingsView.viewWillAppear()
     }
     
     
@@ -62,11 +48,6 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         var navigationController: UINavigationController = self.presentingViewController as UINavigationController
         navigationController.popToRootViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion:nil)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
