@@ -110,13 +110,18 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     }
     
     func startRecording() {
-        if (self.player != nil && self.player.playing) {
-            self.player.stop()
-        }
-        
-        self.recorder.record()
-        
-        NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+        AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool) -> Void in
+            if (granted) {
+                if (self.player != nil && self.player.playing) {
+                    self.player.stop()
+                }
+                self.recorder.record()
+                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+            } else {
+                var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+                alertMessage.show()
+            }
+        })
     }
     
     func stopRecording() {
