@@ -537,6 +537,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         self.isAlreadyUsingAPicture = false
         self.delegate?.composeViewDidTapCaptureAudioButton(self)
         self.startRecordingProgressBar()
+        self.userInteractionEnabled = false
     }
     
     func startRecordingProgressBar() {
@@ -557,6 +558,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
                     update.left.equalTo()(self.mugContainerView)
                     update.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
                     update.width.equalTo()(0)
+                    self.userInteractionEnabled = true
                 })
                 
                 self.layoutIfNeeded()
