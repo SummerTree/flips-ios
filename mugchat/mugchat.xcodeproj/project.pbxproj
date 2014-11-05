@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0794A9C21A0A986800DA8CFA /* NewMug.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewMug.storyboard */; };
+		0794A9C41A0A9AAD00DA8CFA /* NewMugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewMugViewController.swift */; };
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
@@ -136,6 +138,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0794A9C11A0A986800DA8CFA /* NewMug.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewMug.storyboard; sourceTree = "<group>"; };
+		0794A9C31A0A9AAD00DA8CFA /* NewMugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewMugViewController.swift; path = Classes/NewMugViewController.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* MugchatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugchatService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -185,7 +189,6 @@
 		70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
-
 		70CF5C461A041F680052E396 /* i_love_coffee.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = i_love_coffee.mov; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -295,6 +298,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0794A9C01A0A981300DA8CFA /* New Mug */ = {
+			isa = PBXGroup;
+			children = (
+				0794A9C11A0A986800DA8CFA /* NewMug.storyboard */,
+				0794A9C31A0A9AAD00DA8CFA /* NewMugViewController.swift */,
+			);
+			name = "New Mug";
+			sourceTree = "<group>";
+		};
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -410,6 +422,8 @@
 				705EF07B19F9767800D4CF74 /* Confirm Flip */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
 				704E110D19D0934700D2BB88 /* Login */,
+				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
+				0794A9C01A0A981300DA8CFA /* New Mug */,
 				705B3DDD1A03BC0300E0D3E9 /* Preview */,
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
 				7A0D6CEC19D4961700E39A1B /* Settings */,
@@ -419,7 +433,6 @@
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
 				57A3A6BF19D5E4C00043790E /* Verification */,
 				70B560A019D995D500FE4C34 /* Web View */,
-				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -980,6 +993,7 @@
 				5786B2D719EEAE0200021DD3 /* bollywood.mov in Resources */,
 				5786B2DB19EEAE0200021DD3 /* welcome_mugchat.mov in Resources */,
 				5786B2D619EEAE0200021DD3 /* bollywood_thumbnail.jpeg in Resources */,
+				0794A9C21A0A986800DA8CFA /* NewMug.storyboard in Resources */,
 				5786B2D919EEAE0200021DD3 /* movie_thumbnail.png in Resources */,
 				5786B2DA19EEAE0200021DD3 /* wanna_coffee.mov in Resources */,
 				70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */,
@@ -1068,6 +1082,7 @@
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
+				0794A9C41A0A9AAD00DA8CFA /* NewMugViewController.swift in Sources */,
 				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,

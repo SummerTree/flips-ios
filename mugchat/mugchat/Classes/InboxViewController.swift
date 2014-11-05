@@ -50,7 +50,11 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
-        self.navigationController?.pushViewController(ComposeViewController(), animated: true)
+		let storyboard = UIStoryboard(name: "NewMug", bundle: nil)
+		let navigationController = storyboard.instantiateInitialViewController() as UINavigationController
+		navigationController.topViewController.modalPresentationStyle = UIModalPresentationStyle.FullScreen
+		
+		self.navigationController?.presentViewController(navigationController, animated: true, completion: nil)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {
