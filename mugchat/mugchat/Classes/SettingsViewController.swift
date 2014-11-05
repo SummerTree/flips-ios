@@ -51,7 +51,8 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapAbout(settingsView: SettingsView) {
-        println("settingsViewDidTapAbout")
+        var aboutViewController = AboutViewController()
+        self.navigationController?.pushViewController(aboutViewController, animated: true)
     }
     
     func settingsViewDidTapChangeProfile(settingsView: SettingsView) {
