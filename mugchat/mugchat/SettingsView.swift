@@ -157,6 +157,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private func createUserProfileCell() {
         
         if (self.userProfileCell == nil) {
+            // since we're changing our backend structure, I'm leaving this field for debugging
+            // because we don't have user.phoneNumber yet
             let detailedLabel = User.loggedUser()!.username + "\n" + "410-2345-1234"
             let fullname = User.loggedUser()!.fullName()
             
