@@ -77,7 +77,6 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
-//            make.bottom.equalTo()(self)
         }
     }
     
