@@ -346,6 +346,8 @@ class UserFormView : UIView, UITextFieldDelegate {
     func isNewDateInformedValid(newDateString: String) -> Bool {
         var position = 0
         var lastCharacter = ""
+        var lastButOneCharacter = ""
+        var lastButTwoCharacters = ""
         for character in newDateString {
             var characterDoubleValue = String(character).doubleValue()
             if (position == 0) {
@@ -363,7 +365,11 @@ class UserFormView : UIView, UITextFieldDelegate {
                     }
                 }
             } else if (position == 2) {
-                if (characterDoubleValue > 3) {
+                if lastButOneCharacter == "0" && lastCharacter == "2" {
+                    if characterDoubleValue > 2 {
+                        return false
+                    }
+                } else if (characterDoubleValue > 3) {
                     return false
                 }
             } else if (position == 3) {
@@ -373,6 +379,14 @@ class UserFormView : UIView, UITextFieldDelegate {
                     }
                 } else if (lastCharacter == "3") {
                     if (characterDoubleValue > 1) {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "4" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "6" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "9" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButTwoCharacters == "1" && lastButOneCharacter == "1" {
                         return false
                     }
                 }
@@ -395,6 +409,8 @@ class UserFormView : UIView, UITextFieldDelegate {
             } else if (position == 7) {
                 // any value is possible
             }
+            lastButTwoCharacters = lastButOneCharacter
+            lastButOneCharacter = lastCharacter
             lastCharacter = String(character)
             position++
         }
