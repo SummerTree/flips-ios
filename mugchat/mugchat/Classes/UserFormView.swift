@@ -135,6 +135,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             update.trailing.equalTo()(self)
             update.leading.equalTo()(self)
             update.height.equalTo()(self.CELL_HEIGHT)
+            update.bottom.equalTo()(self)
         }
     }
     
