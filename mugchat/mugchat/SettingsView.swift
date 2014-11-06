@@ -12,7 +12,7 @@
 
 import UIKit
 
-class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
+class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     
     private let LOGOUT_BUTTON_HEIGHT    : CGFloat = 55.0
     private let IMAGE_BUTTONS_WIDTH     : CGFloat = 92.0
@@ -20,6 +20,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
     
     private let NUMBER_OF_ROWS                      : Int = 7
+    private let NUMBER_OF_ACTION_ROWS               : Int = 6
     private let USER_PROFILE_CELL_POSITION          : Int = 0
     private let ABOUT_CELL_POSITION                 : Int = 1
     private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 2
@@ -58,7 +59,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     override func layoutSubviews() {
-        let sectionHeight = USER_PROFILE_CELL_HEIGHT + ( (NUMBER_OF_ROWS - 1) * ACTION_ROW_HEIGHT)
+        let actionRowsNumber: Int = NUMBER_OF_ROWS - 1
+        let sectionHeight = USER_PROFILE_CELL_HEIGHT + ( CGFloat(NUMBER_OF_ACTION_ROWS) * ACTION_ROW_HEIGHT)
         var tableFooterViewHeight = self.tableView.frame.size.height - sectionHeight
         
         if (tableFooterViewHeight < LOGOUT_BUTTON_HEIGHT) {
@@ -222,6 +224,23 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         // http://stackoverflow.com/questions/18880341/why-is-there-extra-padding-at-the-top-of-my-uitableview-with-style-uitableviewst
         return 0.001
     }
+
+
+    // MARK: UIScrollViewDelegate
+
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let tableHeight = self.tableView.bounds.size.height
+        var contentHeight = scrollView.contentSize.height
+        
+        if (contentHeight < tableHeight) {
+            contentHeight = tableHeight
+        }
+        
+        let bottomOffset = offsetY + tableHeight - contentHeight
+        self.tableFooterView.transform = CGAffineTransformMakeTranslation(0, max(bottomOffset, 0))
+    }
+
     
     // MARK: Cell creation methods
     
@@ -278,7 +297,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private func createImportContactsCell() {
         
         if (self.importContactsCell == nil) {
-            self.importContactsCell = SettingsTableViewCell(image: UIImage(named: "People"), labelText: NSLocalizedString("Import Contacts", comment: "Import Contacts"), detailLabel: nil)
+            self.importContactsCell = SettingsTableViewCell(image: UIImage(named: "ImportContact"), labelText: NSLocalizedString("Import Contacts", comment: "Import Contacts"), detailLabel: nil)
         }
     }
 }
