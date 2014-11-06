@@ -32,6 +32,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
+    private var mugFilterImageView: UIImageView!
     private var mugWordLabel: UILabel!
     private var centeredMugsView: MugsTextsView!
     private var mugTextsContainerSeparator : UIView!
@@ -128,6 +129,11 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         mugImageView.alpha = 0.0
         mugImageView.contentMode = UIViewContentMode.ScaleAspectFit
         mugContainerView.addSubview(mugImageView)
+        
+        mugFilterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
+        mugFilterImageView.alpha = 1.0
+        mugFilterImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        mugContainerView.addSubview(mugFilterImageView)
         
         mugWordLabel = UILabel()
         mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
@@ -251,6 +257,21 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
             }
             
             make.height.equalTo()(self.mugImageView.mas_width)
+        }
+        
+        mugFilterImageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.mugContainerView)
+            make.bottom.equalTo()(self.mugImageView)
+            
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.centerX.equalTo()(self.mugContainerView)
+                make.width.equalTo()(self.MUG_IMAGE_WIDTH)
+            } else {
+                make.left.equalTo()(self.mugContainerView)
+                make.right.equalTo()(self.mugContainerView)
+            }
+            
+            make.height.equalTo()(self.mugFilterImageView.mas_width)
         }
         
         mugWordLabel.mas_makeConstraints { (make) -> Void in
@@ -516,6 +537,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         self.isAlreadyUsingAPicture = false
         self.delegate?.composeViewDidTapCaptureAudioButton(self)
         self.startRecordingProgressBar()
+        self.userInteractionEnabled = false
     }
     
     func startRecordingProgressBar() {
@@ -536,6 +558,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
                     update.left.equalTo()(self.mugContainerView)
                     update.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
                     update.width.equalTo()(0)
+                    self.userInteractionEnabled = true
                 })
                 
                 self.layoutIfNeeded()
@@ -590,6 +613,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     func getMugImageView() -> UIImageView {
         return self.mugImageView
+    }
+    
+    func getMugFilterImageView() -> UIImageView {
+        return self.mugFilterImageView
     }
     
     func getMugWord() -> String {

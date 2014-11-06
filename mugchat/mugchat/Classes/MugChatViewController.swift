@@ -95,7 +95,14 @@ class MugChatViewController : UIViewController {
                 self.activityIndicator.stopAnimating()
             })
         })
-        
     }
     
+    func previousViewController() -> UIViewController? {
+        let numberOfViewControllers = self.navigationController?.viewControllers.count
+        if (numberOfViewControllers < 2) {
+            return nil
+        }
+        
+        return self.navigationController?.viewControllers![numberOfViewControllers! - 2] as UIViewController!
+    }
 }

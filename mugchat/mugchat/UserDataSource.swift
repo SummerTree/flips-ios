@@ -12,6 +12,7 @@
 
 private struct UserJsonParams {
     static let ID = "id"
+    static let DEVICES = "devices"
     static let USERNAME = "username"
     static let FIRST_NAME = "firstName"
     static let LAST_NAME = "lastName"
@@ -34,6 +35,9 @@ struct UserAttributes {
 public typealias UserSyncFinished = (Bool, NSError?) -> Void
 
 class UserDataSource : BaseDataSource {
+    
+    let deviceDataSource = DeviceDataSource()
+    
     
     // MARK: - CoreData Creator Methods
     
@@ -65,6 +69,17 @@ class UserDataSource : BaseDataSource {
         
         user.userID = json[UserJsonParams.ID].stringValue
         user.username = json[UserJsonParams.USERNAME].stringValue
+        
+        // local user doesn't have device
+        if (user.device == nil) {
+            
+            // remote user has device
+            if (json[UserJsonParams.DEVICES] != nil && json[UserJsonParams.DEVICES].array?.count > 0) {
+                let device = json[UserJsonParams.DEVICES].array?[0]
+                user.device = deviceDataSource.createEntityWithObject(device!.object)
+            }
+        }
+        
         user.firstName = json[UserJsonParams.FIRST_NAME].stringValue
         user.lastName = json[UserJsonParams.LAST_NAME].stringValue
         user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
