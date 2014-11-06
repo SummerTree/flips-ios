@@ -380,7 +380,13 @@ class UserFormView : UIView, UITextFieldDelegate {
                 } else if (lastCharacter == "3") {
                     if (characterDoubleValue > 1) {
                         return false
-                    } else if characterDoubleValue > 0 && (lastButOneCharacter == "4" || lastButOneCharacter == "6" || lastButOneCharacter == "9" || (lastButTwoCharacters == "1" && lastButOneCharacter == "1")) {
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "4" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "6" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "9" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButTwoCharacters == "1" && lastButOneCharacter == "1" {
                         return false
                     }
                 }
