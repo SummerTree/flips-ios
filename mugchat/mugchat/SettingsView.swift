@@ -14,7 +14,6 @@ import UIKit
 
 class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     
-    private let logoutButton = UIButton()
     private let LOGOUT_BUTTON_HEIGHT    : CGFloat = 55.0
     private let IMAGE_BUTTONS_WIDTH     : CGFloat = 92.0
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
@@ -30,7 +29,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     var delegate: SettingsViewDelegate?
     
-    private let tableView: UITableView! = UITableView()
+    private var tableView: UITableView!
     private var userProfileCell: SettingsTableViewCell!
     private var aboutCell: SettingsTableViewCell!
     private var termsOfUseCell: SettingsTableViewCell!
@@ -43,7 +42,6 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         super.init()
         
         self.addSubviews()
-        self.makeConstraints()
     }
     
     func viewWillAppear() {
@@ -53,15 +51,19 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    func viewDidLoad() {
+        self.makeConstraints()
+    }
+    
     private func addSubviews() {
         
         self.backgroundColor = UIColor.whiteColor()
         
+        self.tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Grouped)
         self.tableView.backgroundColor = UIColor.sand()
-        self.tableView.separatorInset = UIEdgeInsetsMake(0, self.IMAGE_BUTTONS_WIDTH, 0, 0)
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.tableView.separatorInset = UIEdgeInsetsMake(0, self.IMAGE_BUTTONS_WIDTH, 0, 0)
         self.addSubview(tableView)
         
         self.createUserProfileCell()
@@ -71,29 +73,18 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         self.createFeedbackCell()
         self.createChangeNumberCell()
         self.createImportContactsCell()
-        
-        self.logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        self.logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
-        self.logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
-        self.addSubview(logoutButton)
     }
     
     private func makeConstraints() {
         
         tableView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self.logoutButton.mas_top)
+            make.bottom.equalTo()(self)
         }
         
-        logoutButton.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self)
-            make.trailing.equalTo()(self)
-            make.bottom.equalTo()(self)
-            make.height.equalTo()(self.LOGOUT_BUTTON_HEIGHT)
-        }
+        // asking help to delegate to align the container with navigation bar
+        self.delegate?.settingsViewMakeConstraintToNavigationBarBottom(self.tableView)
     }
     
     func logOutButtonTapped(sender: AnyObject?) {
@@ -191,7 +182,27 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
             println("Error creating row number: \(indexPath.row)")
             fatalError("Unknown row")
         }
-
+    }
+    
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let logoutButton = UIButton()
+        logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        logoutButton.backgroundColor = UIColor.whiteColor()
+        logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+        logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
+        
+        return logoutButton
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return self.LOGOUT_BUTTON_HEIGHT
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // fix to remove extra padding at top, using tableview mode = grouped
+        // http://stackoverflow.com/questions/18880341/why-is-there-extra-padding-at-the-top-of-my-uitableview-with-style-uitableviewst
+        return 0.001
     }
     
     
@@ -256,6 +267,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
 }
 
 protocol SettingsViewDelegate {
+    func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!)
     func settingsViewDidTapLogOutButton(settingsView: SettingsView)
     func settingsViewDidTapChangeProfile(settingsView: SettingsView)
     func settingsViewDidTapPhoneNumber(settingsView: SettingsView)
