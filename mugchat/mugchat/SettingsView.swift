@@ -15,7 +15,7 @@ import UIKit
 class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     private let logoutButton = UIButton()
-    private let LOGOUT_BUTTON_HEIGHT    : CGFloat = 48.0
+    private let LOGOUT_BUTTON_HEIGHT    : CGFloat = 55.0
     private let IMAGE_BUTTONS_WIDTH     : CGFloat = 92.0
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
@@ -73,8 +73,6 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         self.createImportContactsCell()
         
         self.logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.logoutButton.layer.borderWidth = 0.5
-        self.logoutButton.layer.borderColor = UIColor.grayColor().CGColor
         self.logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         self.logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
         self.logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
@@ -204,7 +202,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         if (self.userProfileCell == nil) {
             // since we're changing our backend structure, I'm leaving this field for debugging
             // because we don't have user.phoneNumber yet
-            let detailedLabel = User.loggedUser()!.username + "\n" + "410-2345-1234"
+            let loggedUser = User.loggedUser()!
+            let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
             let fullname = User.loggedUser()!.fullName()
             
             self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)
