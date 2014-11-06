@@ -23,4 +23,8 @@ extension User {
         var loggedUser = User.loggedUser() as User?
         return (loggedUser != nil)
     }
+    
+    func fullName() -> String! {
+        return self.firstName + " " + self.lastName
+    }
 }

@@ -133,7 +133,7 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (success) {
-                            let authenticatedUser = AuthenticationHelper.sharedInstance.userInSession
+                            let authenticatedUser = User.loggedUser()!
                             if (authenticatedUser.device == nil) {
                                 var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
                                 self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
