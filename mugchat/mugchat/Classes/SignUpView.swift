@@ -227,9 +227,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        println(userInfo)
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
-        println(userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!)
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
     
