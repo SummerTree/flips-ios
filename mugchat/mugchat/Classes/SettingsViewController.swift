@@ -76,7 +76,8 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
-        println("settingsViewDidTapTermsOfUse")
+        var termsOfUseViewController = TermsOfUseViewController()
+        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
