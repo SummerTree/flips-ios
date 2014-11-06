@@ -19,6 +19,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
     
+    private let NUMBER_OF_ROWS                      : Int = 7
     private let USER_PROFILE_CELL_POSITION          : Int = 0
     private let ABOUT_CELL_POSITION                 : Int = 1
     private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 2
@@ -47,7 +48,6 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func viewWillAppear() {
-        
         if let selected = self.tableView.indexPathForSelectedRow() {
             self.tableView.deselectRowAtIndexPath(selected, animated: true)
         }
@@ -58,9 +58,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     override func layoutSubviews() {
-        
-        
-        let sectionHeight = USER_PROFILE_CELL_HEIGHT + (6 * ACTION_ROW_HEIGHT)
+        let sectionHeight = USER_PROFILE_CELL_HEIGHT + ( (NUMBER_OF_ROWS - 1) * ACTION_ROW_HEIGHT)
         var tableFooterViewHeight = self.tableView.frame.size.height - sectionHeight
         
         if (tableFooterViewHeight < LOGOUT_BUTTON_HEIGHT) {
@@ -145,7 +143,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return self.NUMBER_OF_ROWS
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
