@@ -28,9 +28,11 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.automaticallyAdjustsScrollViewInsets = false
         self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        self.settingsView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -41,6 +43,15 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     
     
     // MARK: - Settings View Delegate
+    
+    func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!) {
+        // using Mansory strategy
+        // check here: https://github.com/Masonry/Masonry/issues/27
+        tableView.mas_makeConstraints { (make) -> Void in
+            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+            make.top.equalTo()(topLayoutGuide.mas_bottom)
+        }
+    }
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
         AuthenticationHelper.sharedInstance.logout()
@@ -76,7 +87,8 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
-        println("settingsViewDidTapTermsOfUse")
+        var termsOfUseViewController = TermsOfUseViewController()
+        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
