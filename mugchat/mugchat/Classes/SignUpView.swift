@@ -77,10 +77,26 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
-            make.bottom.equalTo()(self)
+//            make.bottom.equalTo()(self)
         }
     }
     
+    // MARK: - Life Cycle
+    
+    func loadView() {
+        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    func viewDidAppear() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
     
     // MARK: - CustomNavigationBarDelegate
     
@@ -194,10 +210,57 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         })
     }
     
+    // MARK - Keyboard Control
+    
     func dismissKeyboard() {
         userFormView.dismissKeyboard()
     }
     
+    func keyboardWillShow(notification: NSNotification) {
+        let keyboardMinY = getKeyboardMinY(notification)
+        self.slideViews(true, keyboardTop: keyboardMinY)
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        let keyboardMinY = getKeyboardMinY(notification)
+        self.slideViews(false, keyboardTop: keyboardMinY)
+    }
+    
+    private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        println(userInfo)
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
+        println(userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!)
+        return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
+    }
+    
+    func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
+        self.layoutIfNeeded()
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            if (movedUp) {
+                var userFormViewFrameBottom = self.userFormView.frame.origin.y + self.userFormView.frame.size.height
+                var offsetValue = keyboardTop - userFormViewFrameBottom
+                if (offsetValue < 0) {
+                    self.navigationBar.mas_makeConstraints { (update) -> Void in
+                        update.removeExisting = true
+                        update.top.equalTo()(self).with().offset()(offsetValue)
+                        update.trailing.equalTo()(self)
+                        update.leading.equalTo()(self)
+                        update.height.equalTo()(self.navigationBar.frame.size.height)
+                    }
+                }
+            } else {
+                self.navigationBar.mas_makeConstraints { (update) -> Void in
+                    update.removeExisting = true
+                    update.top.equalTo()(self)
+                    update.trailing.equalTo()(self)
+                    update.leading.equalTo()(self)
+                    update.height.equalTo()(self.navigationBar.frame.size.height)
+                }
+            }
+            self.layoutIfNeeded()
+        })
+    }
     
     // MARK: - MessageTopViewDelegate
     

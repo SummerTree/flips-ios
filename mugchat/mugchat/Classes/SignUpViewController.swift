@@ -25,6 +25,20 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
         signUpView = SignUpView()
         signUpView.delegate = self
         self.view = signUpView
+        
+        signUpView.loadView()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        signUpView.viewDidAppear()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        signUpView.viewWillDisappear()
     }
     
     override func prefersStatusBarHidden() -> Bool {
