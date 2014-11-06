@@ -202,7 +202,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         if (self.userProfileCell == nil) {
             // since we're changing our backend structure, I'm leaving this field for debugging
             // because we don't have user.phoneNumber yet
-            let detailedLabel = User.loggedUser()!.username + "\n" + "410-2345-1234"
+            let loggedUser = User.loggedUser()!
+            let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
             let fullname = User.loggedUser()!.fullName()
             
             self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)

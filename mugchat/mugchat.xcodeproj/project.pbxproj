@@ -44,6 +44,7 @@
 		705EF07A19F973A600D4CF74 /* ConfirmFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */; };
 		705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */; };
 		7066E0A519EC4D610009BCF2 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066E0A419EC4D610009BCF2 /* ComposeView.swift */; };
+		708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B51A0A8DFE00725953 /* AboutView.swift */; };
 		70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */; };
@@ -180,6 +181,7 @@
 		705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipView.swift; sourceTree = "<group>"; };
 		705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipViewController.swift; sourceTree = "<group>"; };
 		7066E0A419EC4D610009BCF2 /* ComposeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
+		708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		70A2A5B51A0A8DFE00725953 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 				7AB946D719DED95900779C73 /* StringExtensions.swift */,
 				7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */,
 				70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */,
+				708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1153,6 +1156,7 @@
 				7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
 				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
+				708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */,
 				7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
 				7A12B8D219F5C6E900DE955E /* MugsTextsView.swift in Sources */,
