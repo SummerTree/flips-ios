@@ -20,6 +20,6 @@
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
 - (AVAsset *)videoFromMug:(Mug *)mug;
 
-//- (void)testCreatingFourWordsVideo;
+- (void)testCreatingFourWordsVideo;
 
 @end
