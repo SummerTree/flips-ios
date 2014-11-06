@@ -29,6 +29,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
     
     var delegate: SettingsViewDelegate?
     
+    private var tableFooterView: UIView!
+    private var logoutButton: UIButton!
     private var tableView: UITableView!
     private var userProfileCell: SettingsTableViewCell!
     private var aboutCell: SettingsTableViewCell!
@@ -55,16 +57,42 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         self.makeConstraints()
     }
     
+    override func layoutSubviews() {
+        
+        
+        let sectionHeight = USER_PROFILE_CELL_HEIGHT + (6 * ACTION_ROW_HEIGHT)
+        var tableFooterViewHeight = self.tableView.frame.size.height - sectionHeight
+        
+        if (tableFooterViewHeight < LOGOUT_BUTTON_HEIGHT) {
+            tableFooterViewHeight = LOGOUT_BUTTON_HEIGHT
+        }
+        
+        tableFooterView.frame = CGRectMake(0, 0, tableView.frame.size.width, tableFooterViewHeight)
+        self.tableView.tableFooterView = tableFooterView
+        super.layoutSubviews()
+    }
+    
     private func addSubviews() {
         
         self.backgroundColor = UIColor.whiteColor()
         
-        self.tableView = UITableView(frame: CGRectZero, style: UITableViewStyle.Grouped)
+        self.tableView = UITableView()
         self.tableView.backgroundColor = UIColor.sand()
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.separatorInset = UIEdgeInsetsMake(0, self.IMAGE_BUTTONS_WIDTH, 0, 0)
         self.addSubview(tableView)
+        
+        tableFooterView = UIView()
+        tableFooterView.backgroundColor = UIColor.clearColor()
+        
+        logoutButton = UIButton()
+        logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        logoutButton.backgroundColor = UIColor.whiteColor()
+        logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+        logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
+        tableFooterView.addSubview(logoutButton)
         
         self.createUserProfileCell()
         self.createAboutCell()
@@ -85,6 +113,13 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         
         // asking help to delegate to align the container with navigation bar
         self.delegate?.settingsViewMakeConstraintToNavigationBarBottom(self.tableView)
+        
+        logoutButton.mas_makeConstraints { (make) -> Void in
+            make.bottom.equalTo()(self.tableFooterView)
+            make.left.equalTo()(self.tableFooterView)
+            make.right.equalTo()(self.tableFooterView)
+            make.height.equalTo()(self.LOGOUT_BUTTON_HEIGHT)
+        }
     }
     
     func logOutButtonTapped(sender: AnyObject?) {
@@ -184,27 +219,11 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let logoutButton = UIButton()
-        logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
-        logoutButton.backgroundColor = UIColor.whiteColor()
-        logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
-        logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
-        
-        return logoutButton
-    }
-    
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return self.LOGOUT_BUTTON_HEIGHT
-    }
-    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // fix to remove extra padding at top, using tableview mode = grouped
         // http://stackoverflow.com/questions/18880341/why-is-there-extra-padding-at-the-top-of-my-uitableview-with-style-uitableviewst
         return 0.001
     }
-    
     
     // MARK: Cell creation methods
     
