@@ -10,6 +10,7 @@
 // the license agreement.
 //
 
+
 class InboxViewController : MugChatViewController, InboxViewDelegate {
 
     var inboxView: InboxView!
@@ -50,11 +51,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
-		let storyboard = UIStoryboard(name: "NewMug", bundle: nil)
-		let navigationController = storyboard.instantiateInitialViewController() as UINavigationController
-		navigationController.topViewController.modalPresentationStyle = UIModalPresentationStyle.FullScreen
-		
-		self.navigationController?.presentViewController(navigationController, animated: true, completion: nil)
+		self.navigationController?.presentViewController(NewFlipViewController.instantiateNavigationController(), animated: true, completion: nil)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {

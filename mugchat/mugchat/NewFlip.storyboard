@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="U1q-SQ-Elq">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="8RZ-lg-Gdg">
             <objects>
-                <navigationController storyboardIdentifier="NewMug" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U1q-SQ-Elq" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewFlip" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U1q-SQ-Elq" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8mF-qy-KKD">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -21,10 +20,10 @@
             </objects>
             <point key="canvasLocation" x="-50" y="403"/>
         </scene>
-        <!--New Mug View Controller-->
+        <!--New Flip View Controller-->
         <scene sceneID="xGn-Nv-SVN">
             <objects>
-                <viewController id="wbx-sL-NPb" customClass="NewMugViewController" customModule="Flips" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="wbx-sL-NPb" customClass="NewFlipViewController" customModule="Flips" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oZS-Za-EsS"/>
                         <viewControllerLayoutGuide type="bottom" id="ffq-6Z-ir5"/>
@@ -37,13 +36,13 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="56"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S4W-ZY-Rxq">
-                                        <rect key="frame" x="8" y="8" width="36.5" height="36"/>
+                                        <rect key="frame" x="8" y="8" width="37" height="36"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="26"/>
                                         <color key="textColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" text="Jo" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
-                                        <rect key="frame" x="52.5" y="8" width="539.5" height="48"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
+                                        <rect key="frame" x="52" y="8" width="540" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="30" id="cb5-iL-sDW"/>
                                         </constraints>
@@ -66,16 +65,42 @@
                                     <constraint firstItem="c8q-Ag-DJI" firstAttribute="leading" secondItem="S4W-ZY-Rxq" secondAttribute="trailing" constant="8" id="w7q-jg-zFw"/>
                                 </constraints>
                             </view>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wGd-Vw-hpp">
+                                <rect key="frame" x="0.0" y="120" width="600" height="345"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="56" id="o6e-cF-2b8"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="wbx-sL-NPb" id="AbI-8r-WYs"/>
+                                    <outlet property="delegate" destination="wbx-sL-NPb" id="UCG-YE-jeA"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo">
+                                <rect key="frame" x="0.0" y="465" width="600" height="135"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="135" id="895-Jz-aAN"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wGd-Vw-hpp" secondAttribute="trailing" id="1cz-Bs-fF8"/>
                             <constraint firstAttribute="trailing" secondItem="jaq-uX-Oxx" secondAttribute="trailing" id="BNK-4Z-jJA"/>
+                            <constraint firstAttribute="trailing" secondItem="Q7T-V3-eBo" secondAttribute="trailing" id="DA7-5k-LEx"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="KvQ-Zv-xiL"/>
+                            <constraint firstItem="wGd-Vw-hpp" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="NHY-wI-s3Q"/>
+                            <constraint firstItem="wGd-Vw-hpp" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="O8W-vl-7vL"/>
+                            <constraint firstItem="ffq-6Z-ir5" firstAttribute="top" secondItem="Q7T-V3-eBo" secondAttribute="bottom" id="RsM-4p-7hb"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="top" secondItem="oZS-Za-EsS" secondAttribute="bottom" id="dQa-Gy-ZlE"/>
+                            <constraint firstItem="Q7T-V3-eBo" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="kJ8-TE-GA9"/>
+                            <constraint firstItem="Q7T-V3-eBo" firstAttribute="top" secondItem="wGd-Vw-hpp" secondAttribute="bottom" id="vYq-R7-5UZ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WXn-i6-iJN"/>
                     <connections>
+                        <outlet property="searchTableView" destination="wGd-Vw-hpp" id="qoE-zX-RPB"/>
                         <outlet property="toTextView" destination="c8q-Ag-DJI" id="e5v-bJ-yse"/>
                         <outlet property="toTextViewHeightConstraint" destination="cb5-iL-sDW" id="BpR-vz-FGJ"/>
                     </connections>
