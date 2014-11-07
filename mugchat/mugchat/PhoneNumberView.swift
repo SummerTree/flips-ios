@@ -47,7 +47,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func viewWillAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        mobileNumberField.becomeFirstResponder()
     }
     
     func viewWillDisappear() {
