@@ -24,14 +24,6 @@ private struct UserJsonParams {
     static let PHONE_NUMBER = "phoneNumber"
 }
 
-struct UserAttributes {
-    static let USER_ID = "userID"
-    static let FIRST_NAME = "firstName"
-    static let LAST_NAME = "lastName"
-    static let ME = "me"
-    static let USER_CONTACT = "contacts"
-}
-
 public typealias UserSyncFinished = (Bool, NSError?) -> Void
 
 class UserDataSource : BaseDataSource {
@@ -287,7 +279,7 @@ class UserDataSource : BaseDataSource {
     
     // Users from the App that are my contacts
     func getMyUserContacts() -> [User] {
-        var predicate = NSPredicate(format: "((\(UserAttributes.ME) == false) AND (\(UserAttributes.USER_CONTACT).@count > 0))")
+        var predicate = NSPredicate(format: "((\(UserAttributes.ME) == false) AND (\(UserAttributes.CONTACTS).@count > 0))")
         var result = User.MR_findAllSortedBy("\(UserAttributes.FIRST_NAME)", ascending: true, withPredicate: predicate)
         return result as [User]
     }

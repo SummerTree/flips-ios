@@ -10,6 +10,14 @@
 // the license agreement.
 //
 
+struct UserAttributes {
+	static let USER_ID = "userID"
+	static let FIRST_NAME = "firstName"
+	static let LAST_NAME = "lastName"
+	static let ME = "me"
+	static let CONTACTS = "contacts"
+}
+
 private let LOGGED_USER_ATTRIBUTE = "me"
 
 extension User {
