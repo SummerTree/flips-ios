@@ -110,13 +110,3 @@ extension Mug {
         return result.filePath
     }
 }
-
-
-
-
-
-
-
-
-
-
