@@ -22,7 +22,7 @@ class MugChatViewController : UIViewController {
     // MARK: - Init methods
     
     required init(coder: NSCoder) {
-        fatalError("NSCoding not supported")
+		super.init(coder: coder)
     }
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
