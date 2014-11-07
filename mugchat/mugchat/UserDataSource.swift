@@ -29,7 +29,7 @@ struct UserAttributes {
     static let FIRST_NAME = "firstName"
     static let LAST_NAME = "lastName"
     static let ME = "me"
-    static let USER_CONTACT = "userContact"
+    static let USER_CONTACT = "contacts"
 }
 
 public typealias UserSyncFinished = (Bool, NSError?) -> Void
@@ -188,7 +188,7 @@ class UserDataSource : BaseDataSource {
                 contact.lastName = "Contact"
                 contact.phoneNumber = "+141512345678"
                 contact.contactUser = user
-                user.addUserContactObject(contact)
+                user.addContactsObject(contact)
                 
                 // Simulating a user that is only contact on my agenda
                 var contact2: Contact! = Contact.MR_createEntity() as Contact
