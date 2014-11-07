@@ -13,11 +13,14 @@ let NewFlipViewControllerStoryboard = "NewFlip"
 let Title = NSLocalizedString("New Flip", comment: "New Flip")
 
 
-class NewFlipViewController: MugChatViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
+class NewFlipViewController: MugChatViewController, JoinStringsTextFieldDelegate, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
 
+	@IBOutlet weak var flipTextField: JoinStringsTextField!
+	@IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var nextButtonAction: UIButton!
+	@IBOutlet weak var searchTableView: UITableView!
 	@IBOutlet weak var toTextView: UITextView!
 	@IBOutlet weak var toTextViewHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var searchTableView: UITableView!
 	
 	class func instantiateNavigationController() -> UINavigationController {
 		let storyboard = UIStoryboard(name: NewFlipViewControllerStoryboard, bundle: nil)
@@ -39,19 +42,43 @@ class NewFlipViewController: MugChatViewController, UITableViewDataSource, UITab
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
 		self.navigationController?.setNavigationBarHidden(false, animated: true)
-		
-		self.updateToTextView()
 	}
 
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return UIStatusBarStyle.BlackOpaque
 	}
 	
-	private func updateToTextView() {
-		let textViewSize = self.toTextView.sizeThatFits(CGSizeMake(CGRectGetWidth(self.toTextView.frame), CGRectGetHeight(self.toTextView.frame)/2))
-
-		self.toTextViewHeightConstraint.constant = textViewSize.height
-		self.toTextView.setNeedsLayout()
+	override func updateViewConstraints() {
+		super.updateViewConstraints()
+		
+		self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)
+		self.updateHeightConstraintIfNeeded(self.toTextViewHeightConstraint, view: self.toTextView)
+	}
+	
+	private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
+		let maxHeight = CGRectGetHeight(self.view.frame)/2
+		var neededHeight = view.contentSize.height
+		
+		if neededHeight > maxHeight {
+			neededHeight = maxHeight
+			view.contentOffset = CGPointZero
+		}
+		
+		if neededHeight != heightConstraint.constant {
+			heightConstraint.constant = neededHeight
+		}
+	}
+	
+	// MARK: - Actions
+	
+	@IBAction func nextButtonAction(sender: UIButton) {
+		
+	}
+	
+	// MARK: - JointStringsTextFieldDelegate
+	
+	func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!) {
+		self.view.setNeedsUpdateConstraints()
 	}
 	
 	// MARK: - UITableViewDataSource
@@ -82,8 +109,6 @@ class NewFlipViewController: MugChatViewController, UITableViewDataSource, UITab
 	}
 	
 	func textViewDidChange(textView: UITextView) {
-		if textView == self.toTextView {
-			self.updateToTextView()
-		}
+		self.view.setNeedsUpdateConstraints()
 	}
 }

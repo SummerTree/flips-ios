@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="U1q-SQ-Elq">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -33,21 +34,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jaq-uX-Oxx">
-                                <rect key="frame" x="0.0" y="64" width="600" height="56"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="54"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S4W-ZY-Rxq">
-                                        <rect key="frame" x="8" y="8" width="37" height="36"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="26"/>
+                                        <rect key="frame" x="8" y="16" width="23" height="22"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                         <color key="textColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
-                                        <rect key="frame" x="52" y="8" width="540" height="48"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
+                                        <rect key="frame" x="38" y="8" width="554" height="38"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" priority="750" constant="30" id="cb5-iL-sDW"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="bCJ-zi-4MV"/>
+                                            <constraint firstAttribute="height" priority="750" constant="38" id="cb5-iL-sDW"/>
                                         </constraints>
                                         <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
                                             <outlet property="delegate" destination="wbx-sL-NPb" id="zPE-GV-fz3"/>
@@ -56,20 +58,19 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="c8q-Ag-DJI" secondAttribute="bottom" id="1sj-Oe-ebn"/>
+                                    <constraint firstAttribute="bottom" secondItem="c8q-Ag-DJI" secondAttribute="bottom" constant="8" id="1sj-Oe-ebn"/>
                                     <constraint firstItem="c8q-Ag-DJI" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="top" constant="8" id="A3v-ON-4pd"/>
-                                    <constraint firstItem="S4W-ZY-Rxq" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="top" constant="8" id="Txk-eS-zgS"/>
+                                    <constraint firstItem="S4W-ZY-Rxq" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="top" constant="16" id="Txk-eS-zgS"/>
                                     <constraint firstAttribute="trailing" secondItem="c8q-Ag-DJI" secondAttribute="trailing" constant="8" id="U61-xl-wmx"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="56" id="ced-Q4-TaY"/>
                                     <constraint firstItem="S4W-ZY-Rxq" firstAttribute="leading" secondItem="jaq-uX-Oxx" secondAttribute="leading" constant="8" id="jS3-iS-BDA"/>
                                     <constraint firstItem="c8q-Ag-DJI" firstAttribute="leading" secondItem="S4W-ZY-Rxq" secondAttribute="trailing" constant="8" id="w7q-jg-zFw"/>
                                 </constraints>
                             </view>
                             <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wGd-Vw-hpp">
-                                <rect key="frame" x="0.0" y="120" width="600" height="345"/>
+                                <rect key="frame" x="0.0" y="118" width="600" height="432"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="56" id="o6e-cF-2b8"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="o6e-cF-2b8"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="dataSource" destination="wbx-sL-NPb" id="AbI-8r-WYs"/>
@@ -77,10 +78,45 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo">
-                                <rect key="frame" x="0.0" y="465" width="600" height="135"/>
+                                <rect key="frame" x="0.0" y="550" width="600" height="50"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98x-j1-QcY" customClass="JoinStringsTextField" customModule="Flips" customModuleProvider="target">
+                                        <rect key="frame" x="16" y="0.0" width="525" height="50"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="750" constant="50" id="NbK-k6-HWN"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="ODM-He-WuJ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="wbx-sL-NPb" id="OmL-3E-gAQ"/>
+                                        </connections>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YYl-cb-dw6">
+                                        <rect key="frame" x="549" y="8" width="35" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="Wiy-kC-IEQ"/>
+                                            <constraint firstAttribute="height" constant="34" id="cv3-gN-3jf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
+                                        <state key="normal" title="Next">
+                                            <color key="titleColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="nextButtonAction:" destination="wbx-sL-NPb" eventType="touchUpInside" id="TBy-uz-iut"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="135" id="895-Jz-aAN"/>
+                                    <constraint firstAttribute="centerY" secondItem="YYl-cb-dw6" secondAttribute="centerY" id="L4U-7Z-0Vs"/>
+                                    <constraint firstAttribute="bottom" secondItem="98x-j1-QcY" secondAttribute="bottom" id="L7r-7A-cZ8"/>
+                                    <constraint firstItem="YYl-cb-dw6" firstAttribute="leading" secondItem="98x-j1-QcY" secondAttribute="trailing" constant="8" id="Lcm-nF-PpP"/>
+                                    <constraint firstItem="98x-j1-QcY" firstAttribute="top" secondItem="Q7T-V3-eBo" secondAttribute="top" id="VAL-i3-Mc8"/>
+                                    <constraint firstAttribute="trailing" secondItem="YYl-cb-dw6" secondAttribute="trailing" constant="16" id="et8-yc-fsZ"/>
+                                    <constraint firstItem="98x-j1-QcY" firstAttribute="leading" secondItem="Q7T-V3-eBo" secondAttribute="leading" constant="16" id="jU4-tL-NIs"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -100,6 +136,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="WXn-i6-iJN"/>
                     <connections>
+                        <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
+                        <outlet property="flipTextFieldHeightConstraint" destination="NbK-k6-HWN" id="QWc-bd-1Jw"/>
+                        <outlet property="nextButtonAction" destination="YYl-cb-dw6" id="W18-gm-lJG"/>
                         <outlet property="searchTableView" destination="wGd-Vw-hpp" id="qoE-zX-RPB"/>
                         <outlet property="toTextView" destination="c8q-Ag-DJI" id="e5v-bJ-yse"/>
                         <outlet property="toTextViewHeightConstraint" destination="cb5-iL-sDW" id="BpR-vz-FGJ"/>
