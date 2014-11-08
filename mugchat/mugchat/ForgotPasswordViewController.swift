@@ -29,6 +29,8 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
+    
     override func loadView() {
         super.loadView()
         
@@ -37,8 +39,20 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         self.view = forgotPasswordView
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        forgotPasswordView.viewWillAppear()
+        forgotPasswordView.focusKeyboardOnMobileNumberField()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        forgotPasswordView.viewWillDisappear()
+    }
+    
     
     // MARK: - ForgotPasswordViewDelegate Methods
+    
     func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
         let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"

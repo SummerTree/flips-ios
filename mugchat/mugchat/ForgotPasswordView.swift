@@ -41,10 +41,6 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         super.init()
         self.backgroundColor = UIColor.mugOrange()
         self.addSubviews()
-        self.makeConstraints()
-        
-        let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func addSubviews() {
@@ -75,7 +71,6 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         
         mobileNumberField = UITextField()
         mobileNumberField.delegate = self
-        mobileNumberField.becomeFirstResponder()
         mobileNumberField.textColor = UIColor.whiteColor()
         mobileNumberField.tintColor = UIColor.whiteColor()
         mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
@@ -102,43 +97,43 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
             make.height.equalTo()(self.navigationBar.frame.size.height)
         }
         
-        hintView.mas_updateConstraints { (make) in
+        hintView.mas_makeConstraints { (make) in
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
         }
         
-        hintText.mas_updateConstraints { (make) in
+        hintText.mas_makeConstraints { (make) in
             make.centerY.equalTo()(self.hintView)
             make.centerX.equalTo()(self.hintView)
         }
         
-        mobileNumberView.mas_updateConstraints { (make) in
+        mobileNumberView.mas_makeConstraints { (make) in
             make.top.equalTo()(self.hintView.mas_bottom)
             make.height.equalTo()(self.MOBILE_NUMBER_VIEW_HEIGHT)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
         }
         
-        phoneImageView.mas_updateConstraints { (make) in
+        phoneImageView.mas_makeConstraints { (make) in
             make.left.equalTo()(self.mobileNumberView).with().offset()(self.MOBILE_NUMBER_MARGIN_LEFT)
             make.centerY.equalTo()(self.mobileNumberView)
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
-        mobileNumberField.mas_updateConstraints { (make) in
+        mobileNumberField.mas_makeConstraints { (make) in
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
             make.centerY.equalTo()(self.mobileNumberView)
         }
         
-        spamView.mas_updateConstraints({ (make) in
+        spamView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.mobileNumberView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
             make.height.equalTo()(self.hintView)
         })
         
-        keyboardFillerView.mas_updateConstraints( { (make) in
+        keyboardFillerView.mas_makeConstraints( { (make) in
             make.top.equalTo()(self.spamView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -150,7 +145,19 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     }
     
     
+    // MARK - Life Cycle
+    
+    func viewWillAppear() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+    }
+    
+    
     // MARK: - UITextField delegate
+    
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text
@@ -186,15 +193,18 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         }
     }
     
+    func focusKeyboardOnMobileNumberField() {
+        mobileNumberField.becomeFirstResponder()
+    }
+    
     
     // MARK: - Notifications
     
-    func keyboardOnScreen(notification: NSNotification) {
-        if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            keyboardHeight = keyboardFrame.height
-            updateConstraints()
-        }
+    func keyboardWillShow(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        keyboardHeight = keyboardFrame.height
+        self.makeConstraints()
     }
     
     
