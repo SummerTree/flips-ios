@@ -155,9 +155,19 @@ class NewFlipViewController: MugChatViewController,
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) as Contact
 		let name = "\(contact.firstName) \(contact.lastName)"
-		println(name)
+		
 		let cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
 		cell.textLabel?.text = name
+		
+		if let user = contact.contactUser {
+			// Flips user
+			if let photoURLString = user.photoURL {
+				cell.imageView?.setImageWithURL(NSURL(string: photoURLString))
+			}
+		} else {
+			// not a Flips user
+			cell.detailTextLabel?.text = contact.phoneNumber
+		}
 		
 		return cell
 	}
