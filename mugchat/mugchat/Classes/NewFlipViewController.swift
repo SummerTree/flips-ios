@@ -62,6 +62,7 @@ class NewFlipViewController: MugChatViewController,
 		self.setupWhiteNavBarWithCancelButton(TITLE)
 		self.setNeedsStatusBarAppearanceUpdate()
 		self.automaticallyAdjustsScrollViewInsets = false
+		self.searchTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -88,7 +89,7 @@ class NewFlipViewController: MugChatViewController,
 			self.fetchedResultsController = self.contactDataSource.fetchedResultsController(self.toTextView.text, delegate: self)
 		}
 		
-		self.searchTableView.reloadData()
+		self.updateSearchTableView()
 	}
 	
 	private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
@@ -103,6 +104,16 @@ class NewFlipViewController: MugChatViewController,
 		if (neededHeight != heightConstraint.constant) {
 			heightConstraint.constant = neededHeight
 		}
+	}
+	
+	private func updateSearchTableView() {
+		if let contacts = self.fetchedResultsController?.fetchedObjects {
+			self.searchTableView.hidden = (contacts.count == 0)
+		} else {
+			self.searchTableView.hidden = true
+		}
+		
+		self.searchTableView.reloadData()
 	}
 	
 	// MARK: - Actions
@@ -120,7 +131,7 @@ class NewFlipViewController: MugChatViewController,
 	// MARK: - NSFetchedResultsControllerDelegate
 	
 	func controllerDidChangeContent(controller: NSFetchedResultsController) {
-		self.searchTableView.reloadData()
+		self.updateSearchTableView()
 	}
 	
 	// MARK: - UITableViewDataSource
@@ -142,7 +153,13 @@ class NewFlipViewController: MugChatViewController,
 	}
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		return tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
+		let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) as Contact
+		let name = "\(contact.firstName) \(contact.lastName)"
+		println(name)
+		let cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
+		cell.textLabel?.text = name
+		
+		return cell
 	}
 	
 	// MARK: - UITableViewDelegate
