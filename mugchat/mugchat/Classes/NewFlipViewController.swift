@@ -21,7 +21,12 @@ private let STORYBOARD = "NewFlip"
 private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
 
 
-class NewFlipViewController: MugChatViewController, JoinStringsTextFieldDelegate, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate {
+class NewFlipViewController: MugChatViewController,
+	JoinStringsTextFieldDelegate,
+	NSFetchedResultsControllerDelegate,
+	UITableViewDataSource,
+	UITableViewDelegate,
+	UITextViewDelegate {
 	
 	// MARK: - Constants
 	
@@ -49,6 +54,9 @@ class NewFlipViewController: MugChatViewController, JoinStringsTextFieldDelegate
 	@IBOutlet weak var toTextView: UITextView!
 	@IBOutlet weak var toTextViewHeightConstraint: NSLayoutConstraint!
 	
+	let contactDataSource = ContactDataSource()
+	var fetchedResultsController: NSFetchedResultsController?
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.setupWhiteNavBarWithCancelButton(TITLE)
@@ -69,6 +77,18 @@ class NewFlipViewController: MugChatViewController, JoinStringsTextFieldDelegate
 		super.updateViewConstraints()
 		self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)
 		self.updateHeightConstraintIfNeeded(self.toTextViewHeightConstraint, view: self.toTextView)
+	}
+	
+	// MARK: - Private methods
+	
+	private func updateContactSearch() {
+		if self.toTextView.text.isEmpty {
+			self.fetchedResultsController = nil
+		} else {
+			self.fetchedResultsController = self.contactDataSource.fetchedResultsController(self.toTextView.text, delegate: self)
+		}
+		
+		self.searchTableView.reloadData()
 	}
 	
 	private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
@@ -97,10 +117,28 @@ class NewFlipViewController: MugChatViewController, JoinStringsTextFieldDelegate
 		self.view.setNeedsUpdateConstraints()
 	}
 	
+	// MARK: - NSFetchedResultsControllerDelegate
+	
+	func controllerDidChangeContent(controller: NSFetchedResultsController) {
+		self.searchTableView.reloadData()
+	}
+	
 	// MARK: - UITableViewDataSource
 	
+	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+		if let sections = self.fetchedResultsController?.sections {
+			return sections.count
+		}
+		
+		return 0
+	}
+	
 	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 0;
+		if let sections = self.fetchedResultsController?.sections {
+			return sections[section].numberOfObjects
+		}
+		
+		return 0
 	}
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -126,5 +164,9 @@ class NewFlipViewController: MugChatViewController, JoinStringsTextFieldDelegate
 	
 	func textViewDidChange(textView: UITextView) {
 		self.view.setNeedsUpdateConstraints()
+		
+		if (textView == self.toTextView) {
+			self.updateContactSearch()
+		}
 	}
 }
