@@ -260,6 +260,8 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
+        self.delegate?.userFormViewDidUpdateField?(self)
+        
         if (textField == birthdayTextField) {
             var stringWithOnlyDigits = textField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
@@ -417,6 +419,18 @@ class UserFormView : UIView, UITextFieldDelegate {
         return true
     }
     
+    
+    // MARK: - Setters
+    
+    func setUserData(user: User!) {
+        firstNameTextField.text = user.firstName
+        lastNameTextField.text = user.lastName
+        emailTextField.text = user.username
+        
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        birthdayTextField.text = formatter.stringFromDate(user.birthday)
+    }
     
     // MARK: - Getters
     

@@ -128,7 +128,7 @@ class CustomNavigationBar : UIView {
     class func CustomLargeNavigationBar(avatarImage: UIImage, isAvatarButtonInteractionEnabled: Bool = false, showBackButton: Bool, showSaveButton: Bool) -> CustomNavigationBar {
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_Orange")
         }
         
         var saveButtonTitle : String?
@@ -141,14 +141,13 @@ class CustomNavigationBar : UIView {
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
         
-        var imageButton = UIButton.avatarA2(avatarImage)
+        var imageButton = UIButton.avatarA2WithoutBorder(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
         navigationBar.setup(imageButton, leftButtonImage: backButtonImage, rightButtonObject: saveButtonTitle)
         
         return navigationBar
     }
-    
     
     // MARK: - Init Methods
     
@@ -205,8 +204,8 @@ class CustomNavigationBar : UIView {
             rightButton = UIButton()
             if let rightButtonItem = rightButtonObject as? String {
                 rightButton.setTitle(rightButtonItem, forState: .Normal)
-                rightButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-                rightButton.setTitleColor(UIColor.grayColor(), forState: .Highlighted)
+                rightButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+                rightButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
                 rightButton.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h3)
             } else if let rightButtonItem = rightButtonObject as? UIImage {
                 rightButton.setImage(rightButtonItem, forState: .Normal)
@@ -341,7 +340,7 @@ class CustomNavigationBar : UIView {
     // MARK: - Button Handlers
     
     func didTapLeftButton() {
-        delegate?.customNavigationBarDidTapLeftButton(self)
+        delegate?.customNavigationBarDidTapLeftButton?(self)
     }
     
     func didTapRightButton() {
@@ -357,5 +356,9 @@ class CustomNavigationBar : UIView {
     func setBackgroundImage(image: UIImage) {
         backgroundImageView.alpha = 1.0
         backgroundImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+    }
+    
+    func setBackgroundImageColor(color: UIColor) {
+        backgroundImageView.backgroundColor = color
     }
 }
