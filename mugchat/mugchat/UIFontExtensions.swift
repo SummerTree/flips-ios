@@ -43,4 +43,8 @@ extension UIFont {
         static var h6:CGFloat = 12.0
         static var h7:CGFloat = 10.0
     }
+    
+    class func headingSize1() -> CGFloat {
+        return HeadingSize.h1
+    }
 }

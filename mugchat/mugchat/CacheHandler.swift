@@ -98,8 +98,9 @@ public class CacheHandler : NSObject {
         return url.lastPathComponent
     }
     
-    func hasCachedFileForUrl(url:String) -> Bool {
+    func hasCachedFileForUrl(url:String) -> (hasCache: Bool, filePath: String?) {
         var fileExists = false
+        var filePath : String?
         
         let fileManager = NSFileManager.defaultManager()
         let formatedUrl = self.getFormatedUrl(url)
@@ -107,24 +108,26 @@ public class CacheHandler : NSObject {
         let cacheDirectoryFilePath = "\(applicationCacheDirectory)/\(formatedUrl)"
         if (fileManager.fileExistsAtPath(cacheDirectoryFilePath)) {
             fileExists = true
+            filePath = cacheDirectoryFilePath
         }
         
         let supportDirectoryFilePath = "\(applicationSupportDirectory)/\(formatedUrl)"
         if (fileManager.fileExistsAtPath(supportDirectoryFilePath)) {
             fileExists = true
+            filePath = supportDirectoryFilePath
         }
         
-        return fileExists
+        return (fileExists, filePath)
     }
     
     
     // MARK: - Save/Load Methods
     
-    func saveImage(image: UIImage, withUrl url: String, isTemporary: Bool = true) -> Bool {
+    func saveImage(image: UIImage, withUrl url: String, isTemporary: Bool = true) -> String {
         return self.save(UIImageJPEGRepresentation(image, DEFAULT_JPEG_COMPRESSION_QUALITY), withUrl: url, isTemporary: isTemporary)
     }
     
-    func save(data: NSData, withUrl url: String, isTemporary: Bool = true) -> Bool {
+    func save(data: NSData, withUrl url: String, isTemporary: Bool = true) -> String {
         var directoryPath: String!
         
         if (isTemporary) {
@@ -133,9 +136,7 @@ public class CacheHandler : NSObject {
             directoryPath = applicationSupportDirectory
         }
         
-        self.saveData(data, forUrl: url, atDirectoryPath: directoryPath)
-        
-        return true
+        return self.saveData(data, forUrl: url, atDirectoryPath: directoryPath)
     }
     
     func dataForUrl(url: String) -> NSData? {
@@ -158,7 +159,7 @@ public class CacheHandler : NSObject {
         return nil
     }
     
-    private func saveData(data: NSData, forUrl url: String, atDirectoryPath directoryPath: String) {
+    private func saveData(data: NSData, forUrl url: String, atDirectoryPath directoryPath: String) -> String {
         let fileManager = NSFileManager.defaultManager()
         
         let formatedUrl = self.getFormatedUrl(url)
@@ -168,6 +169,8 @@ public class CacheHandler : NSObject {
         if (!fileManager.fileExistsAtPath(filePath)) {
             fileManager.createFileAtPath(filePath, contents: data, attributes: nil)
         }
+        
+        return filePath
     }
     
     

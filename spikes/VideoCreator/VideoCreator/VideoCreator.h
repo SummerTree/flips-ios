@@ -10,21 +10,11 @@
 // the license agreement.
 //
 
-#import "MugMessage.h"
-#import "Mug.h"
-#import "Room.h"
-#import "User.h"
+#import <UIKit/UIKit.h>
 
+@interface VideoCreator : NSObject 
 
-@implementation MugMessage
-
-@dynamic createdAt;
-@dynamic notRead;
-@dynamic receivedAt;
-@dynamic removed;
-@dynamic mugMessageID;
-@dynamic from;
-@dynamic mugs;
-@dynamic room;
+- (void) writeImagesAsMovie:(NSArray *)array toPath:(NSString*)path;
 
 @end
+
