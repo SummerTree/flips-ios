@@ -31,6 +31,14 @@ extension UIViewController {
         self.navigationItem.leftBarButtonItem = backBarButton
     }
     
+	func setupWhiteNavBarWithCancelButton(title: String) {
+		setupWhiteNavBarWithoutButtons(title)
+		
+		var backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "closeButtonTapped")
+		backBarButton.tintColor = UIColor.orangeColor()
+		self.navigationItem.leftBarButtonItem = backBarButton
+	}
+	
     func setupWhiteNavBarWithoutButtons(title: String) {
         self.setNavBarColor()
         

@@ -24,9 +24,9 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
         self.view = phoneNumberView
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        phoneNumberView.viewDidAppear()
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        phoneNumberView.viewWillAppear()
         phoneNumberView.focusKeyboardOnMobileNumberField()
     }
     
@@ -44,6 +44,12 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     }
     
     func phoneNumberViewDidTapBackButton(view: PhoneNumberView!) {
+        println(self.previousViewController())
+        if (self.previousViewController()!.isKindOfClass(SplashScreenViewController.self) ||
+            self.previousViewController()!.isKindOfClass(LoginViewController.self)) {
+                AuthenticationHelper.sharedInstance.logout()
+        }
+        
         self.navigationController?.popViewControllerAnimated(true)
     }
     

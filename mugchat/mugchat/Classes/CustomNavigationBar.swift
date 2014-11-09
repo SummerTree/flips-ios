@@ -65,6 +65,24 @@ class CustomNavigationBar : UIView {
         return navigationBar
     }
     
+    class func CustomSmallNavigationBar(title: String, showBackButton: Bool) -> CustomNavigationBar {
+        
+        var backButtonImage : UIImage?
+        if (showBackButton) {
+            backButtonImage = UIImage(named: "Back")
+        }
+        
+        var navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        
+        navigationBar.buttonsMargin = NORMAL_NAV_BAR_BUTTON_MARGIN
+        navigationBar.setup(title, leftButtonImage: backButtonImage)
+        
+        return navigationBar
+    }
+
+    
     class func CustomNormalNavigationBar(title: String, showBackButton: Bool) -> CustomNavigationBar {
         
         var backButtonImage : UIImage?
