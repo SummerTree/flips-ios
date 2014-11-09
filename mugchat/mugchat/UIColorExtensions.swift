@@ -33,6 +33,7 @@ extension UIColor {
         )
     }
     
+    
     // MARK: Primary Colors
     class func mugOrange() -> UIColor {
         return UIColor(RRGGBB: UInt(0xEC7061))
@@ -53,6 +54,7 @@ extension UIColor {
     class func avacado() -> UIColor {
         return UIColor(RRGGBB: UInt(0x88BF4C))
     }
+    
     
     // MARK: Secondary Colors
     
@@ -76,7 +78,9 @@ extension UIColor {
         return UIColor(RRGGBB: UInt(0x4A4A4A))
     }
     
+    
     // MARK: Components
+    
     class func darkBackground() -> UIColor {
         return deepSea()
     }
@@ -91,5 +95,9 @@ extension UIColor {
     
     class func lightSemitransparentBackground() -> UIColor {
         return UIColor.whiteColor().colorWithAlphaComponent(0.25)
+    }
+    
+    class func flipLabelTextColor() -> UIColor {
+        return UIColor.whiteColor()
     }
 }

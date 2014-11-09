@@ -74,11 +74,23 @@ class MugDataSource : BaseDataSource {
     }
     
     func createMugWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+        let cacheHandler = CacheHandler.sharedInstance
         let mugService = MugService()
+        
         mugService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (mug) -> Void in
             var userDataSource = UserDataSource()
             mug.owner = User.loggedUser()
             mug.setBackgroundContentType(BackgroundContentType.Image)
+            
+            // TODO: SAVE IMAGE AND AUDIO IN THE CACHE
+            if (backgroundImage != nil) {
+                cacheHandler.saveImage(backgroundImage!, withUrl: mug.backgroundURL, isTemporary: false)
+            }
+            
+            if (soundURL != nil) {
+                cacheHandler.saveDataAtPath(soundURL!.absoluteString!, withUrl: mug.soundURL, isTemporary: false)
+            }
+            
             createMugSuccess(mug)
         }) { (mugError) -> Void in
             var message = mugError?.error as String!
@@ -86,8 +98,23 @@ class MugDataSource : BaseDataSource {
         }
     }
     
-    func createMugWithWord(word: String, backgroundVideo: NSData, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
-        // TODO
+    func createMugWithWord(word: String, videoURL: NSURL, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+        let cacheHandler = CacheHandler.sharedInstance
+        let mugService = MugService()
+        
+        mugService.createMug(word, videoPath: videoURL, isPrivate: true, createMugSuccessCallback: { (mug) -> Void in
+            var userDataSource = UserDataSource()
+            mug.owner = User.loggedUser()
+            mug.setBackgroundContentType(BackgroundContentType.Video)
+            
+            // TODO: SAVE VIDEO IN THE CACHE
+            cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: mug.backgroundURL, isTemporary: false)
+            
+            createMugSuccess(mug)
+        }) { (mugError) -> Void in
+            var message = mugError?.error as String!
+            createMugFail(message)
+        }
     }
     
     func createEmptyMugWithWord(word: String) -> Mug {

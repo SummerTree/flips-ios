@@ -29,7 +29,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     
     var mugText : MugText!
     
-    var mugDataSource = MugDataSource()
+//    var mugDataSource = MugDataSource()
     var myMugs: [Mug] = [Mug]()
     
     var delegate: MyMugsViewDelegate?
@@ -94,14 +94,22 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func setMugText(mugText: MugText) {
+        println("   ")
+        println("setMugText: \(mugText.text)")
+
         self.mugText = mugText
+        
+        var mugDataSource = MugDataSource()
         self.myMugs = mugDataSource.getMyMugsForWord(mugText.text)
+
+        println("   setMugText - number of mugs: \(myMugs.count)")
         if (self.myMugs.count > 0) {
-            self.delegate?.myMugsViewMugsForSelectedWord(self, hasMugs: true)
+            self.delegate?.myMugsView(self, mugsForSelectedWord: true)
             myMugsCollectionView.reloadData()
         } else {
-            self.delegate?.myMugsViewMugsForSelectedWord(self, hasMugs: false)
+            self.delegate?.myMugsView(self, mugsForSelectedWord: false)
         }
+        println("   ")
     }
     
     
@@ -119,13 +127,9 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         } else {
             var currentMug: Mug? = self.myMugs[indexPath.row - 1]
             if (currentMug != nil) {
-                cell.mug = currentMug
-                cell.deselectCell()
-                if (currentMug!.mugID == self.mugText.associatedMug?.mugID) {
-                    cell.toggleCellState()
-                }
-                
-                cell.cellImageView.setImageWithURL(NSURL(string: currentMug!.backgroundURL))
+                cell.setMug(currentMug!)
+                var isSelected = (currentMug!.mugID == self.mugText.associatedMug?.mugID)
+                cell.setSelected(isSelected)
            }
         }
         
@@ -135,16 +139,23 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     //this delegate is called too when the user is tapping the cell to deselects it (not only for selection)
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         var selectedCell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
+        let selectedCellState = selectedCell.isSelected
         
-        //didDeselectItemAtIndexPath doesn't work for all situations
+        // De-select all
         for cell in self.myMugsCollectionView.visibleCells() as [MyMugsViewCell] {
-            if (cell.mug?.mugID != selectedCell.mug.mugID) {
-               cell.deselectCell()
-            }
+            cell.deselectCell()
         }
+
+        var selectedMug: Mug? = nil
+        if (!selectedCellState) {
+            println("myMugs: \(myMugs.count)")
+            println("indexPath.row: \(indexPath.row)")
+            selectedMug = myMugs[indexPath.row - 1] as Mug
+        }
+        selectedCell.setSelected(!selectedCellState)
         
-        selectedCell.toggleCellState()
-        self.delegate?.myMugsViewDidChangeMugSelection(self, mug: selectedCell.mug)
+        
+        self.delegate?.myMugsView(self, didChangeMugSelection: selectedMug)
     }
     
 }
@@ -155,7 +166,11 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
 protocol MyMugsViewDelegate {
     
     func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
-    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!)
-    func myMugsViewMugsForSelectedWord(myMugsView: MyMugsView!, hasMugs: Bool!)
+    func myMugsView(myMugsView: MyMugsView!, didChangeMugSelection mug: Mug?)
+    func myMugsView(myMugsView: MyMugsView!, mugsForSelectedWord hasMugs: Bool!)
+    
+}
+
+protocol MyMugsViewDataSource {
     
 }

@@ -62,7 +62,7 @@
 		7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11791C19DA03980086A66B /* CustomNavigationBarDelegate.swift */; };
 		7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792119DA07F30086A66B /* ComposeViewController.swift */; };
 		7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792319DA08800086A66B /* InboxViewDelegate.swift */; };
-		7A12B8D219F5C6E900DE955E /* MugsTextsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12B8D119F5C6E900DE955E /* MugsTextsView.swift */; };
+		7A12B8D219F5C6E900DE955E /* FlipMessageWordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */; };
 		7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CB19D1E97A0026E641 /* InboxViewController.swift */; };
 		7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */; };
 		7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */; };
@@ -78,6 +78,9 @@
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
 		7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */; };
 		7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */; };
+		7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */; };
+		7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */; };
+		7A8BFEE01A09601200E7F2A3 /* FlipViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFEDF1A09601200E7F2A3 /* FlipViewer.swift */; };
 		7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619DB19DB2976005E4343 /* MugChatViewController.swift */; };
 		7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */; };
 		7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */; };
@@ -105,6 +108,8 @@
 		7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */; };
 		7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */; };
 		7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */; };
+		7AE044FE1A0CE49C00C68313 /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */; };
+		7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
 		7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
 		7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* MugMessageDataSource.swift */; };
@@ -200,7 +205,7 @@
 		7A11791C19DA03980086A66B /* CustomNavigationBarDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBarDelegate.swift; path = Classes/CustomNavigationBarDelegate.swift; sourceTree = "<group>"; };
 		7A11792119DA07F30086A66B /* ComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ComposeViewController.swift; path = Classes/ComposeViewController.swift; sourceTree = "<group>"; };
 		7A11792319DA08800086A66B /* InboxViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxViewDelegate.swift; path = Classes/InboxViewDelegate.swift; sourceTree = "<group>"; };
-		7A12B8D119F5C6E900DE955E /* MugsTextsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugsTextsView.swift; sourceTree = "<group>"; };
+		7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageWordListView.swift; sourceTree = "<group>"; };
 		7A1892CB19D1E97A0026E641 /* InboxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxViewController.swift; path = Classes/InboxViewController.swift; sourceTree = "<group>"; };
 		7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConversationTableViewCell.swift; path = Classes/ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomNavigationBar.swift; path = Classes/CustomNavigationBar.swift; sourceTree = "<group>"; };
@@ -217,6 +222,9 @@
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
 		7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopViewCell.swift; path = Classes/MessagesTopViewCell.swift; sourceTree = "<group>"; };
 		7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopViewDelegate.swift; path = Classes/MessagesTopViewDelegate.swift; sourceTree = "<group>"; };
+		7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeBottomViewContainer.swift; sourceTree = "<group>"; };
+		7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeTopViewContainer.swift; sourceTree = "<group>"; };
+		7A8BFEDF1A09601200E7F2A3 /* FlipViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipViewer.swift; sourceTree = "<group>"; };
 		7A9619DB19DB2976005E4343 /* MugChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MugChatViewController.swift; path = Classes/MugChatViewController.swift; sourceTree = "<group>"; };
 		7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "Classes/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "Classes/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -248,6 +256,8 @@
 		7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageView.swift; path = Classes/NotificationMessageView.swift; sourceTree = "<group>"; };
 		7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageViewDelegate.swift; path = Classes/NotificationMessageViewDelegate.swift; sourceTree = "<group>"; };
 		7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CropOverlayView.swift; path = Classes/CropOverlayView.swift; sourceTree = "<group>"; };
+		7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
+		7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheHandler.swift; sourceTree = "<group>"; };
 		7AF82DE519EFEC3300D0393F /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
 		7AF82DFA19EFEC5800D0393F /* MugMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugMessageDataSource.swift; sourceTree = "<group>"; };
@@ -395,6 +405,7 @@
 				70057E9319DADF59004343ED /* DeviceHelper.swift */,
 				7ACBBED01A024F4300A7109C /* DateHelper.swift */,
 				7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */,
+				7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -491,18 +502,19 @@
 			isa = PBXGroup;
 			children = (
 				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
-				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
-				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
-				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
-				7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */,
-				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
-				7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */,
-				7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */,
-				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
 				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
-				7AB946D719DED95900779C73 /* StringExtensions.swift */,
+				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
+				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
 				7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */,
 				70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */,
+				7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */,
+				7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */,
+				7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */,
+				7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */,
+				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
+				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
+				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
+				7AB946D719DED95900779C73 /* StringExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -575,13 +587,12 @@
 			isa = PBXGroup;
 			children = (
 				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
-				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
-				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
+				7A8BFEDC1A095A6900E7F2A3 /* Utils */,
+				7A8BFEDB1A09597600E7F2A3 /* Mugs Collection */,
+				7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */,
+				7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */,
+				7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */,
 				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
-				7A12B8D119F5C6E900DE955E /* MugsTextsView.swift */,
-				A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */,
-				A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */,
-				A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -707,6 +718,7 @@
 			isa = PBXGroup;
 			children = (
 				7A11792119DA07F30086A66B /* ComposeViewController.swift */,
+				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -732,6 +744,7 @@
 		7A28ADC019D4428A00887831 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				7A8BFEE11A09601700E7F2A3 /* Flip Viewer */,
 				7A9619ED19DC3EE3005E4343 /* Badge */,
 				7A9619EC19DC3ED5005E4343 /* NavigationBar */,
 				7AD93FA119E62535009CC59A /* Notification Messages */,
@@ -784,6 +797,32 @@
 				7A356E4419F95546002D923B /* ContactDataSource.swift */,
 			);
 			name = "Data Sources";
+			sourceTree = "<group>";
+		};
+		7A8BFEDB1A09597600E7F2A3 /* Mugs Collection */ = {
+			isa = PBXGroup;
+			children = (
+				A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */,
+				A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */,
+				A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */,
+			);
+			name = "Mugs Collection";
+			sourceTree = "<group>";
+		};
+		7A8BFEDC1A095A6900E7F2A3 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		7A8BFEE11A09601700E7F2A3 /* Flip Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				7A8BFEDF1A09601200E7F2A3 /* FlipViewer.swift */,
+			);
+			name = "Flip Viewer";
 			sourceTree = "<group>";
 		};
 		7A9619E419DC2A55005E4343 /* SignUp */ = {
@@ -970,6 +1009,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0600;
+				TargetAttributes = {
+					70FD4E6F19D064450024EBDB = {
+						DevelopmentTeam = 5HMJW6N276;
+					};
+				};
 			};
 			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1051,6 +1095,7 @@
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
 				A2A5C6D719FEBC3500E4CB2C /* MyMugsView.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
+				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
@@ -1066,17 +1111,20 @@
 				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
 				A2A5C6D91A001E7A00E4CB2C /* SelectedMugOverlayView.swift in Sources */,
 				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
+				7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
 				705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
+				7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */,
 				7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */,
 				7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */,
 				7ACBBEC91A0026DF00A7109C /* MugExtension.swift in Sources */,
 				7AB946DC19DF35E700779C73 /* MessagesTopView.swift in Sources */,
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
+				7AE044FE1A0CE49C00C68313 /* VideoHelper.swift in Sources */,
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */,
@@ -1145,11 +1193,12 @@
 				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
 				7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
-				7A12B8D219F5C6E900DE955E /* MugsTextsView.swift in Sources */,
+				7A12B8D219F5C6E900DE955E /* FlipMessageWordListView.swift in Sources */,
 				7A9CAB701A04223300791C46 /* ImageVideoCreator.m in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
 				7A41CFA11A051EE100746423 /* MugMessage.m in Sources */,
+				7A8BFEE01A09601200E7F2A3 /* FlipViewer.swift in Sources */,
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,

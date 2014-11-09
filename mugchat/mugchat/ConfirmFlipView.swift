@@ -28,7 +28,7 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     private var moviePlayer: MPMoviePlayerController!
     private var flipWordLabel: UILabel!
     private var flipVideoURL: NSURL!
-    private var flipAudioURL: NSURL!
+    private var flipAudioURL: NSURL?
     private var rejectButton: UIButton!
     private var acceptButton: UIButton!
     
@@ -43,7 +43,7 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         self.flipImageView = UIImageView(image: background)
         
         if (audio != nil) {
-            self.flipAudioURL = audio!
+            self.flipAudioURL = audio
         }
         
         self.addSubviews()
@@ -222,7 +222,9 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     }
     
     func playAudio() {
-        AudioRecorderService.sharedInstance.playAudio(flipAudioURL)
+        if (flipAudioURL != nil) {
+            AudioRecorderService.sharedInstance.playAudio(flipAudioURL)
+        }
     }
     
     

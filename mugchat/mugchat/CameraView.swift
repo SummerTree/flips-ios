@@ -20,7 +20,6 @@ let SessionRunningAndDeviceAuthorizedContext = UnsafeMutablePointer<()>()
 public typealias CapturePictureSuccess = (UIImage?) -> Void
 public typealias CapturePictureFail = (NSError?) -> Void
 
-
 class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     private let DEVICE_AUTHORIZED_KEY_PATH = "sessionRunningAndDeviceAuthorized"
@@ -372,7 +371,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             } else if (context == RecordingContext) {
                 if let isRecording = changes[NSKeyValueChangeNewKey] {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        // TODO: we aren't recording yet
                         if (isRecording) {
                         } else {
                         }
@@ -546,7 +544,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         var currentFileName = "recording-\(format.stringFromDate(NSDate())).mov"
         println("Recording video at: \(currentFileName)")
         
-        var dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         var docsDir: AnyObject = dirPaths[0]
         var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
         var videoURL = NSURL(fileURLWithPath: videoFilePath)

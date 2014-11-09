@@ -109,6 +109,11 @@ extension Mug {
         let result = cacheHandler.hasCachedFileForUrl(self.soundURL)
         return result.filePath
     }
+    
+//    func imagePlaceholder() -> UIImage {
+//        let path = self.backgroundContentLocalPath()
+//        // TODO:
+//    }
 }
 
 

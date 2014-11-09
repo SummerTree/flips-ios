@@ -127,6 +127,27 @@ public class CacheHandler : NSObject {
         return self.save(UIImageJPEGRepresentation(image, DEFAULT_JPEG_COMPRESSION_QUALITY), withUrl: url, isTemporary: isTemporary)
     }
     
+    func saveDataAtPath(dataPath: String, withUrl url: String, isTemporary: Bool = true) -> String {
+        let data = NSData(contentsOfFile: dataPath)
+        return self.save(data, withUrl: url, isTemporary: isTemporary)
+    }
+    
+    func deleteFileAtPath(path: String) {
+        let fileManager = NSFileManager.defaultManager()
+        if (fileManager.fileExistsAtPath(path)) {
+            fileManager.fileExistsAtPath(path)
+        }
+    }
+    
+    func deleteFileWithUrl(url: String) {
+        var filePath = self.getFilePathForUrl(url, isTemporary: true)
+        self.deleteFileAtPath(filePath)
+
+    
+        filePath = self.getFilePathForUrl(url, isTemporary: false)
+        self.deleteFileAtPath(filePath)
+    }
+    
     func save(data: NSData, withUrl url: String, isTemporary: Bool = true) -> String {
         var directoryPath: String!
         

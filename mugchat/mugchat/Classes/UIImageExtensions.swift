@@ -123,5 +123,9 @@ extension UIImage {
         
         return image
     }
+    
+    class func emptyFlipImage() -> UIImage {
+        return UIImage.imageWithColor(UIColor.avacado())
+    }
 }
 

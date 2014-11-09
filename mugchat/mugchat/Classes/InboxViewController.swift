@@ -50,7 +50,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
-        self.navigationController?.pushViewController(ComposeViewController(), animated: true)
+//        self.navigationController?.pushViewController(ComposeViewController(), animated: true)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {

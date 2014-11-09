@@ -20,7 +20,7 @@ public class MugService: MugchatService {
     
     private let UPLOAD_BACKGROUND_RESPONSE_URL = "background_url"
     private let UPLOAD_SOUND_RESPONSE_URL = "sound_url"
-
+    
     let CREATE_MUG: String = "/user/{{user_id}}/mugs"
     let UPLOAD_BACKGROUND: String = "/background"
     let UPLOAD_SOUND: String = "/sound"
@@ -40,18 +40,18 @@ public class MugService: MugchatService {
         var uploadMugBlock: ((String, String) -> Void) = { (backgroundImageUrl, soundUrl) -> () in
             self.uploadNewMug(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, createMugSuccessCallback: createMugSuccessCallback, createMugFailCallBack: createMugFailCallBack)
         }
-    
+        
         var uploadSoundBlock: ((String) -> Void)? = nil
         if (soundPath != nil) {
             uploadSoundBlock = { (backgroundImageUrl) -> () in
                 self.uploadSound(soundPath!, successCallback: { (soundUrl) -> Void in
                     uploadMugBlock(backgroundImageUrl, soundUrl!)
-                }, failCallback: { (mugError) -> Void in
-                    createMugFailCallBack(mugError)
+                    }, failCallback: { (mugError) -> Void in
+                        createMugFailCallBack(mugError)
                 })
             }
         }
-
+        
         if (backgroundImage != nil) {
             self.uploadBackgroundImage(backgroundImage!, successCallback: { (imageUrl) -> Void in
                 let backgroundImageUrl = imageUrl
@@ -62,8 +62,8 @@ public class MugService: MugchatService {
                 } else {
                     uploadMugBlock(backgroundImageUrl!, "")
                 }
-            }) { (mugError) -> Void in
-                createMugFailCallBack(mugError)
+                }) { (mugError) -> Void in
+                    createMugFailCallBack(mugError)
             }
         } else if (uploadSoundBlock != nil) {
             uploadSoundBlock!("")
@@ -72,20 +72,60 @@ public class MugService: MugchatService {
         }
     }
     
-    func createMug(word: String, video: AnyObject, category: String = "", isPrivate: Bool = true, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {
-        // TODO:
+    func createMug(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {
+        var uploadMugBlock: ((String) -> Void) = { (videoURL) -> () in
+            self.uploadNewMug(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, createMugSuccessCallback: createMugSuccessCallback, createMugFailCallBack: createMugFailCallBack)
+        }
+        
+        self.uploadVideo(videoPath, successCallback: { (videoUrl) -> Void in
+            uploadMugBlock(videoUrl!)
+        }) { (mugError) -> Void in
+            createMugFailCallBack(mugError)
+        }
     }
     
     private func uploadBackgroundImage(image: UIImage, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
+        let url = HOST + UPLOAD_BACKGROUND
+        let imageData = UIImageJPEGRepresentation(image, self.IMAGE_COMPRESSION)
+        let fileName = "background_\(NSDate().timeIntervalSince1970).jpg"
+        
+        self.uploadData(imageData, toUrl: url, withFileName: fileName, partName: "background", mimeType: "image/jpeg", successCallback, failCallback)
+    }
+    
+    private func uploadSound(soundPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
+        var error: NSError?
+        let soundData: NSData? = NSData(contentsOfURL: soundPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
+        if (soundData != nil) {
+            let url = HOST + UPLOAD_SOUND
+            let fileName = "sound_\(NSDate().timeIntervalSince1970).m4a"
+            self.uploadData(soundData!, toUrl: url, withFileName: fileName, partName: "sound", mimeType: "audio/mp4a-latm", successCallback: successCallback, failCallback: failCallback)
+        }
+        else {
+            failCallback(MugError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
+        }
+    }
+    
+    private func uploadVideo(videoPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
+        var error: NSError?
+        let soundData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
+        if (soundData != nil) {
+            let url = HOST + UPLOAD_BACKGROUND
+            let fileName = "video_\(NSDate().timeIntervalSince1970).mov"
+            self.uploadData(soundData!, toUrl: url, withFileName: fileName, partName: "background", mimeType: "video/quicktime", successCallback: successCallback, failCallback: failCallback)
+        }
+        else {
+            failCallback(MugError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))
+        }
+    }
+    
+    private func uploadData(data: NSData, toUrl url: String, withFileName fileName: String, partName: String, mimeType: String, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer()
-        let url = HOST + UPLOAD_BACKGROUND
-
+        
         request.POST(url,
             parameters: nil,
             constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                var fileName = "background_\(NSDate().timeIntervalSince1970).jpg"
-                formData.appendPartWithFileData(UIImageJPEGRepresentation(image, self.IMAGE_COMPRESSION), name: "background", fileName: fileName, mimeType: "image/jpeg")
+                formData.appendPartWithFileData(data, name: partName, fileName: fileName, mimeType: mimeType)
             },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 var url = self.parseUploadResponse(responseObject)
@@ -100,40 +140,6 @@ public class MugService: MugchatService {
                 }
             }
         )
-    }
-    
-    private func uploadSound(soundPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
-        var error: NSError?
-
-        let soundData: NSData? = NSData(contentsOfURL: soundPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
-        if (soundData != nil) {
-            let request = AFHTTPRequestOperationManager()
-            request.responseSerializer = AFJSONResponseSerializer()
-            let url = HOST + UPLOAD_SOUND
-            
-            request.POST(url,
-                parameters: nil,
-                constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                    var fileName = "sound_\(NSDate().timeIntervalSince1970).m4a"
-                    formData.appendPartWithFileData(soundData, name: "sound", fileName: fileName, mimeType: "audio/mp4a-latm")
-                },
-                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                    var url = self.parseUploadResponse(responseObject)
-                    successCallback(url)
-                },
-                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                    if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
-                        failCallback(MugError(error: response["error"] as String!, details: nil))
-                    } else {
-                        failCallback(MugError(error: error.localizedDescription, details:nil))
-                    }
-                }
-            )
-        }
-        else {
-            failCallback(MugError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
-        }
     }
     
     private func uploadNewMug(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {

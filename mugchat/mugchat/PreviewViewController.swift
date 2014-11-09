@@ -69,17 +69,14 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     private func mugMessageFromWords(words: [MugText]) -> MugMessage {
         
-        
-        
-        
         println("   ")
         println("   mugMessageFromWords")
         let mugDataSource = MugDataSource()
         var mugs = Array<Mug>()
         for mugText in words {
             
-            var mug = mugDataSource.retrieveMugWithId("\(mugText.mugId)")
-            mugs.append(mug)
+//            var mug = mugDataSource.retrieveMugWithId("\(mugText.mugId)")
+//            mugs.append(mug)
 //            println("       word: \(mugText.text)")
 //            if (mugText.associatedMug != nil) {
 //                println("       has mug associated")

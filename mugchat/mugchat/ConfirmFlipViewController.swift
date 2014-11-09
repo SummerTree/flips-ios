@@ -19,25 +19,29 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     private var confirmFlipView: ConfirmFlipView!
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
-    private var containsAudio = false
-    private var containsVideo = false
     
-    convenience init(flipWord: String!, flipPicture: UIImage!, flipAudio: NSURL?) {
+    private var flipImage: UIImage?
+    private var flipAudioURL: NSURL?
+    private var flipVideoURL: NSURL?
+    
+    convenience init(flipWord: String!, flipPicture: UIImage?, flipAudio: NSURL?) {
         self.init()
+
+        self.flipImage = flipPicture
+        self.flipAudioURL = flipAudio
         
-        if (flipAudio != nil) {
-            self.containsAudio = true
+        var image = flipPicture
+        if (image == nil) {
+            image = UIImage.imageWithColor(UIColor.avacado())
         }
         
-        self.confirmFlipView = ConfirmFlipView(word: flipWord, background: flipPicture, audio: flipAudio)
+        self.confirmFlipView = ConfirmFlipView(word: flipWord, background: image, audio: flipAudio)
     }
     
     convenience init(flipWord: String!, flipVideo: NSURL?) {
         self.init()
-        
-        if (flipVideo != nil) {
-            self.containsVideo = true
-        }
+
+        self.flipVideoURL = flipVideo
         
         self.confirmFlipView = ConfirmFlipView(word: flipWord, video: flipVideo)
     }
@@ -81,11 +85,11 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
     func startPreview() {
         self.isPlaying = true
-        if (self.containsAudio) {
+        if (self.flipAudioURL != nil) {
             self.confirmFlipView.playAudio()
         }
         
-        if (self.containsVideo) {
+        if (self.flipVideoURL != nil) {
             self.confirmFlipView.playVideo()
         }
     }

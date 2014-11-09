@@ -14,13 +14,14 @@ import UIKit
 import AVFoundation
 import AssetsLibrary
 
-class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MugsTextsViewDelegate, MyMugsViewDelegate {
+class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyMugsViewDelegate {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
-    private let MUGWORD_LIST_HEIGHT: CGFloat = 40.0
+    
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
+    private let MUGWORD_LIST_HEIGHT: CGFloat = 40.0
     private let MUGWORD_LIST_SEPARATOR_HEIGHT: CGFloat = 10.0
     
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
@@ -28,12 +29,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     var delegate: ComposeViewDelegate?
     
     private var mugTexts : [MugText] = [MugText]()
-    private var userStep = 0 // which word is working on
+    private var selectedWordIndex = 0
     
     private var mugContainerView: UIView!
     private var mugImageView: UIImageView!
     private var mugWordLabel: UILabel!
-    private var centeredMugsView: MugsTextsView!
+    private var centeredMugsView: FlipMessageWordListView!
     private var mugTextsContainerSeparator : UIView!
     private var mugsOrCameraButtonsView: UIView!
     
@@ -51,9 +52,12 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     
     private var isAlreadyUsingAPicture = false
     
+    
+    // MARK: - Initialization
+    
     init(words: [String]) {
         super.init()
-        createMugs(words)
+        createMugsTexts(words)
         addSubviews()
     }
     
@@ -63,7 +67,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         // just for debugging, since we don't have integration between the views
         let stringTest = "I love San Francisco!" as String
         var texts : [String] = MugStringsUtil.splitMugString(stringTest);
-        createMugs(texts)
+        createMugsTexts(texts)
         
         addSubviews()
     }
@@ -79,40 +83,60 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         }
         
         // Updates the mugWord font size based on the camera's view frame size
-        self.mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1*cameraPreview.getFontSizeMultiplierForDevice())
-    }
-
-    func selectWordFromCurrentStep() {
-        if (self.mugTexts.count > self.userStep) {
-            self.centeredMugsView.selectText(self.mugTexts[self.userStep])
-        }
+        self.mugWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1 * cameraPreview.getFontSizeMultiplierForDevice())
+        
+        self.slideToCameraView()
     }
     
-    func createMugs(texts: [String]) {
+    private func createMugsTexts(texts: [String]) {
         var i: Int
         for i=0; i < texts.count; i++ {
             var text = texts[i]
-            var mugText: MugText = MugText(mugId: i, text: text, state: MugState.NewWord)
+            var mugText: MugText = MugText(position: i, text: text, state: FlipState.NewWord)
             self.mugTexts.append(mugText)
         }
     }
     
-    func changeMugWordState(word: String!, state: MugState!) {
-        for mugText in self.mugTexts {
-            if (mugText.text == word) {
-                mugText.state = state
-                self.centeredMugsView.setNeedsLayout()
-                self.centeredMugsView.layoutIfNeeded()
-                break
-            }
+    
+    // MARK: - Words Navigation Handler
+
+    func setMugForCurrentWord(mug: Mug) {
+        let mugText = self.mugTexts[self.selectedWordIndex]
+        mugText.associatedMug = mug
+    }
+    
+    func selectWordFromCurrentStep() {
+        if (self.mugTexts.count > self.selectedWordIndex) {
+            self.centeredMugsView.selectText(self.mugTexts[self.selectedWordIndex])
         }
     }
     
+//    func changeMugWordState(word: String!, state: FlipState!) {
+//        for mugText in self.mugTexts {
+//            if (mugText.text == word) {
+//                mugText.state = state
+//                self.centeredMugsView.setNeedsLayout()
+//                self.centeredMugsView.layoutIfNeeded()
+//                break
+//            }
+//        }
+//    }
+    
     func navigateToNextWordIfNeeded() {
-        if ( (userStep + 1) < mugTexts.count) {
-            userStep++
-            self.centeredMugsView.selectText(self.mugTexts[userStep])
+        var allMugsCreated = true
+        var index = 0
+        for mugText in mugTexts {
+            if (mugText.associatedMug == nil) {
+                allMugsCreated = false
+                selectedWordIndex = index
+                self.centeredMugsView.selectText(mugText)
+                break
+            }
+            index++
         }
+
+//        delegate?.composeViewDidCreatedAllMugs(self)
+        // TODO: Open the preview
     }
     
     private func addSubviews() {
@@ -135,9 +159,10 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         mugWordLabel.text = mugTexts[0].text
         mugContainerView.addSubview(mugWordLabel)
         
-        centeredMugsView = MugsTextsView(mugTexts: self.mugTexts)
-        centeredMugsView.delegate = self
-        self.addSubview(centeredMugsView)
+//        centeredMugsView = FlipWordScrollView()
+//        centeredMugsView.delegate = self
+//        cente
+//        self.addSubview(centeredMugsView)
         
         mugTextsContainerSeparator = UIView()
         self.addSubview(mugTextsContainerSeparator)
@@ -435,23 +460,24 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func mugsTextsViewDidSelectMugText(mugText: MugText!) {
         var index = 0
         for storedMugText in self.mugTexts {
-            if (mugText.mugId == storedMugText.mugId) {
-                self.userStep = index
+            if (mugText.position == storedMugText.position) {
+                self.selectedWordIndex = index
                 break;
             }
             index++
         }
         
-        mugWordLabel.text = self.mugTexts[self.userStep].text
+        mugWordLabel.text = self.mugTexts[self.selectedWordIndex].text
         
-        var currentMugText: MugText = self.mugTexts[userStep]
+        var currentMugText: MugText = self.mugTexts[selectedWordIndex]
         if (currentMugText.associatedMug != nil) {
-            self.mugImageView.setImageWithURL(NSURL(string: currentMugText.associatedMug!.backgroundURL))
+            let imagePath = currentMugText.associatedMug.backgroundContentLocalPath()
+            self.mugImageView.image = UIImage(contentsOfFile: imagePath)
         } else {
             self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
         }
         
-        self.myMugsView.setMugText(self.mugTexts[self.userStep])
+        self.myMugsView.setMugText(self.mugTexts[self.selectedWordIndex])
     }
     
     func mugsTextsViewDidSplitMugText(mugTexts: [MugText]) {
@@ -465,17 +491,18 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         slideToCameraView()
     }
     
-    func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!) {
-        if (self.mugTexts[userStep].associatedMug?.mugID == mug.mugID) { //same mug (so user is deselecting it)
-            self.mugTexts[userStep].associatedMug = nil
+    func myMugsView(myMugsView: MyMugsView!, didChangeMugSelection mug: Mug?) {
+        if (mug == nil) { // User deselected current mug
+            self.mugTexts[selectedWordIndex].associatedMug = nil
             self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
         } else {
-            self.mugTexts[userStep].associatedMug = mug
-            self.mugImageView.setImageWithURL(NSURL(string: mug.backgroundURL))
+            self.mugTexts[selectedWordIndex].associatedMug = mug
+            let mugImagePath = mug!.backgroundContentLocalPath()
+            self.mugImageView.image = UIImage(contentsOfFile: mugImagePath)
         }
     }
 
-    func myMugsViewMugsForSelectedWord(myMugsView: MyMugsView!, hasMugs: Bool!) {
+    func myMugsView(myMugsView: MyMugsView!, mugsForSelectedWord hasMugs: Bool!) {
         if (hasMugs!) {
             self.slideToMyMugsView()
         } else {
@@ -568,7 +595,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     }
     
     func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
-        println("starting recording microphone")
+        self.setPicture(UIImage.imageWithColor(UIColor.avacado()))
     }
     
     func hideCameraShowPicture() {
@@ -613,4 +640,12 @@ protocol ComposeViewDelegate {
     func composeViewDidHoldShutterButton(composeView: ComposeView!, withCamera cameraView: CameraView!)
     func composeViewDidFinishRecordingView(composeView: ComposeView!, withURL videoURL: NSURL!)
     func composeViewMakeConstraintToNavigationBarBottom(containerView: UIView!)
+    
+    func composeViewDidCreatedAllMugs(composeView: ComposeView)
+}
+
+protocol ComposeViewDataSource {
+    
+    func composeView(composeView: ComposeView, flipWordAtIndex index: Int) -> MugText
+
 }
