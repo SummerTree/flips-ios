@@ -39,21 +39,7 @@ extension UIImageView {
     }
     
     class func imageViewWithColor(color: UIColor) -> UIImageView {
-        return UIImageView(image: imageWithColor(color))
-    }
-    
-    class func imageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
-        UIGraphicsBeginImageContext(rect.size)
-        let context = UIGraphicsGetCurrentContext()
-        
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
-        
-        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
+        return UIImageView(image: UIImage.imageWithColor(color))
     }
     
     convenience init(frame: CGRect, borderWidth : CGFloat) {

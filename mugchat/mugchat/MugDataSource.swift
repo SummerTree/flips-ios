@@ -78,12 +78,25 @@ class MugDataSource : BaseDataSource {
         mugService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (mug) -> Void in
             var userDataSource = UserDataSource()
             mug.owner = User.loggedUser()
+            mug.setBackgroundContentType(BackgroundContentType.Image)
             createMugSuccess(mug)
         }) { (mugError) -> Void in
             var message = mugError?.error as String!
             createMugFail(message)
         }
     }
+    
+    func createMugWithWord(word: String, backgroundVideo: NSData, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+        // TODO
+    }
+    
+    func createEmptyMugWithWord(word: String) -> Mug {
+        var mug: Mug! = Mug.MR_createEntity() as Mug
+        mug.word = word
+        
+        return mug
+    }
+
     
     func retrieveMugWithId(id: String) -> Mug {
         var mug = self.getMugById(id)

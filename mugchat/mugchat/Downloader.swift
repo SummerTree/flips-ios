@@ -104,7 +104,7 @@ public class Downloader : NSObject {
 
     func downloadDataForMug(mug: Mug, isTemporary: Bool = true) {
         if (self.isValidURL(mug.backgroundURL) && (!downloadInProgressURLs.containsObject(mug.backgroundURL))) {
-            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.backgroundURL)) {
+            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.backgroundURL).hasCache) {
                 self.downloadDataAndCacheForUrl(mug.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
                     mug.setBackgroundContentType(backgroundContentType)
                     self.sendDownloadFinishedBroadcastForMug(mug, error: error)
@@ -115,7 +115,7 @@ public class Downloader : NSObject {
         }
         
         if (self.isValidURL(mug.soundURL) && (!downloadInProgressURLs.containsObject(mug.soundURL))) {
-            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.soundURL)) {
+            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.soundURL).hasCache) {
                 self.downloadDataAndCacheForUrl(mug.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
                     self.sendDownloadFinishedBroadcastForMug(mug, error: error)
                 }, isTemporary: isTemporary)

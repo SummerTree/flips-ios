@@ -10,21 +10,16 @@
 // the license agreement.
 //
 
+#import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #import "MugMessage.h"
-#import "Mug.h"
-#import "Room.h"
-#import "User.h"
 
 
-@implementation MugMessage
+@interface VideoComposer : NSObject
 
-@dynamic createdAt;
-@dynamic notRead;
-@dynamic receivedAt;
-@dynamic removed;
-@dynamic mugMessageID;
-@dynamic from;
-@dynamic mugs;
-@dynamic room;
+- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
+- (AVAsset *)videoFromMug:(Mug *)mug;
+
+- (void)testCreatingFourWordsVideo;
 
 @end

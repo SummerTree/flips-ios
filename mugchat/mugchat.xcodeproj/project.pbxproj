@@ -79,6 +79,7 @@
 		7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A356E4419F95546002D923B /* ContactDataSource.swift */; };
 		7A3733C919FADDE800D1E87B /* MugService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* MugService.swift */; };
 		7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */; };
+		7A41CFA11A051EE100746423 /* MugMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A41CFA01A051EE100746423 /* MugMessage.m */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
 		7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */; };
@@ -90,6 +91,7 @@
 		7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E819DC2CF0005E4343 /* SignUpView.swift */; };
 		7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
 		7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
+		7A9CAB701A04223300791C46 /* ImageVideoCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */; };
 		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
 		7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
 		7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */; };
@@ -122,7 +124,6 @@
 		7AFB719E1A000537002695AC /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719D1A000537002695AC /* Device.m */; };
 		7AFB71A11A00053C002695AC /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71A01A00053C002695AC /* Room.m */; };
 		7AFB71A41A00053C002695AC /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71A31A00053C002695AC /* User.m */; };
-		7AFB71AA1A00053C002695AC /* MugMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71A91A00053C002695AC /* MugMessage.m */; };
 		7AFB71AD1A00053D002695AC /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71AC1A00053D002695AC /* Contact.m */; };
 		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
@@ -139,7 +140,8 @@
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
 		A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
-		F249C11D1A0C2A9C004978BC /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F249C11C1A0C2A9C004978BC /* CachingService.swift */; };
+		F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F285B26C1A102190002DEEC2 /* CachingService.swift */; };
+		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -222,6 +224,8 @@
 		7A356E4419F95546002D923B /* ContactDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDataSource.swift; sourceTree = "<group>"; };
 		7A3733C819FADDE800D1E87B /* MugService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugService.swift; sourceTree = "<group>"; };
 		7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugMessageExtension.swift; sourceTree = "<group>"; };
+		7A41CF9F1A051EE100746423 /* MugMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MugMessage.h; path = "Classes/auto-generated/MugMessage.h"; sourceTree = "<group>"; };
+		7A41CFA01A051EE100746423 /* MugMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MugMessage.m; path = "Classes/auto-generated/MugMessage.m"; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
 		7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopViewCell.swift; path = Classes/MessagesTopViewCell.swift; sourceTree = "<group>"; };
@@ -234,6 +238,8 @@
 		7A9619E819DC2CF0005E4343 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpView.swift; path = Classes/SignUpView.swift; sourceTree = "<group>"; };
 		7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewDelegate.swift; sourceTree = "<group>"; };
 		7A9619EF19DC3F01005E4343 /* UserFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormView.swift; path = Classes/UserFormView.swift; sourceTree = "<group>"; };
+		7A9CAB6E1A04223300791C46 /* ImageVideoCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageVideoCreator.h; sourceTree = "<group>"; };
+		7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageVideoCreator.m; sourceTree = "<group>"; };
 		7AB1683719E3196E004E2162 /* TakePictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewController.swift; path = Classes/TakePictureViewController.swift; sourceTree = "<group>"; };
 		7AB1683A19E319DB004E2162 /* TakePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureView.swift; path = Classes/TakePictureView.swift; sourceTree = "<group>"; };
 		7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewDelegate.swift; path = Classes/TakePictureViewDelegate.swift; sourceTree = "<group>"; };
@@ -271,8 +277,6 @@
 		7AFB71A01A00053C002695AC /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Room.m; path = "Classes/auto-generated/Room.m"; sourceTree = "<group>"; };
 		7AFB71A21A00053C002695AC /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = "Classes/auto-generated/User.h"; sourceTree = "<group>"; };
 		7AFB71A31A00053C002695AC /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = "Classes/auto-generated/User.m"; sourceTree = "<group>"; };
-		7AFB71A81A00053C002695AC /* MugMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MugMessage.h; path = "Classes/auto-generated/MugMessage.h"; sourceTree = "<group>"; };
-		7AFB71A91A00053C002695AC /* MugMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MugMessage.m; path = "Classes/auto-generated/MugMessage.m"; sourceTree = "<group>"; };
 		7AFB71AB1A00053D002695AC /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contact.h; path = "Classes/auto-generated/Contact.h"; sourceTree = "<group>"; };
 		7AFB71AC1A00053D002695AC /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contact.m; path = "Classes/auto-generated/Contact.m"; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -292,7 +296,9 @@
 		A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		F249C11C1A0C2A9C004978BC /* CachingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
+		F285B26C1A102190002DEEC2 /* CachingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
+		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
+		F2BF59801A0166CF00C44CC6 /* VideoComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoComposer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,6 +326,7 @@
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F2BF597E1A01632500C44CC6 /* VideoComposer */,
 				7AFB719919FFBF08002695AC /* Downloader */,
 				7AE2B47519FEC794002E4F66 /* Cache Handler */,
 				7AF82E2719F07CF700D0393F /* Chat Handler */,
@@ -782,12 +789,12 @@
 		7A2A7E1019EDBF8800033164 /* auto-generated */ = {
 			isa = PBXGroup;
 			children = (
-				7ACBBECD1A00290B00A7109C /* Mug.h */,
-				7ACBBECE1A00290B00A7109C /* Mug.m */,
 				7AFB71AB1A00053D002695AC /* Contact.h */,
 				7AFB71AC1A00053D002695AC /* Contact.m */,
-				7AFB71A81A00053C002695AC /* MugMessage.h */,
-				7AFB71A91A00053C002695AC /* MugMessage.m */,
+				7A41CF9F1A051EE100746423 /* MugMessage.h */,
+				7A41CFA01A051EE100746423 /* MugMessage.m */,
+				7ACBBECD1A00290B00A7109C /* Mug.h */,
+				7ACBBECE1A00290B00A7109C /* Mug.m */,
 				7AFB71A21A00053C002695AC /* User.h */,
 				7AFB71A31A00053C002695AC /* User.m */,
 				7AFB719F1A00053C002695AC /* Room.h */,
@@ -918,8 +925,8 @@
 		7AE2B47519FEC794002E4F66 /* Cache Handler */ = {
 			isa = PBXGroup;
 			children = (
+				F285B26C1A102190002DEEC2 /* CachingService.swift */,
 				7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */,
-				F249C11C1A0C2A9C004978BC /* CachingService.swift */,
 			);
 			name = "Cache Handler";
 			sourceTree = "<group>";
@@ -956,6 +963,17 @@
 				C3E055BF9E4B434289F06FD3 /* libPods.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2BF597E1A01632500C44CC6 /* VideoComposer */ = {
+			isa = PBXGroup;
+			children = (
+				F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */,
+				F2BF59801A0166CF00C44CC6 /* VideoComposer.m */,
+				7A9CAB6E1A04223300791C46 /* ImageVideoCreator.h */,
+				7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */,
+			);
+			name = VideoComposer;
 			sourceTree = "<group>";
 		};
 		F7C1F4A6A883BC105DD3A82D /* Pods */ = {
@@ -1149,11 +1167,11 @@
 				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
+				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
-				F249C11D1A0C2A9C004978BC /* CachingService.swift in Sources */,
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
@@ -1180,18 +1198,20 @@
 				7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
 				7A12B8D219F5C6E900DE955E /* MugsTextsView.swift in Sources */,
+				7A9CAB701A04223300791C46 /* ImageVideoCreator.m in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
+				7A41CFA11A051EE100746423 /* MugMessage.m in Sources */,
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
+				F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */,
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
 				5784778F19DDB9530063A543 /* DeviceService.swift in Sources */,
 				7A2ED6AF19FA7AA6000C6B86 /* RoomExtension.swift in Sources */,
-				7AFB71AA1A00053C002695AC /* MugMessage.m in Sources */,
 				5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */,
 				7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */,
 			);
