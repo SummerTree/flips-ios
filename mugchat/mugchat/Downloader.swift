@@ -95,8 +95,6 @@ public class Downloader : NSObject {
                 println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
                 completion(success: false);
             } else {
-                println("response: \(httpResponse)")
-                println("file downloaded to: \(localURL.relativePath)")
                 completion(success: true);
             }
         }
