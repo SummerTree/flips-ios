@@ -38,7 +38,7 @@ public class CachingService: NSObject {
         var cachedURL : NSURL?
 
         // Check if there is an already cached copy
-        if (self.cacheHandler.hasCachedFileForUrl(url.relativePath!)) {
+        if (self.cacheHandler.hasCachedFileForUrl(url.relativePath!).hasCache) {
             cachedURL = NSURL.URLWithString(self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
 
             if (fileManager.fileExistsAtPath(cachedURL!.relativePath!)) {
