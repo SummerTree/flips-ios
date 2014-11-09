@@ -140,6 +140,7 @@
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
 		A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
+		F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F285B26C1A102190002DEEC2 /* CachingService.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
 /* End PBXBuildFile section */
 
@@ -295,6 +296,7 @@
 		A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		F285B26C1A102190002DEEC2 /* CachingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
 		F2BF59801A0166CF00C44CC6 /* VideoComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoComposer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -923,6 +925,7 @@
 		7AE2B47519FEC794002E4F66 /* Cache Handler */ = {
 			isa = PBXGroup;
 			children = (
+				F285B26C1A102190002DEEC2 /* CachingService.swift */,
 				7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */,
 			);
 			name = "Cache Handler";
@@ -1164,6 +1167,7 @@
 				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
+				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */,
