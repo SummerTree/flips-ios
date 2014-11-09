@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
+		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
@@ -141,6 +143,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
+		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* MugchatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugchatService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -304,6 +308,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0794A9C01A0A981300DA8CFA /* New Flip */ = {
+			isa = PBXGroup;
+			children = (
+				0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */,
+				0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */,
+			);
+			name = "New Flip";
+			sourceTree = "<group>";
+		};
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -421,6 +434,8 @@
 				705EF07B19F9767800D4CF74 /* Confirm Flip */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
 				704E110D19D0934700D2BB88 /* Login */,
+				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
+				0794A9C01A0A981300DA8CFA /* New Flip */,
 				705B3DDD1A03BC0300E0D3E9 /* Preview */,
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
 				7A0D6CEC19D4961700E39A1B /* Settings */,
@@ -430,7 +445,6 @@
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
 				57A3A6BF19D5E4C00043790E /* Verification */,
 				70B560A019D995D500FE4C34 /* Web View */,
-				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -495,20 +509,20 @@
 		704E111519D0ACAF00D2BB88 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
-				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
 				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
+				7AB946D719DED95900779C73 /* StringExtensions.swift */,
+				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
+				708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */,
+				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
+				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
 				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
-				7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */,
-				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
 				7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */,
 				7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */,
-				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
-				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
-				7AB946D719DED95900779C73 /* StringExtensions.swift */,
 				7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */,
 				70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */,
-				708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */,
+				7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */,
+				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
+				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1010,6 +1024,7 @@
 				5786B2D719EEAE0200021DD3 /* bollywood.mov in Resources */,
 				5786B2DB19EEAE0200021DD3 /* welcome_mugchat.mov in Resources */,
 				5786B2D619EEAE0200021DD3 /* bollywood_thumbnail.jpeg in Resources */,
+				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
 				5786B2D919EEAE0200021DD3 /* movie_thumbnail.png in Resources */,
 				5786B2DA19EEAE0200021DD3 /* wanna_coffee.mov in Resources */,
 				70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */,
@@ -1098,6 +1113,7 @@
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
+				0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */,
 				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
