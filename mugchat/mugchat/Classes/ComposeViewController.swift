@@ -334,16 +334,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     }
     
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSplitFlipWord flipWord: MugText!) {
-        println("didSplitFlipWord: \(flipWord.text)")
-        
         var splittedTextWords: [String] = MugStringsUtil.splitMugString(flipWord.text);
-        
-        /////
-        println("BEFORE")
-        for f in flipWords {
-            println("   \(f.position): \(f.text)")
-        }
-        /////
         
         var newFlipWords = Array<MugText>()
         var flipWordsToAdd = Array<MugText>()
@@ -365,17 +356,9 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             }
             flipWords = newFlipWords
             
-            /////
-            println("AFTER")
-            for f in flipWords {
-                println("   \(f.position): \(f.text)")
-            }
-            println("   ")
-            /////
-            
             self.reloadMyMugs()
             self.updateFlipWordsState()
-            //            self.flipMessageWordListView.reloadWords(animated: false) // Word state can change
+            
             self.composeBottomViewContainer.reloadMyMugs() // Refresh selected state
             
             if (highlightedWordIndex == flipWord.position) {
@@ -383,102 +366,9 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             }
             
             self.flipMessageWordListView.replaceFlipWord(flipWord, forFlipWords: flipWordsToAdd)
-            
         }
-        //        var mugTextView: MugTextView
-        //        var lastMugText: MugTextView!
-        //        var splitMugTextView: MugTextView!
-        
-        //        var foundMug: Bool = false
-        //        var contentOffset: CGFloat = 0.0
-        //        var scrollViewWidth: CGFloat = self.scrollView.contentSize.width
-        //        var textViewY = (CGRectGetHeight(self.frame) / 2) - (MUG_TEXT_HEIGHT / 2)
-        
-        //        var index = -1
-        //        var mugTextViewsUpdated = [MugTextView]()
-        //
-        //        UIView.animateWithDuration(1.0, delay: 0.0, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: { () -> Void in
-        //
-        //            for mugTextView in self.mugTextViews {
-        //                index++
-        //                mugTextViewsUpdated.append(mugTextView)
-        //
-        //                if (mugTextView.mugText.text == text) {
-        //                    foundMug = true
-        //
-        //                    var oldMugTextViewWidth : CGFloat = mugTextView.frame.width
-        //
-        //                    //Update the original MugText with the first string of the splitted text
-        //                    mugTextView.mugText.text = splittedTextWords[0]
-        //                    mugTextView.textLabel.text = splittedTextWords[0]
-        //                    self.mugTexts[index].text = splittedTextWords[0]
-        //
-        //                    //update mugTextView size to fit the smaller text
-        //                    var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
-        //                    var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-        //                    mugTextView.frame = CGRectMake(mugTextView.frame.origin.x, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
-        //
-        //                    scrollViewWidth = scrollViewWidth - oldMugTextViewWidth + mugTextViewWidth
-        //
-        //                    splitMugTextView = mugTextView
-        //                    lastMugText = mugTextView
-        //
-        //                    contentOffset = lastMugText.frame.origin.x + lastMugText.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-        //
-        //                    var newMugTextView : MugTextView
-        //                    for var i=1; i < splittedTextWords.count; i++ { //creating and positioning new MugTextViews
-        //                        index++
-        //
-        //                        var mugText = MugText(position: self.mugTexts.count, text: splittedTextWords[i], state: FlipState.NewWord)
-        //                        self.mugTexts.insert(mugText, atIndex: index)
-        //
-        //                        newMugTextView = MugTextView(mugText: mugText)
-        //                        self.addGestureRecognizers(newMugTextView)
-        //                        self.scrollView.addSubview(newMugTextView)
-        //
-        //                        var requiredWidth = newMugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
-        //                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-        //                        newMugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
-        //                        mugTextViewsUpdated.append(newMugTextView)
-        //
-        //                        lastMugText = newMugTextView
-        //                        contentOffset += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-        //                        scrollViewWidth += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-        //                    }
-        //
-        //                    self.scrollView.contentSize = CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)
-        //                } else {
-        //                    if (foundMug) { //texts after the split one must be moved to the right
-        //                        var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
-        //                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-        //
-        //                        mugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
-        //
-        //                        contentOffset += mugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-        //                    }
-        //                }
-        //            }
-        //
-        //            }, completion: { (value: Bool) in
-        //                //Inserting new mugTextViews in self.mugTextViews
-        //                for var i=0; i < mugTextViewsUpdated.count; i++ {
-        //                    var mugTextView = mugTextViewsUpdated[i]
-        //                    if (i < self.mugTextViews.count) {
-        //                        if (self.mugTextViews[i].mugText.position != mugTextView.mugText.position) {
-        //                            self.mugTextViews.insert(mugTextView, atIndex: i)
-        //                        }
-        //                    } else { //new mugText added in the end
-        //                        self.mugTextViews.append(mugTextView)
-        //                    }
-        //                }
-        //
-        //                self.delegate?.mugsTextsViewDidSplitMugText(self.mugTexts)
-        //
-        //                self.centerScrollViewAtView(splitMugTextView)
-        //                self.delegate?.mugsTextsViewDidSelectMugText(splitMugTextView.mugText)
-        //                ()})
-        
     }
+    
     
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
@@ -530,6 +420,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         } else {
             composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
         }
+        composeBottomViewContainer.reloadMyMugs()
     }
     
     func composeBottomViewContainerWillOpenCameraControls(composeBottomViewContainer: ComposeBottomViewContainer) {
@@ -554,7 +445,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     }
     
     func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlip flip: Mug) {
-        let flipWord = flipWords[highlightedWordIndex]
+        let flipWord = self.flipWords[self.highlightedWordIndex]
         
         // Sometimes the saved flip has the word in a different case. So, we need to change it without override the saved one.
         flip.word = flipWord.text
@@ -572,6 +463,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             }
         }
         self.updateFlipWordsState()
+        
         self.flipMessageWordListView.reloadWords(animated: false) // Word state can change
         self.composeBottomViewContainer.reloadMyMugs() // Refresh selected state
     }

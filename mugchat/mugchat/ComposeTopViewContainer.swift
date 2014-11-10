@@ -89,41 +89,47 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     // MARK: - Container State Setter Methods
     
     func showCameraWithWord(word: String) {
-        cameraPreview.registerObservers()
-        
-        UIView.animateWithDuration(ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
-            self.cameraPreview.alpha = 1.0
-            self.cameraWordLabel.alpha = 1.0
-            self.cameraWordLabel.text = word
-            self.cameraWordLabel.sizeToFit()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.cameraPreview.registerObservers()
             
-            self.flipViewer.alpha = 0.0
-            self.updateConstraintsIfNeeded()
+            UIView.animateWithDuration(self.ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
+                self.cameraPreview.alpha = 1.0
+                self.cameraWordLabel.alpha = 1.0
+                self.cameraWordLabel.text = word
+                self.cameraWordLabel.sizeToFit()
+                
+                self.flipViewer.alpha = 0.0
+                self.updateConstraintsIfNeeded()
+            })
         })
     }
     
     func showFlip(flip: Mug) {
-        var image: UIImage!
-        let filePath = flip.backgroundContentLocalPath()
-        if (flip.isBackgroundContentTypeVideo()) {
-            image = VideoHelper.generateThumbImageForFile(filePath)
-        } else {
-            image = UIImage(contentsOfFile: filePath)
-        }
-        self.showImage(image, andText: flip.word)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            var image: UIImage!
+            let filePath = flip.backgroundContentLocalPath()
+            if (flip.isBackgroundContentTypeVideo()) {
+                image = VideoHelper.generateThumbImageForFile(filePath)
+            } else {
+                image = UIImage(contentsOfFile: filePath)
+            }
+            self.showImage(image, andText: flip.word)
+        })
     }
     
     func showImage(image: UIImage, andText text: String) {
-        cameraPreview.removeObservers()
-        
-        UIView.animateWithDuration(ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
-            self.cameraPreview.alpha = 0.0
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.cameraPreview.removeObservers()
             
-            self.cameraWordLabel.alpha = 0.0
-            
-            self.flipViewer.alpha = 1.0
-            self.flipViewer.setWord(text)
-            self.flipViewer.setImage(image)
+            UIView.animateWithDuration(self.ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
+                self.cameraPreview.alpha = 0.0
+                
+                self.cameraWordLabel.alpha = 0.0
+                
+                self.flipViewer.alpha = 1.0
+                self.flipViewer.setWord(text)
+                self.flipViewer.setImage(image)
+            })
         })
     }
     
