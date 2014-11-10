@@ -253,8 +253,6 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
                 make.top.equalTo()(self)
                 make.height.equalTo()(self)
             })
-            
-            self.layoutIfNeeded()
         })
     }
     

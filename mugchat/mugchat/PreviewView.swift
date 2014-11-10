@@ -54,7 +54,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     func showVideoCreationError() {
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
         
-        var alertView = UIAlertView(title: nil,
+        var alertView = UIAlertView(title: "",
             message: NSLocalizedString("Preview couldn't be created. Please try again later.", comment: "Preview couldn't be created. Please try again later."),
             delegate: nil,
             cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
@@ -65,13 +65,20 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
         
         self.flipVideoURL = videoURL
-        self.addSubviews()
-        self.makeConstraints()
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.moviePlayer.contentURL = self.flipVideoURL
+            self.moviePlayer.prepareToPlay()
+        })
+        
+//        self.addSubviews()
+//        self.makeConstraints()
         
         let oneSecond = 1 * Double(NSEC_PER_SEC)
         let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
         dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-            self.playOrPausePreview()
+//            self.addMoviePlayer()
+//            self.playOrPausePreview()
         }
     }
     
@@ -112,12 +119,13 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         
         self.moviePlayer = MPMoviePlayerController(contentURL: self.flipVideoURL)
         self.moviePlayer.controlStyle = MPMovieControlStyle.None
-        self.moviePlayer.prepareToPlay()
         self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
-        self.moviePlayer.shouldAutoplay = false
+        self.moviePlayer.shouldAutoplay = true
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
         flipContainerView.addSubview(self.moviePlayer.view)
+        
+        self.layoutIfNeeded()
     }
     
     func makeConstraints() {

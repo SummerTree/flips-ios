@@ -132,22 +132,22 @@ class UserDataSource : BaseDataSource {
             // ONLY FOR TESTS
             var contacts = self.getMyUserContacts()
             if (contacts.count == 0) {
-                var mug = Mug.createEntity() as Mug
-                mug.mugID = "2"
-                mug.word = "I"
-                mug.backgroundURL = "http://theburnedhand.files.wordpress.com/2012/06/you.png"
-                mug.setBackgroundContentType(BackgroundContentType.Image)
-                mug.owner = User.loggedUser()
-                mug.isPrivate = true
-
-                var mug2 = Mug.createEntity() as Mug
-                mug2.mugID = "3"
-                mug2.word = "Love"
-                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
-                mug2.setBackgroundContentType(BackgroundContentType.Image)
-                mug2.soundURL = "audio.m4a"
-                mug2.owner = User.loggedUser()
-                mug2.isPrivate = true
+//                var mug = Mug.createEntity() as Mug
+//                mug.mugID = "2"
+//                mug.word = "I"
+//                mug.backgroundURL = "http://theburnedhand.files.wordpress.com/2012/06/you.png"
+//                mug.setBackgroundContentType(BackgroundContentType.Image)
+//                mug.owner = User.loggedUser()
+//                mug.isPrivate = true
+//
+//                var mug2 = Mug.createEntity() as Mug
+//                mug2.mugID = "3"
+//                mug2.word = "Love"
+//                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
+//                mug2.setBackgroundContentType(BackgroundContentType.Image)
+//                mug2.soundURL = "audio.m4a"
+//                mug2.owner = User.loggedUser()
+//                mug2.isPrivate = true
 
 //                var mug21 = Mug.createEntity() as Mug
 //                mug21.mugID = "30"

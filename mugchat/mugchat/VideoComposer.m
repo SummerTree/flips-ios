@@ -157,7 +157,11 @@
     }
 
     NSURL *outputFolder = [self outputFolderPath];
-    __block NSURL *videoUrl = [outputFolder URLByAppendingPathComponent:@"generated-mug-message.mov"]; // Should get unique ID of mug message to use as filename
+    __block NSURL *videoUrl = [outputFolder URLByAppendingPathComponent:@"generated-mug-message.mov"]; // TODO: Should get unique ID of mug message to use as filename
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:videoUrl error:nil];
+    
 
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
     exportSession.outputURL = videoUrl;
@@ -220,7 +224,7 @@
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
-    NSURL *outputFolder = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSURL *outputFolder = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
     outputFolder = [outputFolder URLByAppendingPathComponent:@"VideoComposerOutput"];
 
     if (![fileManager fileExistsAtPath:[outputFolder relativePath] isDirectory:nil]) {
