@@ -10,8 +10,9 @@
 // the license agreement.
 //
 
+@objc
 protocol UserFormViewDelegate {
-    
+
     func userFormView(userFormView: UserFormView, didValidateEmailWithSuccess success: Bool)
  
     func userFormView(userFormView: UserFormView, didValidatePasswordWithSuccess success: Bool)
@@ -19,4 +20,6 @@ protocol UserFormViewDelegate {
     func userFormView(userFormView: UserFormView, didValidateBirthdayWithSuccess success: Bool)
     
     func userFormView(userFormView: UserFormView, didValidateAllFieldsWithSuccess success: Bool)
+    
+    optional func userFormViewDidUpdateField(userFormView: UserFormView)
 }

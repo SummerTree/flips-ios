@@ -20,6 +20,10 @@ extension UIButton {
         return UIButton(frame: CGRectMake(0, 0, A2_AVATAR_SIZE, A2_AVATAR_SIZE), borderWidth: A2_BORDER_WIDTH, image: image)
     }
     
+    class func avatarA2WithoutBorder(image: UIImage) -> UIButton {
+        return UIButton(frame: CGRectMake(0, 0, A2_AVATAR_SIZE, A2_AVATAR_SIZE), borderWidth: 0.0, image: image)
+    }
+    
     class func avatarA3(image: UIImage) -> UIButton {
         return UIButton(frame: CGRectMake(0, 0, A3_AVATAR_SIZE, A3_AVATAR_SIZE), borderWidth: A3_BORDER_WIDTH, image: image)
     }

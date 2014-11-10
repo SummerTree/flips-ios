@@ -53,12 +53,9 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         }
     }
     
-    func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
-        AuthenticationHelper.sharedInstance.logout()
-        
-        var navigationController: UINavigationController = self.presentingViewController as UINavigationController
-        navigationController.popToRootViewControllerAnimated(true)
-        self.dismissViewControllerAnimated(true, completion:nil)
+    func settingsViewDidTapChangeProfile(settingsView: SettingsView) {
+        var updateUserProfileViewController = UpdateUserProfileViewController()
+        self.navigationController?.pushViewController(updateUserProfileViewController, animated: true)
     }
     
     func settingsViewDidTapAbout(settingsView: SettingsView) {
@@ -66,29 +63,34 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
         self.navigationController?.pushViewController(aboutViewController, animated: true)
     }
     
-    func settingsViewDidTapChangeProfile(settingsView: SettingsView) {
-        println("settingsViewDidTapChangeProfile")
-    }
-    
-    func settingsViewDidTapImportContacts(settingsView: SettingsView) {
-        println("settingsViewDidTapImportContacts")
-    }
-    
-    func settingsViewDidTapPhoneNumber(settingsView: SettingsView) {
-        println("settingsViewDidTapPhoneNumber")
+    func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
+        var termsOfUseViewController = TermsOfUseViewController()
+        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
     func settingsViewDidTapPrivacyPolicy(settingsView: SettingsView) {
-        println("settingsViewDidTapPrivacyPolicy")
+        var privacyPolicyViewController = PrivacyPolicyViewController()
+        self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
     func settingsViewDidTapSendFeedback(settingsView: SettingsView) {
         println("settingsViewDidTapSendFeedback")
     }
     
-    func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
-        var termsOfUseViewController = TermsOfUseViewController()
-        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
+    func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView) {
+        println("settingsViewDidTapChangePhoneNumber")
+    }
+    
+    func settingsViewDidTapImportContacts(settingsView: SettingsView) {
+        println("settingsViewDidTapImportContacts")
+    }
+    
+    func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
+        AuthenticationHelper.sharedInstance.logout()
+        
+        var navigationController: UINavigationController = self.presentingViewController as UINavigationController
+        navigationController.popToRootViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion:nil)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

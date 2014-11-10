@@ -13,10 +13,9 @@
 class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, MessagesTopViewDelegate {
     
     private let MESSAGES_TOP_VIEW_ANIMATION_DURATION = 0.3
-    
-    private var navigationBar : CustomNavigationBar!
     private var messagesTopView : MessagesTopView!
-    private var userFormView : UserFormView!
+    internal var navigationBar : CustomNavigationBar!
+    internal var userFormView : UserFormView!
     
     var delegate : SignUpViewDelegate?
     
@@ -42,9 +41,9 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     }
     
     private func initSubviews() {
-        self.backgroundColor = UIColor.deepSea()
+        self.backgroundColor = getBackgroundColor()
         
-        navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto"), isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
+        navigationBar = addCustomNavigationBar()
         navigationBar.setRightButtonEnabled(false)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
@@ -56,6 +55,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         userFormView = UserFormView()
         userFormView.delegate = self
         self.addSubview(userFormView)
+    }
+    
+    internal func addCustomNavigationBar() -> CustomNavigationBar! {
+        return CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto"), isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
     }
     
     private func initConstraints() {
@@ -100,14 +103,14 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     // MARK: - CustomNavigationBarDelegate
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        delegate?.signUpViewDidTapBackButton(self)
+        delegate?.signUpViewDidTapBackButton?(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         if (userFormView.isAllFieldsValids()) {
             self.dismissKeyboard()
-            var userData = userFormView.getUserData()
-            delegate?.signUpView(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
+            var userData = getUserData()
+            delegate?.signUpView!(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
         }
     }
     
@@ -146,7 +149,15 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     }
     
     func userFormView(userFormView: UserFormView, didValidateAllFieldsWithSuccess success: Bool) {
+        enableRightButton(success)
+    }
+
+    func enableRightButton(success: Bool) {
         navigationBar.setRightButtonEnabled(success)
+    }
+    
+    func userFormViewDidUpdateField(userFormView: UserFormView) {
+        // do nothing
     }
     
     
@@ -270,5 +281,16 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     func setUserPicture(picture: UIImage) {
         self.navigationBar.setAvatarImage(picture.avatarProportional())
+    }
+    
+    
+    // MARK: - Getters
+    
+    func getBackgroundColor() -> UIColor {
+        return UIColor.deepSea()
+    }
+    
+    internal func getUserData() -> (firstName: String, lastName: String, email: String, password: String, birthday:String) {
+        return userFormView.getUserData()
     }
 }
