@@ -67,7 +67,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         version = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
         
         if (version == nil) {
-            version = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey.__conversion()) as String
+            version = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as String
         }
         
         copyright = UILabel()

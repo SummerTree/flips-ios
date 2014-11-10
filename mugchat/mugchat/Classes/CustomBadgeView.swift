@@ -36,7 +36,7 @@ class CustomBadgeView : UIView {
 
         var badgeBackgroundImage = UIImage(named: "Notification")
         
-        self.frame = CGRectMake(0, 0, badgeBackgroundImage.size.width, badgeBackgroundImage.size.height)
+        self.frame = CGRectMake(0, 0, badgeBackgroundImage!.size.width, badgeBackgroundImage!.size.height)
 
         var backgroundImageView = UIImageView(image: badgeBackgroundImage)
         backgroundImageView.sizeToFit()

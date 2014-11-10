@@ -38,7 +38,7 @@ class MugChatWebView: UIView, UIWebViewDelegate {
     
     func viewDidLoad() {
         let URL = NSURL(string: self.url)
-        let request = NSURLRequest(URL: URL)
+        let request = NSURLRequest(URL: URL!)
         self.webView.loadRequest(request)
     }
     

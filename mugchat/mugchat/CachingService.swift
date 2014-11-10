@@ -39,14 +39,14 @@ public class CachingService: NSObject {
 
         // Check if there is an already cached copy
         if (self.cacheHandler.hasCachedFileForUrl(url.relativePath!).hasCache) {
-            cachedURL = NSURL.URLWithString(self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
+            cachedURL = NSURL(string:self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
 
             if (fileManager.fileExistsAtPath(cachedURL!.relativePath!)) {
                 completion(url: cachedURL!)
                 return;
             }
 
-            cachedURL = NSURL.URLWithString(self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: false))
+            cachedURL = NSURL(string:self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: false))
 
             if (fileManager.fileExistsAtPath(cachedURL!.relativePath!)) {
                 completion(url: cachedURL!)
@@ -55,7 +55,7 @@ public class CachingService: NSObject {
         }
 
         // No cached version could be found. Fetch from original source to temp file
-        cachedURL = NSURL.URLWithString(self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
+        cachedURL = NSURL(string:self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
 
         self.downloader.downloadDataFromURL(url,
             localURL: cachedURL!,

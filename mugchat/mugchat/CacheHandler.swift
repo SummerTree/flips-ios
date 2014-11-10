@@ -129,7 +129,7 @@ public class CacheHandler : NSObject {
     
     func saveDataAtPath(dataPath: String, withUrl url: String, isTemporary: Bool = true) -> String {
         let data = NSData(contentsOfFile: dataPath)
-        return self.save(data, withUrl: url, isTemporary: isTemporary)
+        return self.save(data!, withUrl: url, isTemporary: isTemporary)
     }
     
     func deleteFileAtPath(path: String) {
