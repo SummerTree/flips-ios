@@ -58,7 +58,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     }
     
     internal func addCustomNavigationBar() -> CustomNavigationBar! {
-        return CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto"), isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
+        return CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
     }
     
     private func initConstraints() {

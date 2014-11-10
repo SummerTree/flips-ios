@@ -19,7 +19,7 @@ class UpdateUserProfileView: SignUpView {
     private var isUserProfileChanged = false
     
     override func addCustomNavigationBar() -> CustomNavigationBar! {
-        let navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto"), isAvatarButtonInteractionEnabled: true, showBackButton: true, showSaveButton: true)
+        let navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showSaveButton: true)
         navigationBar.setBackgroundImageColor(UIColor.whiteColor())
         return navigationBar
     }

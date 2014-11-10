@@ -24,6 +24,6 @@ class VideoHelper {
         time.value = 0
         
         let imageRef = imageGenerator.copyCGImageAtTime(time, actualTime: nil, error: nil)
-        return UIImage(CGImage: imageRef)
+        return UIImage(CGImage: imageRef)!
     }
 }

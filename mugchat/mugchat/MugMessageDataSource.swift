@@ -107,8 +107,8 @@ class MugMessageDataSource : BaseDataSource {
             return 0
         }
         
-        var nextID = mugMessages.first!.mugMessageID + 1
-        return nextID
+        var nextID = Int(mugMessages.first!.mugMessageID)
+        return ++nextID
     }
     
     func oldestNotReadMugMessageForRoom(room: Room) -> MugMessage? {

@@ -360,7 +360,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     // MARK: - Overridden Method
     
-    override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if let changes = change as? [NSString: Bool] {
             if (context == CapturingStillImageContext) {
                 if let isCapturingStillImage = changes[NSKeyValueChangeNewKey] {
@@ -514,11 +514,11 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     var image = UIImage(data: imageData)
                     
-                    var squaredImage = image.cropImageInCenter()
+                    var squaredImage = image!.cropImageInCenter()
                     
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
                         // We need to flip the image captured by the front camera
-                        squaredImage = UIImage(CGImage: squaredImage.CGImage, scale: squaredImage.scale, orientation: UIImageOrientation.LeftMirrored)
+                        squaredImage = UIImage(CGImage: squaredImage.CGImage, scale: squaredImage.scale, orientation: UIImageOrientation.LeftMirrored)!
                     }
                     success(squaredImage)
                 } else {
@@ -547,7 +547,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         var docsDir: AnyObject = dirPaths[0]
         var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
-        var videoURL = NSURL(fileURLWithPath: videoFilePath)
+        var videoURL = NSURL(fileURLWithPath: videoFilePath)!
         
         var fileManager = NSFileManager.defaultManager()
         

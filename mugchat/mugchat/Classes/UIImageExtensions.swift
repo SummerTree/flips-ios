@@ -39,7 +39,7 @@ extension UIImage {
         
         var imageRef = CGImageCreateWithImageInRect(self.CGImage, CGRectApplyAffineTransform(rect, rectTransform));
         var croppedImage = UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
-        return croppedImage
+        return croppedImage!
     }
     
     func cropImageInCenter() -> UIImage {

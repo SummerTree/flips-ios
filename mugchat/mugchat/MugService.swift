@@ -122,7 +122,7 @@ public class MugService: MugchatService {
     
     private func uploadData(data: NSData, toUrl url: String, withFileName fileName: String, partName: String, mimeType: String, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
         request.POST(url,
             parameters: nil,
@@ -146,7 +146,7 @@ public class MugService: MugchatService {
     
     private func uploadNewMug(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let createURL = CREATE_MUG.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let createMugUrl = HOST + createURL
         let createMugParams = [
