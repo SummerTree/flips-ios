@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-private let LABEL_MARGIN_TOP : CGFloat = 7.0
+let LABEL_MARGIN_TOP : CGFloat = 7.0
 private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
 
 class MugTextView : UIView {
@@ -70,21 +70,21 @@ class MugTextView : UIView {
     }
     
     func updateLayout() {
-        var status : MugState = self.mugText.state
+        var status : FlipState = self.mugText.state
         switch status {
-        case MugState.NewWord:
+        case FlipState.NewWord:
             textLabel.textColor = UIColor.blackColor()
             textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
             hasExtrasImageView.alpha = 0.0
-        case MugState.NotAssociatedWithResources:
+        case FlipState.NotAssociatedWithResources:
             textLabel.textColor = UIColor.blackColor()
             textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
             hasExtrasImageView.alpha = 1.0
-        case MugState.AssociatedWithoutOtherResources:
+        case FlipState.AssociatedWithoutOtherResources:
             textLabel.textColor = UIColor.whiteColor()
             textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             hasExtrasImageView.alpha = 0.0
-        case MugState.AssociatedWithOtherResources:
+        case FlipState.AssociatedWithOtherResources:
             textLabel.textColor = UIColor.whiteColor()
             textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             hasExtrasImageView.alpha = 1.0
@@ -114,5 +114,13 @@ class MugTextView : UIView {
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
+    }
+    
+    
+    // MARK: - Overridden Methods
+    
+    override func layoutSubviews() {
+        self.updateLayout()
+        super.layoutSubviews()
     }
 }

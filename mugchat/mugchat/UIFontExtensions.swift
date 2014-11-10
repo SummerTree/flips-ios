@@ -34,6 +34,10 @@ extension UIFont {
         return UIFont(name: "AvenirNext-Bold", size: size)
     }
     
+    class func flipLabelFont() -> UIFont {
+        return UIFont.avenirNextBold(UIFont.HeadingSize.h1)
+    }
+    
     struct HeadingSize {
         static var h1:CGFloat = 32.0
         static var h2:CGFloat = 18.0
@@ -42,5 +46,9 @@ extension UIFont {
         static var h5:CGFloat = 14.0
         static var h6:CGFloat = 12.0
         static var h7:CGFloat = 10.0
+    }
+    
+    class func headingSize1() -> CGFloat {
+        return HeadingSize.h1
     }
 }

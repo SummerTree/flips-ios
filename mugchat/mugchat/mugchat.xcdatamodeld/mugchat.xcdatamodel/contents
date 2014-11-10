@@ -32,6 +32,7 @@
     </entity>
     <entity name="MugMessage" representedClassName="MugMessage" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="mugMessageID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="notRead" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="receivedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="removed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -69,11 +70,11 @@
         <relationship name="rooms" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Room" inverseName="participants" inverseEntity="Room" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Contact" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Device" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Mug" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="MugMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Room" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Contact" positionX="-461" positionY="296" width="128" height="163"/>
+        <element name="Device" positionX="-857" positionY="36" width="128" height="135"/>
+        <element name="Mug" positionX="-675" positionY="324" width="128" height="193"/>
+        <element name="MugMessage" positionX="-144" positionY="470" width="128" height="165"/>
+        <element name="Room" positionX="-974" positionY="428" width="128" height="163"/>
+        <element name="User" positionX="-623" positionY="-54" width="128" height="298"/>
     </elements>
 </model>

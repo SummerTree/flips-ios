@@ -17,6 +17,7 @@ private struct MugMessageJsonParams {
 }
 
 private struct MugMessageAttributes {
+    static let MUG_MESSAGE_ID = "mugMessageID"
     static let CREATED_AT = "createdAt"
     static let NOT_READ = "notRead"
     static let ROOM = "room"
@@ -29,6 +30,7 @@ class MugMessageDataSource : BaseDataSource {
         
         var entity: MugMessage! = MugMessage.createEntity() as MugMessage
         
+        entity.mugMessageID = self.nextMugMessageID()
         entity.from = userDataSource.retrieveUserWithId(json[MugMessageJsonParams.FROM_USER_ID].stringValue)
         entity.createdAt = NSDate(dateTimeString: json[MugMessageJsonParams.SENT_AT].stringValue)
         entity.notRead = true
@@ -56,6 +58,57 @@ class MugMessageDataSource : BaseDataSource {
         self.save()
         
         return mugMessage
+    }
+    
+    func createTemporaryMugMessageWithMugs(mugs: [Mug]) -> MugMessage {
+        let mugDataSource = MugDataSource()
+        
+        var mugMessage: MugMessage! = MugMessage.MR_createEntity() as MugMessage
+        mugMessage.mugMessageID = self.nextMugMessageID()
+        
+        var mugsOrderedSet = NSMutableOrderedSet()
+        for mug in mugs {
+            // TODO: empty mugs should be saved before call this method
+            var mugInContext = mugDataSource.retrieveMugWithId(mug.mugID)
+            mugsOrderedSet.addObject(mugInContext)
+        }
+        mugMessage.mugs = mugsOrderedSet
+        mugMessage.from = User.loggedUser()
+        
+        return mugMessage
+    }
+    
+    func saveTemporaryMugMessage(mugMessageToSave: MugMessage) {
+        let userDataSource = UserDataSource()
+        let mugDataSource = MugDataSource()
+        
+        var entity: MugMessage! = MugMessage.createEntity() as MugMessage
+        
+        entity.mugMessageID = mugMessageToSave.mugMessageID
+        entity.from = userDataSource.retrieveUserWithId(mugMessageToSave.from.userID)
+        entity.createdAt = NSDate()
+        entity.notRead = false
+        entity.receivedAt = NSDate()
+        
+        let mugs = NSMutableOrderedSet()
+        for (var i = 0; i < mugMessageToSave.mugs.count; i++) {
+            var mug = mugMessageToSave.mugs.objectAtIndex(i) as Mug
+            mugs.addObject(mugDataSource.retrieveMugWithId(mug.mugID))
+        }
+        entity.mugs = mugs
+ 
+        self.save()
+    }
+    
+    private func nextMugMessageID() -> Int {
+        let mugMessages = MugMessage.MR_findAllSortedBy(MugMessageAttributes.MUG_MESSAGE_ID, ascending: false)
+        
+        if (mugMessages.first == nil) {
+            return 0
+        }
+        
+        var nextID = mugMessages.first!.mugMessageID + 1
+        return nextID
     }
     
     func oldestNotReadMugMessageForRoom(room: Room) -> MugMessage? {

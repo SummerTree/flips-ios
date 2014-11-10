@@ -124,33 +124,38 @@ class UserDataSource : BaseDataSource {
             // ONLY FOR TESTS
             var contacts = self.getMyUserContacts()
             if (contacts.count == 0) {
-                var mug = Mug.createEntity() as Mug
-                mug.mugID = "2"
-                mug.word = "I"
-                mug.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/09212b08-2904-4576-a93d-d686e9a3cba1.jpg"
-                mug.owner = User.loggedUser()
-                mug.isPrivate = true
-                
-                var mug2 = Mug.createEntity() as Mug
-                mug2.mugID = "3"
-                mug2.word = "Love"
-                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
-                mug2.owner = User.loggedUser()
-                mug2.isPrivate = true
-                
-                var mug21 = Mug.createEntity() as Mug
-                mug21.mugID = "30"
-                mug21.word = "love"
-                mug21.backgroundURL = "http://lovesign.com.au/wp-content/uploads/2009/11/Stop-In-the-Name-of-Love-Alan-James-2003.jpg"
-                mug21.owner = User.loggedUser()
-                mug21.isPrivate = true
-                
-                var mug3 = Mug.createEntity() as Mug
-                mug3.mugID = "4"
-                mug3.word = "San Francisco"
-                mug3.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/Screen+Shot+2014-10-10+at+11.27.00+AM.png"
-                mug3.owner = User.loggedUser()
-                mug3.isPrivate = true
+//                var mug = Mug.createEntity() as Mug
+//                mug.mugID = "2"
+//                mug.word = "I"
+//                mug.backgroundURL = "http://theburnedhand.files.wordpress.com/2012/06/you.png"
+//                mug.setBackgroundContentType(BackgroundContentType.Image)
+//                mug.owner = User.loggedUser()
+//                mug.isPrivate = true
+//
+//                var mug2 = Mug.createEntity() as Mug
+//                mug2.mugID = "3"
+//                mug2.word = "Love"
+//                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
+//                mug2.setBackgroundContentType(BackgroundContentType.Image)
+//                mug2.soundURL = "audio.m4a"
+//                mug2.owner = User.loggedUser()
+//                mug2.isPrivate = true
+
+//                var mug21 = Mug.createEntity() as Mug
+//                mug21.mugID = "30"
+//                mug21.word = "love"
+//                mug21.backgroundURL = "http://lovesign.com.au/wp-content/uploads/2009/11/Stop-In-the-Name-of-Love-Alan-James-2003.jpg"
+//                mug21.setBackgroundContentType(BackgroundContentType.Image)
+//                mug21.owner = User.loggedUser()
+//                mug21.isPrivate = true
+//                
+//                var mug3 = Mug.createEntity() as Mug
+//                mug3.mugID = "4"
+//                mug3.word = "San Francisco"
+//                mug3.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/Screen+Shot+2014-10-10+at+11.27.00+AM.png"
+//                mug3.setBackgroundContentType(BackgroundContentType.Image)
+//                mug3.owner = User.loggedUser()
+//                mug3.isPrivate = true
                 
                 var user: User! = User.MR_createEntity() as User
                 user.userID = "3"
@@ -159,12 +164,13 @@ class UserDataSource : BaseDataSource {
                 user.phoneNumber = "+141512345678"
                 user.photoURL = "http://upload.wikimedia.org/wikipedia/pt/9/9d/Maggie_Simpson.png"
                 
-                var mug4 = Mug.createEntity() as Mug
-                mug4.mugID = "5"
-                mug4.word = "San Francisco"
-                mug4.backgroundURL = "http://baybridgeinfo.org/sites/default/files/images/background/ws/xws7.jpg.pagespeed.ic.ULYPGat4fH.jpg"
-                mug4.owner = user
-                mug4.isPrivate = true
+//                var mug4 = Mug.createEntity() as Mug
+//                mug4.mugID = "5"
+//                mug4.word = "San Francisco"
+//                mug4.backgroundURL = "http://baybridgeinfo.org/sites/default/files/images/background/ws/xws7.jpg.pagespeed.ic.ULYPGat4fH.jpg"
+//                mug4.setBackgroundContentType(BackgroundContentType.Image)
+//                mug4.owner = user
+//                mug4.isPrivate = true
                 
                 // NOT MY CONTACT
                 var user3: User! = User.MR_createEntity() as User

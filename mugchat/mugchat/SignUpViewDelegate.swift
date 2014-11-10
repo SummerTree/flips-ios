@@ -10,11 +10,12 @@
 // the license agreement.
 //
 
+@objc
 protocol SignUpViewDelegate {
 
-    func signUpViewDidTapBackButton(signUpView: SignUpView)
+    optional func signUpViewDidTapBackButton(signUpView: SignUpView)
     
-    func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
+    optional func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
  
     func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool)
     

@@ -52,6 +52,10 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         if let selected = self.tableView.indexPathForSelectedRow() {
             self.tableView.deselectRowAtIndexPath(selected, animated: true)
         }
+        
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.updateUserProfileInfo()
+        })
     }
     
     func viewDidLoad() {
@@ -208,7 +212,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             self.delegate?.settingsViewDidTapSendFeedback(self)
             
         case self.CHANGE_NUMBER_CELL_POSITION:
-            self.delegate?.settingsViewDidTapPhoneNumber(self)
+            self.delegate?.settingsViewDidTapChangePhoneNumber(self)
             
         case self.IMPORT_CONTACTS_CELL_POSITION:
             self.delegate?.settingsViewDidTapImportContacts(self)
@@ -217,12 +221,6 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             println("Error creating row number: \(indexPath.row)")
             fatalError("Unknown row")
         }
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // fix to remove extra padding at top, using tableview mode = grouped
-        // http://stackoverflow.com/questions/18880341/why-is-there-extra-padding-at-the-top-of-my-uitableview-with-style-uitableviewst
-        return 0.001
     }
 
 
@@ -247,8 +245,6 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private func createUserProfileCell() {
         
         if (self.userProfileCell == nil) {
-            // since we're changing our backend structure, I'm leaving this field for debugging
-            // because we don't have user.phoneNumber yet
             let loggedUser = User.loggedUser()!
             let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
             let fullname = User.loggedUser()!.fullName()
@@ -300,17 +296,27 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             self.importContactsCell = SettingsTableViewCell(image: UIImage(named: "ImportContact"), labelText: NSLocalizedString("Import Contacts", comment: "Import Contacts"), detailLabel: nil)
         }
     }
+    
+    
+    // MARK: - Setters
+    private func updateUserProfileInfo() {
+        let loggedUser = User.loggedUser()!
+        let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
+        let fullname = User.loggedUser()!.fullName()
+        
+        self.userProfileCell.setActionLabelText(fullname)
+        self.userProfileCell.setActionDetailLabelText(detailedLabel)
+    }
 }
 
 protocol SettingsViewDelegate {
     func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!)
-    func settingsViewDidTapLogOutButton(settingsView: SettingsView)
-    func settingsViewDidTapChangeProfile(settingsView: SettingsView)
-    func settingsViewDidTapPhoneNumber(settingsView: SettingsView)
     func settingsViewDidTapAbout(settingsView: SettingsView)
+    func settingsViewDidTapChangeProfile(settingsView: SettingsView)
     func settingsViewDidTapTermsOfUse(settingsView: SettingsView)
     func settingsViewDidTapPrivacyPolicy(settingsView: SettingsView)
     func settingsViewDidTapSendFeedback(settingsView: SettingsView)
+    func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView)
     func settingsViewDidTapImportContacts(settingsView: SettingsView)
-    
+    func settingsViewDidTapLogOutButton(settingsView: SettingsView)
 }

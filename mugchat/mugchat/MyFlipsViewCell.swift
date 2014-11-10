@@ -13,13 +13,13 @@
 private let MY_MUGS_CELL_WIDTH: CGFloat = 83.5
 private let MY_MUGS_CELL_HEIGHT: CGFloat = 83.5
 
-class MyMugsViewCell : UICollectionViewCell {
+class MyFlipsViewCell : UICollectionViewCell {
     
-    var mug: Mug!
-    var cellImageView: UIImageView!
-    var seletedOverlayView: SelectedMugOverlayView!
+    private var mug: Mug!
+    private var cellImageView: UIImageView!
+    private var seletedOverlayView: SelectedMugOverlayView!
     
-    var cellIsSelected = false
+    var isSelected: Bool!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,20 +37,25 @@ class MyMugsViewCell : UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func toggleCellState() {
-        if (self.cellIsSelected) {
-            self.seletedOverlayView.alpha = 0
+    func setMug(mug: Mug) {
+        self.mug = mug
+        println("mug: \(mug.mugID)")
+        
+        let mugContentPath = self.mug.backgroundContentLocalPath()
+        if (self.mug.isBackgroundContentTypeVideo()) {
+            // TODO we need to get the first frame screenshot
         } else {
+            let image = UIImage(contentsOfFile: mugContentPath)
+            self.cellImageView.image = image
+        }
+    }
+    
+    func setSelected(var selected: Bool) {
+        if (selected) {
             self.seletedOverlayView.alpha = 1
-        }
-        self.cellIsSelected = !self.cellIsSelected
-    }
-    
-    func deselectCell() {
-        if (self.cellIsSelected) {
+        } else {
             self.seletedOverlayView.alpha = 0
-            self.cellIsSelected = false
         }
+        self.isSelected = selected
     }
-    
 }

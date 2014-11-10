@@ -10,21 +10,21 @@
 // the license agreement.
 //
 
-class MugText { //Temporary data structure
+class MugText {
     
-    var mugId: Int!
+    var position: Int!
     var text: String!
-    var state: MugState!
-    var associatedMug: Mug?
+    var state: FlipState!
+    var associatedMug: Mug!
     
-    init(mugId: Int, text: String, state: MugState) {
-        self.mugId = mugId
+    init(position: Int, text: String, state: FlipState) {
+        self.position = position
         self.text = text
         self.state = state
     }
 }
 
-enum MugState {
+enum FlipState {
     case NewWord
     case AssociatedWithoutOtherResources
     case NotAssociatedWithResources

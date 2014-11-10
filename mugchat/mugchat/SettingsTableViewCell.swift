@@ -109,6 +109,14 @@ class SettingsTableViewCell: UITableViewCell {
         }
     }
     
+    func setActionLabelText(text: String!) {
+        self.actionLabel.text = text
+    }
+    
+    func setActionDetailLabelText(text: String!) {
+        self.actionDetailLabel.text = text
+    }
+    
     func setImageURL(url: NSURL!) {
         self.actionImageView.setImageWithURL(url)
         self.actionImageView.image = self.actionImageView.image?.cropImageInCenter()

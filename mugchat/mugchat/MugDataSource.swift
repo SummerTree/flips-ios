@@ -31,6 +31,8 @@ public typealias CreateMugFail = (String) -> Void
 
 class MugDataSource : BaseDataSource {
     
+    private let EMPTY_FLIP_ID = "-1"
+    
     private func createEntityWithJson(json: JSON) -> Mug {
         var entity: Mug! = Mug.createEntity() as Mug
         self.fillMug(entity, withJsonData: json)
@@ -74,16 +76,58 @@ class MugDataSource : BaseDataSource {
     }
     
     func createMugWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+        let cacheHandler = CacheHandler.sharedInstance
         let mugService = MugService()
+        
         mugService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (mug) -> Void in
             var userDataSource = UserDataSource()
             mug.owner = User.loggedUser()
+            mug.setBackgroundContentType(BackgroundContentType.Image)
+            
+            // TODO: SAVE IMAGE AND AUDIO IN THE CACHE
+            if (backgroundImage != nil) {
+                cacheHandler.saveImage(backgroundImage!, withUrl: mug.backgroundURL, isTemporary: false)
+            }
+            
+            if (soundURL != nil) {
+                cacheHandler.saveDataAtPath(soundURL!.absoluteString!, withUrl: mug.soundURL, isTemporary: false)
+            }
+            
             createMugSuccess(mug)
         }) { (mugError) -> Void in
             var message = mugError?.error as String!
             createMugFail(message)
         }
     }
+    
+    func createMugWithWord(word: String, videoURL: NSURL, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+        let cacheHandler = CacheHandler.sharedInstance
+        let mugService = MugService()
+        
+        mugService.createMug(word, videoPath: videoURL, isPrivate: true, createMugSuccessCallback: { (mug) -> Void in
+            var userDataSource = UserDataSource()
+            mug.owner = User.loggedUser()
+            mug.setBackgroundContentType(BackgroundContentType.Video)
+            
+            // TODO: SAVE VIDEO IN THE CACHE
+            cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: mug.backgroundURL, isTemporary: false)
+            
+            createMugSuccess(mug)
+        }) { (mugError) -> Void in
+            var message = mugError?.error as String!
+            createMugFail(message)
+        }
+    }
+    
+    // This mug is never uploaded to the server. It is used only via Pubnub
+    func createEmptyMugWithWord(word: String) -> Mug {
+        var mug: Mug! = Mug.MR_createEntity() as Mug
+
+        mug.word = word
+        
+        return mug
+    }
+
     
     func retrieveMugWithId(id: String) -> Mug {
         var mug = self.getMugById(id)
