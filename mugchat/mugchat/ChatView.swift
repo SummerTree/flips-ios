@@ -23,7 +23,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     var oldestUnreadMessageIndex = 2
     
     private let CELL_IDENTIFIER = "mugChatCell"
-    private let REPLY_BUTTON_TOP_MARGIN : CGFloat = 18.0
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
     private let REPLY_BUTTON_HEIGHT : CGFloat = 64.0
     private let REPLY_VIEW_MARGIN : CGFloat = 10.0
@@ -37,7 +36,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     var delegate: ChatViewController!
     var tableView: UITableView!
-    var separatorView: UIView!
     var darkHorizontalRulerView: UIView!
     var replyView: UIView!
     var replyButton: UIButton!
@@ -83,10 +81,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         tableView.allowsSelection = false
         self.addSubview(tableView)
         
-        separatorView = UIView()
-        separatorView.backgroundColor = UIColor.whiteColor()
-        self.addSubview(separatorView)
-        
         darkHorizontalRulerView = UIView()
         darkHorizontalRulerView.backgroundColor = UIColor.grayColor()
         self.addSubview(darkHorizontalRulerView)
@@ -127,13 +121,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self.separatorView.mas_top)
-        })
-        
-        separatorView.mas_makeConstraints( { (make) in
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
-            make.height.equalTo()(self.REPLY_BUTTON_TOP_MARGIN)
             make.bottom.equalTo()(self.darkHorizontalRulerView.mas_top)
         })
         
