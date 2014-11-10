@@ -78,8 +78,8 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView) {
-        var changePhoneViewController = ChangeNumberViewController()
-        self.navigationController?.pushViewController(changePhoneViewController, animated: true)
+        var changeNumberInfoViewController = ChangeNumberInfoViewController()
+        self.navigationController?.pushViewController(changeNumberInfoViewController, animated: true)
     }
     
     func settingsViewDidTapImportContacts(settingsView: SettingsView) {

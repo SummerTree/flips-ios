@@ -12,22 +12,22 @@
 
 import Foundation
 
-class ChangeNumberViewController : MugChatViewController, ChangeNumberViewDelegate {
+class ChangeNumberInputPhoneViewController : MugChatViewController, ChangeNumberInputPhoneViewDelegate {
     
-    private var changeNumberView: ChangeNumberView!
+    private var changeNumberInputPhoneView: ChangeNumberInputPhoneView!
     
     override func loadView() {
-        changeNumberView = ChangeNumberView()
-        changeNumberView.delegate = self
+        changeNumberInputPhoneView = ChangeNumberInputPhoneView()
+        changeNumberInputPhoneView.delegate = self
         
-        self.view = changeNumberView
+        self.view = changeNumberInputPhoneView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupWhiteNavBarWithBackButton("Change Number")
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.changeNumberInputPhoneView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -40,9 +40,14 @@ class ChangeNumberViewController : MugChatViewController, ChangeNumberViewDelega
     }
     
     
-    // MARK: - ChangeNumberViewDelegate
+    // MARK: - ChangeNumberInputPhoneViewDelegate
     
-    func changeNumberViewDidTapNextButton(changeNumberView: ChangeNumberView!) {
-        println("next button tapped")
+    func makeConstraintToNavigationBarBottom(view: UIView!) {
+        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+        
+        view.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            return ()
+        }
     }
 }

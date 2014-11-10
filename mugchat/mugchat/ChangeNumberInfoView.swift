@@ -12,9 +12,9 @@
 
 import UIKit
 
-class ChangeNumberView: UIView {
+class ChangeNumberInfoView: UIView {
     
-    var delegate: ChangeNumberViewDelegate?
+    var delegate: ChangeNumberInfoViewDelegate?
     
     private let TRANSITION_CIRCLES_MARGIN: CGFloat = 25.0
     
@@ -113,7 +113,7 @@ class ChangeNumberView: UIView {
     // MARK: - Action buttons
     
     func nextButtonTapped(button: UIButton!) {
-        self.delegate?.changeNumberViewDidTapNextButton(self)
+        self.delegate?.changeNumberInfoViewDidTapNextButton(self)
     }
     
     
@@ -128,6 +128,6 @@ class ChangeNumberView: UIView {
     }
 }
 
-protocol ChangeNumberViewDelegate {
-    func changeNumberViewDidTapNextButton(changeNumberView: ChangeNumberView!)
+protocol ChangeNumberInfoViewDelegate {
+    func changeNumberInfoViewDidTapNextButton(changeNumberInfoView: ChangeNumberInfoView!)
 }
