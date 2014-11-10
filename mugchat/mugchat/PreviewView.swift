@@ -35,28 +35,30 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     override init() {
         super.init()
         
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self)
-        
-//        addSubviews()
+        self.addSubviews()
     }
-    
-//    convenience init(videoURL: NSURL!) {
-//        self.init()
-//        
-//        self.flipVideoURL = videoURL
-//    }
     
     func viewDidLoad() {
-//        makeConstraints()
+        makeConstraints()
     }
-        
+    
     func viewDidAppear() {
-//        self.playOrPausePreview()
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self)
     }
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
         self.stopMovie()
+    }
+    
+    func showVideoCreationError() {
+        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+        
+        var alertView = UIAlertView(title: nil,
+            message: NSLocalizedString("Preview couldn't be created. Please try again later.", comment: "Preview couldn't be created. Please try again later."),
+            delegate: nil,
+            cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+        alertView.show()
     }
     
     func setVideoURL(videoURL: NSURL) {
@@ -103,10 +105,10 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
     
     func addMoviePlayer() {
-//        if (self.flipVideoURL == nil) {
-//            let moviePath = NSBundle.mainBundle().pathForResource("i_love_coffee", ofType: "mov")
-//            self.flipVideoURL = NSURL.fileURLWithPath(moviePath!)
-//        }
+        //        if (self.flipVideoURL == nil) {
+        //            let moviePath = NSBundle.mainBundle().pathForResource("i_love_coffee", ofType: "mov")
+        //            self.flipVideoURL = NSURL.fileURLWithPath(moviePath!)
+        //        }
         
         self.moviePlayer = MPMoviePlayerController(contentURL: self.flipVideoURL)
         self.moviePlayer.controlStyle = MPMovieControlStyle.None
@@ -122,7 +124,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         self.flipContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self.moviePlayer.view)
+            make.height.equalTo()(self.mas_width)
         }
         
         // asking help to delegate to align the container with navigation bar

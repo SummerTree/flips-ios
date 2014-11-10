@@ -89,9 +89,11 @@ extension Mug {
     func backgroundContentLocalPath() -> String {
         let cacheHandler = CacheHandler.sharedInstance
         
-        let result = cacheHandler.hasCachedFileForUrl(self.backgroundURL)
-        if (result.hasCache) {
-            return result.filePath!
+        if ((self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)) {
+            let result = cacheHandler.hasCachedFileForUrl(self.backgroundURL)
+            if (result.hasCache) {
+                return result.filePath!
+            }
         }
         
         let noBackgroundImageResult = cacheHandler.hasCachedFileForUrl(NO_BACKGROUND_IMAGE_NAME)
@@ -99,12 +101,23 @@ extension Mug {
             return noBackgroundImageResult.filePath!
         }
         
-        let noBackgroundImage = UIImage.imageWithColor(UIColor.avacado())
+        let imageWidth = UIScreen.mainScreen().bounds.size.width
+        let imageSize = CGRectMake(0, 0, imageWidth, imageWidth)
+
+        UIGraphicsBeginImageContext(imageSize.size)
+        UIImage.imageWithColor(UIColor.avacado()).drawInRect(imageSize)
+        let noBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
         return cacheHandler.saveImage(noBackgroundImage, withUrl: NO_BACKGROUND_IMAGE_NAME, isTemporary: false)
     }
     
     func soundContentLocalPath() -> String? {
         let cacheHandler = CacheHandler.sharedInstance
+        
+        if (self.soundURL == nil) {
+            return ""
+        }
         
         let result = cacheHandler.hasCachedFileForUrl(self.soundURL)
         return result.filePath

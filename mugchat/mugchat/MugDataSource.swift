@@ -31,6 +31,8 @@ public typealias CreateMugFail = (String) -> Void
 
 class MugDataSource : BaseDataSource {
     
+    private let EMPTY_FLIP_ID = "-1"
+    
     private func createEntityWithJson(json: JSON) -> Mug {
         var entity: Mug! = Mug.createEntity() as Mug
         self.fillMug(entity, withJsonData: json)
@@ -117,8 +119,10 @@ class MugDataSource : BaseDataSource {
         }
     }
     
+    // This mug is never uploaded to the server. It is used only via Pubnub
     func createEmptyMugWithWord(word: String) -> Mug {
         var mug: Mug! = Mug.MR_createEntity() as Mug
+
         mug.word = word
         
         return mug

@@ -65,11 +65,11 @@
 
 
 
-- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage
+- (NSURL *)videoFromMugs:(NSArray *)mugs
 {
     NSMutableArray *messageParts = [NSMutableArray array];
-
-    for (Mug *mug in mugMessage.mugs) {
+    
+    for (Mug *mug in mugs) {
         AVAsset *videoTrack = [self videoFromMug:mug];
 
         if (videoTrack) {
@@ -89,7 +89,7 @@
         NSURL *videoURL = [NSURL URLWithString:backgroundContentLocalPath];
         track = [AVAsset assetWithURL:videoURL];
         [self addText:mug.word overVideoTrack:track];
-    } else if ([mug isBackgroundContentTypeImage]) {
+    } else {
         ImageVideoCreator *imageVideoCreator = [[ImageVideoCreator alloc] init];
         NSURL *videoURL = [NSURL URLWithString:[imageVideoCreator videoPathForMug:mug]];
         track = [AVAsset assetWithURL:videoURL];

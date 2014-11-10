@@ -12,13 +12,12 @@
 class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     private var previewView: PreviewView!
-//    private var mugMessage: MugMessage!
-    private var words: [MugText]!
+    private var flips: [Mug]!
     
-    convenience init(words: [MugText]) {
+    convenience init(flips: [Mug]) {
         self.init()
-//        self.mugMessage = self.mugMessageFromWords(words)
-        self.words = words
+        println("flips count: \(flips.count)")
+        self.flips = flips
     }
     
     override func loadView() {
@@ -43,9 +42,15 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
         
         let videoComposer = VideoComposer()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let mugMessage = self.mugMessageFromWords(self.words)
-            let videoAsset = videoComposer.videoFromMugMessage(mugMessage)
-            self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!))
+            let videoAsset = videoComposer.videoFromMugs(self.flips)
+
+            if (videoAsset != nil) {
+                self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!))
+            } else {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.previewView.showVideoCreationError()
+                })
+            }
         })
     }
     
@@ -65,35 +70,6 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     }
     
     
-    // MARK: - Mugs Initialization
-    
-    private func mugMessageFromWords(words: [MugText]) -> MugMessage {
-        
-        println("   ")
-        println("   mugMessageFromWords")
-        let mugDataSource = MugDataSource()
-        var mugs = Array<Mug>()
-        for mugText in words {
-            
-//            var mug = mugDataSource.retrieveMugWithId("\(mugText.mugId)")
-//            mugs.append(mug)
-//            println("       word: \(mugText.text)")
-//            if (mugText.associatedMug != nil) {
-//                println("       has mug associated")
-//                println("           mug.backgroundURL: \(mugText.associatedMug?.backgroundURL)")
-//                println("           mug.soundURL: \(mugText.associatedMug?.soundURL)")
-//                mugs.append(mugText.associatedMug!)
-//            } else {
-//                println("       create empty mug")
-//                var emptyMug = mugDataSource.createEmptyMugWithWord(mugText.text)
-//                mugs.append(emptyMug)
-//            }
-        }
-        
-        let mugMessageDataSource = MugMessageDataSource()
-        return mugMessageDataSource.createTemporaryMugMessageWithMugs(mugs)
-    }
-    
     // MARK: - ComposeViewDelegate Methods
     
     func previewViewDidTapBackButton(previewView: PreviewView!) {
@@ -101,6 +77,11 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     }
     
     func previewButtonDidTapSendButton(previewView: PreviewView!) {
+        
+        // TODO: for each Mug where the id is empty we need to create the mug at the server.
+        // It requires a change in the server also. The mug will be empty (no image/video and no audio).
+        // But we need it to be stored in the core data, to open the messages correctly in the app.
+        
         self.previewView.stopMovie()
         self.showActivityIndicator()
         
@@ -125,5 +106,4 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
-
 }

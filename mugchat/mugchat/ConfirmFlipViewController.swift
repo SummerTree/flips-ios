@@ -20,6 +20,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
     
+    private var flipWord: String!
     private var flipImage: UIImage?
     private var flipAudioURL: NSURL?
     private var flipVideoURL: NSURL?
@@ -27,6 +28,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     convenience init(flipWord: String!, flipPicture: UIImage?, flipAudio: NSURL?) {
         self.init()
 
+        self.flipWord = flipWord
         self.flipImage = flipPicture
         self.flipAudioURL = flipAudio
         
@@ -41,6 +43,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     convenience init(flipWord: String!, flipVideo: NSURL?) {
         self.init()
 
+        self.flipWord = flipWord
         self.flipVideoURL = flipVideo
         
         self.confirmFlipView = ConfirmFlipView(word: flipWord, video: flipVideo)
@@ -114,16 +117,30 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         let mugDataSource = MugDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
-        mugDataSource.createMugWithWord(flipView.getWord(), backgroundImage: confirmFlipView.getImage(), soundURL: nil,
-            createMugSuccess: { (mug) -> Void in
-                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
-                self.navigationController?.popViewControllerAnimated(false)
-                self.confirmFlipView.hideActivityIndicator()
-            }) { (message) -> Void in
-                self.confirmFlipView.hideActivityIndicator()
-                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
-                var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
-                alertView.show()
+        
+        var createMugSuccessBlock : CreateMugSuccess = { (mug) -> Void in
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
+            self.navigationController?.popViewControllerAnimated(false)
+            self.confirmFlipView.hideActivityIndicator()
+        }
+        var createMugFailBlock : CreateMugFail = { (message) -> Void in
+            self.confirmFlipView.hideActivityIndicator()
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
+            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            alertView.show()
+        }
+        
+        if (flipVideoURL == nil) {
+            mugDataSource.createMugWithWord(flipView.getWord(),
+                backgroundImage: self.flipImage,
+                soundURL: self.flipAudioURL,
+                createMugSuccess: createMugSuccessBlock,
+                createMugFail: createMugFailBlock)
+        } else {
+            mugDataSource.createMugWithWord(self.flipWord,
+                videoURL: self.flipVideoURL!,
+                createMugSuccess: createMugSuccessBlock,
+                createMugFail: createMugFailBlock)
         }
     }
     

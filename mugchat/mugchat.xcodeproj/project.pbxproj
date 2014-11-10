@@ -137,9 +137,9 @@
 		A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */; };
 		A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* MugText.swift */; };
 		A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* MugTextView.swift */; };
-		A2A5C6D719FEBC3500E4CB2C /* MyMugsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */; };
+		A2A5C6D719FEBC3500E4CB2C /* MyFlipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* MyFlipsView.swift */; };
 		A2A5C6D91A001E7A00E4CB2C /* SelectedMugOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */; };
-		A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */; };
+		A2A5C6DB1A01457A00E4CB2C /* MyFlipsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6DA1A01457A00E4CB2C /* MyFlipsViewCell.swift */; };
 		A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
@@ -296,9 +296,9 @@
 		A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugStringsUtil.swift; sourceTree = "<group>"; };
 		A2392BF619EEE7C70037B0C0 /* MugText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugText.swift; sourceTree = "<group>"; };
 		A2392BF819EEE7C70037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
-		A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMugsView.swift; sourceTree = "<group>"; };
+		A2A5C6D619FEBC3500E4CB2C /* MyFlipsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFlipsView.swift; sourceTree = "<group>"; };
 		A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedMugOverlayView.swift; sourceTree = "<group>"; };
-		A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMugsViewCell.swift; sourceTree = "<group>"; };
+		A2A5C6DA1A01457A00E4CB2C /* MyFlipsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFlipsViewCell.swift; sourceTree = "<group>"; };
 		A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
@@ -844,8 +844,8 @@
 		7A8BFEDB1A09597600E7F2A3 /* Mugs Collection */ = {
 			isa = PBXGroup;
 			children = (
-				A2A5C6D619FEBC3500E4CB2C /* MyMugsView.swift */,
-				A2A5C6DA1A01457A00E4CB2C /* MyMugsViewCell.swift */,
+				A2A5C6D619FEBC3500E4CB2C /* MyFlipsView.swift */,
+				A2A5C6DA1A01457A00E4CB2C /* MyFlipsViewCell.swift */,
 				A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */,
 			);
 			name = "Mugs Collection";
@@ -1136,7 +1136,7 @@
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
-				A2A5C6D719FEBC3500E4CB2C /* MyMugsView.swift in Sources */,
+				A2A5C6D719FEBC3500E4CB2C /* MyFlipsView.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */,
@@ -1214,7 +1214,7 @@
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
-				A2A5C6DB1A01457A00E4CB2C /* MyMugsViewCell.swift in Sources */,
+				A2A5C6DB1A01457A00E4CB2C /* MyFlipsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,

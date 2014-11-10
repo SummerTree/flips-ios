@@ -14,7 +14,7 @@ import UIKit
 import AVFoundation
 import AssetsLibrary
 
-class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyMugsViewDelegate {
+class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate/*, MyFlipsViewDelegate*/ {
     
     private let MUG_IMAGE_WIDTH: CGFloat = 240.0
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
@@ -49,7 +49,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyM
     private var galleryButton: UIButton!
     
     private var arrowToCurrentMug: UIButton!
-    private var myMugsView: MyMugsView!
+    private var myMugsView: MyFlipsView!
     
     private var isAlreadyUsingAPicture = false
     
@@ -108,7 +108,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyM
     
     func selectWordFromCurrentStep() {
         if (self.mugTexts.count > self.selectedWordIndex) {
-            self.centeredMugsView.selectText(self.mugTexts[self.selectedWordIndex])
+            self.centeredMugsView.centerAtFlipWord(self.mugTexts[self.selectedWordIndex])
         }
     }
     
@@ -130,7 +130,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyM
             if (mugText.associatedMug == nil) {
                 allMugsCreated = false
                 selectedWordIndex = index
-                self.centeredMugsView.selectText(mugText)
+                self.centeredMugsView.centerAtFlipWord(mugText)
                 break
             }
             index++
@@ -183,16 +183,16 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyM
         
         addCameraButtonsViewSubviews()
 
-        myMugsView = MyMugsView()
-        myMugsView.delegate = self
-        myMugsView.alpha = 0.0
-        mugsOrCameraButtonsView.addSubview(myMugsView)
+//        myMugsView = MyMugsView()
+//        myMugsView.delegate = self
+//        myMugsView.alpha = 0.0
+//        mugsOrCameraButtonsView.addSubview(myMugsView)
         
         arrowToCurrentMug = UIButton()
         arrowToCurrentMug.userInteractionEnabled = false
         arrowToCurrentMug.setImage(UIImage(named: "Triangle"), forState: .Normal)
         arrowToCurrentMug.sizeToFit()
-        myMugsView.addSubview(arrowToCurrentMug)
+//        myMugsView.addSubview(arrowToCurrentMug)
     }
     
     private func addCameraButtonsViewSubviews() {
@@ -498,7 +498,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyM
             self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
         }
         
-        self.myMugsView.setMugText(self.mugTexts[self.selectedWordIndex])
+//        self.myMugsView.setMugText(self.mugTexts[self.selectedWordIndex])
     }
     
     func mugsTextsViewDidSplitMugText(mugTexts: [MugText]) {
@@ -508,30 +508,30 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, MyM
     
     // MARK: - MyMugsView Delegate
 
-    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!) {
-        slideToCameraView()
-    }
-    
-    func myMugsView(myMugsView: MyMugsView!, didChangeMugSelection mug: Mug?) {
-        if (mug == nil) { // User deselected current mug
-            self.mugTexts[selectedWordIndex].associatedMug = nil
-            self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
-        } else {
-            self.mugTexts[selectedWordIndex].associatedMug = mug
-            let mugImagePath = mug!.backgroundContentLocalPath()
-            self.mugImageView.image = UIImage(contentsOfFile: mugImagePath)
-        }
-    }
-
-    func myMugsView(myMugsView: MyMugsView!, mugsForSelectedWord hasMugs: Bool!) {
-        if (hasMugs!) {
-            self.slideToMyMugsView()
-        } else {
-            if (!isAlreadyUsingAPicture) {
-                self.slideToCameraView()
-            }
-        }
-    }
+//    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!) {
+//        slideToCameraView()
+//    }
+//    
+//    func myMugsView(myMugsView: MyMugsView!, didChangeMugSelection mug: Mug?) {
+//        if (mug == nil) { // User deselected current mug
+//            self.mugTexts[selectedWordIndex].associatedMug = nil
+//            self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
+//        } else {
+//            self.mugTexts[selectedWordIndex].associatedMug = mug
+//            let mugImagePath = mug!.backgroundContentLocalPath()
+//            self.mugImageView.image = UIImage(contentsOfFile: mugImagePath)
+//        }
+//    }
+//
+//    func myMugsView(myMugsView: MyMugsView!, mugsForSelectedWord hasMugs: Bool!) {
+//        if (hasMugs!) {
+//            self.slideToMyMugsView()
+//        } else {
+//            if (!isAlreadyUsingAPicture) {
+//                self.slideToCameraView()
+//            }
+//        }
+//    }
     
     
     // MARK: - Button actions

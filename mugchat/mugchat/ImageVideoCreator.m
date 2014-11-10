@@ -109,7 +109,7 @@
     [videoWriter finishWriting];
     CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
     
-    if (audioPath) {
+    if (audioPath && (![audioPath isEqualToString:@""])) {
         [self addAudio:audioPath toMovieAtPath:path];
     }
 }

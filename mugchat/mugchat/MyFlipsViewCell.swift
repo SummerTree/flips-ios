@@ -13,7 +13,7 @@
 private let MY_MUGS_CELL_WIDTH: CGFloat = 83.5
 private let MY_MUGS_CELL_HEIGHT: CGFloat = 83.5
 
-class MyMugsViewCell : UICollectionViewCell {
+class MyFlipsViewCell : UICollectionViewCell {
     
     private var mug: Mug!
     private var cellImageView: UIImageView!
@@ -57,14 +57,5 @@ class MyMugsViewCell : UICollectionViewCell {
             self.seletedOverlayView.alpha = 0
         }
         self.isSelected = selected
-    }
-    
-    func deselectCell() {
-        self.seletedOverlayView.alpha = 0
-    }
-    
-    
-    func mugID() -> String {
-        return mug.mugID
     }
 }

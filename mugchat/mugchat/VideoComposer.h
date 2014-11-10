@@ -17,7 +17,7 @@
 
 @interface VideoComposer : NSObject
 
-- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
+- (NSURL *)videoFromMugs:(NSArray *)mugs;
 - (AVAsset *)videoFromMug:(Mug *)mug;
 
 //- (void)testCreatingFourWordsVideo;

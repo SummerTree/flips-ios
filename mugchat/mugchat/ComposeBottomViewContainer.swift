@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
+class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataSource {
     
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
@@ -19,11 +19,11 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
     private var takePictureButton: UIButton!
     private var captureAudioButton: UIButton!
     private var cancelCaptureAudioButton: UIButton!
-
+    
     private var gridButton: UIButton!
     private var galleryButton: UIButton!
-
-    private var myMugsView: MyMugsView!
+    
+    private var myMugsView: MyFlipsView!
     
     var delegate: ComposeBottomViewContainerDelegate?
     var dataSource: ComposeBottomViewContainerDataSource?
@@ -42,11 +42,12 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
     
     private func addSubviews() {
         self.backgroundColor = UIColor.sand()
-
+        
         self.addCameraButtons()
         
-        myMugsView = MyMugsView()
+        myMugsView = MyFlipsView()
         myMugsView.delegate = self
+        myMugsView.dataSource = self
         myMugsView.alpha = 0.0
         self.addSubview(myMugsView)
     }
@@ -155,11 +156,16 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
     
     // MARK: - View State Setter
     
+    func setCameraButtonEnabled(enabled: Bool) {
+        self.takePictureButton.enabled = enabled
+    }
+    
     func showCameraButtons() {
         self.slideToCameraView(notifyDelegate: false)
     }
     
     func showMyMugs() {
+        self.reloadMyMugs()
         self.slideToMyMugsView(notifyDelegate: false)
     }
     
@@ -175,13 +181,14 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
         self.gridButton.hidden = true
     }
     
-    private func hideRecordingView() {
+    func hideRecordingView() {
         self.captureAudioButton.hidden = true
         self.cancelCaptureAudioButton.hidden = true
         self.takePictureButton.hidden = false
         self.galleryButton.hidden = false
         self.gridButton.hidden = false
     }
+    
     
     // MARK: - Button Handlers
     
@@ -194,7 +201,7 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
         self.delegate?.composeBottomViewContainerDidTapSkipAudioButton(self)
         self.hideRecordingView()
     }
-
+    
     func shutterButtonLongPressAction(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == .Began) {
             self.delegate?.composeBottomViewContainerDidHoldShutterButton(self)
@@ -217,7 +224,7 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
     // MARK: - MyMugs Load Methods
     
     func reloadMyMugs() {
-        
+        myMugsView.reload()
     }
     
     
@@ -258,7 +265,7 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             self.myMugsView.alpha = 0.0
-
+            
             self.myMugsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.width.equalTo()(self)
@@ -280,33 +287,33 @@ class ComposeBottomViewContainer : UIView, MyMugsViewDelegate {
     }
     
     
-    // MARK: - MyMugsView Delegate
+    // MARK: - MyFlipsView Delegate
     
-    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!) {
+    func myFlipsViewDidTapAddFlip(myFlipsView: MyFlipsView!) {
         slideToCameraView()
     }
     
-    func myMugsView(myMugsView: MyMugsView!, didChangeMugSelection mug: Mug?) {
-        // TODO: delegate
-        
-//        if (mug == nil) { // User deselected current mug
-//            self.mugTexts[selectedWordIndex].associatedMug = nil
-//            self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
-//        } else {
-//            self.mugTexts[selectedWordIndex].associatedMug = mug
-//            let mugImagePath = mug!.backgroundContentLocalPath()
-//            self.mugImageView.image = UIImage(contentsOfFile: mugImagePath)
-//        }
+    func myFlipsView(myFlipsView: MyFlipsView!, didTapAtIndex index: Int) {
+        let flips = dataSource?.composeBottomViewContainerFlipsForHighlightedWord(self) as [Mug]!
+        delegate?.composeBottomViewContainer(self, didTapAtFlip: flips[index])
     }
     
-    func myMugsView(myMugsView: MyMugsView!, mugsForSelectedWord hasMugs: Bool!) {
-//        if (hasMugs!) {
-//            self.slideToMyMugsView()
-//        } else {
-//            if (!isAlreadyUsingAPicture) {
-//                self.slideToCameraView()
-//            }
-//        }
+    
+    // MARK: - MyFlipsViewDataSource
+    
+    func myFlipsViewNumberOfFlips() -> Int {
+        let flips = dataSource?.composeBottomViewContainerFlipsForHighlightedWord(self) as [Mug]!
+        return flips.count
+    }
+    
+    func myFlipsView(myFlipsView: MyFlipsView, flipAtIndex index: Int) -> Mug {
+        let flips = dataSource?.composeBottomViewContainerFlipsForHighlightedWord(self) as [Mug]!
+        return flips[index]
+    }
+    
+    func myFlipsViewSelectedFlipId() -> String? {
+        let flipId = dataSource?.flipIdForHighlightedWord()
+        return flipId
     }
 }
 
@@ -315,9 +322,9 @@ protocol ComposeBottomViewContainerDelegate {
     func composeBottomViewContainerDidTapCaptureAudioButton(composeBottomViewContainer: ComposeBottomViewContainer)
     
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer)
-
+    
     func composeBottomViewContainerDidHoldShutterButton(composeBottomViewContainer: ComposeBottomViewContainer)
-
+    
     func composeBottomViewContainerDidTapTakePictureButton(composeBottomViewContainer: ComposeBottomViewContainer)
     
     func composeBottomViewContainerWillOpenMyMugsView(composeBottomViewContainer: ComposeBottomViewContainer)
@@ -326,9 +333,12 @@ protocol ComposeBottomViewContainerDelegate {
     
     func composeBottomViewContainerDidTapGalleryButton(composeBottomViewContainer: ComposeBottomViewContainer)
     
+    func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlip flip: Mug)
 }
 
 protocol ComposeBottomViewContainerDataSource {
     
     func composeBottomViewContainerFlipsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [Mug]
+    
+    func flipIdForHighlightedWord() -> String?
 }

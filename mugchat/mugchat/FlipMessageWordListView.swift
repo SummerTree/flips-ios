@@ -25,11 +25,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     var delegate: FlipMessageWordListViewDelegate?
     
-    var dataSource: FlipMessageWordListViewDataSource? {
-        didSet {
-            self.reloadWords()
-        }
-    }
+    var dataSource: FlipMessageWordListViewDataSource?
     
     
     // MARK: - Initializers
@@ -121,7 +117,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         }
     }
     
-    func reloadWords() {
+    func reloadWords(animated: Bool = true) {
         for flipText in mugTextViews {
             flipText.removeFromSuperview()
         }
@@ -137,6 +133,9 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         }
         
         self.layoutWords()
+        
+        let centeredWordIndex = dataSource?.flipMessageWordListViewHighlightedWordIndex(self)
+        self.centerScrollViewAtView(mugTextViews[centeredWordIndex!], animated: animated)
     }
     
     
@@ -150,7 +149,6 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         let flipText = (gesture.view! as MugTextView).mugText
         delegate?.flipMessageWordListView(self, didSelectFlipWord: flipText)
-//        self.delegate?.flipMessageWordListView(self, didSelectFlipText: flipText)
     }
     
     func flipWordLongPressed(gesture: UILongPressGestureRecognizer) {
@@ -167,15 +165,77 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     }
     
     
+    // MARK: - Items Handler
+    
+    func replaceFlipWord(flipWord: MugText, forFlipWords flipWords: [MugText]) {
+        var startPositionToStartUpdate = flipWord.position
+        
+        var initialFrame : CGRect!
+        for (var i = 0; i < mugTextViews.count; i++) {
+            var textView = mugTextViews[i]
+            if (textView.mugText.position == flipWord.position) {
+                textView.removeFromSuperview()
+                mugTextViews.removeAtIndex(i)
+                initialFrame = textView.frame
+                break
+            }
+        }
+
+        for newFlipWord in flipWords {
+            var flipTextView = MugTextView(mugText: newFlipWord)
+            flipTextView.sizeToFit()
+            
+            var requiredWidth = self.getTextWidth(flipTextView.textLabel.text!) + self.MUG_TEXT_ADDITIONAL_WIDTH
+            var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
+            initialFrame.size.width = mugTextViewWidth
+            flipTextView.frame = initialFrame
+            
+            addGestureRecognizers(flipTextView)
+            scrollView.addSubview(flipTextView)
+            mugTextViews.insert(flipTextView, atIndex: newFlipWord.position)
+        }
+        
+        // Update MugTexts
+        for (var i = 0; i < mugTextViews.count; i++) {
+            var flipWord = dataSource?.flipMessageWordListView(self, flipWordAtIndex: i)
+            var textView = mugTextViews[i]
+            textView.mugText = flipWord
+        }
+    
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            var contentOffset: CGFloat = 0
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                var totalOffsetX: CGFloat = 0
+                var itemX: CGFloat = initialFrame.origin.x
+                for flipTextView in self.mugTextViews {
+                    if (flipTextView.mugText.position >= startPositionToStartUpdate) {
+                        var x = itemX + totalOffsetX
+                        var requiredWidth = self.getTextWidth(flipTextView.textLabel.text!) + self.MUG_TEXT_ADDITIONAL_WIDTH
+                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
+                        
+                        flipTextView.frame = CGRectMake(x,
+                            CGRectGetMinY(flipTextView.frame),
+                            mugTextViewWidth,
+                            CGRectGetHeight(flipTextView.frame))
+                        
+                        totalOffsetX = totalOffsetX + mugTextViewWidth + self.SPACE_BETWEEN_MUG_TEXTS
+                    }
+                    contentOffset = CGRectGetMidX(flipTextView.frame) + (CGRectGetWidth(self.frame) / 2)
+                }
+
+            }, completion: { (finished) -> Void in
+                self.centerScrollViewAtClosestItem()
+            })
+        })
+    }
+    
+    
     // MARK: - Scroll Position Setters
     
-    func selectText(text: MugText?) {
+    func centerAtFlipWord(flipWord: MugText?) {
         for textView in mugTextViews {
-            if (textView.mugText.position == text?.position) {
+            if (textView.mugText.position == flipWord?.position) {
                 self.centerScrollViewAtView(textView)
-                
-                let flipText = (textView as MugTextView).mugText
-                break
             }
         }
     }
@@ -201,105 +261,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     }
     
     func splitText() {
-//        delegate?.flipMessageWordListView(self, didSelectFlipText: <#MugText!#>)
-        
-//        let text = self.tappedMugTextView?.mugText.text
-//        
-//        var splittedTextWords: [String] = MugStringsUtil.splitMugString(text!);
-//        
-//        var mugTextView: MugTextView
-//        var lastMugText: MugTextView!
-//        var splitMugTextView: MugTextView!
-//        
-//        var foundMug: Bool = false
-//        var contentOffset: CGFloat = 0.0
-//        var scrollViewWidth: CGFloat = self.scrollView.contentSize.width
-//        var textViewY = (CGRectGetHeight(self.frame) / 2) - (MUG_TEXT_HEIGHT / 2)
-//        
-//        var index = -1
-//        var mugTextViewsUpdated = [MugTextView]()
-//        
-//        UIView.animateWithDuration(1.0, delay: 0.0, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: { () -> Void in
-//            
-//            for mugTextView in self.mugTextViews {
-//                index++
-//                mugTextViewsUpdated.append(mugTextView)
-//                
-//                if (mugTextView.mugText.text == text) {
-//                    foundMug = true
-//                    
-//                    var oldMugTextViewWidth : CGFloat = mugTextView.frame.width
-//                    
-//                    //Update the original MugText with the first string of the splitted text
-//                    mugTextView.mugText.text = splittedTextWords[0]
-//                    mugTextView.textLabel.text = splittedTextWords[0]
-//                    self.mugTexts[index].text = splittedTextWords[0]
-//                    
-//                    //update mugTextView size to fit the smaller text
-//                    var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
-//                    var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-//                    mugTextView.frame = CGRectMake(mugTextView.frame.origin.x, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
-//                    
-//                    scrollViewWidth = scrollViewWidth - oldMugTextViewWidth + mugTextViewWidth
-//                    
-//                    splitMugTextView = mugTextView
-//                    lastMugText = mugTextView
-//                    
-//                    contentOffset = lastMugText.frame.origin.x + lastMugText.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-//                    
-//                    var newMugTextView : MugTextView
-//                    for var i=1; i < splittedTextWords.count; i++ { //creating and positioning new MugTextViews
-//                        index++
-//                        
-//                        var mugText = MugText(position: self.mugTexts.count, text: splittedTextWords[i], state: FlipState.NewWord)
-//                        self.mugTexts.insert(mugText, atIndex: index)
-//                        
-//                        newMugTextView = MugTextView(mugText: mugText)
-//                        self.addGestureRecognizers(newMugTextView)
-//                        self.scrollView.addSubview(newMugTextView)
-//                        
-//                        var requiredWidth = newMugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
-//                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-//                        newMugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
-//                        mugTextViewsUpdated.append(newMugTextView)
-//                        
-//                        lastMugText = newMugTextView
-//                        contentOffset += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-//                        scrollViewWidth += newMugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-//                    }
-//                    
-//                    self.scrollView.contentSize = CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)
-//                } else {
-//                    if (foundMug) { //texts after the split one must be moved to the right
-//                        var requiredWidth = mugTextView.getTextWidth() + self.MUG_TEXT_ADDITIONAL_WIDTH
-//                        var mugTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-//                        
-//                        mugTextView.frame = CGRectMake(contentOffset, textViewY, mugTextViewWidth, self.MUG_TEXT_HEIGHT)
-//                        
-//                        contentOffset += mugTextView.frame.size.width + self.SPACE_BETWEEN_MUG_TEXTS
-//                    }
-//                }
-//            }
-//            
-//            }, completion: { (value: Bool) in
-//                //Inserting new mugTextViews in self.mugTextViews
-//                for var i=0; i < mugTextViewsUpdated.count; i++ {
-//                    var mugTextView = mugTextViewsUpdated[i]
-//                    if (i < self.mugTextViews.count) {
-//                        if (self.mugTextViews[i].mugText.position != mugTextView.mugText.position) {
-//                            self.mugTextViews.insert(mugTextView, atIndex: i)
-//                        }
-//                    } else { //new mugText added in the end
-//                        self.mugTextViews.append(mugTextView)
-//                    }
-//                }
-//                
-//                self.delegate?.mugsTextsViewDidSplitMugText(self.mugTexts)
-//                
-//                self.centerScrollViewAtView(splitMugTextView)
-//                self.delegate?.mugsTextsViewDidSelectMugText(splitMugTextView.mugText)
-//                ()})
-        
+        delegate?.flipMessageWordListView(self, didSplitFlipWord: self.tappedMugTextView?.mugText)
     }
     
 
@@ -312,12 +274,12 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
-            self.centerScrollViewAtClosestItem(scrollView)
+            self.centerScrollViewAtClosestItem()
         }
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        self.centerScrollViewAtClosestItem(scrollView)
+        self.centerScrollViewAtClosestItem()
     }
     
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
@@ -327,7 +289,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     // MARK: - ScrollView Helper Methods
     
-    private func centerScrollViewAtClosestItem(scrollView: UIScrollView) {
+    private func centerScrollViewAtClosestItem() {
         scrollView.scrollEnabled = false
         
         var mugTextViewToBeCentered = mugTextViews[0]
@@ -359,7 +321,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         self.delegate?.flipMessageWordListView(self, didSelectFlipWord: mugTextViewToBeCentered.mugText)
     }
     
-    private func centerScrollViewAtView(view: UIView) {
+    private func centerScrollViewAtView(view: UIView, animated: Bool = true) {
         scrollView.scrollEnabled = false
         
         var mugTextViewToBeCenteredMidX: CGFloat = CGRectGetMidX(view.frame)
@@ -367,7 +329,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         var contentOffsetX = mugTextViewToBeCenteredMidX - scrollViewCenterX
         
         if (scrollView.contentOffset.x != contentOffsetX) {
-            scrollView.setContentOffset(CGPointMake(contentOffsetX, 0.0), animated: true)
+            scrollView.setContentOffset(CGPointMake(contentOffsetX, 0.0), animated: animated)
         } else {
             scrollView.scrollEnabled = true
         }
@@ -412,6 +374,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         return super.canPerformAction(action, withSender: sender)
     }
 }
+
 
 // MARK: - Protocols
 

@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     private let MY_MUGS_LABEL_MARGIN_TOP: CGFloat = 5.0
     private let MY_MUGS_LABEL_MARGIN_LEFT: CGFloat = 10.0
@@ -29,10 +29,8 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     
     var mugText : MugText!
     
-//    var mugDataSource = MugDataSource()
-    var myMugs: [Mug] = [Mug]()
-    
-    var delegate: MyMugsViewDelegate?
+    var delegate: MyFlipsViewDelegate?
+    var dataSource: MyFlipsViewDataSource?
     
     override init() {
         super.init(frame: CGRect.zeroRect)
@@ -67,7 +65,7 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
         myMugsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         myMugsCollectionView!.dataSource = self
         myMugsCollectionView!.delegate = self
-        myMugsCollectionView.registerClass(MyMugsViewCell.self, forCellWithReuseIdentifier:"Cell");
+        myMugsCollectionView.registerClass(MyFlipsViewCell.self, forCellWithReuseIdentifier:"Cell");
         myMugsCollectionView!.backgroundColor = self.backgroundColor
         myMugsCollectionView!.allowsSelection = true
         self.addSubview(myMugsCollectionView!)
@@ -90,87 +88,61 @@ class MyMugsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewD
     }
     
     func addMugButtonTapped(sender: UIButton!) {
-        delegate?.myMugsViewDidTapAddMug(self)
+        delegate?.myFlipsViewDidTapAddFlip(self)
     }
     
-    func setMugText(mugText: MugText) {
-        println("   ")
-        println("setMugText: \(mugText.text)")
-
-        self.mugText = mugText
-        
-        var mugDataSource = MugDataSource()
-        self.myMugs = mugDataSource.getMyMugsForWord(mugText.text)
-
-        println("   setMugText - number of mugs: \(myMugs.count)")
-        if (self.myMugs.count > 0) {
-            self.delegate?.myMugsView(self, mugsForSelectedWord: true)
-            myMugsCollectionView.reloadData()
-        } else {
-            self.delegate?.myMugsView(self, mugsForSelectedWord: false)
-        }
-        println("   ")
-    }
     
+    // MARK: - Data Handler Methods
+    
+    func reload() {
+        myMugsCollectionView.reloadData()
+    }
     
     // MARK: - UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.myMugs.count + 1 //addMugButton
+        var numberOfFlips = self.dataSource?.myFlipsViewNumberOfFlips()
+        if (numberOfFlips == nil) {
+            numberOfFlips = 0
+        }
+        return numberOfFlips! + 1 //addMugButton
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MyMugsViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MyFlipsViewCell
         
         if (indexPath.section == 0 && indexPath.row == 0) {
             cell.addSubview(addMugButton)
         } else {
-            var currentMug: Mug? = self.myMugs[indexPath.row - 1]
-            if (currentMug != nil) {
-                cell.setMug(currentMug!)
-                var isSelected = (currentMug!.mugID == self.mugText.associatedMug?.mugID)
-                cell.setSelected(isSelected)
-           }
+            var currentFlip: Mug? = dataSource?.myFlipsView(self, flipAtIndex: indexPath.row - 1)
+            cell.setMug(currentFlip!)
+            
+            var isSelected = (currentFlip!.mugID == dataSource?.myFlipsViewSelectedFlipId())
+            cell.setSelected(isSelected)
         }
         
         return cell
     }
     
-    //this delegate is called too when the user is tapping the cell to deselects it (not only for selection)
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        var selectedCell: MyMugsViewCell! = collectionView.cellForItemAtIndexPath(indexPath) as MyMugsViewCell
-        let selectedCellState = selectedCell.isSelected
-        
-        // De-select all
-        for cell in self.myMugsCollectionView.visibleCells() as [MyMugsViewCell] {
-            cell.deselectCell()
-        }
-
-        var selectedMug: Mug? = nil
-        if (!selectedCellState) {
-            println("myMugs: \(myMugs.count)")
-            println("indexPath.row: \(indexPath.row)")
-            selectedMug = myMugs[indexPath.row - 1] as Mug
-        }
-        selectedCell.setSelected(!selectedCellState)
-        
-        
-        self.delegate?.myMugsView(self, didChangeMugSelection: selectedMug)
+        self.delegate?.myFlipsView(self, didTapAtIndex: indexPath.row - 1)
     }
-    
 }
 
 
 // MARK: - View Delegate
 
-protocol MyMugsViewDelegate {
+protocol MyFlipsViewDelegate {
     
-    func myMugsViewDidTapAddMug(myMugsView: MyMugsView!)
-    func myMugsView(myMugsView: MyMugsView!, didChangeMugSelection mug: Mug?)
-    func myMugsView(myMugsView: MyMugsView!, mugsForSelectedWord hasMugs: Bool!)
+    func myFlipsViewDidTapAddFlip(myFlipsView: MyFlipsView!)
+    func myFlipsView(myFlipsView: MyFlipsView!, didTapAtIndex index: Int)
     
 }
 
-protocol MyMugsViewDataSource {
+protocol MyFlipsViewDataSource {
+    
+    func myFlipsViewNumberOfFlips() -> Int
+    func myFlipsView(myFlipsView: MyFlipsView, flipAtIndex index: Int) -> Mug
+    func myFlipsViewSelectedFlipId() -> String?
     
 }

@@ -107,11 +107,13 @@ public class MugService: MugchatService {
     
     private func uploadVideo(videoPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         var error: NSError?
-        let soundData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
-        if (soundData != nil) {
+        let videoData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
+        if (videoData != nil) {
+            println("Uploading a video with size = \(videoData?.length)")
+            
             let url = HOST + UPLOAD_BACKGROUND
             let fileName = "video_\(NSDate().timeIntervalSince1970).mov"
-            self.uploadData(soundData!, toUrl: url, withFileName: fileName, partName: "background", mimeType: "video/quicktime", successCallback: successCallback, failCallback: failCallback)
+            self.uploadData(videoData!, toUrl: url, withFileName: fileName, partName: "background", mimeType: "video/quicktime", successCallback: successCallback, failCallback: failCallback)
         }
         else {
             failCallback(MugError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))

@@ -22,8 +22,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     private var captureProgressBar: UIView!
     
     private var flipViewer: FlipViewer!
-//    private var currentFlipImageView: UIImageView!
-//    private var currentFlipWordLabel: UILabel!
+    
+    var delegate: ComposeTopViewContainerDelegate?
     
     
     // MARK: - Initialization Methods
@@ -34,7 +34,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         self.addSubviews()
         self.addConstraints()
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -165,23 +165,19 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         cameraPreview.capturePictureWithCompletion(success, fail)
     }
     
+    
     // MARK: - CameraViewDelegate
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool)  {
-//        takePictureButton.enabled = available
-        // TODO: call delegate
+        delegate?.composeTopViewContainer(self, cameraAvailable: available)
     }
     
     func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool) {
-        // TODO: call delegate
-//        self.userInteractionEnabled = true
-//        if (success) {
-//            self.delegate?.composeViewDidFinishRecordingView(self, withURL: videoURL)
-//        }
+        delegate?.composeTopViewContainer(self, didFinishRecordingVideoAtUrl: videoURL, withSuccess: success)
     }
     
     func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
-        // TODO: call delegate
+        delegate?.composeTopViewContainerDidTapMicrophoneButton(self)
     }
 }
 
@@ -191,5 +187,7 @@ protocol ComposeTopViewContainerDelegate {
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, withSuccess success: Bool)
     
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, cameraAvailable available: Bool)
+    
+    func composeTopViewContainerDidTapMicrophoneButton(composeTopViewContainer: ComposeTopViewContainer)
 }
 
