@@ -117,12 +117,10 @@
 - (void) addAudio:(NSString*)audioPath toMovieAtPath:(NSString *)moviePath {
     NSURL    *outputFileUrl = [NSURL fileURLWithPath:moviePath];
     
-//    NSString *filePath = [documents stringByAppendingPathComponent:@"audio.m4a"];
     AVMutableComposition* mixComposition = [AVMutableComposition composition];
     
     NSURL *audio_inputFileUrl = [NSURL fileURLWithPath:audioPath];
     
-//    NSString *tmpPath = [documents stringByAppendingPathComponent:@"tmp_mov.mov"];
     NSURL *video_inputFileUrl = [NSURL fileURLWithPath:moviePath];
     
     CMTime nextClipStartTime = kCMTimeZero;
@@ -205,16 +203,17 @@
 -(UIImage*) drawText:(NSString*)text inImage:(UIImage*)image {
     
     // TODO: ajdust it correct has it is in the others screens
-    float expectedFontSize = 40;
     float expectedScreenWidth = 320;
+    float textBottomMargin = 40;
     float multiplier = image.size.width / expectedScreenWidth;
     
-    UIFont *font = [UIFont boldSystemFontOfSize:expectedFontSize * multiplier];
+//    UIFont *font = [UIFont boldSystemFontOfSize:expectedFontSize * multiplier];
+    UIFont *font = [UIFont avenirNextBold:[UIFont headingSize1]];
     
     CGSize textSize = [text sizeWithAttributes:@{ NSFontAttributeName : font }];
     
     float x = (image.size.width / 2) - (textSize.width / 2);
-    float y = image.size.height - textSize.height - (20 * multiplier);
+    float y = image.size.height - textSize.height - (textBottomMargin * multiplier);
     
     CGPoint point = CGPointMake(x, y);
     
