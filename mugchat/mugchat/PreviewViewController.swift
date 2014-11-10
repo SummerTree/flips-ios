@@ -45,7 +45,7 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
             let videoAsset = videoComposer.videoFromMugs(self.flips)
 
             if (videoAsset != nil) {
-                self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!))
+                self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!)!)
             } else {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.previewView.showVideoCreationError()

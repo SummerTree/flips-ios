@@ -26,7 +26,7 @@ class SelectedMugOverlayView : UIView {
     }
     
     private func addSubviews() {
-        var checkImage : UIImage = UIImage(named: "Check")
+        var checkImage : UIImage = UIImage(named: "Check")!
         checkImageView = UIImageView(image: checkImage)
         self.addSubview(checkImageView)
         

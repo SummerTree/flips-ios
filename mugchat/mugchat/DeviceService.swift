@@ -32,7 +32,7 @@ public class DeviceService: MugchatService {
     
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + createURL
         var params = [
@@ -68,7 +68,7 @@ public class DeviceService: MugchatService {
     
     func verifyDevice(userId: String, deviceId: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         verifyURL = verifyURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + verifyURL
@@ -96,7 +96,7 @@ public class DeviceService: MugchatService {
     
     func resendVerificationCode(userId: String, deviceId: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var resendURL = RESEND_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         resendURL = resendURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + resendURL

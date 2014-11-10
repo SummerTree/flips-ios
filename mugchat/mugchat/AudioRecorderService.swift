@@ -67,7 +67,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         
         var recordSettings = [
             AVFormatIDKey: kAudioFormatAppleLossless,
-            AVEncoderAudioQualityKey : AVAudioQuality.Max.toRaw(),
+            AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
             AVEncoderBitRateKey : 320000,
             AVNumberOfChannelsKey: 2,
             AVSampleRateKey : 44100.0

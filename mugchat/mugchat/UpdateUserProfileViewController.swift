@@ -36,10 +36,10 @@ class UpdateUserProfileViewController : MugChatViewController, SignUpViewDelegat
         super.viewDidLoad()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let userPictureData = NSData(contentsOfURL: NSURL(string: User.loggedUser()!.photoURL))
+            let userPictureData = NSData(contentsOfURL: NSURL(string: User.loggedUser()!.photoURL)!)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.updateUserProfileView.setUserPicture(UIImage(data: userPictureData))
+                self.updateUserProfileView.setUserPicture(UIImage(data: userPictureData!)!)
             })
         })
         

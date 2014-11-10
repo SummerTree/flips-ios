@@ -87,7 +87,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         
         let longPress = UILongPressGestureRecognizer(target: self, action: "shutterButtonLongPressAction:")
         longPress.minimumPressDuration = 0.5
-        longPress.allowableMovement = true
+        longPress.allowableMovement = 50.0
         takePictureButton.addGestureRecognizer(longPress)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "shutterButtonTapAction:")

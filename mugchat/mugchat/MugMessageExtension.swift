@@ -49,7 +49,7 @@ extension MugMessage {
         if (firstMug.isBackgroundContentTypeImage()) {
             let backgroundImageData = cacheHandler.dataForUrl(firstMug.backgroundURL)
             if (backgroundImageData != nil) {
-                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!), forUrl: firstMug.backgroundURL)
+                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstMug.backgroundURL)
             }
         } else if (firstMug.isBackgroundContentTypeVideo()) {
             // TODO:

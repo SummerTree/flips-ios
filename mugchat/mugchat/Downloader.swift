@@ -51,7 +51,7 @@ public class Downloader : NSObject {
         downloadInProgressURLs.addObject(urlString)
         
         let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: url!)
         request.timeoutInterval = TIME_OUT_INTERVAL
         
         var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
