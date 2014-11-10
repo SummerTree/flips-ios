@@ -287,7 +287,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
             self.showContentForHighlightedWord()
-            self.openPreview()
+//            self.openPreview()
         } else {
             self.highlightedWordIndex = nextIndex
             let flipWord = self.flipWords[self.highlightedWordIndex]

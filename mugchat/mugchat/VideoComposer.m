@@ -111,9 +111,9 @@
             NSLog(@"LEAVE");
             dispatch_group_leave(group);
         }];
-    } else if ([flip isBackgroundContentTypeImage]) {
+    } else {
         ImageVideoCreator *imageVideoCreator = [[ImageVideoCreator alloc] init];
-        NSURL *videoURL = [NSURL URLWithString:[imageVideoCreator videoPathForMug:flip]];
+        NSURL *videoURL = [NSURL fileURLWithPath:[imageVideoCreator videoPathForMug:flip]];
         track = [AVAsset assetWithURL:videoURL];
     }
 
