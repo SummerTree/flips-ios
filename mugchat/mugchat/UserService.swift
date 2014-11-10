@@ -54,7 +54,7 @@ public class UserService: MugchatService {
                 formData.appendPartWithFileData(UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION), name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
             },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                var user = self.parseSignupResponse(responseObject)
+                var user = self.parseUserResponse(responseObject)
                 success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
@@ -70,7 +70,7 @@ public class UserService: MugchatService {
         )
     }
     
-    func parseSignupResponse(response: AnyObject) -> User? {
+    private func parseUserResponse(response: AnyObject) -> User? {
         let userDataSource = UserDataSource()
         let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
         return user
@@ -134,6 +134,44 @@ public class UserService: MugchatService {
         userDataSource.save()
         
         return user
+    }
+    
+    
+    // MARK: Update user profile
+    
+    func update(username: String, password: String?, firstName: String, lastName: String, avatar: UIImage?, birthday: NSDate, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer()
+        let url = HOST + UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        
+        var params: Dictionary<String, AnyObject> = [
+            RequestParams.USERNAME : username,
+            RequestParams.FIRSTNAME : firstName,
+            RequestParams.LASTNAME : lastName,
+            RequestParams.BIRTHDAY : birthday
+        ]
+        
+        if let newPassword = password {
+            params[RequestParams.PASSWORD] = newPassword
+        }
+        
+        request.PUT(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                var user = self.parseUserResponse(responseObject)
+                success(user)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    // TODO: we need to identify what was the problem to show the appropriate message
+                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(MugError(error: response["error"] as String!, details: nil))
+                } else {
+                    failure(MugError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
     }
     
     
