@@ -25,6 +25,20 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
         signUpView = SignUpView()
         signUpView.delegate = self
         self.view = signUpView
+        
+        signUpView.loadView()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        signUpView.viewDidAppear()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        signUpView.viewWillDisappear()
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -47,10 +61,11 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
             
             UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
                 self.hideActivityIndicator()
-                AuthenticationHelper.sharedInstance.userInSession = user as User
-                var phoneNumberViewController = PhoneNumberViewController()
+                
+                var userEntity = user as User
+                var phoneNumberViewController = PhoneNumberViewController(userId: userEntity.userID)
                 self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
-                }) { (mugError) -> Void in
+            }) { (mugError) -> Void in
                     self.hideActivityIndicator()
                     println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
                     var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
@@ -82,7 +97,7 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     // MARK: - NotificationMessageView Methods
     
     func setupNotificationMessage() {
-        notificationMessageView = NotificationMessageView(message: NSLocalizedString("Hey, faceless wonder!  Looks like your Mug is missin!", comment: "Hey, faceless wonder!  Looks like your Mug is missin!"))
+        notificationMessageView = NotificationMessageView(message: NSLocalizedString("Hey, faceless wonder!  Looks like your Mug is missing!", comment: "Hey, faceless wonder!  Looks like your Mug is missing!"))
         notificationMessageView.backgroundColor = UIColor.clearColor()
         notificationMessageView.delegate = self
         self.view.addSubview(notificationMessageView)

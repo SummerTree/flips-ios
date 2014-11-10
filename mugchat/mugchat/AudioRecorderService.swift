@@ -13,7 +13,7 @@
 import AVFoundation
 
 public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
-
+    
     private var recorder: AVAudioRecorder!
     private var player: AVAudioPlayer!
     private var soundFileURL:NSURL?
@@ -110,33 +110,49 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     }
     
     func startRecording() {
-        if (self.player != nil && self.player.playing) {
-            self.player.stop()
-        }
-        
-        self.recorder.record()
-        
-        NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+        AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool) -> Void in
+            if (granted) {
+                if (self.player != nil && self.player.playing) {
+                    self.player.stop()
+                }
+                self.recorder.record()
+                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+            } else {
+                var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+                alertMessage.show()
+            }
+        })
     }
     
     func stopRecording() {
         self.recorder.stop()
     }
     
-    func playLastRecordedAudio() {
+    func playAudio(audioURL: NSURL!) {
         var error: NSError?
-        self.player = AVAudioPlayer(contentsOfURL: soundFileURL!, error: &error)
+        self.player = AVAudioPlayer(contentsOfURL: audioURL, error: &error)
         
         if player == nil {
             if let e = error {
                 println(e.localizedDescription)
             }
+            return
         }
         
         player.delegate = self
         player.prepareToPlay()
         player.volume = 1.0
         player.play()
+    }
+    
+    func stopAudio() {
+        if (player.playing) {
+            player.stop()
+        }
+    }
+    
+    func isPlaying() -> Bool {
+        return player.playing
     }
 }
 

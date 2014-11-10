@@ -20,7 +20,7 @@ let SessionRunningAndDeviceAuthorizedContext = UnsafeMutablePointer<()>()
 public typealias CapturePictureSuccess = (UIImage?) -> Void
 public typealias CapturePictureFail = (NSError?) -> Void
 
-class CameraView : UIView {
+class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     private let DEVICE_AUTHORIZED_KEY_PATH = "sessionRunningAndDeviceAuthorized"
     private let CAPTURING_STILL_IMAGE_KEY_PATH = "stillImageOutput.capturingStillImage"
@@ -28,6 +28,8 @@ class CameraView : UIView {
     
     private let CAMERA_BUTTON_RIGHT_MARGIN: CGFloat = -10
     private let CAMERA_BUTTON_VERTICAL_MARGIN: CGFloat = 10
+
+    private let CAMERA_VIEW_FRAME_WIDTH_ON_IPHONE_4: CGFloat = 240
     
     private var currentInterfaceOrientation: AVCaptureVideoOrientation!
     
@@ -45,7 +47,6 @@ class CameraView : UIView {
     private var showAvatarCropArea: Bool
     private var showMicrophoneButton: Bool
     private var isMicrophoneAvailable: Bool
-    
     private var showingFrontCamera: Bool
     
     var delegate: CameraViewDelegate?
@@ -63,7 +64,7 @@ class CameraView : UIView {
     private var sessionRunningAndDeviceAuthorized: Bool!
     var lockInterfaceRotation: Bool!
     var runtimeErrorHandlingObserver: AnyObject!
-    
+    private var observersRegistered: Bool! = false
     
     // MARK: - Initialization Methods
     
@@ -279,8 +280,6 @@ class CameraView : UIView {
                 })
             }
             
-            
-            
             if (self.showMicrophoneButton) {
                 error = nil
                 
@@ -299,11 +298,12 @@ class CameraView : UIView {
             }
             
             var movieOutput = AVCaptureMovieFileOutput()
+            
             if (self.session.canAddOutput(movieOutput)) {
                 self.session.addOutput(movieOutput)
                 self.movieFileOutput = movieOutput
-                
                 var connection = self.movieFileOutput.connectionWithMediaType(AVMediaTypeVideo)
+                connection.videoMirrored = true
                 if (connection.videoStabilizationEnabled) {
                     connection.enablesVideoStabilizationWhenAvailable = true
                 }
@@ -336,6 +336,7 @@ class CameraView : UIView {
                 })
             })
             self.session.startRunning()
+            self.observersRegistered = true
         })
     }
     
@@ -343,12 +344,16 @@ class CameraView : UIView {
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
             
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
-            NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
-            
-            self.removeObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, context: SessionRunningAndDeviceAuthorizedContext)
-            self.removeObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, context: CapturingStillImageContext)
-            self.removeObserver(self, forKeyPath: self.RECORDING_KEY_PATH, context: RecordingContext)
+            if (self.observersRegistered!) {
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
+                NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
+                
+                self.removeObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, context: SessionRunningAndDeviceAuthorizedContext)
+                self.removeObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, context: CapturingStillImageContext)
+                self.removeObserver(self, forKeyPath: self.RECORDING_KEY_PATH, context: RecordingContext)
+                
+                self.observersRegistered = false
+            }
         })
     }
     
@@ -366,7 +371,6 @@ class CameraView : UIView {
             } else if (context == RecordingContext) {
                 if let isRecording = changes[NSKeyValueChangeNewKey] {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        // TODO: we aren't recording yet
                         if (isRecording) {
                         } else {
                         }
@@ -510,16 +514,7 @@ class CameraView : UIView {
                     var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     var image = UIImage(data: imageData)
                     
-                    var squaredRect : CGRect
-                    if (image!.size.width > image!.size.height) {
-                        var cropX = (image!.size.width / 2) - (image!.size.height / 2)
-                        squaredRect = CGRectMake(cropX, 0, image!.size.height, image!.size.height)
-                    } else {
-                        var cropY = (image!.size.height / 2) - (image!.size.width / 2)
-                        squaredRect = CGRectMake(0, cropY, image!.size.width, image!.size.width)
-                    }
-                    
-                    var squaredImage = image!.cropImageToRect(squaredRect)
+                    var squaredImage = image!.cropImageInCenter()
                     
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
                         // We need to flip the image captured by the front camera
@@ -531,6 +526,49 @@ class CameraView : UIView {
                 }
             })
         })
+    }
+    
+    func captureVideo() {
+        let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+        let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
+        videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
+        
+        videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
+        
+        var format = NSDateFormatter()
+        format.dateFormat="yyyy-MM-dd"
+        
+        // TODO - which name should we use?
+        var currentFileName = "recording-\(format.stringFromDate(NSDate())).mov"
+        println("Recording video at: \(currentFileName)")
+        
+        var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+        var docsDir: AnyObject = dirPaths[0]
+        var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+        var videoURL = NSURL(fileURLWithPath: videoFilePath)!
+        
+        var fileManager = NSFileManager.defaultManager()
+        
+        if (fileManager.fileExistsAtPath(videoURL.path!)) {
+            println("File already exists, removing it.")
+            fileManager.removeItemAtURL(videoURL, error: nil)
+        }
+        
+        let oneSecond = 1 * Double(NSEC_PER_SEC)
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+        
+        dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+            self.stopRecording()
+        }
+
+        self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
+    }
+    
+    func stopRecording() {
+        println("Stop recording video")
+        self.movieFileOutput.stopRecording()
     }
     
     func focusAndExposeTap(gestureRecognizer: UIGestureRecognizer) {
@@ -626,6 +664,9 @@ class CameraView : UIView {
         return captureDevice
     }
     
+    func getFontSizeMultiplierForDevice() -> CGFloat {
+        return self.frame.size.width / self.CAMERA_VIEW_FRAME_WIDTH_ON_IPHONE_4
+    }
     
     // MARK: - Utility Methods
     
@@ -649,6 +690,18 @@ class CameraView : UIView {
             }
         })
     }
+    
+    
+    // MARK: Finish Record Output Delegate
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+        if (error != nil) {
+            println("An error happen while recording a video: error [\(error)] and userinfo[\(error.userInfo)]")
+            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, withSuccess: false)
+        } else {
+            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, withSuccess: true)
+        }
+    }
 }
 
 
@@ -656,4 +709,5 @@ class CameraView : UIView {
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool) // Take a picture button should be disabled
     optional func cameraViewDidTapMicrophoneButton(cameraView: CameraView)
+    optional func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool)
 }

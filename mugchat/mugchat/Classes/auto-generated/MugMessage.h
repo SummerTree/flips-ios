@@ -13,21 +13,30 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Mug, User;
+@class Mug, Room, User;
 
 @interface MugMessage : NSManagedObject
 
+@property (nonatomic, retain) NSDate * createdAt;
 @property (nonatomic, retain) NSNumber * notRead;
-@property (nonatomic, retain) NSDate * sentDate;
+@property (nonatomic, retain) NSDate * receivedAt;
+@property (nonatomic, retain) NSNumber * removed;
+@property (nonatomic, retain) NSNumber * mugMessageID;
 @property (nonatomic, retain) User *from;
-@property (nonatomic, retain) NSSet *mugs;
+@property (nonatomic, retain) NSOrderedSet *mugs;
+@property (nonatomic, retain) Room *room;
 @end
 
 @interface MugMessage (CoreDataGeneratedAccessors)
 
+- (void)insertObject:(Mug *)value inMugsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromMugsAtIndex:(NSUInteger)idx;
+- (void)insertMugs:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeMugsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInMugsAtIndex:(NSUInteger)idx withObject:(Mug *)value;
+- (void)replaceMugsAtIndexes:(NSIndexSet *)indexes withMugs:(NSArray *)values;
 - (void)addMugsObject:(Mug *)value;
 - (void)removeMugsObject:(Mug *)value;
-- (void)addMugs:(NSSet *)values;
-- (void)removeMugs:(NSSet *)values;
-
+- (void)addMugs:(NSOrderedSet *)values;
+- (void)removeMugs:(NSOrderedSet *)values;
 @end

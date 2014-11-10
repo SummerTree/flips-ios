@@ -12,16 +12,7 @@
 
 class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavigationBarDelegate {
     
-    // TODO: will be removed - just for test
-    var items = [ InboxItem(userName: "Ben", mugMessage: "tap to play", notReadMessages: 2, mugTime: "10:20 PM"),
-        InboxItem(userName: "Diego, Ecil, Bruno, Cristiano, Ben, Eric", mugMessage: "tap to play", notReadMessages: 3, mugTime: "10:18 PM"),
-        InboxItem(userName: "Diego", mugMessage: "I love SF 1", notReadMessages: 0, mugTime: "10:16 PM"),
-        InboxItem(userName: "Eric", mugMessage: "I love SF 2", notReadMessages: 20, mugTime: "10:15 PM"),
-        InboxItem(userName: "Ecil", mugMessage: "I love SF 3", notReadMessages: 0, mugTime: "10:14 PM"),
-        InboxItem(userName: "Diego, Ecil", mugMessage: "I love SF 4", notReadMessages: 1, mugTime: "10:13 PM"),
-        InboxItem(userName: "MugBoys", mugMessage: "Welcome to MugChat", notReadMessages: 0, mugTime: "10:01 PM") ]
-    
-    private let MUG_CELL_HEIGHT : CGFloat = 168.5
+    private let MUG_CELL_HEIGHT : CGFloat = 169
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
     
@@ -30,6 +21,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private var composeButton : UIButton!
     
     var delegate : InboxViewDelegate?
+    
+    private var rooms: Array<Room>!
     
     
     // MARK: - Initialization Methods
@@ -41,6 +34,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        rooms = Array<Room>()
+        
         self.initSubviews()
         self.initConstraints()
     }
@@ -50,16 +45,20 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     private func initSubviews() {
-        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "tmp_homer")!, showSettingsButton: true, showBuiderButton: true)
-        navigationBar.delegate = self
-        
+        let loggedUser = AuthenticationHelper.sharedInstance.userInSession
+        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User")!, showSettingsButton: true, showBuilderButton: true)
+        navigationBar.setAvatarImageUrl(loggedUser.photoURL)
+        navigationBar.alpha = 0.99 // FOR iOS7.
+        // TODO: apply blur for iOS8 using new methods.
         
         conversationsTableView = UITableView(frame: self.frame, style: .Plain)
         conversationsTableView.registerClass(ConversationTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
         conversationsTableView.separatorStyle = .None
         conversationsTableView.contentInset = UIEdgeInsetsMake(navigationBar.getNavigationBarHeight(), 0, 0, 0)
         conversationsTableView.contentOffset = CGPointMake(0, -navigationBar.getNavigationBarHeight())
+        conversationsTableView.backgroundColor = UIColor.sand()
         self.addSubview(conversationsTableView)
+        navigationBar.delegate = self
         
         conversationsTableView.dataSource = self
         conversationsTableView.delegate = self
@@ -89,9 +88,17 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         }
         
         composeButton.mas_makeConstraints { (make) -> Void in
-            make.bottom.lessThanOrEqualTo()(self).with().offset()(-self.COMPOSE_BUTTON_BOTTOM_MARGIN)
+            make.bottom.equalTo()(self).with().offset()(-self.COMPOSE_BUTTON_BOTTOM_MARGIN)
             make.centerX.equalTo()(self)
         }
+    }
+    
+    
+    // MARK: - Rooms Setter
+    
+    func setRooms(rooms: [Room]) {
+        self.rooms = rooms
+        self.conversationsTableView.reloadData()
     }
     
     
@@ -99,12 +106,13 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ConversationTableViewCell
-        cell.item = items[indexPath.row]
-        return cell;
+        cell.setRoom(rooms[indexPath.row]) 
+        cell.selectionStyle = UITableViewCellSelectionStyle.Gray
+        return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count;
+        return rooms.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -121,14 +129,21 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            items.removeAtIndex(indexPath.row)
+            var room = rooms[indexPath.row]
+            ActivityIndicatorHelper.showActivityIndicatorAtView(self)
+            room.markAllMessagesAsRemoved({ (success) -> Void in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+            })
+            rooms.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
         }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        var size = CGSizeMake(CGRectGetWidth(navigationBar.frame), CGRectGetHeight(navigationBar.frame))
-        navigationBar.setBackgroundImage(conversationsTableView.getImageWithSize(size))
+        // BLUR is causing the scroll to not be smooth.
+//        let size = CGSizeMake(CGRectGetWidth(self.navigationBar.frame), CGRectGetHeight(self.navigationBar.frame))
+//        let image = self.conversationsTableView.getImageWithSize(size)
+//        self.navigationBar.setBackgroundImage(image)
     }
     
     

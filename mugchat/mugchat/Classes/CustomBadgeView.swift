@@ -60,6 +60,5 @@ class CustomBadgeView : UIView {
     
     func setBagdeValue(value: String) {
         badgeLabel.text = value
-        self.layoutIfNeeded()
     }
 }

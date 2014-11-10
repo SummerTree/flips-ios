@@ -18,7 +18,6 @@
 
 @dynamic deviceID;
 @dynamic isVerified;
-@dynamic phoneNumber;
 @dynamic platform;
 @dynamic retryCount;
 @dynamic uuid;

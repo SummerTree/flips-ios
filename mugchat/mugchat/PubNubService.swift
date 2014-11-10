@@ -43,7 +43,7 @@ public class PubNubService: MugchatService, PNDelegate {
     func connect() {
         if (!PubNub.sharedInstance().isConnected()) {
             PubNub.connect()
-            self.subscribeOnOwnChannel()
+            self.subscribeOnMyChannels()
         }
     }
     
@@ -51,9 +51,26 @@ public class PubNubService: MugchatService, PNDelegate {
         return PubNub.sharedInstance().isConnected()
     }
     
-    func subscribeOnOwnChannel() {
+    private func subscribeOnMyChannels() {
         var ownChannel: PNChannel = PNChannel.channelWithName(AuthenticationHelper.sharedInstance.userInSession.pubnubID) as PNChannel
-        PubNub.subscribeOnChannel(ownChannel)
+        
+        var channels = Array<PNChannel>()
+        channels.append(ownChannel)
+        
+        let roomDataSource = RoomDataSource()
+        var rooms = roomDataSource.getAllRooms() // We need to subscribe even in rooms without messages
+        for room in rooms {
+            channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
+        }
+        
+        PubNub.subscribeOnChannels(channels)
+    }
+    
+    func subscribeToChannel(pubnubID: String) {
+        var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
+        if (!PubNub.isSubscribedOnChannel(channel)) {
+            PubNub.subscribeOnChannel(channel)
+        }
     }
     
     public func pubnubClient(client: PubNub!, error: PNError!) {
@@ -62,14 +79,15 @@ public class PubNubService: MugchatService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
         println("Did receive message. Forwading it to delegate.")
-        var messageJSON: JSON = JSON(pnMessage.message)
-//        let mugMessage = MugMessage(json: message)
-        let mugMessageDataSource = MugMessageDataSource()
-        let mugMessage = mugMessageDataSource.createEntityWithJson(messageJSON)
-        self.delegate?.pubnubClient(client, didReceiveMessage:mugMessage)
+        println("pnMessage.channel.name: \(pnMessage.channel.name)")
+
+        let messageJSON: JSON = JSON(pnMessage.message)
+        self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, fromChannelName: pnMessage.channel.name)
     }
 }
 
 protocol PubNubServiceDelegate {
-    func pubnubClient(client: PubNub!, didReceiveMessage message: MugMessage!)
+    
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String)
+    
 }

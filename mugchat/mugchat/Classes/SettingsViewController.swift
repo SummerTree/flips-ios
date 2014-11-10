@@ -14,59 +14,83 @@ import Foundation
 
 class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     
-    let settingsView = SettingsView()
+    private var settingsView: SettingsView!
     
     
     // MARK: - Overridden Methods
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view = settingsView
+    override func loadView() {
+        super.loadView()
+        self.settingsView = SettingsView()
         self.settingsView.delegate = self
-        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
-        
-        self.setNeedsStatusBarAppearanceUpdate()
-        
-        // Just for test. Can be removed.
-        let loggedUserNameLabel = UILabel()
-        loggedUserNameLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h3)
-        loggedUserNameLabel.textColor = UIColor.mugOrange()
-        loggedUserNameLabel.numberOfLines = 2
-        loggedUserNameLabel.textAlignment = NSTextAlignment.Center
-        self.view.addSubview(loggedUserNameLabel)
-        
-        loggedUserNameLabel.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.view)
-            make.trailing.equalTo()(self.view)
-            make.center.equalTo()(self.view)
-        }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let loggedUser: User! = User.loggedUser()
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if (loggedUser != nil) {
-                    loggedUserNameLabel.text = "Logged as \n\(loggedUser.firstName) \(loggedUser.lastName)"
-                }
-            })
-        })
+        self.view = settingsView
     }
     
-    
-    // MARK: - Settings View Delegate
-    
-    func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
-        AuthenticationHelper.sharedInstance.logout()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.automaticallyAdjustsScrollViewInsets = false
+        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Settings", comment: "Settings"))
+        self.setNeedsStatusBarAppearanceUpdate()
         
-        var navigationController: UINavigationController = self.presentingViewController as UINavigationController
-        navigationController.popViewControllerAnimated(false)
-        self.dismissViewControllerAnimated(true, completion:nil)
+        self.settingsView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.settingsView.viewWillAppear()
+    }
+    
+    
+    // MARK: - Settings View Delegate
+    
+    func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!) {
+        // using Mansory strategy
+        // check here: https://github.com/Masonry/Masonry/issues/27
+        tableView.mas_makeConstraints { (make) -> Void in
+            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+            make.top.equalTo()(topLayoutGuide.mas_bottom)
+        }
+    }
+    
+    func settingsViewDidTapChangeProfile(settingsView: SettingsView) {
+        var updateUserProfileViewController = UpdateUserProfileViewController()
+        self.navigationController?.pushViewController(updateUserProfileViewController, animated: true)
+    }
+    
+    func settingsViewDidTapAbout(settingsView: SettingsView) {
+        var aboutViewController = AboutViewController()
+        self.navigationController?.pushViewController(aboutViewController, animated: true)
+    }
+    
+    func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
+        var termsOfUseViewController = TermsOfUseViewController()
+        self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
+    }
+    
+    func settingsViewDidTapPrivacyPolicy(settingsView: SettingsView) {
+        var privacyPolicyViewController = PrivacyPolicyViewController()
+        self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
+    }
+    
+    func settingsViewDidTapSendFeedback(settingsView: SettingsView) {
+        println("settingsViewDidTapSendFeedback")
+    }
+    
+    func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView) {
+        println("settingsViewDidTapChangePhoneNumber")
+    }
+    
+    func settingsViewDidTapImportContacts(settingsView: SettingsView) {
+        println("settingsViewDidTapImportContacts")
+    }
+    
+    func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
+        AuthenticationHelper.sharedInstance.logout()
+        
+        var navigationController: UINavigationController = self.presentingViewController as UINavigationController
+        navigationController.popToRootViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion:nil)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

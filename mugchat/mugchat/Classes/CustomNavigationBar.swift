@@ -41,7 +41,7 @@ class CustomNavigationBar : UIView {
     
     // MARK: - Static Creator Method
     
-    class func CustomSmallNavigationBar(avatarImage: UIImage, showSettingsButton: Bool, showBuiderButton: Bool) -> CustomNavigationBar {
+    class func CustomSmallNavigationBar(avatarImage: UIImage, showSettingsButton: Bool, showBuilderButton: Bool) -> CustomNavigationBar {
         
         var settingsButtonImage : UIImage?
         if (showSettingsButton) {
@@ -49,7 +49,7 @@ class CustomNavigationBar : UIView {
         }
         
         var builderButtonImage : UIImage?
-        if (showBuiderButton) {
+        if (showBuilderButton) {
             builderButtonImage = UIImage(named: "Builder")
         }
         
@@ -64,6 +64,24 @@ class CustomNavigationBar : UIView {
         
         return navigationBar
     }
+    
+    class func CustomSmallNavigationBar(title: String, showBackButton: Bool) -> CustomNavigationBar {
+        
+        var backButtonImage : UIImage?
+        if (showBackButton) {
+            backButtonImage = UIImage(named: "Back")
+        }
+        
+        var navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        
+        navigationBar.buttonsMargin = NORMAL_NAV_BAR_BUTTON_MARGIN
+        navigationBar.setup(title, leftButtonImage: backButtonImage)
+        
+        return navigationBar
+    }
+
     
     class func CustomNormalNavigationBar(title: String, showBackButton: Bool) -> CustomNavigationBar {
         
@@ -98,7 +116,7 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
-
+        
         var imageButton = UIButton.avatarA2(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
@@ -110,7 +128,7 @@ class CustomNavigationBar : UIView {
     class func CustomLargeNavigationBar(avatarImage: UIImage, isAvatarButtonInteractionEnabled: Bool = false, showBackButton: Bool, showSaveButton: Bool) -> CustomNavigationBar {
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_Orange")
         }
         
         var saveButtonTitle : String?
@@ -122,15 +140,14 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
-
-        var imageButton = UIButton.avatarA2(avatarImage)
+        
+        var imageButton = UIButton.avatarA2WithoutBorder(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
         navigationBar.setup(imageButton, leftButtonImage: backButtonImage, rightButtonObject: saveButtonTitle)
         
         return navigationBar
     }
-    
     
     // MARK: - Init Methods
     
@@ -187,8 +204,8 @@ class CustomNavigationBar : UIView {
             rightButton = UIButton()
             if let rightButtonItem = rightButtonObject as? String {
                 rightButton.setTitle(rightButtonItem, forState: .Normal)
-                rightButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-                rightButton.setTitleColor(UIColor.grayColor(), forState: .Highlighted)
+                rightButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+                rightButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
                 rightButton.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h3)
             } else if let rightButtonItem = rightButtonObject as? UIImage {
                 rightButton.setImage(rightButtonItem, forState: .Normal)
@@ -214,7 +231,7 @@ class CustomNavigationBar : UIView {
                 update.height.equalTo()(self.avatarButton.frame.size.height)
             })
         }
-
+        
         if (avatarImageView != nil) {
             avatarImageView.mas_updateConstraints { (update) -> Void in
                 update.centerX.equalTo()(self)
@@ -309,11 +326,21 @@ class CustomNavigationBar : UIView {
         }
     }
     
+    func setAvatarImageUrl(url: String) {
+        if (!url.isEmpty) {
+            if (avatarImageView != nil) {
+                avatarImageView.setImageWithURL(NSURL(string: url))
+            } else {
+                println("Avatar using button is not integrated with images from URLs yet.")
+            }
+        }
+    }
+    
     
     // MARK: - Button Handlers
     
     func didTapLeftButton() {
-        delegate?.customNavigationBarDidTapLeftButton(self)
+        delegate?.customNavigationBarDidTapLeftButton?(self)
     }
     
     func didTapRightButton() {
@@ -329,5 +356,9 @@ class CustomNavigationBar : UIView {
     func setBackgroundImage(image: UIImage) {
         backgroundImageView.alpha = 1.0
         backgroundImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+    }
+    
+    func setBackgroundImageColor(color: UIColor) {
+        backgroundImageView.backgroundColor = color
     }
 }

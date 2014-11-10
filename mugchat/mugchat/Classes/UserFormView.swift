@@ -135,6 +135,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             update.trailing.equalTo()(self)
             update.leading.equalTo()(self)
             update.height.equalTo()(self.CELL_HEIGHT)
+            update.bottom.equalTo()(self)
         }
     }
     
@@ -259,6 +260,8 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
+        self.delegate?.userFormViewDidUpdateField?(self)
+        
         if (textField == birthdayTextField) {
             var stringWithOnlyDigits = textField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
@@ -345,6 +348,8 @@ class UserFormView : UIView, UITextFieldDelegate {
     func isNewDateInformedValid(newDateString: String) -> Bool {
         var position = 0
         var lastCharacter = ""
+        var lastButOneCharacter = ""
+        var lastButTwoCharacters = ""
         for character in newDateString {
             var characterDoubleValue = String(character).doubleValue()
             if (position == 0) {
@@ -362,7 +367,11 @@ class UserFormView : UIView, UITextFieldDelegate {
                     }
                 }
             } else if (position == 2) {
-                if (characterDoubleValue > 3) {
+                if lastButOneCharacter == "0" && lastCharacter == "2" {
+                    if characterDoubleValue > 2 {
+                        return false
+                    }
+                } else if (characterDoubleValue > 3) {
                     return false
                 }
             } else if (position == 3) {
@@ -372,6 +381,14 @@ class UserFormView : UIView, UITextFieldDelegate {
                     }
                 } else if (lastCharacter == "3") {
                     if (characterDoubleValue > 1) {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "4" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "6" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButOneCharacter == "9" {
+                        return false
+                    } else if characterDoubleValue > 0 && lastButTwoCharacters == "1" && lastButOneCharacter == "1" {
                         return false
                     }
                 }
@@ -394,12 +411,26 @@ class UserFormView : UIView, UITextFieldDelegate {
             } else if (position == 7) {
                 // any value is possible
             }
+            lastButTwoCharacters = lastButOneCharacter
+            lastButOneCharacter = lastCharacter
             lastCharacter = String(character)
             position++
         }
         return true
     }
     
+    
+    // MARK: - Setters
+    
+    func setUserData(user: User!) {
+        firstNameTextField.text = user.firstName
+        lastNameTextField.text = user.lastName
+        emailTextField.text = user.username
+        
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        birthdayTextField.text = formatter.stringFromDate(user.birthday)
+    }
     
     // MARK: - Getters
     

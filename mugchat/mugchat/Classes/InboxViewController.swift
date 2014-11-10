@@ -10,37 +10,48 @@
 // the license agreement.
 //
 
+
 class InboxViewController : MugChatViewController, InboxViewDelegate {
+
+    var inboxView: InboxView!
+    var roomDataSource: RoomDataSource!
     
     // MARK: - UIViewController overridden methods
 
+    override func loadView() {
+        inboxView = InboxView()
+        inboxView.delegate = self
+        self.view = inboxView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.initInboxView()
+        roomDataSource = RoomDataSource()
     }
     
-    
-    //MARK: - Private methods
-    
-    private func initInboxView() {
-        var inboxView = InboxView()
-        inboxView.delegate = self
-        self.view.addSubview(inboxView)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
-        inboxView.mas_makeConstraints { (maker) -> Void in
-            maker.top.equalTo()(self.view)
-            maker.bottom.equalTo()(self.view)
-            maker.leading.equalTo()(self.view)
-            maker.trailing.equalTo()(self.view)
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.refreshRooms()
     }
     
     
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
-        self.navigationController?.pushViewController(ComposeViewController(), animated: true)
+		self.navigationController?.presentViewController(NewFlipViewController.instantiateNavigationController(), animated: true, completion: nil)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {
@@ -62,6 +73,29 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
         println("tap at cell \(index)")
         self.navigationController?.pushViewController(ChatViewController(chatTitle: "MugBoys"), animated: true)
+    }
+    
+    
+    // MARK: - Room Handlers
+    
+    private func refreshRooms() {
+        inboxView.setRooms(roomDataSource.getMyRoomsOrderedByOldestNotReadMessage())
+    }
+    
+    
+    // MARK: - Messages Notification Handler
+    
+    func notificationReceived(notification: NSNotification) {
+        var userInfo: Dictionary = notification.userInfo!
+        var mug = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Mug
+        if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
+            println("Download failed for mug: \(mug.mugID)")
+            // TODO: show download fail state
+        } else {
+            if (mug.hasAllContentDownloaded()) {
+                self.refreshRooms()
+            }
+        }
     }
 }
 

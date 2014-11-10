@@ -33,5 +33,10 @@
 #import "Room.h"
 #import "Mug.h"
 #import "MugMessage.h"
+#import "Contact.h"
+
+#import "UIImageView+AFNetworking.h"
+#import "VideoComposer.h"
+#import "ImageVideoCreator.h"
 
 #endif

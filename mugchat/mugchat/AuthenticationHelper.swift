@@ -35,6 +35,12 @@ public class AuthenticationHelper: NSObject {
         userDefaults.synchronize()
     }
 
+    private func removeAuthenticatedUsername() {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(LOGIN_USERNAME_KEY)
+        userDefaults.synchronize()
+    }
+    
     func retrieveAuthenticatedUsernameIfExists() -> String? {
         var loggedUserInfo = User.isUserLoggedIn()
         var userDefaults = NSUserDefaults.standardUserDefaults()
@@ -42,12 +48,22 @@ public class AuthenticationHelper: NSObject {
     }
     
     func logout() {
+        
+        if let facebookID = self.userInSession.facebookID {
+            if !self.userInSession.facebookID.isEmpty {
+                self.removeAuthenticatedUsername()
+            }
+        }
+        
         self.userInSession = nil
         FBSession.activeSession().closeAndClearTokenInformation()
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)
         
         CoreDataHandler.sharedInstance.resetDatabase()
+        
+        // Unregister for push notifications
+        UIApplication.sharedApplication().unregisterForRemoteNotifications()
     }
 
     

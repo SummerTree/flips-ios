@@ -13,7 +13,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Device, Mug, Room, User;
+@class Contact, Device, Mug, MugMessage, Room;
 
 @interface User : NSManagedObject
 
@@ -23,41 +23,54 @@
 @property (nonatomic, retain) NSString * lastName;
 @property (nonatomic, retain) NSNumber * me;
 @property (nonatomic, retain) NSString * nickname;
+@property (nonatomic, retain) NSString * phoneNumber;
 @property (nonatomic, retain) NSString * photoURL;
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSOrderedSet *contacts;
-@property (nonatomic, retain) NSSet *devices;
-@property (nonatomic, retain) NSSet *mugs;
-@property (nonatomic, retain) NSSet *rooms;
+@property (nonatomic, retain) Device *device;
+@property (nonatomic, retain) NSOrderedSet *mugs;
+@property (nonatomic, retain) NSOrderedSet *mugsSent;
+@property (nonatomic, retain) NSOrderedSet *rooms;
+@property (nonatomic, retain) NSSet *userContact;
+@property (nonatomic, retain) Room *adminRooms;
 @end
 
 @interface User (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(User *)value inContactsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromContactsAtIndex:(NSUInteger)idx;
-- (void)insertContacts:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeContactsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInContactsAtIndex:(NSUInteger)idx withObject:(User *)value;
-- (void)replaceContactsAtIndexes:(NSIndexSet *)indexes withContacts:(NSArray *)values;
-- (void)addContactsObject:(User *)value;
-- (void)removeContactsObject:(User *)value;
-- (void)addContacts:(NSOrderedSet *)values;
-- (void)removeContacts:(NSOrderedSet *)values;
-- (void)addDevicesObject:(Device *)value;
-- (void)removeDevicesObject:(Device *)value;
-- (void)addDevices:(NSSet *)values;
-- (void)removeDevices:(NSSet *)values;
-
+- (void)insertObject:(Mug *)value inMugsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromMugsAtIndex:(NSUInteger)idx;
+- (void)insertMugs:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeMugsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInMugsAtIndex:(NSUInteger)idx withObject:(Mug *)value;
+- (void)replaceMugsAtIndexes:(NSIndexSet *)indexes withMugs:(NSArray *)values;
 - (void)addMugsObject:(Mug *)value;
 - (void)removeMugsObject:(Mug *)value;
-- (void)addMugs:(NSSet *)values;
-- (void)removeMugs:(NSSet *)values;
-
+- (void)addMugs:(NSOrderedSet *)values;
+- (void)removeMugs:(NSOrderedSet *)values;
+- (void)insertObject:(MugMessage *)value inMugsSentAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromMugsSentAtIndex:(NSUInteger)idx;
+- (void)insertMugsSent:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeMugsSentAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInMugsSentAtIndex:(NSUInteger)idx withObject:(MugMessage *)value;
+- (void)replaceMugsSentAtIndexes:(NSIndexSet *)indexes withMugsSent:(NSArray *)values;
+- (void)addMugsSentObject:(MugMessage *)value;
+- (void)removeMugsSentObject:(MugMessage *)value;
+- (void)addMugsSent:(NSOrderedSet *)values;
+- (void)removeMugsSent:(NSOrderedSet *)values;
+- (void)insertObject:(Room *)value inRoomsAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromRoomsAtIndex:(NSUInteger)idx;
+- (void)insertRooms:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeRoomsAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInRoomsAtIndex:(NSUInteger)idx withObject:(Room *)value;
+- (void)replaceRoomsAtIndexes:(NSIndexSet *)indexes withRooms:(NSArray *)values;
 - (void)addRoomsObject:(Room *)value;
 - (void)removeRoomsObject:(Room *)value;
-- (void)addRooms:(NSSet *)values;
-- (void)removeRooms:(NSSet *)values;
+- (void)addRooms:(NSOrderedSet *)values;
+- (void)removeRooms:(NSOrderedSet *)values;
+- (void)addUserContactObject:(Contact *)value;
+- (void)removeUserContactObject:(Contact *)value;
+- (void)addUserContact:(NSSet *)values;
+- (void)removeUserContact:(NSSet *)values;
 
 @end

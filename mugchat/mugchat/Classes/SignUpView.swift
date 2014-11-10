@@ -13,10 +13,9 @@
 class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, MessagesTopViewDelegate {
     
     private let MESSAGES_TOP_VIEW_ANIMATION_DURATION = 0.3
-    
-    private var navigationBar : CustomNavigationBar!
     private var messagesTopView : MessagesTopView!
-    private var userFormView : UserFormView!
+    internal var navigationBar : CustomNavigationBar!
+    internal var userFormView : UserFormView!
     
     var delegate : SignUpViewDelegate?
     
@@ -42,9 +41,9 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     }
     
     private func initSubviews() {
-        self.backgroundColor = UIColor.deepSea()
+        self.backgroundColor = getBackgroundColor()
         
-        navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
+        navigationBar = addCustomNavigationBar()
         navigationBar.setRightButtonEnabled(false)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
@@ -56,6 +55,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         userFormView = UserFormView()
         userFormView.delegate = self
         self.addSubview(userFormView)
+    }
+    
+    internal func addCustomNavigationBar() -> CustomNavigationBar! {
+        return CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
     }
     
     private func initConstraints() {
@@ -77,22 +80,37 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             make.top.equalTo()(self.navigationBar.mas_bottom)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
-            make.bottom.equalTo()(self)
         }
     }
     
+    // MARK: - Life Cycle
+    
+    func loadView() {
+        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    func viewDidAppear() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
     
     // MARK: - CustomNavigationBarDelegate
     
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
-        delegate?.signUpViewDidTapBackButton(self)
+        delegate?.signUpViewDidTapBackButton?(self)
     }
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         if (userFormView.isAllFieldsValids()) {
             self.dismissKeyboard()
-            var userData = userFormView.getUserData()
-            delegate?.signUpView(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
+            var userData = getUserData()
+            delegate?.signUpView!(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
         }
     }
     
@@ -131,7 +149,15 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     }
     
     func userFormView(userFormView: UserFormView, didValidateAllFieldsWithSuccess success: Bool) {
+        enableRightButton(success)
+    }
+
+    func enableRightButton(success: Bool) {
         navigationBar.setRightButtonEnabled(success)
+    }
+    
+    func userFormViewDidUpdateField(userFormView: UserFormView) {
+        // do nothing
     }
     
     
@@ -194,10 +220,55 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         })
     }
     
+    // MARK - Keyboard Control
+    
     func dismissKeyboard() {
         userFormView.dismissKeyboard()
     }
     
+    func keyboardWillShow(notification: NSNotification) {
+        let keyboardMinY = getKeyboardMinY(notification)
+        self.slideViews(true, keyboardTop: keyboardMinY)
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        let keyboardMinY = getKeyboardMinY(notification)
+        self.slideViews(false, keyboardTop: keyboardMinY)
+    }
+    
+    private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
+        return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
+    }
+    
+    func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
+        self.layoutIfNeeded()
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            if (movedUp) {
+                var userFormViewFrameBottom = self.userFormView.frame.origin.y + self.userFormView.frame.size.height
+                var offsetValue = keyboardTop - userFormViewFrameBottom
+                if (offsetValue < 0) {
+                    self.navigationBar.mas_makeConstraints { (update) -> Void in
+                        update.removeExisting = true
+                        update.top.equalTo()(self).with().offset()(offsetValue)
+                        update.trailing.equalTo()(self)
+                        update.leading.equalTo()(self)
+                        update.height.equalTo()(self.navigationBar.frame.size.height)
+                    }
+                }
+            } else {
+                self.navigationBar.mas_makeConstraints { (update) -> Void in
+                    update.removeExisting = true
+                    update.top.equalTo()(self)
+                    update.trailing.equalTo()(self)
+                    update.leading.equalTo()(self)
+                    update.height.equalTo()(self.navigationBar.frame.size.height)
+                }
+            }
+            self.layoutIfNeeded()
+        })
+    }
     
     // MARK: - MessageTopViewDelegate
     
@@ -210,5 +281,16 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     func setUserPicture(picture: UIImage) {
         self.navigationBar.setAvatarImage(picture.avatarProportional())
+    }
+    
+    
+    // MARK: - Getters
+    
+    func getBackgroundColor() -> UIColor {
+        return UIColor.deepSea()
+    }
+    
+    internal func getUserData() -> (firstName: String, lastName: String, email: String, password: String, birthday:String) {
+        return userFormView.getUserData()
     }
 }

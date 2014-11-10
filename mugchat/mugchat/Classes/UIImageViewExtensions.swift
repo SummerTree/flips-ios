@@ -11,7 +11,8 @@
 //
 
 let A1_BORDER_WIDTH : CGFloat = 3
-let A1_AVATAR_SIZE = 200 + A1_BORDER_WIDTH
+// Sets avatar capture width to be 90% of camera view's width
+let A1_AVATAR_SIZE = DeviceHelper.DeviceScreenSize.screenRect.width * 0.9 + A1_BORDER_WIDTH
 let A2_BORDER_WIDTH : CGFloat = 3
 let A2_AVATAR_SIZE = 90 + A2_BORDER_WIDTH
 let A3_BORDER_WIDTH : CGFloat = 2
@@ -37,18 +38,8 @@ extension UIImageView {
         return UIImageView(frame: CGRectMake(0, 0, A4_AVATAR_SIZE, A4_AVATAR_SIZE), borderWidth: A4_BORDER_WIDTH)
     }
     
-    class func imageWithColor(color: UIColor) -> UIImageView {
-        let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
-        UIGraphicsBeginImageContext(rect.size)
-        let context = UIGraphicsGetCurrentContext()
-        
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
-        
-        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return UIImageView(image: image)
+    class func imageViewWithColor(color: UIColor) -> UIImageView {
+        return UIImageView(image: UIImage.imageWithColor(color))
     }
     
     convenience init(frame: CGRect, borderWidth : CGFloat) {

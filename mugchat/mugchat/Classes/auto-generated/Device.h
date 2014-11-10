@@ -19,7 +19,6 @@
 
 @property (nonatomic, retain) NSString * deviceID;
 @property (nonatomic, retain) NSNumber * isVerified;
-@property (nonatomic, retain) NSString * phoneNumber;
 @property (nonatomic, retain) NSString * platform;
 @property (nonatomic, retain) NSNumber * retryCount;
 @property (nonatomic, retain) NSString * uuid;

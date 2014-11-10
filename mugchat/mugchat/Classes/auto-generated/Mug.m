@@ -11,6 +11,7 @@
 //
 
 #import "Mug.h"
+#import "MugMessage.h"
 #import "User.h"
 
 
@@ -20,8 +21,11 @@
 @dynamic category;
 @dynamic isPrivate;
 @dynamic mugID;
+@dynamic removed;
 @dynamic soundURL;
 @dynamic word;
+@dynamic backgroundContentType;
+@dynamic messages;
 @dynamic owner;
 
 @end
