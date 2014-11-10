@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
 		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
+		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
@@ -154,6 +155,7 @@
 /* Begin PBXFileReference section */
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
 		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
+		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* MugchatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugchatService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 			children = (
 				0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */,
 				0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */,
+				07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */,
 			);
 			name = "New Flip";
 			sourceTree = "<group>";
@@ -1107,6 +1110,7 @@
 				5786B2D919EEAE0200021DD3 /* movie_thumbnail.png in Resources */,
 				5786B2DA19EEAE0200021DD3 /* wanna_coffee.mov in Resources */,
 				70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */,
+				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
