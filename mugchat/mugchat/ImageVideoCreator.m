@@ -106,7 +106,9 @@
     
     //Finish the session:
     [writerVideoInput markAsFinished];
-    [videoWriter finishWriting];
+    [videoWriter finishWritingWithCompletionHandler:^{
+        NSLog(@"Finished writing video");
+    }];
     CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
     
     if (audioPath && (![audioPath isEqualToString:@""])) {
