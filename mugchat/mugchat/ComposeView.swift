@@ -469,7 +469,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
         if (currentMugText.associatedMug != nil) {
             self.mugImageView.setImageWithURL(NSURL(string: currentMugText.associatedMug!.backgroundURL))
         } else {
-            self.mugImageView.image = UIImageView.imageWithColor(UIColor.avacado())
+            self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
         }
         
         self.myMugsView.setMugText(self.mugTexts[self.userStep])
@@ -489,7 +489,7 @@ class ComposeView : UIView, CustomNavigationBarDelegate, CameraViewDelegate, Mug
     func myMugsViewDidChangeMugSelection(myMugsView: MyMugsView!, mug: Mug!) {
         if (self.mugTexts[userStep].associatedMug?.mugID == mug.mugID) { //same mug (so user is deselecting it)
             self.mugTexts[userStep].associatedMug = nil
-            self.mugImageView.image = UIImageView.imageWithColor(UIColor.avacado())
+            self.mugImageView.image = UIImage.imageWithColor(UIColor.avacado())
         } else {
             self.mugTexts[userStep].associatedMug = mug
             self.mugImageView.setImageWithURL(NSURL(string: mug.backgroundURL))

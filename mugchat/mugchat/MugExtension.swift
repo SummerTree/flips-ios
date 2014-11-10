@@ -23,6 +23,8 @@ private struct BackgroundContentTypeValue {
     static let Video: Int = 2
 }
 
+private let NO_BACKGROUND_IMAGE_NAME = "no_background_image.jpg"
+
 extension Mug {
  
     func setBackgroundContentType(type: BackgroundContentType) {
@@ -56,22 +58,55 @@ extension Mug {
         return (self.backgroundContentType == BackgroundContentTypeValue.Video)
     }
     
+    func isBlankMug() -> Bool {
+        let hasBackgroundUrlDefined = (self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)
+        let hasSoundUrlDefine = (self.soundURL != nil) && (!self.soundURL.isEmpty)
+        
+        return (!hasBackgroundUrlDefined) && (!hasSoundUrlDefine)
+    }
+    
     func hasAllContentDownloaded() -> Bool {
-        let cacheHanlder = CacheHandler.sharedInstance
+        let cacheHandler = CacheHandler.sharedInstance
         var allContentReceived = true
         
         if ((self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)) {
-            if (!cacheHanlder.hasCachedFileForUrl(self.backgroundURL)) {
+            var result = cacheHandler.hasCachedFileForUrl(self.backgroundURL)
+            if (!result.hasCache) {
                 allContentReceived = false
             }
         }
         
         if ((self.soundURL != nil) && (!self.soundURL.isEmpty)) {
-            if (!cacheHanlder.hasCachedFileForUrl(self.soundURL)) {
+            var result = cacheHandler.hasCachedFileForUrl(self.soundURL)
+            if (!result.hasCache) {
                 allContentReceived = false
             }
         }
         
         return allContentReceived
+    }
+    
+    func backgroundContentLocalPath() -> String {
+        let cacheHandler = CacheHandler.sharedInstance
+        
+        let result = cacheHandler.hasCachedFileForUrl(self.backgroundURL)
+        if (result.hasCache) {
+            return result.filePath!
+        }
+        
+        let noBackgroundImageResult = cacheHandler.hasCachedFileForUrl(NO_BACKGROUND_IMAGE_NAME)
+        if (noBackgroundImageResult.hasCache) {
+            return noBackgroundImageResult.filePath!
+        }
+        
+        let noBackgroundImage = UIImage.imageWithColor(UIColor.avacado())
+        return cacheHandler.saveImage(noBackgroundImage, withUrl: NO_BACKGROUND_IMAGE_NAME, isTemporary: false)
+    }
+    
+    func soundContentLocalPath() -> String? {
+        let cacheHandler = CacheHandler.sharedInstance
+        
+        let result = cacheHandler.hasCachedFileForUrl(self.soundURL)
+        return result.filePath
     }
 }
