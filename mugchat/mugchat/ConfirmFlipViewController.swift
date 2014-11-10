@@ -19,25 +19,32 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     private var confirmFlipView: ConfirmFlipView!
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
-    private var containsAudio = false
-    private var containsVideo = false
     
-    convenience init(flipWord: String!, flipPicture: UIImage!, flipAudio: NSURL?) {
+    private var flipWord: String!
+    private var flipImage: UIImage?
+    private var flipAudioURL: NSURL?
+    private var flipVideoURL: NSURL?
+    
+    convenience init(flipWord: String!, flipPicture: UIImage?, flipAudio: NSURL?) {
         self.init()
+
+        self.flipWord = flipWord
+        self.flipImage = flipPicture
+        self.flipAudioURL = flipAudio
         
-        if (flipAudio != nil) {
-            self.containsAudio = true
+        var image = flipPicture
+        if (image == nil) {
+            image = UIImage.imageWithColor(UIColor.avacado())
         }
         
-        self.confirmFlipView = ConfirmFlipView(word: flipWord, background: flipPicture, audio: flipAudio)
+        self.confirmFlipView = ConfirmFlipView(word: flipWord, background: image, audio: flipAudio)
     }
     
     convenience init(flipWord: String!, flipVideo: NSURL?) {
         self.init()
-        
-        if (flipVideo != nil) {
-            self.containsVideo = true
-        }
+
+        self.flipWord = flipWord
+        self.flipVideoURL = flipVideo
         
         self.confirmFlipView = ConfirmFlipView(word: flipWord, video: flipVideo)
     }
@@ -81,11 +88,11 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
     func startPreview() {
         self.isPlaying = true
-        if (self.containsAudio) {
+        if (self.flipAudioURL != nil) {
             self.confirmFlipView.playAudio()
         }
         
-        if (self.containsVideo) {
+        if (self.flipVideoURL != nil) {
             self.confirmFlipView.playVideo()
         }
     }
@@ -110,16 +117,30 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         let mugDataSource = MugDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
-        mugDataSource.createMugWithWord(flipView.getWord(), backgroundImage: confirmFlipView.getImage(), soundURL: nil,
-            createMugSuccess: { (mug) -> Void in
-                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
-                self.navigationController?.popViewControllerAnimated(false)
-                self.confirmFlipView.hideActivityIndicator()
-            }) { (message) -> Void in
-                self.confirmFlipView.hideActivityIndicator()
-                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
-                var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
-                alertView.show()
+        
+        var createMugSuccessBlock : CreateMugSuccess = { (mug) -> Void in
+            self.navigationController?.popViewControllerAnimated(false)
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
+            self.confirmFlipView.hideActivityIndicator()
+        }
+        var createMugFailBlock : CreateMugFail = { (message) -> Void in
+            self.confirmFlipView.hideActivityIndicator()
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
+            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            alertView.show()
+        }
+        
+        if (flipVideoURL == nil) {
+            mugDataSource.createMugWithWord(flipView.getWord(),
+                backgroundImage: self.flipImage,
+                soundURL: self.flipAudioURL,
+                createMugSuccess: createMugSuccessBlock,
+                createMugFail: createMugFailBlock)
+        } else {
+            mugDataSource.createMugWithWord(self.flipWord,
+                videoURL: self.flipVideoURL!,
+                createMugSuccess: createMugSuccessBlock,
+                createMugFail: createMugFailBlock)
         }
     }
     

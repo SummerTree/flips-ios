@@ -136,12 +136,23 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
             if let e = error {
                 println(e.localizedDescription)
             }
+            return
         }
         
         player.delegate = self
         player.prepareToPlay()
         player.volume = 1.0
         player.play()
+    }
+    
+    func stopAudio() {
+        if (player.playing) {
+            player.stop()
+        }
+    }
+    
+    func isPlaying() -> Bool {
+        return player.playing
     }
 }
 

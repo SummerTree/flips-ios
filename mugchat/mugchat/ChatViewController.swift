@@ -97,7 +97,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate {
     }
     
     func chatView(view: ChatView, didTapNextButtonWithWords words : [String]) {
-        var composeViewController = ComposeViewController(words: words)
+        var composeViewController = ComposeViewController(composeTitle: self.chatTitle, words: words)
         self.navigationController?.pushViewController(composeViewController, animated: true)
     }
    

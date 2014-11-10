@@ -66,7 +66,20 @@
 
 
 
-
+- (NSURL *)videoFromMugs:(NSArray *)mugs
+{
+    NSMutableArray *messageParts = [NSMutableArray array];
+    
+    for (Mug *mug in mugs) {
+        AVAsset *videoTrack = [self videoFromMug:mug];
+        
+        if (videoTrack) {
+            [messageParts addObject:videoTrack];
+        }
+    }
+    
+    return [self videoJoiningParts:messageParts];
+}
 
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage
 {
@@ -98,9 +111,9 @@
             NSLog(@"LEAVE");
             dispatch_group_leave(group);
         }];
-    } else if ([flip isBackgroundContentTypeImage]) {
+    } else {
         ImageVideoCreator *imageVideoCreator = [[ImageVideoCreator alloc] init];
-        NSURL *videoURL = [NSURL URLWithString:[imageVideoCreator videoPathForMug:flip]];
+        NSURL *videoURL = [NSURL fileURLWithPath:[imageVideoCreator videoPathForMug:flip]];
         track = [AVAsset assetWithURL:videoURL];
     }
 
@@ -144,7 +157,11 @@
     }
 
     NSURL *outputFolder = [self outputFolderPath];
-    __block NSURL *videoUrl = [outputFolder URLByAppendingPathComponent:@"generated-mug-message.mov"]; // Should get unique ID of mug message to use as filename
+    __block NSURL *videoUrl = [outputFolder URLByAppendingPathComponent:@"generated-mug-message.mov"]; // TODO: Should get unique ID of mug message to use as filename
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:videoUrl error:nil];
+    
 
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
     exportSession.outputURL = videoUrl;
@@ -207,7 +224,7 @@
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
-    NSURL *outputFolder = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSURL *outputFolder = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
     outputFolder = [outputFolder URLByAppendingPathComponent:@"VideoComposerOutput"];
 
     if (![fileManager fileExistsAtPath:[outputFolder relativePath] isDirectory:nil]) {

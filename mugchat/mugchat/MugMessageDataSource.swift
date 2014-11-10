@@ -68,6 +68,7 @@ class MugMessageDataSource : BaseDataSource {
         
         var mugsOrderedSet = NSMutableOrderedSet()
         for mug in mugs {
+            // TODO: empty mugs should be saved before call this method
             var mugInContext = mugDataSource.retrieveMugWithId(mug.mugID)
             mugsOrderedSet.addObject(mugInContext)
         }

@@ -10,23 +10,18 @@
 // the license agreement.
 //
 
-class MugText {
-    
-    var position: Int!
-    var text: String!
-    var state: FlipState!
-    var associatedMug: Mug!
-    
-    init(position: Int, text: String, state: FlipState) {
-        self.position = position
-        self.text = text
-        self.state = state
-    }
-}
+import Foundation
 
-enum FlipState {
-    case NewWord
-    case AssociatedWithoutOtherResources
-    case NotAssociatedWithResources
-    case AssociatedWithOtherResources
+let FLIP_WORD_LABEL_MARGIN_BOTTOM: CGFloat = -40
+
+extension UILabel {
+    
+    class func flipWordLabel() -> UILabel {
+        var flipWordLabel = UILabel()
+        flipWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
+        flipWordLabel.textColor = UIColor.whiteColor()
+        flipWordLabel.layer.shadowColor = UIColor.blackColor().CGColor
+        flipWordLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0)
+        return flipWordLabel
+    }
 }
