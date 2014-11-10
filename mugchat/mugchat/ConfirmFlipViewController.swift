@@ -119,8 +119,8 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.previewFlipTimer.invalidate()
         
         var createMugSuccessBlock : CreateMugSuccess = { (mug) -> Void in
-            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
             self.navigationController?.popViewControllerAnimated(false)
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
             self.confirmFlipView.hideActivityIndicator()
         }
         var createMugFailBlock : CreateMugFail = { (message) -> Void in

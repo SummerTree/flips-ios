@@ -66,7 +66,20 @@
 
 
 
-
+- (NSURL *)videoFromMugs:(NSArray *)mugs
+{
+    NSMutableArray *messageParts = [NSMutableArray array];
+    
+    for (Mug *mug in mugs) {
+        AVAsset *videoTrack = [self videoFromMug:mug];
+        
+        if (videoTrack) {
+            [messageParts addObject:videoTrack];
+        }
+    }
+    
+    return [self videoJoiningParts:messageParts];
+}
 
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage
 {

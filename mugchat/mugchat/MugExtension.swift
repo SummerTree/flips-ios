@@ -115,7 +115,7 @@ extension Mug {
     func soundContentLocalPath() -> String? {
         let cacheHandler = CacheHandler.sharedInstance
         
-        if (self.soundURL == nil) {
+        if ((self.soundURL == nil) || (self.soundURL.isEmpty)) {
             return ""
         }
         

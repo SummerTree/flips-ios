@@ -286,6 +286,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     private func moveToNextFlipWord() {
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
+            self.showContentForHighlightedWord()
             self.openPreview()
         } else {
             self.highlightedWordIndex = nextIndex
@@ -543,12 +544,14 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     // MARK: - ConfirmFlipViewController Delegate
     
     func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, mug: Mug?) {
-        let flipWord = self.flipWords[self.highlightedWordIndex]
-        if (success) {
-            flipWord.associatedMug = mug
-            self.onMugAssociated()
-        } else {
-            self.composeTopViewContainer.showCameraWithWord(flipWord.text)
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let flipWord = self.flipWords[self.highlightedWordIndex]
+            if (success) {
+                flipWord.associatedMug = mug
+                self.onMugAssociated()
+            } else {
+                self.composeTopViewContainer.showCameraWithWord(flipWord.text)
+            }
+        })
     }
 }
