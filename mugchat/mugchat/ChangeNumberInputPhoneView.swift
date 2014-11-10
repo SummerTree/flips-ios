@@ -12,7 +12,7 @@
 
 import UIKit
 
-class ChangeNumberInputPhoneView: UIView {
+class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     
     var delegate: ChangeNumberInputPhoneViewDelegate?
     
@@ -60,8 +60,13 @@ class ChangeNumberInputPhoneView: UIView {
         self.addSubview(newNumberContainerView)
         
         self.newNumberTextField = UITextField()
+        self.newNumberTextField.addTarget(self, action: "newNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+
         self.newNumberTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Number", comment: "New Number"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
+        self.newNumberTextField.delegate = self
         self.newNumberTextField.keyboardType = UIKeyboardType.PhonePad
+        self.newNumberTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        
         self.newNumberTextField.textColor = UIColor.whiteColor()
         self.newNumberContainerView.addSubview(newNumberTextField)
         
@@ -136,6 +141,51 @@ class ChangeNumberInputPhoneView: UIView {
     }
     
     
+    // UITextFieldDelegate
+    
+    func textField(textField: UITextField,
+        shouldChangeCharactersInRange range: NSRange,
+        replacementString string: String) -> Bool {
+        
+        let text = textField.text
+        let length = countElements(text)
+        var shouldReplace = true
+        
+        if (string != "") {
+            switch length {
+            case 3, 7:
+                textField.text = "\(text)-"
+            default:
+                break;
+            }
+            if (length > 11) {
+                shouldReplace = false
+            }
+        } else {
+            switch length {
+            case 5, 9:
+                let nsString = text as NSString
+                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+            default:
+                break;
+            }
+        }
+        return shouldReplace;
+    }
+    
+    func newNumberFieldDidChange(textField: UITextField) {
+        if (countElements(textField.text) == 12) {
+            textField.resignFirstResponder()
+            self.finishTypingMobileNumber(textField)
+            
+        }
+    }
+    
+    func finishTypingMobileNumber(sender: AnyObject?) {
+        self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text)
+    }
+    
+    
     // MARK: - Required inits
     
     required init(coder aDecoder: NSCoder) {
@@ -149,4 +199,5 @@ class ChangeNumberInputPhoneView: UIView {
 
 protocol ChangeNumberInputPhoneViewDelegate {
     func makeConstraintToNavigationBarBottom(view: UIView!)
+    func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber: String)
 }

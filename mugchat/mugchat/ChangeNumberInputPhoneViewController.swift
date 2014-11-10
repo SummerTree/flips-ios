@@ -50,4 +50,8 @@ class ChangeNumberInputPhoneViewController : MugChatViewController, ChangeNumber
             return ()
         }
     }
+    
+    func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber phone: String) {
+        println("finished with \(phone)")
+    }
 }
