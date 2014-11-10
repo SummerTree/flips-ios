@@ -157,12 +157,12 @@ class NewFlipViewController: MugChatViewController,
 		let name = "\(contact.firstName) \(contact.lastName)"
 		
 		let cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
-		cell.textLabel?.text = name
+		cell.textLabel.text = name
 		
 		if let user = contact.contactUser {
 			// Flips user
 			if let photoURLString = user.photoURL {
-				cell.imageView?.setImageWithURL(NSURL(string: photoURLString))
+				cell.imageView.setImageWithURL(NSURL(string: photoURLString))
 			}
 		} else {
 			// not a Flips user
