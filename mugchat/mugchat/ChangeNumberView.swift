@@ -90,6 +90,7 @@ class ChangeNumberView: UIView {
         }
         
         newPhoneImageView.mas_makeConstraints { (make) -> Void in
+            make.bottom.equalTo()(self.phonesContainer)
             make.left.equalTo()(self.transitionCircleImageView.mas_right).with().offset()(self.TRANSITION_CIRCLES_MARGIN)
             make.height.equalTo()(self.newPhoneImageView.frame.size.height)
             make.width.equalTo()(self.newPhoneImageView.frame.size.width)

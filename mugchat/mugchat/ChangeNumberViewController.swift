@@ -30,6 +30,15 @@ class ChangeNumberViewController : MugChatViewController, ChangeNumberViewDelega
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.Default
+    }
+    
     
     // MARK: - ChangeNumberViewDelegate
     
