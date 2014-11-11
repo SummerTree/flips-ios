@@ -19,21 +19,19 @@
 
 @implementation NSManagedObject (helpers)
 
-+ (NSFetchRequest *)requestAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm inContext:(NSManagedObjectContext *)context
-{
-	NSFetchRequest *request = [self MR_requestAllInContext:context];
-	if (searchTerm)
-	{
-		[request setPredicate:searchTerm];
-	}
-	[request setFetchBatchSize:kMagicalRecordDefaultBatchSize];	
-	[request setSortDescriptors:sortDescriptors];
-	
-	return request;
++ (NSFetchRequest *)requestAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm inContext:(NSManagedObjectContext *)context {
+    NSFetchRequest *request = [self MR_requestAllInContext:context];
+    if (searchTerm) {
+        [request setPredicate:searchTerm];
+    }
+    
+    [request setFetchBatchSize:kMagicalRecordDefaultBatchSize];
+    [request setSortDescriptors:sortDescriptors];
+    
+    return request;
 }
 
-+ (NSFetchedResultsController *)fetchAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm delegate:(id<NSFetchedResultsControllerDelegate>)delegate
-{
++ (NSFetchedResultsController *)fetchAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm delegate:(id<NSFetchedResultsControllerDelegate>)delegate {
 	NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
 	NSFetchRequest *request = [self requestAllSortedBy:sortDescriptors
 										 withPredicate:searchTerm

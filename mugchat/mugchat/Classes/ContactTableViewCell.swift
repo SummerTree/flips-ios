@@ -17,7 +17,6 @@ import Foundation
 
 let ContactTableViewCellIdentifier = "ContactTableViewCell"
 
-
 class ContactTableViewCell: UITableViewCell {
 
 	@IBOutlet weak var nameLabel: UILabel!
