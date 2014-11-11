@@ -246,7 +246,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         
         if (self.userProfileCell == nil) {
             let loggedUser = User.loggedUser()!
-            let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
+            let detailedLabel = loggedUser.username + "\n" + loggedUser.formattedPhoneNumber()
             let fullname = User.loggedUser()!.fullName()
             
             self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)
