@@ -21,6 +21,8 @@ private struct MugMessageAttributes {
     static let CREATED_AT = "createdAt"
     static let NOT_READ = "notRead"
     static let ROOM = "room"
+    static let FROM = "from"
+    static let REMOVED = "removed"
 }
 
 class MugMessageDataSource : BaseDataSource {
@@ -112,7 +114,7 @@ class MugMessageDataSource : BaseDataSource {
     }
     
     func oldestNotReadMugMessageForRoom(room: Room) -> MugMessage? {
-        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(room.roomID)) AND (\(MugMessageAttributes.NOT_READ) == true))")
+        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(room.roomID)) AND (\(MugMessageAttributes.NOT_READ) == true) AND (\(MugMessageAttributes.REMOVED) == false) AND (\(MugMessageAttributes.FROM).userID != \(AuthenticationHelper.sharedInstance.userInSession.userID)))")
         var result = MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
         return result.first
 
@@ -130,5 +132,20 @@ class MugMessageDataSource : BaseDataSource {
 
             completion(true)
         })
+    }
+    
+    func flipMessagesForRoomID(roomID: String) -> [MugMessage] {
+        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(roomID)) AND (\(MugMessageAttributes.REMOVED) == false))")
+        return MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
+    }
+    
+    func retrieveFlipMessageById(flipMessageID: String) -> MugMessage {
+        var flipMessage = MugMessage.findFirstByAttribute(MugMessageAttributes.MUG_MESSAGE_ID, withValue: flipMessageID) as? MugMessage
+        
+        if (flipMessage == nil) {
+            println("FlipMessage with flipMessageID (\(flipMessage)) not found.")
+        }
+        
+        return flipMessage!
     }
 }

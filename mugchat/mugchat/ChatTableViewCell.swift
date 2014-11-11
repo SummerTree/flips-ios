@@ -13,15 +13,6 @@
 import Foundation
 import MediaPlayer
 
-struct MugVideo {
-    var message : String
-    var videoPath : String
-    var timestamp : String
-    var avatarPath : String
-    var thumbnailPath : String
-    var received : Bool
-}
-
 class ChatTableViewCell: UITableViewCell {
     
     // MARK: - Constants
@@ -30,26 +21,18 @@ class ChatTableViewCell: UITableViewCell {
     private let MESSAGE_BOTTOM_MARGIN: CGFloat = 18.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
+    private let flipMessageDataSource = MugMessageDataSource()
+    
     
     // MARK: - Instance variables
     
-    var message : MugVideo! {
-        didSet {
-            let moviePath = NSBundle.mainBundle().pathForResource(message.videoPath, ofType: "mov")
-            player.contentURL = NSURL.fileURLWithPath(moviePath!)
-            thumbnailView.image = UIImage(named: message.thumbnailPath)
-            timestampLabel.text = message.timestamp
-            avatarView.image = UIImage(named: message.avatarPath)
-        }
-    }
-    
-    var videoView : UIView!
-    var messageView : UIView!
-    var avatarView : UIImageView!
-    var timestampLabel : UILabel!
-    var messageTextLabel : UILabel!
-    var player : MPMoviePlayerController!
-    var thumbnailView : UIImageView!
+    private var videoView : UIView!
+    private var messageView : UIView!
+    private var avatarView : UIImageView!
+    private var timestampLabel : UILabel!
+    private var messageTextLabel : UILabel!
+    private var player : MPMoviePlayerController!
+    private var thumbnailView : UIImageView!
     
     
     // MARK: - Required initializers
@@ -111,9 +94,6 @@ class ChatTableViewCell: UITableViewCell {
         }
     }
     
-    
-    // MARK: - Overridden Methods
-    
     func addConstraints() {
         videoView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.contentView)
@@ -162,15 +142,73 @@ class ChatTableViewCell: UITableViewCell {
     }
     
     
+    // MARK: - Set FlipMessage
+    
+    func setFlipMessageId(flipMessageId: String) {
+        let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
+
+        // TODO: we don't have the movie created yet
+        let moviePath = NSBundle.mainBundle().pathForResource("welcome_mugchat", ofType: "mov")
+        player.contentURL = NSURL.fileURLWithPath(moviePath!)
+        thumbnailView.image = UIImage(named: "movie_thumbnail.png")
+        
+        let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
+        timestampLabel.text = formatedDate
+        
+        self.messageTextLabel.text = flipMessage.messagePhrase()
+        self.messageTextLabel.sizeToFit()
+        
+        avatarView.setImageWithURL(NSURL(string: flipMessage.from.photoURL))
+
+        if (flipMessage.from.userID == AuthenticationHelper.sharedInstance.userInSession.userID) {
+            // Sent by the user
+            avatarView.mas_updateConstraints({ (update) -> Void in
+                update.removeExisting = true
+                update.trailing.equalTo()(self).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+                update.centerY.equalTo()(self.videoView.mas_bottom)
+                update.width.equalTo()(self.avatarView.frame.size.width)
+                update.height.equalTo()(self.avatarView.frame.size.height)
+            })
+        } else {
+            // Received by the user
+            avatarView.mas_updateConstraints({ (update) -> Void in
+                update.removeExisting = true
+                update.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+                update.centerY.equalTo()(self.videoView.mas_bottom)
+                update.width.equalTo()(self.avatarView.frame.size.width)
+                update.height.equalTo()(self.avatarView.frame.size.height)
+            })
+        }
+    }
+    
+    
     // MARK: - Mug interaction handlers
     
     func playbackFinished(sender: AnyObject?) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.thumbnailView.alpha = 1.0
-                self.messageTextLabel.text = self.message.message
                 self.messageTextLabel.alpha = 1
         })
         self.player.currentPlaybackTime = 0
+    }
+    
+    
+    // MARK: - Playback controls
+    
+    func prepareToPlay() {
+        self.player.prepareToPlay()
+    }
+    
+    func playMovie() {
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            self.thumbnailView.alpha = 0.0
+        }) { (finished) -> Void in
+            self.player.play()
+        }
+    }
+    
+    func stopMovie() {
+        self.player.stop()
     }
     
     
@@ -179,18 +217,10 @@ class ChatTableViewCell: UITableViewCell {
     func buttonTapped() {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             switch self.player.playbackState {
-            case MPMoviePlaybackState.Stopped:
-                UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    self.thumbnailView.alpha = 0.0
-                })
-                self.player.play()
+            case MPMoviePlaybackState.Stopped, MPMoviePlaybackState.Paused:
+                self.playMovie()
             case MPMoviePlaybackState.Playing:
                 self.player.pause()
-            case MPMoviePlaybackState.Paused:
-                UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    self.thumbnailView.alpha = 0.0
-                })
-                self.player.play()
             default:
                 ()
             }
