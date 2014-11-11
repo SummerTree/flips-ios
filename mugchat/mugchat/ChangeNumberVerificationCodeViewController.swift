@@ -56,6 +56,7 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
             let lastViewController = viewController as UIViewController
             if (lastViewController.isKindOfClass(SettingsViewController.self)) {
                 self.navigationController?.popToViewController(lastViewController, animated: true)
+                break
             }
         }
     }
