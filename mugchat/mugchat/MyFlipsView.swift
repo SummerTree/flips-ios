@@ -98,6 +98,7 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         myMugsCollectionView.reloadData()
     }
     
+    
     // MARK: - UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -114,10 +115,14 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         if (indexPath.section == 0 && indexPath.row == 0) {
             cell.addSubview(addMugButton)
         } else {
-            var currentFlip: Mug? = dataSource?.myFlipsView(self, flipAtIndex: indexPath.row - 1)
-            cell.setMug(currentFlip!)
+            var flipId = dataSource?.myFlipsView(self, flipIdAtIndex: indexPath.row - 1)
             
-            var isSelected = (currentFlip!.mugID == dataSource?.myFlipsViewSelectedFlipId())
+            let flipDataSource = MugDataSource()
+            var flip = flipDataSource.retrieveMugWithId(flipId!)
+            
+            cell.setMug(flip)
+            
+            var isSelected = (flip.mugID == dataSource?.myFlipsViewSelectedFlipId())
             cell.setSelected(isSelected)
         }
         
@@ -142,7 +147,7 @@ protocol MyFlipsViewDelegate {
 protocol MyFlipsViewDataSource {
     
     func myFlipsViewNumberOfFlips() -> Int
-    func myFlipsView(myFlipsView: MyFlipsView, flipAtIndex index: Int) -> Mug
+    func myFlipsView(myFlipsView: MyFlipsView, flipIdAtIndex index: Int) -> String
     func myFlipsViewSelectedFlipId() -> String?
     
 }
