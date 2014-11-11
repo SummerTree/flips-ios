@@ -204,7 +204,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         if (countElements(textField.text) == 12) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
-
         }
     }
     

@@ -28,9 +28,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private let BULLET: String = "\u{2022}"
     
-    private var navigationBar: CustomNavigationBar!
+    internal var navigationBar: CustomNavigationBar!
+    internal var hintView: UIView!
+    internal var phoneNumber: String = ""
     
-    private var hintView: UIView!
     private var labelsView: UIView!
     private var hintText: UILabel!
     private var phoneNumberLabel: UILabel!
@@ -47,13 +48,15 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     private var errorSignView: UIImageView!
     
     private var keyboardHeight: CGFloat = 0.0
-    private var phoneNumber: String = ""
     
     init(phoneNumber : String!) {
         super.init()
         self.phoneNumber = phoneNumber
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = self.defineBackgroundColor()
         self.addSubviews()
+    }
+    
+    func viewWillAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
@@ -61,11 +64,15 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
     }
     
-    func addSubviews() {
-        
+    func addNavigationBar() {
         navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Verification Code", showBackButton: true)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
+    }
+    
+    func addSubviews() {
+        
+        addNavigationBar()
         
         hintView = UIView()
         hintView.contentMode = .Center
@@ -121,8 +128,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         resendButton = UIButton()
         resendButton.addTarget(self, action: "resendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         resendButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Resend Code", comment: "Resend Code"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
-        resendButton.setBackgroundImage(UIImage(named: "Resend_button_normal"), forState: UIControlState.Normal)
-        resendButton.setBackgroundImage(UIImage(named: "Resend_button_tap"), forState: UIControlState.Highlighted)
+        resendButton.setBackgroundImage(UIImage(named: "ResendButtonNormal"), forState: UIControlState.Normal)
+        resendButton.setBackgroundImage(UIImage(named: "ResendButtonTapped"), forState: UIControlState.Highlighted)
         resendButtonView.addSubview(resendButton)
         
         keyboardFillerView = UIView()
@@ -130,20 +137,32 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         
     }
     
-    override func updateConstraints() {
-        
+    func defineBackgroundColor() -> UIColor {
+        return UIColor.mugOrange()
+    }
+    
+    func createHintViewConstraints() {
+        hintView.mas_updateConstraints { (make) in
+            make.top.equalTo()(self.navigationBar.mas_bottom)
+            make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
+        }
+    }
+    
+    func createNavigationBarConstraints() {
         navigationBar.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
             make.height.equalTo()(self.navigationBar.frame.size.height)
         }
+    }
+    
+    override func updateConstraints() {
         
-        hintView.mas_updateConstraints { (make) in
-            make.top.equalTo()(self.navigationBar.mas_bottom)
-            make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-        }
+        createNavigationBarConstraints()
+        
+        createHintViewConstraints()
         
         labelsView.mas_updateConstraints { (make) in
             make.centerY.equalTo()(self.hintView)
