@@ -44,4 +44,14 @@ extension String {
         let date : NSDate? = dateStringFormatter.dateFromString(self)
         return date
     }
+    
+    // Allow to use text[0...5] to get substring
+    subscript (r: Range<Int>) -> String {
+        get {
+            let startIndex = advance(self.startIndex, r.startIndex)
+            let endIndex = advance(startIndex, r.endIndex - r.startIndex)
+            
+            return self[Range(start: startIndex, end: endIndex)]
+        }
+    }
 }

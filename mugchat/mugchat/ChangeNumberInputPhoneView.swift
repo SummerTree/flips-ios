@@ -86,7 +86,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         self.currentNumberLabel = UILabel()
         self.currentNumberLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         self.currentNumberLabel.numberOfLines = 2
-        self.currentNumberLabel.text = "Current number for this account is\n415-123-4567"
+        self.currentNumberLabel.text = "Current number for this account is\n\(User.loggedUser()!.formattedPhoneNumber())"
         self.currentNumberLabel.textAlignment = NSTextAlignment.Center
         self.currentNumberLabel.textColor = UIColor.mediumGray()
         self.currentNumberLabel.sizeToFit()
