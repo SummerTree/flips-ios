@@ -62,24 +62,6 @@ class MugMessageDataSource : BaseDataSource {
         return mugMessage
     }
     
-    func createTemporaryMugMessageWithMugs(mugs: [Mug]) -> MugMessage {
-        let mugDataSource = MugDataSource()
-        
-        var mugMessage: MugMessage! = MugMessage.MR_createEntity() as MugMessage
-        mugMessage.mugMessageID = self.nextMugMessageID()
-        
-        var mugsOrderedSet = NSMutableOrderedSet()
-        for mug in mugs {
-            // TODO: empty mugs should be saved before call this method
-            var mugInContext = mugDataSource.retrieveMugWithId(mug.mugID)
-            mugsOrderedSet.addObject(mugInContext)
-        }
-        mugMessage.mugs = mugsOrderedSet
-        mugMessage.from = User.loggedUser()
-        
-        return mugMessage
-    }
-    
     func saveTemporaryMugMessage(mugMessageToSave: MugMessage) {
         let userDataSource = UserDataSource()
         let mugDataSource = MugDataSource()
