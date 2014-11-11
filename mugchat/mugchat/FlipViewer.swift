@@ -20,6 +20,7 @@ class FlipViewer: UIView {
     private let IPHONE_4S_VIEW_WIDTH: CGFloat = 240.0
     
     private var flipImageView: UIImageView!
+    private var flipFilterImageView: UIImageView!
     private var flipWordLabel: UILabel!
     
     private var flipMoviePlayer: MPMoviePlayerController!
@@ -58,6 +59,11 @@ class FlipViewer: UIView {
         flipMoviePlayer.view.addGestureRecognizer(tapGestureRecognizer)
         self.addSubview(flipMoviePlayer.view)
         
+        flipFilterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
+        flipFilterImageView.alpha = 1.0
+        flipFilterImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        self.addSubview(flipFilterImageView)
+        
         flipWordLabel = UILabel.flipWordLabel()
 //        flipWordLabel.alpha = 0
         self.addSubview(flipWordLabel)
@@ -91,6 +97,13 @@ class FlipViewer: UIView {
             
             make.height.equalTo()(self.flipMoviePlayer.view.mas_width)
         })
+        
+        flipFilterImageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.flipImageView)
+            make.left.equalTo()(self.flipImageView)
+            make.bottom.equalTo()(self.flipImageView)
+            make.right.equalTo()(self.flipImageView)
+        }
         
         flipWordLabel.mas_makeConstraints { (make) -> Void in
             make.bottom.equalTo()(self).with().offset()(FLIP_WORD_LABEL_MARGIN_BOTTOM)

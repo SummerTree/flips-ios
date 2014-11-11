@@ -18,6 +18,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
     
     private var cameraPreview: CameraView!
+    private var cameraFilterImageView: UIImageView!
     private var cameraWordLabel: UILabel!
     private var captureProgressBar: UIView!
     
@@ -49,6 +50,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         captureProgressBar.backgroundColor = UIColor.avacado()
         self.addSubview(captureProgressBar)
         
+        cameraFilterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
+        cameraFilterImageView.alpha = 1.0
+        cameraFilterImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        self.addSubview(cameraFilterImageView)
+        
         cameraWordLabel = UILabel.flipWordLabel()
         cameraWordLabel.alpha = 1.0
         self.addSubview(cameraWordLabel)
@@ -70,6 +76,13 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
             make.left.equalTo()(self)
             make.height.equalTo()(self.AUDIO_RECORDING_PROGRESS_BAR_HEIGHT)
             make.width.equalTo()(0)
+        }
+        
+        cameraFilterImageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.cameraPreview)
+            make.left.equalTo()(self.cameraPreview)
+            make.bottom.equalTo()(self.cameraPreview)
+            make.right.equalTo()(self.cameraPreview)
         }
         
         cameraWordLabel.mas_makeConstraints { (make) -> Void in
