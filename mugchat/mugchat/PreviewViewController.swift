@@ -12,12 +12,11 @@
 class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     private var previewView: PreviewView!
-    private var flips: [Mug]!
+    private var flipWords: [MugText]!
     
-    convenience init(flips: [Mug]) {
+    convenience init(flipWords: [MugText]) {
         self.init()
-        println("flips count: \(flips.count)")
-        self.flips = flips
+        self.flipWords = flipWords
     }
     
     override func loadView() {
@@ -42,7 +41,8 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
         
         let videoComposer = VideoComposer()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let videoAsset = videoComposer.videoFromMugs(self.flips)
+            let flips = self.createFlipsFromFlipWords()
+            let videoAsset = videoComposer.videoFromMugs(flips)
 
             if (videoAsset != nil) {
                 self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!)!)
@@ -69,6 +69,26 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
         self.previewView.viewWillDisappear()
     }
     
+    
+    // MARK: - Flips Methods
+    
+    private func createFlipsFromFlipWords() -> [Mug] {
+        var flips = Array<Mug>()
+        let flipDataSource = MugDataSource()
+        
+        for flipWord in self.flipWords {
+            if (flipWord.associatedFlipId != nil) {
+                var flip = flipDataSource.retrieveMugWithId(flipWord.associatedFlipId!)
+                flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
+                flips.append(flip)
+            } else {
+                var emptyFlip = flipDataSource.createEmptyMugWithWord(flipWord.text)
+                flips.append(emptyFlip)
+            }
+        }
+        
+        return flips
+    }
     
     // MARK: - ComposeViewDelegate Methods
     

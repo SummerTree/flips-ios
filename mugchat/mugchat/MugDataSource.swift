@@ -147,15 +147,15 @@ class MugDataSource : BaseDataSource {
         return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@))", word)) as [Mug]
     }
     
-    func getMyMugsForWords(words: [String]) -> Dictionary<String, [Mug]> {
-        var resultDictionary = Dictionary<String, [Mug]>()
+    func getMyMugIdsForWords(words: [String]) -> Dictionary<String, [String]> {
+        var resultDictionary = Dictionary<String, [String]>()
         
         if (words.count == 0) {
             return resultDictionary
         }
         
         for word in words {
-            resultDictionary[word] = Array<Mug>()
+            resultDictionary[word] = Array<String>()
             
             // I didn't find a way to use a NSPredicate case-insensitive with an IN clause
             // I've tried in many diffent ways with NSPredicate or NSCompoundPredicate, but none of it worked and for some of it returned an weird error about a selector not found.
@@ -163,7 +163,7 @@ class MugDataSource : BaseDataSource {
             // Error: swift predicate reason: '-[Swift._NSContiguousString countByEnumeratingWithState:objects:count:]: unrecognized selector
             var mugs = self.getMyMugsForWord(word)
             for mug in mugs {
-                resultDictionary[word]?.append(mug)
+                resultDictionary[word]?.append(mug.mugID)
             }
         }
         
