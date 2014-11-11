@@ -39,7 +39,11 @@
 		7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
 		7033584619E4160B0030CF11 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584519E4160B0030CF11 /* SettingsView.swift */; };
 		7033584819E462A20030CF11 /* PubNubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584719E462A20030CF11 /* PubNubService.swift */; };
+		7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */; };
+		7043DF381A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7043DF371A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift */; };
 		7046C9B719F18EB100CBD72D /* AudioRecorderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7046C9B619F18EB100CBD72D /* AudioRecorderService.swift */; };
+		7049A7A21A111998001D8121 /* ChangeNumberInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7049A7A11A111998001D8121 /* ChangeNumberInfoView.swift */; };
+		7049A7A51A11238A001D8121 /* ChangeNumberInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7049A7A41A11238A001D8121 /* ChangeNumberInfoViewController.swift */; };
 		704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
 		7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */; };
@@ -64,6 +68,8 @@
 		70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */; };
 		70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
 		70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */ = {isa = PBXBuildFile; fileRef = 70CF5C461A041F680052E396 /* i_love_coffee.mov */; };
+		70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */; };
+		70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
@@ -192,7 +198,11 @@
 		7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHelper.swift; sourceTree = "<group>"; };
 		7033584519E4160B0030CF11 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7033584719E462A20030CF11 /* PubNubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PubNubService.swift; sourceTree = "<group>"; };
+		7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberInputPhoneView.swift; sourceTree = "<group>"; };
+		7043DF371A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberInputPhoneViewController.swift; sourceTree = "<group>"; };
 		7046C9B619F18EB100CBD72D /* AudioRecorderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderService.swift; sourceTree = "<group>"; };
+		7049A7A11A111998001D8121 /* ChangeNumberInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberInfoView.swift; sourceTree = "<group>"; };
+		7049A7A41A11238A001D8121 /* ChangeNumberInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberInfoViewController.swift; sourceTree = "<group>"; };
 		704E110E19D0935F00D2BB88 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 3; };
 		704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfUseView.swift; sourceTree = "<group>"; };
@@ -219,6 +229,8 @@
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70CF5C461A041F680052E396 /* i_love_coffee.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = i_love_coffee.mov; sourceTree = "<group>"; };
+		70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeView.swift; sourceTree = "<group>"; };
+		70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -460,11 +472,32 @@
 			isa = PBXGroup;
 			children = (
 				70A2A5B41A0A8DF000725953 /* About */,
+				7049A7A01A111925001D8121 /* Change Number */,
 				70736C361A0D5817004E55E4 /* UserProfile */,
 				7033584519E4160B0030CF11 /* SettingsView.swift */,
 				70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		7049A7A01A111925001D8121 /* Change Number */ = {
+			isa = PBXGroup;
+			children = (
+				7049A7A11A111998001D8121 /* ChangeNumberInfoView.swift */,
+				7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */,
+				70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */,
+			);
+			name = "Change Number";
+			sourceTree = "<group>";
+		};
+		7049A7A31A11237B001D8121 /* Change Number */ = {
+			isa = PBXGroup;
+			children = (
+				7049A7A41A11238A001D8121 /* ChangeNumberInfoViewController.swift */,
+				7043DF371A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift */,
+				70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */,
+			);
+			name = "Change Number";
 			sourceTree = "<group>";
 		};
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
@@ -788,6 +821,7 @@
 			isa = PBXGroup;
 			children = (
 				70A2A5B71A0A8E5200725953 /* About */,
+				7049A7A31A11237B001D8121 /* Change Number */,
 				70736C301A0D453F004E55E4 /* UserProfile */,
 				7A0D6CEE19D4963100E39A1B /* SettingsViewController.swift */,
 			);
@@ -1189,6 +1223,8 @@
 				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
 				705B3DD91A03B9DD00E0D3E9 /* PreviewView.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
+				7049A7A51A11238A001D8121 /* ChangeNumberInfoViewController.swift in Sources */,
+				7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,
@@ -1218,11 +1254,13 @@
 				7ACBBECF1A00290B00A7109C /* Mug.m in Sources */,
 				7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
+				70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
 				0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */,
 				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
+				7049A7A21A111998001D8121 /* ChangeNumberInfoView.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				70736C321A0D471F004E55E4 /* UpdateUserProfileViewController.swift in Sources */,
@@ -1279,6 +1317,7 @@
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
 				7AF82E0319EFECDC00D0393F /* MugDataSource.swift in Sources */,
+				7043DF381A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */,
 				70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */,
 				70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */,
@@ -1286,6 +1325,7 @@
 				7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */,
 				7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
+				70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */,
 				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
 				708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */,
 				7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */,

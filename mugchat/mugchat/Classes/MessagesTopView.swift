@@ -51,7 +51,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     private func initSubviews() {
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.clearColor()
         
         backgroundBlurImageView = UIImageView()
         backgroundBlurImageView.contentMode = UIViewContentMode.Center
@@ -160,18 +160,19 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     // MARK: - AttributedString Handlers
     
     func formatUsingUltraLightFont(text: String) -> NSMutableAttributedString {
-        return NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIColor(RRGGBB: UInt(0xEC7061)), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
+        return NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h6)])
         
     }
     
     func formatUsingMediumFont(text: String) -> NSMutableAttributedString {
-        return NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIColor(RRGGBB: UInt(0xEC7061)), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h6)])
+        return NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h6)])
     }
     
     
     // MARK: - Blur Background hanlder
     
     func setMessagesTopViewBackgroundImage(image: UIImage) {
-        backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.whiteColor())
+        backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+        backgroundBlurImageView.alpha = 0.98
     }
 }

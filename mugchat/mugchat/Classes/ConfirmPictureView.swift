@@ -46,7 +46,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     }
     
     private func initSubviews() {
-        navigationBar = CustomNavigationBar.CustomNormalNavigationBar(NSLocalizedString("Confirm Picture", comment: "Confirm Picture"), showBackButton: true)
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar(NSLocalizedString("Confirm Picture", comment: "Confirm Picture"), showBackButton: false)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
         
