@@ -15,9 +15,11 @@ import MediaPlayer
 
 public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecognizerDelegate {
     
-    private let FLIP_VIDEO_WIDTH: CGFloat = 240.0
-    private let LABEL_MARGIN_TOP: CGFloat = 40.0
-    
+    private let LOW_RES_VIDEO_WIDTH: CGFloat = 240.0
+    private let LOW_RES_VIDEO_MARGIN: CGFloat = 15.0
+    private let LOW_RES_LABEL_MARGIN: CGFloat = 15.0
+    private let HI_RES_LABEL_MARGIN: CGFloat = 40.0
+
     var delegate: PreviewViewDelegate?
     
     private var flipContainerView: UIView!
@@ -87,6 +89,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
         tapGestureRecognizer.delegate = self
         flipContainerView.addGestureRecognizer(tapGestureRecognizer)
+        flipContainerView.backgroundColor = UIColor.deepSea()
         self.addSubview(flipContainerView)
         
         self.addMoviePlayer()
@@ -105,18 +108,12 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         self.sendImage = UIImage(named: "Send")
         self.sendImageButton = UIButton()
         self.sendImageButton.addTarget(self, action: "sendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.sendImageButton.imageEdgeInsets = UIEdgeInsets(top: 50.0, left: 0.0, bottom: 0.0, right: 0.0)
         self.sendImageButton.setImage(self.sendImage, forState: UIControlState.Normal)
         
         self.sendContainerView.addSubview(sendImageButton)
     }
     
     func addMoviePlayer() {
-        //        if (self.flipVideoURL == nil) {
-        //            let moviePath = NSBundle.mainBundle().pathForResource("i_love_coffee", ofType: "mov")
-        //            self.flipVideoURL = NSURL.fileURLWithPath(moviePath!)
-        //        }
-        
         self.moviePlayer = MPMoviePlayerController(contentURL: self.flipVideoURL)
         self.moviePlayer.controlStyle = MPMovieControlStyle.None
         self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
@@ -132,19 +129,25 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         self.flipContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.mas_width)
+
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.height.equalTo()(self.LOW_RES_VIDEO_WIDTH + (2 * self.LOW_RES_VIDEO_MARGIN))
+            } else {
+                make.height.equalTo()(self.mas_width)
+            }
+
         }
-        
+
         // asking help to delegate to align the container with navigation bar
         self.delegate?.previewViewMakeConstraintToNavigationBarBottom(self.flipContainerView)
         
         self.moviePlayer.view.mas_makeConstraints({ (make) -> Void in
-            make.top.equalTo()(self.flipContainerView)
-            
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
                 make.centerX.equalTo()(self.flipContainerView)
-                make.width.equalTo()(self.FLIP_VIDEO_WIDTH)
+                make.centerY.equalTo()(self.flipContainerView)
+                make.width.equalTo()(self.LOW_RES_VIDEO_WIDTH)
             } else {
+                make.top.equalTo()(self.flipContainerView)
                 make.left.equalTo()(self.flipContainerView)
                 make.right.equalTo()(self.flipContainerView)
             }
@@ -159,15 +162,23 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
             make.bottom.equalTo()(self)
         }
         
-        self.sendImageButton.mas_makeConstraints { (make) -> Void in
-            make.center.equalTo()(self.sendContainerView)
-            make.width.equalTo()(self.sendContainerView)
-            make.height.equalTo()(self.sendContainerView)
-        }
-        
         self.sendLabel.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.sendContainerView.mas_top).with().offset()(self.LABEL_MARGIN_TOP)
-            make.centerX.equalTo()(self.sendImageButton)
+            make.centerX.equalTo()(self.sendContainerView)
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.top.equalTo()(self.LOW_RES_LABEL_MARGIN);
+            } else {
+                make.top.equalTo()(self.HI_RES_LABEL_MARGIN);
+            }
+        }
+
+        self.sendImageButton.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self.sendContainerView)
+
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.LOW_RES_LABEL_MARGIN);
+            } else {
+                make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.HI_RES_LABEL_MARGIN);
+            }
         }
     }
     
@@ -218,7 +229,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
     
     func playOrPausePreview() {
-        // TODO - should play or pause
         if (self.isPlaying) {
             self.pauseMovie()
         } else {

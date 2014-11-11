@@ -117,7 +117,10 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         })
     }
     
-    func showFlip(flip: Mug) {
+    func showFlip(flipId: String) {
+        let flipDataSource = MugDataSource()
+        var flip = flipDataSource.retrieveMugWithId(flipId)
+        
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             var image: UIImage!
             let filePath = flip.backgroundContentLocalPath()
