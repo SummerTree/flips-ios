@@ -32,7 +32,7 @@
 @property (nonatomic, retain) NSOrderedSet *mugs;
 @property (nonatomic, retain) NSOrderedSet *mugsSent;
 @property (nonatomic, retain) NSOrderedSet *rooms;
-@property (nonatomic, retain) NSSet *userContact;
+@property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) Room *adminRooms;
 @end
 
@@ -68,9 +68,9 @@
 - (void)removeRoomsObject:(Room *)value;
 - (void)addRooms:(NSOrderedSet *)values;
 - (void)removeRooms:(NSOrderedSet *)values;
-- (void)addUserContactObject:(Contact *)value;
-- (void)removeUserContactObject:(Contact *)value;
-- (void)addUserContact:(NSSet *)values;
-- (void)removeUserContact:(NSSet *)values;
+- (void)addContactsObject:(Contact *)value;
+- (void)removeContactsObject:(Contact *)value;
+- (void)addContacts:(NSSet *)values;
+- (void)removeContacts:(NSSet *)values;
 
 @end

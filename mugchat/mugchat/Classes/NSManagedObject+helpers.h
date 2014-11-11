@@ -1,4 +1,7 @@
 //
+//  NSManagedObject+helpers.h
+//  mugchat
+//
 // Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
@@ -10,32 +13,10 @@
 // the license agreement.
 //
 
-#import "User.h"
-#import "Contact.h"
-#import "Device.h"
-#import "Mug.h"
-#import "MugMessage.h"
-#import "Room.h"
+#import <CoreData/CoreData.h>
 
+@interface NSManagedObject (helpers)
 
-@implementation User
-
-@dynamic birthday;
-@dynamic facebookID;
-@dynamic firstName;
-@dynamic lastName;
-@dynamic me;
-@dynamic nickname;
-@dynamic phoneNumber;
-@dynamic photoURL;
-@dynamic pubnubID;
-@dynamic userID;
-@dynamic username;
-@dynamic device;
-@dynamic mugs;
-@dynamic mugsSent;
-@dynamic rooms;
-@dynamic contacts;
-@dynamic adminRooms;
++ (NSFetchedResultsController *)fetchAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm delegate:(id<NSFetchedResultsControllerDelegate>)delegate;
 
 @end
