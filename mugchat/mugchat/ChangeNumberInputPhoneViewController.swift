@@ -35,6 +35,11 @@ class ChangeNumberInputPhoneViewController : MugChatViewController, ChangeNumber
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        changeNumberInputPhoneView.viewWillDisappear()
+    }
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.Default
     }

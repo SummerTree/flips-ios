@@ -16,10 +16,11 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     
     var delegate: ChangeNumberInputPhoneViewDelegate?
     
-    private let ENTER_NUMBER_BELOW_CONTAINER_HEIGHT:    CGFloat = 109.0
-    private let NEW_NUMBER_CONTAINER_HEIGHT:            CGFloat = 80.0
+    private let ENTER_NUMBER_BELOW_CONTAINER_HEIGHT:    CGFloat = 75.0
+    private let NEW_NUMBER_CONTAINER_HEIGHT:            CGFloat = 50.0
     private let NEW_NUMBER_IMAGE_MARGIN:                CGFloat = 20.0
     
+    private var keyboardHeight: CGFloat = 0.0
     private var enterNumberBelowContainer: UIView!
     private var enterNumberBelowLabel:  UILabel!
     private var currentNumberContainer: UIView!
@@ -27,6 +28,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     private var newNumberContainerView: UIView!
     private var newNumberTextField:     UITextField!
     private var newNumberImageView:     UIImageView!
+    private var keyboardView:           UIView!
     
     override init() {
         super.init()
@@ -35,9 +37,13 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     }
     
     func viewDidLoad() {
-        makeConstraints()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         
         self.newNumberTextField.becomeFirstResponder()
+    }
+    
+    func viewWillDisappear() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
     }
     
     func addSubviews() {
@@ -85,34 +91,43 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         self.currentNumberLabel.textColor = UIColor.mediumGray()
         self.currentNumberLabel.sizeToFit()
         self.currentNumberContainer.addSubview(currentNumberLabel)
+        
+        self.keyboardView = UIView()
+        self.addSubview(keyboardView)
     }
     
     func makeConstraints() {
         
         enterNumberBelowContainer.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.centerX.equalTo()(self)
-            make.height.equalTo()(self.ENTER_NUMBER_BELOW_CONTAINER_HEIGHT)
+            make.height.greaterThanOrEqualTo()(self.ENTER_NUMBER_BELOW_CONTAINER_HEIGHT)
+            make.bottom.equalTo()(self.newNumberContainerView.mas_top)
         }
         
         // ask to delegate create constraint related to navigation bar
         self.delegate?.makeConstraintToNavigationBarBottom(enterNumberBelowContainer)
         
         enterNumberBelowLabel.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
             make.center.equalTo()(self.enterNumberBelowContainer)
             make.height.equalTo()(self.enterNumberBelowLabel.frame.size.height)
             make.width.equalTo()(self.enterNumberBelowLabel.frame.size.width)
         }
         
         newNumberContainerView.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
             make.top.equalTo()(self.enterNumberBelowContainer.mas_bottom)
+            make.bottom.equalTo()(self.currentNumberContainer.mas_top)
             make.left.equalTo()(self.enterNumberBelowContainer)
             make.right.equalTo()(self.enterNumberBelowContainer)
-            make.height.equalTo()(self.NEW_NUMBER_CONTAINER_HEIGHT)
+            make.height.greaterThanOrEqualTo()(self.NEW_NUMBER_CONTAINER_HEIGHT)
         }
         
         newNumberImageView.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
             make.centerY.equalTo()(self.newNumberContainerView)
             make.left.equalTo()(self).with().offset()(self.NEW_NUMBER_IMAGE_MARGIN)
             make.width.equalTo()(self.newNumberImageView.frame.size.width)
@@ -120,6 +135,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         }
         
         newNumberTextField.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
             make.centerY.equalTo()(self.newNumberContainerView)
             make.left.equalTo()(self.newNumberImageView.mas_right).with().offset()(self.NEW_NUMBER_IMAGE_MARGIN)
             make.right.equalTo()(self.newNumberContainerView)
@@ -127,17 +143,36 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         }
         
         currentNumberContainer.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.newNumberContainerView.mas_bottom)
+            make.removeExisting = true
+            make.bottom.equalTo()(self.keyboardView.mas_top)
             make.height.equalTo()(self.enterNumberBelowContainer)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
         }
         
         currentNumberLabel.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
             make.center.equalTo()(self.currentNumberContainer)
             make.height.equalTo()(self.currentNumberLabel.frame.size.height)
             make.width.equalTo()(self.currentNumberLabel.frame.size.width)
         }
+        
+        keyboardView.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.keyboardHeight)
+            make.bottom.equalTo()(self)
+        }
+        
+        super.updateConstraints()
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        let info = notification.userInfo!
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        keyboardHeight = keyboardFrame.height
+        self.makeConstraints()
     }
     
     
