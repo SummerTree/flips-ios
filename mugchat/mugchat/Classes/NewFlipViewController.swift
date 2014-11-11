@@ -165,6 +165,8 @@ class NewFlipViewController: MugChatViewController,
                     cell.photoView.setImageWithURL(url)
                 }
             }
+            
+            cell.hideNumberLabel()
         } else {
             // not a Flips user
             cell.numberLabel?.text = contact.phoneNumber
