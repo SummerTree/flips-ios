@@ -102,7 +102,7 @@ class ConversationTableViewCell : UITableViewCell {
             make.top.equalTo()(self.contentView)
             make.height.equalTo()(self.CELL_MUG_IMAGE_VIEW_HEIGHT)
             make.leading.equalTo()(self.contentView)
-            make.trailing.equalTo()(self.contentView)
+            make.trailing.equalTo()(self.contentView).with().offset()(0.5)
         }
         
         userImageView.mas_makeConstraints { (make) -> Void in
