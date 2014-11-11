@@ -51,7 +51,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     private func initSubviews() {
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = UIColor.clearColor()
         
         backgroundBlurImageView = UIImageView()
         backgroundBlurImageView.contentMode = UIViewContentMode.Center
@@ -173,5 +173,6 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     func setMessagesTopViewBackgroundImage(image: UIImage) {
         backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+        backgroundBlurImageView.alpha = 0.98
     }
 }
