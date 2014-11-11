@@ -98,13 +98,22 @@
 
 - (AVAsset *)videoFromMug:(Mug *)flip {
     __block AVAsset *track;
+    
+    NSLog(@"flip word: %@", flip.word);
+    NSString *word = flip.word;
 
     dispatch_group_t group = dispatch_group_create();
 
-    if ([flip isBackgroundContentTypeVideo]) {
+    // Empty mugs doesn't exist
+    Mug *flipInContext = [flip MR_inThreadContext];
+    if (flipInContext == nil) {
+        flipInContext = [Mug MR_createEntity];
+        flipInContext.word = word;
+    }
+    if ([flipInContext isBackgroundContentTypeVideo]) {
         NSLog(@"ENTER");
         dispatch_group_enter(group);
-        [self prepareVideoAssetFromFlip:flip completion:^(BOOL success, AVAsset *videoAsset) {
+        [self prepareVideoAssetFromFlip:flipInContext completion:^(BOOL success, AVAsset *videoAsset) {
             if (success) {
                 track = videoAsset;
             }
@@ -113,7 +122,7 @@
         }];
     } else {
         ImageVideoCreator *imageVideoCreator = [[ImageVideoCreator alloc] init];
-        NSURL *videoURL = [NSURL fileURLWithPath:[imageVideoCreator videoPathForMug:flip]];
+        NSURL *videoURL = [NSURL fileURLWithPath:[imageVideoCreator videoPathForMug:flipInContext]];
         track = [AVAsset assetWithURL:videoURL];
     }
 

@@ -45,7 +45,6 @@
 		705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705B3DDA1A03BBB400E0D3E9 /* PreviewViewController.swift */; };
 		705EF07A19F973A600D4CF74 /* ConfirmFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */; };
 		705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */; };
-		7066E0A519EC4D610009BCF2 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7066E0A419EC4D610009BCF2 /* ComposeView.swift */; };
 		70736C321A0D471F004E55E4 /* UpdateUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70736C311A0D471F004E55E4 /* UpdateUserProfileViewController.swift */; };
 		70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70736C371A0D582A004E55E4 /* UpdateUserProfileView.swift */; };
 		708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */; };
@@ -194,7 +193,6 @@
 		705B3DDA1A03BBB400E0D3E9 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipView.swift; sourceTree = "<group>"; };
 		705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipViewController.swift; sourceTree = "<group>"; };
-		7066E0A419EC4D610009BCF2 /* ComposeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		70736C311A0D471F004E55E4 /* UpdateUserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateUserProfileViewController.swift; sourceTree = "<group>"; };
 		70736C371A0D582A004E55E4 /* UpdateUserProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateUserProfileView.swift; sourceTree = "<group>"; };
 		708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
@@ -618,7 +616,6 @@
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
 			isa = PBXGroup;
 			children = (
-				7066E0A419EC4D610009BCF2 /* ComposeView.swift */,
 				7A8BFEDC1A095A6900E7F2A3 /* Utils */,
 				7A8BFEDB1A09597600E7F2A3 /* Mugs Collection */,
 				7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */,
@@ -1215,7 +1212,6 @@
 				7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */,
 				7AF82DFF19EFEC5800D0393F /* UserDataSource.swift in Sources */,
 				5786B2CE19EEADD400021DD3 /* ChatView.swift in Sources */,
-				7066E0A519EC4D610009BCF2 /* ComposeView.swift in Sources */,
 				7046C9B719F18EB100CBD72D /* AudioRecorderService.swift in Sources */,
 				A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,

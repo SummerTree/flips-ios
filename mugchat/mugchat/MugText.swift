@@ -15,7 +15,7 @@ class MugText {
     var position: Int!
     var text: String!
     var state: FlipState!
-    var associatedMug: Mug!
+    var associatedFlipId: String?
     
     init(position: Int, text: String, state: FlipState) {
         self.position = position
