@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
+		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
 		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
@@ -153,6 +155,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactTableViewCell.swift; path = Classes/ContactTableViewCell.swift; sourceTree = "<group>"; };
+		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
 		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
@@ -330,12 +334,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0757ECAB1A116A1E00D0277C /* Contact */ = {
+			isa = PBXGroup;
+			children = (
+				0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */,
+				07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */,
+				0757ECB01A11A61600D0277C /* ContactPhotoView.swift */,
+			);
+			name = Contact;
+			sourceTree = "<group>";
+		};
 		0794A9C01A0A981300DA8CFA /* New Flip */ = {
 			isa = PBXGroup;
 			children = (
 				0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */,
 				0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */,
-				07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */,
 			);
 			name = "New Flip";
 			sourceTree = "<group>";
@@ -482,6 +495,7 @@
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
 				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
+				0757ECAB1A116A1E00D0277C /* Contact */,
 				7A28ADC019D4428A00887831 /* Custom */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
@@ -1179,6 +1193,7 @@
 				A2A5C6D91A001E7A00E4CB2C /* SelectedMugOverlayView.swift in Sources */,
 				574156A219D34F2B006F0A2F /* MugError.swift in Sources */,
 				7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */,
+				0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
@@ -1199,6 +1214,7 @@
 				7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
+				0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
 				0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */,
 				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,

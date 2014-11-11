@@ -16,7 +16,6 @@
 import UIKit
 
 // TODO: remove when class variables are supported by Swift (after upgrade to Xcode 6.1)
-private let CELL_IDENTIFIER = "SomeCell"
 private let STORYBOARD = "NewFlip"
 private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
 
@@ -31,7 +30,6 @@ class NewFlipViewController: MugChatViewController,
 	// MARK: - Constants
 	
 	// TODO: uncomment when class variables are supported by Swift
-//	class private let CELL_IDENTIFIER = "SomeCell"
 //	class private let STORYBOARD = "NewFlip"
 //	class private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
 	
@@ -62,7 +60,7 @@ class NewFlipViewController: MugChatViewController,
 		self.setupWhiteNavBarWithCancelButton(TITLE)
 		self.setNeedsStatusBarAppearanceUpdate()
 		self.automaticallyAdjustsScrollViewInsets = false
-		self.searchTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
+		self.searchTableView.registerNib(UINib(nibName: ContactTableViewCellIdentifier, bundle: nil), forCellReuseIdentifier: ContactTableViewCellIdentifier)
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -154,19 +152,22 @@ class NewFlipViewController: MugChatViewController,
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) as Contact
-		let name = "\(contact.firstName) \(contact.lastName)"
-		
-		let cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
-		cell.textLabel.text = name
+		let cell = tableView.dequeueReusableCellWithIdentifier(ContactTableViewCellIdentifier, forIndexPath: indexPath) as ContactTableViewCell;
+		cell.nameLabel.text = "\(contact.firstName) \(contact.lastName)"
+		cell.photoView.initials = "\(contact.firstName[contact.firstName.startIndex])\(contact.lastName[contact.lastName.startIndex])"
 		
 		if let user = contact.contactUser {
 			// Flips user
+			cell.photoView.borderColor = .mugOrange()
+			
 			if let photoURLString = user.photoURL {
-				cell.imageView.setImageWithURL(NSURL(string: photoURLString))
+				if let url = NSURL(string: photoURLString) {
+					cell.photoView.setImageWithURL(url)
+				}
 			}
 		} else {
 			// not a Flips user
-			cell.detailTextLabel?.text = contact.phoneNumber
+			cell.numberLabel?.text = contact.phoneNumber
 		}
 		
 		return cell
