@@ -64,6 +64,8 @@
 		70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */; };
 		70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
 		70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */ = {isa = PBXBuildFile; fileRef = 70CF5C461A041F680052E396 /* i_love_coffee.mov */; };
+		70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */; };
+		70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
@@ -218,6 +220,8 @@
 		70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveCHeaders.h; sourceTree = "<group>"; };
 		70CF5C461A041F680052E396 /* i_love_coffee.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = i_love_coffee.mov; sourceTree = "<group>"; };
+		70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeView.swift; sourceTree = "<group>"; };
+		70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -462,6 +466,7 @@
 			children = (
 				7049A7A11A111998001D8121 /* ChangeNumberInfoView.swift */,
 				7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */,
+				70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */,
 			);
 			name = "Change Number";
 			sourceTree = "<group>";
@@ -471,6 +476,7 @@
 			children = (
 				7049A7A41A11238A001D8121 /* ChangeNumberInfoViewController.swift */,
 				7043DF371A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift */,
+				70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */,
 			);
 			name = "Change Number";
 			sourceTree = "<group>";
@@ -1224,6 +1230,7 @@
 				7ACBBECF1A00290B00A7109C /* Mug.m in Sources */,
 				7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
+				70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */,
 				708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
 				0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */,
@@ -1292,6 +1299,7 @@
 				7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */,
 				7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
+				70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */,
 				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,
 				708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */,
 				7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */,

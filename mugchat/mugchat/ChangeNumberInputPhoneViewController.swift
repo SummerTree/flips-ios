@@ -27,17 +27,21 @@ class ChangeNumberInputPhoneViewController : MugChatViewController, ChangeNumber
         super.viewDidLoad()
         
         setupWhiteNavBarWithBackButton("Change Number")
-        self.changeNumberInputPhoneView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.changeNumberInputPhoneView.viewWillAppear()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.changeNumberInputPhoneView.viewDidAppear()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        changeNumberInputPhoneView.viewWillDisappear()
+        self.changeNumberInputPhoneView.viewWillDisappear()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -57,6 +61,7 @@ class ChangeNumberInputPhoneViewController : MugChatViewController, ChangeNumber
     }
     
     func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber phone: String) {
-        println("finished with \(phone)")
+        let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phone, userId: User.loggedUser()?.userID)
+        self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
     }
 }

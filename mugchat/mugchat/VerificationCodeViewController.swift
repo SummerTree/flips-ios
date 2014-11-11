@@ -30,9 +30,19 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
         self.view = verificationCodeView
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        verificationCodeView.viewWillAppear()
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         verificationCodeView.viewWillDisappear()
+    }
+    
+    func navigateAfterValidateDevice() {
+        var inboxViewController = InboxViewController()
+        self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     
     // MARK: - VerificationCodeViewDelegate Methods
@@ -46,8 +56,8 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     }
     
     func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
-        verificationCodeView.resetVerificationCodeField()
-        verificationCodeView.focusKeyboardOnCodeField()
+        view.resetVerificationCodeField()
+        view.focusKeyboardOnCodeField()
         self.resendVerificationCode(userId, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
     }
     
@@ -79,8 +89,9 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     println("Error: Verification Code was not resent")
                     return ()
                 }
-                self.verificationCodeView.resetVerificationCodeField()
-                self.verificationCodeView.focusKeyboardOnCodeField()
+                let verificationCodeView = self.view as VerificationCodeView
+                verificationCodeView.resetVerificationCodeField()
+                verificationCodeView.focusKeyboardOnCodeField()
             },
             failure: { (mugError) in
                 println("Error trying to resend verification code to device: " + mugError!.error!)
@@ -107,18 +118,19 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 userDataSource.syncUserData({ (success, error) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (success) {
-                            var inboxViewController = InboxViewController()
-                            self.navigationController?.pushViewController(inboxViewController, animated: true)
+                            self.navigateAfterValidateDevice()
                         }
                     })
                 })
             },
             failure: { (mugError) in
                 if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
-                    self.verificationCodeView.didEnterWrongVerificationCode()
+                    let verificationCodeView = self.view as VerificationCodeView
+                    verificationCodeView.didEnterWrongVerificationCode()
                 } else {
                     println("Device code verification error: " + mugError!.error!)
-                    self.verificationCodeView.resetVerificationCodeField()
+                    let verificationCodeView = self.view as VerificationCodeView
+                    verificationCodeView.resetVerificationCodeField()
                 }
             })
     }

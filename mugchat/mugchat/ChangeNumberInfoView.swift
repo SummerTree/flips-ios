@@ -53,7 +53,8 @@ class ChangeNumberInfoView: UIView {
         self.descriptionLabel = UILabel()
         self.descriptionLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h3)
         self.descriptionLabel.numberOfLines = 3
-        self.descriptionLabel.text = "Changing your number will transfer\nyour account info, groups and settings\nto the new number."
+        let descriptionText = "Changing your number will transfer\nyour account info, groups and settings\nto the new number."
+        self.descriptionLabel.text = NSLocalizedString(descriptionText, comment: descriptionText)
         self.descriptionLabel.textAlignment = NSTextAlignment.Center
         self.descriptionLabel.textColor = UIColor.deepSea()
         self.descriptionLabel.sizeToFit()

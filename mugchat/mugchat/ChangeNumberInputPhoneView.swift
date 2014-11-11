@@ -36,13 +36,17 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         addSubviews()
     }
     
-    func viewDidLoad() {
+    func viewWillAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        
+        self.newNumberTextField.becomeFirstResponder()
+    }
+    
+    func viewDidAppear() {
         self.newNumberTextField.becomeFirstResponder()
     }
     
     func viewWillDisappear() {
+        self.newNumberTextField.resignFirstResponder()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
     }
     
@@ -55,7 +59,8 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         self.enterNumberBelowLabel = UILabel()
         self.enterNumberBelowLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h3)
         self.enterNumberBelowLabel.numberOfLines = 2
-        self.enterNumberBelowLabel.text = "Please enter the new\nnumber below"
+        let enterNumberText = "Please enter the new\nnumber below"
+        self.enterNumberBelowLabel.text = NSLocalizedString(enterNumberText, comment: enterNumberText)
         self.enterNumberBelowLabel.textAlignment = NSTextAlignment.Center
         self.enterNumberBelowLabel.textColor = UIColor.mediumGray()
         self.enterNumberBelowLabel.sizeToFit()
@@ -86,7 +91,8 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         self.currentNumberLabel = UILabel()
         self.currentNumberLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         self.currentNumberLabel.numberOfLines = 2
-        self.currentNumberLabel.text = "Current number for this account is\n\(User.loggedUser()!.formattedPhoneNumber())"
+        let currentNumberText = "Current number for this account is\n\(User.loggedUser()!.formattedPhoneNumber())"
+        self.currentNumberLabel.text = NSLocalizedString(currentNumberText, comment: currentNumberText)
         self.currentNumberLabel.textAlignment = NSTextAlignment.Center
         self.currentNumberLabel.textColor = UIColor.mediumGray()
         self.currentNumberLabel.sizeToFit()
@@ -102,7 +108,6 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
             make.removeExisting = true
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.centerX.equalTo()(self)
             make.height.greaterThanOrEqualTo()(self.ENTER_NUMBER_BELOW_CONTAINER_HEIGHT)
             make.bottom.equalTo()(self.newNumberContainerView.mas_top)
         }
@@ -210,9 +215,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     
     func newNumberFieldDidChange(textField: UITextField) {
         if (countElements(textField.text) == 12) {
-            textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
-            
         }
     }
     
