@@ -75,7 +75,8 @@ class BuilderView : UIView {
         self.thisIsYourWordBuilderLabel = UILabel()
         self.thisIsYourWordBuilderLabel.numberOfLines = 1
         self.thisIsYourWordBuilderLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)
-        self.thisIsYourWordBuilderLabel.text = "this is your word builder."
+        let thisIsYourWordMessage = "this is your word builder."
+        self.thisIsYourWordBuilderLabel.text = NSLocalizedString(thisIsYourWordMessage, comment: thisIsYourWordMessage)
         self.thisIsYourWordBuilderLabel.textColor = UIColor.deepSea()
         self.thisIsYourWordBuilderLabel.textAlignment = NSTextAlignment.Center
         self.thisIsYourWordBuilderLabel.sizeToFit()
