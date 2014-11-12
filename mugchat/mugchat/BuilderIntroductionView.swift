@@ -18,7 +18,8 @@ class BuilderIntroductionView : UIView {
 
     private let CONTENT_MARGIN_LEFT:    CGFloat = 25.0
     private let CONTENT_MARGIN_RIGHT:   CGFloat = -25.0
-    private let TOP_CONTAINER_HEIGHT:   CGFloat = 60.0
+    private let TOP_CONTAINER_HEIGHT_4S:CGFloat = 60.0
+    private let TOP_CONTAINER_HEIGHT:   CGFloat = 120.0
     private let SEPARATOR_HEIGHT:       CGFloat = 50.0
     private let OK_SWEET_BUTTON_HEIGHT: CGFloat = 62.0
     private let OK_SWEET_BUTTON_WIDTH:  CGFloat = 195.0
@@ -65,7 +66,6 @@ class BuilderIntroductionView : UIView {
     }
     
     func addSubviews() {
-        
         self.blurredImageView = UIImageView(image: self.backgroundImage)
         self.addSubview(blurredImageView)
         
@@ -117,7 +117,6 @@ class BuilderIntroductionView : UIView {
         
         self.separatorBetweenButtonAndBottom = UIView()
         self.addSubview(separatorBetweenButtonAndBottom)
-
     }
     
     func okSweetButtonTapped(button: UIButton!) {
@@ -136,7 +135,12 @@ class BuilderIntroductionView : UIView {
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.greaterThanOrEqualTo()(self.TOP_CONTAINER_HEIGHT)
+            
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.height.equalTo()(self.TOP_CONTAINER_HEIGHT_4S)
+            } else {
+                make.height.equalTo()(self.TOP_CONTAINER_HEIGHT)
+            }
         }
         
         self.hiUserLabel.mas_makeConstraints { (make) -> Void in
@@ -187,7 +191,6 @@ class BuilderIntroductionView : UIView {
             make.right.equalTo()(self)
             make.height.equalTo()(self.contentTopContainer)
         }
-
     }
     
     func applyBlur(image: UIImage) -> UIImage {
