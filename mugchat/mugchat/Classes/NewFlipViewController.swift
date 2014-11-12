@@ -48,6 +48,7 @@ class NewFlipViewController: MugChatViewController,
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var flipView: UIView!
     @IBOutlet weak var nextButtonAction: UIButton!
     @IBOutlet weak var searchTableView: UITableView!
     @IBOutlet weak var toTextView: UITextView!
@@ -72,7 +73,24 @@ class NewFlipViewController: MugChatViewController,
     }
     
     override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        struct Holder {
+            static var flipViewUpperBorderLayer :CALayer!
+        }
+        
+        if (Holder.flipViewUpperBorderLayer == nil) {
+            Holder.flipViewUpperBorderLayer = CALayer()
+            Holder.flipViewUpperBorderLayer.backgroundColor = UIColor.lightGreyF2().CGColor
+            [self.flipView.layer.addSublayer(Holder.flipViewUpperBorderLayer)]
+        }
+        
+        Holder.flipViewUpperBorderLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.flipView.frame), 1.0)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
