@@ -12,25 +12,45 @@
 
 import Foundation
 
-class BuilderViewController : MugChatViewController {
+class BuilderViewController : MugChatViewController, BuilderViewDelegate {
     
-    // MARK: - Overridden Methods
+    private var builderView: BuilderView!
+    
+    private let userDefaults = NSUserDefaults.standardUserDefaults()
+    private let ALREADY_SEEN_INTRODUCTION_KEY = "builder.introduction.watched"
+    
+    override func loadView() {
+        self.builderView = BuilderView()
+        self.builderView.delegate = self
+        self.view = builderView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Builder", comment: "Builder"))
         self.view.backgroundColor = UIColor.deepSea()
-     
+        setupWhiteNavBarWithBackButton("Builder")
         self.setNeedsStatusBarAppearanceUpdate()
+        self.builderView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
+        if (alreadySeenIntroduction == nil || !alreadySeenIntroduction!) {
+            self.navigationController?.setNavigationBarHidden(true, animated: false)
+            builderView.showIntroduction()
+            userDefaults.setObject(true, forKey: ALREADY_SEEN_INTRODUCTION_KEY)
+        }
+    }
+    
+    func builderViewDidTapOkSweetButton(builderView: BuilderView!) {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 }

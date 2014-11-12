@@ -46,8 +46,10 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - Instance variables
     
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var flipView: UIView!
     @IBOutlet weak var nextButtonAction: UIButton!
     @IBOutlet weak var searchTableView: UITableView!
     @IBOutlet weak var toTextView: UITextView!
@@ -67,6 +69,29 @@ class NewFlipViewController: MugChatViewController,
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        registerForKeyboardNotifications()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        struct Holder {
+            static var flipViewUpperBorderLayer :CALayer!
+        }
+        
+        if (Holder.flipViewUpperBorderLayer == nil) {
+            Holder.flipViewUpperBorderLayer = CALayer()
+            Holder.flipViewUpperBorderLayer.backgroundColor = UIColor.lightGreyF2().CGColor
+            [self.flipView.layer.addSublayer(Holder.flipViewUpperBorderLayer)]
+        }
+        
+        Holder.flipViewUpperBorderLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.flipView.frame), 1.0)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -80,6 +105,12 @@ class NewFlipViewController: MugChatViewController,
     }
     
     // MARK: - Private methods
+    
+    private func registerForKeyboardNotifications() {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
+    }
     
     private func updateContactSearch() {
         if self.toTextView.text.isEmpty {
@@ -127,6 +158,33 @@ class NewFlipViewController: MugChatViewController,
         } else {
             let alertView = UIAlertView(title: CANCEL_TITLE, message: CANCEL_MESSAGE, delegate: self, cancelButtonTitle: NO, otherButtonTitles: DELETE)
             alertView.show()
+        }
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let kbFrame = info[UIKeyboardFrameEndUserInfoKey] as NSValue
+            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            let keyboardFrame = kbFrame.CGRectValue()
+            let height = CGRectGetHeight(keyboardFrame)
+
+            self.bottomConstraint.constant = height
+            
+            UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    func keyboardWillBeHidden(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            
+            self.bottomConstraint.constant = 0
+            
+            UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+            })
         }
     }
     
@@ -183,6 +241,8 @@ class NewFlipViewController: MugChatViewController,
                     cell.photoView.setImageWithURL(url)
                 }
             }
+            
+            cell.hideNumberLabel()
         } else {
             // not a Flips user
             cell.numberLabel?.text = contact.phoneNumber

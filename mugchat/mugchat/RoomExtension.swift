@@ -71,4 +71,15 @@ extension Room {
         mugMessageDataSource.removeAllMugMessagesFromRoomID(self.roomID, completion)
     }
     
+    func roomName() -> String {
+        var roomName = ""
+        var comma = ""
+        for participant in self.participants {
+            if (participant.userID != AuthenticationHelper.sharedInstance.userInSession.userID) {
+                roomName = "\(roomName)\(comma)\(participant.firstName)"
+                comma = ", "
+            }
+        }
+        return roomName
+    }
 }

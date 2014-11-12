@@ -42,7 +42,7 @@
                                         <color key="textColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
                                         <rect key="frame" x="38" y="8" width="554" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="bCJ-zi-4MV"/>
@@ -83,7 +83,7 @@
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98x-j1-QcY" customClass="JoinStringsTextField" customModule="Flips" customModuleProvider="target">
                                         <rect key="frame" x="16" y="0.0" width="525" height="50"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="50" id="NbK-k6-HWN"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="ODM-He-WuJ"/>
@@ -137,8 +137,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="WXn-i6-iJN"/>
                     <connections>
+                        <outlet property="bottomConstraint" destination="RsM-4p-7hb" id="n7e-yF-21r"/>
                         <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
                         <outlet property="flipTextFieldHeightConstraint" destination="NbK-k6-HWN" id="QWc-bd-1Jw"/>
+                        <outlet property="flipView" destination="Q7T-V3-eBo" id="rwb-aP-tVr"/>
                         <outlet property="nextButtonAction" destination="YYl-cb-dw6" id="W18-gm-lJG"/>
                         <outlet property="searchTableView" destination="wGd-Vw-hpp" id="qoE-zX-RPB"/>
                         <outlet property="toTextView" destination="c8q-Ag-DJI" id="e5v-bJ-yse"/>
