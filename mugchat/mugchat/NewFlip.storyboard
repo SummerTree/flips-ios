@@ -42,7 +42,7 @@
                                         <color key="textColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
                                         <rect key="frame" x="38" y="8" width="554" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="bCJ-zi-4MV"/>
@@ -137,6 +137,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="WXn-i6-iJN"/>
                     <connections>
+                        <outlet property="bottomConstraint" destination="RsM-4p-7hb" id="n7e-yF-21r"/>
                         <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
                         <outlet property="flipTextFieldHeightConstraint" destination="NbK-k6-HWN" id="QWc-bd-1Jw"/>
                         <outlet property="nextButtonAction" destination="YYl-cb-dw6" id="W18-gm-lJG"/>
