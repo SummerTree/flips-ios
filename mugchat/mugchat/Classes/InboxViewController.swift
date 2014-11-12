@@ -64,10 +64,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     
     func inboxViewDidTapBuilderButton(inboxView : InboxView) {
         var builderViewController = BuilderViewController()
-        var navigationController = UINavigationController(rootViewController: builderViewController)
-        
-        builderViewController.modalPresentationStyle = UIModalPresentationStyle.PageSheet;
-        self.presentViewController(navigationController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(builderViewController, animated:true)
     }
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
