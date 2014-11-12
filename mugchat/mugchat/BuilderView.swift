@@ -16,9 +16,6 @@ class BuilderView : UIView, BuilderIntroductionViewDelegate {
     
     var delegate: BuilderViewDelegate?
     
-    private let userDefaults = NSUserDefaults.standardUserDefaults()
-    private let ALREADY_SEEN_INTRODUCTION_KEY: String! = "builder.introduction"
-    private var alreadySeenIntroduction: Bool!
     private var backgroundImageView: UIImageView!
     private var builderIntroductionView: BuilderIntroductionView!
     
@@ -39,29 +36,25 @@ class BuilderView : UIView, BuilderIntroductionViewDelegate {
         makeConstraints()
     }
     
-    func viewDidAppear() {
-        self.alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
-        if (alreadySeenIntroduction == nil || !alreadySeenIntroduction!) {
-            userDefaults.setObject(true, forKey: ALREADY_SEEN_INTRODUCTION_KEY)
-            builderIntroductionView = BuilderIntroductionView(viewBackground: self.snapshot())
-            builderIntroductionView.alpha = 0.0
-            builderIntroductionView.delegate = self
-            self.bringSubviewToFront(builderIntroductionView)
-            self.addSubview(builderIntroductionView)
-            
-            self.builderIntroductionView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self)
-                make.bottom.equalTo()(self)
-                make.left.equalTo()(self)
-                make.right.equalTo()(self)
-            }
-            
-            self.layoutIfNeeded()
-            
-            UIView.animateWithDuration(1.0, animations: { () -> Void in
-                self.builderIntroductionView.alpha = 1.0
-            })
+    func showIntroduction() {
+        builderIntroductionView = BuilderIntroductionView(viewBackground: self.snapshot())
+        builderIntroductionView.alpha = 0.0
+        builderIntroductionView.delegate = self
+        self.bringSubviewToFront(builderIntroductionView)
+        self.addSubview(builderIntroductionView)
+        
+        self.builderIntroductionView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.bottom.equalTo()(self)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
         }
+        
+        self.layoutIfNeeded()
+        
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            self.builderIntroductionView.alpha = 1.0
+        })
     }
     
     func addSubviews() {
@@ -83,8 +76,8 @@ class BuilderView : UIView, BuilderIntroductionViewDelegate {
         self.delegate?.builderViewDidTapOkSweetButton(self)
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.builderIntroductionView.alpha = 0.0
-        }) { (completed) -> Void in
-            self.bringSubviewToFront(self.backgroundImageView)
+            }) { (completed) -> Void in
+                self.bringSubviewToFront(self.backgroundImageView)
         }
     }
 }
