@@ -10,6 +10,65 @@
 	<string>46</string>
 	<key>objects</key>
 	<dict>
+		<key>0757ECA91A114FA500D0277C</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>name</key>
+			<string>ContactTableViewCell.swift</string>
+			<key>path</key>
+			<string>Classes/ContactTableViewCell.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0757ECAA1A114FA500D0277C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0757ECA91A114FA500D0277C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>0757ECAB1A116A1E00D0277C</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>0757ECA91A114FA500D0277C</string>
+				<string>07E0A0821A113A7400D5B292</string>
+				<string>0757ECB01A11A61600D0277C</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Contact</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0757ECB01A11A61600D0277C</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.swift</string>
+			<key>name</key>
+			<string>ContactPhotoView.swift</string>
+			<key>path</key>
+			<string>Classes/ContactPhotoView.swift</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>0757ECB11A11A61600D0277C</key>
+		<dict>
+			<key>fileRef</key>
+			<string>0757ECB01A11A61600D0277C</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>0794A9C01A0A981300DA8CFA</key>
 		<dict>
 			<key>children</key>
@@ -63,6 +122,65 @@
 		<dict>
 			<key>fileRef</key>
 			<string>0794A9C31A0A9AAD00DA8CFA</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>07C53DC81A11C6B40011E6A2</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>NSManagedObject+helpers.h</string>
+			<key>path</key>
+			<string>Classes/NSManagedObject+helpers.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>07C53DC91A11C6B40011E6A2</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>NSManagedObject+helpers.m</string>
+			<key>path</key>
+			<string>Classes/NSManagedObject+helpers.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>07C53DCA1A11C6B40011E6A2</key>
+		<dict>
+			<key>fileRef</key>
+			<string>07C53DC91A11C6B40011E6A2</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>07E0A0821A113A7400D5B292</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>file.xib</string>
+			<key>name</key>
+			<string>ContactTableViewCell.xib</string>
+			<key>path</key>
+			<string>Classes/ContactTableViewCell.xib</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>07E0A0831A113A7400D5B292</key>
+		<dict>
+			<key>fileRef</key>
+			<string>07E0A0821A113A7400D5B292</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -995,11 +1113,11 @@ fi
 		<dict>
 			<key>children</key>
 			<array>
-				<string>70DAB3471A1275B00044AEC1</string>
 				<string>5786B2CF19EEADD900021DD3</string>
 				<string>7066E0A319EC4D570009BCF2</string>
 				<string>705EF07819F9738100D4CF74</string>
 				<string>7AD93F8C19E4B677009CC59A</string>
+				<string>0757ECAB1A116A1E00D0277C</string>
 				<string>7A28ADC019D4428A00887831</string>
 				<string>7A1892C919D1E9210026E641</string>
 				<string>704E111019D0936800D2BB88</string>
@@ -1130,6 +1248,8 @@ fi
 				<string>5741569E19D33F30006F0A2F</string>
 				<string>7AB946D719DED95900779C73</string>
 				<string>70B7695D19E6FF1000CAA9A9</string>
+				<string>07C53DC81A11C6B40011E6A2</string>
+				<string>07C53DC91A11C6B40011E6A2</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -1399,7 +1519,6 @@ fi
 		<dict>
 			<key>children</key>
 			<array>
-				<string>7066E0A419EC4D610009BCF2</string>
 				<string>7A8BFEDC1A095A6900E7F2A3</string>
 				<string>7A8BFEDB1A09597600E7F2A3</string>
 				<string>7A8BFED91A09596700E7F2A3</string>
@@ -1413,26 +1532,6 @@ fi
 			<string>Compose</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7066E0A419EC4D610009BCF2</key>
-		<dict>
-			<key>fileEncoding</key>
-			<string>4</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>ComposeView.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7066E0A519EC4D610009BCF2</key>
-		<dict>
-			<key>fileRef</key>
-			<string>7066E0A419EC4D610009BCF2</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
 		</dict>
 		<key>70736C301A0D453F004E55E4</key>
 		<dict>
@@ -1882,39 +1981,6 @@ fi
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>70DAB3471A1275B00044AEC1</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>70DAB3481A1275BA0044AEC1</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Builder</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>70DAB3481A1275BA0044AEC1</key>
-		<dict>
-			<key>fileEncoding</key>
-			<string>4</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>BuilderView.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>70DAB3491A1275BA0044AEC1</key>
-		<dict>
-			<key>fileRef</key>
-			<string>70DAB3481A1275BA0044AEC1</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
 		<key>70E59C6119F584B2008DE18E</key>
 		<dict>
 			<key>children</key>
@@ -2010,7 +2076,6 @@ fi
 				<string>7A8BFEDE1A095AB100E7F2A3</string>
 				<string>7AE2B47719FEC7AE002E4F66</string>
 				<string>7AD93F9219E56D41009CC59A</string>
-				<string>70DAB3491A1275BA0044AEC1</string>
 				<string>5786B2CD19EEADD400021DD3</string>
 				<string>7A9619E319DB85D4005E4343</string>
 				<string>A2392BF919EEE7C70037B0C0</string>
@@ -2027,6 +2092,7 @@ fi
 				<string>A2A5C6D91A001E7A00E4CB2C</string>
 				<string>574156A219D34F2B006F0A2F</string>
 				<string>7AE045001A0CF14600C68313</string>
+				<string>0757ECAA1A114FA500D0277C</string>
 				<string>7A11791D19DA03980086A66B</string>
 				<string>7AD93FA019E62530009CC59A</string>
 				<string>7A11792219DA07F30086A66B</string>
@@ -2048,6 +2114,7 @@ fi
 				<string>7A11792419DA08800086A66B</string>
 				<string>70DAB3461A1241B70044AEC1</string>
 				<string>708E2E9619D1EF2F0076C3E4</string>
+				<string>0757ECB11A11A61600D0277C</string>
 				<string>A2D60FD219E45EFF001C92A0</string>
 				<string>0794A9C41A0A9AAD00DA8CFA</string>
 				<string>A2392BFA19EEE7C70037B0C0</string>
@@ -2069,7 +2136,6 @@ fi
 				<string>7AFB719B19FFBF1B002695AC</string>
 				<string>7AF82DFF19EFEC5800D0393F</string>
 				<string>5786B2CE19EEADD400021DD3</string>
-				<string>7066E0A519EC4D610009BCF2</string>
 				<string>7046C9B719F18EB100CBD72D</string>
 				<string>A2392BFC19EEE7C70037B0C0</string>
 				<string>A2D60FCC19E45EEA001C92A0</string>
@@ -2090,6 +2156,7 @@ fi
 				<string>70736C381A0D582A004E55E4</string>
 				<string>F285B26D1A102190002DEEC2</string>
 				<string>7AFB71A11A00053C002695AC</string>
+				<string>07C53DCA1A11C6B40011E6A2</string>
 				<string>57E3763C19DC57970060AAA8</string>
 				<string>A2A5C6DB1A01457A00E4CB2C</string>
 				<string>7AB946DA19DEF1CC00779C73</string>
@@ -2172,6 +2239,7 @@ fi
 				<string>5786B2D919EEAE0200021DD3</string>
 				<string>5786B2DA19EEAE0200021DD3</string>
 				<string>70CF5C471A041F680052E396</string>
+				<string>07E0A0831A113A7400D5B292</string>
 				<string>70FD4E8019D064450024EBDB</string>
 			</array>
 			<key>isa</key>

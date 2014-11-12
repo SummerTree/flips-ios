@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="14A389" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Contact" representedClassName="Contact" syncable="YES">
         <attribute name="contactID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -8,7 +8,7 @@
         <attribute name="phoneNumber" attributeType="String" syncable="YES"/>
         <attribute name="phoneType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="contactUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="userContact" inverseEntity="User" syncable="YES"/>
+        <relationship name="contactUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="contacts" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES">
         <attribute name="deviceID" optional="YES" attributeType="String" syncable="YES"/>
@@ -63,11 +63,11 @@
         <attribute name="userID" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="adminRooms" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Room" inverseName="admin" inverseEntity="Room" syncable="YES"/>
+        <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Contact" inverseName="contactUser" inverseEntity="Contact" syncable="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="user" inverseEntity="Device" syncable="YES"/>
         <relationship name="mugs" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Mug" inverseName="owner" inverseEntity="Mug" syncable="YES"/>
         <relationship name="mugsSent" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MugMessage" inverseName="from" inverseEntity="MugMessage" syncable="YES"/>
         <relationship name="rooms" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Room" inverseName="participants" inverseEntity="Room" syncable="YES"/>
-        <relationship name="userContact" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Contact" inverseName="contactUser" inverseEntity="Contact" syncable="YES"/>
     </entity>
     <elements>
         <element name="Contact" positionX="-461" positionY="296" width="128" height="163"/>
