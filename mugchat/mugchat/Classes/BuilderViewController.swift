@@ -12,25 +12,36 @@
 
 import Foundation
 
-class BuilderViewController : MugChatViewController {
+class BuilderViewController : MugChatViewController, BuilderViewDelegate {
     
-    // MARK: - Overridden Methods
+    private var builderView: BuilderView!
+    
+    override func loadView() {
+        self.builderView = BuilderView()
+        self.builderView.delegate = self
+        self.view = builderView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Builder", comment: "Builder"))
         self.view.backgroundColor = UIColor.deepSea()
-     
+        setupWhiteNavBarWithBackButton("Builder")
         self.setNeedsStatusBarAppearanceUpdate()
+        self.builderView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        builderView.viewDidAppear()
+    }
+    
+    func builderViewDidTapOkSweetButton(builderView: BuilderView!) {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 }
