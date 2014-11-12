@@ -292,21 +292,21 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     }
     
     func myFlipsView(myFlipsView: MyFlipsView!, didTapAtIndex index: Int) {
-        let flips = dataSource?.composeBottomViewContainerFlipsForHighlightedWord(self) as [Mug]!
-        delegate?.composeBottomViewContainer(self, didTapAtFlip: flips[index])
+        let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
+        delegate?.composeBottomViewContainer(self, didTapAtFlipWithId: flipIds[index])
     }
     
     
     // MARK: - MyFlipsViewDataSource
     
     func myFlipsViewNumberOfFlips() -> Int {
-        let flips = dataSource?.composeBottomViewContainerFlipsForHighlightedWord(self) as [Mug]!
-        return flips.count
+        let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
+        return flipIds.count
     }
     
-    func myFlipsView(myFlipsView: MyFlipsView, flipAtIndex index: Int) -> Mug {
-        let flips = dataSource?.composeBottomViewContainerFlipsForHighlightedWord(self) as [Mug]!
-        return flips[index]
+    func myFlipsView(myFlipsView: MyFlipsView, flipIdAtIndex index: Int) -> String {
+        let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
+        return flipIds[index]
     }
     
     func myFlipsViewSelectedFlipId() -> String? {
@@ -331,12 +331,12 @@ protocol ComposeBottomViewContainerDelegate {
     
     func composeBottomViewContainerDidTapGalleryButton(composeBottomViewContainer: ComposeBottomViewContainer)
     
-    func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlip flip: Mug)
+    func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlipWithId flipId: String)
 }
 
 protocol ComposeBottomViewContainerDataSource {
     
-    func composeBottomViewContainerFlipsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [Mug]
+    func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String]
     
     func flipIdForHighlightedWord() -> String?
 }

@@ -35,6 +35,7 @@
 #import "MugMessage.h"
 #import "Contact.h"
 
+#import "NSManagedObject+helpers.h"
 #import "UIImageView+AFNetworking.h"
 #import "VideoComposer.h"
 #import "ImageVideoCreator.h"
