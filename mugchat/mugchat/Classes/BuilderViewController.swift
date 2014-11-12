@@ -16,6 +16,9 @@ class BuilderViewController : MugChatViewController, BuilderViewDelegate {
     
     private var builderView: BuilderView!
     
+    private let userDefaults = NSUserDefaults.standardUserDefaults()
+    private let ALREADY_SEEN_INTRODUCTION_KEY = "builder.introduction.watched"
+    
     override func loadView() {
         self.builderView = BuilderView()
         self.builderView.delegate = self
@@ -33,12 +36,18 @@ class BuilderViewController : MugChatViewController, BuilderViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        builderView.viewDidAppear()
+        
+        let alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
+        if (alreadySeenIntroduction == nil || !alreadySeenIntroduction!) {
+            self.navigationController?.setNavigationBarHidden(true, animated: false)
+            builderView.showIntroduction()
+            userDefaults.setObject(true, forKey: ALREADY_SEEN_INTRODUCTION_KEY)
+        }
     }
     
     func builderViewDidTapOkSweetButton(builderView: BuilderView!) {
