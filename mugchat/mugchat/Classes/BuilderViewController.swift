@@ -41,6 +41,6 @@ class BuilderViewController : MugChatViewController, BuilderViewDelegate {
     }
     
     func builderViewDidTapOkSweetButton(builderView: BuilderView!) {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
     }
 }

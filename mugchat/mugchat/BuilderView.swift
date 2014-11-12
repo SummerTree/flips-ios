@@ -115,6 +115,10 @@ class BuilderView : UIView {
 
     }
     
+    func okSweetButtonTapped(button: UIButton!) {
+        self.delegate?.builderViewDidTapOkSweetButton(self)
+    }
+    
     func makeConstraints() {
         self.backgroundImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
