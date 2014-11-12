@@ -28,7 +28,6 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     
     init(chatTitle: String, roomID: String) {
         super.init(nibName: nil, bundle: nil)

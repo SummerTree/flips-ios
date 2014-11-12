@@ -152,8 +152,8 @@ class ChatTableViewCell: UITableViewCell {
         player.contentURL = NSURL.fileURLWithPath(moviePath!)
         thumbnailView.image = UIImage(named: "movie_thumbnail.png")
         
-        let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
-        timestampLabel.text = formatedDate
+        let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
+        timestampLabel.text = formattedDate
         
         self.messageTextLabel.text = flipMessage.messagePhrase()
         self.messageTextLabel.sizeToFit()
