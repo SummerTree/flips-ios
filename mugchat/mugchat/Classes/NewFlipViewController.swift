@@ -34,6 +34,10 @@ class NewFlipViewController: MugChatViewController,
     private let NO = NSLocalizedString("No", comment: "No")
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     
+    private let NO_CONTACTS = NSLocalizedString("No contacts found.  Please try again.", comment: "No contacts")
+    private let NO_MATCHES = NSLocalizedString("No Matches", comment: "No Matches")
+    private let OK = NSLocalizedString("OK", comment: "OK")
+
     // MARK: - Class methods
     
     class func instantiateNavigationController() -> UINavigationController {
@@ -57,6 +61,7 @@ class NewFlipViewController: MugChatViewController,
     
     let contactDataSource = ContactDataSource()
     var fetchedResultsController: NSFetchedResultsController?
+    var didPressReturn = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,7 +143,13 @@ class NewFlipViewController: MugChatViewController,
     
     private func updateSearchTableView() {
         if let contacts = self.fetchedResultsController?.fetchedObjects {
-            self.searchTableView.hidden = (contacts.count == 0)
+            let hasContacts = (contacts.count != 0)
+            self.searchTableView.hidden = !hasContacts
+
+            if (self.didPressReturn && !hasContacts) {
+                let alertView = UIAlertView(title: NO_MATCHES, message: NO_CONTACTS, delegate: nil, cancelButtonTitle: OK)
+                alertView.show()
+            }
         } else {
             self.searchTableView.hidden = true
         }
@@ -255,8 +266,14 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - UITextViewDelegate
     
+    func textViewDidBeginEditing(textView: UITextView) {
+        self.didPressReturn = false
+    }
+    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
+            self.didPressReturn = true
+            self.updateContactSearch()
             textView.resignFirstResponder()
             return false
         } else if (text.rangeOfString("\n") != nil) {
