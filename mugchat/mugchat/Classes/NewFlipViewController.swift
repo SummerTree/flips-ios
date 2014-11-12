@@ -15,23 +15,24 @@
 
 import UIKit
 
-// TODO: remove when class variables are supported by Swift (after upgrade to Xcode 6.1)
 private let STORYBOARD = "NewFlip"
-private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
 
 
 class NewFlipViewController: MugChatViewController,
     JoinStringsTextFieldDelegate,
     NSFetchedResultsControllerDelegate,
+    UIAlertViewDelegate,
     UITableViewDataSource,
     UITableViewDelegate,
     UITextViewDelegate {
     
     // MARK: - Constants
     
-    // TODO: uncomment when class variables are supported by Swift
-    //	class private let STORYBOARD = "NewFlip"
-    //	class private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
+    private let CANCEL_MESSAGE = NSLocalizedString("This will delete any text you have written for this message.  Do you wish to delete this message?", comment: "Cancel message")
+    private let CANCEL_TITLE = NSLocalizedString("Delete Message", comment: "Delete Message")
+    private let DELETE = NSLocalizedString("Delete", comment: "Delete")
+    private let NO = NSLocalizedString("No", comment: "No")
+    private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     
     // MARK: - Class methods
     
@@ -120,6 +121,15 @@ class NewFlipViewController: MugChatViewController,
         
     }
     
+    override func closeButtonTapped() {
+        if !flipTextField.hasText() {
+            super.closeButtonTapped()
+        } else {
+            let alertView = UIAlertView(title: CANCEL_TITLE, message: CANCEL_MESSAGE, delegate: self, cancelButtonTitle: NO, otherButtonTitles: DELETE)
+            alertView.show()
+        }
+    }
+    
     // MARK: - JointStringsTextFieldDelegate
     
     func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!) {
@@ -130,6 +140,14 @@ class NewFlipViewController: MugChatViewController,
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.updateSearchTableView()
+    }
+    
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex != alertView.cancelButtonIndex {
+            super.closeButtonTapped()
+        }
     }
     
     // MARK: - UITableViewDataSource
