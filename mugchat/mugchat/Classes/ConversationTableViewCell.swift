@@ -162,15 +162,7 @@ class ConversationTableViewCell : UITableViewCell {
     // MARK: - Cell Layout Methods
     
     private func layoutParticipantsNames() {
-        var participantsNames = ""
-        var namesSeparator = ""
-        let participants = room.participants.allObjects
-        for (var i = 0; i < participants.count; i++) {
-            let user = participants[i] as User
-            participantsNames = "\(participantsNames)\(namesSeparator)\(user.firstName)"
-            namesSeparator = ", "
-        }
-        participantsNamesLabel.text = participantsNames
+        participantsNamesLabel.text = room.roomName()
     }
     
     private func layoutMessageInfo() {
