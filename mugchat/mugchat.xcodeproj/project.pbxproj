@@ -11,6 +11,10 @@
 		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
 		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
+		07B66AF91A140E3C00407A28 /* ContactPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AF81A140E3C00407A28 /* ContactPicker.swift */; };
+		07B66AFC1A140FB900407A28 /* MBContactPicker+helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AFB1A140FB900407A28 /* MBContactPicker+helper.m */; };
+		07B66AFE1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AFD1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift */; };
+		07B66B001A14293700407A28 /* ContactCollectionViewEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AFF1A14293700407A28 /* ContactCollectionViewEntryCell.swift */; };
 		07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
@@ -168,6 +172,11 @@
 		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
 		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
+		07B66AF81A140E3C00407A28 /* ContactPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPicker.swift; path = Classes/ContactPicker.swift; sourceTree = "<group>"; };
+		07B66AFA1A140FB900407A28 /* MBContactPicker+helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MBContactPicker+helper.h"; path = "Classes/MBContactPicker+helper.h"; sourceTree = "<group>"; };
+		07B66AFB1A140FB900407A28 /* MBContactPicker+helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MBContactPicker+helper.m"; path = "Classes/MBContactPicker+helper.m"; sourceTree = "<group>"; };
+		07B66AFD1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactCollectionViewPromptCell.swift; path = Classes/ContactCollectionViewPromptCell.swift; sourceTree = "<group>"; };
+		07B66AFF1A14293700407A28 /* ContactCollectionViewEntryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactCollectionViewEntryCell.swift; path = Classes/ContactCollectionViewEntryCell.swift; sourceTree = "<group>"; };
 		07C53DC81A11C6B40011E6A2 /* NSManagedObject+helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObject+helpers.h"; path = "Classes/NSManagedObject+helpers.h"; sourceTree = "<group>"; };
 		07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+helpers.m"; path = "Classes/NSManagedObject+helpers.m"; sourceTree = "<group>"; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
@@ -356,9 +365,14 @@
 		0757ECAB1A116A1E00D0277C /* Contact */ = {
 			isa = PBXGroup;
 			children = (
+				07B66AFF1A14293700407A28 /* ContactCollectionViewEntryCell.swift */,
+				07B66AFD1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift */,
+				0757ECB01A11A61600D0277C /* ContactPhotoView.swift */,
+				07B66AF81A140E3C00407A28 /* ContactPicker.swift */,
 				0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */,
 				07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */,
-				0757ECB01A11A61600D0277C /* ContactPhotoView.swift */,
+				07B66AFA1A140FB900407A28 /* MBContactPicker+helper.h */,
+				07B66AFB1A140FB900407A28 /* MBContactPicker+helper.m */,
 			);
 			name = Contact;
 			sourceTree = "<group>";
@@ -590,23 +604,23 @@
 		704E111519D0ACAF00D2BB88 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
+				07C53DC81A11C6B40011E6A2 /* NSManagedObject+helpers.h */,
+				07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */,
+				7AB946D719DED95900779C73 /* StringExtensions.swift */,
+				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
 				708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */,
 				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
 				704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */,
 				708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */,
+				7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */,
+				7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */,
 				7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */,
 				70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */,
 				7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */,
-				7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */,
-				7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */,
 				7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */,
 				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
 				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
-				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
-				7AB946D719DED95900779C73 /* StringExtensions.swift */,
-				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
-				07C53DC81A11C6B40011E6A2 /* NSManagedObject+helpers.h */,
-				07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */,
 				70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */,
 			);
 			name = Extensions;
@@ -1265,6 +1279,7 @@
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */,
+				07B66AFE1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift in Sources */,
 				7ACBBECF1A00290B00A7109C /* Mug.m in Sources */,
 				7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
@@ -1303,12 +1318,14 @@
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				7AFB71A41A00053C002695AC /* User.m in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
+				07B66B001A14293700407A28 /* ContactCollectionViewEntryCell.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				70DAB34C1A13734E0044AEC1 /* BuilderIntroductionView.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7AFB719E1A000537002695AC /* Device.m in Sources */,
 				70DAB34E1A1375710044AEC1 /* BuilderView.swift in Sources */,
+				07B66AF91A140E3C00407A28 /* ContactPicker.swift in Sources */,
 				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
@@ -1356,6 +1373,7 @@
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
+				07B66AFC1A140FB900407A28 /* MBContactPicker+helper.m in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
 				F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */,
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
