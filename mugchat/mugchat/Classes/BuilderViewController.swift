@@ -35,8 +35,8 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         return false
     }
     
-    override func shouldShowPlusButtonInWors() -> Bool {
-        return false
+    override func shouldShowPlusButtonInWords() -> Bool {
+        return true
     }
     
     
@@ -72,4 +72,12 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
             self.view.sendSubviewToBack(self.builderIntroductionViewController.view)
         }
     }
+    
+    
+    // MARK: - FlipMessageWordListView Delegate
+    
+    override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
+        println("flipMessageWordListViewDidTapAddWordButton")
+    }
+
 }

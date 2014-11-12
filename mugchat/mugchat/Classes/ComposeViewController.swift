@@ -109,6 +109,10 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         flipMessageWordListView.delegate = self
         self.view.addSubview(flipMessageWordListView)
         
+        if (self.shouldShowPlusButtonInWords()) {
+            flipMessageWordListView.showPlusButton()
+        }
+        
         composeBottomViewContainer = ComposeBottomViewContainer()
         composeBottomViewContainer.delegate = self
         composeBottomViewContainer.dataSource = self
@@ -362,6 +366,9 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         }
     }
     
+    func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
+        // DO NOTHING - the optional mark didn't work on this delegate because of the others methods' params
+    }
     
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
@@ -557,7 +564,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         return true
     }
     
-    internal func shouldShowPlusButtonInWors() -> Bool {
-        return true
+    internal func shouldShowPlusButtonInWords() -> Bool {
+        return false
     }
 }
