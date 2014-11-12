@@ -69,8 +69,7 @@
 		70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */ = {isa = PBXBuildFile; fileRef = 70CF5C461A041F680052E396 /* i_love_coffee.mov */; };
 		70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */; };
 		70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
-		70DAB34C1A13734E0044AEC1 /* BuilderIntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34B1A13734E0044AEC1 /* BuilderIntroductionView.swift */; };
-		70DAB34E1A1375710044AEC1 /* BuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34D1A1375710044AEC1 /* BuilderView.swift */; };
+		70DAB34C1A13734E0044AEC1 /* BuilderIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34B1A13734E0044AEC1 /* BuilderIntroductionViewController.swift */; };
 		70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
@@ -232,8 +231,7 @@
 		70CF5C461A041F680052E396 /* i_love_coffee.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = i_love_coffee.mov; sourceTree = "<group>"; };
 		70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeView.swift; sourceTree = "<group>"; };
 		70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeViewController.swift; sourceTree = "<group>"; };
-		70DAB34B1A13734E0044AEC1 /* BuilderIntroductionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionView.swift; sourceTree = "<group>"; };
-		70DAB34D1A1375710044AEC1 /* BuilderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderView.swift; sourceTree = "<group>"; };
+		70DAB34B1A13734E0044AEC1 /* BuilderIntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionViewController.swift; sourceTree = "<group>"; };
 		70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -531,7 +529,6 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				70DAB34A1A1373260044AEC1 /* Builder */,
 				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
@@ -761,15 +758,6 @@
 			name = "Splash Screen";
 			sourceTree = "<group>";
 		};
-		70DAB34A1A1373260044AEC1 /* Builder */ = {
-			isa = PBXGroup;
-			children = (
-				70DAB34D1A1375710044AEC1 /* BuilderView.swift */,
-				70DAB34B1A13734E0044AEC1 /* BuilderIntroductionView.swift */,
-			);
-			name = Builder;
-			sourceTree = "<group>";
-		};
 		70E59C6119F584B2008DE18E /* Media */ = {
 			isa = PBXGroup;
 			children = (
@@ -846,6 +834,7 @@
 			isa = PBXGroup;
 			children = (
 				7A0D6CF019D4966700E39A1B /* BuilderViewController.swift */,
+				70DAB34B1A13734E0044AEC1 /* BuilderIntroductionViewController.swift */,
 			);
 			name = Builder;
 			sourceTree = "<group>";
@@ -1305,10 +1294,9 @@
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
-				70DAB34C1A13734E0044AEC1 /* BuilderIntroductionView.swift in Sources */,
+				70DAB34C1A13734E0044AEC1 /* BuilderIntroductionViewController.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7AFB719E1A000537002695AC /* Device.m in Sources */,
-				70DAB34E1A1375710044AEC1 /* BuilderView.swift in Sources */,
 				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,

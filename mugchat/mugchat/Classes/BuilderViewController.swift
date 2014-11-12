@@ -10,47 +10,66 @@
 // the license agreement.
 //
 
-import Foundation
 
-class BuilderViewController : MugChatViewController, BuilderViewDelegate {
+class BuilderViewController : ComposeViewController, BuilderIntroductionViewControllerDelegate {
     
-    private var builderView: BuilderView!
+    private var builderIntroductionViewController: BuilderIntroductionViewController!
     
-    private let userDefaults = NSUserDefaults.standardUserDefaults()
-    private let ALREADY_SEEN_INTRODUCTION_KEY = "builder.introduction.watched"
-    
-    override func loadView() {
-        self.builderView = BuilderView()
-        self.builderView.delegate = self
-        self.view = builderView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.deepSea()
-        setupWhiteNavBarWithBackButton("Builder")
-        self.setNeedsStatusBarAppearanceUpdate()
-        self.builderView.viewDidLoad()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-    }
+
+    // MARK: - Overriden Methods
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
-        if (alreadySeenIntroduction == nil || !alreadySeenIntroduction!) {
-            self.navigationController?.setNavigationBarHidden(true, animated: false)
-            builderView.showIntroduction()
-            userDefaults.setObject(true, forKey: ALREADY_SEEN_INTRODUCTION_KEY)
+
+        if (!DeviceHelper.sharedInstance.didUserAlreadySeeBuildIntroduction()) {
+            DeviceHelper.sharedInstance.setBuilderIntroductionShown(true)
+            self.showIntroduction()
         }
     }
     
-    func builderViewDidTapOkSweetButton(builderView: BuilderView!) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    override func shouldShowPreviewButton() -> Bool {
+        return false
+    }
+    
+    override func canShowMyFlips() -> Bool {
+        return false
+    }
+    
+    override func shouldShowPlusButtonInWors() -> Bool {
+        return false
+    }
+    
+    
+    // MARK: - Builder Introduction Methods
+    
+    func showIntroduction() {
+        builderIntroductionViewController = BuilderIntroductionViewController(viewBackground: self.view.snapshot())
+        builderIntroductionViewController.view.alpha = 0.0
+        builderIntroductionViewController.delegate = self
+        self.view.addSubview(builderIntroductionViewController.view)
+        self.addChildViewController(builderIntroductionViewController)
+        
+        self.builderIntroductionViewController.view.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.view)
+            make.bottom.equalTo()(self.view)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
+        }
+        
+        self.view.layoutIfNeeded()
+        
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            self.navigationController?.navigationBar.alpha = 0.001
+            self.builderIntroductionViewController.view.alpha = 1.0
+        })
+    }
+    
+    func builderIntroductionViewControllerDidTapOkSweetButton(builderIntroductionViewController: BuilderIntroductionViewController!) {
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            self.navigationController?.navigationBar.alpha = 1.0
+            self.builderIntroductionViewController.view.alpha = 0.0
+        }) { (completed) -> Void in
+            self.view.sendSubviewToBack(self.builderIntroductionViewController.view)
+        }
     }
 }

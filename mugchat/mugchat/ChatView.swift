@@ -344,11 +344,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             numberOfMessages = 0
         }
         
-        let indexPath = NSIndexPath(forRow: numberOfMessages! - 1, inSection: 0)
-        self.frame.size.height -= keyboardHeight
-        super.updateConstraints()
-        self.layoutIfNeeded()
-        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        if (numberOfMessages > 0) {
+            let indexPath = NSIndexPath(forRow: numberOfMessages! - 1, inSection: 0)
+            self.frame.size.height -= keyboardHeight
+            super.updateConstraints()
+            self.layoutIfNeeded()
+            self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+        }
     }
     
     

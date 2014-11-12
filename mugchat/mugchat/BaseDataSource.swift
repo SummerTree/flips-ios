@@ -20,6 +20,6 @@ class BaseDataSource {
             println("   SAVING IN MAIN THREAD!! FIX IT!")
             println("   ")
         }
-        NSManagedObjectContext.MR_rootSavingContext().MR_saveToPersistentStoreAndWait()
+        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
     }
 }
