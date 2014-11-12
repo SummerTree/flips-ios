@@ -24,7 +24,6 @@ class BuilderView : UIView, BuilderIntroductionViewDelegate {
     
     override init() {
         super.init()
-        
         addSubviews()
     }
     

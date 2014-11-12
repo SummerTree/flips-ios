@@ -65,7 +65,6 @@ class BuilderIntroductionView : UIView {
     }
     
     func addSubviews() {
-        
         self.blurredImageView = UIImageView(image: self.backgroundImage)
         self.addSubview(blurredImageView)
         
@@ -117,7 +116,6 @@ class BuilderIntroductionView : UIView {
         
         self.separatorBetweenButtonAndBottom = UIView()
         self.addSubview(separatorBetweenButtonAndBottom)
-
     }
     
     func okSweetButtonTapped(button: UIButton!) {
@@ -187,7 +185,6 @@ class BuilderIntroductionView : UIView {
             make.right.equalTo()(self)
             make.height.equalTo()(self.contentTopContainer)
         }
-
     }
     
     func applyBlur(image: UIImage) -> UIImage {
