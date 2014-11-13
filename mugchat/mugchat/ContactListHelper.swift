@@ -56,16 +56,38 @@ public class ContactListHelper {
     }
     
     private func retrieveContacts() -> Array<ContactListHelper.Contact> {
+        let contactDataSource = ContactDataSource()
         let people = self.addressBook.people() as Array<RHPerson>
         var contacts = Array<ContactListHelper.Contact>()
         for person in people {
-            let phones = person.phoneNumbers
+            let phones: RHMultiStringValue = person.phoneNumbers
+
             for (var i:UInt = 0; i < phones.count(); i++) {
                 var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
+                let phoneNumber: String! = phones.valueAtIndex(i) as String
+                let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
+                contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
                 contacts.append(contact)
             }
         }
         
         return contacts
+    }
+    
+    private func retrievePhoneTypeByLabel(label: String!) -> String! {
+        switch label {
+        case kABPersonPhoneMobileLabel:
+            return "Mobile"
+        case kABPersonPhoneIPhoneLabel:
+            return "iPhone"
+        case kABPersonPhoneMainLabel:
+            return "Main"
+        case kABWorkLabel:
+            return "Work"
+        case kABHomeLabel:
+            return "Home"
+        default:
+            return ""
+        }
     }
 }

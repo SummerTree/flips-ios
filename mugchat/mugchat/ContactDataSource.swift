@@ -81,33 +81,33 @@ class ContactDataSource : BaseDataSource {
         
         if (firstName != nil) {
             var value = firstName!
-            predicateValue = "(\(ContactAttributes.FIRST_NAME) == \(value))"
+            predicateValue = "(\(ContactAttributes.FIRST_NAME) == '\(value)')"
         }
         
         if (lastName != nil) {
             var value = lastName!
             if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.LAST_NAME) == \(value))"
+                predicateValue = "(\(ContactAttributes.LAST_NAME) == '\(value)')"
             } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.LAST_NAME) == \(value))"
+                predicateValue = "\(predicateValue) AND (\(ContactAttributes.LAST_NAME) == '\(value)')"
             }
         }
         
         if (phoneNumber != nil) {
             var value = phoneNumber!
             if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.PHONE_NUMBER) == \(value))"
+                predicateValue = "(\(ContactAttributes.PHONE_NUMBER) == '\(value)')"
             } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_NUMBER) == \(value))"
+                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_NUMBER) == '\(value)')"
             }
         }
         
         if (phoneType != nil) {
             var value = phoneType!
             if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.PHONE_TYPE) == \(value))"
+                predicateValue = "(\(ContactAttributes.PHONE_TYPE) == '\(value)')"
             } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_TYPE) == \(value))"
+                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_TYPE) == '\(value)')"
             }
         }
 

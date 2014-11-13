@@ -83,7 +83,11 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapImportContacts(settingsView: SettingsView) {
-        println("settingsViewDidTapImportContacts")
+        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
+            println("success")
+        }, failure: { (errorMessage) -> Void in
+            println(errorMessage)
+        })
     }
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
