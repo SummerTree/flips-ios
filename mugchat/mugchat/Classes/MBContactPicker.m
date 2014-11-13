@@ -357,6 +357,13 @@ CGFloat const kAnimationSpeed = .25;
         return NO;
     }
     
+    if (self.filteredContacts.count) {
+        id<MBContactPickerModelProtocol> model = [self.filteredContacts firstObject];
+        
+        [self hideSearchTableView];
+        [self.contactCollectionView addToSelectedContacts:model withCompletion:nil];
+    }
+    
     return YES;
 }
 
