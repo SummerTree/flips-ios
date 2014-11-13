@@ -15,6 +15,7 @@
 		07B66AFC1A140FB900407A28 /* MBContactPicker+helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AFB1A140FB900407A28 /* MBContactPicker+helper.m */; };
 		07B66AFE1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AFD1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift */; };
 		07B66B001A14293700407A28 /* ContactCollectionViewEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66AFF1A14293700407A28 /* ContactCollectionViewEntryCell.swift */; };
+		07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B011A14340C00407A28 /* ContactExtensions.swift */; };
 		07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
@@ -177,6 +178,7 @@
 		07B66AFB1A140FB900407A28 /* MBContactPicker+helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MBContactPicker+helper.m"; path = "Classes/MBContactPicker+helper.m"; sourceTree = "<group>"; };
 		07B66AFD1A1412FF00407A28 /* ContactCollectionViewPromptCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactCollectionViewPromptCell.swift; path = Classes/ContactCollectionViewPromptCell.swift; sourceTree = "<group>"; };
 		07B66AFF1A14293700407A28 /* ContactCollectionViewEntryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactCollectionViewEntryCell.swift; path = Classes/ContactCollectionViewEntryCell.swift; sourceTree = "<group>"; };
+		07B66B011A14340C00407A28 /* ContactExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactExtensions.swift; path = Classes/ContactExtensions.swift; sourceTree = "<group>"; };
 		07C53DC81A11C6B40011E6A2 /* NSManagedObject+helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObject+helpers.h"; path = "Classes/NSManagedObject+helpers.h"; sourceTree = "<group>"; };
 		07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+helpers.m"; path = "Classes/NSManagedObject+helpers.m"; sourceTree = "<group>"; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
@@ -931,6 +933,7 @@
 				7A2ED6AE19FA7AA6000C6B86 /* RoomExtension.swift */,
 				7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */,
 				7ACBBEC81A0026DF00A7109C /* MugExtension.swift */,
+				07B66B011A14340C00407A28 /* ContactExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1249,6 +1252,7 @@
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
+				07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */,
 				705B3DD91A03B9DD00E0D3E9 /* PreviewView.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
 				7049A7A51A11238A001D8121 /* ChangeNumberInfoViewController.swift in Sources */,

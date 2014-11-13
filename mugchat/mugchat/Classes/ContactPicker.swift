@@ -37,7 +37,9 @@ class ContactPicker: MBContactPicker {
         
         // overrides the class set in MBContactCollectionView's setup method
         self.contactCollectionView.registerClass(MBContactCollectionViewContactCell.self, forCellWithReuseIdentifier:CONTACT_CELL)
-        self.contactCollectionView.registerClass(MBContactCollectionViewContactCell.self, forCellWithReuseIdentifier:CONTACT_CELL)
+        self.contactCollectionView.registerClass(MBContactCollectionViewEntryCell.self, forCellWithReuseIdentifier:CONTACT_ENTRY_CELL)
         self.contactCollectionView.registerClass(ContactCollectionViewPromptCell.self, forCellWithReuseIdentifier:PROMPT_CELL)
+        
+        MBContactCollectionViewContactCell.appearance().tintColor = .mugOrange()
     }
 }

@@ -48,4 +48,13 @@
 	return controller;
 }
 
++ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors {
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSFetchRequest *request = [self requestAllSortedBy:sortDescriptors
+                                         withPredicate:nil
+                                             inContext:context];
+    
+    return [self MR_executeFetchRequest:request inContext:context];
+}
+
 @end

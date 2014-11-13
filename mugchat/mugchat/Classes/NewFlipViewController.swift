@@ -224,7 +224,7 @@ class NewFlipViewController: MugChatViewController,
     
     // Use this method to give the contact picker the entire set of possible contacts.  Required.
     func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
-        return Contact.findAll();
+        return Contact.findAllSortedBy(contactDataSource.sortedByUserFirstNameLastName())
     }
     
     func selectedContactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
