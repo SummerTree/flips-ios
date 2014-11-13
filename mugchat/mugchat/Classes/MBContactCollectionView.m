@@ -534,10 +534,6 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 
 - (void)textFieldDidChange:(UITextField *)textField
 {
-    if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:entryTextWillChange:from:)]) {
-        [self.contactDelegate contactCollectionView:self entryTextWillChange:textField.text from:self.searchText];
-    }
-    
     self.searchText = textField.text;
     if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:entryTextDidChange:)])
     {
@@ -547,10 +543,19 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    self.notBecomeFirstResponder = YES;
-    (void)textField.resignFirstResponder;
-    self.notBecomeFirstResponder = NO;
-    return YES;
+    BOOL result = YES;
+    
+    if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:textFieldShouldReturn:)]) {
+        result = [self.contactDelegate contactCollectionView:self textFieldShouldReturn:textField];
+    }
+    
+    if (result) {
+        self.notBecomeFirstResponder = YES;
+        (void)textField.resignFirstResponder;
+        self.notBecomeFirstResponder = NO;
+    }
+    
+    return result;
 }
 
 @end

@@ -20,7 +20,7 @@
 
 - (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView willChangeContentSizeTo:(CGSize)newSize;
 - (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView entryTextDidChange:(NSString*)text;
-- (void)contactCollectionView:(MBContactCollectionView *)contactCollectionView entryTextWillChange:(NSString *)text from:(NSString *)oldText;
+- (BOOL)contactCollectionView:(MBContactCollectionView *)contactCollectionView textFieldShouldReturn:(UITextField *)textField;
 - (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didSelectContact:(id<MBContactPickerModelProtocol>)model;
 - (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didAddContact:(id<MBContactPickerModelProtocol>)model;
 - (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didRemoveContact:(id<MBContactPickerModelProtocol>)model;

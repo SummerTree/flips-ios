@@ -319,17 +319,6 @@ CGFloat const kAnimationSpeed = .25;
     }
 }
 
-- (void)contactCollectionView:(MBContactCollectionView *)contactCollectionView entryTextWillChange:(NSString *)text from:(NSString *)oldText {
-    if ([oldText isEqual:text] && self.filteredContacts.count == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NO_MATCHES
-                                                            message:NO_CONTACTS
-                                                           delegate:nil
-                                                  cancelButtonTitle:OK
-                                                  otherButtonTitles:nil];
-        [alertView show];
-    }
-}
-
 - (void)contactCollectionView:(MBContactCollectionView*)contactCollectionView didRemoveContact:(id<MBContactPickerModelProtocol>)model
 {
     if ([self.delegate respondsToSelector:@selector(contactCollectionView:didRemoveContact:)])
@@ -352,6 +341,23 @@ CGFloat const kAnimationSpeed = .25;
     {
         [self.delegate contactCollectionView:contactCollectionView didSelectContact:model];
     }
+}
+
+- (BOOL)contactCollectionView:(MBContactCollectionView *)contactCollectionView textFieldShouldReturn:(UITextField *)textField {
+    if (textField.text.length > 0 &&
+        ![textField.text isEqual:@" "] &&
+        self.filteredContacts.count == 0) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NO_MATCHES
+                                                            message:NO_CONTACTS
+                                                           delegate:nil
+                                                  cancelButtonTitle:OK
+                                                  otherButtonTitles:nil];
+        [alertView show];
+        
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark - UIResponder
