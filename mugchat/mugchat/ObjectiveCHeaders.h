@@ -41,5 +41,6 @@
 #import "ImageVideoCreator.h"
 #import "RHAddressBook.h"
 #import "RHPerson.h"
+#import "RHPersonLabels.h"
 
 #endif
