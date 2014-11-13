@@ -84,7 +84,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         self.addSubview(spamView)
         
         keyboardFillerView = UIView()
-        keyboardFillerView.backgroundColor = UIColor.greenColor()
+        keyboardFillerView.backgroundColor = UIColor.clearColor()
         self.addSubview(keyboardFillerView)
     }
     

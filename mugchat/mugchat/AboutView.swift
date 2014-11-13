@@ -74,7 +74,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         copyright.numberOfLines = 3
         copyright.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         copyright.sizeToFit()
-        copyright.text = UIApplication.versionBuild()
+        copyright.text = "Copyright © \(components.year) Flips.\nAll Rights Reserved.\n\(UIApplication.versionBuild())"
         copyright.textColor = UIColor.whiteColor()
         copyright.textAlignment = NSTextAlignment.Center
         self.logoContainer.addSubview(copyright)

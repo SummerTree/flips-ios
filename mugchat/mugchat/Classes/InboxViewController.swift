@@ -13,8 +13,11 @@
 
 class InboxViewController : MugChatViewController, InboxViewDelegate {
 
-    var inboxView: InboxView!
-    var roomDataSource: RoomDataSource!
+    private var inboxView: InboxView!
+    private var roomDataSource: RoomDataSource!
+    
+    private var roomIds: [String]!
+    
     
     // MARK: - UIViewController overridden methods
 
@@ -27,7 +30,8 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        roomDataSource = RoomDataSource()
+        self.roomDataSource = RoomDataSource()
+        self.roomIds = Array<String>()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -63,23 +67,29 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     }
     
     func inboxViewDidTapBuilderButton(inboxView : InboxView) {
-        var builderViewController = BuilderViewController()
-        var navigationController = UINavigationController(rootViewController: builderViewController)
-        
-        builderViewController.modalPresentationStyle = UIModalPresentationStyle.PageSheet;
-        self.presentViewController(navigationController, animated: true, completion: nil)
+        let words = [ "San Francisco", "Coffee", "Dracula", "Christmas", "Santa Claus", "Love", "Birthday", "Halloween" ] // TODO: get words from the server
+        var builderViewController = BuilderViewController(composeTitle: NSLocalizedString("Builder", comment: "Builder"), words: words)
+        self.navigationController?.pushViewController(builderViewController, animated:true)
     }
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
-        println("tap at cell \(index)")
-        self.navigationController?.pushViewController(ChatViewController(chatTitle: "MugBoys"), animated: true)
+        let roomID = roomIds[index]
+        let room = roomDataSource.retrieveRoomWithId(roomID)
+        self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
     }
     
     
     // MARK: - Room Handlers
     
     private func refreshRooms() {
-        inboxView.setRooms(roomDataSource.getMyRoomsOrderedByOldestNotReadMessage())
+        roomIds.removeAll(keepCapacity: false)
+        
+        let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
+        for room in rooms {
+            roomIds.append(room.roomID)
+        }
+        
+        inboxView.setRooms(rooms)
     }
     
     

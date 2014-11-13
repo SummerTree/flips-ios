@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="U1q-SQ-Elq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="U1q-SQ-Elq">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -33,56 +33,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jaq-uX-Oxx">
-                                <rect key="frame" x="0.0" y="64" width="600" height="54"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S4W-ZY-Rxq">
-                                        <rect key="frame" x="8" y="16" width="23" height="22"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
-                                        <color key="textColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8q-Ag-DJI">
-                                        <rect key="frame" x="38" y="8" width="554" height="38"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="bCJ-zi-4MV"/>
-                                            <constraint firstAttribute="height" priority="750" constant="38" id="cb5-iL-sDW"/>
-                                        </constraints>
-                                        <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="wbx-sL-NPb" id="zPE-GV-fz3"/>
-                                        </connections>
-                                    </textView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jaq-uX-Oxx" userLabel="ContactPicker" customClass="MBContactPicker">
+                                <rect key="frame" x="0.0" y="64" width="600" height="56"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="c8q-Ag-DJI" secondAttribute="bottom" constant="8" id="1sj-Oe-ebn"/>
-                                    <constraint firstItem="c8q-Ag-DJI" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="top" constant="8" id="A3v-ON-4pd"/>
-                                    <constraint firstItem="S4W-ZY-Rxq" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="top" constant="16" id="Txk-eS-zgS"/>
-                                    <constraint firstAttribute="trailing" secondItem="c8q-Ag-DJI" secondAttribute="trailing" constant="8" id="U61-xl-wmx"/>
-                                    <constraint firstItem="S4W-ZY-Rxq" firstAttribute="leading" secondItem="jaq-uX-Oxx" secondAttribute="leading" constant="8" id="jS3-iS-BDA"/>
-                                    <constraint firstItem="c8q-Ag-DJI" firstAttribute="leading" secondItem="S4W-ZY-Rxq" secondAttribute="trailing" constant="8" id="w7q-jg-zFw"/>
+                                    <constraint firstAttribute="height" priority="750" constant="56" id="xKP-Wf-aH5"/>
                                 </constraints>
                             </view>
-                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wGd-Vw-hpp">
-                                <rect key="frame" x="0.0" y="118" width="600" height="432"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="o6e-cF-2b8"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="dataSource" destination="wbx-sL-NPb" id="AbI-8r-WYs"/>
-                                    <outlet property="delegate" destination="wbx-sL-NPb" id="UCG-YE-jeA"/>
-                                </connections>
-                            </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98x-j1-QcY" customClass="JoinStringsTextField" customModule="Flips" customModuleProvider="target">
                                         <rect key="frame" x="16" y="0.0" width="525" height="50"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="50" id="NbK-k6-HWN"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="ODM-He-WuJ"/>
@@ -122,26 +84,24 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="wGd-Vw-hpp" secondAttribute="trailing" id="1cz-Bs-fF8"/>
                             <constraint firstAttribute="trailing" secondItem="jaq-uX-Oxx" secondAttribute="trailing" id="BNK-4Z-jJA"/>
                             <constraint firstAttribute="trailing" secondItem="Q7T-V3-eBo" secondAttribute="trailing" id="DA7-5k-LEx"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="KvQ-Zv-xiL"/>
-                            <constraint firstItem="wGd-Vw-hpp" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="NHY-wI-s3Q"/>
-                            <constraint firstItem="wGd-Vw-hpp" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="O8W-vl-7vL"/>
                             <constraint firstItem="ffq-6Z-ir5" firstAttribute="top" secondItem="Q7T-V3-eBo" secondAttribute="bottom" id="RsM-4p-7hb"/>
+                            <constraint firstItem="Q7T-V3-eBo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="Y1h-Qd-Wmb"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="top" secondItem="oZS-Za-EsS" secondAttribute="bottom" id="dQa-Gy-ZlE"/>
                             <constraint firstItem="Q7T-V3-eBo" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="kJ8-TE-GA9"/>
-                            <constraint firstItem="Q7T-V3-eBo" firstAttribute="top" secondItem="wGd-Vw-hpp" secondAttribute="bottom" id="vYq-R7-5UZ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WXn-i6-iJN"/>
                     <connections>
+                        <outlet property="bottomConstraint" destination="RsM-4p-7hb" id="n7e-yF-21r"/>
+                        <outlet property="contactPicker" destination="jaq-uX-Oxx" id="AZ6-7N-0aR"/>
+                        <outlet property="contactPickerHeightConstraint" destination="xKP-Wf-aH5" id="DBV-PA-t02"/>
                         <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
                         <outlet property="flipTextFieldHeightConstraint" destination="NbK-k6-HWN" id="QWc-bd-1Jw"/>
+                        <outlet property="flipView" destination="Q7T-V3-eBo" id="rwb-aP-tVr"/>
                         <outlet property="nextButtonAction" destination="YYl-cb-dw6" id="W18-gm-lJG"/>
-                        <outlet property="searchTableView" destination="wGd-Vw-hpp" id="qoE-zX-RPB"/>
-                        <outlet property="toTextView" destination="c8q-Ag-DJI" id="e5v-bJ-yse"/>
-                        <outlet property="toTextViewHeightConstraint" destination="cb5-iL-sDW" id="BpR-vz-FGJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xjk-R7-ENW" userLabel="First Responder" sceneMemberID="firstResponder"/>

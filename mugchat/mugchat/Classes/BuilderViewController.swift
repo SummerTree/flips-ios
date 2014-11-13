@@ -10,27 +10,74 @@
 // the license agreement.
 //
 
-import Foundation
 
-class BuilderViewController : MugChatViewController {
+class BuilderViewController : ComposeViewController, BuilderIntroductionViewControllerDelegate {
     
-    // MARK: - Overridden Methods
+    private var builderIntroductionViewController: BuilderIntroductionViewController!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    // MARK: - Overriden Methods
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if (!DeviceHelper.sharedInstance.didUserAlreadySeenBuildIntroduction()) {
+            DeviceHelper.sharedInstance.setBuilderIntroductionShown(true)
+            self.showIntroduction()
+        }
+    }
+    
+    override func shouldShowPreviewButton() -> Bool {
+        return false
+    }
+    
+    override func canShowMyFlips() -> Bool {
+        return false
+    }
+    
+    override func shouldShowPlusButtonInWords() -> Bool {
+        return true
+    }
+    
+    
+    // MARK: - Builder Introduction Methods
+    
+    func showIntroduction() {
+        builderIntroductionViewController = BuilderIntroductionViewController(viewBackground: self.view.snapshot())
+        builderIntroductionViewController.view.alpha = 0.0
+        builderIntroductionViewController.delegate = self
+        self.view.addSubview(builderIntroductionViewController.view)
+        self.addChildViewController(builderIntroductionViewController)
         
-        self.setupWhiteNavBarWithCloseButton(NSLocalizedString("Builder", comment: "Builder"))
-        self.view.backgroundColor = UIColor.deepSea()
-     
-        self.setNeedsStatusBarAppearanceUpdate()
+        self.builderIntroductionViewController.view.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.view)
+            make.bottom.equalTo()(self.view)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
+        }
+        
+        self.view.layoutIfNeeded()
+        
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            self.navigationController?.navigationBar.alpha = 0.001
+            self.builderIntroductionViewController.view.alpha = 1.0
+        })
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    func builderIntroductionViewControllerDidTapOkSweetButton(builderIntroductionViewController: BuilderIntroductionViewController!) {
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            self.navigationController?.navigationBar.alpha = 1.0
+            self.builderIntroductionViewController.view.alpha = 0.0
+        }) { (completed) -> Void in
+            self.view.sendSubviewToBack(self.builderIntroductionViewController.view)
+        }
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+    
+    // MARK: - FlipMessageWordListView Delegate
+    
+    override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
+        println("flipMessageWordListViewDidTapAddWordButton")
     }
+
 }

@@ -21,6 +21,7 @@
 #import <Masonry/Masonry.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <PubNub/PNImports.h>
+#import "MBContactPicker.h"
 #import "UIImage+ImageEffects.h"
 #import "AVCamPreviewView.h"
 
@@ -35,8 +36,11 @@
 #import "MugMessage.h"
 #import "Contact.h"
 
+#import "NSManagedObject+helpers.h"
 #import "UIImageView+AFNetworking.h"
 #import "VideoComposer.h"
 #import "ImageVideoCreator.h"
+#import "RHAddressBook.h"
+#import "RHPerson.h"
 
 #endif
