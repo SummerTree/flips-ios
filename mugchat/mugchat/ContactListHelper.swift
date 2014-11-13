@@ -66,7 +66,6 @@ public class ContactListHelper {
                 var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
                 let phoneNumber: String! = phones.valueAtIndex(i) as String
                 let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
-                println("\(person.firstName) \(person.lastName), \(phoneNumber) - \(phoneType)")
                 contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
                 contacts.append(contact)
             }
