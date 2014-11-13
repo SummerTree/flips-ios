@@ -22,7 +22,6 @@ class NewFlipViewController: MugChatViewController,
     JoinStringsTextFieldDelegate,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
-    NSFetchedResultsControllerDelegate,
     UIAlertViewDelegate,
     UITableViewDataSource,
     UITableViewDelegate,
@@ -36,10 +35,6 @@ class NewFlipViewController: MugChatViewController,
     private let NO = NSLocalizedString("No", comment: "No")
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     
-    private let NO_CONTACTS = NSLocalizedString("No contacts found.  Please try again.", comment: "No contacts")
-    private let NO_MATCHES = NSLocalizedString("No Matches", comment: "No Matches")
-    private let OK = NSLocalizedString("OK", comment: "OK")
-
     // MARK: - Class methods
     
     class func instantiateNavigationController() -> UINavigationController {
@@ -53,18 +48,13 @@ class NewFlipViewController: MugChatViewController,
     // MARK: - Instance variables
     
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var contactPicker: ContactPicker!
+    @IBOutlet weak var contactPicker: MBContactPicker!
     @IBOutlet weak var contactPickerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipView: UIView!
     @IBOutlet weak var nextButtonAction: UIButton!
 
-    // TODO: remove
-//    @IBOutlet weak var searchTableView: UITableView!
-//    @IBOutlet weak var toTextView: UITextView!
-//    @IBOutlet weak var toTextViewHeightConstraint: NSLayoutConstraint!
-    
     let contactDataSource = ContactDataSource()
     var fetchedResultsController: NSFetchedResultsController?
     var didPressReturn = false
@@ -133,17 +123,6 @@ class NewFlipViewController: MugChatViewController,
         self.view.animateConstraintWithDuration(NSTimeInterval(contactPicker.animationSpeed))
     }
     
-    private func updateContactSearch() {
-        // TODO: refactor
-//        if self.toTextView.text.isEmpty {
-//            self.fetchedResultsController = nil
-//        } else {
-//            self.fetchedResultsController = self.contactDataSource.fetchedResultsController(self.toTextView.text, delegate: self)
-//        }
-        
-        self.updateSearchTableView()
-    }
-    
     private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
         let maxHeight = CGRectGetHeight(self.view.frame)/2
         var neededHeight = view.contentSize.height
@@ -156,26 +135,6 @@ class NewFlipViewController: MugChatViewController,
         if (neededHeight != heightConstraint.constant) {
             heightConstraint.constant = neededHeight
         }
-    }
-    
-    private func updateSearchTableView() {
-        if let contacts = self.fetchedResultsController?.fetchedObjects {
-            let hasContacts = (contacts.count != 0)
-            
-            // TODO: refactor
-//            self.searchTableView.hidden = !hasContacts
-
-            if (self.didPressReturn && !hasContacts) {
-                let alertView = UIAlertView(title: NO_MATCHES, message: NO_CONTACTS, delegate: nil, cancelButtonTitle: OK)
-                alertView.show()
-            }
-        } else {
-            // TODO: refactor
-//            self.searchTableView.hidden = true
-        }
-        
-        // TODO: refactor
-//        self.searchTableView.reloadData()
     }
     
     // MARK: - Actions
@@ -276,12 +235,6 @@ class NewFlipViewController: MugChatViewController,
         self.updateContactPickerHeight(newHeight)
     }
     
-    // MARK: - NSFetchedResultsControllerDelegate
-    
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.updateSearchTableView()
-    }
-    
     // MARK: - UIAlertViewDelegate
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
@@ -333,35 +286,4 @@ class NewFlipViewController: MugChatViewController,
         return cell
     }
     
-    // MARK: - UITableViewDelegate
-    
-    // MARK: - UITextViewDelegate
-    
-    func textViewDidBeginEditing(textView: UITextView) {
-        self.didPressReturn = false
-    }
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if (text == "\n") {
-            self.didPressReturn = true
-            self.updateContactSearch()
-            textView.resignFirstResponder()
-            return false
-        } else if (text.rangeOfString("\n") != nil) {
-            let replacementText: String = text.stringByReplacingOccurrencesOfString("\n", withString: "")
-            textView.text = (textView.text as NSString).stringByReplacingCharactersInRange(range, withString: replacementText)
-            return false
-        }
-        
-        return true
-    }
-    
-    func textViewDidChange(textView: UITextView) {
-        self.view.setNeedsUpdateConstraints()
-        
-        // TODO: refactor
-//        if (textView == self.toTextView) {
-//            self.updateContactSearch()
-//        }
-    }
 }

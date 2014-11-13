@@ -21,7 +21,7 @@
 #import <Masonry/Masonry.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <PubNub/PNImports.h>
-#import "MBContactPicker+helper.h"
+#import "MBContactPicker.h"
 #import "UIImage+ImageEffects.h"
 #import "AVCamPreviewView.h"
 
