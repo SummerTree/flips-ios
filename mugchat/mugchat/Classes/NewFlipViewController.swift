@@ -23,8 +23,6 @@ class NewFlipViewController: MugChatViewController,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
-    UITableViewDataSource,
-    UITableViewDelegate,
     UITextViewDelegate {
     
     // MARK: - Constants
@@ -56,8 +54,6 @@ class NewFlipViewController: MugChatViewController,
     @IBOutlet weak var nextButtonAction: UIButton!
 
     let contactDataSource = ContactDataSource()
-    var fetchedResultsController: NSFetchedResultsController?
-    var didPressReturn = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -242,48 +238,4 @@ class NewFlipViewController: MugChatViewController,
             super.closeButtonTapped()
         }
     }
-    
-    // MARK: - UITableViewDataSource
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if let sections = self.fetchedResultsController?.sections {
-            return sections.count
-        }
-        
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = self.fetchedResultsController?.sections {
-            return sections[section].numberOfObjects
-        }
-        
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) as Contact
-        let cell = tableView.dequeueReusableCellWithIdentifier(ContactTableViewCellIdentifier, forIndexPath: indexPath) as ContactTableViewCell;
-        cell.nameLabel.text = "\(contact.firstName) \(contact.lastName)"
-        cell.photoView.initials = "\(contact.firstName[contact.firstName.startIndex])\(contact.lastName[contact.lastName.startIndex])"
-        
-        if let user = contact.contactUser {
-            // Flips user
-            cell.photoView.borderColor = .mugOrange()
-            
-            if let photoURLString = user.photoURL {
-                if let url = NSURL(string: photoURLString) {
-                    cell.photoView.setImageWithURL(url)
-                }
-            }
-            
-            cell.hideNumberLabel()
-        } else {
-            // not a Flips user
-            cell.numberLabel?.text = contact.phoneNumber
-        }
-        
-        return cell
-    }
-    
 }

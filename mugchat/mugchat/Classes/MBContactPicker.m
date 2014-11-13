@@ -7,14 +7,18 @@
 //
 
 #import "MBContactPicker.h"
+#import "Flips-Swift.h"
 
 CGFloat const kMaxVisibleRows = 2;
 NSString * const kMBPrompt = @"To:";
 CGFloat const kAnimationSpeed = .25;
+static NSString *const ContactTableViewCellIdentifier = @"ContactTableViewCell";
+static CGFloat const ROW_HEIGHT = 56.0;
 
 #define NO_CONTACTS NSLocalizedString(@"No contacts found.  Please try again.", @"No contacts")
 #define NO_MATCHES NSLocalizedString(@"No Matches", @"No Matches")
 #define OK NSLocalizedString(@"OK", @"OK")
+
 
 @interface MBContactPicker()
 
@@ -101,6 +105,10 @@ CGFloat const kAnimationSpeed = .25;
     searchTableView.delegate = self;
     searchTableView.translatesAutoresizingMaskIntoConstraints = NO;
     searchTableView.hidden = YES;
+    searchTableView.rowHeight = ROW_HEIGHT;
+    searchTableView.separatorInset = UIEdgeInsetsZero;
+    searchTableView.tableFooterView = [UIView new];
+    [searchTableView registerNib:[UINib nibWithNibName:@"ContactTableViewCell" bundle:nil] forCellReuseIdentifier:ContactTableViewCellIdentifier];
     [self addSubview:searchTableView];
     self.searchTableView = searchTableView;
     
@@ -230,33 +238,42 @@ CGFloat const kAnimationSpeed = .25;
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                      reuseIdentifier:@"Cell"];
-    }
+    ContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ContactTableViewCellIdentifier forIndexPath:indexPath];
 
-    id<MBContactPickerModelProtocol> model = (id<MBContactPickerModelProtocol>)self.filteredContacts[indexPath.row];
+    Contact<MBContactPickerModelProtocol> *contact = (id<MBContactPickerModelProtocol>)self.filteredContacts[indexPath.row];
 
-    cell.textLabel.text = model.contactTitle;
-    UIFont *font = [[self.class appearance] font];
-    if (font)
-    {
-        cell.textLabel.font = font;
-    }
-
+    cell.nameLabel.text = contact.contactTitle;
     cell.detailTextLabel.text = nil;
     cell.imageView.image = nil;
     
-    if ([model respondsToSelector:@selector(contactSubtitle)])
-    {
-        cell.detailTextLabel.text = model.contactSubtitle;
-    }
+    NSRange range = [contact.firstName rangeOfComposedCharacterSequenceAtIndex:0];
+    NSString *firstName = [contact.firstName substringWithRange:range];
     
-    if ([model respondsToSelector:@selector(contactImage)])
-    {
-        cell.imageView.image = model.contactImage;
+    range = [contact.lastName rangeOfComposedCharacterSequenceAtIndex:0];
+    NSString *lastName = [contact.lastName substringWithRange:range];
+    
+    cell.photoView.initials = [NSString stringWithFormat:@"%@%@", firstName, lastName];
+    
+    User *user = contact.contactUser;
+    
+    if (user) {
+        // Flips user
+        cell.photoView.borderColor = [UIColor mugOrange];
+        
+        NSString *photoURLString = user.photoURL;
+        
+        if (photoURLString) {
+            NSURL *url = [NSURL URLWithString:photoURLString];
+            if (url) {
+                [cell.photoView setImageWithURL:url];
+            }
+        }
+        
+        [cell hideNumberLabel];
+    } else {
+        if ([contact respondsToSelector:@selector(contactSubtitle)]) {
+            cell.numberLabel.text = contact.contactSubtitle;
+        }
     }
     
     return cell;

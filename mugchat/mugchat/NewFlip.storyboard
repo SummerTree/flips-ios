@@ -34,9 +34,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jaq-uX-Oxx" userLabel="ContactPicker" customClass="MBContactPicker">
-                                <rect key="frame" x="0.0" y="64" width="600" height="31"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="56"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" priority="750" constant="31" id="xKP-Wf-aH5"/>
+                                    <constraint firstAttribute="height" priority="750" constant="56" id="xKP-Wf-aH5"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View">
