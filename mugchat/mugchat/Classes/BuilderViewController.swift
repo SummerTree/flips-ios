@@ -21,7 +21,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        if (!DeviceHelper.sharedInstance.didUserAlreadySeeBuildIntroduction()) {
+        if (!DeviceHelper.sharedInstance.didUserAlreadySeenBuildIntroduction()) {
             DeviceHelper.sharedInstance.setBuilderIntroductionShown(true)
             self.showIntroduction()
         }

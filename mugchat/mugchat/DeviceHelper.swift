@@ -101,7 +101,7 @@ public class DeviceHelper: NSObject {
         userDefaults.synchronize()
     }
     
-    func didUserAlreadySeeBuildIntroduction() -> Bool {
+    func didUserAlreadySeenBuildIntroduction() -> Bool {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
         if (alreadySeenIntroduction != nil) {

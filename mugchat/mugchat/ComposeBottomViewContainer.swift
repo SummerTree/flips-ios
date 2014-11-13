@@ -229,7 +229,6 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     func hideFlipCreatedMessage() {
         self.sendSubviewToBack(self.builderFlipCreateLabel)
         self.builderFlipCreateLabel.hidden = true
-        
     }
     
     // MARK: - Button Handlers
