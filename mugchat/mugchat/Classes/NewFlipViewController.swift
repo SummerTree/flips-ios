@@ -100,10 +100,7 @@ class NewFlipViewController: MugChatViewController,
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
-        self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)
-        
-        // TODO: Refactor
-//        self.updateHeightConstraintIfNeeded(self.toTextViewHeightConstraint, view: self.toTextView)
+        self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)        
     }
     
     // MARK: - Private methods
