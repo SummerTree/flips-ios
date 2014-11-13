@@ -57,6 +57,7 @@
 		7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */; };
 		7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */; };
 		7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */; };
+		70577C761A13AECF0006B1FD /* ContactListHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70577C751A13AECF0006B1FD /* ContactListHelper.swift */; };
 		705B3DD91A03B9DD00E0D3E9 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705B3DD81A03B9DD00E0D3E9 /* PreviewView.swift */; };
 		705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705B3DDA1A03BBB400E0D3E9 /* PreviewViewController.swift */; };
 		705EF07A19F973A600D4CF74 /* ConfirmFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */; };
@@ -77,8 +78,6 @@
 		70CF5C471A041F680052E396 /* i_love_coffee.mov in Resources */ = {isa = PBXBuildFile; fileRef = 70CF5C461A041F680052E396 /* i_love_coffee.mov */; };
 		70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */; };
 		70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
-		70DAB34C1A13734E0044AEC1 /* BuilderIntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34B1A13734E0044AEC1 /* BuilderIntroductionView.swift */; };
-		70DAB34E1A1375710044AEC1 /* BuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34D1A1375710044AEC1 /* BuilderView.swift */; };
 		70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
@@ -117,6 +116,7 @@
 		7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
 		7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
 		7A9CAB701A04223300791C46 /* ImageVideoCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */; };
+		7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */; };
 		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
 		7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
 		7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */; };
@@ -234,6 +234,7 @@
 		7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsOfUseViewController.swift; sourceTree = "<group>"; };
 		7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyController.swift; sourceTree = "<group>"; };
+		70577C751A13AECF0006B1FD /* ContactListHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactListHelper.swift; sourceTree = "<group>"; };
 		705B3DD81A03B9DD00E0D3E9 /* PreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		705B3DDA1A03BBB400E0D3E9 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmFlipView.swift; sourceTree = "<group>"; };
@@ -255,8 +256,6 @@
 		70CF5C461A041F680052E396 /* i_love_coffee.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = i_love_coffee.mov; sourceTree = "<group>"; };
 		70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeView.swift; sourceTree = "<group>"; };
 		70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberVerificationCodeViewController.swift; sourceTree = "<group>"; };
-		70DAB34B1A13734E0044AEC1 /* BuilderIntroductionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionView.swift; sourceTree = "<group>"; };
-		70DAB34D1A1375710044AEC1 /* BuilderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderView.swift; sourceTree = "<group>"; };
 		70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -300,6 +299,7 @@
 		7A9619EF19DC3F01005E4343 /* UserFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormView.swift; path = Classes/UserFormView.swift; sourceTree = "<group>"; };
 		7A9CAB6E1A04223300791C46 /* ImageVideoCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageVideoCreator.h; sourceTree = "<group>"; };
 		7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageVideoCreator.m; sourceTree = "<group>"; };
+		7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionViewController.swift; sourceTree = "<group>"; };
 		7AB1683719E3196E004E2162 /* TakePictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewController.swift; path = Classes/TakePictureViewController.swift; sourceTree = "<group>"; };
 		7AB1683A19E319DB004E2162 /* TakePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureView.swift; path = Classes/TakePictureView.swift; sourceTree = "<group>"; };
 		7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewDelegate.swift; path = Classes/TakePictureViewDelegate.swift; sourceTree = "<group>"; };
@@ -500,11 +500,12 @@
 		70057E9219DADEB5004343ED /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */,
 				7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */,
 				70057E9319DADF59004343ED /* DeviceHelper.swift */,
 				7ACBBED01A024F4300A7109C /* DateHelper.swift */,
-				7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */,
 				7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */,
+				70577C751A13AECF0006B1FD /* ContactListHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -568,7 +569,6 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				70DAB34A1A1373260044AEC1 /* Builder */,
 				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
@@ -798,15 +798,6 @@
 			name = "Splash Screen";
 			sourceTree = "<group>";
 		};
-		70DAB34A1A1373260044AEC1 /* Builder */ = {
-			isa = PBXGroup;
-			children = (
-				70DAB34D1A1375710044AEC1 /* BuilderView.swift */,
-				70DAB34B1A13734E0044AEC1 /* BuilderIntroductionView.swift */,
-			);
-			name = Builder;
-			sourceTree = "<group>";
-		};
 		70E59C6119F584B2008DE18E /* Media */ = {
 			isa = PBXGroup;
 			children = (
@@ -882,6 +873,7 @@
 		7A0D6CED19D4961C00E39A1B /* Builder */ = {
 			isa = PBXGroup;
 			children = (
+				7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */,
 				7A0D6CF019D4966700E39A1B /* BuilderViewController.swift */,
 			);
 			name = Builder;
@@ -1319,6 +1311,7 @@
 				0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */,
 				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
 				7049A7A21A111998001D8121 /* ChangeNumberInfoView.swift in Sources */,
+				70577C761A13AECF0006B1FD /* ContactListHelper.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				70736C321A0D471F004E55E4 /* UpdateUserProfileViewController.swift in Sources */,
@@ -1345,6 +1338,7 @@
 				70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */,
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
+				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB71A41A00053C002695AC /* User.m in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
@@ -1353,7 +1347,6 @@
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7AFB719E1A000537002695AC /* Device.m in Sources */,
-				70DAB34E1A1375710044AEC1 /* BuilderView.swift in Sources */,
 				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
 				07B66B321A147B5800407A28 /* MBContactPicker.m in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,

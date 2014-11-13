@@ -17,6 +17,7 @@ public class DeviceHelper: NSObject {
     private let DEVICE_TOKEN = "device_token"
     private let DEVICE_ID = "device_id"
     
+    private let ALREADY_SEEN_INTRODUCTION_KEY = "builder.introduction.watched"
     
     // MARK: - Singleton
     
@@ -94,4 +95,19 @@ public class DeviceHelper: NSObject {
         return userDefaults.valueForKey(DEVICE_ID) as String?
     }
     
+    func setBuilderIntroductionShown(hasShow: Bool) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(hasShow, forKey: ALREADY_SEEN_INTRODUCTION_KEY)
+        userDefaults.synchronize()
+    }
+    
+    func didUserAlreadySeenBuildIntroduction() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
+        if (alreadySeenIntroduction != nil) {
+            return alreadySeenIntroduction!
+        }
+        
+        return false
+    }
 }

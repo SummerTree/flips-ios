@@ -40,5 +40,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "VideoComposer.h"
 #import "ImageVideoCreator.h"
+#import "RHAddressBook.h"
+#import "RHPerson.h"
 
 #endif

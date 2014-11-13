@@ -57,6 +57,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         
         cameraWordLabel = UILabel.flipWordLabel()
         cameraWordLabel.alpha = 1.0
+        cameraWordLabel.sizeToFit()
         self.addSubview(cameraWordLabel)
         
         flipViewer = FlipViewer()
@@ -105,11 +106,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.cameraPreview.registerObservers()
             
+            self.cameraWordLabel.text = word
+            self.cameraWordLabel.sizeToFit()
             UIView.animateWithDuration(self.ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
                 self.cameraPreview.alpha = 1.0
                 self.cameraWordLabel.alpha = 1.0
-                self.cameraWordLabel.text = word
-                self.cameraWordLabel.sizeToFit()
                 
                 self.flipViewer.alpha = 0.0
                 self.updateConstraintsIfNeeded()
