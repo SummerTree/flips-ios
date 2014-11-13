@@ -69,9 +69,11 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         
         self.setupWhiteNavBarWithBackButton(self.composeTitle)
         
-        var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
-        previewBarButton.tintColor = UIColor.orangeColor()
-        self.navigationItem.rightBarButtonItem = previewBarButton
+        if (self.shouldShowPreviewButton()) {
+            var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+            previewBarButton.tintColor = UIColor.orangeColor()
+            self.navigationItem.rightBarButtonItem = previewBarButton
+        }
         
         self.setNeedsStatusBarAppearanceUpdate()
         
@@ -106,6 +108,10 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         flipMessageWordListView.dataSource = self
         flipMessageWordListView.delegate = self
         self.view.addSubview(flipMessageWordListView)
+        
+        if (self.shouldShowPlusButtonInWords()) {
+            flipMessageWordListView.showPlusButton()
+        }
         
         composeBottomViewContainer = ComposeBottomViewContainer()
         composeBottomViewContainer.delegate = self
@@ -186,8 +192,13 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     }
     
     private func showFlipCreatedState(flipId: String) {
-        self.composeTopViewContainer.showFlip(flipId)
-        self.composeBottomViewContainer.showMyMugs()
+        if (self.canShowMyFlips()) {
+            self.composeTopViewContainer.showFlip(flipId)
+            self.composeBottomViewContainer.showMyMugs()
+        } else {
+            self.composeTopViewContainer.showFlip(flipId)
+            self.composeBottomViewContainer.showFlipCreateMessage()
+        }
     }
     
     private func showNewFlipWithoutSavedFlipsForWord(word: String) {
@@ -196,8 +207,12 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     }
     
     private func showNewFlipWithSavedFlipsForWord(word: String) {
-        self.composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: word)
-        self.composeBottomViewContainer.showMyMugs()
+        if (self.canShowMyFlips()) {
+            self.composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: word)
+            self.composeBottomViewContainer.showMyMugs()
+        } else {
+            self.showNewFlipWithoutSavedFlipsForWord(word)
+        }
     }
     
     
@@ -298,14 +313,20 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             composeTopViewContainer.showCameraWithWord(flipWord.text)
             composeBottomViewContainer.showCameraButtons()
         case FlipState.NotAssociatedWithResources:
-            composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
-            composeBottomViewContainer.showMyMugs()
-        case FlipState.AssociatedWithoutOtherResources, FlipState.AssociatedWithOtherResources:
-            if (flipWord.associatedFlipId == nil) {
-                println("flipWord.associatedFlipId IS NIL")
+            if (self.canShowMyFlips()) {
+                composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
+                composeBottomViewContainer.showMyMugs()
+            } else {
+                composeTopViewContainer.showCameraWithWord(flipWord.text)
+                composeBottomViewContainer.showCameraButtons()
             }
+        case FlipState.AssociatedWithoutOtherResources, FlipState.AssociatedWithOtherResources:
             composeTopViewContainer.showFlip(flipWord.associatedFlipId!)
-            composeBottomViewContainer.showMyMugs()
+            if (self.canShowMyFlips()) {
+                composeBottomViewContainer.showMyMugs()
+            } else {
+                composeBottomViewContainer.showFlipCreateMessage()
+            }
         }
     }
     
@@ -345,6 +366,9 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         }
     }
     
+    func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
+        // DO NOTHING - the optional mark didn't work on this delegate because of the others methods' params
+    }
     
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
@@ -457,6 +481,10 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         return nil
     }
     
+    func composeBottomViewContainerCanShowMyFlipsButton(composeBottomViewContainer: ComposeBottomViewContainer) -> Bool {
+        return self.canShowMyFlips()
+    }
+    
     
     // MARK: - ComposeTopViewContainerDelegate
     
@@ -523,5 +551,20 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)
         }
+    }
+    
+    
+    // MARK: - Internal Methods (methods to be overriden by Builder
+    
+    internal func shouldShowPreviewButton() -> Bool {
+        return true
+    }
+    
+    internal func canShowMyFlips() -> Bool {
+        return true
+    }
+    
+    internal func shouldShowPlusButtonInWords() -> Bool {
+        return false
     }
 }

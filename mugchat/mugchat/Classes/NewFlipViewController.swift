@@ -15,24 +15,29 @@
 
 import UIKit
 
-// TODO: remove when class variables are supported by Swift (after upgrade to Xcode 6.1)
 private let STORYBOARD = "NewFlip"
-private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
 
 
 class NewFlipViewController: MugChatViewController,
     JoinStringsTextFieldDelegate,
     NSFetchedResultsControllerDelegate,
+    UIAlertViewDelegate,
     UITableViewDataSource,
     UITableViewDelegate,
     UITextViewDelegate {
     
     // MARK: - Constants
     
-    // TODO: uncomment when class variables are supported by Swift
-    //	class private let STORYBOARD = "NewFlip"
-    //	class private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
+    private let CANCEL_MESSAGE = NSLocalizedString("This will delete any text you have written for this message.  Do you wish to delete this message?", comment: "Cancel message")
+    private let CANCEL_TITLE = NSLocalizedString("Delete Message", comment: "Delete Message")
+    private let DELETE = NSLocalizedString("Delete", comment: "Delete")
+    private let NO = NSLocalizedString("No", comment: "No")
+    private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     
+    private let NO_CONTACTS = NSLocalizedString("No contacts found.  Please try again.", comment: "No contacts")
+    private let NO_MATCHES = NSLocalizedString("No Matches", comment: "No Matches")
+    private let OK = NSLocalizedString("OK", comment: "OK")
+
     // MARK: - Class methods
     
     class func instantiateNavigationController() -> UINavigationController {
@@ -45,8 +50,10 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - Instance variables
     
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var flipView: UIView!
     @IBOutlet weak var nextButtonAction: UIButton!
     @IBOutlet weak var searchTableView: UITableView!
     @IBOutlet weak var toTextView: UITextView!
@@ -54,6 +61,7 @@ class NewFlipViewController: MugChatViewController,
     
     let contactDataSource = ContactDataSource()
     var fetchedResultsController: NSFetchedResultsController?
+    var didPressReturn = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +74,29 @@ class NewFlipViewController: MugChatViewController,
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        registerForKeyboardNotifications()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        struct Holder {
+            static var flipViewUpperBorderLayer :CALayer!
+        }
+        
+        if (Holder.flipViewUpperBorderLayer == nil) {
+            Holder.flipViewUpperBorderLayer = CALayer()
+            Holder.flipViewUpperBorderLayer.backgroundColor = UIColor.lightGreyF2().CGColor
+            [self.flipView.layer.addSublayer(Holder.flipViewUpperBorderLayer)]
+        }
+        
+        Holder.flipViewUpperBorderLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.flipView.frame), 1.0)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -79,6 +110,12 @@ class NewFlipViewController: MugChatViewController,
     }
     
     // MARK: - Private methods
+    
+    private func registerForKeyboardNotifications() {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
+    }
     
     private func updateContactSearch() {
         if self.toTextView.text.isEmpty {
@@ -106,7 +143,13 @@ class NewFlipViewController: MugChatViewController,
     
     private func updateSearchTableView() {
         if let contacts = self.fetchedResultsController?.fetchedObjects {
-            self.searchTableView.hidden = (contacts.count == 0)
+            let hasContacts = (contacts.count != 0)
+            self.searchTableView.hidden = !hasContacts
+
+            if (self.didPressReturn && !hasContacts) {
+                let alertView = UIAlertView(title: NO_MATCHES, message: NO_CONTACTS, delegate: nil, cancelButtonTitle: OK)
+                alertView.show()
+            }
         } else {
             self.searchTableView.hidden = true
         }
@@ -120,6 +163,42 @@ class NewFlipViewController: MugChatViewController,
         
     }
     
+    override func closeButtonTapped() {
+        if !flipTextField.hasText() {
+            super.closeButtonTapped()
+        } else {
+            let alertView = UIAlertView(title: CANCEL_TITLE, message: CANCEL_MESSAGE, delegate: self, cancelButtonTitle: NO, otherButtonTitles: DELETE)
+            alertView.show()
+        }
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let kbFrame = info[UIKeyboardFrameEndUserInfoKey] as NSValue
+            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            let keyboardFrame = kbFrame.CGRectValue()
+            let height = CGRectGetHeight(keyboardFrame)
+
+            self.bottomConstraint.constant = height
+            
+            UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    func keyboardWillBeHidden(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            
+            self.bottomConstraint.constant = 0
+            
+            UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
     // MARK: - JointStringsTextFieldDelegate
     
     func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!) {
@@ -130,6 +209,14 @@ class NewFlipViewController: MugChatViewController,
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.updateSearchTableView()
+    }
+    
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex != alertView.cancelButtonIndex {
+            super.closeButtonTapped()
+        }
     }
     
     // MARK: - UITableViewDataSource
@@ -165,6 +252,8 @@ class NewFlipViewController: MugChatViewController,
                     cell.photoView.setImageWithURL(url)
                 }
             }
+            
+            cell.hideNumberLabel()
         } else {
             // not a Flips user
             cell.numberLabel?.text = contact.phoneNumber
@@ -177,8 +266,14 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - UITextViewDelegate
     
+    func textViewDidBeginEditing(textView: UITextView) {
+        self.didPressReturn = false
+    }
+    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
+            self.didPressReturn = true
+            self.updateContactSearch()
             textView.resignFirstResponder()
             return false
         } else if (text.rangeOfString("\n") != nil) {

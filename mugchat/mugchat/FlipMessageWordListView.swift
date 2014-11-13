@@ -17,11 +17,15 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     private let MUG_TEXT_HEIGHT : CGFloat = 36.0
     private let SPACE_BETWEEN_MUG_TEXTS : CGFloat = 12.0
     
+    private let PLUS_BUTTON_WIDTH: CGFloat = 50.0
+    
     private var arrowToCenteredWordImageView: UIImageView!
     private var scrollView: UIScrollView!
     
     private var mugTextViews: [MugTextView]!
     private var tappedMugTextView: MugTextView?
+    
+    private var addWordButton: UIButton!
     
     var delegate: FlipMessageWordListViewDelegate?
     
@@ -55,6 +59,12 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         arrowToCenteredWordImageView.image = UIImage(named: "Triangle")
         arrowToCenteredWordImageView.sizeToFit()
         self.addSubview(arrowToCenteredWordImageView)
+        
+        addWordButton = UIButton()
+        addWordButton.setImage(UIImage(named: "AddWord"), forState: UIControlState.Normal)
+        addWordButton.addTarget(self, action: "addWordButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        addWordButton.hidden = true
+        self.addSubview(addWordButton)
     }
     
     private func addConstraints() {
@@ -68,6 +78,13 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         arrowToCenteredWordImageView.mas_makeConstraints { (make) -> Void in
             make.centerY.equalTo()(self.mas_bottom) // to show only half triangle
             make.centerX.equalTo()(self)
+        }
+        
+        addWordButton.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.leading.equalTo()(self)
+            make.bottom.equalTo()(self)
+            make.width.equalTo()(self.PLUS_BUTTON_WIDTH)
         }
     }
     
@@ -138,6 +155,9 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         self.centerScrollViewAtView(mugTextViews[centeredWordIndex!], animated: animated)
     }
     
+    func showPlusButton() {
+        addWordButton.hidden = false
+    }
     
     // MARK: - Word Gesture Handlers
     
@@ -166,6 +186,10 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     
     // MARK: - Items Handler
+    
+    func addWordButtonTapped() {
+        delegate?.flipMessageWordListViewDidTapAddWordButton(self)
+    }
     
     func replaceFlipWord(flipWord: MugText, forFlipWords flipWords: [MugText]) {
         var startPositionToStartUpdate = flipWord.position
@@ -384,6 +408,7 @@ protocol FlipMessageWordListViewDelegate {
 
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSplitFlipWord flipWordToSplit: MugText!)
     
+    func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView)
 }
 
 protocol FlipMessageWordListViewDataSource {
