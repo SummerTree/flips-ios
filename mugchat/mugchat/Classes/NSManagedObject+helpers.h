@@ -17,6 +17,10 @@
 
 @interface NSManagedObject (helpers)
 
-+ (NSFetchedResultsController *)fetchAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm delegate:(id<NSFetchedResultsControllerDelegate>)delegate;
++ (NSFetchedResultsController *)fetchAllSortedBy:(NSArray *)sortDescriptors
+                                   withPredicate:(NSPredicate *)searchTerm
+                                        delegate:(id<NSFetchedResultsControllerDelegate>)delegate;
+
++ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors;
 
 @end

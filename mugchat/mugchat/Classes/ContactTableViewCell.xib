@@ -61,6 +61,7 @@
                     <constraint firstAttribute="centerY" secondItem="NUp-dd-p6z" secondAttribute="centerY" id="ofB-U2-HYc"/>
                 </constraints>
             </tableViewCellContentView>
+            <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="labelView" destination="1vt-Ue-G5m" id="gAq-PM-kvK"/>
                 <outlet property="nameLabel" destination="lye-9r-T4y" id="56x-NG-LhR"/>

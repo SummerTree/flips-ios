@@ -11,6 +11,13 @@
 //
 
 extension UIView {
+    
+    func animateConstraintWithDuration(duration: NSTimeInterval) {
+        UIView.animateWithDuration(duration, animations: { () -> Void in
+            self.layoutIfNeeded()
+        })
+    }
+    
     func snapshot() -> UIImage! {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0)
         self.drawViewHierarchyInRect(self.bounds, afterScreenUpdates: true)

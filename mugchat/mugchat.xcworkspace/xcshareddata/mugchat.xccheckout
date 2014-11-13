@@ -12,6 +12,8 @@
 	<dict>
 		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
 		<string>https://github.com/arctouch/mugchat-ios</string>
+		<key>6FF2F2899EB190416EFBA394FDB8E25333BBE882</key>
+		<string>https://github.com/Citrrus/MBContactPicker.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>mugchat/mugchat.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
 		<string>../..</string>
+		<key>6FF2F2899EB190416EFBA394FDB8E25333BBE882</key>
+		<string>../../../MBContactPicker</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/arctouch/mugchat-ios</string>
@@ -28,6 +32,14 @@
 	<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6FF2F2899EB190416EFBA394FDB8E25333BBE882</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MBContactPicker</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

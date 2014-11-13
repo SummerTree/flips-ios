@@ -20,10 +20,9 @@ private let STORYBOARD = "NewFlip"
 
 class NewFlipViewController: MugChatViewController,
     JoinStringsTextFieldDelegate,
-    NSFetchedResultsControllerDelegate,
+    MBContactPickerDataSource,
+    MBContactPickerDelegate,
     UIAlertViewDelegate,
-    UITableViewDataSource,
-    UITableViewDelegate,
     UITextViewDelegate {
     
     // MARK: - Constants
@@ -34,10 +33,6 @@ class NewFlipViewController: MugChatViewController,
     private let NO = NSLocalizedString("No", comment: "No")
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     
-    private let NO_CONTACTS = NSLocalizedString("No contacts found.  Please try again.", comment: "No contacts")
-    private let NO_MATCHES = NSLocalizedString("No Matches", comment: "No Matches")
-    private let OK = NSLocalizedString("OK", comment: "OK")
-
     // MARK: - Class methods
     
     class func instantiateNavigationController() -> UINavigationController {
@@ -51,24 +46,24 @@ class NewFlipViewController: MugChatViewController,
     // MARK: - Instance variables
     
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var contactPicker: MBContactPicker!
+    @IBOutlet weak var contactPickerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipView: UIView!
     @IBOutlet weak var nextButtonAction: UIButton!
-    @IBOutlet weak var searchTableView: UITableView!
-    @IBOutlet weak var toTextView: UITextView!
-    @IBOutlet weak var toTextViewHeightConstraint: NSLayoutConstraint!
-    
+
     let contactDataSource = ContactDataSource()
-    var fetchedResultsController: NSFetchedResultsController?
-    var didPressReturn = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupWhiteNavBarWithCancelButton(TITLE)
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        self.contactPicker.datasource = self
+        self.contactPicker.delegate = self
+        self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.searchTableView.registerNib(UINib(nibName: ContactTableViewCellIdentifier, bundle: nil), forCellReuseIdentifier: ContactTableViewCellIdentifier)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -105,8 +100,7 @@ class NewFlipViewController: MugChatViewController,
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
-        self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)
-        self.updateHeightConstraintIfNeeded(self.toTextViewHeightConstraint, view: self.toTextView)
+        self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)        
     }
     
     // MARK: - Private methods
@@ -117,14 +111,9 @@ class NewFlipViewController: MugChatViewController,
         notificationCenter.addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    private func updateContactSearch() {
-        if self.toTextView.text.isEmpty {
-            self.fetchedResultsController = nil
-        } else {
-            self.fetchedResultsController = self.contactDataSource.fetchedResultsController(self.toTextView.text, delegate: self)
-        }
-        
-        self.updateSearchTableView()
+    private func updateContactPickerHeight(newHeight: CGFloat) {
+        self.contactPickerHeightConstraint.constant = newHeight
+        self.view.animateConstraintWithDuration(NSTimeInterval(contactPicker.animationSpeed))
     }
     
     private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
@@ -139,22 +128,6 @@ class NewFlipViewController: MugChatViewController,
         if (neededHeight != heightConstraint.constant) {
             heightConstraint.constant = neededHeight
         }
-    }
-    
-    private func updateSearchTableView() {
-        if let contacts = self.fetchedResultsController?.fetchedObjects {
-            let hasContacts = (contacts.count != 0)
-            self.searchTableView.hidden = !hasContacts
-
-            if (self.didPressReturn && !hasContacts) {
-                let alertView = UIAlertView(title: NO_MATCHES, message: NO_CONTACTS, delegate: nil, cancelButtonTitle: OK)
-                alertView.show()
-            }
-        } else {
-            self.searchTableView.hidden = true
-        }
-        
-        self.searchTableView.reloadData()
     }
     
     // MARK: - Actions
@@ -180,10 +153,7 @@ class NewFlipViewController: MugChatViewController,
             let height = CGRectGetHeight(keyboardFrame)
 
             self.bottomConstraint.constant = height
-            
-            UIView.animateWithDuration(animationDuration, animations: { () -> Void in
-                self.view.layoutIfNeeded()
-            })
+            self.view.animateConstraintWithDuration(animationDuration)
         }
     }
     
@@ -192,10 +162,7 @@ class NewFlipViewController: MugChatViewController,
             let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
             
             self.bottomConstraint.constant = 0
-            
-            UIView.animateWithDuration(animationDuration, animations: { () -> Void in
-                self.view.layoutIfNeeded()
-            })
+            self.view.animateConstraintWithDuration(animationDuration)
         }
     }
     
@@ -205,10 +172,60 @@ class NewFlipViewController: MugChatViewController,
         self.view.setNeedsUpdateConstraints()
     }
     
-    // MARK: - NSFetchedResultsControllerDelegate
+    // MARK: - MBContactPickerDataSource
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.updateSearchTableView()
+    // Use this method to give the contact picker the entire set of possible contacts.  Required.
+    func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
+        return Contact.findAllSortedBy(contactDataSource.sortedByUserFirstNameLastName())
+    }
+    
+    func selectedContactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
+        return [];
+    }
+    
+    // MARK: - MBContactPickerDelegate
+    
+    // Optional
+    func contactCollectionView(contactCollectionView: MBContactCollectionView!, didSelectContact model: MBContactPickerModelProtocol!) {
+        println("Did Select: \(model.contactTitle)")
+    }
+    
+    // Optional
+    func contactCollectionView(contactCollectionView: MBContactCollectionView!, didAddContact model: MBContactPickerModelProtocol!) {
+        println("Did Add: \(model.contactTitle)")
+    }
+    
+    // Optional
+    func contactCollectionView(contactCollectionView: MBContactCollectionView!, didRemoveContact model: MBContactPickerModelProtocol!) {
+        println("Did Remove: \(model.contactTitle)")
+    }
+    
+    // Optional
+    // This delegate method is called to allow the parent view to increase the size of
+    // the contact picker view to show the search table view
+    func didShowFilteredContactsForContactPicker(contactPicker: MBContactPicker!) {
+        if (self.contactPickerHeightConstraint.constant <= contactPicker.currentContentHeight) {
+            let pickerRectInWindow = self.view.convertRect(contactPicker.frame, fromView: nil)
+            let newHeight = self.view.window!.bounds.size.height - pickerRectInWindow.origin.y - contactPicker.keyboardHeight
+            self.updateContactPickerHeight(newHeight)
+        }
+    }
+    
+    // Optional
+    // This delegate method is called to allow the parent view to decrease the size of
+    // the contact picker view to hide the search table view
+    func didHideFilteredContactsForContactPicker(contactPicker: MBContactPicker!) {
+        if (self.contactPickerHeightConstraint.constant > contactPicker.currentContentHeight) {
+            self.updateContactPickerHeight(contactPicker.currentContentHeight)
+        }
+    }
+    
+    // Optional
+    // This delegate method is invoked to allow the parent to increase the size of the
+    // collectionview that shows which contacts have been selected. To increase or decrease
+    // the number of rows visible, change the maxVisibleRows property of the MBContactPicker
+    func contactPicker(contactPicker: MBContactPicker!, didUpdateContentHeightTo newHeight: CGFloat) {
+        self.updateContactPickerHeight(newHeight)
     }
     
     // MARK: - UIAlertViewDelegate
@@ -216,80 +233,6 @@ class NewFlipViewController: MugChatViewController,
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if buttonIndex != alertView.cancelButtonIndex {
             super.closeButtonTapped()
-        }
-    }
-    
-    // MARK: - UITableViewDataSource
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if let sections = self.fetchedResultsController?.sections {
-            return sections.count
-        }
-        
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let sections = self.fetchedResultsController?.sections {
-            return sections[section].numberOfObjects
-        }
-        
-        return 0
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let contact = self.fetchedResultsController?.objectAtIndexPath(indexPath) as Contact
-        let cell = tableView.dequeueReusableCellWithIdentifier(ContactTableViewCellIdentifier, forIndexPath: indexPath) as ContactTableViewCell;
-        cell.nameLabel.text = "\(contact.firstName) \(contact.lastName)"
-        cell.photoView.initials = "\(contact.firstName[contact.firstName.startIndex])\(contact.lastName[contact.lastName.startIndex])"
-        
-        if let user = contact.contactUser {
-            // Flips user
-            cell.photoView.borderColor = .mugOrange()
-            
-            if let photoURLString = user.photoURL {
-                if let url = NSURL(string: photoURLString) {
-                    cell.photoView.setImageWithURL(url)
-                }
-            }
-            
-            cell.hideNumberLabel()
-        } else {
-            // not a Flips user
-            cell.numberLabel?.text = contact.phoneNumber
-        }
-        
-        return cell
-    }
-    
-    // MARK: - UITableViewDelegate
-    
-    // MARK: - UITextViewDelegate
-    
-    func textViewDidBeginEditing(textView: UITextView) {
-        self.didPressReturn = false
-    }
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if (text == "\n") {
-            self.didPressReturn = true
-            self.updateContactSearch()
-            textView.resignFirstResponder()
-            return false
-        } else if (text.rangeOfString("\n") != nil) {
-            let replacementText: String = text.stringByReplacingOccurrencesOfString("\n", withString: "")
-            textView.text = (textView.text as NSString).stringByReplacingCharactersInRange(range, withString: replacementText)
-            return false
-        }
-        
-        return true
-    }
-    
-    func textViewDidChange(textView: UITextView) {
-        self.view.setNeedsUpdateConstraints()
-        
-        if (textView == self.toTextView) {
-            self.updateContactSearch()
         }
     }
 }
