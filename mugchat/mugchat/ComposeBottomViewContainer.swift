@@ -15,6 +15,8 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
     
+    private let FLIP_CREATED_TEXT = NSLocalizedString("Flip Created", comment: "Flip Created")
+    
     private var cameraButtonsView: UIView!
     private var takePictureButton: UIButton!
     private var captureAudioButton: UIButton!
@@ -22,6 +24,8 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     
     private var gridButton: UIButton!
     private var galleryButton: UIButton!
+    
+    private var builderFlipCreateLabel: UILabel!
     
     private var myMugsView: MyFlipsView!
     
@@ -43,6 +47,15 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     private func addSubviews() {
         self.backgroundColor = UIColor.sand()
         
+        self.builderFlipCreateLabel = UILabel()
+        self.builderFlipCreateLabel.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
+        self.builderFlipCreateLabel.text = FLIP_CREATED_TEXT
+        self.builderFlipCreateLabel.hidden = true
+        self.builderFlipCreateLabel.textColor = UIColor.deepSea()
+        self.builderFlipCreateLabel.backgroundColor = UIColor.sand()
+        self.builderFlipCreateLabel.textAlignment = NSTextAlignment.Center
+        self.addSubview(self.builderFlipCreateLabel)
+        
         self.addCameraButtons()
         
         myMugsView = MyFlipsView()
@@ -53,6 +66,13 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     }
     
     private func addConstraints() {
+        builderFlipCreateLabel.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self)
+            make.top.equalTo()(self)
+            make.width.equalTo()(self)
+            make.height.equalTo()(self)
+        }
+        
         self.addCameraButtonsViewConstraints()
         
         myMugsView.mas_makeConstraints { (make) -> Void in
@@ -94,7 +114,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         takePictureButton.addGestureRecognizer(tapGesture)
         
         cameraButtonsView.addSubview(takePictureButton)
-        
+
         gridButton = UIButton()
         gridButton.setImage(UIImage(named: "Grid"), forState: .Normal)
         gridButton.sizeToFit()
@@ -161,19 +181,31 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     }
     
     func showCameraButtons() {
+        self.hideFlipCreatedMessage()
         self.slideToCameraView(notifyDelegate: false)
+        
+        if let canShowMyFlipsButton = dataSource?.composeBottomViewContainerCanShowMyFlipsButton(self) {
+            if (canShowMyFlipsButton) {
+                gridButton.hidden = false
+            } else {
+                gridButton.hidden = true
+            }
+        }
     }
     
     func showMyMugs() {
+        self.hideFlipCreatedMessage()
         self.reloadMyMugs()
         self.slideToMyMugsView(notifyDelegate: false)
     }
     
     func showAudioRecordButton() {
+        self.hideFlipCreatedMessage()
         self.showRecordingView()
     }
     
     private func showRecordingView() {
+        self.hideFlipCreatedMessage()
         self.captureAudioButton.hidden = false
         self.cancelCaptureAudioButton.hidden = false
         self.takePictureButton.hidden = true
@@ -189,6 +221,15 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         self.gridButton.hidden = false
     }
     
+    func showFlipCreateMessage() {
+        self.bringSubviewToFront(self.builderFlipCreateLabel)
+        self.builderFlipCreateLabel.hidden = false
+    }
+    
+    func hideFlipCreatedMessage() {
+        self.sendSubviewToBack(self.builderFlipCreateLabel)
+        self.builderFlipCreateLabel.hidden = true
+    }
     
     // MARK: - Button Handlers
     
@@ -339,4 +380,6 @@ protocol ComposeBottomViewContainerDataSource {
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String]
     
     func flipIdForHighlightedWord() -> String?
+    
+    func composeBottomViewContainerCanShowMyFlipsButton(composeBottomViewContainer: ComposeBottomViewContainer) -> Bool
 }

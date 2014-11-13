@@ -12,10 +12,10 @@
 
 import UIKit
 
-class BuilderIntroductionView : UIView {
+class BuilderIntroductionViewController : UIViewController {
     
-    var delegate: BuilderIntroductionViewDelegate?
-
+    var delegate: BuilderIntroductionViewControllerDelegate?
+    
     private let CONTENT_MARGIN_LEFT:    CGFloat = 25.0
     private let CONTENT_MARGIN_RIGHT:   CGFloat = -25.0
     private let TOP_CONTAINER_HEIGHT_4S:CGFloat = 60.0
@@ -42,9 +42,8 @@ class BuilderIntroductionView : UIView {
     private let DESCRIPTION_TEXT_MESSAGE = "It's a quick & easy tool to define & add\nwords to use for future messages. We have\nsuggested words to get you started, but feel free\nto add as many words as you like."
     private let OK_SWEET_MESSAGE = "ok, sweet!"
     
-    override init() {
-        super.init()
-    }
+    
+    // MARK: - Initialization Methods
     
     convenience init(viewBackground: UIImage!) {
         self.init()
@@ -52,25 +51,13 @@ class BuilderIntroductionView : UIView {
         addSubviews()
         makeConstraints()
     }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    func viewDidLoad() {
-        makeConstraints()
-    }
     
     func addSubviews() {
         self.blurredImageView = UIImageView(image: self.backgroundImage)
-        self.addSubview(blurredImageView)
+        self.view.addSubview(blurredImageView)
         
         self.contentTopContainer = UIView()
-        self.addSubview(contentTopContainer)
+        self.view.addSubview(contentTopContainer)
         
         self.hiUserLabel = UILabel()
         self.hiUserLabel.numberOfLines = 1
@@ -79,7 +66,7 @@ class BuilderIntroductionView : UIView {
         self.hiUserLabel.textColor = UIColor.deepSea()
         self.hiUserLabel.textAlignment = NSTextAlignment.Center
         self.hiUserLabel.sizeToFit()
-        self.addSubview(hiUserLabel)
+        self.view.addSubview(hiUserLabel)
         
         self.thisIsYourWordBuilderLabel = UILabel()
         self.thisIsYourWordBuilderLabel.numberOfLines = 1
@@ -88,10 +75,10 @@ class BuilderIntroductionView : UIView {
         self.thisIsYourWordBuilderLabel.textColor = UIColor.deepSea()
         self.thisIsYourWordBuilderLabel.textAlignment = NSTextAlignment.Center
         self.thisIsYourWordBuilderLabel.sizeToFit()
-        self.addSubview(thisIsYourWordBuilderLabel)
+        self.view.addSubview(thisIsYourWordBuilderLabel)
         
         self.separatorBetweenNameAndDescription = UIView()
-        self.addSubview(separatorBetweenNameAndDescription)
+        self.view.addSubview(separatorBetweenNameAndDescription)
         
         self.descriptionLabel = UILabel()
         self.descriptionLabel.numberOfLines = 0
@@ -103,38 +90,34 @@ class BuilderIntroductionView : UIView {
         self.descriptionLabel.textColor = UIColor.deepSea()
         self.descriptionLabel.textAlignment = NSTextAlignment.Center
         self.descriptionLabel.sizeToFit()
-        self.addSubview(descriptionLabel)
-
+        self.view.addSubview(descriptionLabel)
+        
         self.separatorBetweenDescriptionAndButton = UIView()
-        self.addSubview(separatorBetweenDescriptionAndButton)
-
+        self.view.addSubview(separatorBetweenDescriptionAndButton)
+        
         self.okSweetButton = UIButton()
         self.okSweetButton.addTarget(self, action: "okSweetButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         self.okSweetButton.backgroundColor = self.OK_SWEET_BACKGROUND_COLOR
         self.okSweetButton.layer.cornerRadius = self.OK_SWEET_CORNER_RADIUS
         self.okSweetButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString(OK_SWEET_MESSAGE, comment: OK_SWEET_MESSAGE), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
-        self.addSubview(okSweetButton)
+        self.view.addSubview(okSweetButton)
         
         self.separatorBetweenButtonAndBottom = UIView()
-        self.addSubview(separatorBetweenButtonAndBottom)
+        self.view.addSubview(separatorBetweenButtonAndBottom)
     }
     
-    func okSweetButtonTapped(button: UIButton!) {
-        self.delegate?.builderIntroductionViewDidTapOkSweetButton(self)
-    }
-    
-    func makeConstraints() {
+    private func makeConstraints() {
         self.blurredImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.bottom.equalTo()(self)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
+            make.top.equalTo()(self.view)
+            make.bottom.equalTo()(self.view)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
         }
         
         self.contentTopContainer.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
+            make.top.equalTo()(self.view)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
             
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
                 make.height.equalTo()(self.TOP_CONTAINER_HEIGHT_4S)
@@ -156,48 +139,58 @@ class BuilderIntroductionView : UIView {
             make.right.equalTo()(self.contentTopContainer).with().offset()(self.CONTENT_MARGIN_RIGHT)
             make.height.equalTo()(self.thisIsYourWordBuilderLabel.frame.size.height)
         }
-
+        
         self.separatorBetweenNameAndDescription.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.thisIsYourWordBuilderLabel.mas_bottom)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
             make.height.equalTo()(self.separatorBetweenDescriptionAndButton)
         }
         
         self.descriptionLabel.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.separatorBetweenNameAndDescription.mas_bottom)
-            make.left.equalTo()(self).with().offset()(self.CONTENT_MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(self.CONTENT_MARGIN_RIGHT)
+            make.left.equalTo()(self.view).with().offset()(self.CONTENT_MARGIN_LEFT)
+            make.right.equalTo()(self.view).with().offset()(self.CONTENT_MARGIN_RIGHT)
         }
         
         self.separatorBetweenDescriptionAndButton.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.descriptionLabel.mas_bottom)
             make.bottom.equalTo()(self.okSweetButton.mas_top)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
             make.height.greaterThanOrEqualTo()(self.SEPARATOR_HEIGHT)
         }
         
         self.okSweetButton.mas_makeConstraints { (make) -> Void in
             make.bottom.equalTo()(self.separatorBetweenButtonAndBottom.mas_top)
-            make.centerX.equalTo()(self)
+            make.centerX.equalTo()(self.view)
             make.height.equalTo()(self.OK_SWEET_BUTTON_HEIGHT)
             make.width.equalTo()(self.OK_SWEET_BUTTON_WIDTH)
         }
         
         self.separatorBetweenButtonAndBottom.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
+            make.bottom.equalTo()(self.view)
+            make.left.equalTo()(self.view)
+            make.right.equalTo()(self.view)
             make.height.equalTo()(self.contentTopContainer)
         }
     }
+    
+
+    // MARK: - Button Handlers
+    
+    func okSweetButtonTapped(button: UIButton!) {
+        self.delegate?.builderIntroductionViewControllerDidTapOkSweetButton(self)
+    }
+    
+
+    // MARK: - Image Helper Methods
     
     func applyBlur(image: UIImage) -> UIImage {
         return image.applyBlurWithRadius(10, tintColor: UIColor(white: 255, alpha: 0.5), saturationDeltaFactor: 1.5, maskImage: nil)
     }
 }
 
-protocol BuilderIntroductionViewDelegate {
-    func builderIntroductionViewDidTapOkSweetButton(builderIntroductionView: BuilderIntroductionView!)
+protocol BuilderIntroductionViewControllerDelegate {
+    func builderIntroductionViewControllerDidTapOkSweetButton(builderIntroductionViewController: BuilderIntroductionViewController!)
 }
