@@ -39,7 +39,7 @@
                                     <constraint firstAttribute="height" priority="750" constant="56" id="xKP-Wf-aH5"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View" customClass="TopBorderedView" customModule="Flips" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98x-j1-QcY" customClass="JoinStringsTextField" customModule="Flips" customModuleProvider="target">

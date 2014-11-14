@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71B1A168CAC0011B212 /* BorderedView.swift */; };
 		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
 		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
@@ -172,6 +173,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		072AD71B1A168CAC0011B212 /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BorderedView.swift; path = Classes/BorderedView.swift; sourceTree = "<group>"; };
 		0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactTableViewCell.swift; path = Classes/ContactTableViewCell.swift; sourceTree = "<group>"; };
 		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 		0757ECAB1A116A1E00D0277C /* Contact */ = {
 			isa = PBXGroup;
 			children = (
+				072AD71B1A168CAC0011B212 /* BorderedView.swift */,
 				0757ECB01A11A61600D0277C /* ContactPhotoView.swift */,
 				0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */,
 				07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */,
@@ -1263,6 +1266,7 @@
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
+				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
@@ -1343,7 +1347,6 @@
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
-				70DAB34C1A13734E0044AEC1 /* BuilderIntroductionView.swift in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7AFB719E1A000537002695AC /* Device.m in Sources */,
