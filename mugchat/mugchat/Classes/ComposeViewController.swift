@@ -12,6 +12,8 @@
 
 import Foundation
 
+private let GROUP_CHAT = NSLocalizedString("Group Chat", comment: "Group Chat")
+
 class ComposeViewController : MugChatViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate {
     
     private let NO_EMPTY_FLIP_INDEX = -1
@@ -42,6 +44,18 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         self.initFlipWords(words)
         
         self.highlightedWordIndex = 0
+    }
+    
+    convenience init(contacts: [Contact], words: [String]) {
+        var title = GROUP_CHAT
+        
+        if (contacts.count == 1) {
+            if let contactTitle = contacts.first?.contactTitle {
+                title = contactTitle
+            }
+        }
+        
+        self.init(composeTitle: title, words: words)
     }
     
     required init(coder: NSCoder) {

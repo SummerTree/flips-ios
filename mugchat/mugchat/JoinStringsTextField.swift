@@ -212,6 +212,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         if (neededFrameHeight != currentFrameHeight) {
             joinStringsTextFieldDelegate?.joinStringsTextFieldNeedsToHaveItsHeightUpdated(self)
         }
+        
+        joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: text)
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -249,8 +251,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
 
 // MARK: - View Delegate
 
-protocol JoinStringsTextFieldDelegate {
+@objc protocol JoinStringsTextFieldDelegate {
     
     func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
+    
+    optional func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!)
 
 }

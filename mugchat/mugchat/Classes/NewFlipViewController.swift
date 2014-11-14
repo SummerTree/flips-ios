@@ -24,7 +24,7 @@ class NewFlipViewController: MugChatViewController,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
     UITextViewDelegate {
-    
+
     // MARK: - Constants
     
     private let CANCEL_MESSAGE = NSLocalizedString("This will delete any text you have written for this message.  Do you wish to delete this message?", comment: "Cancel message")
@@ -51,14 +51,27 @@ class NewFlipViewController: MugChatViewController,
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipView: UIView!
-    @IBOutlet weak var nextButtonAction: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
 
     let contactDataSource = ContactDataSource()
+    var contacts: [Contact] {
+        didSet {
+            updateNextButtonState()
+        }
+    }
+
+    required init(coder: NSCoder) {
+        contacts = [Contact]()
+        
+        super.init(coder: coder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupWhiteNavBarWithCancelButton(TITLE)
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        self.flipTextField.joinStringsTextFieldDelegate = self
         
         self.contactPicker.datasource = self
         self.contactPicker.delegate = self
@@ -130,10 +143,18 @@ class NewFlipViewController: MugChatViewController,
         }
     }
     
+    private func updateNextButtonState() {
+        let hasContacts = contacts.count > 0
+        let hasText = !flipTextField.text.isEmpty
+        nextButton.enabled = hasContacts && hasText
+        nextButton.setTitleColor(nextButton.enabled ? .darkGray() : .mediumGray(), forState: .Normal)
+    }
+    
     // MARK: - Actions
     
     @IBAction func nextButtonAction(sender: UIButton) {
-        
+        let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getMugTexts())
+        self.navigationController?.pushViewController(composeViewController, animated: true)
     }
     
     override func closeButtonTapped() {
@@ -172,9 +193,12 @@ class NewFlipViewController: MugChatViewController,
         self.view.setNeedsUpdateConstraints()
     }
     
+    func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
+        updateNextButtonState()
+    }
+    
     // MARK: - MBContactPickerDataSource
     
-    // Use this method to give the contact picker the entire set of possible contacts.  Required.
     func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
         return Contact.findAllSortedBy(contactDataSource.sortedByUserFirstNameLastName())
     }
@@ -185,24 +209,20 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - MBContactPickerDelegate
     
-    // Optional
-    func contactCollectionView(contactCollectionView: MBContactCollectionView!, didSelectContact model: MBContactPickerModelProtocol!) {
-        println("Did Select: \(model.contactTitle)")
-    }
-    
-    // Optional
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didAddContact model: MBContactPickerModelProtocol!) {
-        println("Did Add: \(model.contactTitle)")
+        if let contact = model as? Contact {
+            contacts.append(contact)
+        }
     }
     
-    // Optional
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didRemoveContact model: MBContactPickerModelProtocol!) {
-        println("Did Remove: \(model.contactTitle)")
+        if let contact = model as? Contact {
+            if let index = find(contacts, contact) {
+                contacts.removeAtIndex(index)
+            }
+        }
     }
     
-    // Optional
-    // This delegate method is called to allow the parent view to increase the size of
-    // the contact picker view to show the search table view
     func didShowFilteredContactsForContactPicker(contactPicker: MBContactPicker!) {
         if (self.contactPickerHeightConstraint.constant <= contactPicker.currentContentHeight) {
             let pickerRectInWindow = self.view.convertRect(contactPicker.frame, fromView: nil)
@@ -211,19 +231,12 @@ class NewFlipViewController: MugChatViewController,
         }
     }
     
-    // Optional
-    // This delegate method is called to allow the parent view to decrease the size of
-    // the contact picker view to hide the search table view
     func didHideFilteredContactsForContactPicker(contactPicker: MBContactPicker!) {
         if (self.contactPickerHeightConstraint.constant > contactPicker.currentContentHeight) {
             self.updateContactPickerHeight(contactPicker.currentContentHeight)
         }
     }
     
-    // Optional
-    // This delegate method is invoked to allow the parent to increase the size of the
-    // collectionview that shows which contacts have been selected. To increase or decrease
-    // the number of rows visible, change the maxVisibleRows property of the MBContactPicker
     func contactPicker(contactPicker: MBContactPicker!, didUpdateContentHeightTo newHeight: CGFloat) {
         self.updateContactPickerHeight(newHeight)
     }
