@@ -84,6 +84,8 @@ class NewFlipViewController: MugChatViewController,
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         
         registerForKeyboardNotifications()
+        
+        self.flipTextField.viewWillAppear()
     }
     
     override func viewDidDisappear(animated: Bool) {
