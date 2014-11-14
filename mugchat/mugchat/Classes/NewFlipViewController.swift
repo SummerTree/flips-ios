@@ -24,7 +24,7 @@ class NewFlipViewController: MugChatViewController,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
     UITextViewDelegate {
-    
+
     // MARK: - Constants
     
     private let CANCEL_MESSAGE = NSLocalizedString("This will delete any text you have written for this message.  Do you wish to delete this message?", comment: "Cancel message")
@@ -51,14 +51,27 @@ class NewFlipViewController: MugChatViewController,
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipView: UIView!
-    @IBOutlet weak var nextButtonAction: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
 
     let contactDataSource = ContactDataSource()
+    var contacts: [Contact] {
+        didSet {
+            updateNextButtonState()
+        }
+    }
+
+    required init(coder: NSCoder) {
+        contacts = [Contact]()
+        
+        super.init(coder: coder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupWhiteNavBarWithCancelButton(TITLE)
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        self.flipTextField.joinStringsTextFieldDelegate = self
         
         self.contactPicker.datasource = self
         self.contactPicker.delegate = self
@@ -130,10 +143,18 @@ class NewFlipViewController: MugChatViewController,
         }
     }
     
+    private func updateNextButtonState() {
+        let hasContacts = contacts.count > 0
+        let hasText = !flipTextField.text.isEmpty
+        nextButton.enabled = hasContacts && hasText
+        nextButton.setTitleColor(nextButton.enabled ? .darkGray() : .mediumGray(), forState: .Normal)
+    }
+    
     // MARK: - Actions
     
     @IBAction func nextButtonAction(sender: UIButton) {
-        
+        let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getMugTexts())
+        self.navigationController?.pushViewController(composeViewController, animated: true)
     }
     
     override func closeButtonTapped() {
@@ -172,6 +193,10 @@ class NewFlipViewController: MugChatViewController,
         self.view.setNeedsUpdateConstraints()
     }
     
+    func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
+        updateNextButtonState()
+    }
+    
     // MARK: - MBContactPickerDataSource
     
     // Use this method to give the contact picker the entire set of possible contacts.  Required.
@@ -192,12 +217,22 @@ class NewFlipViewController: MugChatViewController,
     
     // Optional
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didAddContact model: MBContactPickerModelProtocol!) {
-        println("Did Add: \(model.contactTitle)")
+        if let contact = model as? Contact {
+            println("Did Add: \(model.contactTitle)")
+
+            contacts.append(contact)
+        }
     }
     
     // Optional
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didRemoveContact model: MBContactPickerModelProtocol!) {
-        println("Did Remove: \(model.contactTitle)")
+        if let contact = model as? Contact {
+            if let index = find(contacts, contact) {
+                println("Did Remove: \(model.contactTitle)")
+
+                contacts.removeAtIndex(index)
+            }
+        }
     }
     
     // Optional
