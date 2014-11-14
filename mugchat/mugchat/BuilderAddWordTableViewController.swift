@@ -12,7 +12,7 @@
 
 import UIKit
 
-class BuilderAddWordTableViewController: UITableViewController {
+class BuilderAddWordTableViewController: UITableViewController, UITextFieldDelegate {
     
     private let NUMBER_OF_SECTIONS_IN_TABLEVIEW: Int = 1
     private let CELL_IDENTIFIER = "BuilderWordCell"
@@ -32,27 +32,6 @@ class BuilderAddWordTableViewController: UITableViewController {
         self.words = words
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if (self.newWordTextField == nil) {
-            self.newWordTextField = UITextField()
-            let paddingView = UIView(frame: CGRectMake(0, 0, 16, newWordTextField.frame.size.height))
-            self.newWordTextField.leftView = paddingView
-            
-            self.newWordTextField.leftViewMode = UITextFieldViewMode.Always
-            self.newWordTextField.backgroundColor = UIColor.sand()
-        }
-        
-        return self.newWordTextField
-    }
-    
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return CELL_HEIGHT
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CELL_HEIGHT
-    }
-
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -70,7 +49,44 @@ class BuilderAddWordTableViewController: UITableViewController {
         setupWhiteNavBarWithoutBackButtonWithRightDoneButton("Builder")
         self.navigationController?.navigationBar.alpha = 1.0
         self.navigationController?.navigationBar.translucent = false
+        
+        self.newWordTextField = UITextField()
+        let paddingView = UIView(frame: CGRectMake(0, 0, 16, newWordTextField.frame.size.height))
+        self.newWordTextField.backgroundColor = UIColor.sand()
+        self.newWordTextField.leftView = paddingView
+        self.newWordTextField.leftViewMode = UITextFieldViewMode.Always
+        self.newWordTextField.autocorrectionType = UITextAutocorrectionType.No
+        self.newWordTextField.returnKeyType = UIReturnKeyType.Next
+        self.newWordTextField.delegate = self
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.newWordTextField.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.newWordTextField.resignFirstResponder()
+    }
+    
+    
+    // MARK: UITableViewDelegate
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return self.newWordTextField
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return CELL_HEIGHT
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CELL_HEIGHT
+    }
+
+    
+    // MARK: UITableViewDelegate
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return NUMBER_OF_SECTIONS_IN_TABLEVIEW
@@ -98,9 +114,23 @@ class BuilderAddWordTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
             self.words.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
+    
+    
+    // MARK: UITextFieldDelegate
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if (countElements(textField.text!) > 0) {
+            words.insert(textField.text!, atIndex: 0)
+            tableView.reloadData()
+            
+            textField.text = ""
+            textField.becomeFirstResponder()
+            return true
         }
         
-        tableView.reloadData()
+        return false
     }
 }
