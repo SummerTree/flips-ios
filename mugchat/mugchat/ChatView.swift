@@ -31,7 +31,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var replyView: UIView!
     private var replyButton: UIButton!
     private var replyTextField: JoinStringsTextField!
-    private var nextButton: UIButton!
+    private var nextButton: NextButton!
     
     private var shouldPlayUnreadMessage: Bool = true
     private var keyboardHeight: CGFloat = 0.0
@@ -95,14 +95,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         replyView.addSubview(replyTextField)
         
-        nextButton = UIButton()
+        nextButton = NextButton()
         nextButton.contentEdgeInsets = UIEdgeInsetsMake(REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET)
         nextButton.hidden = true
         nextButton.addTarget(self, action: "didTapNextButton", forControlEvents: UIControlEvents.TouchUpInside)
-        nextButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Next", comment: "Next"), attributes:[NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.avenirNextDemiBold(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
         nextButton.sizeToFit()
         replyView.addSubview(nextButton)
-        
     }
     
     func makeConstraints() {

@@ -58,7 +58,7 @@ class NewFlipViewController: MugChatViewController,
     @IBOutlet weak var flipTextField: JoinStringsTextField!
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipView: TopBorderedView!
-    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var nextButton: NextButton!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -84,9 +84,6 @@ class NewFlipViewController: MugChatViewController,
         self.contactPicker.delegate = self
         self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
-        
-        self.nextButton.setTitleColor(UIColor.darkGray(), forState: .Normal)
-        self.nextButton.setTitleColor(UIColor.mediumGray(), forState: .Disabled)
     }
     
     override func viewWillAppear(animated: Bool) {

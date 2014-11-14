@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71B1A168CAC0011B212 /* BorderedView.swift */; };
+		072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
 		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
 		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
@@ -174,6 +175,7 @@
 
 /* Begin PBXFileReference section */
 		072AD71B1A168CAC0011B212 /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BorderedView.swift; path = Classes/BorderedView.swift; sourceTree = "<group>"; };
+		072AD71E1A16B01B0011B212 /* NextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextButton.swift; path = Classes/NextButton.swift; sourceTree = "<group>"; };
 		0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactTableViewCell.swift; path = Classes/ContactTableViewCell.swift; sourceTree = "<group>"; };
 		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
@@ -378,6 +380,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072AD71D1A16B0040011B212 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				072AD71E1A16B01B0011B212 /* NextButton.swift */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
 		0757ECAB1A116A1E00D0277C /* Contact */ = {
 			isa = PBXGroup;
 			children = (
@@ -572,6 +582,7 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				072AD71D1A16B0040011B212 /* Buttons */,
 				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
@@ -1357,6 +1368,7 @@
 				70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */,
 				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
+				072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */,
 				07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* MyFlipsViewCell.swift in Sources */,
