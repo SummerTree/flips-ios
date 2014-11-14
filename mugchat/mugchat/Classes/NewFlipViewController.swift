@@ -199,7 +199,6 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - MBContactPickerDataSource
     
-    // Use this method to give the contact picker the entire set of possible contacts.  Required.
     func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
         return Contact.findAllSortedBy(contactDataSource.sortedByUserFirstNameLastName())
     }
@@ -210,34 +209,20 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - MBContactPickerDelegate
     
-    // Optional
-    func contactCollectionView(contactCollectionView: MBContactCollectionView!, didSelectContact model: MBContactPickerModelProtocol!) {
-        println("Did Select: \(model.contactTitle)")
-    }
-    
-    // Optional
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didAddContact model: MBContactPickerModelProtocol!) {
         if let contact = model as? Contact {
-            println("Did Add: \(model.contactTitle)")
-
             contacts.append(contact)
         }
     }
     
-    // Optional
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didRemoveContact model: MBContactPickerModelProtocol!) {
         if let contact = model as? Contact {
             if let index = find(contacts, contact) {
-                println("Did Remove: \(model.contactTitle)")
-
                 contacts.removeAtIndex(index)
             }
         }
     }
     
-    // Optional
-    // This delegate method is called to allow the parent view to increase the size of
-    // the contact picker view to show the search table view
     func didShowFilteredContactsForContactPicker(contactPicker: MBContactPicker!) {
         if (self.contactPickerHeightConstraint.constant <= contactPicker.currentContentHeight) {
             let pickerRectInWindow = self.view.convertRect(contactPicker.frame, fromView: nil)
@@ -246,19 +231,12 @@ class NewFlipViewController: MugChatViewController,
         }
     }
     
-    // Optional
-    // This delegate method is called to allow the parent view to decrease the size of
-    // the contact picker view to hide the search table view
     func didHideFilteredContactsForContactPicker(contactPicker: MBContactPicker!) {
         if (self.contactPickerHeightConstraint.constant > contactPicker.currentContentHeight) {
             self.updateContactPickerHeight(contactPicker.currentContentHeight)
         }
     }
     
-    // Optional
-    // This delegate method is invoked to allow the parent to increase the size of the
-    // collectionview that shows which contacts have been selected. To increase or decrease
-    // the number of rows visible, change the maxVisibleRows property of the MBContactPicker
     func contactPicker(contactPicker: MBContactPicker!, didUpdateContentHeightTo newHeight: CGFloat) {
         self.updateContactPickerHeight(newHeight)
     }
