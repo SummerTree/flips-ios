@@ -16,7 +16,32 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     
     var phoneNumberView: PhoneNumberView!
     var userId: String!
+    
+    private var username: String!
+    private var password: String!
+    private var firstName: String!
+    private var lastName: String!
+    private var nickname: String?
+    private var avatar: UIImage!
+    private var birthday: NSDate!
+    
+    init(userId: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.userId = userId
+    }
+    
+    convenience init(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: String!, nickname: String?) {
         
+        self.init(nibName: nil, bundle: nil)
+        self.username = username
+        self.password = password
+        self.firstName = firstName
+        self.lastName = lastName
+        self.avatar = avatar
+        self.birthday = birthday.dateValue()
+        self.nickname = nickname
+    }
+    
     override func loadView() {
         super.loadView()
         phoneNumberView = PhoneNumberView()
@@ -39,8 +64,30 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     // MARK: - PhoneNumberViewDelegate Methods
     
     func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
-        var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: self.userId)
-        self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+        
+        self.showActivityIndicator()
+        UserService.sharedInstance.signUp(self.username,
+            password: self.password,
+            firstName: self.firstName,
+            lastName: self.lastName,
+            avatar: self.avatar,
+            birthday: self.birthday,
+            nickname: self.nickname,
+            phoneNumber: mobileNumber,
+            success: { (user) -> Void in
+                self.hideActivityIndicator()
+                
+                var userEntity = user as User
+                var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: userEntity.userID)
+                self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+                self.hideActivityIndicator()
+                
+            }) { (mugError) -> Void in
+                self.hideActivityIndicator()
+                println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
+                var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                alertView.show()
+        }
     }
     
     func phoneNumberViewDidTapBackButton(view: PhoneNumberView!) {
@@ -63,10 +110,4 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-
-    init(userId: String) {
-        super.init(nibName: nil, bundle: nil)
-        self.userId = userId
-    }
-    
 }
