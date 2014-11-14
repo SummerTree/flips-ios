@@ -84,6 +84,10 @@ class NewFlipViewController: MugChatViewController,
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         
         registerForKeyboardNotifications()
+
+        if self.contacts.isEmpty {
+            self.contactPicker.becomeFirstResponder()
+        }
     }
     
     override func viewDidDisappear(animated: Bool) {
