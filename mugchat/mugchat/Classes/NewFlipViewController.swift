@@ -84,6 +84,9 @@ class NewFlipViewController: MugChatViewController,
         self.contactPicker.delegate = self
         self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
+        
+        self.nextButton.setTitleColor(UIColor.darkGray(), forState: .Normal)
+        self.nextButton.setTitleColor(UIColor.mediumGray(), forState: .Disabled)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -142,7 +145,6 @@ class NewFlipViewController: MugChatViewController,
         let hasContacts = contacts.count > 0
         let hasText = !flipTextField.text.isEmpty
         nextButton.enabled = hasContacts && hasText
-        nextButton.setTitleColor(nextButton.enabled ? .darkGray() : .mediumGray(), forState: .Normal)
     }
     
     // MARK: - Actions
