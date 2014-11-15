@@ -33,6 +33,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     private var currentInterfaceOrientation: AVCaptureVideoOrientation!
     
+    private var activityIndicator: UIActivityIndicatorView!
     private var previewView: AVCamPreviewView!
     private var avatarCropAreaView: CropOverlayView!
     private var frontCameraButtonView: UIView!
@@ -141,6 +142,14 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             microphoneButton.addTarget(self, action: "microphoneButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
             self.addSubview(microphoneButton)
         }
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        activityIndicator.setTranslatesAutoresizingMaskIntoConstraints(false)
+        activityIndicator.hidesWhenStopped = true
+        
+        self.addSubview(activityIndicator)
+        
+        activityIndicator.startAnimating()
     }
     
     
@@ -240,6 +249,10 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             }
         }
         
+        activityIndicator.mas_makeConstraints { (make) -> Void in
+            make.removeExisting = true
+            make.center.equalTo()(self)
+        }
     }
     
     private func initCamera() {
@@ -277,6 +290,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     var previewViewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
                     previewViewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                     previewViewLayer.connection.videoOrientation = self.currentInterfaceOrientation
+                    
+                    self.activityIndicator.stopAnimating()
                 })
             }
             
