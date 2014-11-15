@@ -19,7 +19,6 @@ extension UIViewController {
         setupWhiteNavBarWithoutButtons(title)
         
         var closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: "closeButtonTapped")
-        closeBarButton.tintColor = UIColor.orangeColor()
         self.navigationItem.leftBarButtonItem = closeBarButton
     }
     
@@ -27,7 +26,6 @@ extension UIViewController {
         setupWhiteNavBarWithoutButtons(title)
         
         var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
-        backBarButton.tintColor = UIColor.orangeColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }
     
@@ -35,7 +33,6 @@ extension UIViewController {
 		setupWhiteNavBarWithoutButtons(title)
 		
 		var backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "closeButtonTapped")
-		backBarButton.tintColor = UIColor.orangeColor()
 		self.navigationItem.leftBarButtonItem = backBarButton
 	}
 	
@@ -88,5 +85,6 @@ extension UIViewController {
     private func setNavBarColor() {
         self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.alpha = 0.9
+        self.navigationController?.navigationBar.tintColor = .mugOrange()
     }
 }
