@@ -34,12 +34,15 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     private var highlightedWordCurrentAssociatedImage: UIImage?
     
+    internal var words: [String]!
+    
     
     // MARK: - Init Methods
     
     init(composeTitle: String, words : [String]) {
         super.init(nibName: nil, bundle: nil)
         self.composeTitle = composeTitle
+        self.words = words
         
         self.initFlipWords(words)
         
@@ -288,7 +291,11 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
             self.showContentForHighlightedWord()
-//            self.openPreview() TODO: it was not working.
+            if (self.shouldShowPreviewButton()) {
+                // self.openPreview() TODO: it was not working.
+            } else {
+                self.composeBottomViewContainer.showAllFlipCreateMessage()
+            }
         } else {
             self.highlightedWordIndex = nextIndex
             let flipWord = self.flipWords[self.highlightedWordIndex]
@@ -398,6 +405,8 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
         let flipWord = flipWords[highlightedWordIndex]
         let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: self.highlightedWordCurrentAssociatedImage, flipAudio: nil)
+        confirmFlipViewController.title = self.composeTitle
+        confirmFlipViewController.showPreviewButton = self.shouldShowPreviewButton()
         confirmFlipViewController.delegate = self
         self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
     }

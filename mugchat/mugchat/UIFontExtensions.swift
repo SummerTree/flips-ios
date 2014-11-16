@@ -34,6 +34,10 @@ extension UIFont {
         return UIFont(name: "AvenirNext-Bold", size: size)!
     }
     
+    class func avenirNextBoldItalic(size: CGFloat) -> UIFont {
+        return UIFont(name: "AvenirNext-BoldItalic", size: size)!
+    }
+    
     class func flipLabelFont() -> UIFont {
         return UIFont.avenirNextBold(UIFont.HeadingSize.h1)
     }

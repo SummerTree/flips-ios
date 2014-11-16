@@ -17,6 +17,8 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     
     private let FLIP_CREATED_TEXT = NSLocalizedString("Flip Created", comment: "Flip Created")
     
+    private let BUILDER_ALL_FLIPS_CREATED_MESSAGE = NSLocalizedString("Oh snap! We're tapped!\nPress the \"+\" button to add some words to record, or check back later... we'll add more suggested words from time to time.", comment: "Oh snap!  We're tapped!\nPress the \"+\" button to add some words to record, or check back later... we'll add more suggested words from time to time.")
+    
     private var cameraButtonsView: UIView!
     private var takePictureButton: UIButton!
     private var captureAudioButton: UIButton!
@@ -224,6 +226,16 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     func showFlipCreateMessage() {
         self.bringSubviewToFront(self.builderFlipCreateLabel)
         self.builderFlipCreateLabel.hidden = false
+    }
+    
+    func showAllFlipCreateMessage() {
+        self.builderFlipCreateLabel.numberOfLines = 5
+        var text = NSMutableAttributedString(string: BUILDER_ALL_FLIPS_CREATED_MESSAGE)
+        text.addAttribute(NSFontAttributeName, value: UIFont.avenirNextBoldItalic(UIFont.HeadingSize.h5), range: NSMakeRange(0, 23))
+        text.addAttribute(NSFontAttributeName, value: UIFont.avenirNextBold(UIFont.HeadingSize.h6), range: NSMakeRange(23, text.length-23))
+        
+        self.builderFlipCreateLabel.attributedText = text
+        self.showFlipCreateMessage()
     }
     
     func hideFlipCreatedMessage() {

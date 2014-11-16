@@ -91,6 +91,8 @@ class NewFlipViewController: MugChatViewController,
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         
         registerForKeyboardNotifications()
+        
+        self.flipTextField.viewWillAppear()
 
         if self.contacts.isEmpty {
             self.contactPicker.becomeFirstResponder()

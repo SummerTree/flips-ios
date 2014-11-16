@@ -29,6 +29,14 @@ extension UIViewController {
         self.navigationItem.leftBarButtonItem = backBarButton
     }
     
+    func setupWhiteNavBarWithoutBackButtonWithRightDoneButton(title: String) {
+        setupWhiteNavBarWithoutButtons(title)
+        
+        var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonTapped")
+        doneButton.tintColor = UIColor.orangeColor()
+        self.navigationItem.rightBarButtonItem = doneButton
+    }
+    
 	func setupWhiteNavBarWithCancelButton(title: String) {
 		setupWhiteNavBarWithoutButtons(title)
 		
@@ -73,6 +81,10 @@ extension UIViewController {
     
     func closeButtonTapped() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func doneButtonTapped() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func backButtonTapped() {

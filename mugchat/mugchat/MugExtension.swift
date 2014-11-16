@@ -102,13 +102,9 @@ extension Mug {
         }
         
         let imageWidth = UIScreen.mainScreen().bounds.size.width
-        let imageSize = CGRectMake(0, 0, imageWidth, imageWidth)
+        let imageSize = CGSizeMake(imageWidth, imageWidth)
+        let noBackgroundImage = UIImage.imageWithColor(UIColor.avacado(), size:imageSize);
 
-        UIGraphicsBeginImageContext(imageSize.size)
-        UIImage.imageWithColor(UIColor.avacado()).drawInRect(imageSize)
-        let noBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
         return cacheHandler.saveImage(noBackgroundImage, withUrl: NO_BACKGROUND_IMAGE_NAME, isTemporary: false)
     }
     
