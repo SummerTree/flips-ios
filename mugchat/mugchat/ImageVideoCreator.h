@@ -17,6 +17,6 @@
 
 @interface ImageVideoCreator : NSObject
 
-- (NSString *)videoPathForMug:(Mug *)mug;
++ (NSString *)videoPathForMug:(Mug *)mug;
 
 @end

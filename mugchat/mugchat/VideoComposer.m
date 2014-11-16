@@ -48,7 +48,8 @@
     mugThree.mugID = @"id_three";
     mugThree.word = @"Three";
     mugThree.backgroundContentType = @(1);
-    mugThree.backgroundURL = @"https://mugchat-background.s3.amazonaws.com/c1ea1077-95ff-471c-abb3-c21205f53fff.jpg";
+//    mugThree.backgroundURL = @"https://mugchat-background.s3.amazonaws.com/c1ea1077-95ff-471c-abb3-c21205f53fff.jpg";
+    mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-3.jpg"] absoluteString];
     mugThree.soundURL = [[docsDir URLByAppendingPathComponent:@"recording-3.m4a"] absoluteString];
     [message addMug:mugThree];
 
@@ -58,6 +59,13 @@
     mugFour.backgroundContentType = @(2);
     mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-4.mov"] absoluteString];
     [message addMug:mugFour];
+
+    Mug *mugFive = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
+    mugFive.mugID = @"id_five";
+    mugFive.word = @"Five";
+    mugFive.backgroundContentType = @(1);
+//    mugFive.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-5.jpg"] absoluteString];
+    [message addMug:mugFive];
 
     NSLog(@"GENERATED VIDEO URL: %@", [self videoFromMugMessage:message]);
 
@@ -110,26 +118,17 @@
         flipInContext = [Mug MR_createEntity];
         flipInContext.word = word;
     }
-    if ([flipInContext isBackgroundContentTypeVideo]) {
-        NSLog(@"ENTER");
-        dispatch_group_enter(group);
-        [self prepareVideoAssetFromFlip:flipInContext completion:^(BOOL success, AVAsset *videoAsset) {
-            if (success) {
-                track = videoAsset;
-            }
-            NSLog(@"LEAVE");
-            dispatch_group_leave(group);
-        }];
-    } else {
-        ImageVideoCreator *imageVideoCreator = [[ImageVideoCreator alloc] init];
-        NSURL *videoURL = [NSURL fileURLWithPath:[imageVideoCreator videoPathForMug:flipInContext]];
-        track = [AVAsset assetWithURL:videoURL];
-    }
+
+    dispatch_group_enter(group);
+    [self prepareVideoAssetFromFlip:flipInContext completion:^(BOOL success, AVAsset *videoAsset) {
+        if (success) {
+            track = videoAsset;
+        }
+        dispatch_group_leave(group);
+    }];
 
     // Timeout in 5 seconds
     dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
-
-    NSLog(@"CONTINUE");
 
     return track;
 }
@@ -194,20 +193,34 @@
 
 - (void)prepareVideoAssetFromFlip:(Mug *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
 {
-//    NSString *backgroundContentLocalPath = [mug backgroundContentLocalPath];
-    NSURL *videoURL = [NSURL URLWithString:flip.backgroundURL];
+    NSURL *videoURL;
+
+    if ([flip isBackgroundContentTypeVideo]) {
+        //    NSString *backgroundContentLocalPath = [mug backgroundContentLocalPath];
+        videoURL = [NSURL URLWithString:flip.backgroundURL];
+    } else {
+        videoURL = [NSURL fileURLWithPath:[ImageVideoCreator videoPathForMug:flip]];
+    }
 
     AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:videoURL options:nil];
     AVAssetTrack *videoTrack = [self videoTrackFromAsset:videoAsset];
 
-    AVMutableComposition *composition = [self compositionFromAsset:videoAsset];
+    AVMutableComposition *composition;
+
+    if (flip.soundURL) {
+        AVAsset *audioAsset = [AVAsset assetWithURL:[NSURL URLWithString:flip.soundURL]];
+        composition = [self compositionFromVideoAsset:videoAsset audioAsset:audioAsset];
+    } else {
+        composition = [self compositionFromVideoAsset:videoAsset];
+    }
+
     AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack withText:flip.word];
 
     NSURL *outputURL = [self tempOutputFileURL];
 
     /// exporting
     AVAssetExportSession *exportSession;
-    exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality] ;
+    exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
     exportSession.videoComposition = videoComposition;
     exportSession.outputURL = outputURL;
     exportSession.outputFileType = AVFileTypeQuickTimeMovie;
@@ -312,6 +325,7 @@
     return videoSize;
 }
 
+
 #pragma mark - Video manipulation
 
 - (CALayer *)squareCroppedVideoLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
@@ -328,11 +342,40 @@
     if ([self orientationForTrack:videoTrack] == UIInterfaceOrientationLandscapeLeft) {
         CGAffineTransform rotation = CGAffineTransformMakeRotation(-M_PI_2);
         CGAffineTransform translateToCenter = CGAffineTransformMakeTranslation(CGRectGetWidth(videoLayer.frame), CGRectGetHeight(videoLayer.frame));
-        CGAffineTransform mixedTransform = CGAffineTransformConcat(rotation, translateToCenter);
-        [videoLayer setAffineTransform:mixedTransform];
+
+        videoLayer.affineTransform = CGAffineTransformConcat(rotation, translateToCenter);
     }
 
     return videoLayer;
+}
+
+- (AVMutableVideoComposition *)videoCompositionFromImage:(UIImage *)image withText:(NSString *)text
+{
+    CGSize compositionSize = image.size;
+
+    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoComposition];
+    videoComposition.renderSize = compositionSize;
+    videoComposition.frameDuration = CMTimeMake(1, 30);
+
+
+    CALayer *imageLayer = [CALayer layer];
+    imageLayer.contents = CFBridgingRelease(image.CGImage);
+    imageLayer.frame = CGRectMake(0, 0, compositionSize.width, compositionSize.height);
+
+    CATextLayer *wordLayer = [self layerForText:text];
+    wordLayer.frame = CGRectMake(0, 50, compositionSize.width, 50);
+
+    [imageLayer addSublayer:wordLayer];
+    [wordLayer display];
+
+    videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithAdditionalLayer:imageLayer asTrackID:kCMPersistentTrackID_Invalid];
+
+    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMake(30, 30));
+
+    videoComposition.instructions = @[instruction];
+
+    return videoComposition;
 }
 
 - (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack withText:(NSString *)text
@@ -340,19 +383,22 @@
     CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
 
     AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoComposition];
-    videoComposition.renderSize  = croppedVideoSize;
+    videoComposition.renderSize = croppedVideoSize;
     videoComposition.frameDuration = CMTimeMake(1, 30);
 
     CALayer *parentLayer = [self squareCroppedVideoLayer:[CALayer layer] fromTrack:videoTrack];
-    CALayer *videoLayer = [self orientationFixedVideoLayer:[CALayer layer] fromTrack:videoTrack];
+
+    CALayer *videoLayer = [CALayer layer];
+    videoLayer = [self orientationFixedVideoLayer:videoLayer fromTrack:videoTrack];
+
     CATextLayer *wordLayer = [self layerForText:text];
     wordLayer.frame = CGRectMake(0, 50, croppedVideoSize.width, 50);
 
-    videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
     [parentLayer addSublayer:videoLayer];
     [parentLayer addSublayer:wordLayer];
     [wordLayer display];
     videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
+    videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
 
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     instruction.timeRange = CMTimeRangeMake(kCMTimeZero, videoTrack.asset.duration);
@@ -364,19 +410,21 @@
     return videoComposition;
 }
 
-- (AVMutableComposition *)compositionFromAsset:(AVAsset *)videoAsset
+- (AVMutableComposition *)compositionFromVideoAsset:(AVAsset *)videoAsset
+{
+    return [self compositionFromVideoAsset:videoAsset audioAsset:videoAsset];
+}
+
+- (AVMutableComposition *)compositionFromVideoAsset:(AVAsset *)videoAsset audioAsset:(AVAsset *)audioAsset
 {
     AVMutableComposition *composition = [AVMutableComposition composition];
+    CMTime compositionDuration = videoAsset.duration; // Use video length
+    NSError *error;
 
     AVMutableCompositionTrack *compositionVideoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo
                                                                                 preferredTrackID:kCMPersistentTrackID_Invalid];
 
-    AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio
-                                                                                preferredTrackID:kCMPersistentTrackID_Invalid];
-
-    NSError *error;
-
-    [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
+    [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, compositionDuration)
                                    ofTrack:[self videoTrackFromAsset:videoAsset]
                                     atTime:kCMTimeZero
                                      error:&error];
@@ -386,16 +434,22 @@
         error = nil;
     }
 
-    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
-                                   ofTrack:[self audioTrackFromAsset:videoAsset]
-                                    atTime:kCMTimeZero
-                                     error:&error];
+    AVAssetTrack *audioTrack = [self audioTrackFromAsset:audioAsset];
+    if (audioTrack) {
+        AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio
+                                                                                    preferredTrackID:kCMPersistentTrackID_Invalid];
 
-    if (error) {
-        NSLog(@"Could not insert audio track: %@", error.localizedDescription);
-        error = nil;
+        [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, compositionDuration)
+                                       ofTrack:audioTrack
+                                        atTime:kCMTimeZero
+                                         error:&error];
+
+        if (error) {
+            NSLog(@"Could not insert audio track: %@", error.localizedDescription);
+            error = nil;
+        }
     }
-    
+
     return composition;
 }
 
