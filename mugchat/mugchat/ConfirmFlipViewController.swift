@@ -20,6 +20,8 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     private var previewFlipTimer: NSTimer!
     private var isPlaying = true
     
+    var showPreviewButton = true
+    
     private var flipWord: String!
     private var flipImage: UIImage?
     private var flipAudioURL: NSURL?
@@ -58,12 +60,14 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupWhiteNavBarWithoutButtons(NSLocalizedString("MugBoys", comment: "MugBoys"))
+        self.setupWhiteNavBarWithoutButtons(self.title!)
         
-        var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
-        previewBarButton.enabled = false
-        previewBarButton.tintColor = UIColor.orangeColor()
-        self.navigationItem.rightBarButtonItem = previewBarButton
+        if (showPreviewButton) {
+            var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+            previewBarButton.enabled = false
+            previewBarButton.tintColor = UIColor.orangeColor()
+            self.navigationItem.rightBarButtonItem = previewBarButton
+        }
         
         self.setNeedsStatusBarAppearanceUpdate()
         
