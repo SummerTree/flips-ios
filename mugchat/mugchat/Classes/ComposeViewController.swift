@@ -34,12 +34,15 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     private var highlightedWordCurrentAssociatedImage: UIImage?
     
+    internal var words: [String]!
+    
     
     // MARK: - Init Methods
     
     init(composeTitle: String, words : [String]) {
         super.init(nibName: nil, bundle: nil)
         self.composeTitle = composeTitle
+        self.words = words
         
         self.initFlipWords(words)
         

@@ -10,7 +10,6 @@
 // the license agreement.
 //
 
-
 class BuilderViewController : ComposeViewController, BuilderIntroductionViewControllerDelegate {
     
     private var builderIntroductionViewController: BuilderIntroductionViewController!
@@ -77,7 +76,8 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     // MARK: - FlipMessageWordListView Delegate
     
     override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
-        println("flipMessageWordListViewDidTapAddWordButton")
+        let builderAddWordTableViewController = BuilderAddWordTableViewController(words: words)
+        self.navigationController?.pushViewController(builderAddWordTableViewController, animated: true)
     }
 
 }

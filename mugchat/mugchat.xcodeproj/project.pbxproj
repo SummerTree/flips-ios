@@ -45,6 +45,7 @@
 		57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
 		70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
 		7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
+		702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */; };
 		7033584619E4160B0030CF11 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584519E4160B0030CF11 /* SettingsView.swift */; };
 		7033584819E462A20030CF11 /* PubNubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584719E462A20030CF11 /* PubNubService.swift */; };
 		7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */; };
@@ -221,6 +222,7 @@
 		57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeView.swift; sourceTree = "<group>"; };
 		70057E9319DADF59004343ED /* DeviceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHelper.swift; sourceTree = "<group>"; };
+		702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderAddWordTableViewController.swift; sourceTree = "<group>"; };
 		7033584519E4160B0030CF11 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7033584719E462A20030CF11 /* PubNubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PubNubService.swift; sourceTree = "<group>"; };
 		7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberInputPhoneView.swift; sourceTree = "<group>"; };
@@ -873,6 +875,7 @@
 		7A0D6CED19D4961C00E39A1B /* Builder */ = {
 			isa = PBXGroup;
 			children = (
+				702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */,
 				7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */,
 				7A0D6CF019D4966700E39A1B /* BuilderViewController.swift */,
 			);
@@ -1394,6 +1397,7 @@
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
+				702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
 				F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */,
