@@ -130,9 +130,10 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func viewWillDisappear() {
-        
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        
+        self.passwordTextField.text = nil
     }
     
     func showValidationErrorInCredentialFields() {
@@ -235,9 +236,6 @@ class LoginView : UIView, UITextFieldDelegate {
         passwordTextField.textColor = UIColor.whiteColor()
         passwordTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         passwordTextField.secureTextEntry = true
-        #if DEBUG
-        passwordTextField.text = "Password1"
-        #endif
         passwordTextField.attributedPlaceholder = NSAttributedString(string:NSLocalizedString("Password", comment: "Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
         credentialsView.addSubview(passwordTextField)
         
