@@ -12,6 +12,6 @@
 
 public class MugchatService : NSObject {
     
-    let HOST: String = "http://flipsdev.localtunnel.me"
+    let HOST: String = "http://mugchat-dev.arctouch.com"
 
 }
