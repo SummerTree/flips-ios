@@ -154,6 +154,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     // MARK: - ProgressBar Handler
     
     func startRecordingProgressBar() {
+        self.bringSubviewToFront(self.captureProgressBar)
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
