@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71B1A168CAC0011B212 /* BorderedView.swift */; };
+		072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
 		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
 		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
@@ -45,6 +47,7 @@
 		57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
 		70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
 		7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
+		702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */; };
 		7033584619E4160B0030CF11 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584519E4160B0030CF11 /* SettingsView.swift */; };
 		7033584819E462A20030CF11 /* PubNubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584719E462A20030CF11 /* PubNubService.swift */; };
 		7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */; };
@@ -168,10 +171,14 @@
 		A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F285B26C1A102190002DEEC2 /* CachingService.swift */; };
+		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
+		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		072AD71B1A168CAC0011B212 /* BorderedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BorderedView.swift; path = Classes/BorderedView.swift; sourceTree = "<group>"; };
+		072AD71E1A16B01B0011B212 /* NextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextButton.swift; path = Classes/NextButton.swift; sourceTree = "<group>"; };
 		0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactTableViewCell.swift; path = Classes/ContactTableViewCell.swift; sourceTree = "<group>"; };
 		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
@@ -221,6 +228,7 @@
 		57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeView.swift; sourceTree = "<group>"; };
 		70057E9319DADF59004343ED /* DeviceHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHelper.swift; sourceTree = "<group>"; };
+		702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderAddWordTableViewController.swift; sourceTree = "<group>"; };
 		7033584519E4160B0030CF11 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7033584719E462A20030CF11 /* PubNubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PubNubService.swift; sourceTree = "<group>"; };
 		7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNumberInputPhoneView.swift; sourceTree = "<group>"; };
@@ -359,6 +367,8 @@
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F285B26C1A102190002DEEC2 /* CachingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
+		F29324701A1583B700355A4D /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		F29324741A19A36700355A4D /* FlipPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipPlayerItem.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
 		F2BF59801A0166CF00C44CC6 /* VideoComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoComposer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -376,9 +386,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072AD71D1A16B0040011B212 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				072AD71E1A16B01B0011B212 /* NextButton.swift */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
 		0757ECAB1A116A1E00D0277C /* Contact */ = {
 			isa = PBXGroup;
 			children = (
+				072AD71B1A168CAC0011B212 /* BorderedView.swift */,
 				0757ECB01A11A61600D0277C /* ContactPhotoView.swift */,
 				0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */,
 				07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */,
@@ -569,6 +588,7 @@
 		704E110B19D08E4700D2BB88 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				072AD71D1A16B0040011B212 /* Buttons */,
 				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
@@ -577,6 +597,7 @@
 				7A28ADC019D4428A00887831 /* Custom */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
+				F293246D1A15833D00355A4D /* Player */,
 				705B3DDC1A03BBBA00E0D3E9 /* Preview */,
 				7056FE5719D8822F00BD6571 /* Privacy Policy */,
 				7033584419E415E60030CF11 /* Settings */,
@@ -873,6 +894,7 @@
 		7A0D6CED19D4961C00E39A1B /* Builder */ = {
 			isa = PBXGroup;
 			children = (
+				702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */,
 				7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */,
 				7A0D6CF019D4966700E39A1B /* BuilderViewController.swift */,
 			);
@@ -1126,6 +1148,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F293246D1A15833D00355A4D /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				F29324701A1583B700355A4D /* PlayerView.swift */,
+				F29324741A19A36700355A4D /* FlipPlayerItem.swift */,
+			);
+			name = Player;
+			sourceTree = "<group>";
+		};
 		F2BF597E1A01632500C44CC6 /* VideoComposer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1263,6 +1294,7 @@
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
+				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
@@ -1298,6 +1330,7 @@
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
 				7AE044FE1A0CE49C00C68313 /* VideoHelper.swift in Sources */,
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
+				F29324711A1583B700355A4D /* PlayerView.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */,
 				7ACBBECF1A00290B00A7109C /* Mug.m in Sources */,
@@ -1343,7 +1376,6 @@
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
-				70DAB34C1A13734E0044AEC1 /* BuilderIntroductionView.swift in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7AFB719E1A000537002695AC /* Device.m in Sources */,
@@ -1354,6 +1386,7 @@
 				70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */,
 				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
+				072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */,
 				07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* MyFlipsViewCell.swift in Sources */,
@@ -1362,6 +1395,7 @@
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* MugchatService.swift in Sources */,
 				70ABC7EA1A09376100A7085A /* SettingsTableViewCell.swift in Sources */,
+				F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
@@ -1394,6 +1428,7 @@
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
+				702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
 				F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */,

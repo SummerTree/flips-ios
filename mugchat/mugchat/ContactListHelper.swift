@@ -63,11 +63,13 @@ public class ContactListHelper {
             let phones: RHMultiStringValue = person.phoneNumbers
 
             for (var i:UInt = 0; i < phones.count(); i++) {
-                var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
-                let phoneNumber: String! = phones.valueAtIndex(i) as String
-                let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
-                contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-                contacts.append(contact)
+                if (person.firstName != nil) {
+                    var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
+                    let phoneNumber: String! = phones.valueAtIndex(i) as String
+                    let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
+                    contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+                    contacts.append(contact)
+                }
             }
         }
         

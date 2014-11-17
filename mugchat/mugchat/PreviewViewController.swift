@@ -39,19 +39,8 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
         
         self.previewView.viewDidLoad()
         
-        let videoComposer = VideoComposer()
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let flips = self.createFlipsFromFlipWords()
-            let videoAsset = videoComposer.videoFromMugs(flips)
-
-            if (videoAsset != nil) {
-                self.previewView.setVideoURL(NSURL(fileURLWithPath: videoAsset.path!)!)
-            } else {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.previewView.showVideoCreationError()
-                })
-            }
-        })
+        let flips = self.createFlipsFromFlipWords()
+        self.previewView.setupVideoPlayerWithFlips(flips)
     }
     
     override func viewWillAppear(animated: Bool) {

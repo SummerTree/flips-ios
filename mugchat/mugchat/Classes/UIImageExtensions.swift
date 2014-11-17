@@ -111,19 +111,23 @@ extension UIImage {
     }
     
     class func imageWithColor(color: UIColor) -> UIImage {
-        let rect = CGRectMake(0.0, 0.0, 1.0, 1.0)
-        UIGraphicsBeginImageContext(rect.size)
+        return UIImage.imageWithColor(color, size: CGSizeMake(1.0, 1.0))
+    }
+
+    class func imageWithColor(color: UIColor, size: CGSize) -> UIImage {
+        let rect = CGRectMake(0.0, 0.0, size.width, size.height)
+        UIGraphicsBeginImageContext(size)
         let context = UIGraphicsGetCurrentContext()
-        
+
         CGContextSetFillColorWithColor(context, color.CGColor)
         CGContextFillRect(context, rect)
-        
+
         let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         return image
     }
-    
+
     class func emptyFlipImage() -> UIImage {
         return UIImage.imageWithColor(UIColor.avacado())
     }
