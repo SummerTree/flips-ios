@@ -560,6 +560,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             flipAudio: fileURL)
         
         confirmFlipViewController.delegate = self
+        confirmFlipViewController.title = self.composeTitle
         self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
     }
     
