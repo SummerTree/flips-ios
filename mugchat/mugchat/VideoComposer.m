@@ -12,7 +12,6 @@
 
 #import "VideoComposer.h"
 #import "Mug.h"
-#import <CoreData+MagicalRecord.h>
 
 #import "Flips-Swift.h"
 
@@ -27,115 +26,6 @@
     }
 
     return self;
-}
-
-- (NSArray *)videoPartsFromTestFlips
-{
-    NSURL *docsDir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-
-    NSManagedObjectContext *moc = [NSManagedObjectContext MR_contextForCurrentThread];
-
-    NSEntityDescription *messageDescription = [NSEntityDescription entityForName:@"MugMessage" inManagedObjectContext:moc];
-    NSEntityDescription *mugDescription = [NSEntityDescription entityForName:@"Mug" inManagedObjectContext:moc];
-
-    MugMessage *message = [[MugMessage alloc] initWithEntity:messageDescription insertIntoManagedObjectContext:moc];
-
-    Mug *mugOne = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugOne.mugID = @"id_one";
-    mugOne.word = @"One";
-    mugOne.backgroundContentType = @(2);
-    mugOne.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-1.mov"] absoluteString];
-    [message addMug:mugOne];
-
-    Mug *mugTwo = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugTwo.mugID = @"id_two";
-    mugTwo.word = @"Two";
-    mugTwo.backgroundContentType = @(2);
-    mugTwo.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2.mov"] absoluteString];
-    [message addMug:mugTwo];
-
-    Mug *mugThree = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugThree.mugID = @"id_three";
-    mugThree.word = @"Three";
-    mugThree.backgroundContentType = @(1);
-    //    mugThree.backgroundURL = @"https://mugchat-background.s3.amazonaws.com/c1ea1077-95ff-471c-abb3-c21205f53fff.jpg";
-    mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"6e22c85d-b416-44fc-a43f-710097ca5360.jpg"] absoluteString];
-    mugThree.soundURL = [[docsDir URLByAppendingPathComponent:@"recording-3.m4a"] absoluteString];
-    [message addMug:mugThree];
-
-    Mug *mugFour = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFour.mugID = @"id_four";
-    mugFour.word = @"Four";
-    mugFour.backgroundContentType = @(2);
-    mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-4.mov"] absoluteString];
-    [message addMug:mugFour];
-
-    Mug *mugFive = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFive.mugID = @"id_five";
-    mugFive.word = @"Five";
-    mugFive.backgroundContentType = @(1);
-    //    mugFive.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-5.jpg"] absoluteString];
-    [message addMug:mugFive];
-
-    NSArray *videoParts = [self videoPartsFromFlips:[message.mugs array]];
-
-    [moc rollback];
-
-    return videoParts;
-}
-
-- (void)testCreatingFourWordsVideo
-{
-    NSURL *docsDir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-
-    NSManagedObjectContext *moc = [NSManagedObjectContext MR_defaultContext];
-
-    NSEntityDescription *messageDescription = [NSEntityDescription entityForName:@"MugMessage" inManagedObjectContext:moc];
-    NSEntityDescription *mugDescription = [NSEntityDescription entityForName:@"Mug" inManagedObjectContext:moc];
-
-    MugMessage *message = [[MugMessage alloc] initWithEntity:messageDescription insertIntoManagedObjectContext:moc];
-
-    Mug *mugOne = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugOne.mugID = @"id_one";
-    mugOne.word = @"One";
-    mugOne.backgroundContentType = @(2);
-    mugOne.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-1.mov"] absoluteString];
-    [message addMug:mugOne];
-
-    Mug *mugTwo = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugTwo.mugID = @"id_two";
-    mugTwo.word = @"Two";
-    mugTwo.backgroundContentType = @(2);
-    mugTwo.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2.mov"] absoluteString];
-    [message addMug:mugTwo];
-
-    Mug *mugThree = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugThree.mugID = @"id_three";
-    mugThree.word = @"Three";
-    mugThree.backgroundContentType = @(1);
-    //    mugThree.backgroundURL = @"https://mugchat-background.s3.amazonaws.com/c1ea1077-95ff-471c-abb3-c21205f53fff.jpg";
-    mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"6e22c85d-b416-44fc-a43f-710097ca5360.jpg"] absoluteString];
-    mugThree.soundURL = [[docsDir URLByAppendingPathComponent:@"recording-3.m4a"] absoluteString];
-    [message addMug:mugThree];
-
-    Mug *mugFour = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFour.mugID = @"id_four";
-    mugFour.word = @"Four";
-    mugFour.backgroundContentType = @(1);
-//    mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-4.mov"] absoluteString];
-    mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"3056f6ec-cf5f-4260-85fa-4df067547ba6.jpg"] absoluteString];
-    [message addMug:mugFour];
-
-    Mug *mugFive = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFive.mugID = @"id_five";
-    mugFive.word = @"Five";
-    mugFive.backgroundContentType = @(1);
-    //    mugFive.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-5.jpg"] absoluteString];
-    [message addMug:mugFive];
-
-    NSLog(@"GENERATED VIDEO URL: %@", [self videoFromMugMessage:message]);
-
-    [moc rollback];
 }
 
 - (NSURL *)videoFromMugs:(NSArray *)mugs

@@ -25,7 +25,4 @@
 
 - (NSArray *)videoPartsFromFlips:(NSArray *)flips;
 
-- (NSArray *)videoPartsFromTestFlips;
-- (void)testCreatingFourWordsVideo;
-
 @end
