@@ -10,19 +10,10 @@
 // the license agreement.
 //
 
-#import <Foundation/Foundation.h>
-#import <AVFoundation/AVFoundation.h>
-#import "MugMessage.h"
+import UIKit
 
+class FlipPlayerItem: AVPlayerItem {
 
-@interface VideoComposer : NSObject
+    var order: Int!
 
-@property (nonatomic) BOOL renderOverlays;
-
-- (NSURL *)videoFromMugs:(NSArray *)mugs;
-- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
-- (AVAsset *)videoFromMug:(Mug *)mug;
-
-- (NSArray *)videoPartsFromFlips:(NSArray *)flips;
-
-@end
+}

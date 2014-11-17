@@ -23,7 +23,7 @@ class ContactDataSource : BaseDataSource {
     
     // MARK: - CoreData Creator Methods
     
-    private func createEntityWith(firstName: String, lastName: String, phoneNumber: String, phoneType: String) -> Contact {
+    private func createEntityWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
         var entity: Contact! = Contact.MR_createEntity() as Contact
 
         entity.createdAt = NSDate()
@@ -32,7 +32,7 @@ class ContactDataSource : BaseDataSource {
         return entity
     }
     
-    private func fillContact(contact: Contact, firstName: String, lastName: String, phoneNumber: String, phoneType: String) {
+    private func fillContact(contact: Contact, firstName: String, lastName: String?, phoneNumber: String, phoneType: String) {
         contact.firstName = firstName
         contact.lastName = lastName
         contact.phoneNumber = phoneNumber
@@ -43,7 +43,7 @@ class ContactDataSource : BaseDataSource {
     
     // MARK: - Public Methods
     
-    func createOrUpdateContactWith(firstName: String, lastName: String, phoneNumber: String, phoneType: String) -> Contact {
+    func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
 
         var contact = self.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         

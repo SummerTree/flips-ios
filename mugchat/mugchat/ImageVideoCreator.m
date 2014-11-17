@@ -111,6 +111,8 @@
     CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
 }
 
+
+
 - (CVPixelBufferRef) pixelBufferFromCGImage: (CGImageRef) image
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -129,12 +131,10 @@
                                                  CGImageGetWidth(image),
                                                  CGImageGetHeight(image),
                                                  8,
-                                                 4 * CGImageGetWidth(image),
+                                                 CVPixelBufferGetBytesPerRow(pxbuffer),
                                                  rgbColorSpace,
                                                  kCGImageAlphaNoneSkipFirst);
-    
-    CGContextConcatCTM(context, CGAffineTransformMakeRotation(0));
-    
+
     CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
     CGColorSpaceRelease(rgbColorSpace);
     CGContextRelease(context);
