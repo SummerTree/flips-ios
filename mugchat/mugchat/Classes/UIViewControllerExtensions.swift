@@ -19,7 +19,6 @@ extension UIViewController {
         setupWhiteNavBarWithoutButtons(title)
         
         var closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: "closeButtonTapped")
-        closeBarButton.tintColor = UIColor.orangeColor()
         self.navigationItem.leftBarButtonItem = closeBarButton
     }
     
@@ -27,15 +26,21 @@ extension UIViewController {
         setupWhiteNavBarWithoutButtons(title)
         
         var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
-        backBarButton.tintColor = UIColor.orangeColor()
         self.navigationItem.leftBarButtonItem = backBarButton
+    }
+    
+    func setupWhiteNavBarWithoutBackButtonWithRightDoneButton(title: String) {
+        setupWhiteNavBarWithoutButtons(title)
+        
+        var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonTapped")
+        doneButton.tintColor = UIColor.orangeColor()
+        self.navigationItem.rightBarButtonItem = doneButton
     }
     
 	func setupWhiteNavBarWithCancelButton(title: String) {
 		setupWhiteNavBarWithoutButtons(title)
 		
 		var backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "closeButtonTapped")
-		backBarButton.tintColor = UIColor.orangeColor()
 		self.navigationItem.leftBarButtonItem = backBarButton
 	}
 	
@@ -78,6 +83,10 @@ extension UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func doneButtonTapped() {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     func backButtonTapped() {
         self.navigationController?.popViewControllerAnimated(true)
     }
@@ -88,5 +97,6 @@ extension UIViewController {
     private func setNavBarColor() {
         self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.alpha = 0.9
+        self.navigationController?.navigationBar.tintColor = .mugOrange()
     }
 }

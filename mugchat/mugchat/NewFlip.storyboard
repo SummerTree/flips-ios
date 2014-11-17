@@ -39,7 +39,7 @@
                                     <constraint firstAttribute="height" priority="750" constant="56" id="xKP-Wf-aH5"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View" customClass="TopBorderedView" customModule="Flips" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98x-j1-QcY" customClass="JoinStringsTextField" customModule="Flips" customModuleProvider="target">
@@ -51,19 +51,11 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="wbx-sL-NPb" id="OmL-3E-gAQ"/>
-                                        </connections>
                                     </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YYl-cb-dw6">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="35" placeholderIntrinsicHeight="34" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YYl-cb-dw6" userLabel="Next" customClass="NextButton" customModule="Flips" customModuleProvider="target">
                                         <rect key="frame" x="549" y="8" width="35" height="34"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="35" id="Wiy-kC-IEQ"/>
-                                            <constraint firstAttribute="height" constant="34" id="cv3-gN-3jf"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
-                                        <state key="normal" title="Next">
-                                            <color key="titleColor" red="0.84705882349999995" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -101,7 +93,7 @@
                         <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
                         <outlet property="flipTextFieldHeightConstraint" destination="NbK-k6-HWN" id="QWc-bd-1Jw"/>
                         <outlet property="flipView" destination="Q7T-V3-eBo" id="rwb-aP-tVr"/>
-                        <outlet property="nextButtonAction" destination="YYl-cb-dw6" id="W18-gm-lJG"/>
+                        <outlet property="nextButton" destination="YYl-cb-dw6" id="lbW-3t-WzR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xjk-R7-ENW" userLabel="First Responder" sceneMemberID="firstResponder"/>
