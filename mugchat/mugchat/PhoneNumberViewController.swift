@@ -66,27 +66,34 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
         
         self.showActivityIndicator()
-        UserService.sharedInstance.signUp(self.username,
-            password: self.password,
-            firstName: self.firstName,
-            lastName: self.lastName,
-            avatar: self.avatar,
-            birthday: self.birthday,
-            nickname: self.nickname,
-            phoneNumber: mobileNumber,
-            success: { (user) -> Void in
-                self.hideActivityIndicator()
-                
-                var userEntity = user as User
-                var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: userEntity.userID)
-                self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
-                self.hideActivityIndicator()
-                
-            }) { (mugError) -> Void in
-                self.hideActivityIndicator()
-                println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
-                var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
-                alertView.show()
+        
+        if (self.userId == nil) {
+            UserService.sharedInstance.signUp(self.username,
+                password: self.password,
+                firstName: self.firstName,
+                lastName: self.lastName,
+                avatar: self.avatar,
+                birthday: self.birthday,
+                nickname: self.nickname,
+                phoneNumber: mobileNumber,
+                success: { (user) -> Void in
+                    self.hideActivityIndicator()
+                    
+                    var userEntity = user as User
+                    var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: userEntity.userID)
+                    self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
+                    self.hideActivityIndicator()
+                    
+                }) { (mugError) -> Void in
+                    self.hideActivityIndicator()
+                    println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
+                    var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                    alertView.show()
+            }
+        } else {
+            self.hideActivityIndicator()
+            var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: self.userId)
+            self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }
     }
     

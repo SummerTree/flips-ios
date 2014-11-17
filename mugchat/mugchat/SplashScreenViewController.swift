@@ -61,7 +61,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (success) {
                                 let authenticatedUser = AuthenticationHelper.sharedInstance.userInSession
-                                if (authenticatedUser.device == nil) {
+                                if (authenticatedUser.device.isVerified.integerValue == 0) {
                                     self.openPhoneNumberController(authenticatedUser.userID)
                                 } else {
                                     self.openInboxViewController()
