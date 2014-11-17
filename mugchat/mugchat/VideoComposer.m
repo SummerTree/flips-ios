@@ -12,81 +12,42 @@
 
 #import "VideoComposer.h"
 #import "Mug.h"
-#import <CoreData+MagicalRecord.h>
 
 #import "Flips-Swift.h"
 
 @implementation VideoComposer
 
-
-- (void)testCreatingFourWordsVideo
+- (instancetype)init
 {
-    NSURL *docsDir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    self = [super init];
 
-    NSManagedObjectContext *moc = [NSManagedObjectContext MR_defaultContext];
+    if (self) {
+        self.renderOverlays = YES;
+    }
 
-    NSEntityDescription *messageDescription = [NSEntityDescription entityForName:@"MugMessage" inManagedObjectContext:moc];
-    NSEntityDescription *mugDescription = [NSEntityDescription entityForName:@"Mug" inManagedObjectContext:moc];
-
-    MugMessage *message = [[MugMessage alloc] initWithEntity:messageDescription insertIntoManagedObjectContext:moc];
-
-    Mug *mugOne = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugOne.mugID = @"id_one";
-    mugOne.word = @"One";
-    mugOne.backgroundContentType = @(2);
-    mugOne.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-1.mov"] absoluteString];
-    [message addMug:mugOne];
-
-    Mug *mugTwo = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugTwo.mugID = @"id_two";
-    mugTwo.word = @"Two";
-    mugTwo.backgroundContentType = @(2);
-    mugTwo.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-2.mov"] absoluteString];
-    [message addMug:mugTwo];
-
-    Mug *mugThree = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugThree.mugID = @"id_three";
-    mugThree.word = @"Three";
-    mugThree.backgroundContentType = @(1);
-//    mugThree.backgroundURL = @"https://mugchat-background.s3.amazonaws.com/c1ea1077-95ff-471c-abb3-c21205f53fff.jpg";
-    mugThree.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-3.jpg"] absoluteString];
-    mugThree.soundURL = [[docsDir URLByAppendingPathComponent:@"recording-3.m4a"] absoluteString];
-    [message addMug:mugThree];
-
-    Mug *mugFour = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFour.mugID = @"id_four";
-    mugFour.word = @"Four";
-    mugFour.backgroundContentType = @(2);
-    mugFour.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-4.mov"] absoluteString];
-    [message addMug:mugFour];
-
-    Mug *mugFive = [[Mug alloc] initWithEntity:mugDescription insertIntoManagedObjectContext:moc];
-    mugFive.mugID = @"id_five";
-    mugFive.word = @"Five";
-    mugFive.backgroundContentType = @(1);
-//    mugFive.backgroundURL = [[docsDir URLByAppendingPathComponent:@"recording-5.jpg"] absoluteString];
-    [message addMug:mugFive];
-
-    NSLog(@"GENERATED VIDEO URL: %@", [self videoFromMugMessage:message]);
-
-    [moc rollback];
+    return self;
 }
-
-
 
 - (NSURL *)videoFromMugs:(NSArray *)mugs
 {
-    NSMutableArray *messageParts = [NSMutableArray array];
+    NSArray *messageParts = [self videoPartsFromFlips:mugs];
     
-    for (Mug *mug in mugs) {
-        AVAsset *videoTrack = [self videoFromMug:mug];
-        
+    return [self videoJoiningParts:messageParts];
+}
+
+- (NSArray *)videoPartsFromFlips:(NSArray *)flips
+{
+    NSMutableArray *messageParts = [NSMutableArray array];
+
+    for (Mug *flip in flips) {
+        AVAsset *videoTrack = [self videoFromMug:flip];
+
         if (videoTrack) {
             [messageParts addObject:videoTrack];
         }
     }
-    
-    return [self videoJoiningParts:messageParts];
+
+    return [NSArray arrayWithArray:messageParts];
 }
 
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage
@@ -390,13 +351,15 @@
 
     CALayer *videoLayer = [CALayer layer];
     videoLayer = [self orientationFixedVideoLayer:videoLayer fromTrack:videoTrack];
-
-    CATextLayer *wordLayer = [self layerForText:text];
-    wordLayer.frame = CGRectMake(0, 50, croppedVideoSize.width, 50);
-
     [parentLayer addSublayer:videoLayer];
-    [parentLayer addSublayer:wordLayer];
-    [wordLayer display];
+
+    if (self.renderOverlays) {
+        CATextLayer *wordLayer = [self layerForText:text];
+        wordLayer.frame = CGRectMake(0, 50, croppedVideoSize.width, 50);
+        [parentLayer addSublayer:wordLayer];
+        [wordLayer display];
+    }
+
     videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
     videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
 

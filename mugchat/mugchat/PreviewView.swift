@@ -23,9 +23,8 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     var delegate: PreviewViewDelegate?
     
     private var flipContainerView: UIView!
-    private var moviePlayer: MPMoviePlayerController!
-    private var flipVideoURL: NSURL!
     
+    private var videoPlayerView: PlayerView!
     private var sendContainerView: UIView!
     private var sendContainerButtonView: UIView!
     private var sendLabel: UILabel!
@@ -49,7 +48,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
     
     func viewWillDisappear() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
+        self.player().removeObserver(self, forKeyPath: "status")
         self.stopMovie()
     }
     
@@ -62,28 +61,17 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
             cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
         alertView.show()
     }
-    
-    func setVideoURL(videoURL: NSURL) {
-        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-        
-        self.flipVideoURL = videoURL
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.moviePlayer.contentURL = self.flipVideoURL
-            self.moviePlayer.prepareToPlay()
+
+    func setupVideoPlayerWithFlips(flips: Array<Mug>) {
+        self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
+            if (player.status == AVPlayerStatus.ReadyToPlay) {
+                self.playMovie()
+            }
+
+            player.addObserver(self, forKeyPath: "status", options:NSKeyValueObservingOptions.New, context:nil);
         })
-        
-//        self.addSubviews()
-//        self.makeConstraints()
-        
-        let oneSecond = 1 * Double(NSEC_PER_SEC)
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-        dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-//            self.addMoviePlayer()
-//            self.playOrPausePreview()
-        }
     }
-    
+
     func addSubviews() {
         flipContainerView = UIView()
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
@@ -92,7 +80,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         flipContainerView.backgroundColor = UIColor.deepSea()
         self.addSubview(flipContainerView)
         
-        self.addMoviePlayer()
+        self.addVideoPlayerView()
         
         self.sendContainerView = UIView()
         self.sendContainerView.backgroundColor = UIColor.avacado()
@@ -112,19 +100,12 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         
         self.sendContainerView.addSubview(sendImageButton)
     }
-    
-    func addMoviePlayer() {
-        self.moviePlayer = MPMoviePlayerController(contentURL: self.flipVideoURL)
-        self.moviePlayer.controlStyle = MPMovieControlStyle.None
-        self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
-        self.moviePlayer.shouldAutoplay = true
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
-        flipContainerView.addSubview(self.moviePlayer.view)
-        
-        self.layoutIfNeeded()
+
+    func addVideoPlayerView() {
+        self.videoPlayerView = PlayerView()
+        self.flipContainerView.addSubview(self.videoPlayerView)
     }
-    
+
     func makeConstraints() {
         self.flipContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
@@ -141,7 +122,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         // asking help to delegate to align the container with navigation bar
         self.delegate?.previewViewMakeConstraintToNavigationBarBottom(self.flipContainerView)
         
-        self.moviePlayer.view.mas_makeConstraints({ (make) -> Void in
+        self.videoPlayerView.mas_makeConstraints({ (make) -> Void in
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
                 make.centerX.equalTo()(self.flipContainerView)
                 make.centerY.equalTo()(self.flipContainerView)
@@ -152,7 +133,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
                 make.right.equalTo()(self.flipContainerView)
             }
             
-            make.height.equalTo()(self.moviePlayer.view.mas_width)
+            make.height.equalTo()(self.videoPlayerView.mas_width)
         })
         
         self.sendContainerView.mas_makeConstraints { (make) -> Void in
@@ -187,19 +168,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
     
     
-    // MARK: - MPMoviePlayerPlaybackDidFinishNotification
-    
-    func moviePlayerDidFinish(notification: NSNotification) {
-        self.isPlaying = false
-        let player = notification.object as MPMoviePlayerController
-        let delayBetweenExecutions = 1.0 * Double(NSEC_PER_SEC)
-        let oneSecond = dispatch_time(DISPATCH_TIME_NOW, Int64(delayBetweenExecutions))
-        dispatch_after(oneSecond, dispatch_get_main_queue()) { () -> Void in
-            self.playMovie()
-        }
-    }
-    
-    
     // MARK: - UIGestureRecognizerDelegate
     
     public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
@@ -212,20 +180,25 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     
     
     // MARK: - Movie player controls
-    
+
+    func player() -> AVQueuePlayer {
+        let layer = self.videoPlayerView.layer as AVPlayerLayer
+        return layer.player as AVQueuePlayer
+    }
+
     func playMovie() {
+        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
         self.isPlaying = true
-        self.moviePlayer.play()
+        self.videoPlayerView.play()
     }
     
     func pauseMovie() {
         self.isPlaying = false
-        self.moviePlayer.pause()
+        self.videoPlayerView.pause()
     }
     
     func stopMovie() {
-        self.isPlaying = false
-        self.moviePlayer.stop()
+        self.pauseMovie()
     }
     
     func playOrPausePreview() {
@@ -235,8 +208,23 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
             self.playMovie()
         }
     }
-    
-    
+
+
+    // MARK: - KVO
+
+    override public func observeValueForKeyPath(keyPath: String, ofObject: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if (keyPath == "status" && ofObject is AVQueuePlayer) {
+            let player: AVQueuePlayer = ofObject as AVQueuePlayer
+
+            if (player.status == AVPlayerStatus.ReadyToPlay && !self.isPlaying) {
+                self.playMovie()
+            } else {
+                self.showVideoCreationError()
+            }
+        }
+    }
+
+
     // MARK: - Nav Bar Delegate
     
     func customNavigationBarDidTapLeftButton(navBar: CustomNavigationBar) {
