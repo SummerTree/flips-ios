@@ -17,10 +17,15 @@
 
 @interface VideoComposer : NSObject
 
+@property (nonatomic) BOOL renderOverlays;
+
 - (NSURL *)videoFromMugs:(NSArray *)mugs;
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
 - (AVAsset *)videoFromMug:(Mug *)mug;
 
+- (NSArray *)videoPartsFromFlips:(NSArray *)flips;
+
+- (NSArray *)videoPartsFromTestFlips;
 - (void)testCreatingFourWordsVideo;
 
 @end
