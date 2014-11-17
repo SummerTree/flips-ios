@@ -66,7 +66,6 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
         
         self.showActivityIndicator()
-        
         if (self.userId == nil) {
             UserService.sharedInstance.signUp(self.username,
                 password: self.password,
@@ -78,7 +77,6 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
                 phoneNumber: mobileNumber,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
-                    
                     var userEntity = user as User
                     var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: userEntity.userID)
                     self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
