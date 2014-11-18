@@ -57,20 +57,9 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
         if (self.avatar == nil) {
             self.showNoPictureMessage()
         } else {
-            self.showActivityIndicator()
+            var phoneNumberViewController = PhoneNumberViewController(username: email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
             
-            UserService.sharedInstance.signUp(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(), nickname: firstName, success: { (user) -> Void in
-                self.hideActivityIndicator()
-                
-                var userEntity = user as User
-                var phoneNumberViewController = PhoneNumberViewController(userId: userEntity.userID)
-                self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
-            }) { (mugError) -> Void in
-                    self.hideActivityIndicator()
-                    println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
-                    var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
-                    alertView.show()
-            }
+            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }
     }
     

@@ -73,11 +73,11 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                             if (success) {
                                 activityIndicator.stopAnimating()
                                 
-                                let authenticatedUser = AuthenticationHelper.sharedInstance.userInSession
-                                if (authenticatedUser.device == nil) {
-                                    self.openPhoneNumberController(authenticatedUser.userID)
-                                } else {
+                                let authenticatedUser = User.loggedUser()!
+                                if (self.userHasDevice(authenticatedUser)) {
                                     self.openInboxViewController()
+                                } else {
+                                    self.openPhoneNumberController(authenticatedUser.userID)
                                 }
                             }
                         })
@@ -129,6 +129,10 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     private func openPhoneNumberController(userID: String) {
         var phoneNumberViewController = PhoneNumberViewController(userId: userID)
         self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+    }
+    
+    private func userHasDevice(user: User) -> Bool {
+        return user.device != nil && user.device.isVerified.integerValue == 1
     }
     
     override func prefersStatusBarHidden() -> Bool {
