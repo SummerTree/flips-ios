@@ -12,7 +12,11 @@
 
 import Foundation
 
-class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
+private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
+private let RETRY = NSLocalizedString("Retry", comment: "Retry")
+
+
+class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
     
     let splashScreenView = SplashScreenView()
     
@@ -49,6 +53,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     // MARK: SplashScreenViewDelegate methods
     
     func splashScreenViewAttemptLoginWithFacebook() {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        activityIndicator.color = .plum()
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        self.view.addSubview(activityIndicator)
+        
         var success = FBSession.openActiveSessionWithAllowLoginUI(false)
         println("User is already authenticated with Facebook? \(success)")
         if (success) {
@@ -60,6 +71,8 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
                     userDataSource.syncUserData({ (success, error) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (success) {
+                                activityIndicator.stopAnimating()
+                                
                                 let authenticatedUser = AuthenticationHelper.sharedInstance.userInSession
                                 if (authenticatedUser.device == nil) {
                                     self.openPhoneNumberController(authenticatedUser.userID)
@@ -71,7 +84,9 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
                     })
                 }, failure: { (mugError) -> Void in
                     println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
-                    var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                    activityIndicator.stopAnimating()
+                    
+                    var alertView = UIAlertView(title: LOGIN_ERROR, message: mugError!.error, delegate: self, cancelButtonTitle: "Retry")
                     alertView.show()
             })
         }
@@ -93,6 +108,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         } else {
             openLoginViewController()
         }
+    }
+    
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        splashScreenViewAttemptLoginWithFacebook()
     }
     
     private func openInboxViewController() {
