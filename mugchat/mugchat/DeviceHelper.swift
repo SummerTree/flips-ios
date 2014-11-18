@@ -15,6 +15,7 @@ import Foundation
 public class DeviceHelper: NSObject {
     
     private let DEVICE_TOKEN = "device_token"
+    private let DEVICE_TOKEN_NSDATA = "device_token_nsdata"
     private let DEVICE_ID = "device_id"
     
     private let ALREADY_SEEN_INTRODUCTION_KEY = "builder.introduction.watched"
@@ -39,7 +40,7 @@ public class DeviceHelper: NSObject {
         return DeviceScreenSize.screenRect.size.height <= 480
     }
     
-    struct DeviceScreenSize {
+    struct DeviceScreenSize { 
         static let screenRect: CGRect = UIScreen.mainScreen().bounds
     }
     
@@ -63,6 +64,16 @@ public class DeviceHelper: NSObject {
         userDefaults.synchronize()
     }
     
+    func saveDeviceTokenAsNsData(token: NSData?) {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        if (token == nil) {
+            userDefaults.removeObjectForKey(DEVICE_TOKEN_NSDATA)
+        } else {
+            userDefaults.setValue(token, forKey: DEVICE_TOKEN_NSDATA)
+        }
+        userDefaults.synchronize()
+    }
+    
     func saveDeviceId(deviceId: String?) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
         if (deviceId == nil) {
@@ -79,6 +90,12 @@ public class DeviceHelper: NSObject {
         userDefaults.synchronize()
     }
     
+    func removeDeviceTokenAsNsData() {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey(DEVICE_TOKEN_NSDATA)
+        userDefaults.synchronize()
+    }
+    
     func removeDeviceId() {
         var userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(DEVICE_ID)
@@ -88,6 +105,11 @@ public class DeviceHelper: NSObject {
     func retrieveDeviceToken() -> String? {
         var userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(DEVICE_TOKEN) as String?
+    }
+    
+    func retrieveDeviceTokenAsNSData() -> NSData? {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.valueForKey(DEVICE_TOKEN_NSDATA) as NSData?
     }
     
     func retrieveDeviceId() -> String? {
