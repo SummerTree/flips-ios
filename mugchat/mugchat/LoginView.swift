@@ -74,6 +74,8 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenCredentialsAndFacebook: UIView!
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
+    private var spaceBetweenEmailFieldAndSeparator: UIView!
+    private var spaceBetweenPasswordFieldAndSeparator: UIView!
  
     private var isInformedWrongPassword: Bool = false
     
@@ -221,8 +223,20 @@ class LoginView : UIView, UITextFieldDelegate {
         credentialsView.addSubview(emailTextField)
         
         emailPasswordSeparator = UIView()
+        var separatorRecognizer = UITapGestureRecognizer(target: self, action: "separatorTapped")
+        emailPasswordSeparator.addGestureRecognizer(separatorRecognizer)
         emailPasswordSeparator.backgroundColor = UIColor.whiteColor()
         credentialsView.addSubview(emailPasswordSeparator)
+        
+        spaceBetweenEmailFieldAndSeparator = UIView()
+        var emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenEmailAndSeparatorTapped")
+        spaceBetweenEmailFieldAndSeparator.addGestureRecognizer(emailSpaceViewRecognizer)
+        credentialsView.addSubview(spaceBetweenEmailFieldAndSeparator)
+        
+        spaceBetweenPasswordFieldAndSeparator = UIView()
+        var passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenPasswordAndSeparatorTapped")
+        spaceBetweenPasswordFieldAndSeparator.addGestureRecognizer(passwordSpaceViewRecognizer)
+        credentialsView.addSubview(spaceBetweenPasswordFieldAndSeparator)
         
         passwordImageView = UIImageView(image: UIImage(named: "Password"));
         passwordImageView.contentMode = .Center
@@ -316,8 +330,8 @@ class LoginView : UIView, UITextFieldDelegate {
             make.removeExisting = true
             make.centerX.equalTo()(self)
             make.top.equalTo()(self.spaceBetweenTopAndMugchat.mas_bottom)
-            make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
-            make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
         }
     }
     
@@ -326,16 +340,16 @@ class LoginView : UIView, UITextFieldDelegate {
         spaceBetweenTopAndMugchat.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.top.equalTo()(self)
-            make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
-            make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
             make.height.greaterThanOrEqualTo()(self.MARGIN_TOP)
         }
         
         logoView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.centerY.equalTo()(self)
-            make.leading.equalTo()(self).with().offset()(self.MARGIN_LEFT)
-            make.trailing.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
             make.top.equalTo()(self.bubbleChatImageView)
             make.bottom.equalTo()(self.mugchatWordImageView)
         }
@@ -344,15 +358,15 @@ class LoginView : UIView, UITextFieldDelegate {
             make.centerX.equalTo()(self.logoView)
             make.top.equalTo()(self.logoView)
             make.height.equalTo()(self.bubbleChatImageView.frame.size.height)
-            make.leading.equalTo()(self.logoView)
-            make.trailing.equalTo()(self.logoView)
+            make.left.equalTo()(self.logoView)
+            make.right.equalTo()(self.logoView)
         }
         
         mugchatWordImageView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.logoView)
             make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.MUGCHAT_WORD_LOGO_MARGIN_TOP)
-            make.leading.equalTo()(self.logoView)
-            make.trailing.equalTo()(self.logoView)
+            make.left.equalTo()(self.logoView)
+            make.right.equalTo()(self.logoView)
             make.bottom.equalTo()(self.logoView)
             make.height.equalTo()(self.mugchatWordImageView.frame.height)
         }
@@ -360,8 +374,8 @@ class LoginView : UIView, UITextFieldDelegate {
         spaceBetweenMugchatAndCredentials.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.logoView.mas_bottom)
             make.bottom.equalTo()(self.credentialsView.mas_top)
-            make.leading.equalTo()(self)
-            make.trailing.equalTo()(self)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
             make.height.greaterThanOrEqualTo()(self.MINIMAL_SPACER_HEIGHT)
         }
         
@@ -371,52 +385,65 @@ class LoginView : UIView, UITextFieldDelegate {
         }
         
         credentialsView.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.bubbleChatImageView)
-            make.trailing.equalTo()(self.bubbleChatImageView)
+            make.left.equalTo()(self.bubbleChatImageView)
+            make.right.equalTo()(self.bubbleChatImageView)
             make.top.equalTo()(self.spaceBetweenMugchatAndCredentials.mas_bottom)
-            make.bottom.equalTo()(self.passwordImageView)
+            make.bottom.equalTo()(self.passwordTextField)
         }
         
         emailImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.credentialsView)
             make.centerY.equalTo()(self.emailTextField)
-            make.leading.equalTo()(self.credentialsView)
-            make.width.equalTo()(self.emailImageView.image?.size.width)
-            make.bottom.equalTo()(self.emailPasswordSeparator.mas_top).with().offset()(-self.EMAIL_MARGIN_BOTTOM)
+            make.left.equalTo()(self.credentialsView)
+            make.width.equalTo()(self.emailImageView.frame.size.width)
+            make.height.equalTo()(self.emailImageView.frame.size.height)
         }
         
         emailTextField.mas_makeConstraints { (make) -> Void in
-            make.centerY.equalTo()(self.emailImageView)
             make.top.equalTo()(self.credentialsView)
-            make.leading.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
-            make.trailing.equalTo()(self.bubbleChatImageView.mas_right)
-            make.bottom.equalTo()(self.emailPasswordSeparator.mas_top).with().offset()(-self.EMAIL_MARGIN_BOTTOM)
+            make.left.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
+            make.right.equalTo()(self.bubbleChatImageView.mas_right)
+            make.bottom.equalTo()(self.spaceBetweenEmailFieldAndSeparator.mas_top)
+        }
+        
+        spaceBetweenEmailFieldAndSeparator.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.emailTextField.mas_bottom)
+            make.height.equalTo()(self.EMAIL_MARGIN_BOTTOM)
+            make.left.equalTo()(self.emailTextField)
+            make.right.equalTo()(self.emailTextField)
         }
         
         emailPasswordSeparator.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.passwordTextField)
-            make.trailing.equalTo()(self.passwordTextField)
+            make.top.equalTo()(self.spaceBetweenEmailFieldAndSeparator.mas_bottom)
+            make.left.equalTo()(self.passwordTextField)
+            make.right.equalTo()(self.passwordTextField)
             make.height.equalTo()(self.SEPARATOR_HEIGHT)
-            make.bottom.equalTo()(self.passwordTextField.mas_top).with().offset()(-self.PASSWORD_MARGIN_TOP)
+        }
+        
+        spaceBetweenPasswordFieldAndSeparator.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.emailPasswordSeparator.mas_bottom)
+            make.height.equalTo()(self.spaceBetweenEmailFieldAndSeparator)
+            make.left.equalTo()(self.passwordTextField)
+            make.right.equalTo()(self.passwordTextField)
         }
         
         passwordImageView.mas_makeConstraints { (make) -> Void in
             make.centerY.equalTo()(self.passwordTextField)
-            make.leading.equalTo()(self.credentialsView)
-            make.width.equalTo()(self.passwordImageView.image?.size.width)
-            make.bottom.equalTo()(self.credentialsView)
+            make.left.equalTo()(self.credentialsView)
+            make.width.equalTo()(self.passwordImageView.frame.size.width)
+            make.height.equalTo()(self.passwordImageView.frame.size.height)
         }
         
         passwordTextField.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.spaceBetweenPasswordFieldAndSeparator.mas_bottom)
             make.left.equalTo()(self.passwordImageView.mas_right).with().offset()(self.PASSWORD_MARGIN_LEFT)
-            make.trailing.equalTo()(self.credentialsView)
+            make.right.equalTo()(self.credentialsView)
             make.bottom.equalTo()(self.credentialsView)
         }
         
         spaceBetweenCredentialsAndFacebook.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.credentialsView.mas_bottom)
-            make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.left.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.right.equalTo()(self.spaceBetweenMugchatAndCredentials)
             make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
         }
 
@@ -427,8 +454,8 @@ class LoginView : UIView, UITextFieldDelegate {
 
         spaceBetweenFacebookAndSignUp.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.facebookButton.mas_bottom)
-            make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.left.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.right.equalTo()(self.spaceBetweenMugchatAndCredentials)
             make.height.equalTo()(self.spaceBetweenSignUpAndAcceptance)
         }
 
@@ -440,21 +467,21 @@ class LoginView : UIView, UITextFieldDelegate {
         spaceBetweenSignUpAndAcceptance.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.signupButton.mas_bottom)
             make.bottom.equalTo()(self.acceptanceView.mas_top)
-            make.leading.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.trailing.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.left.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.right.equalTo()(self.spaceBetweenMugchatAndCredentials)
             make.height.equalTo()(self.SIGNUP_MARGIN_BOTTOM)
         }
         
         acceptanceView.mas_makeConstraints { (make) -> Void in
             make.bottom.equalTo()(self).with().offset()(-self.MARGIN_BOTTOM)
             make.top.equalTo()(self.spaceBetweenSignUpAndAcceptance.mas_bottom)
-            make.trailing.equalTo()(self.signupButton)
-            make.leading.equalTo()(self.signupButton)
+            make.right.equalTo()(self.signupButton)
+            make.left.equalTo()(self.signupButton)
             make.height.equalTo()(self.ACCEPTANCE_VIEW_HEIGHT)
         }
         
         termsOfUse.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.acceptanceView)
+            make.left.equalTo()(self.acceptanceView)
             make.height.equalTo()(self.TERMS_OF_USE_HEIGHT)
             make.bottom.equalTo()(self.acceptanceView)
         }
@@ -597,6 +624,18 @@ class LoginView : UIView, UITextFieldDelegate {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
         let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
+    }
+    
+    func spaceBetweenEmailAndSeparatorTapped() {
+        self.emailTextField.becomeFirstResponder()
+    }
+    
+    func spaceBetweenPasswordAndSeparatorTapped() {
+        self.passwordTextField.becomeFirstResponder()
+    }
+    
+    func separatorTapped() {
+        // do nothing - its just to avoid the keyboard dismissing
     }
 }
 
