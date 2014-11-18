@@ -376,23 +376,23 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
         if action == "cut:" {
-            return false;
+            return false
         }
             
         else if action == "copy:" {
-            return false;
+            return false
         }
             
         else if action == "paste:" {
-            return false;
+            return false
         }
             
         else if action == "_define:" {
-            return false;
+            return false
         }
             
         else if action == "splitText" {
-            return true;
+            return true
         }
         
         return super.canPerformAction(action, withSender: sender)
