@@ -63,13 +63,13 @@ public class PubNubService: MugchatService, PNDelegate {
             channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
         }
         
-        PubNub.subscribeOnChannels(channels)
+        PubNub.subscribeOn(channels)
     }
     
     func subscribeToChannel(pubnubID: String) {
         var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
-        if (!PubNub.isSubscribedOnChannel(channel)) {
-            PubNub.subscribeOnChannel(channel)
+        if (!PubNub.isSubscribedOn(channel)) {
+            PubNub.subscribeOn([channel])
         }
     }
     
