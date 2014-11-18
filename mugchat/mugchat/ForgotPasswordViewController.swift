@@ -12,9 +12,9 @@
 
 import UIKit
 
-let INVALID_NUMBER = NSLocalizedString("Invalid Number", comment: "Invalid Number")
-let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not match our records. Please try again.", comment: "No match")
-let OK = NSLocalizedString("OK", comment: "OK")
+private let INVALID_NUMBER = NSLocalizedString("Invalid Number", comment: "Invalid Number")
+private let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not match our records. Please try again.", comment: "No match")
+private let OK = NSLocalizedString("OK", comment: "OK")
 
 
 class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
