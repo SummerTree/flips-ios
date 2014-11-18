@@ -35,7 +35,7 @@ public class UserService: MugchatService {
     
     // MARK: - Sign-up
     
-    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNUP_URL
@@ -45,6 +45,7 @@ public class UserService: MugchatService {
                 RequestParams.FIRSTNAME : firstName,
                 RequestParams.LASTNAME : lastName,
                 RequestParams.BIRTHDAY : birthday,
+                RequestParams.PHONENUMBER: phoneNumber,
                 RequestParams.NICKNAME : nickname!]
         
         // first create user
@@ -274,6 +275,7 @@ public class UserService: MugchatService {
         static let NICKNAME = "nickname"
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
+        static let PHONENUMBER = "phoneNumber"
         static let VERIFICATION_CODE = "verification_code"
         static let PHOTO = "photo"
     }
