@@ -322,7 +322,6 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         if (errorSignView != nil) {
             errorSignView.removeFromSuperview()
         }
-        focusKeyboardOnCodeField()
     }
     
     func codeFieldDidChange(textField: UITextField) {
@@ -340,6 +339,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func didEnterWrongVerificationCode() {
         resetVerificationCodeField()
+        focusKeyboardOnCodeField()
         codeView.backgroundColor = UIColor.deepSea()
         errorSignView = UIImageView(image: UIImage(named: "Error"))
         errorSignView.contentMode = .Center
