@@ -12,6 +12,10 @@
 
 import UIKit
 
+private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
+private let OK = NSLocalizedString("OK", comment: "OK")
+
+
 class LoginViewController: MugChatViewController, LoginViewDelegate {
     
     var loginView: LoginView!
@@ -148,9 +152,8 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
             }, failure: { (mugError) -> Void in
                 println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
                 self.hideActivityIndicator()
-                var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                var alertView = UIAlertView(title: LOGIN_ERROR, message: mugError!.error, delegate: self, cancelButtonTitle: OK)
                 alertView.show()
         })
     }
-
 }
