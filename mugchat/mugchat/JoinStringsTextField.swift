@@ -169,7 +169,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
             
         else if action == "paste:" {
-            return false
+            return true
         }
             
         else if action == "_define:" {
