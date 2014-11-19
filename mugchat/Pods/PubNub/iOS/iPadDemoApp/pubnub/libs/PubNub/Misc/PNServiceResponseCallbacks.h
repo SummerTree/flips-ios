@@ -22,11 +22,6 @@ struct PNServiceResponseCallbacksStruct {
 
     // Name of the function which is used for state retrieval request.
     __unsafe_unretained NSString *stateRetrieveCallback;
-<<<<<<< HEAD
-
-    // Name of the function which is used for state update request.
-    __unsafe_unretained NSString *stateUpdateCallback;
-=======
     
     // Name of the function which is used for state update request.
     __unsafe_unretained NSString *stateUpdateCallback;
@@ -51,7 +46,6 @@ struct PNServiceResponseCallbacksStruct {
     
     // Name of the function which is used for channels addition into channel group.
     __unsafe_unretained NSString *channelGroupChannelsRemoveCallback;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
     // Name of the function which is used for subscription and presence events for set/single channel(s).
     __unsafe_unretained NSString *subscriptionCallback;

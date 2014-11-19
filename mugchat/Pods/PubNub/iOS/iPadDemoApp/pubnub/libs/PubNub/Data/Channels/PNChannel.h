@@ -11,10 +11,7 @@
 //
 
 #import <Foundation/Foundation.h>
-<<<<<<< HEAD
-=======
 #import "PNChannelProtocol.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark Class forward
@@ -24,32 +21,7 @@
 
 #pragma mark - Public interface declaration
 
-<<<<<<< HEAD
-@interface PNChannel : NSObject
-
-
-#pragma mark Properties
-
-// Channel name
-@property (nonatomic, readonly, copy) NSString *name;
-
-// Last state update time
-@property (nonatomic, readonly, copy) NSString *updateTimeToken;
-
-// Last presence update date
-@property (nonatomic, readonly, strong) PNDate *presenceUpdateDate;
-
-// Stores number of participants for particular channel (this number fetched from presence API if it is used and
-// updated when requested list of participants)
-// INFO: it may differ in count from participants name because of nature of this value update logic
-@property (nonatomic, readonly, assign) NSUInteger participantsCount;
-
-// Stores list of participants names for particular channel (updated and initially filled only by participants list
-// request)
-@property (nonatomic, readonly) NSArray *participants;
-=======
 @interface PNChannel : NSObject <PNChannelProtocol>
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Class methods

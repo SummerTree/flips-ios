@@ -18,17 +18,11 @@
 #import "PNBaseRequest+Protected.h"
 #import "NSString+PNAddition.h"
 #import "PNChannel+Protected.h"
-<<<<<<< HEAD
-#import "PubNub+Protected.h"
-#import "PNConstants.h"
-#import "PNCache.h"
-=======
 #import "PNJSONSerialization.h"
 #import "PNConfiguration.h"
 #import "PNConstants.h"
 #import "PNCache.h"
 #import "PNMacro.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -55,12 +49,6 @@
 // Stores recent channels/presence state update time (token)
 @property (nonatomic, copy) NSString *updateTimeToken;
 
-<<<<<<< HEAD
-// Stores reference on client identifier on the moment of request creation
-@property (nonatomic, copy) NSString *clientIdentifier;
-
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 /**
  Stores user-provided state which should be appended to the client subscription.
  */
@@ -71,12 +59,9 @@
 
 @property (nonatomic, assign, getter = isPerformingMultipleActions) BOOL performingMultipleActions;
 
-<<<<<<< HEAD
-=======
 @property (nonatomic, assign) NSInteger presenceHeartbeatTimeout;
 @property (nonatomic, copy) NSString *subscriptionKey;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 @end
 
@@ -118,12 +103,7 @@
         
         self.sendingByUserRequest = isSubscribingByUserRequest;
         self.channels = [NSArray arrayWithArray:channels];
-<<<<<<< HEAD
-        self.clientIdentifier = [PubNub escapedClientIdentifier];
-        self.state = (clientState ? clientState : [[PubNub sharedInstance].cache stateForChannels:channels]);
-=======
         self.state = ([clientState count] ? clientState : nil);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         
         
         // Retrieve largest update time token from set of channels (sorting to make larger token to be at
@@ -135,8 +115,6 @@
     return self;
 }
 
-<<<<<<< HEAD
-=======
 - (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier {
     
     [super finalizeWithConfiguration:configuration clientIdentifier:clientIdentifier];
@@ -147,7 +125,6 @@
     self.clientIdentifier = clientIdentifier;
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (void)resetSubscriptionTimeToken {
     
     self.updateTimeToken = @"0";
@@ -211,10 +188,7 @@
     
     return [self.updateTimeToken isEqualToString:@"0"];
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (void)prepareToSend {
 
     NSMutableSet *channels = [NSMutableSet setWithArray:_channels];
@@ -271,15 +245,6 @@
     self.channels = [channels allObjects];
 }
 
-<<<<<<< HEAD
-
-- (NSTimeInterval)timeout {
-    
-    return [PubNub sharedInstance].configuration.subscriptionRequestTimeout;
-}
-
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (NSString *)callbackMethodName {
     
     return PNServiceResponseCallbacks.subscriptionCallback;
@@ -288,16 +253,9 @@
 - (NSString *)resourcePath {
     
     NSString *heartbeatValue = @"";
-<<<<<<< HEAD
-    if ([PubNub sharedInstance].configuration.presenceHeartbeatTimeout > 0.0f) {
-        
-        heartbeatValue = [NSString stringWithFormat:@"&heartbeat=%d",
-                          (int)[PubNub sharedInstance].configuration.presenceHeartbeatTimeout];
-=======
     if (self.presenceHeartbeatTimeout > 0.0f) {
         
         heartbeatValue = [NSString stringWithFormat:@"&heartbeat=%d", (int)self.presenceHeartbeatTimeout];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
     NSString *state = @"";
     if (self.state) {
@@ -305,16 +263,6 @@
         state = [NSString stringWithFormat:@"&state=%@",
                                            [[PNJSONSerialization stringFromJSONObject:self.state] pn_percentEscapedString]];
     }
-<<<<<<< HEAD
-    return [NSString stringWithFormat:@"/subscribe/%@/%@/%@_%@/%@?uuid=%@%@%@%@&pnsdk=%@",
-                                      [[PubNub sharedInstance].configuration.subscriptionKey pn_percentEscapedString],
-                                      [[self.channels valueForKey:@"escapedName"] componentsJoinedByString:@","],
-                                      [self callbackMethodName], self.shortIdentifier, self.updateTimeToken,
-                                      self.clientIdentifier, heartbeatValue, state,
-                                      ([self authorizationField] ? [NSString stringWithFormat:@"&%@",
-                                                                                              [self authorizationField]] : @""),
-                                      [self clientInformationField]];
-=======
     
     NSArray *channelsList = [self channels];
     NSString *channelsListParameter = nil;
@@ -340,20 +288,12 @@
             state, (groupsListParameter ? [NSString stringWithFormat:@"&channel-group=%@", groupsListParameter] : @""),
             ([self authorizationField] ? [NSString stringWithFormat:@"&%@", [self authorizationField]] : @""),
             [self clientInformationField]];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 - (NSString *)debugResourcePath {
     
-<<<<<<< HEAD
-    NSMutableArray *resourcePathComponents = [[[self resourcePath] componentsSeparatedByString:@"/"] mutableCopy];
-    [resourcePathComponents replaceObjectAtIndex:2 withObject:PNObfuscateString([[PubNub sharedInstance].configuration.subscriptionKey pn_percentEscapedString])];
-    
-    return [resourcePathComponents componentsJoinedByString:@"/"];
-=======
     NSString *subscriptionKey = [self.subscriptionKey pn_percentEscapedString];
     return [[self resourcePath] stringByReplacingOccurrencesOfString:subscriptionKey withString:PNObfuscateString(subscriptionKey)];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 - (NSString *)description {

@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-//
-//  PNObservationCenter+Protected.h
-//  pubnub
-//
-//  This header file used by library internal
-//  components which require to access to some
-//  methods and properties which shouldn't be
-//  visible to other application components
-//
-//
-//  Created by Sergey Mamontov.
-//
-//
-
-#import "PNObservationCenter.h"
-#import "PNStructures.h"
-
-
-=======
 #import "PNObservationCenter.h"
 #import "PNStructures.h"
 
@@ -29,15 +9,12 @@
  @version 3.4.0
  @copyright © 2009-13 PubNub Inc.
  */
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @interface PNObservationCenter (Protected)
 
 
 #pragma mark - Class methods
 
 /**
-<<<<<<< HEAD
-=======
  Create observation instance which is attached to specified observer. This will allow to use simplified methods
  when API with completion block will be used.
  
@@ -47,7 +24,6 @@
 + (PNObservationCenter *)observationCenterWithDefaultObserver:(id)defaultObserver;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  * Completely reset observation center by cleaning up
  * all subscribers and shared instance destroy
  */
@@ -57,8 +33,6 @@
 #pragma mark - Instance methods
 
 /**
-<<<<<<< HEAD
-=======
  Initialize observation instance which is attached to specified observer. This will allow to use simplified methods
  when API with completion block will be used.
  
@@ -68,7 +42,6 @@
 - (id)initWithDefaultObserver:(id)defaultObserver;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  * Check whether observer is subscribed on PubNub state
  * change
  */
@@ -107,8 +80,6 @@
 - (void)removeClientAsStateUpdateObserver;
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Client channel groups observation
 
 /**
@@ -150,7 +121,6 @@
 - (void)removeClientAsChannelsRemovalFromGroupObserver;
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Channels subscribe/leave observers
 
 /**

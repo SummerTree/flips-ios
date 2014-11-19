@@ -35,14 +35,11 @@
 // Stores whether channel presence observation flag was set by developer or not
 @property (nonatomic, assign, getter = isLinkedWithPresenceObservationChannel) BOOL linkedWithPresenceObservationChannel;
 
-<<<<<<< HEAD
-=======
 /**
  Stores whether channel represents group of channels or not.
  */
 @property (nonatomic, assign, getter = isChannelGroup) BOOL channelGroup;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 // Stores number of participants for particular channel (this number fetched from presence API if it is used and
 // updated when requested list of participants)
 // INFO: it may differ in count from participants name because of nature of this value update logic
@@ -60,8 +57,6 @@
 + (void)purgeChannelsCache;
 
 /**
-<<<<<<< HEAD
-=======
  @brief Remove specified object from local cache.
  
  @param channel Reference on data feed object which should be removed from cache.
@@ -71,7 +66,6 @@
 + (void)removeChannelFromCache:(PNChannel *)channel;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  * Retrieve reference on channel by it's name and update presence observing settings by request
  */
 + (id)            channelWithName:(NSString *)channelName
@@ -112,11 +106,6 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag;
 - (void)updateWithEvent:(PNPresenceEvent *)event;
 
 /**
-<<<<<<< HEAD
- * Updating cached channel data with participants list information
- */
-- (void)updateWithParticipantsList:(PNHereNow *)hereNow;
-=======
  Updating cached channel data with participants list information.
  
  @param participants
@@ -126,7 +115,6 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag;
  Represent real number of participants in channel
  */
 - (void)updateWithParticipantsList:(NSArray *)participants andCount:(NSUInteger)participantsCount;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Update channel update time token

@@ -7,10 +7,7 @@
  */
 
 #import "PNHereNow+Protected.h"
-<<<<<<< HEAD
-=======
 #import "PNChannel.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -20,9 +17,6 @@
 #endif
 
 
-<<<<<<< HEAD
-#pragma mark Externs
-=======
 #pragma mark Structures
 
 struct PNChannelParticipantsEntryStructure {
@@ -42,7 +36,6 @@ struct PNChannelParticipantsEntryStructure PNChannelParticipantsEntry = {
 
 
 #pragma mark - Externs
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  Used for \b PNClient instances in case if client identifier is unknown.
@@ -55,8 +48,6 @@ NSString * const kPNAnonymousParticipantIdentifier = @"unknown";
 @implementation PNHereNow
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Instance methods
 
 - (instancetype)init {
@@ -132,7 +123,6 @@ NSString * const kPNAnonymousParticipantIdentifier = @"unknown";
     #pragma clang diagnostic pop
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark -
 
 

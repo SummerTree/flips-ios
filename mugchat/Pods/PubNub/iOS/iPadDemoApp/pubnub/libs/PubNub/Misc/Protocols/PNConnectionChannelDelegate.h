@@ -49,12 +49,7 @@
  * to establish connection with remote PubNub services because
  * of error
  */
-<<<<<<< HEAD
-- (void)connectionChannel:(PNConnectionChannel *)channel
-     connectionDidFailToOrigin:(NSString *)host
-=======
 - (void)connectionChannel:(PNConnectionChannel *)channel connectionDidFailToOrigin:(NSString *)host
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                 withError:(PNError *)error;
 
 /**
@@ -67,12 +62,7 @@
  * Sent to the PubNub client when connection channel disconnected
  * from PubNub services because of error
  */
-<<<<<<< HEAD
-- (void)connectionChannel:(PNConnectionChannel *)channel
-    willDisconnectFromOrigin:(NSString *)host
-=======
 - (void)connectionChannel:(PNConnectionChannel *)channel willDisconnectFromOrigin:(NSString *)host
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                 withError:(PNError *)error;
 
 /**
@@ -101,20 +91,13 @@
  * impossible at this moment because of some reasons (no internet connection)
  * This method is called periodically by intervals defined in connection class.
  */
-<<<<<<< HEAD
-- (BOOL)connectionChannelCanConnect:(PNConnectionChannel *)channel;
-=======
 - (void)connectionChannel:(PNConnectionChannel *)channel checkCanConnect:(void(^)(BOOL))checkCompletionBlock;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Sent to the delegate each timer when connection channel want to ensure on whether it should resume it's operation
  * or not (after it was disconnected).
  * This method is called periodically by intervals defined in connection class.
  */
-<<<<<<< HEAD
-- (BOOL)connectionChannelShouldRestoreConnection:(PNConnectionChannel *)channel;
-=======
 - (void)connectionChannel:(PNConnectionChannel *)channel checkShouldRestoreConnection:(void(^)(BOOL))checkCompletionBlock;
 
 /**
@@ -133,7 +116,6 @@
  @return \c YES in case if \b PubNub and network reachable.
  */
 - (void)isPubNubServiceAvailable:(BOOL)shouldUpdateInformation checkCompletionBlock:(void(^)(BOOL))checkCompletionBlock;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark -
 

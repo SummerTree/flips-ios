@@ -7,10 +7,7 @@
 //
 
 #import "PNStructures.h"
-<<<<<<< HEAD
-=======
 #import "PNChannelProtocol.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark Public interface declaration
@@ -41,9 +38,6 @@
 
  @note This property will be set only if \a level is set to: \a PNChannelAccessRightsLevel or \a PNUserAccessRightsLevel.
  */
-<<<<<<< HEAD
-@property (nonatomic, readonly, strong) PNChannel *channel;
-=======
 @property (nonatomic, readonly, strong) PNChannel *channel DEPRECATED_MSG_ATTRIBUTE(" Use 'object' property instead");
 
 /**
@@ -53,7 +47,6 @@
  \a PNChannelGroupAccessRightsLevel or \a PNUserAccessRightsLevel.
  */
 @property (nonatomic, readonly, strong) id <PNChannelProtocol> object;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  Stores reference on authorization key for which access rights has been granted or retrieved.
@@ -79,30 +72,21 @@
 
 /**
  Check access rights bit mask and return whether \a 'write' access permission is granted or not.
-<<<<<<< HEAD
-
-=======
  
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  @return \c YES if \b PNWriteAccessRight bit is set in \a 'rights' property.
  */
 - (BOOL)hasWriteRight;
 
 /**
  Check access rights bit mask and return whether \a 'write' access permission is granted or not.
-<<<<<<< HEAD
-=======
  
  @discussion This check doesn't include \a 'management' access rights
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
  @return \c YES if both \b PNReadAccessRight and \b PNWriteAccessRight bits are set in \a 'rights' property.
  */
 - (BOOL)hasAllRights;
 
 /**
-<<<<<<< HEAD
-=======
  Check access rights bit mask and return whether \a 'write' access permission is granted or not.
  
  @return \c YES if \b PNManagementAccessRight bit is set in \a 'rights' property.
@@ -117,7 +101,6 @@
 - (BOOL)hasManagementRight;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  Check whether all rights has been revoked or not.
 
  @return \c YES if both \b PNReadAccessRight and \b PNWriteAccessRight bits not set in \a 'rights' property.

@@ -27,8 +27,6 @@
 - (BOOL)requiresConnectionResetWithConfiguration:(PNConfiguration *)configuration;
 
 /**
-<<<<<<< HEAD
-=======
  Migrates setting options from provided configuration to receiver.
  
  @param configuration
@@ -37,7 +35,6 @@
 - (void)migrateConfigurationFrom:(PNConfiguration *)configuration;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  * Check whether caller configuration is equal to the other or not
  */
 - (BOOL)isEqual:(PNConfiguration *)configuration;

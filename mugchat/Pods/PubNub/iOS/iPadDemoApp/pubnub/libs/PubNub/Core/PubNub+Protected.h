@@ -7,15 +7,6 @@
  */
 
 #import "PNPrivateImports.h"
-<<<<<<< HEAD
-#import "PNConfiguration.h"
-#import "PNReachability.h"
-#import "PNDelegate.h"
-#import "PubNub.h"
-
-
-@class PNCache;
-=======
 #import "PNConnectionChannelDelegate.h"
 #import "PNServiceChannelDelegate.h"
 #import "PNMessageChannelDelegate.h"
@@ -25,7 +16,6 @@
 
 
 @class PNConfiguration, PNReachability, PNCryptoHelper, PNBaseRequest, PNCache;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark Static
@@ -63,51 +53,14 @@ typedef enum _PNPubNubClientState {
 } PNPubNubClientState;
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Private interface declaration
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @interface PubNub (Protected)
 
 
 #pragma mark - Properties
 
 /**
-<<<<<<< HEAD
- Stores reference on configuration which was used to perform initial PubNub client initialization.
- */
-@property (nonatomic, strong) PNConfiguration *configuration;
-
-@property (nonatomic, strong) PNCache *cache;
-
-/**
- Stores reference on current client identifier.
- */
-@property (nonatomic, strong) NSString *clientIdentifier;
-
-/**
- Stores unique client initialization session identifier (created each time when PubNub stack is configured after
- application launch).
- */
-@property (nonatomic, strong) NSString *launchSessionIdentifier;
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-/**
- Stores whether application is able to work in background or not.
- */
-@property (nonatomic, readonly, getter = canRunInBackground) BOOL runInBackground;
-#endif
-
-
-#pragma mark - Class methods
-
-/**
- * Return reference on client identifier which is ready to be sent as part of GET HTTP request (encoded with %
- * which allow to use it to send in HTTP requests)
- */
-+ (NSString *)escapedClientIdentifier;
-=======
  Stores current client state.
  */
 @property (nonatomic, assign) PNPubNubClientState state;
@@ -157,17 +110,11 @@ typedef enum _PNPubNubClientState {
  Stores whether client is restoring connection after network failure or not
  */
 @property (nonatomic, assign, getter = isRestoringConnection) BOOL restoringConnection;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
 
 /**
-<<<<<<< HEAD
- * Return reference on reachability instance which is used to track network state
- */
-- (PNReachability *)reachability;
-=======
  Reschedule \b PubNub method call. Depending on whether client will perform some actions on it's own, this method will
  deal with procedural lock to make sure that re-scheduled method will be triggered in time.
  
@@ -275,7 +222,6 @@ typedef enum _PNPubNubClientState {
  @return Formatted string
  */
 - (NSString *)humanReadableStateFrom:(PNPubNubClientState)state;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark -
 

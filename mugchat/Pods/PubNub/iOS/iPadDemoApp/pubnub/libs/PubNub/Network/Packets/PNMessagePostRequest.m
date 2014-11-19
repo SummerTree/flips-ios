@@ -18,19 +18,11 @@
 #import "NSString+PNAddition.h"
 #import "PNMessage+Protected.h"
 #import "PNChannel+Protected.h"
-<<<<<<< HEAD
-#import "PubNub+Protected.h"
-#import "PNLoggerSymbols.h"
-#import "PNCryptoHelper.h"
-#import "PNConstants.h"
-#import "PNHelper.h"
-=======
 #import "PNLoggerSymbols.h"
 #import "PNConfiguration.h"
 #import "PNConstants.h"
 #import "PNHelper.h"
 #import "PNMacro.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -54,14 +46,8 @@
 // Stores reference on prepared message
 @property (nonatomic, strong) NSString *preparedMessage;
 
-<<<<<<< HEAD
-// Stores reference on client identifier on the
-// moment of request creation
-@property (nonatomic, copy) NSString *clientIdentifier;
-=======
 @property (nonatomic, copy) NSString *subscriptionKey;
 @property (nonatomic, copy) NSString *publishKey;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
@@ -97,18 +83,12 @@
 
         self.sendingByUserRequest = YES;
         self.message = message;
-<<<<<<< HEAD
-        self.clientIdentifier = [PubNub escapedClientIdentifier];
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 
 
     return self;
 }
 
-<<<<<<< HEAD
-=======
 - (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier {
     
     [super finalizeWithConfiguration:configuration clientIdentifier:clientIdentifier];
@@ -118,7 +98,6 @@
     self.clientIdentifier = clientIdentifier;
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (NSString *)callbackMethodName {
 
     return PNServiceResponseCallbacks.sendMessageCallback;
@@ -144,29 +123,6 @@
     if (_preparedMessage == nil) {
         
         id message = self.message.message;
-<<<<<<< HEAD
-        if ([message isKindOfClass:[NSNumber class]]) {
-            
-            message = [(NSNumber *)message stringValue];
-        }
-        
-        // Retrieve reference on encrypted message (if possible)
-        PNError *encryptionError;
-        if ([PNCryptoHelper sharedInstance].isReady) {
-            
-            message = [PubNub AESEncrypt:message error:&encryptionError];
-            
-            if (encryptionError != nil) {
-
-                [PNLogger logCommunicationChannelErrorMessageFrom:self withParametersFromBlock:^NSArray *{
-
-                    return @[PNLoggerSymbols.requests.messagePost.messageBodyEncryptionError,
-                            (encryptionError ? encryptionError : [NSNull null])];
-                }];
-            }
-        }
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         
         if ([self HTTPMethod] == PNRequestGETMethod) {
             
@@ -191,13 +147,8 @@
 - (NSString *)resourcePath {
     
     NSMutableString *resourcePath = [NSMutableString stringWithFormat:@"/publish/%@/%@/%@/%@/%@_%@",
-<<<<<<< HEAD
-                                                                      [[PubNub sharedInstance].configuration.publishKey pn_percentEscapedString],
-                                                                      [[PubNub sharedInstance].configuration.subscriptionKey pn_percentEscapedString],
-=======
                                                                       [self.publishKey pn_percentEscapedString],
                                                                       [self.subscriptionKey pn_percentEscapedString],
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                                                                       [self signature],
                                                                       [self.message.channel escapedName],
                                                                       [self callbackMethodName],
@@ -208,11 +159,7 @@
         [resourcePath appendFormat:@"/%@", self.preparedMessage];
     }
     
-<<<<<<< HEAD
-    [resourcePath appendFormat:@"?uuid=%@%@&pnsdk=%@", self.clientIdentifier,
-=======
     [resourcePath appendFormat:@"?uuid=%@%@&pnsdk=%@", [self.clientIdentifier stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                                ([self authorizationField] ? [NSString stringWithFormat:@"&%@", [self authorizationField]] : @""),
                                [self clientInformationField]];
     
@@ -226,14 +173,6 @@
 }
 
 - (NSString *)debugResourcePath {
-<<<<<<< HEAD
-
-    NSMutableArray *resourcePathComponents = [[[self resourcePath] componentsSeparatedByString:@"/"] mutableCopy];
-    [resourcePathComponents replaceObjectAtIndex:2 withObject:PNObfuscateString([[PubNub sharedInstance].configuration.publishKey pn_percentEscapedString])];
-    [resourcePathComponents replaceObjectAtIndex:3 withObject:PNObfuscateString([[PubNub sharedInstance].configuration.subscriptionKey pn_percentEscapedString])];
-
-    return [resourcePathComponents componentsJoinedByString:@"/"];
-=======
     
     NSString *subscriptionKey = [self.subscriptionKey pn_percentEscapedString];
     NSString *publishKey = [self.publishKey pn_percentEscapedString];
@@ -241,28 +180,17 @@
 
     
     return [debugResourcePath stringByReplacingOccurrencesOfString:publishKey withString:PNObfuscateString(publishKey)];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 - (NSString *)signature {
 
     NSString *signature = @"0";
 #if PN_SHOULD_USE_SIGNATURE
-<<<<<<< HEAD
-    NSString *secretKey = [PubNub sharedInstance].configuration.secretKey;
-    if ([secretKey length] > 0) {
-
-        NSString *signedRequestPath = [NSString stringWithFormat:@"%@/%@/%@/%@/%@%@",
-                        [PubNub sharedInstance].configuration.publishKey,
-                        [PubNub sharedInstance].configuration.subscriptionKey, secretKey,
-                        [self.message.channel escapedName], self.message.message,
-=======
     NSString *secretKey = self.secretKey;
     if ([secretKey length] > 0) {
 
         NSString *signedRequestPath = [NSString stringWithFormat:@"%@/%@/%@/%@/%@%@", self.publishKey, self.subscriptionKey,
                                        secretKey, [self.message.channel escapedName], self.message.message,
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                         ([self authorizationField] ? [NSString stringWithFormat:@"?%@", [self authorizationField]] : @""),
                         ([self authorizationField] ? [NSString stringWithFormat:@"&pnsdk=%@", [self clientInformationField]] :
                                                      [NSString stringWithFormat:@"?pnsdk=%@", [self clientInformationField]])];

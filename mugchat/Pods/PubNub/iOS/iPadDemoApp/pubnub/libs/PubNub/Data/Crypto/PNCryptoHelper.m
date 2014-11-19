@@ -34,26 +34,6 @@ typedef enum _PNCryptorType {
 } PNCryptorType;
 
 
-<<<<<<< HEAD
-#pragma mark Static
-
-static PNCryptoHelper *_sharedInstance;
-static dispatch_once_t onceToken;
-
-
-// Stores reference on recent configuration which
-// was used for crypto helper
-static PNConfiguration *_configuration = nil;
-
-// Stores reference on initialization vector
-static NSData *_cryptorInitializationVectorData = nil;
-
-// Stores reference on prepared cipher key
-static NSData *_cryptorKeyData = nil;
-
-
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Private interface implementation
 
 @interface PNCryptoHelper ()
@@ -61,9 +41,6 @@ static NSData *_cryptorKeyData = nil;
 
 #pragma mark - Properties
 
-<<<<<<< HEAD
-@property (nonatomic, assign, getter = isReady) BOOL ready;
-=======
 @property (nonatomic, assign) BOOL ready;
 
 /**
@@ -76,37 +53,18 @@ static NSData *_cryptorKeyData = nil;
  Stores reference on cryptor initialization vector.
  */
 @property (nonatomic, strong) NSData *cryptorInitializationVectorData;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
 
 #ifdef CRYPTO_BACKWARD_COMPATIBILITY_MODE
 /**
-<<<<<<< HEAD
- * Returns reference on array with encrypted values
- * from original array in it.
- * In case of encryption error message will be generated.
-=======
  Returns reference on array with encrypted values from original array in it. In case of encryption error message will 
  be generated.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (NSArray *)arrayOfEnryptedValues:(NSArray *)arrayForEncryption error:(PNError *__strong *)error;
 
 /**
-<<<<<<< HEAD
- * Returns reference on dictionary with encrypted values
- * from original dictionary in it.
- * In case of encryption error message will be generated.
- */
-- (NSDictionary *)dictionaryOfEnryptedValues:(NSDictionary *)dictionaryForEncryption
-                                       error:(PNError *__strong *)error;
-/**
- * Returns reference array with decrypted values
- * from original array in it.
- * In case of encryption error message will be generated.
-=======
  Returns reference on dictionary with encrypted values from original dictionary in it. In case of encryption error 
  message will be generated.
  */
@@ -114,35 +72,20 @@ static NSData *_cryptorKeyData = nil;
 /**
  Returns reference array with decrypted values from original array in it. In case of encryption error message will 
  be generated.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (NSArray *)arrayOfDecryptedValues:(NSArray *)arrayForDecryption error:(PNError *__strong *)error;
 
 /**
-<<<<<<< HEAD
- * Returns reference dictionary with decrypted values
- * from original dictionary in it.
- * In case of encryption error message will be generated.
- */
-- (NSDictionary *)dictionaryOfDecryptedValues:(NSDictionary *)dictionaryForDecryption
-                                        error:(PNError *__strong *)error;
-=======
  Returns reference dictionary with decrypted values from original dictionary in it.  In case of encryption error 
  message will be generated.
  */
 - (NSDictionary *)dictionaryOfDecryptedValues:(NSDictionary *)dictionaryForDecryption error:(PNError *__strong *)error;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #endif
 
 /**
  * Process data with specified cryptor and input data
  */
-<<<<<<< HEAD
-- (CCCryptorStatus)getProcessedData:(NSData **)outputData
-                      fromInputData:(NSData *)inputData
-=======
 - (CCCryptorStatus)getProcessedData:(NSData **)outputData fromInputData:(NSData *)inputData
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                     withCryptorType:(PNCryptorType)cryptorType;
 
 /**
@@ -154,11 +97,6 @@ static NSData *_cryptorKeyData = nil;
 #pragma mark - Misc methods
 
 /**
-<<<<<<< HEAD
- * Update cached data which is based on client's configuration
- */
-- (void)updateCipherData;
-=======
  Update/backup/restore cached data which is based on client's provided cipher key.
  
  @param cipherKey
@@ -167,19 +105,13 @@ static NSData *_cryptorKeyData = nil;
 - (void)updateCipherDataWithCipherKey:(NSString *)cipherKey;
 - (void)backupCipherConfiguration;
 - (void)restoreCipheConfiguration;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Construct and return reference on prepared cryptor
  * which will be used for data encode/decode depending
  * on specified options
  */
-<<<<<<< HEAD
-- (CCCryptorStatus)getCryptor:(CCCryptorRef *)cryptor
-                 forOperation:(CCOperation)operation;
-=======
 - (CCCryptorStatus)getCryptor:(CCCryptorRef *)cryptor forOperation:(CCOperation)operation;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Reset specified cryptor to initial state
@@ -201,27 +133,6 @@ static NSData *_cryptorKeyData = nil;
 
 #pragma mark - Class methods
 
-<<<<<<< HEAD
-+ (PNCryptoHelper *)sharedInstance {
-
-    dispatch_once(&onceToken, ^{
-        
-        _sharedInstance = [self new];
-    });
-    
-    
-    return _sharedInstance;
-}
-
-+ (void)resetHelper {
-
-    onceToken = 0;
-    _configuration = nil;
-    _cryptorInitializationVectorData = nil;
-    _cryptorKeyData = nil;
-
-    _sharedInstance = nil;
-=======
 + (PNCryptoHelper *)helperWithConfiguration:(PNConfiguration *)configuration error:(PNError **)error {
     
     PNCryptoHelper *helper = [self new];
@@ -233,7 +144,6 @@ static NSData *_cryptorKeyData = nil;
     
     
     return helper;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 
@@ -241,15 +151,7 @@ static NSData *_cryptorKeyData = nil;
 
 - (BOOL)updateWithConfiguration:(PNConfiguration *)configuration withError:(PNError **)error {
 
-<<<<<<< HEAD
-    _configuration = configuration;
-    [self updateCipherData];
-
-    // Temporary encrypt/decrypt objects to validate provided
-    // configuration
-=======
     // Temporary encrypt/decrypt objects to validate provided configuration
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     CCCryptorRef encoder;
     CCCryptorRef decoder;
 
@@ -260,12 +162,9 @@ static NSData *_cryptorKeyData = nil;
     // Check whether developer specified cipher key in configuration or not
     if ([configuration.cipherKey length] > 0) {
         
-<<<<<<< HEAD
-=======
         [self backupCipherConfiguration];
         [self updateCipherDataWithCipherKey:configuration.cipherKey];
         
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         // Create new cryptors with updated configuration
         initStatus = [self getCryptor:&encoder forOperation:kCCEncrypt];
         if (initStatus == kCCSuccess){
@@ -276,10 +175,7 @@ static NSData *_cryptorKeyData = nil;
             CCCryptorRelease(encoder);
             CCCryptorRelease(decoder);
         }
-<<<<<<< HEAD
-=======
         [self restoreCipheConfiguration];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
     else {
         
@@ -344,12 +240,7 @@ static NSData *_cryptorKeyData = nil;
 - (NSArray *)arrayOfEnryptedValues:(NSArray *)arrayForEncryption error:(PNError *__strong *)error {
 
     NSMutableArray *messages = [NSMutableArray arrayWithCapacity:[arrayForEncryption count]];
-<<<<<<< HEAD
-    [arrayForEncryption enumerateObjectsUsingBlock:^(id objectForEncryption,
-                                                     NSUInteger objectIndex,
-=======
     [arrayForEncryption enumerateObjectsUsingBlock:^(id objectForEncryption, NSUInteger objectIndex,
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                                                      BOOL *objectEnumeratorStop) {
 
         id encryptedObject = [self encryptedObjectFromObject:objectForEncryption error:error];
@@ -367,12 +258,7 @@ static NSData *_cryptorKeyData = nil;
     return messages;
 }
 
-<<<<<<< HEAD
-- (NSDictionary *)dictionaryOfEnryptedValues:(NSDictionary *)dictionaryForEncryption
-                                       error:(PNError *__strong *)error {
-=======
 - (NSDictionary *)dictionaryOfEnryptedValues:(NSDictionary *)dictionaryForEncryption error:(PNError *__strong *)error {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:[dictionaryForEncryption count]];
     [dictionaryForEncryption enumerateKeysAndObjectsUsingBlock:^(id key,
@@ -446,19 +332,10 @@ static NSData *_cryptorKeyData = nil;
     return messages;
 }
 
-<<<<<<< HEAD
-- (NSDictionary *)dictionaryOfDecryptedValues:(NSDictionary *)dictionaryForDecryption
-                                        error:(PNError *__strong *)error {
-
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:[dictionaryForDecryption count]];
-    [dictionaryForDecryption enumerateKeysAndObjectsUsingBlock:^(id key,
-                                                                 id objectForDecryption,
-=======
 - (NSDictionary *)dictionaryOfDecryptedValues:(NSDictionary *)dictionaryForDecryption error:(PNError *__strong *)error {
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:[dictionaryForDecryption count]];
     [dictionaryForDecryption enumerateKeysAndObjectsUsingBlock:^(id key, id objectForDecryption,
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                                                                  BOOL *objectEnumeratorStop) {
 
         id decryptedObject = [self decryptedObjectFromObject:objectForDecryption error:error];
@@ -477,20 +354,11 @@ static NSData *_cryptorKeyData = nil;
 }
 #endif
 
-<<<<<<< HEAD
-- (CCCryptorStatus)getProcessedData:(NSData **)outputData
-                      fromInputData:(NSData *)inputData
-                    withCryptorType:(PNCryptorType)cryptorType {
-
-    CCCryptorStatus processingStatus = kCCParamError;
-    if (self.isReady) {
-=======
 - (CCCryptorStatus)getProcessedData:(NSData **)outputData fromInputData:(NSData *)inputData
                     withCryptorType:(PNCryptorType)cryptorType {
 
     CCCryptorStatus processingStatus = kCCParamError;
     if (self.ready) {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         // Create new cryptor
         CCCryptorRef cryptor;
@@ -505,17 +373,8 @@ static NSData *_cryptorKeyData = nil;
 
             // Perform processing and response data size adjustment calculation
             size_t updatedProcessedDataLength;
-<<<<<<< HEAD
-            processingStatus = CCCryptorUpdate(cryptor,
-                                               [inputData bytes],
-                                               [inputData length],
-                                               [processedData mutableBytes],
-                                               [processedData length],
-                                               &updatedProcessedDataLength);
-=======
             processingStatus = CCCryptorUpdate(cryptor, [inputData bytes], [inputData length], [processedData mutableBytes],
                                                [processedData length], &updatedProcessedDataLength);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
             if (processingStatus == kCCSuccess) {
 
@@ -559,11 +418,7 @@ static NSData *_cryptorKeyData = nil;
     NSString *processedString = string;
     NSInteger errorCode = -1;
     
-<<<<<<< HEAD
-    if (self.isReady) {
-=======
     if (self.ready) {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         
         CCCryptorStatus status = kCCSuccess;
         NSData *inputData;
@@ -627,44 +482,16 @@ static NSData *_cryptorKeyData = nil;
 
 #pragma mark - Misc methods
 
-<<<<<<< HEAD
-- (void)updateCipherData {
-
-    if (_cryptorInitializationVectorData == nil) {
-
-        // Prepare cryptor initialization vector
-        _cryptorInitializationVectorData = [@"0123456789012345" dataUsingEncoding:NSUTF8StringEncoding];
-=======
 - (void)updateCipherDataWithCipherKey:(NSString *)cipherKey {
 
     if (self.cryptorInitializationVectorData == nil) {
 
         // Prepare cryptor initialization vector
         self.cryptorInitializationVectorData = [@"0123456789012345" dataUsingEncoding:NSUTF8StringEncoding];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 
 #ifndef CRYPTO_BACKWARD_COMPATIBILITY_MODE
     // Update cryptor key
-<<<<<<< HEAD
-    _cryptorKeyData = [[_configuration.cipherKey pn_sha256HEXString] dataUsingEncoding:NSUTF8StringEncoding];
-#else
-    // Update cryptor key
-    _cryptorKeyData = [_configuration.cipherKey md5Data];
-#endif
-}
-
-- (CCCryptorStatus)getCryptor:(CCCryptorRef *)cryptor
-                 forOperation:(CCOperation)operation {
-
-    CCCryptorStatus cryptCreateStatus = CCCryptorCreate(operation,
-                                                        kCCAlgorithmAES128,
-                                                        kCCOptionPKCS7Padding,
-                                                        [_cryptorKeyData bytes],
-                                                        [_cryptorKeyData length],
-                                                        [_cryptorInitializationVectorData bytes],
-                                                        cryptor);
-=======
     self.cryptorKeyData = [[cipherKey pn_sha256HEXString] dataUsingEncoding:NSUTF8StringEncoding];
 #else
     // Update cryptor key
@@ -690,18 +517,13 @@ static NSData *_cryptorKeyData = nil;
     CCCryptorStatus cryptCreateStatus = CCCryptorCreate(operation, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
                                                         [self.cryptorKeyData bytes], [self.cryptorKeyData length],
                                                         [self.cryptorInitializationVectorData bytes], cryptor);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     
     return cryptCreateStatus;
 }
 
 - (CCCryptorStatus)resetCryptor:(CCCryptorRef)cryptor {
     
-<<<<<<< HEAD
-    return CCCryptorReset(cryptor, [_cryptorInitializationVectorData bytes]);
-=======
     return CCCryptorReset(cryptor, [self.cryptorInitializationVectorData bytes]);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 - (NSInteger)errorCodeFromStatus:(CCCryptorStatus)status {

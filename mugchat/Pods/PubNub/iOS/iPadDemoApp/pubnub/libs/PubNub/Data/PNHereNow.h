@@ -11,11 +11,7 @@
  identifier property) subscribed at this moment.
 
  @author Sergey Mamontov
-<<<<<<< HEAD
- @version 3.4.0
-=======
  @since 3.4.0
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  @copyright © 2009-13 PubNub Inc.
  */
 @interface PNHereNow : NSObject
@@ -25,34 +21,22 @@
 
 /**
  Stores reference on list of \b PNClient instances.
-<<<<<<< HEAD
- */
-@property (nonatomic, readonly, strong) NSArray *participants;
-=======
  
  @note In case if requested only number of participants, this array will be \c nil.
  */
 @property (nonatomic, readonly, strong) NSArray *participants
 DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use '-participantsForChannel:' to retrieve participants list");
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  Stores how much participants have been found subscribed on concrete channel.
  */
-<<<<<<< HEAD
-@property (nonatomic, readonly, assign) unsigned long participantsCount;
-=======
 @property (nonatomic, readonly, assign) unsigned long participantsCount
 DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use '-participantsCountForChannel:' to retrieve participants "
                          "count");
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  Stores reference on channel inside of which \b PubNub client searched for participants (clients).
  */
-<<<<<<< HEAD
-@property (nonatomic, readonly, strong) PNChannel *channel;
-=======
 @property (nonatomic, readonly, strong) PNChannel *channel
 DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use 'channels' property to retrieve list of channels with "
                          "participants information");
@@ -96,7 +80,6 @@ DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use 'channels' property to 
  @return \b 0 in case if there is no subscribers (or \c channel wasn't part of fetch request) on target \c channel.
  */
 - (NSUInteger)participantsCountForChannel:(PNChannel *)channel;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark -
 

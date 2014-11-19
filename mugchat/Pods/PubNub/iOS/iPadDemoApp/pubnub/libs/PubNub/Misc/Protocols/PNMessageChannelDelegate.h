@@ -20,12 +20,9 @@
 
 @protocol PNMessageChannelDelegate <NSObject>
 
-<<<<<<< HEAD
-=======
 
 @optional // @required in corresponding categories for PubNub main class.
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 /**
  Sent to the delegate when messaging channel would like to change channels set and it need to know whether it should
  proceed with last time token or request new one from server.
@@ -44,8 +41,6 @@
 - (BOOL)shouldMessagingChannelRestoreWithLastTimeToken:(PNMessagingChannel *)messagingChannel;
 
 /**
-<<<<<<< HEAD
-=======
  Retrieve client state informatino for set of channels.
  
  @param channels
@@ -84,7 +79,6 @@
 - (void)updateClientStateInformationWith:(NSDictionary *)state forChannels:(NSArray *)channels;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  * Sent to the delegate when client did reset it's state
  */
 - (void)messagingChannelDidReset:(PNMessagingChannel *)messagingChannel;
@@ -98,131 +92,79 @@
 /**
  * Sent to the delegate when client successfully subscribed on specified set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didSubscribeOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didSubscribeOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced withClientState:(NSDictionary *)clientState;
 
 /**
  * Sent to the delegate when client is about to launch subscription restore process
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel willRestoreSubscriptionOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel willRestoreSubscriptionOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client successfully restored subscription on previous set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didRestoreSubscriptionOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didRestoreSubscriptionOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client failed to subscribe on channels because of error
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailSubscribeOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailSubscribeOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                withError:(PNError *)error sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client is about to unsubscribe from specified list of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel willUnsubscribeFromChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel willUnsubscribeFrom:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client unsubscribed from specified set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didUnsubscribeFromChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didUnsubscribeFrom:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client failed to unsubscribe from channels because of error
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailUnsubscribeOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailUnsubscribeFrom:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                withError:(PNError *)error sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client is about to enable presence observation on specified set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel willEnablePresenceObservationOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel willEnablePresenceObservationOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client successfully enabled presence observation on set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didEnablePresenceObservationOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didEnablePresenceObservationOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client failed to enable presence on channels because of error
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailPresenceEnablingOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailPresenceEnablingOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                withError:(PNError *)error sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client is about to disable presence observation on set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel willDisablePresenceObservationOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel willDisablePresenceObservationOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client successfully disabled presence observation on set of channels
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didDisablePresenceObservationOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didDisablePresenceObservationOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                sequenced:(BOOL)isSequenced;
 
 /**
  * Sent to the delegate when client failed to disable presence on channels because of error
  */
-<<<<<<< HEAD
-- (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailPresenceDisablingOnChannels:(NSArray *)channels
-=======
 - (void)messagingChannel:(PNMessagingChannel *)messagingChannel didFailPresenceDisablingOn:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                withError:(PNError *)error sequenced:(BOOL)isSequenced;
 
 /**

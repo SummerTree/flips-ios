@@ -88,10 +88,7 @@ struct PNServiceResponseServiceDataKeysStruct {
 @property (nonatomic, assign, getter = isLastResponseOnConnection) BOOL lastResponseOnConnection;
 @property (nonatomic, strong) id response;
 @property (nonatomic, strong) NSMutableDictionary *privateData;
-<<<<<<< HEAD
-=======
 @property (nonatomic, strong) NSMutableDictionary *unknownData;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark -
 

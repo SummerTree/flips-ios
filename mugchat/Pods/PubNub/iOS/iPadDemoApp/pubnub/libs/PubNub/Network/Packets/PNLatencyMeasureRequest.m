@@ -10,16 +10,10 @@
 #import "PNServiceResponseCallbacks.h"
 #import "PNBaseRequest+Protected.h"
 #import "PNMessage+Protected.h"
-<<<<<<< HEAD
-#import "PubNub+Protected.h"
-#import "PNConstants.h"
-#import "PNResponse.h"
-=======
 #import "PNConstants.h"
 #import "PNResponse.h"
 #import "PNChannel.h"
 #import "PNHelper.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -56,12 +50,7 @@
 
     // Retrieve reference on channel which is used to measure
     // network latency
-<<<<<<< HEAD
-    NSString *latencyMeterChannelName = [kPNLatencyMeterChannel stringByAppendingFormat:@"-%@",
-                                         [PubNub sharedInstance].launchSessionIdentifier];
-=======
     NSString *latencyMeterChannelName = [kPNLatencyMeterChannel stringByAppendingFormat:@"-%@", [PNHelper UUID]];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     PNChannel *latencyMeterChannel = [PNChannel channelWithName:latencyMeterChannelName];
     PNMessage *message = [PNMessage messageWithObject:@"1" forChannel:latencyMeterChannel compressed:NO
                                        storeInHistory:NO error:NULL];
@@ -73,15 +62,12 @@
     return self;
 }
 
-<<<<<<< HEAD
-=======
 - (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier {
     
     [super finalizeWithConfiguration:configuration clientIdentifier:clientIdentifier];
     self.clientIdentifier = clientIdentifier;
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (NSString *)callbackMethodName {
 
     return PNServiceResponseCallbacks.latencyMeasureMessageCallback;

@@ -7,10 +7,7 @@
 //
 
 #import "PNAccessRightOptions+Protected.h"
-<<<<<<< HEAD
-=======
 #import "PNChannel+Protected.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNPrivateImports.h"
 #import "PNHelper.h"
 
@@ -51,13 +48,10 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
         if ([channels count]) {
 
             self.level = PNChannelAccessRightsLevel;
-<<<<<<< HEAD
-=======
             if (((PNChannel *)[channels lastObject]).isChannelGroup) {
                 
                 self.level = PNChannelGroupAccessRightsLevel;
             }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
             if ([clientsAuthorizationKeys count]) {
 
                 self.level = PNUserAccessRightsLevel;
@@ -67,11 +61,7 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
         }
 
         self.accessPeriodDuration = accessPeriodDuration >= 0 ? accessPeriodDuration : kPNDefaulfAccessPeriodDuration;
-<<<<<<< HEAD
-        if (self.rights == PNUnknownAccessRights) {
-=======
         if (self.rights == PNUnknownAccessRights || self.rights == PNNoAccessRights) {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
             self.accessPeriodDuration = 0;
         }
@@ -135,13 +125,10 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
 
         [description appendFormat:@" channels: %@;", self.channels];
     }
-<<<<<<< HEAD
-=======
     else if (self.level == PNChannelGroupAccessRightsLevel) {
         
         [description appendFormat:@" channel-group: %@;", self.channels];
     }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     else if (self.level == PNUserAccessRightsLevel) {
 
         [description appendFormat:@" users: %@;", self.clientsAuthorizationKeys];
@@ -153,8 +140,6 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
     return description;
 }
 
-<<<<<<< HEAD
-=======
 - (NSString *)logDescription {
     
     NSString *level = @"application";
@@ -194,7 +179,6 @@ static NSUInteger const kPNDefaulfAccessPeriodDuration = 1440;
     return logDescription;
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark -
 
 

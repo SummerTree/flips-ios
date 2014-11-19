@@ -86,11 +86,6 @@
 - (NSArray *)requestsWithClass:(Class)requestClass;
 
 /**
-<<<<<<< HEAD
- * Closing connection to the server. Requests queue won't be flushed.
- * If 'shouldNotifyOnDisconnection' is set to YES, than connection channel will receive disconnection event and pass
- * it forward
-=======
  Close only connection w/o any further notification to the user.
  */
 - (void)disconnectOnInternalRequest;
@@ -99,7 +94,6 @@
  Closing connection to the server. Requests queue won't be flushed.
  If 'shouldNotifyOnDisconnection' is set to YES, than connection channel will receive disconnection event and pass
  it forward
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)disconnectWithEvent:(BOOL)shouldNotifyOnDisconnection;
 

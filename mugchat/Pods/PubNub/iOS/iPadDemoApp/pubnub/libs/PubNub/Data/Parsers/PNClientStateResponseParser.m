@@ -6,16 +6,10 @@
 
  */
 
-<<<<<<< HEAD
-#import "PNClientStateResponseParser.h"
-#import "PNResponse+Protected.h"
-#import "PNClient+Protected.h"
-=======
 #import "PNClientStateResponseParser+Protected.h"
 #import "PNResponse+Protected.h"
 #import "PNClient+Protected.h"
 #import "PNChannel.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -25,27 +19,6 @@
 #endif
 
 
-<<<<<<< HEAD
-#pragma mark Private interface declaration
-
-@interface PNClientStateResponseParser ()
-
-
-#pragma mark - Properties
-
-/**
- Refrence on \b PNClient instance which will store client information.
- */
-@property (nonatomic, strong) PNClient *client;
-
-#pragma mark -
-
-
-@end
-
-
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Public interface implementation
 
 @implementation PNClientStateResponseParser
@@ -66,13 +39,10 @@
     // Checking base requirement about payload data type.
     BOOL conforms = [response.response isKindOfClass:[NSDictionary class]];
     conforms = (conforms ? (response.additionalData && [response.additionalData isKindOfClass:[PNClient class]]) : conforms);
-<<<<<<< HEAD
-=======
     if (conforms && [response.response objectForKey:kPNResponseChannelsKey]) {
         
         conforms = [[response.response valueForKey:kPNResponseChannelsKey] isKindOfClass:[NSDictionary class]];
     }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
     return conforms;
@@ -85,12 +55,6 @@
 
     // Check whether initialization successful or not
     if ((self = [super init])) {
-<<<<<<< HEAD
-
-        NSDictionary *responseData = response.response;
-        self.client = response.additionalData;
-        self.client.data = responseData;
-=======
         
         PNClient *client = response.additionalData;
         NSDictionary *responseData = response.response;
@@ -108,7 +72,6 @@
             [client addClientData:responseData forChannel:client.channel];
         }
         self.client = client;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 
 

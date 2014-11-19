@@ -1,31 +1,3 @@
-<<<<<<< HEAD
-//
-//  PNObservationCenter.h
-//  pubnub
-//
-//  Observation center will allow to subscribe
-//  for particular events with handle block
-//  (block will be provided by subscriber)
-//
-//
-//  Created by Sergey Mamontov.
-//
-//
-
-#import <Foundation/Foundation.h>
-#import "PNStructures.h"
-
-
-@interface PNObservationCenter : NSObject
-
-
-#pragma mark Class methods
-
-/**
- * Returns reference on shared observer center instance
- * which manage all observers and notify them by request
- * or notification.
-=======
 #import <Foundation/Foundation.h>
 #import "PNStructures.h"
 
@@ -45,7 +17,6 @@
  Returns reference on shared observer center instance which manage all observers and notify them by request or notification.
  
  @return \b PNObservationCenter singleton.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 + (PNObservationCenter *)defaultCenter;
 
@@ -97,8 +68,6 @@
 - (void)removeClientStateUpdateObserver:(id)observer;
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Client channel groups observation
 
 /**
@@ -147,7 +116,6 @@
 - (void)removeChannelsRemovalFromGroupObserver:(id)observer;
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Client channels action/event observation
 
 /**

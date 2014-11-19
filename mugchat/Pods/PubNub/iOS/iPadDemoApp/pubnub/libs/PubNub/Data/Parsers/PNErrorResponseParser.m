@@ -109,13 +109,10 @@
                 
                 associatedChannels = [PNChannel channelsWithNames:[responseData valueForKeyPath:kPNResponseErrorChannelsKey]];
             }
-<<<<<<< HEAD
-=======
             if (!associatedChannels && [responseData valueForKeyPath:kPNResponseErrorChannelGroupsKey]) {
                 
                 associatedChannels = [PNChannel channelsWithNames:[responseData valueForKeyPath:kPNResponseErrorChannelGroupsKey]];
             }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
             
             
             if (response.statusCode != 200 && errorMessage == nil) {

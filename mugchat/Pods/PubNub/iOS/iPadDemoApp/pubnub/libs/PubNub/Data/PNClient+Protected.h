@@ -17,11 +17,6 @@
 #pragma mark - Properties
 
 @property (nonatomic, strong) PNChannel *channel;
-<<<<<<< HEAD
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, strong) NSDictionary *data;
-
-=======
 @property (nonatomic, strong) PNChannelGroup *group;
 @property (nonatomic, copy) NSString *identifier;
 @property (nonatomic, strong) NSDictionary *data;
@@ -47,7 +42,6 @@
  */
 @property (nonatomic, strong) NSDictionary *unboundData;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark - Class methods
 
@@ -98,18 +92,12 @@
  \b PNChannel instance which describe where this client reside at this moment / or leaved.
 
  @param data
-<<<<<<< HEAD
- \b NSDictionary instance which hold applied to the client during subscription.
-=======
  \b NSDictionary instance which hold applied to the client during subscription or state fetch request.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
  @return \b PNClient instance.
  */
 - (id)initWithIdentifier:(NSString *)identifier channel:(PNChannel *)channel andData:(NSDictionary *)data;
 
-<<<<<<< HEAD
-=======
 /**
  @brief Bind client's data to channel.
  
@@ -122,7 +110,6 @@
  */
 - (void)addClientData:(NSDictionary *)data forChannel:(PNChannel *)channel;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark -
 
 

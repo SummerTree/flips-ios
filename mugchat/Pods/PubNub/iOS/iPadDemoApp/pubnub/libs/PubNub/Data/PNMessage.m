@@ -17,10 +17,7 @@
 
 #import "PNMessage+Protected.h"
 #import "PNJSONSerialization.h"
-<<<<<<< HEAD
-=======
 #import "PNChannelGroup.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNErrorCodes.h"
 #import "PNChannel.h"
 #import "PNError.h"
@@ -53,29 +50,6 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
 
 #pragma mark - Properties
 
-<<<<<<< HEAD
-// Stores reference on channel to which this message
-// should be sent
-@property (nonatomic, strong) PNChannel *channel;
-
-// Stores whether message should be compressed or not
-@property (nonatomic, assign, getter = shouldCompressMessage) BOOL compressMessage;
-
-@property (nonatomic, assign, getter = shouldStoreInHistory) BOOL storeInHistory;
-
-// Stores reference on message body
-@property (nonatomic, strong) id message;
-
-// Stores reference on date when this message was received
-// (doesn't work for history, only for presence events)
-@property (nonatomic, strong) PNDate *receiveDate;
-
-@property (nonatomic, strong) PNDate *date;
-
-// Stores reference on timetoken when this message was received
-@property (nonatomic, strong) NSNumber *timeToken;
-
-=======
 @property (nonatomic, strong) PNChannel *channel;
 @property (nonatomic, strong) PNChannelGroup *channelGroup;
 @property (nonatomic, assign, getter = shouldCompressMessage) BOOL compressMessage;
@@ -87,16 +61,11 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
 
 #pragma mark -
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 @end
 
 
-<<<<<<< HEAD
-#pragma mark Public interface methods
-=======
 #pragma mark - Public interface methods
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 @implementation PNMessage
 
@@ -153,31 +122,6 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
 }
 
 + (PNMessage *)messageFromServiceResponse:(id)messageBody onChannel:(PNChannel *)channel atDate:(PNDate *)messagePostDate {
-<<<<<<< HEAD
-
-    PNMessage *message = [[self class] new];
-
-    // Check whether message body contains time token included from history API or not
-    if ([messageBody isKindOfClass:[NSDictionary class]]) {
-
-        if ([messageBody objectForKey:kPNMessageTimeTokenKey])  {
-
-            messagePostDate = [PNDate dateWithToken:[messageBody objectForKey:kPNMessageTimeTokenKey]];
-        }
-
-        // Extract real message
-        if ([messageBody objectForKey:kPNMessageTimeTokenKey]) {
-
-            messageBody = [messageBody valueForKey:kPNMessageBodyKey];
-        }
-    }
-
-    message.message = [PubNub AESDecrypt:messageBody];
-    message.channel = channel;
-    message.receiveDate = messagePostDate;
-
-
-=======
     
     return [self messageFromServiceResponse:messageBody onChannel:channel channelGroup:nil atDate:messagePostDate];
 }
@@ -208,7 +152,6 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
     message.receiveDate = messagePostDate;
     
     
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     return message;
 }
 
@@ -260,12 +203,8 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
     return self;
 }
 
-<<<<<<< HEAD
-- (id)initWithObject:(id)object forChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage storeInHistory:(BOOL)shouldStoreInHistory {
-=======
 - (id)initWithObject:(id)object forChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
       storeInHistory:(BOOL)shouldStoreInHistory {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
     // Check whether initialization was successful or not
     if ((self = [super init])) {
@@ -320,14 +259,6 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
 
 - (NSString *)description {
 
-<<<<<<< HEAD
-    return [NSString stringWithFormat:@"%@ (%p): <message: %@, date: %@, channel: %@>",
-                                      NSStringFromClass([self class]),
-                                      self,
-                                      self.message,
-                                      (self.receiveDate ? self.receiveDate : self.date),
-                                      self.channel.name];
-=======
     return [NSString stringWithFormat:@"%@ (%p): <message: %@, date: %@, channel: %@>", NSStringFromClass([self class]),
             self, self.message, (self.receiveDate ? self.receiveDate : self.date), self.channel.name];
 }
@@ -354,7 +285,6 @@ struct PNMessageDataKeysStruct PNMessageDataKeys = {
     
     
     return logDescription;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 #pragma mark -

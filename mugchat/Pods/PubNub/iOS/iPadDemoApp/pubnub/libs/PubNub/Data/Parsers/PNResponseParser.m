@@ -7,16 +7,6 @@
  */
 
 #import "PNResponseParser.h"
-<<<<<<< HEAD
-#import "PNAccessRightsResponseParser+Protected.h"
-#import "PNPushNotificationsEnabledChannelsParser.h"
-#import "PNClientStateUpdateResponseParser.h"
-#import "PNActionResponseParser+Protected.h"
-#import "PNChannelHistoryParser+Protected.h"
-#import "PNOperationStatusResponseParser.h"
-#import "PNErrorResponseParser+Protected.h"
-#import "PNChannelEventsResponseParser.h"
-=======
 #import "PNChannelGroupNamespaceRemoveResponseParser.h"
 #import "PNPushNotificationsEnabledChannelsParser.h"
 #import "PNAccessRightsResponseParser+Protected.h"
@@ -31,7 +21,6 @@
 #import "PNErrorResponseParser+Protected.h"
 #import "PNChannelEventsResponseParser.h"
 #import "PNChannelGroupsResponseParser.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNClientStateResponseParser.h"
 #import "PNServiceResponseCallbacks.h"
 #import "PNTimeTokenResponseParser.h"
@@ -105,24 +94,16 @@
         }
     }
 
-<<<<<<< HEAD
-    Class parserClass = [self classForResponse:response];
-=======
     Class parserClass = nil;
     if (![response isErrorResponse]){
         
         parserClass = [self classForResponse:response];
     }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
     // Looks like server provided response which doesn't conform to standards required for concrete packet processing.
     if (!parserClass) {
 
         parserClass = [PNErrorResponseParser class];
-<<<<<<< HEAD
-        response = nil;
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 
 
@@ -179,8 +160,6 @@
 
         parserClass = [PNClientStateUpdateResponseParser class];
     }
-<<<<<<< HEAD
-=======
     // Check whether result is result for "Channel Groups" request or not.
     else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.channelGroupsRequestCallback]) {
         
@@ -212,7 +191,6 @@
         
         parserClass = [PNGroupChannelsListChangeParser class];
     }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     // Check whether result is result for "Here now" request execution or not.
     else if ([response.callbackMethod isEqualToString:PNServiceResponseCallbacks.channelParticipantsCallback]) {
         

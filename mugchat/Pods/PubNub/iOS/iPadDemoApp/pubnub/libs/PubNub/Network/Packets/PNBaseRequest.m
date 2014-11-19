@@ -15,22 +15,14 @@
 #import "PNBaseRequest+Protected.h"
 #import "NSString+PNAddition.h"
 #import "NSData+PNAdditions.h"
-<<<<<<< HEAD
-#import "PubNub+Protected.h"
-#import "PNLoggerSymbols.h"
-=======
 #import "PNConfiguration.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNWriteBuffer.h"
 #import "PNConstants.h"
 #import "PNHelper.h"
 
-<<<<<<< HEAD
-=======
 #import "PNLogger+Protected.h"
 #import "PNLoggerSymbols.h"
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 // ARC check
 #if !__has_feature(objc_arc)
@@ -45,17 +37,6 @@
 
 #pragma mark - Properties
 
-<<<<<<< HEAD
-// Stores reference on whether connection should
-// be closed before sending this message or not
-@property (nonatomic, assign, getter = shouldCloseConnection) BOOL closeConnection;
-
-// Stores number of request sending retries
-// (when it will reach limit communication
-// channel should remove it from queue
-@property (nonatomic, assign) NSUInteger retryCount;
-
-=======
 // Stores reference on client identifier on the moment of request creation
 @property (nonatomic, copy) NSString *clientIdentifier;
 
@@ -72,7 +53,6 @@
 @property (nonatomic, copy) NSString *origin;
 @property (nonatomic, assign, getter = shouldAcceptCompressedResponse) BOOL acceptCompressedResponse;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark - Instance methods
 
@@ -110,15 +90,6 @@
     
     return self;
 }
-<<<<<<< HEAD
-
-- (NSTimeInterval)timeout {
-
-    return [PubNub sharedInstance].configuration.nonSubscriptionRequestTimeout;
-}
-
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (NSString *)callbackMethodName {
 
     return @"0";
@@ -150,8 +121,6 @@
     return @"/";
 }
 
-<<<<<<< HEAD
-=======
 - (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier {
     
     self.acceptCompressedResponse = configuration.shouldAcceptCompressedResponse;
@@ -160,7 +129,6 @@
     self.origin = configuration.origin;
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (PNWriteBuffer *)buffer {
     
     return [PNWriteBuffer writeBufferForRequest:self];
@@ -203,11 +171,7 @@
 
 - (NSString *)authorizationField {
 
-<<<<<<< HEAD
-    NSString *authorizationKey = [PubNub sharedInstance].configuration.authorizationKey;
-=======
     NSString *authorizationKey = self.authorizationKey;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     if ([authorizationKey length] > 0) {
 
 		authorizationKey = [NSString stringWithFormat:@"auth=%@", [authorizationKey pn_percentEscapedString]];
@@ -236,11 +200,7 @@
 
 - (NSString *)requestPath {
     
-<<<<<<< HEAD
-    return [NSString stringWithFormat:@"http://%@%@", [PubNub sharedInstance].configuration.origin, [self resourcePath]];
-=======
     return [NSString stringWithFormat:@"http://%@%@", self.origin, [self resourcePath]];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 - (PNRequestHTTPMethod)HTTPMethod {
@@ -263,11 +223,7 @@
     NSMutableString *plainPayload = [NSMutableString string];
     NSMutableData *payloadData = [NSMutableData data];
     NSString *acceptEncoding = @"";
-<<<<<<< HEAD
-    if ([PubNub sharedInstance].configuration.shouldAcceptCompressedResponse || [self shouldCompressPOSTBody]) {
-=======
     if (self.shouldAcceptCompressedResponse || [self shouldCompressPOSTBody]) {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         acceptEncoding = @"Accept-Encoding: gzip, deflate\r\n";
     }
@@ -286,11 +242,7 @@
     }
     
     [plainPayload appendFormat:@"%@ %@ HTTP/1.1\r\nHost: %@\r\nAccept: */*\r\n%@",
-<<<<<<< HEAD
-     HTTPMethod, [self resourcePath], [PubNub sharedInstance].configuration.origin, acceptEncoding];
-=======
      HTTPMethod, [self resourcePath], self.origin, acceptEncoding];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     
     if (postBody) {
         
@@ -314,10 +266,6 @@
 
 - (NSString *)logDescription {
     
-<<<<<<< HEAD
-    return [NSString stringWithFormat:@"<%@|%@|%@>", ([self HTTPMethod] == PNRequestPOSTMethod ? @"POST" :@"GET"),
-            [self resourcePath], @([self shouldCompressPOSTBody])];
-=======
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
     NSString *resourcePath = ([self respondsToSelector:@selector(debugResourcePath)] ?
@@ -326,7 +274,6 @@
     
     return [NSString stringWithFormat:@"<%@|%@|%@>", ([self HTTPMethod] == PNRequestPOSTMethod ? @"POST" :@"GET"),
             resourcePath, @([self shouldCompressPOSTBody])];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 #pragma mark -

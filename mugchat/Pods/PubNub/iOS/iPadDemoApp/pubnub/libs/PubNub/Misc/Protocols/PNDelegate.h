@@ -14,12 +14,7 @@
 
 #pragma mark Class forward
 
-<<<<<<< HEAD
-@class PNPresenceEvent, PNMessage, PubNub, PNError, PNDate, PNAccessRightsCollection;
-@class PNClient;
-=======
 @class PNAccessRightsCollection, PNPresenceEvent, PNChannelGroup, PNMessage, PNClient, PubNub, PNError, PNDate;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 @protocol PNDelegate <NSObject>
@@ -129,12 +124,6 @@
 - (void)pubnubClient:(PubNub *)client clientStateUpdateDidFailWithError:(PNError *)error;
 
 /**
-<<<<<<< HEAD
- * Called on delegate when client successfully subscribed to specified
- * set of channels
- */
-- (void)pubnubClient:(PubNub *)client didSubscribeOnChannels:(NSArray *)channels;
-=======
  Called on delegate when client successfully received list of channel groups which has been created earlier.
  
  @param client
@@ -327,15 +316,11 @@
  @since 3.7.0
  */
 - (void)pubnubClient:(PubNub *)client didSubscribeOn:(NSArray *)channelObjects;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Called on delegate when client is about to init resubscribe on
  * previous set of channels
  */
-<<<<<<< HEAD
-- (void)pubnubClient:(PubNub *)client willRestoreSubscriptionOnChannels:(NSArray *)channels;
-=======
 - (void)pubnubClient:(PubNub *)client willRestoreSubscriptionOnChannels:(NSArray *)channels
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:willRestoreSubscriptionOn:' instead.");
 
@@ -352,21 +337,11 @@
  @since 3.7.0
  */
 - (void)pubnubClient:(PubNub *)client willRestoreSubscriptionOn:(NSArray *)channelObjects;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Called on delegate when client successfully restored subscription on
  * previous set of channels
  */
-<<<<<<< HEAD
-- (void)pubnubClient:(PubNub *)client didRestoreSubscriptionOnChannels:(NSArray *)channels;
-
-/**
- * Called on delegate when some kind of error occurred during 
- * subscription creation
- * error - returned error will contain information about channel
- *         on which this error occurred and possible reason of error
-=======
 - (void)pubnubClient:(PubNub *)client didRestoreSubscriptionOnChannels:(NSArray *)channels
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:didRestoreSubscriptionOn:' instead.");
 
@@ -393,7 +368,6 @@
                \b PNChannelProtocol data feed object protocol) on which client did fail to subscribe.
  
  @since 3.7.0
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)pubnubClient:(PubNub *)client subscriptionDidFailWithError:(PNError *)error;
 
@@ -401,9 +375,6 @@
  * Called on delegate when client successfully unsubscribed from specified
  * set of channels
  */
-<<<<<<< HEAD
-- (void)pubnubClient:(PubNub *)client didUnsubscribeOnChannels:(NSArray *)channels;
-=======
 - (void)pubnubClient:(PubNub *)client didUnsubscribeOnChannels:(NSArray *)channels
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:didUnsubscribeFrom:' instead.");
 
@@ -419,7 +390,6 @@
  @since 3.7.0
  */
 - (void)pubnubClient:(PubNub *)client didUnsubscribeFrom:(NSArray *)channelObjects;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Called on delegate when some kind of error occurred during
@@ -427,8 +397,6 @@
  * error - returned error will contain information about channel
  *         on which this error occurred and possible reason of error
  */
-<<<<<<< HEAD
-=======
 /**
  @brief Unsubscription failure callback.
  
@@ -440,22 +408,12 @@
  
  @since 3.7.0
  */
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (void)pubnubClient:(PubNub *)client unsubscriptionDidFailWithError:(PNError *)error;
 
 /**
  * Called on delegate when client successfully enabled presence observation on
  * set of channels
  */
-<<<<<<< HEAD
-- (void)pubnubClient:(PubNub *)client didEnablePresenceObservationOnChannels:(NSArray *)channels;
-
-/**
- * Called on delegate when some kind of error occurred during
- * presence observation enabling
- * error - returned error will contain information about channel
- *         on which this error occurred and possible reason of error
-=======
 - (void)pubnubClient:(PubNub *)client didEnablePresenceObservationOnChannels:(NSArray *)channels
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:didEnablePresenceObservationOn:' instead.");
 
@@ -483,7 +441,6 @@
                \b PNChannelProtocol data feed object protocol) for which client did fail to enable presence observation.
  
  @since 3.7.0
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)pubnubClient:(PubNub *)client presenceObservationEnablingDidFailWithError:(PNError *)error;
 
@@ -491,9 +448,6 @@
  * Called on delegate when client successfully disabled presence observation on
  * set of channels
  */
-<<<<<<< HEAD
-- (void)pubnubClient:(PubNub *)client didDisablePresenceObservationOnChannels:(NSArray *)channels;
-=======
 - (void)pubnubClient:(PubNub *)client didDisablePresenceObservationOnChannels:(NSArray *)channels
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:didDisablePresenceObservationOn:' instead.");
 
@@ -510,7 +464,6 @@
  @since 3.7.0
  */
 - (void)pubnubClient:(PubNub *)client didDisablePresenceObservationOn:(NSArray *)channelObjects;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Called on delegate when some kind of error occurred during
@@ -518,8 +471,6 @@
  * error - returned error will contain information about channel
  *         on which this error occurred and possible reason of error
  */
-<<<<<<< HEAD
-=======
 /**
  @brief Presence observation disabling failure callback.
  
@@ -531,7 +482,6 @@
  
  @since 3.7.0
  */
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (void)pubnubClient:(PubNub *)client presenceObservationDisablingDidFailWithError:(PNError *)error;
 
 /**
@@ -693,12 +643,6 @@
 - (void)pubnubClient:(PubNub *)client didFailHistoryDownloadForChannel:(PNChannel *)channel withError:(PNError *)error;
 
 /**
-<<<<<<< HEAD
- * Called on delegate when client retrieved participants list for specific channel
- */
-- (void)pubnubClient:(PubNub *)client didReceiveParticipantsList:(NSArray *)participantsList
-          forChannel:(PNChannel *)channel;
-=======
  Called on delegate when client retrieved participants list for specific channel.
  
  @param participantsList
@@ -711,14 +655,11 @@
 - (void)pubnubClient:(PubNub *)client didReceiveParticipantsList:(NSArray *)participantsList
           forChannel:(PNChannel *)channel
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:didReceiveParticipants:forObjects:' instead.");
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  * Called on delegate when client failed to download participants list
  */
 - (void)pubnubClient:(PubNub *)client didFailParticipantsListDownloadForChannel:(PNChannel *)channel
-<<<<<<< HEAD
-=======
            withError:(PNError *)error
   DEPRECATED_MSG_ATTRIBUTE(" Use '-pubnubClient:didFailParticipantsListDownloadFor:withError:'"
                            " instead.");
@@ -755,7 +696,6 @@
  @since 3.7.0
  */
 - (void)pubnubClient:(PubNub *)client didFailParticipantsListDownloadFor:(NSArray *)channelObjects
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
            withError:(PNError *)error;
 
 /**

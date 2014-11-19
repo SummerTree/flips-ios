@@ -124,10 +124,7 @@ struct PNLoggerSymbolsStructure PNLoggerSymbols = {
         .proxyConfigurationInformation = @"0100065",
         .proxyConfigurationNotRequired = @"0100066",
         .destroyed = @"0100067",
-<<<<<<< HEAD
-=======
         .resourceLinkage = @"0100068",
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         .stream = {
 
@@ -241,10 +238,7 @@ struct PNLoggerSymbolsStructure PNLoggerSymbols = {
         .requestRescheduleImpossible = @"0200042",
         .connectionReset = @"0200043",
         .destroyed = @"0200044",
-<<<<<<< HEAD
-=======
         .resourceLinkage = @"0200045",
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         .subscribe = {
 
             .leaveAllChannels = @"0201000",
@@ -321,8 +315,6 @@ struct PNLoggerSymbolsStructure PNLoggerSymbols = {
             .latencyMeterRequestSent = @"0202034",
             .latencyMeterRequestSendingCanceled = @"0202035",
             .messagePostRequestSent = @"0202036",
-<<<<<<< HEAD
-=======
             .channelGroupsRetrieveRequestCompleted = @"0202037",
             .channelGroupsRetrieveRequestFailed = @"0202038",
             .channelsForGroupRetrieveRequestCompleted = @"0202039",
@@ -337,7 +329,6 @@ struct PNLoggerSymbolsStructure PNLoggerSymbols = {
             .channelGroupNamespaceRemovalRequestFailed = @"0202048",
             .channelGroupRemovalRequestCompleted = @"0202049",
             .channelGroupRemovalRequestFailed = @"0202050",
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         }
     },
     .requests = {
@@ -638,8 +629,6 @@ struct PNLoggerSymbolsStructure PNLoggerSymbols = {
         .willConnect = @"0900236",
         .clientInformation = @"0900237",
         .configurationInformation = @"0900238",
-<<<<<<< HEAD
-=======
         .resourceLinkage = @"0900239",
         .channelGroupsRequestAttempt = @"0900240",
         .requestChannelGroups = @"0900241",
@@ -691,7 +680,6 @@ struct PNLoggerSymbolsStructure PNLoggerSymbols = {
         .rescheduleChannelGroupRemoval = @"0900287",
         .channelGroupRemovalFailed = @"0900288",
         
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     },
     .observationCenter = {
         
@@ -919,26 +907,6 @@ typedef NS_OPTIONS(NSUInteger, PNLoggerConfiguration) {
 
 + (void)prepare {
 
-<<<<<<< HEAD
-    // Retrieve path to the 'Documents' folder
-    NSString *documentsFolder = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    [self sharedInstance].dumpFilePath = [documentsFolder stringByAppendingPathComponent:kPNLoggerDumpFileName];
-    [self sharedInstance].oldDumpFilePath = [documentsFolder stringByAppendingPathComponent:kPNLoggerOldDumpFileName];
-    [self sharedInstance].httpPacketStoreFolderPath = [documentsFolder stringByAppendingPathComponent:@"http-response-dump"];
-    [self sharedInstance].maximumDumpFileSize = kPNLoggerMaximumDumpFileSize;
-
-    [[self sharedInstance] prepareForAsynchronousFileProcessing];
-    [[self sharedInstance] prepareSymbols];
-
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:[self sharedInstance].httpPacketStoreFolderPath isDirectory:NULL]) {
-
-        [fileManager createDirectoryAtPath:[self sharedInstance].httpPacketStoreFolderPath withIntermediateDirectories:YES
-                                attributes:nil error:NULL];
-    }
-
-    [[self sharedInstance] applyDefaultConfiguration];
-=======
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
@@ -961,7 +929,6 @@ typedef NS_OPTIONS(NSUInteger, PNLoggerConfiguration) {
         
         [[self sharedInstance] applyDefaultConfiguration];
     });
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 + (void)logFrom:(id)sender forLevel:(PNLogLevel)level withParametersFromBlock:(NSArray *(^)(void))parametersBlock {
@@ -1153,11 +1120,7 @@ typedef NS_OPTIONS(NSUInteger, PNLoggerConfiguration) {
                                                                              target:[self sharedInstance]
                                                                            selector:@selector(handleConsoleDumpTimer:)
                                                                            userInfo:nil repeats:YES];
-<<<<<<< HEAD
-            [[NSRunLoop currentRunLoop] addTimer:[self sharedInstance].consoleDumpTimer forMode:NSRunLoopCommonModes];
-=======
             [[NSRunLoop mainRunLoop] addTimer:[self sharedInstance].consoleDumpTimer forMode:NSRunLoopCommonModes];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         } else if (![self isDumpingToFile] && [[self sharedInstance].consoleDumpTimer isValid]) {
             
             [[self sharedInstance].consoleDumpTimer invalidate];

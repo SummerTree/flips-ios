@@ -37,8 +37,6 @@
     return self;
 }
 
-<<<<<<< HEAD
-=======
 - (NSString *)logDescription {
     
     #pragma clang diagnostic push
@@ -48,7 +46,6 @@
     #pragma clang diagnostic pop
 }
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark -
 
 

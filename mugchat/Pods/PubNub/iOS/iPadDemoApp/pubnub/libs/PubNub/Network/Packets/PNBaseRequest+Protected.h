@@ -13,16 +13,12 @@
 #import "PNBaseRequest.h"
 
 
-<<<<<<< HEAD
-#pragma mark Structures
-=======
 #pragma mark Class forward
 
 @class PNConfiguration;
 
 
 #pragma mark - Structures
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  This enumerator lists available HTTP methods which can be used for request sending
@@ -46,12 +42,9 @@ typedef NS_OPTIONS(NSInteger , PNRequestHTTPMethod) {
 
 #pragma mark - Properties
 
-<<<<<<< HEAD
-=======
 // Stores reference on client identifier on the moment of request creation
 @property (nonatomic, copy) NSString *clientIdentifier;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 // Stores reference on whether connection should be closed before sending this message or not
 @property (nonatomic, assign, getter = shouldCloseConnection) BOOL closeConnection;
 
@@ -59,8 +52,6 @@ typedef NS_OPTIONS(NSInteger , PNRequestHTTPMethod) {
 #pragma mark - Instance methods
 
 /**
-<<<<<<< HEAD
-=======
  Finalize configuration using specified information.
  
  @param configuration
@@ -72,7 +63,6 @@ typedef NS_OPTIONS(NSInteger , PNRequestHTTPMethod) {
 - (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  Reset request state so it can be reused and scheduled again on connection channel.
  */
 - (void)reset;

@@ -97,8 +97,6 @@ static NSString * const kPNClientDidUpdateClientStateNotification = @"PNClientDi
 static NSString * const kPNClientStateUpdateDidFailWithErrorNotification = @"PNClientStateUpdateDidFailWithErrorNotification";
 
 /**
-<<<<<<< HEAD
-=======
  Sent when \b PubNub client was able to retrieve channel groups inside namespace or application wide.
  
  \b userInfo contains reference on \b PNChannelGroup instances stored in \a NSArray in case if request has been done for application wide
@@ -231,7 +229,6 @@ static NSString * const kPNClientChannelGroupRemovalDidFailWithErrorNotification
 
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  Sent when \b PubNub client was able to complete subscription on specified set of channels.
 
  \b userInfo contains reference on \a NSArray of \b PNChannel instances on which \b PubNub client was able to subscribe.
@@ -529,26 +526,16 @@ static NSString * const kPNClientHistoryDownloadFailedWithErrorNotification = @"
 /**
  Sent when \b PubNub client did complete participants list retrieval process.
 
-<<<<<<< HEAD
- \b userInfo contains \b PNHereNow instead of \a NSDictionary. \b PNHereNow instance contain set of participants UUID
- and channel information (for which this request has been made).
-=======
  \b userInfo contains \b PNHereNow instead of \a NSDictionary. \b PNHereNow instance contain methods which allow to 
  get list of channels for which information available and get participants list for each of those channels.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 static NSString * const kPNClientDidReceiveParticipantsListNotification = @"PNClientDidReceiveParticipantsListNotification";
 
 /**
  Sent when \b PubNub client did fail to retrieve participants list for specific channel.
 
-<<<<<<< HEAD
- \b userInfo contains \b PNError instead of \a NSDictionary. \b PNChannel for which \b PubNub client did fail to
- receive participants list stored inside \a 'error.associatedObject'.
-=======
  \b userInfo contains \b PNError instead of \a NSDictionary. List of \b PNChannel and \b PNChannelGroup for which 
  \b PubNub client did fail to receive participants list stored inside \a 'error.associatedObject'.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
  @note Always check \a error.code to find out what caused error (check PNErrorCodes header file and use \a -localizedDescription /
  \a -localizedFailureReason and \a -localizedRecoverySuggestion to get human readable description for error).

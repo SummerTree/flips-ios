@@ -35,8 +35,6 @@ static NSUInteger const kPNResponseEventsListElementIndex = 0;
 static NSUInteger const kPNResponseChannelsListElementIndex = 2;
 
 /**
-<<<<<<< HEAD
-=======
  @brief Stores reference on index under which channels detalization is stored
  
  @discussion In case if under \c kPNResponseChannelsListElementIndex stored list of channel groups, under this index
@@ -47,7 +45,6 @@ static NSUInteger const kPNResponseChannelsListElementIndex = 2;
 static NSUInteger const kPNResponseChannelsDetailsListElementIndex = 3;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  Stores reference on time token element index in response for events.
  */
 static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
@@ -151,8 +148,6 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
             channels = [[responseData objectAtIndex:kPNResponseChannelsListElementIndex]
                     componentsSeparatedByString:@","];
         }
-<<<<<<< HEAD
-=======
         
         // Retrieve list of channel details
         NSArray *channelDetails = nil;
@@ -161,28 +156,12 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
             channelDetails = [[responseData objectAtIndex:kPNResponseChannelsDetailsListElementIndex]
                               componentsSeparatedByString:@","];
         }
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         if ([events count] > 0) {
 
             NSMutableArray *eventObjects = [NSMutableArray arrayWithCapacity:[events count]];
             [events enumerateObjectsUsingBlock:^(id event, NSUInteger eventIdx, BOOL *eventEnumeratorStop) {
 
-<<<<<<< HEAD
-                PNChannel *channel = nil;
-                if ([channels count] > 0) {
-
-                    // Retrieve reference on channel on which event is occurred
-                    channel = [PNChannel channelWithName:[channels objectAtIndex:eventIdx]];
-
-                    // Checking whether event occurred on presence observing channel
-                    // or no and retrieve reference on original channel
-                    if ([channel isPresenceObserver]) {
-
-                        channel = [(PNChannelPresence *)channel observedChannel];
-                    }
-                }
-=======
                 PNChannel* (^channelExtractBlock)(NSString *) = ^(NSString *channelName) {
                     
                     // Retrieve reference on channel on which event is occurred
@@ -200,21 +179,11 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
                 
                 PNChannel *channel = ([channels count] ? channelExtractBlock([channels objectAtIndex:eventIdx]): nil);
                 PNChannel *detailedChannel = ([channelDetails count] ? channelExtractBlock([channelDetails objectAtIndex:eventIdx]): nil);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
                 id eventObject = nil;
 
                 // Checking whether event presence event or not
                 if ([event isKindOfClass:[NSDictionary class]] && [PNPresenceEvent isPresenceEventObject:event]) {
-<<<<<<< HEAD
-
-                    eventObject = [PNPresenceEvent presenceEventForResponse:event];
-                    ((PNPresenceEvent *)eventObject).channel = channel;
-                }
-                else {
-
-                    eventObject = [PNMessage messageFromServiceResponse:event onChannel:channel atDate:eventDate];
-=======
                     
                     eventObject = [PNPresenceEvent presenceEventForResponse:event];
                     ((PNPresenceEvent *)eventObject).channel = (detailedChannel ? detailedChannel : channel);
@@ -233,7 +202,6 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
 
                     eventObject = [PNMessage messageFromServiceResponse:event onChannel:targetChannel channelGroup:group
                                                                  atDate:eventDate];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                 }
 
                 [eventObjects addObject:eventObject];

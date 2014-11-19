@@ -38,11 +38,6 @@
 #pragma mark - Class methods
 
 /**
-<<<<<<< HEAD
- * Return reference on configured messages communication channel with specified delegate
- */
-+ (PNMessagingChannel *)messageChannelWithDelegate:(id<PNConnectionChannelDelegate>)delegate;
-=======
  Return reference on configured messages communication channel with specified delegate.
 
  @param configuration
@@ -55,7 +50,6 @@
  */
 + (PNMessagingChannel *)messageChannelWithConfiguration:(PNConfiguration *)configuration
                                             andDelegate:(id<PNConnectionChannelDelegate>)delegate;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods

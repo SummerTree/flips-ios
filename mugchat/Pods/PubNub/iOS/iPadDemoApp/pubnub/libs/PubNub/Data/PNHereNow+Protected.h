@@ -9,14 +9,11 @@
 #import "PNHereNow.h"
 
 
-<<<<<<< HEAD
-=======
 #pragma mark Class forward
 
 @class PNChannel, PNClient;
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Private interface methods
 
 @interface PNHereNow ()
@@ -24,20 +21,6 @@
 
 #pragma mark - Properties
 
-<<<<<<< HEAD
-// Stores reference on list of participants
-// uuid
-@property (nonatomic, strong) NSArray *participants;
-
-// Stores reference on how many participants in
-// the channel
-@property (nonatomic, assign) unsigned long participantsCount;
-
-// Stores reference on channel which this 'Here now'
-// information was generated on PubNub service by client
-// request
-@property (nonatomic, strong) PNChannel *channel;
-=======
 @property (nonatomic, strong) NSArray *participants DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use '-participantsForChannel:' to retrieve participants list");
 @property (nonatomic, assign) unsigned long participantsCount DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use '-participantsCountForChannel:' to retrieve participants count");
 @property (nonatomic, strong) PNChannel *channel DEPRECATED_MSG_ATTRIBUTE(" This property deprecated. Use 'channels' property to retrieve list of channels with participants information");
@@ -86,7 +69,6 @@
  @return \a NSMutableDictionary instance which hold list of channels and number of participants for target \c channel.
  */
 - (NSMutableDictionary *)presenceInformationForChannel:(PNChannel *)channel;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark -
 

@@ -26,12 +26,9 @@ static NSString * const kPNAccessChannelKey = @"channel";
 // Stores reference on key under which stored information about how long granted access rights will be valid.
 static NSString * const kPNAccessRightsPeriodKey = @"ttl";
 
-<<<<<<< HEAD
-=======
 // Stores reference on key under which affected channel groups list is stored in response
 static NSString * const kPNAccessChannelGroupsKey = @"channel-groups";
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 // Stores reference on key under which affected channels list is stored in response
 static NSString * const kPNAccessChannelsKey = @"channels";
 
@@ -50,12 +47,9 @@ static NSString * const kPNAccessClientAuthorizationKey = @"auths";
 // Stores reference on key under which \a 'read' rights state is stored.
 static NSString * const kPNReadAccessRightStateKey = @"r";
 
-<<<<<<< HEAD
-=======
 // Stores reference on key under which \a 'management' rights state is stored.
 static NSString * const kPNManagementAccessRightStateKey = @"m";
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 // Stores reference on key under which \a 'write' rights state is stored.
 static NSString * const kPNWriteAccessRightStateKey = @"w";
 

@@ -60,8 +60,6 @@
 #endif // pn_gcdhelper
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Public dispatch objects wrapper declaration
 
 @interface PNDispatchObjectWrapper : NSObject
@@ -95,7 +93,6 @@
 @end
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Public dispatch objects helper declaration
 
 @interface PNDispatchHelper : NSObject
@@ -258,8 +255,6 @@ static NSUInteger BITS_LIST_TERMINATOR  = ((NSUInteger)0);
 @end
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - UIApplication replacement helper declaration
 
 @interface PNApplicationHelper : NSObject
@@ -278,7 +273,6 @@ static NSUInteger BITS_LIST_TERMINATOR  = ((NSUInteger)0);
 @end
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Helper public interface declaration
 
 @interface PNHelper : NSObject

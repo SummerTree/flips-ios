@@ -15,8 +15,6 @@
 #import "PNMacro.h"
 
 
-<<<<<<< HEAD
-=======
 #pragma mark Class forward
 
 @class PNConfiguration;
@@ -24,7 +22,6 @@
 
 #pragma mark - Public interface declaration
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @interface PNConnection : NSObject
 
 
@@ -40,25 +37,9 @@
 #pragma mark - Class methods
 
 /**
-<<<<<<< HEAD
- * Depending on platform will be able to return few connections when on Mac OS and will reuse same connection on iOS
- */
-+ (PNConnection *)connectionWithIdentifier:(NSString *)identifier;
-
-/**
- * Closes all streams and remove connection from connections pool to completely free up resources
- */
-+ (void)destroyConnection:(PNConnection *)connection;
-
-/**
- * Close all opened connections which is stored inside connections pool for reuse
- */
-+ (void)closeAllConnections;
-=======
  Depending on platform will be able to return few connections when on Mac OS and will reuse same connection on iOS
  */
 + (PNConnection *)connectionWithConfiguration:(PNConfiguration *)configuration andIdentifier:(NSString *)identifier;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
@@ -66,20 +47,12 @@
 #pragma mark - Requests queue execution management
 
 /**
-<<<<<<< HEAD
- * Inform connection to schedule requests queue processing.
-=======
  Inform connection to schedule requests queue processing.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)scheduleNextRequestExecution;
 
 /**
-<<<<<<< HEAD
- * Inform connection to stop requests queue processing (last active request will be sent)
-=======
  Inform connection to stop requests queue processing (last active request will be sent)
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)unscheduleRequestsExecution;
 

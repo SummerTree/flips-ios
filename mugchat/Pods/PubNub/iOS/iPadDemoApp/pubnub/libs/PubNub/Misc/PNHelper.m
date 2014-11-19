@@ -12,8 +12,6 @@
 #import "NSData+PNAdditions.h"
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Public dispatch objects wrapper declaration
 
 @interface PNDispatchObjectWrapper ()
@@ -76,15 +74,11 @@
 @end
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Public dispatch objects helper implementation
 
 @implementation PNDispatchHelper
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Class methods
 
 + (void)retain:(dispatch_object_t)dispatchObject {
@@ -220,8 +214,6 @@
 @end
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - UIApplication replacement helper declaration
 
 @implementation PNApplicationHelper : NSObject
@@ -259,7 +251,6 @@
 
 @end
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark - Helper private interface declaration
 

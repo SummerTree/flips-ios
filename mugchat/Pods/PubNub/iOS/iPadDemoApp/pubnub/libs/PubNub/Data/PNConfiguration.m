@@ -45,8 +45,6 @@
 @property (nonatomic, copy) NSString *secretKey;
 
 
-<<<<<<< HEAD
-=======
 #pragma mark - Instance methods
 
 
@@ -86,7 +84,6 @@
 #pragma mark -
 
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @end
 
 
@@ -99,91 +96,6 @@
 
 + (PNConfiguration *)defaultConfiguration {
     
-<<<<<<< HEAD
-    return [self configurationForOrigin:kPNOriginHost
-                             publishKey:kPNPublishKey
-                           subscribeKey:kPNSubscriptionKey
-                              secretKey:kPNSecretKey
-                              cipherKey:kPNCipherKey];
-}
-
-+ (PNConfiguration *)configurationWithPublishKey:(NSString *)publishKey
-                                    subscribeKey:(NSString *)subscribeKey
-                                       secretKey:(NSString *)secretKey {
-    
-    return [self configurationWithPublishKey:publishKey
-                                subscribeKey:subscribeKey
-                                   secretKey:secretKey
-                            authorizationKey:kPNAuthorizationKey];
-}
-
-+ (PNConfiguration *)configurationWithPublishKey:(NSString *)publishKey
-                                    subscribeKey:(NSString *)subscribeKey
-                                       secretKey:(NSString *)secretKey
-                                authorizationKey:(NSString *)authorizationKey {
-    
-    return [self configurationForOrigin:kPNDefaultOriginHost
-                             publishKey:publishKey
-                           subscribeKey:subscribeKey
-                              secretKey:secretKey
-                       authorizationKey:authorizationKey];
-}
-
-+ (PNConfiguration *)configurationForOrigin:(NSString *)originHostName
-                                 publishKey:(NSString *)publishKey
-                               subscribeKey:(NSString *)subscribeKey
-                                  secretKey:(NSString *)secretKey {
-    
-    return [self configurationForOrigin:originHostName
-                             publishKey:publishKey
-                           subscribeKey:subscribeKey
-                              secretKey:secretKey
-                              cipherKey:kPNCipherKey
-                       authorizationKey:kPNAuthorizationKey];
-}
-
-+ (PNConfiguration *)configurationForOrigin:(NSString *)originHostName
-                                 publishKey:(NSString *)publishKey
-                               subscribeKey:(NSString *)subscribeKey
-                                  secretKey:(NSString *)secretKey
-                           authorizationKey:(NSString *)authorizationKey {
-
-    return [self configurationForOrigin:originHostName
-                                 publishKey:publishKey
-                               subscribeKey:subscribeKey
-                                  secretKey:secretKey
-                                  cipherKey:kPNCipherKey
-                           authorizationKey:authorizationKey];
-}
-
-+ (PNConfiguration *)configurationForOrigin:(NSString *)originHostName
-                                 publishKey:(NSString *)publishKey
-                               subscribeKey:(NSString *)subscribeKey
-                                  secretKey:(NSString *)secretKey
-                                  cipherKey:(NSString *)cipherKey {
-    
-    return [self configurationForOrigin:originHostName
-                             publishKey:publishKey
-                           subscribeKey:subscribeKey
-                              secretKey:secretKey
-                              cipherKey:cipherKey
-                       authorizationKey:kPNAuthorizationKey];
-}
-
-+ (PNConfiguration *)configurationForOrigin:(NSString *)originHostName
-                                 publishKey:(NSString *)publishKey
-                               subscribeKey:(NSString *)subscribeKey
-                                  secretKey:(NSString *)secretKey
-                                  cipherKey:(NSString *)cipherKey
-                           authorizationKey:(NSString *)authorizationKey {
-
-    return [[[self class] alloc] initWithOrigin:originHostName
-                                     publishKey:publishKey
-                                   subscribeKey:subscribeKey
-                                      secretKey:secretKey
-                                      cipherKey:cipherKey
-                               authorizationKey:authorizationKey];
-=======
     return [self configurationForOrigin:kPNOriginHost publishKey:kPNPublishKey subscribeKey:kPNSubscriptionKey
                               secretKey:kPNSecretKey cipherKey:kPNCipherKey];
 }
@@ -231,34 +143,11 @@
 
     return [[[self class] alloc] initWithOrigin:originHostName publishKey:publishKey subscribeKey:subscribeKey
                                       secretKey:secretKey cipherKey:cipherKey authorizationKey:authorizationKey];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 
 #pragma mark - Instance methods
 
-<<<<<<< HEAD
-- (id)initWithOrigin:(NSString *)originHostName
-          publishKey:(NSString *)publishKey
-        subscribeKey:(NSString *)subscribeKey
-           secretKey:(NSString *)secretKey
-           cipherKey:(NSString *)cipherKey {
-
-    return [self initWithOrigin:originHostName
-                     publishKey:publishKey
-                   subscribeKey:subscribeKey
-                      secretKey:secretKey
-                      cipherKey:cipherKey
-               authorizationKey:kPNAuthorizationKey];
-}
-
-- (id)initWithOrigin:(NSString *)originHostName
-          publishKey:(NSString *)publishKey
-        subscribeKey:(NSString *)subscribeKey
-           secretKey:(NSString *)secretKey
-           cipherKey:(NSString *)cipherKey
-    authorizationKey:(NSString *)authorizationKey {
-=======
 - (id)initWithOrigin:(NSString *)originHostName publishKey:(NSString *)publishKey subscribeKey:(NSString *)subscribeKey
            secretKey:(NSString *)secretKey cipherKey:(NSString *)cipherKey {
 
@@ -268,7 +157,6 @@
 
 - (id)initWithOrigin:(NSString *)originHostName publishKey:(NSString *)publishKey subscribeKey:(NSString *)subscribeKey
            secretKey:(NSString *)secretKey cipherKey:(NSString *)cipherKey authorizationKey:(NSString *)authorizationKey {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     
     // Checking whether initialization was successful or not
     if((self = [super init])) {
@@ -303,9 +191,6 @@
                                        subscribeKey:(NSString *)subscribeKey secretKey:(NSString *)secretKey
                                           cipherKey:(NSString *)cipherKey authorizationKey:(NSString *)authorizationKey {
     
-<<<<<<< HEAD
-    PNConfiguration *updatedConfiguration = [self copy];
-=======
     return [self updatedConfigurationWithOrigin:originHostName publishKey:publishKey subscribeKey:subscribeKey
                                       secretKey:secretKey cipherKey:cipherKey authorizationKey:authorizationKey
                                    applyInPlace:NO];
@@ -317,7 +202,6 @@
                                        applyInPlace:(BOOL)shouldApplyOnReceiver {
     
     PNConfiguration *updatedConfiguration = (shouldApplyOnReceiver ? self : [self copy]);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     updatedConfiguration.origin = ([originHostName length] > 0 ? originHostName : kPNDefaultOriginHost);
     updatedConfiguration.realOrigin = self.origin;
     updatedConfiguration.publishKey = (publishKey ? publishKey : @"");
@@ -332,25 +216,8 @@
 
 - (id)copyWithZone:(NSZone *)zone {
     
-<<<<<<< HEAD
-    PNConfiguration *configuration = [[[self class] allocWithZone:zone] initWithOrigin:self.origin publishKey:self.publishKey subscribeKey:self.subscriptionKey
-                                                                             secretKey:self.secretKey cipherKey:self.cipherKey authorizationKey:self.authorizationKey];
-    configuration.useSecureConnection = self.shouldUseSecureConnection;
-    configuration.autoReconnectClient = self.shouldAutoReconnectClient;
-    configuration.keepTimeTokenOnChannelsListChange = self.shouldKeepTimeTokenOnChannelsListChange;
-    configuration.reduceSecurityLevelOnError = self.shouldReduceSecurityLevelOnError;
-    configuration.ignoreSecureConnectionRequirement = self.canIgnoreSecureConnectionRequirement;
-    configuration.resubscribeOnConnectionRestore = self.shouldResubscribeOnConnectionRestore;
-    configuration.restoreSubscriptionFromLastTimeToken = self.shouldRestoreSubscriptionFromLastTimeToken;
-    configuration.acceptCompressedResponse = self.shouldAcceptCompressedResponse;
-    configuration.nonSubscriptionRequestTimeout = self.nonSubscriptionRequestTimeout;
-    configuration.subscriptionRequestTimeout = self.subscriptionRequestTimeout;
-    configuration.presenceHeartbeatTimeout = self.presenceHeartbeatTimeout;
-    configuration.presenceHeartbeatInterval = self.presenceHeartbeatInterval;
-=======
     PNConfiguration *configuration = [[[self class] allocWithZone:zone] init];
     [configuration migrateConfigurationFrom:self];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     
     
     return configuration;
@@ -361,11 +228,7 @@
     BOOL shouldReset = NO;
 
 
-<<<<<<< HEAD
-    if (configuration != nil) {
-=======
     if (configuration != nil && [configuration isValid]) {
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         // Checking whether critical configuration information has been changed or not
         if ((self.shouldUseSecureConnection != configuration.shouldUseSecureConnection) ||
@@ -379,103 +242,6 @@
     return shouldReset;
 }
 
-<<<<<<< HEAD
-- (BOOL)isEqual:(PNConfiguration *)configuration {
-
-    BOOL isEqual = configuration != nil;
-
-    if (isEqual) {
-
-        isEqual = [self.origin isEqualToString:configuration.origin];
-    }
-
-    if (isEqual) {
-
-        isEqual = [self.publishKey isEqualToString:configuration.publishKey];
-    }
-
-    if (isEqual) {
-
-        isEqual = [self.subscriptionKey isEqualToString:configuration.subscriptionKey];
-    }
-
-    if (isEqual) {
-
-        isEqual = [self.secretKey isEqualToString:configuration.secretKey];
-    }
-
-    if (isEqual) {
-
-        isEqual = [self.cipherKey isEqualToString:configuration.cipherKey];
-    }
-
-    if (isEqual) {
-
-        isEqual = [self.authorizationKey isEqualToString:configuration.authorizationKey];
-    }
-    
-    if (isEqual) {
-        
-        isEqual = (self.presenceHeartbeatTimeout == configuration.presenceHeartbeatTimeout);
-    }
-    
-    if (isEqual) {
-        
-        isEqual = (self.presenceHeartbeatInterval == configuration.presenceHeartbeatInterval);
-    }
-    
-    if (isEqual) {
-        
-        isEqual = (self.nonSubscriptionRequestTimeout == configuration.nonSubscriptionRequestTimeout);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.subscriptionRequestTimeout == configuration.subscriptionRequestTimeout);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldKeepTimeTokenOnChannelsListChange == configuration.shouldKeepTimeTokenOnChannelsListChange);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldResubscribeOnConnectionRestore == configuration.shouldResubscribeOnConnectionRestore);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldRestoreSubscriptionFromLastTimeToken == configuration.shouldRestoreSubscriptionFromLastTimeToken);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.canIgnoreSecureConnectionRequirement == configuration.canIgnoreSecureConnectionRequirement);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldReduceSecurityLevelOnError == configuration.shouldReduceSecurityLevelOnError);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldUseSecureConnection == configuration.shouldUseSecureConnection);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldAutoReconnectClient == configuration.shouldAutoReconnectClient);
-    }
-
-    if (isEqual) {
-
-        isEqual = (self.shouldAcceptCompressedResponse == configuration.shouldAcceptCompressedResponse);
-    }
-
-
-=======
 - (void)migrateConfigurationFrom:(PNConfiguration *)configuration {
     
     [self updatedConfigurationWithOrigin:configuration.origin publishKey:configuration.publishKey
@@ -538,7 +304,6 @@
     isEqual = (isEqual ? (self.shouldAcceptCompressedResponse == configuration.shouldAcceptCompressedResponse) : isEqual);
     
     
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     return isEqual;
 }
 

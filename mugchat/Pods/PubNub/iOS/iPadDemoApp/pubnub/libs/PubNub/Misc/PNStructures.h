@@ -11,11 +11,7 @@
 
 #pragma mark Class forward
 
-<<<<<<< HEAD
-@class PNPresenceEvent, PNMessage, PNChannel, PNClient, PNError, PNDate, PNAccessRightsCollection;
-=======
 @class PNAccessRightsCollection, PNPresenceEvent, PNChannelGroup, PNHereNow, PNMessage, PNChannel, PNClient, PNError, PNDate;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #ifndef PNStructures_h
@@ -92,14 +88,6 @@ typedef NS_OPTIONS(unsigned long, PNAccessRights)  {
 
     // \a 'read' access rights is granted.
     PNReadAccessRight = 1 << 0,
-<<<<<<< HEAD
-
-    // \a 'write' access rights is granted.
-    PNWriteAccessRight = 1 << 1,
-
-    // There is no access rights (maybe they has been revoked or expired).
-    PNNoAccessRights = 1 << 2
-=======
     
     // \a 'write' access rights is granted.
     PNWriteAccessRight = 1 << 1,
@@ -112,7 +100,6 @@ typedef NS_OPTIONS(unsigned long, PNAccessRights)  {
 
     // There is no access rights (maybe they has been revoked or expired).
     PNNoAccessRights = 1 << 3
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 };
 
 // this enum represents access right levels
@@ -122,16 +109,12 @@ typedef NS_OPTIONS(NSInteger , PNAccessRightsLevel) {
      Access rights granted application wide (for \a 'subscribe' key).
      */
     PNApplicationAccessRightsLevel,
-<<<<<<< HEAD
-
-=======
     
     /**
      Access rights granted for channel group or namespace.
      */
     PNChannelGroupAccessRightsLevel,
     
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     /**
      Access rights granted for particular channel.
      */
@@ -149,8 +132,6 @@ typedef void (^PNClientConnectionFailureBlock)(PNError *);
 typedef void (^PNClientConnectionStateChangeBlock)(NSString *, BOOL, PNError *);
 typedef void (^PNClientStateRetrieveHandlingBlock)(PNClient *, PNError *);
 typedef void (^PNClientStateUpdateHandlingBlock)(PNClient *, PNError *);
-<<<<<<< HEAD
-=======
 typedef void (^PNClientChannelGroupsRequestHandlingBlock)(NSString *, NSArray *, PNError *);
 typedef void (^PNClientChannelGroupNamespacesRequestHandlingBlock)(NSArray *, PNError *);
 typedef void (^PNClientChannelGroupNamespaceRemoveHandlingBlock)(NSString *, PNError *);
@@ -158,18 +139,13 @@ typedef void (^PNClientChannelGroupRemoveHandlingBlock)(PNChannelGroup *, PNErro
 typedef void (^PNClientChannelsForGroupRequestHandlingBlock)(PNChannelGroup *, PNError *);
 typedef void (^PNClientChannelsAdditionToGroupHandlingBlock)(PNChannelGroup *, NSArray *, PNError *);
 typedef void (^PNClientChannelsRemovalFromGroupHandlingBlock)(PNChannelGroup *, NSArray *, PNError *);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 typedef void (^PNClientChannelSubscriptionHandlerBlock)(PNSubscriptionProcessState state, NSArray *, PNError *);
 typedef void (^PNClientChannelUnsubscriptionHandlerBlock)(NSArray *, PNError *);
 typedef void (^PNClientTimeTokenReceivingCompleteBlock)(NSNumber *, PNError *);
 typedef void (^PNClientMessageProcessingBlock)(PNMessageState, id);
 typedef void (^PNClientMessageHandlingBlock)(PNMessage *);
 typedef void (^PNClientHistoryLoadHandlingBlock)(NSArray *, PNChannel *, PNDate *, PNDate *, PNError *);
-<<<<<<< HEAD
-typedef void (^PNClientParticipantsHandlingBlock)(NSArray *, PNChannel *, PNError *);
-=======
 typedef void (^PNClientParticipantsHandlingBlock)(PNHereNow *, NSArray *, PNError *);
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 typedef void (^PNClientParticipantChannelsHandlingBlock)(NSString *, NSArray *, PNError *);
 typedef void (^PNClientChannelAccessRightsChangeBlock)(PNAccessRightsCollection *, PNError *);
 typedef void (^PNClientChannelAccessRightsAuditBlock)(PNAccessRightsCollection *, PNError *);

@@ -14,21 +14,13 @@
 
 #pragma mark Class forward
 
-<<<<<<< HEAD
-@class PNAccessRightsCollection, PNServiceChannel, PNMessagesHistory, PNWhereNow, PNResponse, PNHereNow, PNClient;
-=======
 @class PNAccessRightsCollection, PNChannelGroupChange, PNServiceChannel, PNMessagesHistory, PNWhereNow, PNResponse, PNHereNow, PNClient;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 @protocol PNServiceChannelDelegate<NSObject>
 
 
-<<<<<<< HEAD
-@required
-=======
 @optional // @required in corresponding categories for PubNub main class.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  Sent to the delegate when \b PubNub client successfully retrieved state for client.
@@ -83,8 +75,6 @@
 - (void)serviceChannel:(PNServiceChannel *)channel clientStateUpdateDidFailWithError:(PNError *)error;
 
 /**
-<<<<<<< HEAD
-=======
  Sent to the delegate when \b PubNub client successfully retrieved channel groups.
  
  @param channel
@@ -261,7 +251,6 @@
 - (void)serviceChannel:(PNServiceChannel *)channel channelGroup:(PNChannelGroup *)group removalDidFailWithError:(PNError *)error;
 
 /**
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  Sent to the delegate when \b PubNub client successfully changed access rights.
 
  @param channel
@@ -418,24 +407,14 @@ didReceiveNetworkLatency:(double)latency
              withError:(PNError *)error;
 
 /**
-<<<<<<< HEAD
- * Sent to the delegate when PubNub service responded on participants list request.
-=======
  Sent to the delegate when PubNub service responded on participants information request.
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)serviceChannel:(PNServiceChannel *)serviceChannel didReceiveParticipantsList:(PNHereNow *)participants;
 
 /**
-<<<<<<< HEAD
- * Sent to the delegate when PubNub service failed to retrieve participants list for specified channel
- */
-- (void)serviceChannel:(PNServiceChannel *)serviceChannel didFailParticipantsListLoadForChannel:(PNChannel *)channel
-=======
  Sent to the delegate when PubNub service failed to retrieve participants information for specified channels list
  */
 - (void)serviceChannel:(PNServiceChannel *)serviceChannel didFailParticipantsListLoadForChannels:(NSArray *)channels
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
              withError:(PNError *)error;
 
 /**

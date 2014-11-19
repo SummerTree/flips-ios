@@ -17,8 +17,6 @@
 // error is occurred
 @property (nonatomic, strong) id associatedObject;
 
-<<<<<<< HEAD
-=======
 
 #pragma mark - Instance methods
 
@@ -31,7 +29,6 @@
  */
 - (void)replaceAssociatedObject:(id)object;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark -
 
 

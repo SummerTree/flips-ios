@@ -17,11 +17,7 @@
 #pragma mark General information constants
 
 // Stores client library version number
-<<<<<<< HEAD
-static NSString * const kPNLibraryVersion = @"3.6.7";
-=======
 static NSString * const kPNLibraryVersion = @"3.7.0";
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 static NSString * const kPNClientName = @"ObjC-iOS";
@@ -34,16 +30,7 @@ static NSString * const kPNClientName = @"ObjC-MacOS";
 
 // Stores reference on PubNub service domain
 static NSString * const kPNServiceMainDomain = @"pubnub.com";
-<<<<<<< HEAD
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-static NSString * const kPNDefaultOriginHost = @"ios.pubnub.com";
-#elif __MAC_OS_X_VERSION_MIN_REQUIRED
-static NSString * const kPNDefaultOriginHost = @"macos.pubnub.com";
-#endif
-=======
 static NSString * const kPNDefaultOriginHost = @"pubsub.pubnub.com";
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 static BOOL const kPNSecureConnectionByDefault = YES;
 static BOOL const kPNShouldAutoReconnectClientByDefault = YES;
 static BOOL const kPNShouldReduceSecurityLevelOnErrorByDefault = YES;

@@ -107,8 +107,6 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
  */
 + (PNMessage *)messageFromServiceResponse:(id)messageBody onChannel:(PNChannel *)channel atDate:(PNDate *)messagePostDate;
 
-<<<<<<< HEAD
-=======
 /**
  @brief Construct message instance from \b PubNub service response.
  
@@ -128,7 +126,6 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
 + (PNMessage *)messageFromServiceResponse:(id)messageBody onChannel:(PNChannel *)channel
                              channelGroup:(PNChannelGroup *)group atDate:(PNDate *)messagePostDate;
 
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark - Instance methods
 
@@ -136,11 +133,7 @@ extern struct PNMessageDataKeysStruct PNMessageDataKeys;
  * Initialize object instance with text and channel
  */
 - (id)initWithObject:(id)object forChannel:(PNChannel *)channel compressed:(BOOL)shouldCompressMessage
-<<<<<<< HEAD
-      storeInHistory:(BOOL)shouldStoreInHistory;;
-=======
       storeInHistory:(BOOL)shouldStoreInHistory;
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (void)setReceiveDate:(PNDate *)receiveDate;
 
 

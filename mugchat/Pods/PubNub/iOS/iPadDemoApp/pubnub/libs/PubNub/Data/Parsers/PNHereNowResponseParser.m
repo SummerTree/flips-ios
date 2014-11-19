@@ -9,15 +9,9 @@
 #import "PNHereNowResponseParser.h"
 #import "PNHereNowResponseParser+Protected.h"
 #import "PNHereNow+Protected.h"
-<<<<<<< HEAD
-#import "PNClient+Protected.h"
-#import "PNResponse.h"
-#import "PNChannel.h"
-=======
 #import "PNChannel+Protected.h"
 #import "PNClient+Protected.h"
 #import "PNResponse.h"
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -55,11 +49,6 @@
         conforms = (channels ? [channels isKindOfClass:[NSDictionary class]] : conforms);
         if (!channels) {
 
-<<<<<<< HEAD
-            id channel = response.additionalData;
-            conforms = (channel ? [channel isKindOfClass:[PNChannel class]] : conforms);
-=======
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
             id identifiers = [responseData objectForKey:kPNResponseUUIDKey];
             id occupancyCount = [responseData objectForKey:kPNResponseOccupancyKey];
             conforms = ((conforms && identifiers) ? [identifiers isKindOfClass:[NSArray class]] : conforms);
@@ -119,39 +108,6 @@
 
         self.hereNow = [PNHereNow new];
         NSDictionary *channels = [responseData objectForKey:kPNResponseChannelsKey];
-<<<<<<< HEAD
-        if (!channels) {
-
-            PNChannel *channel = (PNChannel *)response.additionalData;
-            if (channel.name.length) {
-                
-                NSArray *participants = [responseData objectForKey:kPNResponseUUIDKey];
-                channels = @{channel.name: @{kPNResponseUUIDKey: (participants ? participants : @[]),
-                                             kPNResponseOccupancyKey: [responseData objectForKey:kPNResponseOccupancyKey]
-                                             }};
-            }
-        }
-        NSMutableArray *participants = [NSMutableArray array];
-        [channels enumerateKeysAndObjectsUsingBlock:^(NSString *channelName, NSDictionary *channelParticipantsInformation,
-                                                      BOOL *channelNamesEnumeratorStop) {
-
-            NSMutableArray *participantsInChannel = [[self clientsFromData:[channelParticipantsInformation objectForKey:kPNResponseUUIDKey]
-                                                                forChannel:[PNChannel channelWithName:channelName]] mutableCopy];
-
-            NSUInteger participantsCount = [[channelParticipantsInformation objectForKey:kPNResponseOccupancyKey] unsignedIntValue];
-            NSUInteger differenceInParticipantsCount = participantsCount - [participantsInChannel count];
-            if (differenceInParticipantsCount > 0) {
-
-                for (int i = 0; i < differenceInParticipantsCount; i++) {
-
-                    [participantsInChannel addObject:[PNClient anonymousClientForChannel:[PNChannel channelWithName:channelName]]];
-                }
-            }
-            [participants addObjectsFromArray:participantsInChannel];
-        }];
-        self.hereNow.participants = [NSArray arrayWithArray:participants];
-        self.hereNow.participantsCount = [participants count];
-=======
         
         // If there is no "channels" node in response, then probably this is response for single channel requested
         // by user (we must ensure that there is only one channel in request)
@@ -191,7 +147,6 @@
                 [self.hereNow setParticipantsCount:MAX([participantsInChannel count], participantsCount) forChannel:targetChannel];
             }
         }];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 
 
@@ -234,28 +189,15 @@
 
         clientIdentifier = clientInformation;
     }
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
     return [PNClient clientForIdentifier:clientIdentifier channel:channel andData:state];
 }
 
 - (NSString *)description {
 
-<<<<<<< HEAD
-    return [NSString stringWithFormat:@"%@ (%p): <participants: %@, participants count: %lu, channel: %@>",
-                    NSStringFromClass([self class]),
-                    self,
-                    self.hereNow.participants,
-                    self.hereNow.participantsCount,
-                    self.hereNow.channel];
-=======
     return [NSString stringWithFormat:@"%@ (%p): <presence information: %@>", NSStringFromClass([self class]), self,
             self.hereNow];
->>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 #pragma mark -
