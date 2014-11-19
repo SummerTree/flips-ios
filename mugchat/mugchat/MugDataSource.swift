@@ -12,7 +12,7 @@
 
 import Foundation
 
-private struct MugJsonParams {
+struct MugJsonParams {
     static let ID = "id"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
@@ -24,6 +24,8 @@ struct MugAttributes {
     static let MUG_ID = "mugID"
     static let MUG_OWNER = "owner"
     static let WORD = "word"
+    static let BACKGROUND_URL = "backgroundURL"
+    static let SOUND_URL = "soundURL"
 }
 
 public typealias CreateMugSuccess = (Mug) -> Void

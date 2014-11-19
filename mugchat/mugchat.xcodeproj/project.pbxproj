@@ -104,6 +104,7 @@
 		7A3733C919FADDE800D1E87B /* MugService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* MugService.swift */; };
 		7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */; };
 		7A41CFA11A051EE100746423 /* MugMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A41CFA01A051EE100746423 /* MugMessage.m */; };
+		7A63C7111A1A55AF00C975A4 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A63C7101A1A55AF00C975A4 /* MessageService.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
 		7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */; };
@@ -290,6 +291,7 @@
 		7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugMessageExtension.swift; sourceTree = "<group>"; };
 		7A41CF9F1A051EE100746423 /* MugMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MugMessage.h; path = "Classes/auto-generated/MugMessage.h"; sourceTree = "<group>"; };
 		7A41CFA01A051EE100746423 /* MugMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MugMessage.m; path = "Classes/auto-generated/MugMessage.m"; sourceTree = "<group>"; };
+		7A63C7101A1A55AF00C975A4 /* MessageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
 		7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopViewCell.swift; path = Classes/MessagesTopViewCell.swift; sourceTree = "<group>"; };
@@ -1118,6 +1120,7 @@
 			isa = PBXGroup;
 			children = (
 				70B7696119E706B100CAA9A9 /* MessageReceiver.swift */,
+				7A63C7101A1A55AF00C975A4 /* MessageService.swift */,
 			);
 			name = "Chat Handler";
 			sourceTree = "<group>";
@@ -1284,6 +1287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */,
+				7A63C7111A1A55AF00C975A4 /* MessageService.swift in Sources */,
 				A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */,
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,

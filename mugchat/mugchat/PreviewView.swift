@@ -17,8 +17,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     
     private let LOW_RES_VIDEO_WIDTH: CGFloat = 240.0
     private let LOW_RES_VIDEO_MARGIN: CGFloat = 15.0
-    private let LOW_RES_LABEL_MARGIN: CGFloat = 15.0
-    private let HI_RES_LABEL_MARGIN: CGFloat = 40.0
+    private let SEND_BUTTON_SUBVIEWS_CENTER_MARGIN: CGFloat = 10.0
 
     var delegate: PreviewViewDelegate?
     
@@ -145,21 +144,12 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         
         self.sendLabel.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.sendContainerView)
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.top.equalTo()(self.LOW_RES_LABEL_MARGIN);
-            } else {
-                make.top.equalTo()(self.HI_RES_LABEL_MARGIN);
-            }
+            make.bottom.equalTo()(self.sendContainerView.mas_centerY).with().offset()(-self.SEND_BUTTON_SUBVIEWS_CENTER_MARGIN)
         }
-
+        
         self.sendImageButton.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.sendContainerView)
-
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.LOW_RES_LABEL_MARGIN);
-            } else {
-                make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.HI_RES_LABEL_MARGIN);
-            }
+            make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.SEND_BUTTON_SUBVIEWS_CENTER_MARGIN)
         }
     }
     
