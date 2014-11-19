@@ -15,9 +15,9 @@ import Foundation
 public class PubNubService: MugchatService, PNDelegate {
     
     private let PUBNUB_ORIGIN = "pubsub.pubnub.com"
-    private let PUBNUB_PUBLISH_KEY = "pub-c-44dbaf09-91c6-4e9d-98d2-99841736d52a"
-    private let PUBNUB_SUBSCRIBE_KEY = "sub-c-fbc63a34-59fd-11e4-a91d-02ee2ddab7fe"
-    private let PUBNUB_SECRET_KEY = "sec-c-NGUzZWFmNDgtYmNmNi00ZjRiLTgyMTYtOTMxYWIzYmExNmEx"
+    private let PUBNUB_PUBLISH_KEY = "pub-c-579fbcaa-1c0a-44fc-bb1c-e02e43e7eb30"
+    private let PUBNUB_SUBSCRIBE_KEY = "sub-c-3bcb7c42-59ff-11e4-9632-02ee2ddab7fe"
+    private let PUBNUB_SECRET_KEY = "sec-c-MTA5MjJmZWUtOGI4Ni00NTUwLTgzN2ItNWU0ZGIyZmI0MWY4"
     
     var delegate: PubNubServiceDelegate?
     
