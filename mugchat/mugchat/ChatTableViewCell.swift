@@ -19,6 +19,7 @@ class ChatTableViewCell: UITableViewCell {
     
     private let MESSAGE_TOP_MARGIN: CGFloat = 18.0
     private let MESSAGE_BOTTOM_MARGIN: CGFloat = 18.0
+    private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
     private let flipMessageDataSource = MugMessageDataSource()
@@ -97,16 +98,26 @@ class ChatTableViewCell: UITableViewCell {
     func addConstraints() {
         videoView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.contentView)
-            make.left.equalTo()(self.contentView)
-            make.width.equalTo()(self.contentView.mas_width)
-            make.height.equalTo()(self.contentView.mas_width)
+            make.centerX.equalTo()(self.contentView)
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
+                make.height.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
+            } else {
+                make.width.equalTo()(self.contentView.mas_width)
+                make.height.equalTo()(self.contentView.mas_width)
+            }
         })
         
         thumbnailView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.videoView)
-            make.left.equalTo()(self.videoView)
-            make.width.equalTo()(self.contentView.mas_width)
-            make.height.equalTo()(self.contentView.mas_width)
+            make.centerX.equalTo()(self.videoView)
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
+                make.height.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
+            } else {
+                make.width.equalTo()(self.contentView.mas_width)
+                make.height.equalTo()(self.contentView.mas_width)
+            }
         }
         
         player.view.mas_makeConstraints { (make) -> Void in
