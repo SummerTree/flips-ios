@@ -146,7 +146,7 @@ class MugDataSource : BaseDataSource {
     }
     
     func getMyMugsForWord(word: String) -> [Mug] {
-        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@))", word)) as [Mug]
+        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@) and ( (\(MugAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(MugAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Mug]
     }
     
     func getMyMugIdsForWords(words: [String]) -> Dictionary<String, [String]> {
