@@ -508,7 +508,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         if (self.isMicrophoneAvailable) {
             self.delegate?.cameraViewDidTapMicrophoneButton!(self)
         } else {
-            var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
             alertMessage.show()
         }
     }

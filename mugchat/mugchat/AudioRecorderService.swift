@@ -118,7 +118,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
                 self.recorder.record()
                 NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
             } else {
-                var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "MugChat does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+                var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
                 alertMessage.show()
             }
         })
