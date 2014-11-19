@@ -40,7 +40,7 @@ public class DeviceHelper: NSObject {
         return DeviceScreenSize.screenRect.size.height <= 480
     }
     
-    struct DeviceScreenSize { 
+    struct DeviceScreenSize {
         static let screenRect: CGRect = UIScreen.mainScreen().bounds
     }
     
