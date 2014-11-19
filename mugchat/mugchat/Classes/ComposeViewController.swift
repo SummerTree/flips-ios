@@ -515,6 +515,8 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         if (success) {
             let flipWord = flipWords[highlightedWordIndex]
             let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
+            confirmFlipViewController.title = self.composeTitle
+            confirmFlipViewController.delegate = self
             self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
         } else {
             println("Did finish recording with success = false")
