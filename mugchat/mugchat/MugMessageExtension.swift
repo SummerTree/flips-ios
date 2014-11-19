@@ -10,6 +10,10 @@
 // the license agreement.
 //
 
+private let NOTIFICATION_KEY = "aps"
+private let NOTIFICATION_ALERT_KEY = "alert"
+private let NOTIFICATION_MESSAGE = "You received a new flip message from"
+
 extension MugMessage {
 
     func addMug(mug: Mug) {
@@ -76,6 +80,14 @@ extension MugMessage {
         dictionary.updateValue(self.from.userID, forKey: MugMessageJsonParams.FROM_USER_ID)
         dictionary.updateValue(self.createdAt.toFormattedString(), forKey: MugMessageJsonParams.SENT_AT)
         dictionary.updateValue(self.mugMessageID, forKey: MugMessageJsonParams.FLIP_MESSAGE_ID)
+        
+        let loggedUserFirstName = AuthenticationHelper.sharedInstance.userInSession.firstName
+        let notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
+        
+        var notificationDictionary = Dictionary<String, AnyObject>()
+        notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
+        
+        dictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
         
         var flips = Array<Dictionary<String, String>>()
         for (var i = 0; i < self.mugs.count; i++) {
