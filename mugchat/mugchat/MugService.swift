@@ -21,7 +21,7 @@ public class MugService: MugchatService {
     private let UPLOAD_BACKGROUND_RESPONSE_URL = "background_url"
     private let UPLOAD_SOUND_RESPONSE_URL = "sound_url"
     
-    let CREATE_MUG: String = "/user/{{user_id}}/mugs"
+    let CREATE_MUG: String = "/user/{{user_id}}/flips"
     let UPLOAD_BACKGROUND: String = "/background"
     let UPLOAD_SOUND: String = "/sound"
     
