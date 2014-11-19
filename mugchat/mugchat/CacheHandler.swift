@@ -128,7 +128,7 @@ public class CacheHandler : NSObject {
     }
     
     func saveDataAtPath(dataPath: String, withUrl url: String, isTemporary: Bool = true) -> String {
-        let data = NSData(contentsOfFile: dataPath)
+        let data = NSData(contentsOfURL: NSURL(string: dataPath)!)
         return self.save(data!, withUrl: url, isTemporary: isTemporary)
     }
     

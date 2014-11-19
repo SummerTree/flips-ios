@@ -55,7 +55,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         var currentFileName = "recording-\(format.stringFromDate(NSDate())).m4a"
         println(currentFileName)
         
-        var dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         var docsDir: AnyObject = dirPaths[0]
         var soundFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
         soundFileURL = NSURL(fileURLWithPath: soundFilePath)
