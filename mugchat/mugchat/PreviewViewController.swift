@@ -11,12 +11,28 @@
 
 class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
+    private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
+    private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
+    private let SEND_MESSAGE_ERROR_OK = NSLocalizedString("OK", comment: "OK")
+
+    
     private var previewView: PreviewView!
     private var flipWords: [MugText]!
+    private var roomID: String?
+    private var contactIDs: [String]?
     
-    convenience init(flipWords: [MugText]) {
+    var delegate: PreviewViewControllerDelegate?
+    
+    convenience init(flipWords: [MugText], roomID: String) {
         self.init()
         self.flipWords = flipWords
+        self.roomID = roomID
+    }
+    
+    convenience init(flipWords: [MugText], contactIDs: [String]) {
+        self.init()
+        self.flipWords = flipWords
+        self.contactIDs = contactIDs
     }
     
     override func loadView() {
@@ -86,21 +102,62 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     }
     
     func previewButtonDidTapSendButton(previewView: PreviewView!) {
-        
-        // TODO: for each Mug where the id is empty we need to create the mug at the server.
-        // It requires a change in the server also. The mug will be empty (no image/video and no audio).
-        // But we need it to be stored in the core data, to open the messages correctly in the app.
-        
         self.previewView.stopMovie()
         self.showActivityIndicator()
-        
-        let delayBetweenExecutions = 2.0 * Double(NSEC_PER_SEC)
-        let oneSecond = dispatch_time(DISPATCH_TIME_NOW, Int64(delayBetweenExecutions))
-        dispatch_after(oneSecond, dispatch_get_main_queue()) { () -> Void in
-            self.hideActivityIndicator()
-            self.navigationController?.popViewControllerAnimated(true)
-        }
 
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            var error: MugError?
+            var flipIds = Array<String>()
+            let flipService = MugService()
+            
+            var group = dispatch_group_create()
+
+            let flipDataSource = MugDataSource()
+            for flipWord in self.flipWords {
+                if (flipWord.associatedFlipId != nil) {
+                    var flip = flipDataSource.retrieveMugWithId(flipWord.associatedFlipId!)
+                    flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
+                    flipIds.append(flip.mugID)
+                } else {
+                    // Create a Flip in the server for each empty Flip
+                    dispatch_group_enter(group)
+                    flipService.createMug(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createMugSuccessCallback: { (flip) -> Void in
+                        flipIds.append(flip.mugID)
+                        dispatch_group_leave(group);
+                    }, createMugFailCallBack: { (flipError) -> Void in
+                        error = flipError
+                        dispatch_group_leave(group);
+                    })
+                }
+            }
+            
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            
+            if (error != nil) {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.hideActivityIndicator()
+                    
+                    let message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error?.error)"
+                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: self.SEND_MESSAGE_ERROR_OK)
+                    alertView.show()
+                })
+            } else {
+                // SEND MESSAGE
+                let messageService = MessageService.sharedInstance
+                if (self.roomID != nil) {
+                    messageService.sendMessage(flipIds, roomID: self.roomID!, completion: { (success) -> Void in
+                        self.hideActivityIndicator()
+                        if (success) {
+                            self.delegate?.previewViewControllerDidSendMessage(self)
+                        } else {
+                            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: self.SEND_MESSAGE_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: self.SEND_MESSAGE_ERROR_OK)
+                            alertView.show()
+                        }
+                    })
+                }
+            }
+        })
     }
     
     func previewViewMakeConstraintToNavigationBarBottom(container: UIView!) {
@@ -115,4 +172,10 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
+}
+
+protocol PreviewViewControllerDelegate {
+    
+    func previewViewControllerDidSendMessage(viewController: PreviewViewController)
+    
 }

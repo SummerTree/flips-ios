@@ -10,7 +10,8 @@
 // the license agreement.
 //
 
-private struct MugMessageJsonParams {
+struct MugMessageJsonParams {
+    static let FLIP_MESSAGE_ID = "flipMessageId" // used to identify messages sent by the logged user that are from history or not. To do not duplicate it.
     static let FROM_USER_ID = "fromUserId"
     static let SENT_AT = "sentAt"
     static let CONTENT = "content"
@@ -30,10 +31,25 @@ class MugMessageDataSource : BaseDataSource {
     private func createEntityWithJson(json: JSON) -> MugMessage {
         let userDataSource = UserDataSource()
         
-        var entity: MugMessage! = MugMessage.createEntity() as MugMessage
+        let fromUserID = json[MugMessageJsonParams.FROM_USER_ID].stringValue
+        let loggedUser = User.loggedUser()
         
+        var entity: MugMessage!
+        if (json[MugMessageJsonParams.FLIP_MESSAGE_ID] != nil) { // JUST TO AVOID CRASHES WHILE OTHER PEOPLE ARE SENDING OLD FORMAT MESSAGES VIA WEBSITE.
+            let flipMessageID = json[MugMessageJsonParams.FLIP_MESSAGE_ID].stringValue
+            
+            if (fromUserID == loggedUser?.userID!) {
+                entity = self.getFlipMessageById(flipMessageID)
+                if (entity != nil) {
+                    return entity // if the user already has his message do not recreate
+                }
+            }
+        }
+        
+        entity = MugMessage.createEntity() as MugMessage
         entity.mugMessageID = self.nextMugMessageID()
-        entity.from = userDataSource.retrieveUserWithId(json[MugMessageJsonParams.FROM_USER_ID].stringValue)
+        
+        entity.from = userDataSource.retrieveUserWithId(fromUserID)
         entity.createdAt = NSDate(dateTimeString: json[MugMessageJsonParams.SENT_AT].stringValue)
         entity.notRead = true
         entity.receivedAt = NSDate()
@@ -62,26 +78,22 @@ class MugMessageDataSource : BaseDataSource {
         return mugMessage
     }
     
-    func saveTemporaryMugMessage(mugMessageToSave: MugMessage) {
-        let userDataSource = UserDataSource()
-        let mugDataSource = MugDataSource()
-        
+    func createFlipMessageWithFlips(flips: [Mug], toRoom room: Room) -> MugMessage {
         var entity: MugMessage! = MugMessage.createEntity() as MugMessage
         
-        entity.mugMessageID = mugMessageToSave.mugMessageID
-        entity.from = userDataSource.retrieveUserWithId(mugMessageToSave.from.userID)
+        entity.mugMessageID = self.nextMugMessageID()
+        entity.room = room
+        entity.from = User.loggedUser()
         entity.createdAt = NSDate()
         entity.notRead = false
         entity.receivedAt = NSDate()
-        
-        let mugs = NSMutableOrderedSet()
-        for (var i = 0; i < mugMessageToSave.mugs.count; i++) {
-            var mug = mugMessageToSave.mugs.objectAtIndex(i) as Mug
-            mugs.addObject(mugDataSource.retrieveMugWithId(mug.mugID))
+        for flip in flips {
+            entity.addMug(flip)
         }
-        entity.mugs = mugs
- 
+        
         self.save()
+        
+        return entity
     }
     
     private func nextMugMessageID() -> Int {
@@ -95,8 +107,8 @@ class MugMessageDataSource : BaseDataSource {
         return ++nextID
     }
     
-    func oldestNotReadMugMessageForRoom(room: Room) -> MugMessage? {
-        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(room.roomID)) AND (\(MugMessageAttributes.NOT_READ) == true) AND (\(MugMessageAttributes.REMOVED) == false) AND (\(MugMessageAttributes.FROM).userID != \(AuthenticationHelper.sharedInstance.userInSession.userID)))")
+    func oldestNotReadMugMessageForRoomId(roomID: String) -> MugMessage? {
+        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(roomID)) AND (\(MugMessageAttributes.NOT_READ) == true) AND (\(MugMessageAttributes.REMOVED) == false) AND (\(MugMessageAttributes.FROM).userID != \(AuthenticationHelper.sharedInstance.userInSession.userID)))")
         var result = MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
         return result.first
 
@@ -121,8 +133,12 @@ class MugMessageDataSource : BaseDataSource {
         return MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
     }
     
+    private func getFlipMessageById(flipMessageID: String) -> MugMessage? {
+        return MugMessage.findFirstByAttribute(MugMessageAttributes.MUG_MESSAGE_ID, withValue: flipMessageID) as? MugMessage
+    }
+    
     func retrieveFlipMessageById(flipMessageID: String) -> MugMessage {
-        var flipMessage = MugMessage.findFirstByAttribute(MugMessageAttributes.MUG_MESSAGE_ID, withValue: flipMessageID) as? MugMessage
+        var flipMessage = self.getFlipMessageById(flipMessageID)
         
         if (flipMessage == nil) {
             println("FlipMessage with flipMessageID (\(flipMessage)) not found.")

@@ -171,7 +171,7 @@ class ConversationTableViewCell : UITableViewCell {
         let mugMessageDataSource = MugMessageDataSource()
 
         // The preview still photo should reflect the first frame of the video of the oldest unread message in the conversation
-        var mugMessage = mugMessageDataSource.oldestNotReadMugMessageForRoom(room)
+        var mugMessage = mugMessageDataSource.oldestNotReadMugMessageForRoomId(room.roomID)
         if (mugMessage == nil) {
             mugMessage = room.mugMessagesNotRemoved().lastObject as? MugMessage
         }

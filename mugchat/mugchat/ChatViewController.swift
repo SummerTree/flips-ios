@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataSource {
+class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
     
     private var chatView: ChatView!
     private var chatTitle: String!
@@ -49,6 +49,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         flipMessageIds = Array<String>()
+        self.reloadFlipMessages()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -63,7 +64,6 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            self.reloadFlipMessages()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.chatView.reloadFlipMessages()
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.chatView)
@@ -76,6 +76,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
+        self.chatView.dataSource = nil
         self.chatView.viewWillDisappear()
     }
     
@@ -102,7 +103,8 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     }
     
     func chatView(chatView: ChatView, didTapNextButtonWithWords words : [String]) {
-        var composeViewController = ComposeViewController(composeTitle: self.chatTitle, words: words)
+        var composeViewController = ComposeViewController(roomID: self.roomID, composeTitle: self.chatTitle, words: words)
+        composeViewController.delegate = self
         self.navigationController?.pushViewController(composeViewController, animated: true)
     }
     
@@ -130,5 +132,12 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.reloadFlipMessages()
         })
+    }
+    
+    
+    // MARK: - ComposeViewControllerDelegate
+    
+    func composeViewControllerDidSendMessage(viewController: ComposeViewController) {
+        self.navigationController?.popToViewController(self, animated: true)
     }
 }
