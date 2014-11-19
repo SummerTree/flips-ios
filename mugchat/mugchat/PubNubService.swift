@@ -15,9 +15,9 @@ import Foundation
 public class PubNubService: MugchatService, PNDelegate {
     
     private let PUBNUB_ORIGIN = "pubsub.pubnub.com"
-    private let PUBNUB_PUBLISH_KEY = "pub-c-0f705157-1c76-450a-99e9-59342f271f12"
-    private let PUBNUB_SUBSCRIBE_KEY = "sub-c-8047a8dc-3853-11e4-8736-02ee2ddab7fe"
-    private let PUBNUB_SECRET_KEY = "sec-c-M2Y5YTNmMjEtOTUwMi00Yzg3LWEyNzgtMmM1YmJmYThkOTk2"
+    private let PUBNUB_PUBLISH_KEY = "pub-c-44dbaf09-91c6-4e9d-98d2-99841736d52a"
+    private let PUBNUB_SUBSCRIBE_KEY = "sub-c-fbc63a34-59fd-11e4-a91d-02ee2ddab7fe"
+    private let PUBNUB_SECRET_KEY = "sec-c-NGUzZWFmNDgtYmNmNi00ZjRiLTgyMTYtOTMxYWIzYmExNmEx"
     
     var delegate: PubNubServiceDelegate?
     
@@ -59,7 +59,7 @@ public class PubNubService: MugchatService, PNDelegate {
     private func subscribeOnMyChannels() {
         var ownChannel: PNChannel = PNChannel.channelWithName(AuthenticationHelper.sharedInstance.userInSession.pubnubID) as PNChannel
         
-        var channels = Array<PNChannel>()
+        var channels = [AnyObject]()
         channels.append(ownChannel)
         
         let roomDataSource = RoomDataSource()
@@ -68,21 +68,30 @@ public class PubNubService: MugchatService, PNDelegate {
             channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
         }
         
-        PubNub.subscribeOnChannels(channels)
+        let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
+        
+        PubNub.subscribeOn(channels)
+        PubNub.enablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
+            println("Result of enablePushNotificationOnChannels: channels=[\(channels), with error: \(pnError)")
+        }
     }
     
     func subscribeToChannel(pubnubID: String) {
         var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
-        if (!PubNub.isSubscribedOnChannel(channel)) {
-            PubNub.subscribeOnChannel(channel)
+        if (!PubNub.isSubscribedOn(channel)) {
+            PubNub.subscribeOn([channel])
+            let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
+            PubNub.enablePushNotificationsOnChannel(channel, withDevicePushToken: token) { (channels, pnError) -> Void in
+                println("Result of enablePushNotificationsOnChannel: channels=[\(channels), with error: \(pnError)")
+            }
         }
     }
     
     public func pubnubClient(client: PubNub!, error: PNError!) {
         println("Error connecting \(client) with error \(error)")
     }
-    
-    
+	
+	
     // MARK: - PNDelegate
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
@@ -93,7 +102,7 @@ public class PubNubService: MugchatService, PNDelegate {
         self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, fromChannelName: pnMessage.channel.name)
     }
     
-    
+
     // MARK: - Send Messages Methods
     
     func sendMessage(message: Dictionary<String, AnyObject>, pubnubID: String, completion: CompletionBlock) {
@@ -122,6 +131,13 @@ public class PubNubService: MugchatService, PNDelegate {
         // + (PNMessage *)sendMessage:(id)message applePushNotification:(NSDictionary *)apnsPayload googleCloudNotification:(NSDictionary *)gcmPayload
         // toChannel:(PNChannel *)channel storeInHistory:(BOOL)shouldStoreInHistory withCompletionBlock:(PNClientMessageProcessingBlock)success;
     }
+	
+	
+	// MARK: - Notifications Handler
+	
+    public func pubnubClient(client: PubNub!, didReceivePushNotificationEnabledChannels channels: [AnyObject]!) {
+        println("didReceivePushNotificationEnabledChannels")
+	}
 }
 
 protocol PubNubServiceDelegate {

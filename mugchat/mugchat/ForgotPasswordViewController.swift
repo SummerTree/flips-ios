@@ -12,7 +12,12 @@
 
 import UIKit
 
-class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate {
+private let INVALID_NUMBER = NSLocalizedString("Invalid Number", comment: "Invalid Number")
+private let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not match our records. Please try again.", comment: "No match")
+private let OK = NSLocalizedString("OK", comment: "OK")
+
+
+class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
     
     private let US_CODE = "+1"
     
@@ -61,7 +66,8 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: intlPhoneNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (mugError) -> Void in
-            println(mugError!.error)
+            let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: OK)
+            alertView.show()
         }
     }
     
@@ -69,4 +75,10 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         self.navigationController?.popViewControllerAnimated(true)
     }
 
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView,
+        clickedButtonAtIndex buttonIndex: Int) {
+        forgotPasswordView.focusKeyboardOnMobileNumberField()
+    }
 }

@@ -12,7 +12,11 @@
 
 import Foundation
 
-class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
+private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
+private let RETRY = NSLocalizedString("Retry", comment: "Retry")
+
+
+class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
     
     let splashScreenView = SplashScreenView()
     
@@ -49,6 +53,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     // MARK: SplashScreenViewDelegate methods
     
     func splashScreenViewAttemptLoginWithFacebook() {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        activityIndicator.color = .plum()
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+        self.view.addSubview(activityIndicator)
+        
         var success = FBSession.openActiveSessionWithAllowLoginUI(false)
         println("User is already authenticated with Facebook? \(success)")
         if (success) {
@@ -60,18 +71,22 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
                     userDataSource.syncUserData({ (success, error) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (success) {
-                                let authenticatedUser = AuthenticationHelper.sharedInstance.userInSession
-                                if (authenticatedUser.device == nil) {
-                                    self.openPhoneNumberController(authenticatedUser.userID)
-                                } else {
+                                activityIndicator.stopAnimating()
+                                
+                                let authenticatedUser = User.loggedUser()!
+                                if (self.userHasDevice(authenticatedUser)) {
                                     self.openInboxViewController()
+                                } else {
+                                    self.openPhoneNumberController(authenticatedUser.userID)
                                 }
                             }
                         })
                     })
                 }, failure: { (mugError) -> Void in
                     println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
-                    var alertView = UIAlertView(title: "Login Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                    activityIndicator.stopAnimating()
+                    
+                    var alertView = UIAlertView(title: LOGIN_ERROR, message: mugError!.error, delegate: self, cancelButtonTitle: "Retry")
                     alertView.show()
             })
         }
@@ -95,6 +110,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
         }
     }
     
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        splashScreenViewAttemptLoginWithFacebook()
+    }
+    
     private func openInboxViewController() {
         var inboxViewController = InboxViewController()
         self.navigationController?.pushViewController(inboxViewController, animated: true)
@@ -108,6 +129,10 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate {
     private func openPhoneNumberController(userID: String) {
         var phoneNumberViewController = PhoneNumberViewController(userId: userID)
         self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+    }
+    
+    private func userHasDevice(user: User) -> Bool {
+        return user.device != nil && user.device.isVerified.integerValue == 1
     }
     
     override func prefersStatusBarHidden() -> Bool {

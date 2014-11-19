@@ -12,7 +12,7 @@
 #import "MBContactCollectionViewFlowLayout.h"
 #import "Flips-Swift.h"
 
-NSInteger const kCellHeight = 56;
+NSInteger const kCellHeight = 36;
 NSString * const kPrompt = @"To:";
 NSString * const kDefaultEntryText = @" ";
 

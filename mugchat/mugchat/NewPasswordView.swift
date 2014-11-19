@@ -52,6 +52,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     func viewDidAppear() {
         passwordField.becomeFirstResponder()
+        updatePasswordFieldEnabled(passwordField.text)
     }
     
     func addSubviews() {
@@ -85,7 +86,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         passwordField.secureTextEntry = true;
         passwordField.sizeToFit()
         passwordField.textColor = UIColor.whiteColor()
-        passwordField.tintColor = UIColor.whiteColor()
         passwordField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         passwordField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Password", comment: "New Password"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         passwordField.keyboardType = UIKeyboardType.Default
@@ -174,6 +174,10 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         super.updateConstraints()
     }
     
+    func updatePasswordFieldEnabled(text: String!) {
+        passwordField.enabled = text != nil && !text.isEmpty
+    }
+    
     
     // MARK: - Notifications
     func keyboardOnScreen(notification: NSNotification) {
@@ -224,6 +228,15 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         // Do nothing
         println("customNavigationBarDidTapRightButton")
+    }
+    
+    
+    // MARK: - UITextFieldDelegate
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let newText = (textField.text as NSString).stringByReplacingCharactersInRange(range, withString: string)
+        updatePasswordFieldEnabled(newText)
+        return true
     }
     
     

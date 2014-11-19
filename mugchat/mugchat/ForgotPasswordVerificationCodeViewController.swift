@@ -34,6 +34,8 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                     return ()
                 }
                 
+                self.verificationCodeView.resetVerificationCodeField()
+                
                 var userDevice: Device! = device as Device;
                 var user: User! = userDevice.user
                 
@@ -46,6 +48,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 } else {
                     println("Device code verification error: " + mugError!.error!)
                     self.verificationCodeView.resetVerificationCodeField()
+                    self.verificationCodeView.focusKeyboardOnCodeField()
                 }
             })
     }
