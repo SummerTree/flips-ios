@@ -33,13 +33,38 @@
 #import "PNErrorCodes.h"
 #import "PNStructures.h"
 
+<<<<<<< HEAD
+=======
+#import "PNChannelGroupNamespace.h"
+#import "PNChannelGroupChange.h"
+#import "PNChannelProtocol.h"
+#import "PNChannelGroup.h"
+#import "PNHereNow.h"
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNMessage.h"
 #import "PNChannel.h"
 #import "PNClient.h"
 #import "PNLogger.h"
 #import "PNMacro.h"
 #import "PNError.h"
+<<<<<<< HEAD
 #import "PubNub.h"
 #import "PNDate.h"
 
+=======
+#import "PNDate.h"
+
+#import "PubNub+ChannelRegistry.h"
+#import "PubNub+PresenceEvents.h"
+#import "PubNub+Subscription.h"
+#import "PubNub+Messaging.h"
+#import "PubNub+Presence.h"
+#import "PubNub+History.h"
+#import "PubNub+State.h"
+#import "PubNub+Time.h"
+#import "PubNub+APNS.h"
+#import "PubNub+PAM.h"
+#import "PubNub.h"
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #endif // PNImports_h

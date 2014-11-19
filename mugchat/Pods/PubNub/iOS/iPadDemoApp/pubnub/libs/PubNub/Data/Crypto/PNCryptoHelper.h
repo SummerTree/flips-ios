@@ -16,62 +16,124 @@
 @class PNConfiguration, PNError;
 
 
+<<<<<<< HEAD
+=======
+#pragma mark - Public interface declaration
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @interface PNCryptoHelper : NSObject
 
 
 #pragma mark - Properties
 
+<<<<<<< HEAD
 // Stores whether crypto helper was prepared or not
 @property (nonatomic, readonly, assign, getter = isReady) BOOL ready;
+=======
+/**
+ Stores whether crypto helper configuration completed or not.
+ */
+@property (nonatomic, readonly, assign) BOOL ready;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Class methods
 
 /**
+<<<<<<< HEAD
  * Retrieve reference on on helper instance.
  * At first launch instance should be configurated.
  */
 + (PNCryptoHelper *)sharedInstance;
 
 + (void)resetHelper;
+=======
+ Create and initialize crypto helper with specified set of configuration information.
+ 
+ @param configuration
+ Reference on configuration instance which hold all information which is required to complete crypto helper configuration.
+ 
+ @param error
+ Pointer which will store error object in case if any confuguration information can't be applied.
+ 
+ @return Reference on fully initialized and ready to use \b PNCryptoHelper. \c nil will be returned in case if configuration
+ can't be applied to the instance.
+ */
++ (PNCryptoHelper *)helperWithConfiguration:(PNConfiguration *)configuration error:(PNError **)error;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
 
 /**
+<<<<<<< HEAD
  * Update helper configuration and return whether it was
  * successful and error in case if there is some
+=======
+ Update helper configuration and return whether it was successful and error in case if there is some.
+ 
+ @param configuration
+ Reference on configuration instance which hold all information which is required to complete crypto helper configuration.
+ 
+ @param error
+ Pointer which will store error object in case if any confuguration information can't be applied.
+ 
+ @return \c YES in case if valid configuration has been provided.
+ 
+ @warning In case if configuration update failed, cryptor will try to restore previous configuration. If this is initial
+ configuration which is failed, cryptor helper won't be able to work as expected.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (BOOL)updateWithConfiguration:(PNConfiguration *)configuration withError:(PNError **)error;
 
 /**
+<<<<<<< HEAD
  * Returns reference on encrypted string which can be sent
  * to remote PubNub origin for processing.
  * In case of encryption error message will be generated.
+=======
+ Returns reference on encrypted string which can be sent to remote PubNub origin for processing. In case of encryption 
+ error message will be generated.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (NSString *)encryptedStringFromString:(NSString *)plainString error:(PNError *__strong *)error;
 
 #ifdef CRYPTO_BACKWARD_COMPATIBILITY_MODE
 /**
+<<<<<<< HEAD
  * Returns reference on encrypted object which was retrieved
  * from object.
  * In case of encryption error message will be generated.
+=======
+ Returns reference on encrypted object which was retrieved from object. In case of encryption error message will be 
+ generated.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (id)encryptedObjectFromObject:(id)objectForEncryption error:(PNError *__strong *)error;
 #endif
 
 /**
+<<<<<<< HEAD
  * Returns reference on decrypted string which received from 
  * encoded server response
  * In case of decryption error message will be generated.
+=======
+ Returns reference on decrypted string which received from encoded server response. In case of decryption error message
+ will be generated.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (NSString *)decryptedStringFromString:(NSString *)encodedString error:(PNError *__strong *)error;
 
 #ifdef CRYPTO_BACKWARD_COMPATIBILITY_MODE
 /**
+<<<<<<< HEAD
  * Returns reference on decrypted object which received from
  * encoded server response.
  * In case of encryption error message will be generated.
+=======
+ Returns reference on decrypted object which received from encoded server response. In case of encryption error message
+ will be generated.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (id)decryptedObjectFromObject:(id)encodedObject error:(PNError *__strong *)error;
 #endif

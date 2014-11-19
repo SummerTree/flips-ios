@@ -41,6 +41,16 @@ struct PNServiceResponseCallbacksStruct PNServiceResponseCallbacks = {
     .latencyMeasureMessageCallback = @"lm",
     .stateRetrieveCallback = @"mr",
     .stateUpdateCallback = @"mu",
+<<<<<<< HEAD
+=======
+    .channelGroupsRequestCallback = @"cga",
+    .channelGroupNamespacesRequestCallback = @"cgnr",
+    .channelGroupNamespaceRemoveCallback = @"cgnd",
+    .channelGroupRemoveCallback = @"cgr",
+    .channelsForGroupRequestCallback = @"cfgr",
+    .channelGroupChannelsAddCallback = @"cgac",
+    .channelGroupChannelsRemoveCallback = @"cgrc",
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     .subscriptionCallback = @"s",
     .leaveChannelCallback = @"lv",
     .channelPushNotificationsEnableCallback = @"cpe",
@@ -147,6 +157,10 @@ struct PNServiceResponseCallbacksStruct PNServiceResponseCallbacks = {
         self.size = responseSize;
         self.statusCode = statusCode;
         self.privateData = [NSMutableDictionary dictionary];
+<<<<<<< HEAD
+=======
+        self.unknownData = [NSMutableDictionary dictionary];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         self.lastResponseOnConnection = isLastResponseOnConnection;
 
         
@@ -306,6 +320,7 @@ struct PNServiceResponseCallbacksStruct PNServiceResponseCallbacks = {
 
             if (isPayloadFound) {
 
+<<<<<<< HEAD
                 NSMutableDictionary *responseForModification = [self.response mutableCopy];
                 [unprocessedDataKeys enumerateObjectsUsingBlock:^(NSString *dataKey, NSUInteger dataKeyIdx,
                                                                   BOOL *dataKeyEnumeratorStop) {
@@ -314,6 +329,14 @@ struct PNServiceResponseCallbacksStruct PNServiceResponseCallbacks = {
                     [processedData removeObjectForKey:dataKey];
                 }];
                 self.response = [NSDictionary dictionaryWithDictionary:responseForModification];
+=======
+                [unprocessedDataKeys enumerateObjectsUsingBlock:^(NSString *dataKey, NSUInteger dataKeyIdx,
+                                                                  BOOL *dataKeyEnumeratorStop) {
+
+                    [self.unknownData setValue:[processedData valueForKey:dataKey] forKey:dataKey];
+                    [processedData removeObjectForKey:dataKey];
+                }];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
             }
             else {
 
@@ -325,7 +348,10 @@ struct PNServiceResponseCallbacksStruct PNServiceResponseCallbacks = {
 
 - (void)getCallbackFunction:(NSString **)callback requestIdentifier:(NSString **)identifier fromData:(NSData *)responseData {
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     // Trying to extract callback method and request identifier
     NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
     if (responseString) {

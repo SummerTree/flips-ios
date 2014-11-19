@@ -35,6 +35,19 @@ static NSUInteger const kPNResponseEventsListElementIndex = 0;
 static NSUInteger const kPNResponseChannelsListElementIndex = 2;
 
 /**
+<<<<<<< HEAD
+=======
+ @brief Stores reference on index under which channels detalization is stored
+ 
+ @discussion In case if under \c kPNResponseChannelsListElementIndex stored list of channel groups, under this index
+ will be stored list of actual channels from channel group at which event fired.
+ 
+ @since 3.7.0
+ */
+static NSUInteger const kPNResponseChannelsDetailsListElementIndex = 3;
+
+/**
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  Stores reference on time token element index in response for events.
  */
 static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
@@ -138,12 +151,24 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
             channels = [[responseData objectAtIndex:kPNResponseChannelsListElementIndex]
                     componentsSeparatedByString:@","];
         }
+<<<<<<< HEAD
+=======
+        
+        // Retrieve list of channel details
+        NSArray *channelDetails = nil;
+        if ([responseData count] > kPNResponseChannelsDetailsListElementIndex) {
+            
+            channelDetails = [[responseData objectAtIndex:kPNResponseChannelsDetailsListElementIndex]
+                              componentsSeparatedByString:@","];
+        }
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         if ([events count] > 0) {
 
             NSMutableArray *eventObjects = [NSMutableArray arrayWithCapacity:[events count]];
             [events enumerateObjectsUsingBlock:^(id event, NSUInteger eventIdx, BOOL *eventEnumeratorStop) {
 
+<<<<<<< HEAD
                 PNChannel *channel = nil;
                 if ([channels count] > 0) {
 
@@ -157,11 +182,31 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
                         channel = [(PNChannelPresence *)channel observedChannel];
                     }
                 }
+=======
+                PNChannel* (^channelExtractBlock)(NSString *) = ^(NSString *channelName) {
+                    
+                    // Retrieve reference on channel on which event is occurred
+                    PNChannel *channel = [PNChannel channelWithName:channelName];
+                    
+                    // Checking whether event occurred on presence observing channel or no and retrieve reference on
+                    // original channel
+                    if ([channel isPresenceObserver]) {
+                        
+                        channel = [(PNChannelPresence *)channel observedChannel];
+                    }
+                    
+                    return channel;
+                };
+                
+                PNChannel *channel = ([channels count] ? channelExtractBlock([channels objectAtIndex:eventIdx]): nil);
+                PNChannel *detailedChannel = ([channelDetails count] ? channelExtractBlock([channelDetails objectAtIndex:eventIdx]): nil);
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
                 id eventObject = nil;
 
                 // Checking whether event presence event or not
                 if ([event isKindOfClass:[NSDictionary class]] && [PNPresenceEvent isPresenceEventObject:event]) {
+<<<<<<< HEAD
 
                     eventObject = [PNPresenceEvent presenceEventForResponse:event];
                     ((PNPresenceEvent *)eventObject).channel = channel;
@@ -169,6 +214,26 @@ static NSUInteger const kPNResponseTimeTokenElementIndexForEvent = 1;
                 else {
 
                     eventObject = [PNMessage messageFromServiceResponse:event onChannel:channel atDate:eventDate];
+=======
+                    
+                    eventObject = [PNPresenceEvent presenceEventForResponse:event];
+                    ((PNPresenceEvent *)eventObject).channel = (detailedChannel ? detailedChannel : channel);
+                }
+                else {
+                    
+                    PNChannelGroup *group = nil;
+                    PNChannel *targetChannel = (detailedChannel ? detailedChannel : channel);
+                    if (detailedChannel && channel) {
+                        
+                        if (channel.isChannelGroup) {
+                            
+                            group = (PNChannelGroup *)channel;
+                        }
+                    }
+
+                    eventObject = [PNMessage messageFromServiceResponse:event onChannel:targetChannel channelGroup:group
+                                                                 atDate:eventDate];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                 }
 
                 [eventObjects addObject:eventObject];

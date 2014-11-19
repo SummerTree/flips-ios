@@ -44,6 +44,15 @@
     return self;
 }
 
+<<<<<<< HEAD
+=======
+- (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier {
+    
+    [super finalizeWithConfiguration:configuration clientIdentifier:clientIdentifier];
+    self.clientIdentifier = clientIdentifier;
+}
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (NSString *)callbackMethodName {
 
     return PNServiceResponseCallbacks.timeTokenCallback;

@@ -65,7 +65,7 @@ public class PubNubService: MugchatService, PNDelegate {
         
         let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
         
-        PubNub.subscribeOnChannels(channels)
+        PubNub.subscribeOn(channels)
         PubNub.enablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
             println("Result of subscribing: channels=[\(channels), with error: \(pnError)")
         }
@@ -73,13 +73,12 @@ public class PubNubService: MugchatService, PNDelegate {
     
     func subscribeToChannel(pubnubID: String) {
         var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
-        if (!PubNub.isSubscribedOnChannel(channel)) {
-            PubNub.subscribeOnChannel(channel)
+        if (!PubNub.isSubscribedOn(channel)) {
+            PubNub.subscribeOn(channel)
             let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
             PubNub.enablePushNotificationsOnChannel(channel, withDevicePushToken: token) { (channels, pnError) -> Void in
                 println("Result of subscribing: channels=[\(channels), with error: \(pnError)")
             }
-        }
     }
     
     public func pubnubClient(client: PubNub!, error: PNError!) {

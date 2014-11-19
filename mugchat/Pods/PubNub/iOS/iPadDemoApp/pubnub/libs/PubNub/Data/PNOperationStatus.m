@@ -7,6 +7,10 @@
 //
 
 #import "PNOperationStatus+Protected.h"
+<<<<<<< HEAD
+=======
+#import "PNError.h"
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 // ARC check
@@ -42,11 +46,26 @@
 - (NSString *)description {
 
     return [NSString stringWithFormat:@"%@ (%p) <successful: %@, time token: %@, description: %@, error: %@>",
+<<<<<<< HEAD
                     NSStringFromClass([self class]),
                     self, self.isSuccessful?@"YES":@"NO",
                     self.timeToken,
                     self.statusDescription,
                     self.error];
+=======
+            NSStringFromClass([self class]), self, self.isSuccessful?@"YES":@"NO", self.timeToken,
+            self.statusDescription, self.error];
+}
+
+- (NSString *)logDescription {
+    
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wundeclared-selector"
+    return [NSString stringWithFormat:@"<%@|%@|%@|%@>", @(self.isSuccessful), self.timeToken,
+            (self.statusDescription ? self.statusDescription : [NSNull null]),
+            (self.error ? [self.error performSelector:@selector(logDescription)] : [NSNull null])];
+    #pragma clang diagnostic pop
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 #pragma mark -

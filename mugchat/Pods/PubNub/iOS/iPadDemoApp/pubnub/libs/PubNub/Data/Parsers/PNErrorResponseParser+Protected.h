@@ -29,4 +29,10 @@ static NSString * const kPNResponseErrorServiceKey = @"service";
 // Stores reference on key under which list of channels on which error occurred is stored
 static NSString * const kPNResponseErrorChannelsKey = @"channels";
 
+<<<<<<< HEAD
+=======
+// Stores reference on key under which list of channel groups on which error occurred is stored
+static NSString * const kPNResponseErrorChannelGroupsKey = @"channel-groups";
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #endif

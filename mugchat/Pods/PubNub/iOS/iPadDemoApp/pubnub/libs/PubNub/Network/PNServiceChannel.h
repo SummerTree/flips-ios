@@ -41,10 +41,25 @@
 #pragma mark - Class methods
 
 /**
+<<<<<<< HEAD
  * Return reference on configured service communication
  * channel with specified delegate
  */
 + (PNServiceChannel *)serviceChannelWithDelegate:(id<PNConnectionChannelDelegate>)delegate;
+=======
+ Return reference on configured service communication channel with specified delegate
+
+ @param configuration
+ Reference on \b PNConfiguration instance which should be used by connection channel and accompany classes.
+
+ @param delegate
+ Reference on delegate which will accept all general callbacks from underlay connection channel class.
+
+ @return Reference on fully configured and ready to use instance.
+ */
++ (PNServiceChannel *)serviceChannelWithConfiguration:(PNConfiguration *)configuration
+                                          andDelegate:(id<PNConnectionChannelDelegate>)delegate;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
@@ -66,6 +81,7 @@
 #pragma mark - PAM manipulation methods
 
 /**
+<<<<<<< HEAD
  Change access rights for specific object (object defined by set of parameters).
 
  @param channels
@@ -95,12 +111,37 @@
  */
 - (void)changeAccessRightsForChannels:(NSArray *)channels accessRights:(PNAccessRights)accessRights
                     authorizationKeys:(NSArray *)authorizationKeys forPeriod:(NSInteger)accessPeriod;
+=======
+ @brief Change access rights to set of data feed objects in linkage to client's authorization keys.
+ 
+ @discussion This method allow to modify access rights for set of data feed objects and link them to concrete client 
+ using it's authorization key.
+ 
+ @param channelObjects    List of objects (which conforms to \b PNChannelProtocol data feed object protocol) for which
+                          \b PubNub client should change access rights.
+ @param accessRights      Bit field which allow to specify set of options. Bit options specified in 
+                          \c PNAccessRights
+ @param authorizationKeys List of \a NSString instances which specify list of client for which access rights should be 
+                          changed.
+ @param accessPeriod      Duration in minutes during which provided access rights should be active for provided objects.
+ 
+ @since 3.7.0
+ */
+- (void)changeAccessRightsFor:(NSArray *)channelObjects accessRights:(PNAccessRights)accessRights
+            authorizationKeys:(NSArray *)authorizationKeys onPeriod:(NSInteger)accessPeriod;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 /**
  Audit access rights for specific object (object defined by set of parameters).
 
+<<<<<<< HEAD
  @param channels
  Array of \b PNChannel instances for which access wights should be audited.
+=======
+ @param channelObjects
+ Array of objects (which conforms to \b PNChannelProtocol data feed object protocol) like \b PNChannel, 
+ \b PNChannelGroup or \b PNChannelGroupNamespace for which access wights should be audited.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
  @param clientsAuthorizationKeys
  Array of \a NSString instances which describes scope of authorization keys for which access rights should be audited.
@@ -114,10 +155,15 @@
  possible to audit multiple clients).
 
  @see \b PNChannel class
+<<<<<<< HEAD
 
  @see \a -changeAccessRightsForChannels:accessRights:authorizationKeys:forPeriod:
  */
 - (void)auditAccessRightsForChannels:(NSArray *)channels clients:(NSArray *)clientsAuthorizationKeys;
+=======
+ */
+- (void)auditAccessRightsFor:(NSArray *)channelObjects clients:(NSArray *)clientsAuthorizationKeys;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark -

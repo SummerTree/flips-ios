@@ -33,11 +33,14 @@ extern struct PNConnectionIdentifiersStruct PNConnectionIdentifiers;
 @interface PNConnection (Protected)
 
 
+<<<<<<< HEAD
 #pragma mark - Class methods
 
 + (void)resetConnectionsPool;
 
 
+=======
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #pragma mark - Instance methods
 
 /**
@@ -58,6 +61,14 @@ extern struct PNConnectionIdentifiersStruct PNConnectionIdentifiers;
 - (BOOL)isDisconnecting;
 
 /**
+<<<<<<< HEAD
+=======
+ Silently close connection
+ */
+- (void)closeConnection;
+
+/**
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  * This is final point where connection can release all resources which may not allow it to destroy it from outside
  */
 - (void)prepareForTermination;

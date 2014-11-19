@@ -12,6 +12,10 @@
 
 #import "PNChannel+Protected.h"
 #import "PNChannelPresence+Protected.h"
+<<<<<<< HEAD
+=======
+#import "NSObject+PNAdditions.h"
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "NSString+PNAddition.h"
 #import "PNHereNow+Protected.h"
 #import "PNClient+Protected.h"
@@ -34,6 +38,10 @@
 
 static NSMutableDictionary *_channelsCache = nil;
 
+<<<<<<< HEAD
+=======
+static dispatch_queue_t _privateQueue = NULL;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 #pragma mark - Private interface methods
 
@@ -48,6 +56,10 @@ static NSMutableDictionary *_channelsCache = nil;
 @property (nonatomic, strong) PNDate *presenceUpdateDate;
 @property (nonatomic, assign) NSUInteger participantsCount;
 @property (nonatomic, strong) NSMutableDictionary *participantsList;
+<<<<<<< HEAD
+=======
+@property (nonatomic, assign, getter = isChannelGroup) BOOL channelGroup;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @property (nonatomic, assign, getter = shouldObservePresence) BOOL observePresence;
 @property (nonatomic, assign, getter = isAbleToResetTimeToken) BOOL ableToResetTimeToken;
 @property (nonatomic, assign, getter = isLinkedWithPresenceObservationChannel)BOOL linkedWithPresenceObservationChannel;
@@ -78,12 +90,29 @@ static NSMutableDictionary *_channelsCache = nil;
 
 #pragma mark - Class methods
 
+<<<<<<< HEAD
+=======
++ (void)initialize {
+    
+    if (self == [PNChannel class]) {
+        
+        _privateQueue = [PNChannel pn_serialQueueWithOwnerIdentifier:@"channel" andTargetQueue:NULL];
+    }
+    
+    [super initialize];
+}
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 + (NSArray *)channelsWithNames:(NSArray *)channelsName {
 
     NSMutableArray *channels = [NSMutableArray arrayWithCapacity:[channelsName count]];
 
+<<<<<<< HEAD
     [channelsName enumerateObjectsUsingBlock:^(NSString *channelName,
                                                NSUInteger channelNameIdx,
+=======
+    [channelsName enumerateObjectsUsingBlock:^(NSString *channelName, NSUInteger channelNameIdx,
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                                                BOOL *channelNamesEnumerator) {
 
         PNChannel *channel = [PNChannel channelWithName:channelName];
@@ -121,6 +150,7 @@ static NSMutableDictionary *_channelsCache = nil;
     return channel;
 }
 
+<<<<<<< HEAD
 + (id)            channelWithName:(NSString *)channelName
             shouldObservePresence:(BOOL)observePresence
 shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
@@ -144,6 +174,33 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
 
         channel.observePresence = observePresence;
     }
+=======
++ (id)              channelWithName:(NSString *)channelName shouldObservePresence:(BOOL)observePresence
+  shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
+
+    __block PNChannel *channel = nil;
+    [PNChannel pn_dispatchSynchronouslyOnQueue:_privateQueue block:^{
+        
+        channel = [[self channelsCache] valueForKey:channelName];
+        if (channel == nil && [channelName length] > 0) {
+            
+            channel = [[self alloc] initWithName:channelName];
+            [[self channelsCache] setValue:channel forKey:channelName];
+        }
+        else if ([channelName length] == 0) {
+            
+            [PNLogger logGeneralMessageFrom:self withParametersFromBlock:^NSArray *{
+                
+                return @[PNLoggerSymbols.channel.nameRequired];
+            }];
+        }
+        
+        if (shouldUpdatePresenceObservingFlag) {
+            
+            channel.observePresence = observePresence;
+        }
+    }];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
     return channel;
@@ -151,13 +208,32 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
 
 + (void)purgeChannelsCache {
     
+<<<<<<< HEAD
     @synchronized(self) {
+=======
+    [PNChannel pn_dispatchAsynchronouslyOnQueue:_privateQueue block:^{
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         
         if([_channelsCache count] > 0) {
             
             [_channelsCache removeAllObjects];
         }
+<<<<<<< HEAD
     }
+=======
+    }];
+}
+
++ (void)removeChannelFromCache:(PNChannel *)channel {
+    
+    [PNChannel pn_dispatchAsynchronouslyOnQueue:_privateQueue block:^{
+        
+        if([_channelsCache count] > 0 && channel) {
+            
+            [_channelsCache removeObjectForKey:channel.name];
+        }
+    }];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 + (NSDictionary *)channelsCache {
@@ -236,7 +312,11 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
 }
 
 - (BOOL)isTimeTokenChangeLocked {
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     return !self.isAbleToResetTimeToken;
 }
 
@@ -252,6 +332,7 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
 
 - (NSArray *)participants {
     
+<<<<<<< HEAD
     return [self.participantsList allValues];
 }
 
@@ -316,6 +397,57 @@ shouldUpdatePresenceObservingFlag:(BOOL)shouldUpdatePresenceObservingFlag {
             clientStoreIdentifier = [PNHelper UUID];
         }
         [self.participantsList setValue:client forKey:clientStoreIdentifier];
+=======
+    __block NSArray *participants = nil;
+    [PNChannel pn_dispatchSynchronouslyOnQueue:_privateQueue block:^{
+        
+        participants = [self.participantsList allValues];
+    }];
+    
+    
+    return participants;
+}
+
+- (void)updateWithEvent:(PNPresenceEvent *)event {
+    
+    [PNChannel pn_dispatchAsynchronouslyOnQueue:_privateQueue block:^{
+
+        self.participantsCount = event.occupancy;
+
+        // Checking whether someone is joined to channel or not
+        if (event.type == PNPresenceEventJoin) {
+
+            event.client.channel = self;
+            [self.participantsList setValue:event.client forKey:event.client.identifier];
+        }
+        // Looks like someone leaved or was kicked by timeout
+        else if (event.type == PNPresenceEventLeave || event.type == PNPresenceEventTimeout){
+
+            [self.participantsList removeObjectForKey:event.client.identifier];
+        }
+
+        self.presenceUpdateDate = [PNDate dateWithDate:[NSDate date]];
+    }];
+}
+
+- (void)updateWithParticipantsList:(NSArray *)participants andCount:(NSUInteger)participantsCount {
+    
+    [PNChannel pn_dispatchAsynchronouslyOnQueue:_privateQueue block:^{
+
+        self.presenceUpdateDate = [PNDate dateWithDate:[NSDate date]];
+        self.participantsCount = participantsCount;
+        self.participantsList = [NSMutableDictionary dictionary];
+        [participants enumerateObjectsUsingBlock:^(PNClient *client, NSUInteger clientIdx, BOOL *clientEnumeratorStop) {
+
+            NSString *clientStoreIdentifier = client.identifier;
+            if ([client isAnonymous]) {
+
+                client.channel = self;
+                clientStoreIdentifier = [PNHelper UUID];
+            }
+            [self.participantsList setValue:client forKey:clientStoreIdentifier];
+        }];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }];
 }
 

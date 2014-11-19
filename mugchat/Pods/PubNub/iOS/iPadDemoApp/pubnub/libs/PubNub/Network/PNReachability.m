@@ -143,7 +143,11 @@ typedef enum _PNReachabilityStatus {
 
 + (PNReachability *)serviceReachability {
     
+<<<<<<< HEAD
     return [[[self class] alloc] init];
+=======
+    return [[self alloc] init];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 + (SCNetworkReachabilityRef)newReachabilityForWiFi:(BOOL)wifiReachability {
@@ -330,11 +334,18 @@ void PNReachabilityCallback(SCNetworkReachabilityRef reachability __unused, SCNe
     }
 
     // Check whether origin (PubNub services host) is specified or not
+<<<<<<< HEAD
     NSString *originHost = [PubNub sharedInstance].configuration.origin;
     if (originHost != nil) {
 
         // Prepare and configure reachability monitor
         self.serviceReachability = SCNetworkReachabilityCreateWithName(kCFAllocatorDefault, [originHost UTF8String]);
+=======
+    if (self.serviceOrigin != nil) {
+
+        // Prepare and configure reachability monitor
+        self.serviceReachability = SCNetworkReachabilityCreateWithName(kCFAllocatorDefault, [self.serviceOrigin UTF8String]);
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
         SCNetworkReachabilityContext context = {0, (__bridge void *)self, NULL, NULL, NULL};
         if (SCNetworkReachabilitySetCallback(self.serviceReachability, PNReachabilityCallback, &context)) {
@@ -351,7 +362,11 @@ void PNReachabilityCallback(SCNetworkReachabilityRef reachability __unused, SCNe
 
             struct sockaddr_in addressIPv4;
             struct sockaddr_in6 addressIPv6;
+<<<<<<< HEAD
             char *serverCString = (char *)[originHost UTF8String];
+=======
+            char *serverCString = (char *)[self.serviceOrigin UTF8String];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
             if (inet_pton(AF_INET, serverCString, &addressIPv4) == 1 || inet_pton(AF_INET6, serverCString, &addressIPv6)) {
 
                 SCNetworkReachabilityFlags currentReachabilityStateFlags;
@@ -397,7 +412,11 @@ void PNReachabilityCallback(SCNetworkReachabilityRef reachability __unused, SCNe
         
         self.originLookupTimer = [NSTimer timerWithTimeInterval:kPNReachabilityOriginLookupInterval target:self
                                                        selector:@selector(handleOriginLookupTimer) userInfo:nil repeats:NO];
+<<<<<<< HEAD
         [[NSRunLoop currentRunLoop] addTimer:self.originLookupTimer forMode:NSRunLoopCommonModes];
+=======
+        [[NSRunLoop mainRunLoop] addTimer:self.originLookupTimer forMode:NSRunLoopCommonModes];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 }
 
@@ -520,11 +539,21 @@ void PNReachabilityCallback(SCNetworkReachabilityRef reachability __unused, SCNe
             
             NSError *requestError;
             NSHTTPURLResponse *response;
+<<<<<<< HEAD
             NSMutableURLRequest *timeTokenRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[PNNetworkHelper originLookupResourcePath]]];
             timeTokenRequest.timeoutInterval = kPNReachabilityOriginLookupTimeout;
             NSData *downloadedTimeTokenData = [NSURLConnection sendSynchronousRequest:timeTokenRequest returningResponse:&response error:&requestError];
             [[NSURLCache sharedURLCache] removeCachedResponseForRequest:timeTokenRequest];
 
+=======
+            NSString *timeTokenRequestPath = [[PNNetworkHelper originLookupResourcePath] stringByReplacingOccurrencesOfString:@"(null)"
+                                                                                                               withString:@"pubsub.pubnub.com"];
+            NSMutableURLRequest *timeTokenRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:timeTokenRequestPath]];
+            timeTokenRequest.timeoutInterval = kPNReachabilityOriginLookupTimeout;
+            NSData *downloadedTimeTokenData = [NSURLConnection sendSynchronousRequest:timeTokenRequest returningResponse:&response error:&requestError];
+            [[NSURLCache sharedURLCache] removeCachedResponseForRequest:timeTokenRequest];
+            
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 [weakSelf handleOriginLookupCompletionWithData:downloadedTimeTokenData response:response error:requestError];

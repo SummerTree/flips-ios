@@ -14,6 +14,7 @@
 #ifndef PNRequestsImport_h
 #define PNRequestsImport_h
 
+<<<<<<< HEAD
 #import "PNPushNotificationsEnabledChannelsRequest.h"
 #import "PNPushNotificationsStateChangeRequest.h"
 #import "PNClientStateRequest+Protected.h"
@@ -26,10 +27,33 @@
 #import "PNAccessRightsAuditRequest.h"
 #import "PNServiceResponseCallbacks.h"
 #import "PNHereNowRequest+Protected.h"
+=======
+#import "PNChannelsListUpdateForChannelGroupRequest.h"
+#import "PNPushNotificationsEnabledChannelsRequest.h"
+#import "PNPushNotificationsStateChangeRequest.h"
+#import "PNChannelGroupNamespaceRemoveRequest.h"
+#import "PNPushNotificationsRemoveRequest.h"
+#import "PNChannelGroupNamespacesRequest.h"
+#import "PNClientStateRequest+Protected.h"
+#import "PNMessagePostRequest+Protected.h"
+#import "PNSubscribeRequest+Protected.h"
+#import "PNChangeAccessRightsRequest.h"
+#import "PNMessagesHistory+Protected.h"
+#import "PNChannelGroupRemoveRequest.h"
+#import "PNAccessRightsAuditRequest.h"
+#import "PNServiceResponseCallbacks.h"
+#import "PNHereNowRequest+Protected.h"
+#import "PNClientStateUpdateRequest.h"
+#import "PNChannelsForGroupRequest.h"
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNLeaveRequest+Protected.h"
 #import "PNMessageHistoryRequest.h"
 #import "PNBaseRequest+Protected.h"
 #import "PNLatencyMeasureRequest.h"
+<<<<<<< HEAD
+=======
+#import "PNChannelGroupsRequest.h"
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNHeartbeatRequest.h"
 #import "PNTimeTokenRequest.h"
 #import "PNWhereNowRequest.h"

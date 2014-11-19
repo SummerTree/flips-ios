@@ -137,9 +137,15 @@
 
     [self populateAccessRightsFrom:[self accessRightsInformationForApplication] to:information];
 
+<<<<<<< HEAD
     if (![self.channelsAccessRightsInformation objectForKey:information.channel.name]) {
 
         [self.channelsAccessRightsInformation setValue:information forKey:information.channel.name];
+=======
+    if (![self.channelsAccessRightsInformation objectForKey:information.object.name]) {
+
+        [self.channelsAccessRightsInformation setValue:information forKey:information.object.name];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 }
 
@@ -161,7 +167,11 @@
 
         if (options.level != PNUserAccessRightsLevel) {
 
+<<<<<<< HEAD
             [self storeChannelAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:PNChannelAccessRightsLevel
+=======
+            [self storeChannelAccessRightsInformation:[PNAccessRightsInformation accessRightsInformationForLevel:options.level
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                                                                 rights:PNNoAccessRights applicationKey:self.applicationKey
                                                             forChannel:channel client:nil accessPeriod:options.accessPeriodDuration]];
         }

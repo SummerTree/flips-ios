@@ -46,6 +46,11 @@
  * requests queue should be locked till request processing by server will arrive, but not more than configured
  * lock time)
  */
+<<<<<<< HEAD
 - (BOOL)shouldRequestsQueue:(PNRequestsQueue *)queue removeCompletedRequest:(PNBaseRequest *)request;
+=======
+- (void)shouldRequestsQueue:(PNRequestsQueue *)queue removeCompletedRequest:(PNBaseRequest *)request
+            checkCompletion:(void(^)(BOOL))checkCompletionBlock;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 @end

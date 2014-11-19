@@ -55,7 +55,11 @@
         self.level = level;
         self.rights = rights;
         self.subscriptionKey = subscriptionKey;
+<<<<<<< HEAD
         self.channel = channel;
+=======
+        self.object = channel;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         self.authorizationKey = clientAuthorizationKey;
         self.accessPeriodDuration = accessPeriodDuration;
     }
@@ -79,6 +83,14 @@
     return [PNBitwiseHelper is:self.rights strictly:YES containsBits:PNReadAccessRight, PNWriteAccessRight, BITS_LIST_TERMINATOR];
 }
 
+<<<<<<< HEAD
+=======
+- (BOOL)hasManagementRight {
+    
+    return [PNBitwiseHelper is:self.rights containsBit:PNManagementRight];
+}
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (BOOL)isAllRightsRevoked {
 
     return ![self hasAllRights];
@@ -90,8 +102,17 @@
                                                     NSStringFromClass([self class]), self];
 
     NSString *level = @"application";
+<<<<<<< HEAD
     if (self.level == PNChannelAccessRightsLevel) {
 
+=======
+    if (self.level == PNChannelGroupAccessRightsLevel) {
+
+        level = @"channel-group";
+    }
+    else if (self.level == PNChannelAccessRightsLevel) {
+        
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         level = @"channel";
     }
     else if (self.level == PNUserAccessRightsLevel) {
@@ -109,18 +130,40 @@
             rights = ([rights length] > 0) ? [rights stringByAppendingString:@" / write"] : @"write";
         }
     }
+<<<<<<< HEAD
+=======
+    if ([self hasManagementRight]) {
+        
+        rights = ([rights length] > 0) ? [rights stringByAppendingString:@" / management"] : @"management";
+    }
+    
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     [description appendFormat:@" rights: %@;", rights];
 
     [description appendFormat:@" application: %@;", PNObfuscateString(self.subscriptionKey)];
 
+<<<<<<< HEAD
     if (self.level == PNChannelAccessRightsLevel) {
 
         [description appendFormat:@" channel: %@;", self.channel];
+=======
+    if (self.level == PNChannelGroupAccessRightsLevel) {
+
+        [description appendFormat:@" channel-group: %@;", self.object];
+    }
+    else if (self.level == PNChannelAccessRightsLevel) {
+        
+        [description appendFormat:@" channel: %@;", self.object];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
     else if (self.level == PNUserAccessRightsLevel) {
 
         [description appendFormat:@" user: %@;", self.authorizationKey];
+<<<<<<< HEAD
         [description appendFormat:@" channel: %@;", self.channel];
+=======
+        [description appendFormat:@" object: %@;", self.object];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
     }
 
     [description appendFormat:@" access period duration: %lu>", (unsigned long)self.accessPeriodDuration];
@@ -132,7 +175,15 @@
 - (NSString *)logDescription {
     
     NSString *level = @"application";
+<<<<<<< HEAD
     if (self.level == PNChannelAccessRightsLevel) {
+=======
+    if (self.level == PNChannelGroupAccessRightsLevel) {
+        
+        level = @"channel-group";
+    }
+    else if (self.level == PNChannelAccessRightsLevel) {
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         
         level = @"channel";
     }
@@ -142,11 +193,19 @@
     }
     NSMutableString *logDescription = [NSMutableString stringWithFormat:@"<%@|%@|%@|%lu", level, PNObfuscateString(self.subscriptionKey),
                                        @(self.rights), (unsigned long)self.accessPeriodDuration];
+<<<<<<< HEAD
     if (self.level == PNChannelAccessRightsLevel) {
         
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wundeclared-selector"
         [logDescription appendFormat:@"|%@", (self.channel ? [self.channel performSelector:@selector(logDescription)] : [NSNull null])];
+=======
+    if (self.level == PNChannelGroupAccessRightsLevel || self.level == PNChannelAccessRightsLevel) {
+        
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wundeclared-selector"
+        [logDescription appendFormat:@"|%@", (self.object ? [self.object performSelector:@selector(logDescription)] : [NSNull null])];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         #pragma clang diagnostic pop
     }
     else if (self.level == PNUserAccessRightsLevel) {
@@ -154,7 +213,11 @@
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wundeclared-selector"
         [logDescription appendFormat:@"|%@|%@", self.authorizationKey,
+<<<<<<< HEAD
          (self.channel ? [self.channel performSelector:@selector(logDescription)] : [NSNull null])];
+=======
+         (self.object ? [self.object performSelector:@selector(logDescription)] : [NSNull null])];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
         #pragma clang diagnostic pop
     }
     [logDescription appendString:@">"];

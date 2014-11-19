@@ -21,6 +21,10 @@
 @property (nonatomic, assign) PNAccessRights rights;
 @property (nonatomic, copy) NSString *subscriptionKey;
 @property (nonatomic, strong) PNChannel *channel;
+<<<<<<< HEAD
+=======
+@property (nonatomic, strong) id <PNChannelProtocol> object;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 @property (nonatomic, copy) NSString *authorizationKey;
 @property (nonatomic, assign) NSUInteger accessPeriodDuration;
 

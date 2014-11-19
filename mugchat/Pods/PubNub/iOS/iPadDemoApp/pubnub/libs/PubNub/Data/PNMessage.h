@@ -19,7 +19,11 @@
 
 #pragma mark Class forward
 
+<<<<<<< HEAD
 @class PNChannel, PNDate;
+=======
+@class PNChannelGroup, PNChannel, PNDate;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Public interface declaration
@@ -33,6 +37,16 @@
 // should be sent
 @property (nonatomic, readonly, strong) PNChannel *channel;
 
+<<<<<<< HEAD
+=======
+/**
+ @brief Stores reference on channel group with channel for whic message has been received.
+ 
+ @since 3.7.0
+ */
+@property (nonatomic, readonly, strong) PNChannelGroup *channelGroup;
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 // Stores reference on message body
 @property (nonatomic, readonly, strong) id message;
 

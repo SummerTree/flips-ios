@@ -15,10 +15,21 @@
 #import "PNConnectionDelegate.h"
 
 
+<<<<<<< HEAD
 #pragma mark Structures
 
 
 #pragma mark Connection channel types
+=======
+#pragma mark Class forward
+
+@class PNConfiguration;
+
+
+#pragma mark - Structures
+
+#pragma mark - Connection channel types
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 // This enum represents list of available connection
 // channel types
@@ -57,18 +68,54 @@ typedef enum _PNConnectionChannelType {
 #pragma mark Class methods
 
 /**
+<<<<<<< HEAD
  * Returns reference on fully configured channel which is ready to be connected and usage
  */
 + (id)connectionChannelWithType:(PNConnectionChannelType)connectionChannelType
                     andDelegate:(id<PNConnectionChannelDelegate>)delegate;
+=======
+ Returns reference on fully configured channel which is ready to be connected and usage.
+
+ @param configuration
+ Reference on \b PNConfiguration instance which should be used by connection channel and accompany classes.
+
+ @param connectionChannelType
+ Basing on connection type different identifiers will be used.
+
+ @param delegate
+ Reference on delegate which will accept all general callbacks from underlay connection channel class.
+
+ @return Reference on fully configured and ready to use instance.
+ */
++ (id)connectionChannelWithConfiguration:(PNConfiguration *)configuration type:(PNConnectionChannelType)connectionChannelType
+                             andDelegate:(id<PNConnectionChannelDelegate>)delegate;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 
 #pragma mark - Instance methods
 
 /**
+<<<<<<< HEAD
  * Initialize connection channel which on it's own will initiate socket connection with streams
  */
 - (id)initWithType:(PNConnectionChannelType)connectionChannelType andDelegate:(id<PNConnectionChannelDelegate>)delegate;
+=======
+ Initialize connection channel which on it's own will initiate socket connection with streams
+
+ @param configuration
+ Reference on \b PNConfiguration instance which should be used by connection channel and accompany classes.
+
+ @param connectionChannelType
+ Basing on connection type different identifiers will be used.
+
+ @param delegate
+ Reference on delegate which will accept all general callbacks from underlay connection channel class.
+
+ @return Reference on fully configured and ready to use instance.
+ */
+- (id)initWithConfiguration:(PNConfiguration *)configuration type:(PNConnectionChannelType)connectionChannelType
+                andDelegate:(id<PNConnectionChannelDelegate>)delegate;
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 - (void)connect;
 
@@ -78,7 +125,11 @@ typedef enum _PNConnectionChannelType {
 - (BOOL)isConnected;
 
 /**
+<<<<<<< HEAD
  * Closing connection to the server. Requests queue won't be flushed.
+=======
+ Closing connection to the server. Requests queue won't be flushed.
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
  */
 - (void)disconnect;
 

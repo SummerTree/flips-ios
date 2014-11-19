@@ -25,7 +25,7 @@ PODS:
     - Bolts (~> 1.0)
   - MagicalRecord/Shorthand (2.2)
   - Masonry (0.5.3)
-  - PubNub (3.6.7)
+  - PubNub (3.7.0)
   - RHAddressBook (1.1.1)
 
 DEPENDENCIES:
@@ -33,7 +33,7 @@ DEPENDENCIES:
   - Facebook-iOS-SDK (= 3.19.0)
   - MagicalRecord/Shorthand (~> 2.2)
   - Masonry (= 0.5.3)
-  - PubNub (= 3.6.7)
+  - PubNub (= 3.7)
   - RHAddressBook (= 1.1.1)
 
 SPEC CHECKSUMS:
@@ -42,7 +42,7 @@ SPEC CHECKSUMS:
   Facebook-iOS-SDK: cb7d74759d0b1ba546e6e6f1dde407b0d4e448d6
   MagicalRecord: 2b471584fc9e3137f3d0a56967917baa4979e224
   Masonry: 35368c2ca9577ca87722c12fc52c4bad9b1c1516
-  PubNub: 4ed8739db23d61ab29d9aed62749324bc62d524d
+  PubNub: b374a88f661ff58ee3c42c5e8dc9ac52403e3954
   RHAddressBook: 0cad9d33b9494d1e28323b62e5c7afc109cc4294
 
 COCOAPODS: 0.34.1

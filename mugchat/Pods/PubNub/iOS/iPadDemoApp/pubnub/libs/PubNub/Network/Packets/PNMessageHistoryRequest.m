@@ -12,7 +12,12 @@
 #import "PNBaseRequest+Protected.h"
 #import "PNChannel+Protected.h"
 #import "NSString+PNAddition.h"
+<<<<<<< HEAD
 #import "PubNub+Protected.h"
+=======
+#import "PNConfiguration.h"
+#import "PNMacro.h"
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 #import "PNDate.h"
 
 
@@ -51,6 +56,11 @@
  */
 @property (nonatomic, assign, getter = shouldIncludeTimeToken) BOOL includeTimeToken;
 
+<<<<<<< HEAD
+=======
+@property (nonatomic, copy) NSString *subscriptionKey;
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 
 @end
 
@@ -93,6 +103,17 @@
     return self;
 }
 
+<<<<<<< HEAD
+=======
+- (void)finalizeWithConfiguration:(PNConfiguration *)configuration clientIdentifier:(NSString *)clientIdentifier {
+    
+    [super finalizeWithConfiguration:configuration clientIdentifier:clientIdentifier];
+    
+    self.subscriptionKey = configuration.subscriptionKey;
+    self.clientIdentifier = clientIdentifier;
+}
+
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 - (NSString *)callbackMethodName {
 
     return PNServiceResponseCallbacks.messageHistoryCallback;
@@ -131,17 +152,27 @@
 
 
     return [NSString stringWithFormat:@"/v2/history/sub-key/%@/channel/%@%@%@&pnsdk=%@",
+<<<<<<< HEAD
                     [[PubNub sharedInstance].configuration.subscriptionKey pn_percentEscapedString], [self.channel escapedName],
+=======
+                    [self.subscriptionKey pn_percentEscapedString], [self.channel escapedName],
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
                     parameters, ([self authorizationField]?[NSString stringWithFormat:@"&%@", [self authorizationField]]:@""),
                     [self clientInformationField]];
 }
 
 - (NSString *)debugResourcePath {
+<<<<<<< HEAD
 
     NSMutableArray *resourcePathComponents = [[[self resourcePath] componentsSeparatedByString:@"/"] mutableCopy];
     [resourcePathComponents replaceObjectAtIndex:4 withObject:PNObfuscateString([[PubNub sharedInstance].configuration.subscriptionKey pn_percentEscapedString])];
 
     return [resourcePathComponents componentsJoinedByString:@"/"];
+=======
+    
+    NSString *subscriptionKey = [self.subscriptionKey pn_percentEscapedString];
+    return [[self resourcePath] stringByReplacingOccurrencesOfString:subscriptionKey withString:PNObfuscateString(subscriptionKey)];
+>>>>>>> 0176047a5fd5f839466f621bacdb66d9affd19ba
 }
 
 - (NSString *)description {
