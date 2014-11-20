@@ -44,14 +44,19 @@ extension MugMessage {
     }
     
     func createThumbnail() {
-        let firstMug = self.mugs.firstObject as Mug
+        let firstMug = self.mugs.firstObject as? Mug
+
+        if (firstMug == nil) {
+            return
+        }
+
         let cacheHandler = CacheHandler.sharedInstance
-        if (firstMug.isBackgroundContentTypeImage()) {
-            let backgroundImageData = cacheHandler.dataForUrl(firstMug.backgroundURL)
+        if (firstMug!.isBackgroundContentTypeImage()) {
+            let backgroundImageData = cacheHandler.dataForUrl(firstMug!.backgroundURL)
             if (backgroundImageData != nil) {
-                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstMug.backgroundURL)
+                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstMug!.backgroundURL)
             }
-        } else if (firstMug.isBackgroundContentTypeVideo()) {
+        } else if (firstMug!.isBackgroundContentTypeVideo()) {
             // TODO:
         }
     }
