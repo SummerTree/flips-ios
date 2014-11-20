@@ -69,6 +69,7 @@
 		70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70736C371A0D582A004E55E4 /* UpdateUserProfileView.swift */; };
 		708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
+		709088251A1E163B009915FE /* ImportContactTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709088241A1E163B009915FE /* ImportContactTableViewController.swift */; };
 		70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B51A0A8DFE00725953 /* AboutView.swift */; };
 		70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */; };
 		70ABC7EA1A09376100A7085A /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */; };
@@ -252,6 +253,7 @@
 		70736C371A0D582A004E55E4 /* UpdateUserProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateUserProfileView.swift; sourceTree = "<group>"; };
 		708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
+		709088241A1E163B009915FE /* ImportContactTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactTableViewController.swift; sourceTree = "<group>"; };
 		70A2A5B51A0A8DFE00725953 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
@@ -570,6 +572,7 @@
 				5786B2CA19EEADBC00021DD3 /* Chat */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				705EF07B19F9767800D4CF74 /* Confirm Flip */,
+				709088231A1E1624009915FE /* Import Contact */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
 				704E110D19D0934700D2BB88 /* Login */,
 				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
@@ -763,6 +766,14 @@
 				70736C371A0D582A004E55E4 /* UpdateUserProfileView.swift */,
 			);
 			name = UserProfile;
+			sourceTree = "<group>";
+		};
+		709088231A1E1624009915FE /* Import Contact */ = {
+			isa = PBXGroup;
+			children = (
+				709088241A1E163B009915FE /* ImportContactTableViewController.swift */,
+			);
+			name = "Import Contact";
 			sourceTree = "<group>";
 		};
 		70A2A5B41A0A8DF000725953 /* About */ = {
@@ -1393,6 +1404,7 @@
 				072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */,
 				07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,
+				709088251A1E163B009915FE /* ImportContactTableViewController.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* MyFlipsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
