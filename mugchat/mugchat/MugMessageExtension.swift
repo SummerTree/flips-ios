@@ -10,6 +10,7 @@
 // the license agreement.
 //
 
+private let NOTIFICATION_PN_KEY = "pn_apns"
 private let NOTIFICATION_KEY = "aps"
 private let NOTIFICATION_ALERT_KEY = "alert"
 private let NOTIFICATION_MESSAGE = "You received a new flip message from"
@@ -87,7 +88,10 @@ extension MugMessage {
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
         
-        dictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
+        var notificationApsDictionary = Dictionary<String, AnyObject>()
+        notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
+        
+        dictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
         
         var flips = Array<Dictionary<String, String>>()
         for (var i = 0; i < self.mugs.count; i++) {

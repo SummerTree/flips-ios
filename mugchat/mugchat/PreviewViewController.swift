@@ -11,6 +11,8 @@
 
 class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
+    private let CREATE_EMPTY_FLIP_TIMEOUT: dispatch_time_t = 30
+    
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
     private let SEND_MESSAGE_ERROR_OK = NSLocalizedString("OK", comment: "OK")
@@ -132,7 +134,7 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
                 }
             }
             
-            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            dispatch_group_wait(group, self.CREATE_EMPTY_FLIP_TIMEOUT)
             
             if (error != nil) {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
