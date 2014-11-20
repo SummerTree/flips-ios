@@ -515,7 +515,7 @@ class LoginView : UIView, UITextFieldDelegate {
     func signInButtonTapped(sender: AnyObject?) {
         
         if (self.emailTextField.text.isEmpty || self.passwordTextField.text.isEmpty) {
-            var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
             return
         }
