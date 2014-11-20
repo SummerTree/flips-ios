@@ -97,10 +97,13 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     // MARK: - PubnubServiceDelegate
     
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String) {
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
         let mugMessageDataSource = MugMessageDataSource()
-        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName)
-        self.onMessageReceived(mugMessage)
+        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedDate:date, receivedAtChannel: fromChannelName)
+
+        if (mugMessage != nil) {
+            self.onMessageReceived(mugMessage!)
+        }
     }
     
     func startListeningMessages() {

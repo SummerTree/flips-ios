@@ -31,7 +31,7 @@ class MugMessageDataSource : BaseDataSource {
         let userDataSource = UserDataSource()
         
         var entity: MugMessage! = MugMessage.createEntity() as MugMessage
-        
+
         entity.mugMessageID = self.nextMugMessageID()
         entity.from = userDataSource.retrieveUserWithId(json[MugMessageJsonParams.FROM_USER_ID].stringValue)
         entity.createdAt = NSDate(dateTimeString: json[MugMessageJsonParams.SENT_AT].stringValue)
@@ -48,14 +48,50 @@ class MugMessageDataSource : BaseDataSource {
         
         return entity
     }
+
+
+    // TODO: Handle this message format that means: "You is invited to this new awesome room! Yay!"
+    // {type : 1, content: {room_id : <ROOM_ID>, room_pubnubid : <PUBNUB_ID>}}
+
+
+    private func isValidFlipMessage(json: JSON) -> Bool {
+        if (json[MugMessageJsonParams.FROM_USER_ID] == nil) {
+            return false
+        }
+
+        if (json[MugMessageJsonParams.SENT_AT] == nil) {
+            return false
+        }
+
+        let content = json[MugMessageJsonParams.CONTENT]
+        if (content == nil) {
+            return false
+        }
+
+        return true
+    }
     
-    func createMugMessageWithJson(json: JSON, receivedAtChannel pubnubID: String) -> MugMessage {
+    func createMugMessageWithJson(json: JSON, receivedDate:NSDate, receivedAtChannel pubnubID: String) -> MugMessage? {
+        if (!self.isValidFlipMessage(json)) {
+            println("Invalid message JSON")
+            return nil
+        }
+
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.getRoomWithPubnubID(pubnubID)
-        
+
+        if (room == nil) {
+            // FIXME: This can actually happen if receiving a message from user's personal channel. There's no local room for that.
+            println("Room with pubnubID (\(pubnubID)) not found - It cannot happen, because if user received a message, is because he is subscribed at a channel.")
+        }
+
         let mugMessage = self.createEntityWithJson(json)
-        mugMessage.room = room
-        room.lastMessageReceivedAt = mugMessage.createdAt
+        mugMessage.room = room!
+
+        // Only update room's lastMessageReceivedAt if earlier than this message's createdAt
+        if (room!.lastMessageReceivedAt == nil || (room!.lastMessageReceivedAt.compare(receivedDate) == NSComparisonResult.OrderedAscending)) {
+            mugMessage.room.lastMessageReceivedAt = receivedDate
+        }
         
         self.save()
         
