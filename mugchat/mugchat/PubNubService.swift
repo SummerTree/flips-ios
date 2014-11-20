@@ -33,17 +33,21 @@ public class PubNubService: MugchatService, PNDelegate {
     }
     
     public class var sharedInstance : PubNubService {
-    struct Static {
-        static let instance : PubNubService = PubNubService()
+        struct Static {
+            static let instance : PubNubService = PubNubService()
         }
-        
+
         return Static.instance
     }
     
     func connect() {
-        if (!PubNub.sharedInstance().isConnected()) {
-            PubNub.connect()
-            self.subscribeOnMyChannels()
+        if (!self.isConnected()) {
+            PubNub.connectWithSuccessBlock({ (origin: String!) -> Void in
+                self.subscribeOnMyChannels()
+            },
+            errorBlock: { (error: PNError!) -> Void in
+                println("Could not connect to PubNub");
+            })
         }
     }
     
@@ -63,16 +67,84 @@ public class PubNubService: MugchatService, PNDelegate {
             channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
         }
         
-        PubNub.subscribeOnChannels(channels)
+        PubNub.subscribeOnChannels(channels, withCompletionHandlingBlock: { (state, channels, error) -> Void in
+            self.loadMessagesHistory()
+        })
     }
     
-    func subscribeToChannel(pubnubID: String) {
+    func subscribeToChannelID(pubnubID: String) {
         var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
+        self.subscribeToChannel(channel)
+    }
+
+    func subscribeToChannel(channel: PNChannel) {
         if (!PubNub.isSubscribedOnChannel(channel)) {
             PubNub.subscribeOnChannel(channel)
         }
     }
+
+    func loadMessagesHistoryForChannelID(pubnubID: String) {
+        var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
+        self.loadMessagesHistoryForChannel(channel)
+    }
     
+    func loadMessagesHistoryForChannel(channel: PNChannel) {
+        println("Requesting history for channel: \(channel.name)")
+
+        let roomDataSource = RoomDataSource()
+        let room = roomDataSource.getRoomWithPubnubID(channel.name)
+
+        var lastMessageReceivedDate: NSDate?
+        if (room == nil) {
+            println("Local Room was found for channel. Skipping.")
+            // TODO: If subscribed to a channel without a local Room create it locally if no User's private PubNubID?
+            return
+        }
+
+        lastMessageReceivedDate = room!.lastMessageReceivedAt
+
+        let completionBlock : PNClientHistoryLoadHandlingBlock = { (messages, channel, startDate, endDate, error) -> Void in
+            let messages = messages as? Array<PNMessage>
+
+            if (messages != nil && messages!.count > 0) {
+                println("\(messages!.count) messages retrieved from channel \(channel.name)")
+                for pnMessage in messages! {
+                    self.delegate?.pubnubClient(PubNub.sharedInstance(),
+                        didReceiveMessage:JSON(pnMessage.message),
+                        atDate: pnMessage.receiveDate.date,
+                        fromChannelName: pnMessage.channel.name)
+                }
+            } else if (error != nil) {
+                println("Could not retrieve message history for channel \(channel.name). \(error.localizedDescription)")
+            }
+        }
+
+        if (lastMessageReceivedDate == nil) {
+            println("No message received for channel. Retrieving full history.")
+            PubNub.requestFullHistoryForChannel(channel,
+                includingTimeToken: true,
+                withCompletionBlock: completionBlock)
+
+        } else {
+            println("Retrieving incremental history from: \(lastMessageReceivedDate)")
+            PubNub.requestHistoryForChannel(channel,
+                from: PNDate(date: NSDate()), // From: now
+                to: PNDate(date: lastMessageReceivedDate?.dateByAddingTimeInterval(1)), // To: imediatelly after last received message timestamp
+                includingTimeToken: true,
+                withCompletionBlock: completionBlock)
+        }
+    }
+
+    func loadMessagesHistory() {
+        let subscribedChannels = PubNub.subscribedChannels() as Array<PNChannel>
+
+        for channel in subscribedChannels {
+            self.loadMessagesHistoryForChannel(channel)
+        }
+    }
+
+    // MARK: - PNDelegate
+
     public func pubnubClient(client: PubNub!, error: PNError!) {
         println("Error connecting \(client) with error \(error)")
     }
@@ -82,12 +154,12 @@ public class PubNubService: MugchatService, PNDelegate {
         println("pnMessage.channel.name: \(pnMessage.channel.name)")
 
         let messageJSON: JSON = JSON(pnMessage.message)
-        self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, fromChannelName: pnMessage.channel.name)
+        self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
     }
 }
 
 protocol PubNubServiceDelegate {
     
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String)
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date:NSDate, fromChannelName: String)
     
 }

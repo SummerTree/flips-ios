@@ -202,77 +202,77 @@ class UserDataSource : BaseDataSource {
                 room.name = "Test"
                 room.addParticipantsObject(user)
                 room.addParticipantsObject(user3)
-                PubNubService.sharedInstance.subscribeToChannel(room.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
                 
                 var room2: Room! = Room.MR_createEntity() as Room
                 room2.roomID = "2"
                 room2.pubnubID = "$2a$10$LbkpRd14zxcSacF3kBnqTu8GHRDpI.LqHWOLQkx8qiL3n/H7vJci"
                 room2.name = "Chat"
                 room2.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room2.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room2.pubnubID)
                 
                 var room3: Room! = Room.MR_createEntity() as Room
                 room3.roomID = "3"
                 room3.pubnubID = "$2a$10$tHnGMFLALJpwAZzygOA7uOiG3KHMVMpsvZMW/3ojgi.eb7gfNXXS"
                 room3.name = "Chat"
                 room3.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room3.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room3.pubnubID)
                 
                 var room4: Room! = Room.MR_createEntity() as Room
                 room4.roomID = "4"
                 room4.pubnubID = "$2a$10$5ooP3jZY.tjvOBNydDkJ7.kd.VT8LTOMvDu8fz6lCdNxBdPxhOEW"
                 room4.name = "Chat"
                 room4.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room4.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room4.pubnubID)
                 
                 var room5: Room! = Room.MR_createEntity() as Room
                 room5.roomID = "5"
                 room5.pubnubID = "$2a$10$ipXtNr1gtFbOGWsf26nLWOKDYETNDwyYn.zA5SkOHD4SevtT41rS"
                 room5.name = "Chat"
                 room5.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room5.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room5.pubnubID)
                 
                 var room6: Room! = Room.MR_createEntity() as Room
                 room6.roomID = "6"
                 room6.pubnubID = "$2a$10$z1pMh0oBiuzZF4sbRRC1desEImzj4G0K3CP7wLz.kafQKWjOWfVw."
                 room6.name = "Chat"
                 room6.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room6.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room6.pubnubID)
                 
                 var room7: Room! = Room.MR_createEntity() as Room
                 room7.roomID = "7"
                 room7.pubnubID = "$2a$10$.0zxIsZ1.zQJ2ZkrZm.WW.NMy/kMAzRr79rGkeizZ/AkvQogFeAC"
                 room7.name = "Chat"
                 room7.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room7.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room7.pubnubID)
                 
                 var room8: Room! = Room.MR_createEntity() as Room
                 room8.roomID = "8"
                 room8.pubnubID = "$2a$10$XDyoTHXDSVVzJqqVsLtC.ejbaz5jFE2x55cK480IjHhoqaz8AKmm"
                 room8.name = "Chat"
                 room8.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room8.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room8.pubnubID)
                 
                 var room9: Room! = Room.MR_createEntity() as Room
                 room9.roomID = "9"
                 room9.pubnubID = "$2a$10$88salVtKxvNJ8Vll1POyFOorUFf7CLdeKok2Hg3k4HIG12Qy8xRiG"
                 room9.name = "Chat"
                 room9.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room9.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room9.pubnubID)
                 
                 var room10: Room! = Room.MR_createEntity() as Room
                 room10.roomID = "10"
                 room10.pubnubID = "$2a$10$IdbkXv3RK6WPy4039I8QoegAjdJZ.hoZXqqGLZkMVHt3iVOIk3gVi"
                 room10.name = "Chat"
                 room10.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room10.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room10.pubnubID)
                 
                 var room11: Room! = Room.MR_createEntity() as Room
                 room11.roomID = "11"
                 room11.pubnubID = "$2a$10$t.pA7LXizbWYAhlYOLf22OWrekd6ONjsaaG36iqvaKhbewuodsua"
                 room11.name = "Chat"
                 room11.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room11.pubnubID)
+                PubNubService.sharedInstance.subscribeToChannelID(room11.pubnubID)
                 
                 println("NSManagedObjectContext.MR_defaultContext(): \(NSManagedObjectContext.MR_defaultContext())")
                 NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
