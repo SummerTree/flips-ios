@@ -111,6 +111,8 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     
     func startRecording() {
         AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool) -> Void in
+            self.delegate?.audioRecorderService(self, didRequestRecordPermission: granted)
+            
             if (granted) {
                 if (self.player != nil && self.player.playing) {
                     self.player.stop()
@@ -158,4 +160,6 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
 
 protocol AudioRecorderServiceDelegate {
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL: NSURL?, success: Bool!)
+    
+    func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool)
 }

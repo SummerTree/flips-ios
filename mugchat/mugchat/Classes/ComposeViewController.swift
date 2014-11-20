@@ -416,10 +416,6 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
     func composeBottomViewContainerDidTapCaptureAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.composeTopViewContainer.startRecordingProgressBar()
-        })
-        
         AudioRecorderService.sharedInstance.delegate = self
         AudioRecorderService.sharedInstance.startRecording()
     }
@@ -586,6 +582,12 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         confirmFlipViewController.delegate = self
         confirmFlipViewController.title = self.composeTitle
         self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+    }
+    
+    func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool) {
+        if (didRequestRecordPermission) {
+            self.composeTopViewContainer.startRecordingProgressBar()
+        }
     }
     
     
