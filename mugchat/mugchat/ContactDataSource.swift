@@ -69,8 +69,12 @@ class ContactDataSource : BaseDataSource {
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
     
-    func getMyContacts() -> [Contact] {
+    func getMyContactsWithoutFlipsAccount() -> [Contact] {
         return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
+    }
+    
+    func getMyContactsWithFlipsAccount() -> [Contact] {
+        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
     }
     
     
