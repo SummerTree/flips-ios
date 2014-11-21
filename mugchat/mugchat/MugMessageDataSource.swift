@@ -30,22 +30,15 @@ class MugMessageDataSource : BaseDataSource {
     
     private func createEntityWithJson(json: JSON) -> MugMessage {
         let userDataSource = UserDataSource()
-        
+
         let fromUserID = json[MugMessageJsonParams.FROM_USER_ID].stringValue
-        let loggedUser = User.loggedUser()
+        let flipMessageID = json[MugMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         
-        var entity: MugMessage!
-        if (json[MugMessageJsonParams.FLIP_MESSAGE_ID] != nil) { // JUST TO AVOID CRASHES WHILE OTHER PEOPLE ARE SENDING OLD FORMAT MESSAGES VIA WEBSITE.
-            let flipMessageID = json[MugMessageJsonParams.FLIP_MESSAGE_ID].stringValue
-            
-            if (fromUserID == loggedUser?.userID!) {
-                entity = self.getFlipMessageById(flipMessageID)
-                if (entity != nil) {
-                    return entity // if the user already has his message do not recreate
-                }
-            }
+        var entity: MugMessage! = self.getFlipMessageById(flipMessageID)
+        if (entity != nil) {
+            return entity // if the user already has his message do not recreate
         }
-        
+
         entity = MugMessage.createEntity() as MugMessage
         entity.mugMessageID = self.nextMugMessageID()
         
@@ -76,6 +69,10 @@ class MugMessageDataSource : BaseDataSource {
         }
 
         if (json[MugMessageJsonParams.SENT_AT] == nil) {
+            return false
+        }
+
+        if (json[MugMessageJsonParams.FLIP_MESSAGE_ID] == nil) {
             return false
         }
 
@@ -132,15 +129,12 @@ class MugMessageDataSource : BaseDataSource {
         return entity
     }
     
-    private func nextMugMessageID() -> Int {
-        let mugMessages = MugMessage.MR_findAllSortedBy(MugMessageAttributes.MUG_MESSAGE_ID, ascending: false)
-        
-        if (mugMessages.first == nil) {
-            return 0
-        }
-        
-        var nextID = Int(mugMessages.first!.mugMessageID)
-        return ++nextID
+    private func nextMugMessageID() -> String {
+        let loggedUser = User.loggedUser()
+        let timestamp = NSDate.timeIntervalSinceReferenceDate()
+        let newMessageId = "\(loggedUser?.userID):\(timestamp)"
+
+        return newMessageId
     }
     
     func oldestNotReadMugMessageForRoomId(roomID: String) -> MugMessage? {
