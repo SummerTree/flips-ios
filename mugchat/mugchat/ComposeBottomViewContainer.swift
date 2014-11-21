@@ -280,6 +280,9 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         myMugsView.reload()
     }
     
+    func updateGalleryButtonImage() {
+        galleryButton.setLastCameraPhotoAsButtonImage()
+    }
     
     // MARK: - Views Transitions
     

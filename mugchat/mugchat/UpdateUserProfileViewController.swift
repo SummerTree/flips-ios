@@ -101,7 +101,7 @@ class UpdateUserProfileViewController : MugChatViewController, SignUpViewDelegat
                 self.hideActivityIndicator()
             }) { (mugError) -> Void in
                 self.hideActivityIndicator()
-                let alertView = UIAlertView(title: "Error updating user", message: mugError?.error!, delegate: nil, cancelButtonTitle: "OK")
+                let alertView = UIAlertView(title: "Error updating user", message: mugError?.error!, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }

@@ -14,7 +14,6 @@ import UIKit
 
 private let INVALID_NUMBER = NSLocalizedString("Invalid Number", comment: "Invalid Number")
 private let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not match our records. Please try again.", comment: "No match")
-private let OK = NSLocalizedString("OK", comment: "OK")
 
 
 class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
@@ -66,7 +65,7 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: intlPhoneNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (mugError) -> Void in
-            let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: OK)
+            let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
     }

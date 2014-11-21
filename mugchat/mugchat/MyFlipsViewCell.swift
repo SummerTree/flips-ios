@@ -43,7 +43,8 @@ class MyFlipsViewCell : UICollectionViewCell {
         
         let mugContentPath = self.mug.backgroundContentLocalPath()
         if (self.mug.isBackgroundContentTypeVideo()) {
-            // TODO we need to get the first frame screenshot
+            let videoThumbnail = VideoHelper.generateThumbImageForFile(mugContentPath)
+            self.cellImageView.image = videoThumbnail
         } else {
             let image = UIImage(contentsOfFile: mugContentPath)
             self.cellImageView.image = image

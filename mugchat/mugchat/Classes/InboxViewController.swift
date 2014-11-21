@@ -11,7 +11,7 @@
 //
 
 
-class InboxViewController : MugChatViewController, InboxViewDelegate {
+class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipViewControllerDelegate {
 
     private var inboxView: InboxView!
     private var roomDataSource: RoomDataSource!
@@ -55,7 +55,10 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
-		self.navigationController?.presentViewController(NewFlipViewController.instantiateNavigationController(), animated: true, completion: nil)
+        var newFlipViewNavigationController = NewFlipViewController.instantiateNavigationController()
+        var viewController = newFlipViewNavigationController.topViewController as NewFlipViewController
+        viewController.delegate = self
+        self.navigationController?.presentViewController(newFlipViewNavigationController, animated: true, completion: nil)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {
@@ -106,6 +109,13 @@ class InboxViewController : MugChatViewController, InboxViewDelegate {
                 self.refreshRooms()
             }
         }
+    }
+    
+    
+    // MARK: - NewFlipViewControllerDelegate
+    
+    func newFlipViewControllerDidSendMessage(viewController: NewFlipViewController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

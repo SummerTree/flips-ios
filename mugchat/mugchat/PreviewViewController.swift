@@ -11,12 +11,8 @@
 
 class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
-    private let CREATE_EMPTY_FLIP_TIMEOUT: dispatch_time_t = 30
-    
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
-    private let SEND_MESSAGE_ERROR_OK = NSLocalizedString("OK", comment: "OK")
-
     
     private var previewView: PreviewView!
     private var flipWords: [MugText]!
@@ -134,29 +130,40 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
                 }
             }
             
-            dispatch_group_wait(group, self.CREATE_EMPTY_FLIP_TIMEOUT)
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             
             if (error != nil) {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.hideActivityIndicator()
                     
                     let message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error?.error)"
-                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: self.SEND_MESSAGE_ERROR_OK)
+                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 })
             } else {
                 // SEND MESSAGE
-                let messageService = MessageService.sharedInstance
-                if (self.roomID != nil) {
-                    messageService.sendMessage(flipIds, roomID: self.roomID!, completion: { (success) -> Void in
+                let completionBlock: SendMessageCompletion = { (success, flipError) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.hideActivityIndicator()
                         if (success) {
                             self.delegate?.previewViewControllerDidSendMessage(self)
                         } else {
-                            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: self.SEND_MESSAGE_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: self.SEND_MESSAGE_ERROR_OK)
+                            var message = self.SEND_MESSAGE_ERROR_MESSAGE
+                            if (flipError != nil) {
+                                message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
+                            }
+                            
+                            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                             alertView.show()
                         }
                     })
+                }
+                
+                let messageService = MessageService.sharedInstance
+                if (self.roomID != nil) {
+                    messageService.sendMessage(flipIds, roomID: self.roomID!, completion: completionBlock)
+                } else {
+                    messageService.sendMessage(flipIds, toContacts: self.contactIDs!, completion: completionBlock)
                 }
             }
         })
