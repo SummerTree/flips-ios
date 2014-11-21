@@ -21,6 +21,14 @@ class ContactPhotoView: UIView {
     private let BORDER_WIDTH: CGFloat = 1.0
     private let INITIAL_FONT_SIZE: CGFloat = 18.0
     
+    // MARK: - Class methods
+    
+    class func avatarA3() -> ContactPhotoView {
+        return ContactPhotoView(frame: CGRectMake(0, 0, A3_AVATAR_SIZE, A3_AVATAR_SIZE), borderWidth: A3_BORDER_WIDTH)
+    }
+    
+    // MARK: - Instance methods
+    
     var borderColor: UIColor {
         get {
             return UIColor(CGColor: self.layer.borderColor)
@@ -72,12 +80,16 @@ class ContactPhotoView: UIView {
         setup()
     }
     
-    func setImageWithURL(url: NSURL) {
-        let urlRequest = NSURLRequest(URL: url)
-        self.imageView.setImageWithURLRequest(urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
-            self.imageView.image = image
-            self.initialLabel.hidden = true
-            }, nil)
+    func setImageWithURL(url: NSURL!) {
+        if url != nil {
+            let urlRequest = NSURLRequest(URL: url)
+            self.imageView.setImageWithURLRequest(urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
+                self.imageView.image = image
+                self.initialLabel.hidden = true
+                }, nil)
+        } else {
+            self.imageView.cancelImageRequestOperation()
+        }
     }
     
     func reset() {
