@@ -111,7 +111,7 @@ class MugDataSource : BaseDataSource {
             mug.owner = User.loggedUser()
             mug.setBackgroundContentType(BackgroundContentType.Video)
             
-            // TODO: SAVE VIDEO IN THE CACHE
+            // TODO: save thumbnail for video: cacheHandler.saveThumbnail(<#thumbnail: UIImage#>, forUrl: <#String#>)
             cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: mug.backgroundURL, isTemporary: false)
             
             createMugSuccess(mug)
