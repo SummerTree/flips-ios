@@ -184,7 +184,9 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
             contact = self.contactsWithoutFlipsAccount[indexPath.row]
         }
 
-        println("Sending a message to: \(contact.firstName)")
+        let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
+        self.presentViewController(navigationController, animated: true, completion: nil)
+        
     }
     
     // MARK - UITableViewDataSource
@@ -212,25 +214,8 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             contact = self.contactsWithoutFlipsAccount[indexPath.row]
         }
-
-        cell.nameLabel.text = contact.contactTitle
-        var phoneText = "\(contact.phoneNumber)"
         
-        if let phoneType = contact.phoneType {
-            phoneText = "\(phoneText) (\(contact.phoneType))"
-        }
-        
-        cell.numberLabel.text = phoneText
-        let firstCharFirstName = String(Array(contact.firstName)[0])
-        var firstCharLastName = ""
-        
-        if (contact.lastName != nil && countElements(contact.lastName) > 0) {
-            firstCharLastName = String(Array(contact.lastName)[0])
-        }
-
-        cell.photoView.initials = "\(firstCharFirstName)\(firstCharLastName)"
-        
+        cell.contact = contact
         return cell
     }
-    
 }
