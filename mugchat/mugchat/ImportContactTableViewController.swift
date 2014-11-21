@@ -18,6 +18,9 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     private let LABEL_MARGIN_RIGHT: CGFloat = -15.0
     private let CELL_HEIGHT: CGFloat = 56.0
     private let HEADER_HEIGHT: CGFloat = 25.0
+    private let CONTACTS_ON_FLIPS_SECTION: Int = 0
+    private let EVERYONE_ELSE_SECTION: Int = 1
+    
     
     private var contactsWithFlipsAccount: [Contact]!
     private var contactsWithoutFlipsAccount: [Contact]!
@@ -63,7 +66,6 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         
         return view
     }
-
     
     private func createEveryoneElseHeaderView() -> UIView {
         let view = UIView()
@@ -102,15 +104,19 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         return view
     }
     
+    
+    // MARK - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         super.setupWhiteNavBarWithCancelButton("Contacts")
-        super.setNeedsStatusBarAppearanceUpdate()
         self.navigationController?.navigationBar.alpha = 1.0
         self.navigationController?.navigationBar.translucent = false
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
+        var textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
+        self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        super.setNeedsStatusBarAppearanceUpdate()
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -123,31 +129,34 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
-        let group = dispatch_group_create()
-        
-        dispatch_group_enter(group)
-                ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
-            let contactDataSource = ContactDataSource()
-            self.contactsWithFlipsAccount = contactDataSource.getMyContactsWithFlipsAccount()
-            self.contactsWithoutFlipsAccount = contactDataSource.getMyContactsWithoutFlipsAccount()
-            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-            self.tableView.reloadData()
-            dispatch_group_leave(group)
-            }, failure: { (error) -> Void in
-            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                println("Couln't retrieve the contact list.")
-                dispatch_group_leave(group)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
+                let contactDataSource = ContactDataSource()
+                self.contactsWithFlipsAccount = contactDataSource.getMyContactsWithFlipsAccount()
+                self.contactsWithoutFlipsAccount = contactDataSource.getMyContactsWithoutFlipsAccount()
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.tableView.reloadData()
+                })
+                
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                }, failure: { (error) -> Void in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    println("Couldn't retrieve the contact list.")
+            })
+
         })
-        
-        dispatch_group_wait(group, self.IMPORT_CONTACTS_TIMEOUT)
     }
     
+    
+    // MARK - UITableViewControllerDelegate
+    
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if (section == 0) {
+        if (section == CONTACTS_ON_FLIPS_SECTION) {
             return self.contactsOnFlipsHeaderView
         }
         
-        if (section == 1) {
+        if (section == EVERYONE_ELSE_SECTION) {
             return everyoneElseHeaderView
         }
         
@@ -162,20 +171,34 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         return 2
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return self.CELL_HEIGHT
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var contact: Contact!
+        
+        if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
+            contact = self.contactsWithFlipsAccount[indexPath.row]
+        } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
+            contact = self.contactsWithoutFlipsAccount[indexPath.row]
+        }
+
+        println("Sending a message to: \(contact.firstName)")
+    }
+    
+    // MARK - UITableViewDataSource
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (section == 0) {
+        if (section == CONTACTS_ON_FLIPS_SECTION) {
             return self.contactsWithFlipsAccount.count
         }
         
-        if (section == 1) {
+        if (section == EVERYONE_ELSE_SECTION) {
             return self.contactsWithoutFlipsAccount.count
         }
         
         return 0
-    }
-    
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return self.CELL_HEIGHT
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -183,15 +206,21 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         
         var contact: Contact!
         
-        if (indexPath.section == 0) {
+        if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
             contact = self.contactsWithFlipsAccount[indexPath.row]
             cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL)!)
-        } else if (indexPath.section == 1) {
+        } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             contact = self.contactsWithoutFlipsAccount[indexPath.row]
         }
 
         cell.nameLabel.text = contact.contactTitle
-        cell.numberLabel.text = "\(contact.phoneNumber) \(contact.phoneType)"
+        var phoneText = "\(contact.phoneNumber)"
+        
+        if let phoneType = contact.phoneType {
+            phoneText = "\(phoneText) (\(contact.phoneType))"
+        }
+        
+        cell.numberLabel.text = phoneText
         let firstCharFirstName = String(Array(contact.firstName)[0])
         var firstCharLastName = ""
         

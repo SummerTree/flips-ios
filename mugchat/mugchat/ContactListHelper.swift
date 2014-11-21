@@ -63,7 +63,7 @@ public class ContactListHelper {
             let phones: RHMultiStringValue = person.phoneNumbers
 
             for (var i:UInt = 0; i < phones.count(); i++) {
-                if (person.firstName != nil) {
+                if (person.firstName != nil && countElements(person.firstName) > 0) {
                     var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
                     let phoneNumber: String! = phones.valueAtIndex(i) as String
                     let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
