@@ -26,7 +26,7 @@ class ContactTableViewCell: UITableViewCell {
 	@IBOutlet weak var numberLabel: UILabel!
 	@IBOutlet weak var photoView: ContactPhotoView!
     @IBOutlet weak var labelView: UIView!
-	
+    
 	override func prepareForReuse() {
 		super.prepareForReuse()
 		self.nameLabel.text = nil
@@ -34,6 +34,7 @@ class ContactTableViewCell: UITableViewCell {
 		self.numberLabel.text = nil
         self.numberLabel.hidden = false
 		self.photoView.reset()
+        self.photoView.borderColor = .lightGreyD8()
 	}
 	
 	func layoutMargins() -> UIEdgeInsets {

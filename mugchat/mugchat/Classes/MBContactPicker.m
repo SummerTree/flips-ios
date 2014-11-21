@@ -271,6 +271,8 @@ static CGFloat const ROW_HEIGHT = 56.0;
         
         [cell hideNumberLabel];
     } else {
+        cell.photoView.borderColor = [UIColor lightGreyD8];
+        
         if ([contact respondsToSelector:@selector(contactSubtitle)]) {
             cell.numberLabel.text = contact.contactSubtitle;
         }

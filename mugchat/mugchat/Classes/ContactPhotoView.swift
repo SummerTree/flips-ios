@@ -17,7 +17,7 @@ import Foundation
 
 
 class ContactPhotoView: UIView {
-    private let BORDER_COLOR = UIColor.lightGreyD8()
+    private let BORDER_COLOR = UIColor.whiteColor()
     private let BORDER_WIDTH: CGFloat = 1.0
     private let INITIAL_FONT_SIZE: CGFloat = 18.0
     
@@ -30,6 +30,15 @@ class ContactPhotoView: UIView {
         }
     }
     
+    var borderWidth: CGFloat {
+        get {
+            return self.layer.borderWidth
+        }
+        set {
+            self.layer.borderWidth = newValue
+        }
+    }
+    
     var imageView: UIImageView!
     
     var initialLabel: UILabel!
@@ -37,7 +46,20 @@ class ContactPhotoView: UIView {
     var initials: String! {
         didSet {
             initialLabel.text = initials
+            initialLabel.hidden = (initials == nil || initials.isEmpty)
         }
+    }
+    
+    init(frame: CGRect, borderWidth : CGFloat) {
+        super.init(frame: frame)
+        setup()
+        
+        self.borderWidth = borderWidth
+        self.borderColor = .whiteColor()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     override func layoutSubviews() {
@@ -47,9 +69,28 @@ class ContactPhotoView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        setup()
+    }
+    
+    func setImageWithURL(url: NSURL) {
+        let urlRequest = NSURLRequest(URL: url)
+        self.imageView.setImageWithURLRequest(urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
+            self.imageView.image = image
+            self.initialLabel.hidden = true
+            }, nil)
+    }
+    
+    func reset() {
         self.borderColor = BORDER_COLOR
-        
+        self.imageView.cancelImageRequestOperation()
+        self.imageView.image = nil
+        self.initials = nil
+    }
+    
+    // MARK: - Private methods
+    
+    private func setup() {
+        self.borderColor = BORDER_COLOR
         self.clipsToBounds = true
         self.layer.borderWidth = BORDER_WIDTH
         
@@ -57,6 +98,7 @@ class ContactPhotoView: UIView {
         self.initialLabel.backgroundColor = .lightGreyF2()
         self.initialLabel.font = UIFont.avenirNextRegular(INITIAL_FONT_SIZE)
         self.initialLabel.textAlignment = .Center
+        self.initialLabel.hidden = true
         
         self.addSubview(self.initialLabel)
         
@@ -77,21 +119,5 @@ class ContactPhotoView: UIView {
             make.height.equalTo()(self)
             make.width.equalTo()(self)
         }
-    }
-    
-    func setImageWithURL(url: NSURL) {
-        let urlRequest = NSURLRequest(URL: url)
-        self.imageView.setImageWithURLRequest(urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
-            self.imageView.image = image
-            self.initialLabel.hidden = true
-            }, nil)
-    }
-    
-    func reset() {
-        self.borderColor = BORDER_COLOR
-        self.imageView.cancelImageRequestOperation()
-        self.imageView.image = nil
-        self.initials = nil
-        self.initialLabel.hidden = false
     }
 }
