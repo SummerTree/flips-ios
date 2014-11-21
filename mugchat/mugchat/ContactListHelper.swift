@@ -78,15 +78,15 @@ public class ContactListHelper {
     
     private func retrievePhoneTypeByLabel(label: String!) -> String! {
         switch label {
-        case kABPersonPhoneMobileLabel:
+        case .Some(kABPersonPhoneMobileLabel):
             return "Mobile"
-        case kABPersonPhoneIPhoneLabel:
+        case .Some(kABPersonPhoneIPhoneLabel):
             return "iPhone"
-        case kABPersonPhoneMainLabel:
+        case .Some(kABPersonPhoneMainLabel):
             return "Main"
-        case kABWorkLabel:
+        case .Some(kABWorkLabel):
             return "Work"
-        case kABHomeLabel:
+        case .Some(kABHomeLabel):
             return "Home"
         default:
             return ""
