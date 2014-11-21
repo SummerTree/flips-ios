@@ -150,9 +150,10 @@ public class PubNubService: MugchatService, PNDelegate {
     }
 
     func loadMessagesHistory() {
-        let subscribedChannels = PubNub.subscribedChannels() as Array<PNChannel>
+        let subscribedChannels = PubNub.sharedInstance().subscribedObjectsList() as Array<PNChannelProtocol>
 
-        for channel in subscribedChannels {
+        for channelProtocol in subscribedChannels {
+            var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
             self.loadMessagesHistoryForChannel(channel)
         }
     }
