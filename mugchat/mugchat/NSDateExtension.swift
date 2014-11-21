@@ -34,4 +34,14 @@ extension NSDate {
         let d = dateStringFormatter.dateFromString(dateTimeString)
         self.init(timeInterval:0, sinceDate:d!)
     }
+    
+    func toFormattedString() -> String {
+        let dateStringFormatter = NSDateFormatter()
+        dateStringFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let gmt = NSTimeZone(abbreviation: "GMT")
+        dateStringFormatter.timeZone = gmt
+        let formattedString = dateStringFormatter.stringFromDate(self)
+        return formattedString
+    }
 }

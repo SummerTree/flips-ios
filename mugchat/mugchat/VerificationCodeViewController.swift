@@ -23,6 +23,18 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     var userId: String!
     var verificationCode: String = "XXXX"
     
+    init(phoneNumber: String!, userId: String!) {
+        super.init(nibName: nil, bundle: nil)
+        self.phoneNumber = phoneNumber
+        self.userId = userId
+        
+        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
+        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
+        
+        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
+    }
+    
     override func loadView() {
         super.loadView()
         verificationCodeView = VerificationCodeView(phoneNumber: phoneNumber)
@@ -53,6 +65,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     func verificationCodeViewDidTapBackButton(verificatioCodeView: VerificationCodeView!) {
         self.navigationController?.popViewControllerAnimated(true)
+        verificatioCodeView.resetVerificationCodeField()
     }
     
     func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
@@ -118,6 +131,9 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 userDataSource.syncUserData({ (success, error) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (success) {
+                            let verificationCodeView = self.view as VerificationCodeView
+                            verificationCodeView.resetVerificationCodeField()
+                            
                             self.navigateAfterValidateDevice()
                         }
                     })
@@ -131,6 +147,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     println("Device code verification error: " + mugError!.error!)
                     let verificationCodeView = self.view as VerificationCodeView
                     verificationCodeView.resetVerificationCodeField()
+                    verificationCodeView.focusKeyboardOnCodeField()
                 }
             })
     }
@@ -145,17 +162,4 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-    
-    init(phoneNumber: String!, userId: String!) {
-        super.init(nibName: nil, bundle: nil)
-        self.phoneNumber = phoneNumber
-        self.userId = userId
-        
-        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
-        
-        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
-    }
-    
 }

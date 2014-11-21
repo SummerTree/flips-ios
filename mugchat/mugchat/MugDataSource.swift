@@ -12,7 +12,7 @@
 
 import Foundation
 
-private struct MugJsonParams {
+struct MugJsonParams {
     static let ID = "id"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
@@ -24,6 +24,8 @@ struct MugAttributes {
     static let MUG_ID = "mugID"
     static let MUG_OWNER = "owner"
     static let WORD = "word"
+    static let BACKGROUND_URL = "backgroundURL"
+    static let SOUND_URL = "soundURL"
 }
 
 public typealias CreateMugSuccess = (Mug) -> Void
@@ -144,7 +146,7 @@ class MugDataSource : BaseDataSource {
     }
     
     func getMyMugsForWord(word: String) -> [Mug] {
-        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@))", word)) as [Mug]
+        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@) and ( (\(MugAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(MugAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Mug]
     }
     
     func getMyMugIdsForWords(words: [String]) -> Dictionary<String, [String]> {

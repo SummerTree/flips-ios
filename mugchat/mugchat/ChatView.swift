@@ -22,6 +22,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     
     private let CELL_FLIP_AREA_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.width
+    private let CELL_FLIP_AREA_HEIGHT_IPHONE_4S : CGFloat = 240.0
     private let CELL_FLIP_TEXT_AREA_HEIGHT: CGFloat = 62
     
     private let THUMBNAIL_FADE_DURATION: NSTimeInterval = 0.2
@@ -188,7 +189,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return CELL_FLIP_AREA_HEIGHT + CELL_FLIP_TEXT_AREA_HEIGHT
+        var cellHeightForRowAtIndexPath : CGFloat
+        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+            cellHeightForRowAtIndexPath = CELL_FLIP_AREA_HEIGHT_IPHONE_4S + CELL_FLIP_TEXT_AREA_HEIGHT
+        } else {
+            cellHeightForRowAtIndexPath = CELL_FLIP_AREA_HEIGHT + CELL_FLIP_TEXT_AREA_HEIGHT
+        }
+        return cellHeightForRowAtIndexPath
+
     }
     
     

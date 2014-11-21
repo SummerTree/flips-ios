@@ -128,6 +128,7 @@ class UserDataSource : BaseDataSource {
 //                mug.mugID = "2"
 //                mug.word = "I"
 //                mug.backgroundURL = "http://theburnedhand.files.wordpress.com/2012/06/you.png"
+//                mug.soundURL = ""
 //                mug.setBackgroundContentType(BackgroundContentType.Image)
 //                mug.owner = User.loggedUser()
 //                mug.isPrivate = true
@@ -136,19 +137,20 @@ class UserDataSource : BaseDataSource {
 //                mug2.mugID = "3"
 //                mug2.word = "Love"
 //                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
+//                mug2.soundURL = ""
 //                mug2.setBackgroundContentType(BackgroundContentType.Image)
-//                mug2.soundURL = "audio.m4a"
 //                mug2.owner = User.loggedUser()
 //                mug2.isPrivate = true
-
+//
 //                var mug21 = Mug.createEntity() as Mug
 //                mug21.mugID = "30"
 //                mug21.word = "love"
 //                mug21.backgroundURL = "http://lovesign.com.au/wp-content/uploads/2009/11/Stop-In-the-Name-of-Love-Alan-James-2003.jpg"
+//                mug21.soundURL = ""
 //                mug21.setBackgroundContentType(BackgroundContentType.Image)
 //                mug21.owner = User.loggedUser()
 //                mug21.isPrivate = true
-//                
+//
 //                var mug3 = Mug.createEntity() as Mug
 //                mug3.mugID = "4"
 //                mug3.word = "San Francisco"

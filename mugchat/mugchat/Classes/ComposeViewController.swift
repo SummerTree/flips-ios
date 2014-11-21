@@ -14,7 +14,7 @@ import Foundation
 
 private let GROUP_CHAT = NSLocalizedString("Group Chat", comment: "Group Chat")
 
-class ComposeViewController : MugChatViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate {
+class ComposeViewController : MugChatViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
     
     private let NO_EMPTY_FLIP_INDEX = -1
     
@@ -34,7 +34,12 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     private var highlightedWordCurrentAssociatedImage: UIImage?
     
+    private var contactIDs: [String]?
+    private var roomID: String?
+    
     internal var words: [String]!
+    
+    var delegate: ComposeViewControllerDelegate?
     
     
     // MARK: - Init Methods
@@ -59,6 +64,16 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         }
         
         self.init(composeTitle: title, words: words)
+        
+        self.contactIDs = Array<String>()
+        for contact in contacts {
+            self.contactIDs?.append(contact.contactID)
+        }
+    }
+    
+    convenience init(roomID: String, composeTitle: String, words: [String]) {
+        self.init(composeTitle: composeTitle, words: words)
+        self.roomID = roomID
     }
     
     required init(coder: NSCoder) {
@@ -175,7 +190,14 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     }
     
     private func openPreview() {
-        let previewViewController = PreviewViewController(flipWords: flipWords)
+        var previewViewController: PreviewViewController
+        if (contactIDs != nil) {
+            previewViewController = PreviewViewController(flipWords: self.flipWords, contactIDs: self.contactIDs!)
+        } else {
+            previewViewController = PreviewViewController(flipWords: self.flipWords, roomID: self.roomID!)
+        }
+        
+        previewViewController.delegate = self
         self.navigationController?.pushViewController(previewViewController, animated: true)
     }
     
@@ -515,6 +537,8 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         if (success) {
             let flipWord = flipWords[highlightedWordIndex]
             let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
+            confirmFlipViewController.title = self.composeTitle
+            confirmFlipViewController.delegate = self
             self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
         } else {
             println("Did finish recording with success = false")
@@ -591,4 +615,16 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     internal func shouldShowPlusButtonInWords() -> Bool {
         return false
     }
+    
+    
+    // MARK: - PreviewViewControllerDelegate
+    
+    func previewViewControllerDidSendMessage(viewController: PreviewViewController) {
+        delegate?.composeViewControllerDidSendMessage(self)
+    }
+}
+
+protocol ComposeViewControllerDelegate {
+    
+    func composeViewControllerDidSendMessage(viewController: ComposeViewController)
 }

@@ -122,12 +122,15 @@ class PlayerView: UIView {
 
             self.makeConstraints()
         }
+        
+        super.layoutSubviews()
     }
 
     private func makeConstraints() {
         self.wordLabel.mas_makeConstraints { (make) -> Void in
             make.width.equalTo()(self)
             make.bottom.equalTo()(self).with().offset()(FLIP_WORD_LABEL_MARGIN_BOTTOM)
+            make.centerX.equalTo()(self)
         }
     }
 

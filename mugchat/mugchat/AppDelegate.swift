@@ -63,6 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         token = token.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         println("token: \(token)")
         DeviceHelper.sharedInstance.saveDeviceToken(token)
+        DeviceHelper.sharedInstance.saveDeviceTokenAsNsData(deviceToken)
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
@@ -78,9 +79,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        println("did receive remote notification \(userInfo)")
+    }
+    
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
     }
-
 }
-

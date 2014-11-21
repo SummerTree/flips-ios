@@ -43,7 +43,7 @@ extension Room {
     func oldestNotReadMessage() -> MugMessage? {
         let mugMessageDataSource = MugMessageDataSource()
         
-        var oldestMessageNotRead = mugMessageDataSource.oldestNotReadMugMessageForRoom(self)
+        var oldestMessageNotRead = mugMessageDataSource.oldestNotReadMugMessageForRoomId(self.roomID)
         
         if (oldestMessageNotRead == nil) {
             return self.mugMessagesNotRemoved().lastObject as? MugMessage
