@@ -28,7 +28,7 @@ class CustomNavigationBar : UIView {
     private var backgroundImageView : UIImageView!
     
     private var avatarButton : UIButton!
-    private var avatarImageView : UIImageView!
+    private var avatarImageView : RoundImageView!
     private var titleTextView : UITextView!
     
     private var leftButton : UIButton!
@@ -57,7 +57,7 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         
-        var imageView = UIImageView.avatarA4()
+        var imageView = RoundImageView.avatarA4()
         imageView.image = avatarImage
         
         navigationBar.setup(imageView, leftButtonImage: settingsButtonImage, rightButtonObject: builderButtonImage)
@@ -176,7 +176,7 @@ class CustomNavigationBar : UIView {
             titleTextView.backgroundColor = UIColor.clearColor()
             titleTextView.sizeToFit()
             self.addSubview(titleTextView)
-        } else if let imageView = titleObject as? UIImageView {
+        } else if let imageView = titleObject as? RoundImageView {
             avatarImageView = imageView
             self.addSubview(avatarImageView)
         } else if let imageButton = titleObject as? UIButton {
@@ -322,7 +322,7 @@ class CustomNavigationBar : UIView {
             avatarButton.setAvatarImage(image, forState: .Normal)
             avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
         } else if (avatarImageView != nil) {
-            avatarImageView.setAvatarImage(image)
+            avatarImageView.image = image
         }
     }
     

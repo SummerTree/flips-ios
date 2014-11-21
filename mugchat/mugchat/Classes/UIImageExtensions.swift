@@ -63,8 +63,14 @@ extension UIImage {
         newSize = CGSizeMake(self.size.width * widthRatio, self.size.height * widthRatio)
         
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetInterpolationQuality(context, kCGInterpolationHigh)
+        
         self.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height))
+        
         var newImage = UIGraphicsGetImageFromCurrentImageContext()
+        
         UIGraphicsEndImageContext()
         
         return newImage
