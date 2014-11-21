@@ -14,6 +14,8 @@ import Foundation
 
 class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
     
+    private let US_CODE = "+1"
+    
     var phoneNumberView: PhoneNumberView!
     var userId: String!
     
@@ -64,6 +66,8 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
     // MARK: - PhoneNumberViewDelegate Methods
     
     func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
+        let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
         
         self.showActivityIndicator()
         if (self.userId == nil) {
@@ -74,7 +78,7 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
                 avatar: self.avatar,
                 birthday: self.birthday,
                 nickname: self.nickname,
-                phoneNumber: mobileNumber,
+                phoneNumber: intlPhoneNumber,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
                     var userEntity = user as User

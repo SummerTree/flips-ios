@@ -178,11 +178,11 @@ public class UserService: MugchatService {
     
     // MARK: - Forgot password
     
-    func forgotPassword(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func forgotPassword(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FORGOT_URL
-        let params = [RequestParams.EMAIL : email, RequestParams.PHONE_NUMBER : phoneNumber]
+        let params = [RequestParams.PHONE_NUMBER : phoneNumber]
         
         request.POST(url,
             parameters: params,
