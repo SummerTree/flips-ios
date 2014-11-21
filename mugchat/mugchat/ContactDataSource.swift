@@ -85,18 +85,18 @@ class ContactDataSource : BaseDataSource {
         return contact!
     }
 
-    func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [String] {
-        let contacts = Contact.findAll()
+    func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [Contact] {
+        let contacts = Contact.findAll() as [Contact]
         let cleannedPhoneNumber = PhoneNumberHelper.cleanFormattedPhoneNumber(phoneNumber)
         
-        var contactIdsWithSamePhoneNumber = Array<String>()
+        var contactsWithSamePhoneNumber = Array<Contact>()
         for contact in contacts {
             var contactPhoneNumber = contact.phoneNumber as String!
             if (PhoneNumberHelper.cleanFormattedPhoneNumber(contactPhoneNumber) == cleannedPhoneNumber) {
-               contactIdsWithSamePhoneNumber.append(contact.contactID)
+               contactsWithSamePhoneNumber.append(contact)
             }
         }
-        return contactIdsWithSamePhoneNumber
+        return contactsWithSamePhoneNumber
     }
 
     func getMyContactsWithFlipsAccount() -> [Contact] {

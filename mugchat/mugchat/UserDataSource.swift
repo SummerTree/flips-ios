@@ -96,9 +96,8 @@ class UserDataSource : BaseDataSource {
         }
         
         let contactDataSource = ContactDataSource()
-        var contactIds = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
-        for contactId in contactIds {
-            let contact = contactDataSource.retrieveContactWithId(contactId)
+        var contacts = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
+        for contact in contacts {
             contact.contactUser = user
             user?.addContactsObject(contact)
         }

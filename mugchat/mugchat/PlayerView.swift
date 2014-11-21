@@ -12,10 +12,14 @@
 
 import UIKit
 
+
+
 class PlayerView: UIView {
 
     private var wordLabel: UILabel!
     private var words: Array<String>!
+    
+    var delegate: PlayerViewDelegate?
 
     override class func layerClass() -> AnyClass {
         return AVPlayerLayer.self
@@ -46,12 +50,21 @@ class PlayerView: UIView {
     }
 
     func setupPlayerWithFlips(flips: Array<Mug>, completion: ((player: AVQueuePlayer)  -> Void)) {
+        println("\nsetupPlayerWithFlips")
+        
+        println("   is visible: \(delegate?.playerViewIsVisible(self))")
+        
+        if (delegate != nil && !delegate!.playerViewIsVisible(self)) {
+            return
+        }
+        
         self.words = []
         for flip in flips {
             self.words.append(flip.word)
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+            println("   nsetupPlayerWithFlips.dispatch_async")
             var localFlips: Array<Mug> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();
 
@@ -62,13 +75,16 @@ class PlayerView: UIView {
             let videoComposer = VideoComposer()
             videoComposer.renderOverlays = false
 
+            println("   will get parts from flips")
             var videoAssets: Array<AVAsset> = videoComposer.videoPartsFromFlips(localFlips as Array<AnyObject>) as Array<AVAsset>
+            println("   got parts from flips")
 
             let videoPlayer = AVQueuePlayer()
             videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.Pause
 
             var i = 0
 
+            println("   will insert items")
             for videoAsset in videoAssets {
                 let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
 
@@ -81,14 +97,19 @@ class PlayerView: UIView {
 
                 i++
             }
+            println("   inserted items")
             
             self.setPlayer(videoPlayer)
+            println("   player setted")
 
             completion(player: videoPlayer)
+            println("   completion called")
         }
     }
 
     func videoQueueEnded(notification: NSNotification) {
+        delegate?.playerViewDidFinishPlayback(self)
+        
         let playerItem: FlipPlayerItem = notification.object as FlipPlayerItem
         let player: AVQueuePlayer = self.player() as AVQueuePlayer
 
@@ -133,5 +154,16 @@ class PlayerView: UIView {
             make.centerX.equalTo()(self)
         }
     }
+    
+    func releaseResources() {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 
+}
+
+protocol PlayerViewDelegate {
+    
+    func playerViewDidFinishPlayback(playerView: PlayerView)
+    func playerViewIsVisible(playerView: PlayerView) -> Bool
+    
 }

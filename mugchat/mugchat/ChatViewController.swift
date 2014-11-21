@@ -60,15 +60,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
-
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.chatView.reloadFlipMessages()
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.chatView)
-            })
-        })
+        self.chatView.reloadFlipMessages()
     }
     
     override func viewWillDisappear(animated: Bool) {
