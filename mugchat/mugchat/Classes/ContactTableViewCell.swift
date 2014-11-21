@@ -20,11 +20,11 @@ let ContactTableViewCellIdentifier = "ContactTableViewCell"
 class ContactTableViewCell: UITableViewCell {
     let LOW_PRIORITY: UILayoutPriority = 1
     let HIGH_PRIORITY: UILayoutPriority = 751
-
-	@IBOutlet weak var nameLabel: UILabel!
+    
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameLabelEqualHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var numberLabel: UILabel!
-	@IBOutlet weak var photoView: ContactPhotoView!
+    @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet weak var photoView: ContactPhotoView!
     @IBOutlet weak var labelView: UIView!
     
     var contact: Contact! {
@@ -46,19 +46,19 @@ class ContactTableViewCell: UITableViewCell {
             }
         }
     }
-	
-	override func prepareForReuse() {
-		super.prepareForReuse()
-		self.nameLabel.text = nil
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.nameLabel.text = nil
         self.nameLabelEqualHeightConstraint.priority = LOW_PRIORITY
-		self.numberLabel.text = nil
+        self.numberLabel.text = nil
         self.numberLabel.hidden = false
-		self.photoView.reset()
-	}
-	
-	func layoutMargins() -> UIEdgeInsets {
-		return UIEdgeInsetsZero
-	}
+        self.photoView.reset()
+    }
+    
+    func layoutMargins() -> UIEdgeInsets {
+        return UIEdgeInsetsZero
+    }
     
     func hideNumberLabel() {
         self.numberLabel?.hidden = true
