@@ -127,8 +127,6 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
                 let contactDataSource = ContactDataSource()
@@ -139,9 +137,7 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
                     self.tableView.reloadData()
                 })
                 
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 }, failure: { (error) -> Void in
-                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                     println("Couldn't retrieve the contact list.")
             })
 
