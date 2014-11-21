@@ -130,7 +130,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         var createMugFailBlock : CreateMugFail = { (message) -> Void in
             self.confirmFlipView.hideActivityIndicator()
             self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
-            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
         
