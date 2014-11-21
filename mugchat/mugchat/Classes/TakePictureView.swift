@@ -119,6 +119,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     
     func viewWillAppear(animated: Bool) {
         cameraView.registerObservers()
+        galleryButton.setLastCameraPhotoAsButtonImage()
     }
     
     func viewWillDisappear(animated: Bool) {
