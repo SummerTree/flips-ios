@@ -26,6 +26,26 @@ class ContactTableViewCell: UITableViewCell {
 	@IBOutlet weak var numberLabel: UILabel!
 	@IBOutlet weak var photoView: ContactPhotoView!
     @IBOutlet weak var labelView: UIView!
+    
+    var contact: Contact! {
+        didSet {
+            self.nameLabel.text = contact.contactTitle
+            var phoneText = "\(contact.phoneNumber)"
+            
+            if let phoneType = contact.phoneType {
+                phoneText = "\(phoneText) (\(contact.phoneType))"
+            }
+            
+            self.numberLabel.text = phoneText
+            
+            if let flipUser = contact.contactUser {
+                self.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL)!)
+                hideNumberLabel()
+            } else {
+                self.photoView.initials = contact.contactInitials
+            }
+        }
+    }
 	
 	override func prepareForReuse() {
 		super.prepareForReuse()

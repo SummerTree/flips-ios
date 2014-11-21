@@ -63,7 +63,9 @@ class NewFlipViewController: MugChatViewController,
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
         didSet {
-            updateNextButtonState()
+            if (self.nextButton != nil) {
+                updateNextButtonState()
+            }
         }
     }
 
@@ -84,6 +86,7 @@ class NewFlipViewController: MugChatViewController,
         self.contactPicker.delegate = self
         self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
+        updateNextButtonState()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -96,6 +99,8 @@ class NewFlipViewController: MugChatViewController,
 
         if self.contacts.isEmpty {
             self.contactPicker.becomeFirstResponder()
+        } else {
+            self.flipTextField.becomeFirstResponder()
         }
     }
     
@@ -200,7 +205,7 @@ class NewFlipViewController: MugChatViewController,
     }
     
     func selectedContactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
-        return [];
+        return self.contacts;
     }
     
     // MARK: - MBContactPickerDelegate
