@@ -245,14 +245,7 @@ static CGFloat const ROW_HEIGHT = 56.0;
     cell.nameLabel.text = contact.contactTitle;
     cell.detailTextLabel.text = nil;
     cell.imageView.image = nil;
-    
-    NSRange range = [contact.firstName rangeOfComposedCharacterSequenceAtIndex:0];
-    NSString *firstName = [contact.firstName substringWithRange:range];
-    
-    range = [contact.lastName rangeOfComposedCharacterSequenceAtIndex:0];
-    NSString *lastName = [contact.lastName substringWithRange:range];
-    
-    cell.photoView.initials = [NSString stringWithFormat:@"%@%@", firstName, lastName];
+    cell.photoView.initials = contact.contactInitials;
     
     User *user = contact.contactUser;
     

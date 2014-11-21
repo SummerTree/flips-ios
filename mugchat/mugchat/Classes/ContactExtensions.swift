@@ -18,6 +18,22 @@ import Foundation
 let NO_NAME = NSLocalizedString("No name", comment: "No name")
 
 extension Contact: MBContactPickerModelProtocol {
+    public var contactInitials: String {
+        var initials = ""
+        
+        if firstName != nil {
+            let range = firstName.rangeOfComposedCharacterSequenceAtIndex(firstName.startIndex)
+            initials = firstName.substringWithRange(range)
+        }
+        
+        if lastName != nil {
+            let range = lastName.rangeOfComposedCharacterSequenceAtIndex(lastName.startIndex)
+            initials += lastName.substringWithRange(range)
+        }
+        
+        return initials
+    }
+    
     public var contactTitle: String? {
         var name = ""
         
