@@ -28,6 +28,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Instance variables
     
+    private var flipMessageId: String!
     private var videoPlayerView: PlayerView!
     private var videoPlayerContainerView : UIView!
     private var messageView : UIView!
@@ -164,6 +165,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     // MARK: - Set FlipMessage
     
     func setFlipMessageId(flipMessageId: String) {
+        self.flipMessageId = flipMessageId
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
         
         self.setupVideoPlayerWithFlips(flipMessage.mugs.array as [Mug])
@@ -171,6 +173,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         timestampLabel.text = formattedDate
         
+        if (flipMessage.notRead.boolValue) {
+            messageTextLabel.alpha = 0
+        } else {
+            messageTextLabel.alpha = 1
+        }
         self.messageTextLabel.text = flipMessage.messagePhrase()
         self.messageTextLabel.sizeToFit()
         
@@ -266,9 +273,15 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     // MARK: - PlayerViewDelegate
     
     func playerViewDidFinishPlayback(playerView: PlayerView) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.messageTextLabel.alpha = 1
-        })
+        if (self.messageTextLabel.alpha == 0) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                self.flipMessageDataSource.markFlipMessageAsRead(self.flipMessageId)
+            })
+            
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.messageTextLabel.alpha = 1
+            })
+        }
     }
     
     func playerViewIsVisible(playerView: PlayerView) -> Bool {
@@ -283,5 +296,5 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 protocol ChatTableViewCellDelegate {
     
     func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool
-    
+
 }

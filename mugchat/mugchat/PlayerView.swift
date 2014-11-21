@@ -54,10 +54,6 @@ class PlayerView: UIView {
         
         println("   is visible: \(delegate?.playerViewIsVisible(self))")
         
-        if (delegate != nil && !delegate!.playerViewIsVisible(self)) {
-            return
-        }
-        
         self.words = []
         for flip in flips {
             self.words.append(flip.word)
