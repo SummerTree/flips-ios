@@ -11,6 +11,7 @@
 //
 
 struct ContactAttributes {
+    static let CONTACT_ID = "contactID"
     static let FIRST_NAME = "firstName"
     static let LAST_NAME = "lastName"
     static let PHONE_NUMBER = "phoneNumber"
@@ -27,6 +28,7 @@ class ContactDataSource : BaseDataSource {
         var entity: Contact! = Contact.MR_createEntity() as Contact
 
         entity.createdAt = NSDate()
+        entity.contactID = String(self.nextContactID())
         self.fillContact(entity, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         
         return entity
@@ -69,12 +71,56 @@ class ContactDataSource : BaseDataSource {
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
     
-    func getMyContacts() -> [Contact] {
+    func getMyContactsWithoutFlipsAccount() -> [Contact] {
         return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
+    }
+    
+    func retrieveContactWithId(id: String) -> Contact {
+        var contact = self.getContactById(id)
+        
+        if (contact == nil) {
+            println("Contact (\(id)) not found in the database, and it mustn't happen. Check why he wasn't imported to database yet.")
+        }
+        
+        return contact!
+    }
+
+    func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [String] {
+        let contacts = Contact.findAll()
+        let cleannedPhoneNumber = PhoneNumberHelper.cleanFormattedPhoneNumber(phoneNumber)
+        
+        var contactIdsWithSamePhoneNumber = Array<String>()
+        for contact in contacts {
+            var contactPhoneNumber = contact.phoneNumber as String!
+            if (PhoneNumberHelper.cleanFormattedPhoneNumber(contactPhoneNumber) == cleannedPhoneNumber) {
+               contactIdsWithSamePhoneNumber.append(contact.contactID)
+            }
+        }
+        return contactIdsWithSamePhoneNumber
+    }
+
+    func getMyContactsWithFlipsAccount() -> [Contact] {
+        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
     }
     
     
     // MARK: - Private Methods
+    
+    private func nextContactID() -> Int {
+        let contacts = Contact.MR_findAllSortedBy(ContactAttributes.CONTACT_ID, ascending: false)
+        
+        if (contacts.first == nil) {
+            return 0
+        }
+        
+        var contactID: String = contacts.first!.contactID
+        var nextID: Int = contactID.toInt()!
+        return ++nextID
+    }
+    
+    private func getContactById(id: String) -> Contact? {
+        return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id) as? Contact
+    }
     
     private func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
         var predicateValue = ""

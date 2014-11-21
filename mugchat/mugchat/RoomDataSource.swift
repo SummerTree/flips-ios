@@ -13,9 +13,11 @@
 private struct RoomJsonParams {
     static let NAME = "name"
     static let PUBNUB_ID = "pubnubId"
-    static let ROOM_ID = "roomId"
-    static let ADMIN_ID = "adminId"
-    static let PARTICIPANTS = "participants" // TODO: not defined yet
+    static let ROOM_ID = "id"
+    static let ADMIN_ID = "admin"
+    static let PARTICIPANTS = "participants"
+    static let CREATED_AT = "createdAt"
+    static let UPDATED_AT = "updatedAt"
 }
 
 struct RoomAttributes {
@@ -37,21 +39,22 @@ class RoomDataSource : BaseDataSource {
     
     private func fillRoom(room: Room, withJson json: JSON) {
         let userDataSource = UserDataSource()
-        
+
         room.name = json[RoomJsonParams.NAME].stringValue
         room.pubnubID = json[RoomJsonParams.PUBNUB_ID].stringValue
         room.roomID = json[RoomJsonParams.ROOM_ID].stringValue
-        room.admin = userDataSource.retrieveUserWithId(json[RoomJsonParams.ADMIN_ID].stringValue)
-        
+
         var content = json[RoomJsonParams.PARTICIPANTS]
         for (index: String, json: JSON) in content {
             // ONLY USERS CAN PARTICIPATE IN A ROOM
             var user = userDataSource.createOrUpdateUserWithJson(json)
             room.addParticipantsObject(user)
         }
+        
+        room.admin = userDataSource.retrieveUserWithId(json[RoomJsonParams.ADMIN_ID].stringValue)
     }
     
-    func createOrUpdateWithJson(json: JSON) {
+    func createOrUpdateWithJson(json: JSON) -> Room {
         let roomID = json[RoomJsonParams.ROOM_ID].stringValue
         var room = self.getRoomById(roomID)
         
@@ -62,6 +65,8 @@ class RoomDataSource : BaseDataSource {
         }
         
         self.save()
+        
+        return room!
     }
     
     
@@ -118,6 +123,24 @@ class RoomDataSource : BaseDataSource {
         var room = Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID) as? Room
         
         return room
+    }
+    
+    func hasRoomWithUserId(userId: String) -> (hasRoom: Bool, room: Room?) {
+        let rooms = self.getAllRooms()
+        
+        var roomFound: Room?
+        for room in rooms {
+            if ((room.participants.count == 2) && (room.participants.allObjects[0].userID == userId)) {
+                roomFound = room
+                break
+            }
+        }
+        
+        if (roomFound != nil) {
+            return (true, roomFound)
+        } else {
+            return (false, nil)
+        }
     }
     
     

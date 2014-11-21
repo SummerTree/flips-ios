@@ -23,7 +23,8 @@ class NewFlipViewController: MugChatViewController,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
-    UITextViewDelegate {
+    UITextViewDelegate,
+    ComposeViewControllerDelegate {
 
     // MARK: - Constants
     
@@ -32,6 +33,8 @@ class NewFlipViewController: MugChatViewController,
     private let DELETE = NSLocalizedString("Delete", comment: "Delete")
     private let NO = NSLocalizedString("No", comment: "No")
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
+    
+    var delegate: NewFlipViewControllerDelegate?
     
     // MARK: - Class methods
     
@@ -63,7 +66,9 @@ class NewFlipViewController: MugChatViewController,
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
         didSet {
-            updateNextButtonState()
+            if (self.nextButton != nil) {
+                updateNextButtonState()
+            }
         }
     }
 
@@ -84,6 +89,7 @@ class NewFlipViewController: MugChatViewController,
         self.contactPicker.delegate = self
         self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
+        updateNextButtonState()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -96,6 +102,8 @@ class NewFlipViewController: MugChatViewController,
 
         if self.contacts.isEmpty {
             self.contactPicker.becomeFirstResponder()
+        } else {
+            self.flipTextField.becomeFirstResponder()
         }
     }
     
@@ -149,8 +157,21 @@ class NewFlipViewController: MugChatViewController,
     // MARK: - Actions
     
     @IBAction func nextButtonAction(sender: UIButton) {
+        if ((contacts.count == 1) && (contacts[0].contactUser != nil)) {
+            let roomDataSource = RoomDataSource()
+            var result = roomDataSource.hasRoomWithUserId(contacts[0].contactUser.userID)
+            if (result.hasRoom) {
+                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getMugTexts())
+                composeViewController.delegate = self
+                self.navigationController?.pushViewController(composeViewController, animated: true)
+                return
+            }
+        }
+        
         let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getMugTexts())
+        composeViewController.delegate = self
         self.navigationController?.pushViewController(composeViewController, animated: true)
+        
     }
     
     override func closeButtonTapped() {
@@ -200,7 +221,7 @@ class NewFlipViewController: MugChatViewController,
     }
     
     func selectedContactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
-        return [];
+        return self.contacts;
     }
     
     // MARK: - MBContactPickerDelegate
@@ -237,6 +258,7 @@ class NewFlipViewController: MugChatViewController,
         self.updateContactPickerHeight(newHeight)
     }
     
+    
     // MARK: - UIAlertViewDelegate
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
@@ -244,4 +266,17 @@ class NewFlipViewController: MugChatViewController,
             super.closeButtonTapped()
         }
     }
+    
+    
+    // MARK: - ComposeViewControllerDelegate
+    
+    func composeViewControllerDidSendMessage(viewController: ComposeViewController) {
+        delegate?.newFlipViewControllerDidSendMessage(self)
+    }
+}
+
+protocol NewFlipViewControllerDelegate {
+    
+    func newFlipViewControllerDidSendMessage(viewController: NewFlipViewController)
+    
 }

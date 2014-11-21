@@ -138,10 +138,15 @@ class MugMessageDataSource : BaseDataSource {
     }
     
     func oldestNotReadMugMessageForRoomId(roomID: String) -> MugMessage? {
-        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(roomID)) AND (\(MugMessageAttributes.NOT_READ) == true) AND (\(MugMessageAttributes.REMOVED) == false) AND (\(MugMessageAttributes.FROM).userID != \(AuthenticationHelper.sharedInstance.userInSession.userID)))")
+        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(roomID)) AND (\(MugMessageAttributes.NOT_READ) == true) AND (\(MugMessageAttributes.REMOVED) == false))")
         var result = MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
         return result.first
-
+    }
+    
+    func newestNotReadMugMessageForRoomId(roomID: String) -> MugMessage? {
+        var predicate = NSPredicate(format: "((\(MugMessageAttributes.ROOM).roomID == \(roomID)) AND (\(MugMessageAttributes.NOT_READ) == true) AND (\(MugMessageAttributes.REMOVED) == false))")
+        var result = MugMessage.MR_findAllSortedBy(MugMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [MugMessage]
+        return result.last
     }
     
     func removeAllMugMessagesFromRoomID(roomID: String, completion: CompletionBlock) {

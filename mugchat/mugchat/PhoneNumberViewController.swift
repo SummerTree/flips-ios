@@ -85,7 +85,7 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
                 }) { (mugError) -> Void in
                     self.hideActivityIndicator()
                     println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
-                    var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: "OK")
+                    var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
             }
         } else {

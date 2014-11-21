@@ -23,10 +23,13 @@ private struct ChatMessageJsonParams {
     static let CONTENT_SOUND_URL = "soundURL"
 }
 
+let MESSAGE_TYPE = "type"
+let MESSAGE_ROOM_INFO_TYPE = "1"
+let MESSAGE_FLIPS_INFO_TYPE = "2"
+
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     var mugMessagesWaitingDownload: NSHashTable!
-    
     
     public class var sharedInstance : MessageReceiver {
     struct Static {
@@ -98,11 +101,27 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     // MARK: - PubnubServiceDelegate
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
-        let mugMessageDataSource = MugMessageDataSource()
-        let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedDate:date, receivedAtChannel: fromChannelName)
+        println("\nMessage received:\n\(messageJson)\n")
+        
+        if (messageJson[MESSAGE_TYPE] != nil) {
+            if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
+                self.onRoomReceived(messageJson)
+            } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
+                // Message Received
+                let mugMessageDataSource = MugMessageDataSource()
+                let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
 
-        if (mugMessage != nil) {
-            self.onMessageReceived(mugMessage!)
+                if (mugMessage != nil) {
+                    self.onMessageReceived(mugMessage!)
+                }
+            }
+        } else {
+            // TODO: Old format - Should be remove later.
+            let mugMessageDataSource = MugMessageDataSource()
+            let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            if (mugMessage != nil) {
+                self.onMessageReceived(mugMessage!)
+            }
         }
     }
     
@@ -112,5 +131,11 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func stopListeningMessages() {
         PubNubService.sharedInstance.delegate = nil
+    }
+    
+    func onRoomReceived(messageJson: JSON) {
+        let roomDataSource = RoomDataSource()
+        let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
+        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }

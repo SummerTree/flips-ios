@@ -10,6 +10,8 @@
 // the license agreement.
 //
 
+import AssetsLibrary
+
 extension UIButton {
     
     class func avatarA1(image: UIImage) -> UIButton {
@@ -50,5 +52,43 @@ extension UIButton {
         } else {
             self.setImage(image, forState: state)
         }
+    }
+    
+    func setLastCameraPhotoAsButtonImage() {
+        
+        var assetLib = ALAssetsLibrary()
+        var lastImage = UIImage?()
+        
+        assetLib.enumerateGroupsWithTypes(ALAssetsGroupType(ALAssetsGroupSavedPhotos), usingBlock: { (group: ALAssetsGroup!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            if group != nil {
+                group!.setAssetsFilter(ALAssetsFilter.allPhotos())
+                group!.enumerateAssetsAtIndexes(NSIndexSet(index: group!.numberOfAssets()-1), options: NSEnumerationOptions.Concurrent, usingBlock: { (result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                    if result != nil {
+                        var assetRep: ALAssetRepresentation = result.defaultRepresentation()
+                        var iref = assetRep.fullScreenImage().takeUnretainedValue()
+                        lastImage = UIImage(CGImage: iref)!.resizedImageWithWidth(100.0, andHeight: 100.0)
+                        self.setImage(lastImage, forState: .Normal)
+                    } else {
+                        if lastImage == nil {
+                            // TODO: change default image according to story defined for it
+                            lastImage = UIImage.imageWithColor(UIColor.avacado())
+                            self.setImage(lastImage, forState: .Normal)
+                        }
+                    }
+                })
+            } else {
+                if lastImage == nil {
+                    // TODO: change default image according to story defined for it
+                    lastImage = UIImage.imageWithColor(UIColor.avacado())
+                    self.setImage(lastImage, forState: .Normal)
+                }            }
+            }, failureBlock: { (error: NSError!) -> Void in
+                if lastImage == nil {
+                    // TODO: change default image according to story defined for it
+                    lastImage = UIImage.imageWithColor(UIColor.avacado())
+                    self.setImage(lastImage, forState: .Normal)
+                }
+                println(error)
+        })
     }
 }

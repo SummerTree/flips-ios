@@ -94,6 +94,15 @@ class UserDataSource : BaseDataSource {
         } else {
             self.fillUser(user!, withJsonData: json)
         }
+        
+        let contactDataSource = ContactDataSource()
+        var contactIds = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
+        for contactId in contactIds {
+            let contact = contactDataSource.retrieveContactWithId(contactId)
+            contact.contactUser = user
+            user?.addContactsObject(contact)
+        }
+        
         self.save()
         
         return user!
@@ -119,6 +128,8 @@ class UserDataSource : BaseDataSource {
             } else {
                 println("syncUserData NOT IN MAIN THREAD")
             }
+            println("   ")
+            println("Logged as \n   First Name: \(AuthenticationHelper.sharedInstance.userInSession.firstName)\n    ID: \(AuthenticationHelper.sharedInstance.userInSession.userID)")
             println("   ")
             
             // ONLY FOR TESTS
@@ -166,22 +177,13 @@ class UserDataSource : BaseDataSource {
                 user.phoneNumber = "+141512345678"
                 user.photoURL = "http://upload.wikimedia.org/wikipedia/pt/9/9d/Maggie_Simpson.png"
                 
-//                var mug4 = Mug.createEntity() as Mug
-//                mug4.mugID = "5"
-//                mug4.word = "San Francisco"
-//                mug4.backgroundURL = "http://baybridgeinfo.org/sites/default/files/images/background/ws/xws7.jpg.pagespeed.ic.ULYPGat4fH.jpg"
-//                mug4.setBackgroundContentType(BackgroundContentType.Image)
-//                mug4.owner = user
-//                mug4.isPrivate = true
-                
-                // NOT MY CONTACT
                 var user3: User! = User.MR_createEntity() as User
                 user3.userID = "5"
                 user3.firstName = "Ecil"
                 user3.lastName = "User"
                 user3.phoneNumber = "+144423455555"
                 user3.photoURL = "http://3.bp.blogspot.com/_339JZmAslb0/TG3x4LbfGeI/AAAAAAAAABU/QATFhgxPMvA/s200/Lisa_Simpson150.jpg"
-                
+
                 var contact: Contact! = Contact.MR_createEntity() as Contact
                 contact.contactID = "1"
                 contact.firstName = "Bruno"
@@ -197,6 +199,35 @@ class UserDataSource : BaseDataSource {
                 contact2.lastName = "Contact"
                 contact2.phoneNumber = "+144423456789"
                 contact2.phoneType = "iPhone"
+                
+                var user4: User! = User.MR_createEntity() as User
+                user4.userID = "637"
+                user4.firstName = "Caio"
+                user4.lastName = "Fonseca"
+                user4.phoneNumber = "4158889999"
+                user4.photoURL = "https://s3.amazonaws.com/flips-pictures/dc652458-41da-4115-87b7-c08a8e715fc1.jpg"
+                var contact111: Contact! = Contact.MR_createEntity() as Contact
+                contact111.contactID = "100"
+                contact111.firstName = "Caio"
+                contact111.lastName = "Contact"
+                contact111.phoneNumber = "4158889999"
+                contact111.contactUser = user4
+                user4.addContactsObject(contact111)
+                
+                var user222: User! = User.MR_createEntity() as User
+                user222.userID = "684"
+                user222.firstName = "Diego"
+                user222.lastName = "Santiviago"
+                user222.phoneNumber = "4153213321"
+                user222.photoURL = "https://s3.amazonaws.com/flips-pictures/1681aaa9-817f-46e5-96e1-8bbe2e089a43.jpg"
+                var contact222: Contact! = Contact.MR_createEntity() as Contact
+                contact222.contactID = "101"
+                contact222.firstName = "Diego"
+                contact222.lastName = "Contact"
+                contact222.phoneNumber = "4153213321"
+                contact222.contactUser = user222
+                user222.addContactsObject(contact222)
+
                 
                 var room: Room! = Room.MR_createEntity() as Room
                 room.roomID = "1"

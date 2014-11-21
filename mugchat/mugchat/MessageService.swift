@@ -10,6 +10,8 @@
 // the license agreement.
 //
 
+public typealias SendMessageCompletion = (Bool, MugError?) -> Void
+
 public class MessageService {
     
     public class var sharedInstance : MessageService {
@@ -19,15 +21,46 @@ public class MessageService {
         return Static.instance
     }
     
-    func sendMessage(flipIds: [String]!, toContacts contacts: [Contact], completion: CompletionBlock) {
-        var room: Room!
-        // TODO: create room in the server
-        // self.sendMessage(flipIds, roomID: room.roomID, completion: completion)
+    func sendMessage(flipIds: [String]!, toContacts contactIds: [String], completion: SendMessageCompletion) {
+        let roomService = RoomService()
 
-        completion(false)
+        var userIds = Array<String>()
+        var contactNumbers = Array<String>()
+        
+        let contactDataSource = ContactDataSource()
+        for contactId in contactIds {
+            let contact = contactDataSource.retrieveContactWithId(contactId)
+            if let user = contact.contactUser {
+                userIds.append(user.userID)
+            } else {
+                contactNumbers.append(PhoneNumberHelper.cleanFormattedPhoneNumber(contact.phoneNumber))
+            }
+        }
+        
+        var room: Room!
+        var error: MugError?
+        
+        var group = dispatch_group_create()
+        dispatch_group_enter(group)
+        roomService.createRoom(userIds, contactNumbers: contactNumbers, successCompletion: { (newRoom) -> Void in
+            room = newRoom
+            dispatch_group_leave(group);
+        }) { (flipError) -> Void in
+            error = flipError
+            dispatch_group_leave(group);
+        }
+
+        dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+        
+        if (error != nil) {
+            completion(false, error)
+            return
+        }
+        
+        self.sendMessage(flipIds, roomID: room.roomID, completion: completion)
     }
     
-    func sendMessage(flipIds: [String]!, roomID: String, completion: CompletionBlock) {
+    func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
         let flipMessageDataSource = MugMessageDataSource()
         let flipDataSource = MugDataSource()
         let roomDataSource = RoomDataSource()
@@ -42,6 +75,8 @@ public class MessageService {
         let flipMessage = flipMessageDataSource.createFlipMessageWithFlips(flips, toRoom: room)
         let messageJson = flipMessage.toJSON()
         
-        PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID, completion: completion)
+        PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
+            completion(success, nil)
+        }
     }
 }

@@ -57,7 +57,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         var alertView = UIAlertView(title: "",
             message: NSLocalizedString("Preview couldn't be created. Please try again later.", comment: "Preview couldn't be created. Please try again later."),
             delegate: nil,
-            cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+            cancelButtonTitle: LocalizedString.OK)
         alertView.show()
     }
 

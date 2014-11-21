@@ -124,6 +124,7 @@ public class CacheHandler : NSObject {
     // MARK: - Save/Load Methods
     
     func saveImage(image: UIImage, withUrl url: String, isTemporary: Bool = true) -> String {
+        self.saveThumbnail(image, forUrl: url)
         return self.save(UIImageJPEGRepresentation(image, DEFAULT_JPEG_COMPRESSION_QUALITY), withUrl: url, isTemporary: isTemporary)
     }
     
