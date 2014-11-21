@@ -71,7 +71,7 @@ class ContactDataSource : BaseDataSource {
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
     
-    func getMyContacts() -> [Contact] {
+    func getMyContactsWithoutFlipsAccount() -> [Contact] {
         return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
     }
     
@@ -86,16 +86,21 @@ class ContactDataSource : BaseDataSource {
     }
 
     func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [String] {
-        let contacts = self.getMyContacts()
+        let contacts = Contact.findAll()
         let cleannedPhoneNumber = PhoneNumberHelper.cleanFormattedPhoneNumber(phoneNumber)
         
         var contactIdsWithSamePhoneNumber = Array<String>()
         for contact in contacts {
-            if (PhoneNumberHelper.cleanFormattedPhoneNumber(contact.phoneNumber) == cleannedPhoneNumber) {
+            var contactPhoneNumber = contact.phoneNumber as String!
+            if (PhoneNumberHelper.cleanFormattedPhoneNumber(contactPhoneNumber) == cleannedPhoneNumber) {
                contactIdsWithSamePhoneNumber.append(contact.contactID)
             }
         }
         return contactIdsWithSamePhoneNumber
+    }
+
+    func getMyContactsWithFlipsAccount() -> [Contact] {
+        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
     }
     
     

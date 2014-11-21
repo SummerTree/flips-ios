@@ -58,7 +58,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
         var newFlipViewNavigationController = NewFlipViewController.instantiateNavigationController()
         var viewController = newFlipViewNavigationController.topViewController as NewFlipViewController
         viewController.delegate = self
-		self.navigationController?.presentViewController(newFlipViewNavigationController, animated: true, completion: nil)
+        self.navigationController?.presentViewController(newFlipViewNavigationController, animated: true, completion: nil)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {

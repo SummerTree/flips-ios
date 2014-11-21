@@ -111,6 +111,8 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     
     func startRecording() {
         AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool) -> Void in
+            self.delegate?.audioRecorderService(self, didRequestRecordPermission: granted)
+            
             if (granted) {
                 if (self.player != nil && self.player.playing) {
                     self.player.stop()
@@ -118,7 +120,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
                 self.recorder.record()
                 NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
             } else {
-                var alertMessage = UIAlertView(title: NSLocalizedString("Microphone Access", comment: "Microphone Access"), message: NSLocalizedString("Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.", comment: "Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK", comment: "OK"))
+                var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertMessage.show()
             }
         })
@@ -158,4 +160,6 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
 
 protocol AudioRecorderServiceDelegate {
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL: NSURL?, success: Bool!)
+    
+    func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool)
 }

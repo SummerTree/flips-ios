@@ -63,7 +63,7 @@ public class ContactListHelper {
             let phones: RHMultiStringValue = person.phoneNumbers
 
             for (var i:UInt = 0; i < phones.count(); i++) {
-                if (person.firstName != nil) {
+                if (person.firstName != nil && countElements(person.firstName) > 0) {
                     var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
                     let phoneNumber: String! = phones.valueAtIndex(i) as String
                     let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
@@ -78,15 +78,15 @@ public class ContactListHelper {
     
     private func retrievePhoneTypeByLabel(label: String!) -> String! {
         switch label {
-        case kABPersonPhoneMobileLabel:
+        case .Some(kABPersonPhoneMobileLabel):
             return "Mobile"
-        case kABPersonPhoneIPhoneLabel:
+        case .Some(kABPersonPhoneIPhoneLabel):
             return "iPhone"
-        case kABPersonPhoneMainLabel:
+        case .Some(kABPersonPhoneMainLabel):
             return "Main"
-        case kABWorkLabel:
+        case .Some(kABWorkLabel):
             return "Work"
-        case kABHomeLabel:
+        case .Some(kABHomeLabel):
             return "Home"
         default:
             return ""

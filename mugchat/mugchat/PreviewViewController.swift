@@ -13,8 +13,6 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
-    private let SEND_MESSAGE_ERROR_OK = NSLocalizedString("OK", comment: "OK")
-
     
     private var previewView: PreviewView!
     private var flipWords: [MugText]!
@@ -139,7 +137,7 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
                     self.hideActivityIndicator()
                     
                     let message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error?.error)"
-                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: self.SEND_MESSAGE_ERROR_OK)
+                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 })
             } else {
@@ -155,7 +153,7 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
                                 message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
                             }
                             
-                            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: self.SEND_MESSAGE_ERROR_OK)
+                            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                             alertView.show()
                         }
                     })
