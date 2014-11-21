@@ -78,6 +78,7 @@ extension MugMessage {
     func toJSON() -> Dictionary<String, AnyObject> {
         var dictionary = Dictionary<String, AnyObject>()
         
+        dictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
         dictionary.updateValue(self.from.userID, forKey: MugMessageJsonParams.FROM_USER_ID)
         dictionary.updateValue(self.createdAt.toFormattedString(), forKey: MugMessageJsonParams.SENT_AT)
         dictionary.updateValue(self.mugMessageID, forKey: MugMessageJsonParams.FLIP_MESSAGE_ID)
