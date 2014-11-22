@@ -239,14 +239,14 @@ class UserDataSource : BaseDataSource {
                 
                 var room2: Room! = Room.MR_createEntity() as Room
                 room2.roomID = "2"
-                room2.pubnubID = "$2a$10$LbkpRd14zxcSacF3kBnqTu8GHRDpI.LqHWOLQkx8qiL3n/H7vJci"
+                room2.pubnubID = "$2a$10$LbkpRd14zxcSacF3kBnqTu8GHRDpI.LqHWOLQkx8qiL3nH7vJci"
                 room2.name = "Chat"
                 room2.addParticipantsObject(user)
                 PubNubService.sharedInstance.subscribeToChannelID(room2.pubnubID)
                 
                 var room3: Room! = Room.MR_createEntity() as Room
                 room3.roomID = "3"
-                room3.pubnubID = "$2a$10$tHnGMFLALJpwAZzygOA7uOiG3KHMVMpsvZMW/3ojgi.eb7gfNXXS"
+                room3.pubnubID = "$2a$10$tHnGMFLALJpwAZzygOA7uOiG3KHMVMpsvZMW3ojgi.eb7gfNXXS"
                 room3.name = "Chat"
                 room3.addParticipantsObject(user)
                 PubNubService.sharedInstance.subscribeToChannelID(room3.pubnubID)
@@ -274,7 +274,7 @@ class UserDataSource : BaseDataSource {
                 
                 var room7: Room! = Room.MR_createEntity() as Room
                 room7.roomID = "7"
-                room7.pubnubID = "$2a$10$.0zxIsZ1.zQJ2ZkrZm.WW.NMy/kMAzRr79rGkeizZ/AkvQogFeAC"
+                room7.pubnubID = "$2a$10$.0zxIsZ1.zQJ2ZkrZm.WW.NMykMAzRr79rGkeizZAkvQogFeAC"
                 room7.name = "Chat"
                 room7.addParticipantsObject(user)
                 PubNubService.sharedInstance.subscribeToChannelID(room7.pubnubID)
