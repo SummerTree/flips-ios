@@ -11,7 +11,7 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
-		<string>https://github.com/arctouch/mugchat-ios</string>
+		<string>https://github.com/arctouch/flips-ios</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>mugchat/mugchat.xcworkspace</string>
@@ -21,7 +21,7 @@
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/arctouch/mugchat-ios</string>
+	<string>https://github.com/arctouch/flips-ios</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
 			<key>IDESourceControlWCCName</key>
-			<string>mugchat-ios</string>
+			<string>flips-ios</string>
 		</dict>
 	</array>
 </dict>
