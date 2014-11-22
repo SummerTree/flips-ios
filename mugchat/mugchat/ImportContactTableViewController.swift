@@ -127,8 +127,6 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
                 let contactDataSource = ContactDataSource()
@@ -139,9 +137,7 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
                     self.tableView.reloadData()
                 })
                 
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 }, failure: { (error) -> Void in
-                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                     println("Couldn't retrieve the contact list.")
             })
 
@@ -184,7 +180,9 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
             contact = self.contactsWithoutFlipsAccount[indexPath.row]
         }
 
-        println("Sending a message to: \(contact.firstName)")
+        let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
+        self.presentViewController(navigationController, animated: true, completion: nil)
+        
     }
     
     // MARK - UITableViewDataSource
@@ -208,29 +206,12 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
             contact = self.contactsWithFlipsAccount[indexPath.row]
-            cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL)!)
+            cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             contact = self.contactsWithoutFlipsAccount[indexPath.row]
         }
-
-        cell.nameLabel.text = contact.contactTitle
-        var phoneText = "\(contact.phoneNumber)"
         
-        if let phoneType = contact.phoneType {
-            phoneText = "\(phoneText) (\(contact.phoneType))"
-        }
-        
-        cell.numberLabel.text = phoneText
-        let firstCharFirstName = String(Array(contact.firstName)[0])
-        var firstCharLastName = ""
-        
-        if (contact.lastName != nil && countElements(contact.lastName) > 0) {
-            firstCharLastName = String(Array(contact.lastName)[0])
-        }
-
-        cell.photoView.initials = "\(firstCharFirstName)\(firstCharLastName)"
-        
+        cell.contact = contact
         return cell
     }
-    
 }

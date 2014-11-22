@@ -11,6 +11,7 @@
 		072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
 		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
 		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
+		078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078D4BD81A1FC71100F24262 /* RoundImageView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
 		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
 		07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B011A14340C00407A28 /* ContactExtensions.swift */; };
@@ -186,6 +187,7 @@
 		072AD71E1A16B01B0011B212 /* NextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextButton.swift; path = Classes/NextButton.swift; sourceTree = "<group>"; };
 		0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactTableViewCell.swift; path = Classes/ContactTableViewCell.swift; sourceTree = "<group>"; };
 		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
+		078D4BD81A1FC71100F24262 /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundImageView.swift; path = Classes/RoundImageView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
 		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
 		07B66B011A14340C00407A28 /* ContactExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactExtensions.swift; path = Classes/ContactExtensions.swift; sourceTree = "<group>"; };
@@ -953,13 +955,14 @@
 		7A28ADC019D4428A00887831 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				7A8BFEE11A09601700E7F2A3 /* Flip Viewer */,
 				7A9619ED19DC3EE3005E4343 /* Badge */,
+				7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */,
+				7A8BFEE11A09601700E7F2A3 /* Flip Viewer */,
 				7A9619EC19DC3ED5005E4343 /* NavigationBar */,
 				7AD93FA119E62535009CC59A /* Notification Messages */,
+				078D4BD81A1FC71100F24262 /* RoundImageView.swift */,
 				A216D3D619E708A900AD10DB /* TextView */,
 				7A9619EE19DC3EEF005E4343 /* UserForm */,
-				7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */,
 			);
 			name = Custom;
 			sourceTree = "<group>";
@@ -1408,6 +1411,7 @@
 				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
 				07B66B321A147B5800407A28 /* MBContactPicker.m in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
+				078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
 				70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */,
 				7A18BF4E1A1E496B00C40E16 /* PhoneNumberHelper.swift in Sources */,

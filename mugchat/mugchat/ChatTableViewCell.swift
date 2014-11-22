@@ -30,7 +30,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     private var videoPlayerView: PlayerView!
     private var videoPlayerContainerView : UIView!
     private var messageView : UIView!
-    private var avatarView : UIImageView!
+    private var avatarView : RoundImageView!
     private var timestampLabel : UILabel!
     private var messageTextLabel : UILabel!
     
@@ -75,7 +75,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageTextLabel.alpha = 0
         messageView.addSubview(messageTextLabel)
         
-        avatarView = UIImageView.avatarA3()
+        avatarView = RoundImageView.avatarA3()
         messageView.addSubview(avatarView)
         
         var button = UIButton()

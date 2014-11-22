@@ -352,8 +352,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         if (numberOfMessages > 0) {
             let indexPath = NSIndexPath(forRow: numberOfMessages! - 1, inSection: 0)
-            self.frame.size.height -= keyboardHeight
-            super.updateConstraints()
+            
+            replyView.mas_updateConstraints( { (make) in
+                make.left.equalTo()(self)
+                make.right.equalTo()(self)
+                make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+                make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
+            })
+            self.updateConstraints()
             self.layoutIfNeeded()
             self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
@@ -364,6 +370,15 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        
+        replyView.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.bottom.equalTo()(self)
+        })
+        self.updateConstraints()
+        
         self.replyTextField.viewWillAppear()
     }
     
@@ -382,7 +397,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
-            make.bottom.equalTo()(self)
+            make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
         })
         
         replyTextField.mas_updateConstraints( { (make) in

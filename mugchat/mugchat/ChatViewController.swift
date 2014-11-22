@@ -83,7 +83,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         flipMessageIds.removeAll(keepCapacity: false)
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
         for flipMessage in flipMessages {
-            flipMessageIds.append(flipMessage.mugMessageID.stringValue)
+            flipMessageIds.append(flipMessage.mugMessageID)
         }
     }
     

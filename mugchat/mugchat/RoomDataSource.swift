@@ -119,14 +119,10 @@ class RoomDataSource : BaseDataSource {
         }
     }
     
-    func getRoomWithPubnubID(pubnubID: String) -> Room {
+    func getRoomWithPubnubID(pubnubID: String) -> Room? {
         var room = Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID) as? Room
         
-        if (room == nil) {
-            println("Room with pubnubID (\(pubnubID)) not found - It cannot happen, because if user received a message, is because he is subscribed at a channel.")
-        }
-        
-        return room!
+        return room
     }
     
     func hasRoomWithUserId(userId: String) -> (hasRoom: Bool, room: Room?) {
@@ -134,9 +130,12 @@ class RoomDataSource : BaseDataSource {
         
         var roomFound: Room?
         for room in rooms {
-            if ((room.participants.count == 2) && (room.participants.allObjects[0].userID == userId)) {
-                roomFound = room
-                break
+            if (room.participants.count == 2) {
+                var allParticipants = room.participants.allObjects as [User]
+                if ((allParticipants[0].userID == userId) || (allParticipants[1].userID == userId)) {
+                    roomFound = room
+                    break
+                }
             }
         }
         
