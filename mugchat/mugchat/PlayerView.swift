@@ -115,8 +115,13 @@ class PlayerView: UIView {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(pauseGap)), dispatch_get_main_queue()) { () -> Void in
             self.setWord(self.words[wordIndex])
 
-            player.removeItem(playerItem)
-            player.insertItem(playerItem, afterItem: nil)
+            if (self.words.count > 1) {
+                player.removeItem(playerItem)
+                player.insertItem(playerItem, afterItem: nil)
+            } else {
+                player.seekToTime(kCMTimeZero)
+            }
+
             player.play()
         }
     }
