@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate,ChatTableViewCellDelegate {
     
     private let CELL_IDENTIFIER = "flipChatCell"
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
@@ -386,7 +386,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-            cell.viewWillDisappear()
         }
     }
     
@@ -410,6 +409,19 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.updateConstraints()
     }
     
+    
+    // MARK: - ChatTableViewCellDelegate
+    
+    func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool {
+        let visibleCells = tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (cell == chatTableViewCell) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 @objc protocol ChatViewDelegate {

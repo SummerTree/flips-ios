@@ -181,4 +181,10 @@ class MugMessageDataSource : BaseDataSource {
         
         return flipMessage!
     }
+    
+    func markFlipMessageAsRead(flipMessageId: String) {
+        let flipMessage = self.retrieveFlipMessageById(flipMessageId)
+        flipMessage.notRead = false
+        self.save()
+    }
 }

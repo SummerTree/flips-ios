@@ -12,15 +12,24 @@
 
 import UIKit
 
+private let _queue = dispatch_queue_create("com.flips.queue.player-view", DISPATCH_QUEUE_SERIAL)
+
 class PlayerView: UIView {
 
     var playing = false
     private var wordLabel: UILabel!
     private var words: Array<String>!
     
+
+    var delegate: PlayerViewDelegate?
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+
+    private class var videoSerialQueue: dispatch_queue_t {
+        return _queue
+	}
 
     override class func layerClass() -> AnyClass {
         return AVPlayerLayer.self
@@ -58,7 +67,7 @@ class PlayerView: UIView {
             self.words.append(flip.word)
         }
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+        dispatch_async(PlayerView.videoSerialQueue) { () -> Void in
             var localFlips: Array<Mug> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();
             
@@ -90,12 +99,17 @@ class PlayerView: UIView {
             }
             
             self.setPlayer(videoPlayer)
-            
-            completion(player: videoPlayer)
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.setWord(self.words.first!)
+                completion(player: videoPlayer)
+            })
         }
     }
 
     func videoQueueEnded(notification: NSNotification) {
+        delegate?.playerViewDidFinishPlayback(self)
+        
         let playerItem: FlipPlayerItem = notification.object as FlipPlayerItem
         let player: AVQueuePlayer = self.player() as AVQueuePlayer
 
@@ -107,13 +121,18 @@ class PlayerView: UIView {
         }
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(pauseGap)), dispatch_get_main_queue()) { () -> Void in
-            if self.playing {
-                self.setWord(self.words[wordIndex])
-                
-                player.removeItem(playerItem)
-                player.insertItem(playerItem, afterItem: nil)
-                player.play()
-            }
+			if self.playing {
+            	self.setWord(self.words[wordIndex])
+
+				if (self.words.count > 1) {
+                	player.removeItem(playerItem)
+					player.insertItem(playerItem, afterItem: nil)
+					} else {
+						player.seekToTime(kCMTimeZero)
+					}
+
+					player.play()
+				}
         }
     }
 
@@ -142,5 +161,16 @@ class PlayerView: UIView {
             make.centerX.equalTo()(self)
         }
     }
+    
+    func releaseResources() {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 
+}
+
+protocol PlayerViewDelegate {
+    
+    func playerViewDidFinishPlayback(playerView: PlayerView)
+    func playerViewIsVisible(playerView: PlayerView) -> Bool
+    
 }
