@@ -54,17 +54,12 @@ class PlayerView: UIView {
     }
 
     func setupPlayerWithFlips(flips: Array<Mug>, completion: ((player: AVQueuePlayer)  -> Void)) {
-        println("\nsetupPlayerWithFlips")
-        
-        println("   is visible: \(delegate?.playerViewIsVisible(self))")
-        
         self.words = []
         for flip in flips {
             self.words.append(flip.word)
         }
 
         dispatch_async(PlayerView.videoSerialQueue) { () -> Void in
-            println("   nsetupPlayerWithFlips.dispatch_async")
             var localFlips: Array<Mug> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();
 
@@ -75,16 +70,13 @@ class PlayerView: UIView {
             let videoComposer = VideoComposer()
             videoComposer.renderOverlays = false
 
-            println("   will get parts from flips")
             var videoAssets: Array<AVAsset> = videoComposer.videoPartsFromFlips(localFlips as Array<AnyObject>) as Array<AVAsset>
-            println("   got parts from flips")
 
             let videoPlayer = AVQueuePlayer()
             videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.Pause
 
             var i = 0
 
-            println("   will insert items")
             for videoAsset in videoAssets {
                 let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
 
@@ -97,13 +89,10 @@ class PlayerView: UIView {
 
                 i++
             }
-            println("   inserted items")
             
             self.setPlayer(videoPlayer)
-            println("   player setted")
 
             completion(player: videoPlayer)
-            println("   completion called")
         }
     }
 
