@@ -11,7 +11,8 @@
     },
     {
       "idiom" : "iphone",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "logo_chatbubbles@3x.png"
     }
   ],
   "info" : {
