@@ -371,7 +371,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-//            cell.viewWillDisappear()
         }
     }
     

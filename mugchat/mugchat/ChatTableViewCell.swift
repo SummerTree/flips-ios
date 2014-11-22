@@ -24,8 +24,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     private let flipMessageDataSource = MugMessageDataSource()
     
-    private let KVO_STATUS_KEY = "status"
-    
     // MARK: - Instance variables
     
     private var flipMessageId: String!
@@ -35,7 +33,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     private var avatarView : UIImageView!
     private var timestampLabel : UILabel!
     private var messageTextLabel : UILabel!
-    //    private var thumbnailView : UIImageView!
     
     private var isPlaying = false
     
@@ -62,20 +59,8 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         videoPlayerView.delegate = self
         videoPlayerContainerView.addSubview(videoPlayerView)
         
-        //        player = MPMoviePlayerController()
-        //        player.controlStyle = MPMovieControlStyle.None
-        //        player.scalingMode = MPMovieScalingMode.AspectFill
-        //        videoPlayerContainerView.addSubview(player.view)
-        
-        //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
-        
         messageView = UIView()
         contentView.addSubview(messageView)
-        
-        //        thumbnailView = UIImageView()
-        //        thumbnailView.userInteractionEnabled = true
-        //        thumbnailView.frame = videoPlayerContainerView.frame
-        //        messageView.addSubview(thumbnailView)
         
         timestampLabel = UILabel()
         timestampLabel.contentMode = .Center
@@ -116,19 +101,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 make.height.equalTo()(self.contentView.mas_width)
             }
         })
-        
-        //        thumbnailView.mas_makeConstraints { (make) -> Void in
-        //            make.top.equalTo()(self.videoPlayerContainerView)
-        //            make.centerX.equalTo()(self.videoPlayerContainerView)
-        //            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-        //                make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
-        //                make.height.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
-        //            } else {
-        //                make.width.equalTo()(self.contentView.mas_width)
-        //                make.height.equalTo()(self.contentView.mas_width)
-        //            }
-        //        }
-        
+
         videoPlayerView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerContainerView)
             make.bottom.equalTo()(self.videoPlayerContainerView)
@@ -220,7 +193,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         super.prepareForReuse()
     }
 
-    
+
     // MARK: - Movie player controls
     
     func player() -> AVQueuePlayer {
