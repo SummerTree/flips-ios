@@ -61,7 +61,7 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
         
-        UserService.sharedInstance.forgotPassword(username, phoneNumber: intlPhoneNumber, success: { (user) -> Void in
+        UserService.sharedInstance.forgotPassword(intlPhoneNumber, success: { (user) -> Void in
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: intlPhoneNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (mugError) -> Void in
