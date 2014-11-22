@@ -12,7 +12,7 @@
 
 import UIKit
 
-
+private let _queue = dispatch_queue_create("com.flips.queue.player-view", DISPATCH_QUEUE_SERIAL)
 
 class PlayerView: UIView {
 
@@ -20,6 +20,10 @@ class PlayerView: UIView {
     private var words: Array<String>!
     
     var delegate: PlayerViewDelegate?
+
+    private class var videoSerialQueue: dispatch_queue_t {
+        return _queue
+    }
 
     override class func layerClass() -> AnyClass {
         return AVPlayerLayer.self
@@ -59,7 +63,7 @@ class PlayerView: UIView {
             self.words.append(flip.word)
         }
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+        dispatch_async(PlayerView.videoSerialQueue) { () -> Void in
             println("   nsetupPlayerWithFlips.dispatch_async")
             var localFlips: Array<Mug> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();
