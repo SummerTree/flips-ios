@@ -100,7 +100,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     // MARK: - PubnubServiceDelegate
     
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String) {
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
         println("\nMessage received:\n\(messageJson)\n")
         
         if (messageJson[MESSAGE_TYPE] != nil) {
@@ -109,14 +109,19 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
                 // Message Received
                 let mugMessageDataSource = MugMessageDataSource()
-                let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName)
-                self.onMessageReceived(mugMessage)
+                let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+
+                if (mugMessage != nil) {
+                    self.onMessageReceived(mugMessage!)
+                }
             }
         } else {
             // TODO: Old format - Should be remove later.
             let mugMessageDataSource = MugMessageDataSource()
-            let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName)
-            self.onMessageReceived(mugMessage)
+            let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            if (mugMessage != nil) {
+                self.onMessageReceived(mugMessage!)
+            }
         }
     }
     
@@ -131,6 +136,6 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func onRoomReceived(messageJson: JSON) {
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
-        PubNubService.sharedInstance.subscribeToChannel(room.pubnubID)
+        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }
