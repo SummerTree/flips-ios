@@ -87,7 +87,7 @@ public class PubNubService: MugchatService, PNDelegate {
         self.subscribeToChannel(channel)
     }
 
-    func subscribeToChannel(channel: PNChannel) {
+    private func subscribeToChannel(channel: PNChannel) {
         if (!PubNub.isSubscribedOn(channel)) {
             PubNub.subscribeOn([channel])
             let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()

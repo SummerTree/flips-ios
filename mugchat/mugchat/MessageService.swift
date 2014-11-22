@@ -57,6 +57,8 @@ public class MessageService {
             return
         }
         
+        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+        
         self.sendMessage(flipIds, roomID: room.roomID, completion: completion)
     }
     
