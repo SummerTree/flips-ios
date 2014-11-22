@@ -205,12 +205,9 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     }
     
     private func setupVideoPlayerWithFlips(flips: Array<Mug>) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.videoPlayerView)
         self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
-            if (player.status == AVPlayerStatus.ReadyToPlay) {
-                self.playMovie()
-            }
-            
-            player.addObserver(self, forKeyPath: self.KVO_STATUS_KEY, options:NSKeyValueObservingOptions.New, context:nil);
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.videoPlayerView)
         })
     }
     
@@ -218,26 +215,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     // MARK: - Overridden Methods
     
     public override func prepareForReuse() {
-        self.videoPlayerView.player().removeObserver(self, forKeyPath: self.KVO_STATUS_KEY)
         self.videoPlayerView.releaseResources()
         
         super.prepareForReuse()
     }
-    
-    // MARK: - KVO
-    
-    override public func observeValueForKeyPath(keyPath: String, ofObject: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if (keyPath == self.KVO_STATUS_KEY && ofObject is AVQueuePlayer) {
-            let player: AVQueuePlayer = ofObject as AVQueuePlayer
-            
-            if (player.status == AVPlayerStatus.ReadyToPlay && !self.isPlaying) {
-                self.playMovie()
-            } else {
-                // TODO: maybe we should show a error icon... to be defined
-            }
-        }
-    }
-    
+
     
     // MARK: - Movie player controls
     
