@@ -92,7 +92,10 @@ class PlayerView: UIView {
             
             self.setPlayer(videoPlayer)
 
-            completion(player: videoPlayer)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.setWord(self.words.first!)
+                completion(player: videoPlayer)
+            })
         }
     }
 
