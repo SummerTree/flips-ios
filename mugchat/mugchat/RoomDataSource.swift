@@ -130,9 +130,12 @@ class RoomDataSource : BaseDataSource {
         
         var roomFound: Room?
         for room in rooms {
-            if ((room.participants.count == 2) && (room.participants.allObjects[0].userID == userId)) {
-                roomFound = room
-                break
+            if (room.participants.count == 2) {
+                var allParticipants = room.participants.allObjects as [User]
+                if ((allParticipants[0].userID == userId) || (allParticipants[1].userID == userId)) {
+                    roomFound = room
+                    break
+                }
             }
         }
         
