@@ -115,7 +115,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
             } else {
                 make.height.equalTo()(self.mas_width)
             }
-
         }
 
         // asking help to delegate to align the container with navigation bar
