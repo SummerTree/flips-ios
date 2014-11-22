@@ -14,8 +14,13 @@ import UIKit
 
 class PlayerView: UIView {
 
+    var playing = false
     private var wordLabel: UILabel!
     private var words: Array<String>!
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 
     override class func layerClass() -> AnyClass {
         return AVPlayerLayer.self
@@ -38,11 +43,13 @@ class PlayerView: UIView {
     func play() {
         let playerItem: FlipPlayerItem = self.player().currentItem as FlipPlayerItem
         self.setWord(self.words[playerItem.order])
+        self.playing = true
         self.player().play()
     }
 
     func pause() {
-        self.player().play()
+        self.player().pause()
+        self.playing = false
     }
 
     func setupPlayerWithFlips(flips: Array<Mug>, completion: ((player: AVQueuePlayer)  -> Void)) {
@@ -54,36 +61,36 @@ class PlayerView: UIView {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
             var localFlips: Array<Mug> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();
-
+            
             for flip in flips {
                 localFlips.append(moc.objectWithID(flip.objectID) as Mug)
             }
-
+            
             let videoComposer = VideoComposer()
             videoComposer.renderOverlays = false
-
+            
             var videoAssets: Array<AVAsset> = videoComposer.videoPartsFromFlips(localFlips as Array<AnyObject>) as Array<AVAsset>
-
+            
             let videoPlayer = AVQueuePlayer()
             videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.Pause
-
+            
             var i = 0
-
+            
             for videoAsset in videoAssets {
                 let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
-
+                
                 playerItem.order = i
-
+                
                 NSNotificationCenter.defaultCenter().addObserver(self, selector:"videoQueueEnded:",
                     name:AVPlayerItemDidPlayToEndTimeNotification, object:playerItem)
-
+                
                 videoPlayer.insertItem(playerItem, afterItem: nil)
-
+                
                 i++
             }
             
             self.setPlayer(videoPlayer)
-
+            
             completion(player: videoPlayer)
         }
     }
@@ -100,11 +107,13 @@ class PlayerView: UIView {
         }
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(pauseGap)), dispatch_get_main_queue()) { () -> Void in
-            self.setWord(self.words[wordIndex])
-
-            player.removeItem(playerItem)
-            player.insertItem(playerItem, afterItem: nil)
-            player.play()
+            if self.playing {
+                self.setWord(self.words[wordIndex])
+                
+                player.removeItem(playerItem)
+                player.insertItem(playerItem, afterItem: nil)
+                player.play()
+            }
         }
     }
 
