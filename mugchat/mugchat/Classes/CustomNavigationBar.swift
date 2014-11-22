@@ -69,7 +69,7 @@ class CustomNavigationBar : UIView {
         
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_White")
         }
         
         var navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
@@ -87,7 +87,7 @@ class CustomNavigationBar : UIView {
         
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_White")
         }
         
         var navBarHeight = NORMAL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
@@ -102,7 +102,7 @@ class CustomNavigationBar : UIView {
     class func CustomLargeNavigationBar(avatarImage: UIImage, isAvatarButtonInteractionEnabled: Bool = false, showBackButton: Bool, showNextButton: Bool) -> CustomNavigationBar {
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_White")
         }
         
         var nextButtonImage : UIImage?

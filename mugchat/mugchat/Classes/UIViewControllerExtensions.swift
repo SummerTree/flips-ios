@@ -71,7 +71,7 @@ extension UIViewController {
         titleLabel.sizeToFit()
         self.navigationItem.titleView = titleLabel
         
-        var backBarButton = UIBarButtonItem(image: UIImage(named: "back") , style: .Done, target: self, action: "backButtonTapped")
+        var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_White") , style: .Done, target: self, action: "backButtonTapped")
         backBarButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }
