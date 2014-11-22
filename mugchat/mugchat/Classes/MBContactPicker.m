@@ -258,12 +258,14 @@ static CGFloat const ROW_HEIGHT = 56.0;
         if (photoURLString) {
             NSURL *url = [NSURL URLWithString:photoURLString];
             if (url) {
-                [cell.photoView setImageWithURL:url];
+                [cell.photoView setImageWithURL:url success:nil];
             }
         }
         
         [cell hideNumberLabel];
     } else {
+        cell.photoView.borderColor = [UIColor lightGreyD8];
+        
         if ([contact respondsToSelector:@selector(contactSubtitle)]) {
             cell.numberLabel.text = contact.contactSubtitle;
         }

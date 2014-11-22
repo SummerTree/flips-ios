@@ -23,7 +23,7 @@ class ConversationTableViewCell : UITableViewCell {
     private var room: Room!
     
     private var mugImageView : UIImageView!
-    private var userImageView : UIImageView!
+    private var userImageView : RoundImageView!
     private var infoView : UIView!
     private var participantsNamesLabel : UILabel!
     private var mugMessageLabel : UILabel!
@@ -47,7 +47,7 @@ class ConversationTableViewCell : UITableViewCell {
         mugImageView.contentMode = UIViewContentMode.ScaleAspectFill
         mugImageView.clipsToBounds = true
         
-        userImageView = UIImageView.avatarA3()
+        userImageView = RoundImageView.avatarA3()
         
         infoView = UIView()
         

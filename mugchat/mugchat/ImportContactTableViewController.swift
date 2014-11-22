@@ -206,7 +206,7 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
             contact = self.contactsWithFlipsAccount[indexPath.row]
-            cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL)!)
+            cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             contact = self.contactsWithoutFlipsAccount[indexPath.row]
         }

@@ -30,16 +30,10 @@ class ContactTableViewCell: UITableViewCell {
     var contact: Contact! {
         didSet {
             self.nameLabel.text = contact.contactTitle
-            var phoneText = "\(contact.phoneNumber)"
-            
-            if let phoneType = contact.phoneType {
-                phoneText = "\(phoneText) (\(contact.phoneType))"
-            }
-            
-            self.numberLabel.text = phoneText
+            self.numberLabel.text = contact.contactSubtitle
             
             if let flipUser = contact.contactUser {
-                self.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL)!)
+                self.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
                 hideNumberLabel()
             } else {
                 self.photoView.initials = contact.contactInitials
@@ -54,6 +48,7 @@ class ContactTableViewCell: UITableViewCell {
         self.numberLabel.text = nil
         self.numberLabel.hidden = false
         self.photoView.reset()
+        self.photoView.borderColor = .lightGreyD8()
     }
     
     func layoutMargins() -> UIEdgeInsets {
