@@ -70,23 +70,17 @@ extension UIButton {
                         self.setImage(lastImage, forState: .Normal)
                     } else {
                         if lastImage == nil {
-                            // TODO: change default image according to story defined for it
-                            lastImage = UIImage.imageWithColor(UIColor.avacado())
-                            self.setImage(lastImage, forState: .Normal)
+                            self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
                         }
                     }
                 })
             } else {
                 if lastImage == nil {
-                    // TODO: change default image according to story defined for it
-                    lastImage = UIImage.imageWithColor(UIColor.avacado())
-                    self.setImage(lastImage, forState: .Normal)
+                    self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
                 }            }
             }, failureBlock: { (error: NSError!) -> Void in
                 if lastImage == nil {
-                    // TODO: change default image according to story defined for it
-                    lastImage = UIImage.imageWithColor(UIColor.avacado())
-                    self.setImage(lastImage, forState: .Normal)
+                    self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
                 }
                 println(error)
         })

@@ -63,6 +63,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         galleryButton = UIButton()
         galleryButton.setImage(UIImage(named: "Grid"), forState: .Normal)
         galleryButton.sizeToFit()
+        galleryButton.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped", forControlEvents: .TouchUpInside)
         bottomButtonsContainerView.addSubview(galleryButton)
     }
