@@ -62,18 +62,22 @@ extension UIButton {
         assetLib.enumerateGroupsWithTypes(ALAssetsGroupType(ALAssetsGroupSavedPhotos), usingBlock: { (group: ALAssetsGroup!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
             if group != nil {
                 group!.setAssetsFilter(ALAssetsFilter.allPhotos())
-                group!.enumerateAssetsAtIndexes(NSIndexSet(index: group!.numberOfAssets()-1), options: NSEnumerationOptions.Concurrent, usingBlock: { (result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-                    if result != nil {
-                        var assetRep: ALAssetRepresentation = result.defaultRepresentation()
-                        var iref = assetRep.fullScreenImage().takeUnretainedValue()
-                        lastImage = UIImage(CGImage: iref)!.resizedImageWithWidth(100.0, andHeight: 100.0)
-                        self.setImage(lastImage, forState: .Normal)
-                    } else {
-                        if lastImage == nil {
-                            self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                if group!.numberOfAssets() > 0 {
+                    group!.enumerateAssetsAtIndexes(NSIndexSet(index: group!.numberOfAssets()-1), options: NSEnumerationOptions.Concurrent, usingBlock: { (result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                        if result != nil {
+                            var assetRep: ALAssetRepresentation = result.defaultRepresentation()
+                            var iref = assetRep.fullScreenImage().takeUnretainedValue()
+                            lastImage = UIImage(CGImage: iref)!.resizedImageWithWidth(100.0, andHeight: 100.0)
+                            self.setImage(lastImage, forState: .Normal)
+                        } else {
+                            if lastImage == nil {
+                                self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                            }
                         }
-                    }
-                })
+                    })
+                } else {
+                    self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                }
             } else {
                 if lastImage == nil {
                     self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
