@@ -49,6 +49,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private var keyboardHeight: CGFloat = 0.0
     
+    private var wrongVerificationCodeCounter = 0
+    
     init(phoneNumber : String!) {
         super.init()
         self.phoneNumber = phoneNumber
@@ -338,6 +340,14 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func didEnterWrongVerificationCode() {
+        
+        self.wrongVerificationCodeCounter++
+        if self.wrongVerificationCodeCounter >= 3 {
+            var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.CONSECUTIVE_INCORRECT_ENTRIES, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertMessage.show()
+            self.wrongVerificationCodeCounter = 0
+        }
+        
         resetVerificationCodeField()
         focusKeyboardOnCodeField()
         codeView.backgroundColor = UIColor.deepSea()
@@ -356,6 +366,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func resendButtonTapped(sender: AnyObject) {
         self.delegate?.verificationCodeViewDidTapResendButton(self)
+        self.wrongVerificationCodeCounter = 0
     }
     
     
