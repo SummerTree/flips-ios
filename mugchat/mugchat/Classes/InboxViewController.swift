@@ -92,7 +92,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
             roomIds.append(room.roomID)
         }
         
-        inboxView.setRooms(rooms)
+        inboxView.setRoomIds(roomIds)
     }
     
     
