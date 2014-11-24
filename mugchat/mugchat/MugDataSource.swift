@@ -112,8 +112,7 @@ class MugDataSource : BaseDataSource {
             mug.setBackgroundContentType(BackgroundContentType.Video)
             
             cacheHandler.saveThumbnail(VideoHelper.generateThumbImageForFile(videoURL.relativePath!), forUrl: mug.backgroundURL)
-            cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: mug.backgroundURL, isTemporary: false)
-            
+            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: mug.backgroundURL, isTemporary: false)
             createMugSuccess(mug)
         }) { (mugError) -> Void in
             var message = mugError?.error as String!
