@@ -262,9 +262,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         
         self.checkDeviceAuthorizationStatus()
         
-        self.sessionQueue = dispatch_queue_create("session_queue", DISPATCH_QUEUE_SERIAL)
+        self.sessionQueue = dispatch_get_main_queue()!
         
-        dispatch_async(sessionQueue, { () -> Void in
+        dispatch_async(self.sessionQueue, { () -> Void in
             self.backgroundRecordingId = UIBackgroundTaskInvalid
             
             var error: NSError?
@@ -358,6 +358,14 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func removeObservers() {
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
+            
+            for input in self.session.inputs {
+                self.session.removeInput(input as AVCaptureInput)
+            }
+            
+            for output in self.session.outputs {
+                self.session.removeOutput(output as AVCaptureOutput)
+            }
             
             if (self.observersRegistered!) {
                 NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
