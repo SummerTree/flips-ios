@@ -308,6 +308,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func didTapReplyButton() {
         hideReplyButtonAndShowTextField()
+        
+        let visibleCells = tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            cell.stopMovie()
+        }
+        
         self.replyTextField.becomeFirstResponder()
     }
     
@@ -386,6 +392,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            cell.stopMovie()
         }
     }
     
