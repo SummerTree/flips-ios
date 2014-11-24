@@ -124,7 +124,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         cameraButtonsView.addSubview(gridButton)
         
         galleryButton = UIButton()
-        galleryButton.setImage(UIImage(named: "Church"), forState: .Normal)
+        galleryButton.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(galleryButton)
     }
