@@ -168,8 +168,9 @@ class ConversationTableViewCell : UITableViewCell {
     // MARK: - Cell Layout Methods
     
     private func layoutParticipantsNames(room: Room) {
+        let roomName = room.roomName()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.participantsNamesLabel.text = room.roomName()
+            self.participantsNamesLabel.text = roomName
         })
     }
     
@@ -183,28 +184,33 @@ class ConversationTableViewCell : UITableViewCell {
         if (mugMessage == nil) {
             mugMessage = room.mugMessagesNotRemoved().lastObject as? MugMessage
         }
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            if (mugMessage != nil) {
-                self.mugImageView.image = mugMessage!.messageThumbnail()?
+
+        if (mugMessage != nil) {
+            let messageThumbnailImage = mugMessage!.messageThumbnail()?
+            let photoURL = NSURL(string: mugMessage!.from.photoURL)
+            let isMessageNotRead = mugMessage!.notRead.boolValue
+            let messagePhrase = mugMessage!.messagePhrase()
+            // The time stamp should reflect the time sent of the oldest unread message in the conversation
+            let formatedDate = DateHelper.formatDateToApresentationFormat(mugMessage!.createdAt)
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.mugImageView.image = messageThumbnailImage
                 
                 // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
-                var photoURL = NSURL(string: mugMessage!.from.photoURL)
                 self.userImageView.setImageWithURL(photoURL)
                 
-                if (mugMessage!.notRead.boolValue) {
+                if (isMessageNotRead) {
                     // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
                     self.mugMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
                 } else {
-                    self.mugMessageLabel.text = mugMessage!.messagePhrase()
+                    self.mugMessageLabel.text = messagePhrase
                 }
                 
-                // The time stamp should reflect the time sent of the oldest unread message in the conversation
-                let formatedDate = DateHelper.formatDateToApresentationFormat(mugMessage!.createdAt)
                 self.mugTimeLabel.text = formatedDate
                 self.mugTimeLabel.sizeToFit()
-            }
-        })
+                
+            })
+        }
     }
     
     private func layoutNumberOfNotReadMessages(room: Room) {
