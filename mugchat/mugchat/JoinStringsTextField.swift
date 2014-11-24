@@ -115,6 +115,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                             mugTexts.append(lastWord)
                             lastWord = ""
                             lastWord.append(character)
+                        } else {
+                            lastWord.append(character)
                         }
                     }
                 }
