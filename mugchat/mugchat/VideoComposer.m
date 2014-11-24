@@ -155,10 +155,11 @@
 - (void)prepareVideoAssetFromFlip:(Mug *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
 {
     NSURL *videoURL;
+    CacheHandler *cacheHandler = [CacheHandler sharedInstance];
 
     if ([flip isBackgroundContentTypeVideo]) {
-        //    NSString *backgroundContentLocalPath = [mug backgroundContentLocalPath];
-        videoURL = [NSURL URLWithString:flip.backgroundURL];
+        NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
+        videoURL = [NSURL fileURLWithPath:filePath];
     } else {
         videoURL = [NSURL fileURLWithPath:[ImageVideoCreator videoPathForMug:flip]];
     }
@@ -169,7 +170,8 @@
     AVMutableComposition *composition;
 
     if (flip.soundURL) {
-        AVAsset *audioAsset = [AVAsset assetWithURL:[NSURL URLWithString:flip.soundURL]];
+        NSString *audioPath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.soundURL];
+        AVAsset *audioAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:audioPath]];
         composition = [self compositionFromVideoAsset:videoAsset audioAsset:audioAsset];
     } else {
         composition = [self compositionFromVideoAsset:videoAsset];
