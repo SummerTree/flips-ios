@@ -16,7 +16,7 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"
-    let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
+    let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code"
     
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
