@@ -20,10 +20,8 @@ class VideoHelper {
         
         let asset: AVAsset! = AVAsset.assetWithURL(url) as AVAsset
         let imageGenerator = AVAssetImageGenerator(asset: asset)
-        var time: CMTime = asset.duration
-        time.value = 0
-        
-        let imageRef = imageGenerator.copyCGImageAtTime(time, actualTime: nil, error: nil)
+
+        let imageRef = imageGenerator.copyCGImageAtTime(kCMTimeZero, actualTime: nil, error: nil)
         return UIImage(CGImage: imageRef)!
     }
 }
