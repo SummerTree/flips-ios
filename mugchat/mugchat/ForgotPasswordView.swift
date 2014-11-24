@@ -123,6 +123,8 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         
         mobileNumberField.mas_makeConstraints { (make) in
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.mobileNumberView)
             make.centerY.equalTo()(self.mobileNumberView)
         }
         
