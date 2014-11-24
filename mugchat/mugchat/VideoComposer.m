@@ -58,12 +58,25 @@
     dispatch_group_t cachingGroup = dispatch_group_create();
 
     for (Mug *flip in flips) {
-        dispatch_group_enter(cachingGroup);
+        if ([flip hasBackground]) {
+            dispatch_group_enter(cachingGroup);
 
-        [cachingService cachedFilePathForURL:[NSURL URLWithString:flip.backgroundURL]
-                                  completion:^(NSURL *localFileURL) {
-                                      dispatch_group_leave(cachingGroup);
-                                  }];
+            [cachingService cachedFilePathForURL:[NSURL URLWithString:flip.backgroundURL]
+                                      completion:^(NSURL *localFileURL) {
+                                          dispatch_group_leave(cachingGroup);
+                                      }];
+        }
+
+        if ([flip hasAudio]) {
+            dispatch_group_enter(cachingGroup);
+
+            [cachingService cachedFilePathForURL:[NSURL URLWithString:flip.soundURL]
+                                      completion:^(NSURL *localFileURL) {
+                                          dispatch_group_leave(cachingGroup);
+                                      }];
+        }
+        
+
     }
 
     // Timeout is number of flips times 30 seconds

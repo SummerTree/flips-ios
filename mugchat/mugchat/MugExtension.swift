@@ -57,12 +57,20 @@ extension Mug {
     func isBackgroundContentTypeVideo() -> Bool {
         return (self.backgroundContentType == BackgroundContentTypeValue.Video)
     }
-    
+
+    func hasBackground() -> Bool {
+        return (self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)
+    }
+
+    func hasAudio() -> Bool {
+        return (self.soundURL != nil) && (!self.soundURL.isEmpty)
+    }
+
     func isBlankMug() -> Bool {
-        let hasBackgroundUrlDefined = (self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)
-        let hasSoundUrlDefine = (self.soundURL != nil) && (!self.soundURL.isEmpty)
+        let hasBackgroundUrlDefined = self.hasBackground()
+        let hasSoundUrlDefined = self.hasAudio()
         
-        return (!hasBackgroundUrlDefined) && (!hasSoundUrlDefine)
+        return (!hasBackgroundUrlDefined) && (!hasSoundUrlDefined)
     }
     
     func hasAllContentDownloaded() -> Bool {
