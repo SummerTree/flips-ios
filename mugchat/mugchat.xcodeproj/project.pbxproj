@@ -75,6 +75,8 @@
 		70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B51A0A8DFE00725953 /* AboutView.swift */; };
 		70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */; };
 		70ABC7EA1A09376100A7085A /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */; };
+		70AC67021A23C98A003FE3CA /* ImportContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67011A23C98A003FE3CA /* ImportContactViewController.swift */; };
+		70AC67051A23C99F003FE3CA /* ImportContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67041A23C99F003FE3CA /* ImportContactView.swift */; };
 		70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */; };
 		70B560A519D996F000FE4C34 /* MugChatWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A419D996F000FE4C34 /* MugChatWebView.swift */; };
 		70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */; };
@@ -263,6 +265,8 @@
 		70A2A5B51A0A8DFE00725953 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		70AC67011A23C98A003FE3CA /* ImportContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactViewController.swift; sourceTree = "<group>"; };
+		70AC67041A23C99F003FE3CA /* ImportContactView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactView.swift; sourceTree = "<group>"; };
 		70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebViewController.swift; sourceTree = "<group>"; };
 		70B560A419D996F000FE4C34 /* MugChatWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebView.swift; sourceTree = "<group>"; };
 		70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+StatusBarLight.swift"; sourceTree = "<group>"; };
@@ -610,6 +614,7 @@
 				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
 				0757ECAB1A116A1E00D0277C /* Contact */,
 				7A28ADC019D4428A00887831 /* Custom */,
+				70AC67031A23C992003FE3CA /* Import Contact */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
 				F293246D1A15833D00355A4D /* Player */,
@@ -781,6 +786,7 @@
 		709088231A1E1624009915FE /* Import Contact */ = {
 			isa = PBXGroup;
 			children = (
+				70AC67011A23C98A003FE3CA /* ImportContactViewController.swift */,
 				709088241A1E163B009915FE /* ImportContactTableViewController.swift */,
 			);
 			name = "Import Contact";
@@ -800,6 +806,14 @@
 				70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */,
 			);
 			name = About;
+			sourceTree = "<group>";
+		};
+		70AC67031A23C992003FE3CA /* Import Contact */ = {
+			isa = PBXGroup;
+			children = (
+				70AC67041A23C99F003FE3CA /* ImportContactView.swift */,
+			);
+			name = "Import Contact";
 			sourceTree = "<group>";
 		};
 		70B560A019D995D500FE4C34 /* Web View */ = {
@@ -1379,6 +1393,7 @@
 				7033584619E4160B0030CF11 /* SettingsView.swift in Sources */,
 				70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */,
+				70AC67021A23C98A003FE3CA /* ImportContactViewController.swift in Sources */,
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7AF82E0119EFECC900D0393F /* DeviceDataSource.swift in Sources */,
 				07CE2ABA1A1E8FEC00CF1A70 /* LocalizedString.swift in Sources */,
@@ -1451,6 +1466,7 @@
 				708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */,
 				7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */,
 				A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */,
+				70AC67051A23C99F003FE3CA /* ImportContactView.swift in Sources */,
 				7A12B8D219F5C6E900DE955E /* FlipMessageWordListView.swift in Sources */,
 				7A9CAB701A04223300791C46 /* ImageVideoCreator.m in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
