@@ -12,6 +12,10 @@
 
 import AssetsLibrary
 
+let GALLERY_BUTTON_IMAGE_WIDTH : CGFloat = 100.0
+let GALLERY_BUTTON_IMAGE_HEIGHT : CGFloat = 100.0
+let FILTER_PHOTO_IMAGE : UIImage = UIImage(named: "Filter_Photo")!
+
 extension UIButton {
     
     class func avatarA1(image: UIImage) -> UIButton {
@@ -67,24 +71,24 @@ extension UIButton {
                         if result != nil {
                             var assetRep: ALAssetRepresentation = result.defaultRepresentation()
                             var iref = assetRep.fullScreenImage().takeUnretainedValue()
-                            lastImage = UIImage(CGImage: iref)!.resizedImageWithWidth(100.0, andHeight: 100.0)
+                            lastImage = UIImage(CGImage: iref)!.resizedImageWithWidth(GALLERY_BUTTON_IMAGE_WIDTH, andHeight: GALLERY_BUTTON_IMAGE_HEIGHT)
                             self.setImage(lastImage, forState: .Normal)
                         } else {
                             if lastImage == nil {
-                                self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                                self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
                             }
                         }
                     })
                 } else {
-                    self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                    self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
                 }
             } else {
                 if lastImage == nil {
-                    self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                    self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
                 }            }
             }, failureBlock: { (error: NSError!) -> Void in
                 if lastImage == nil {
-                    self.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+                    self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
                 }
                 println(error)
         })
