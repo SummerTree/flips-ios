@@ -247,6 +247,10 @@ class UserFormView : UIView, UITextFieldDelegate {
             }
         }
         
+        if shouldChangeTextFieldText {
+            self.delegate?.userFormViewDidUpdateField?(self)
+        }
+        
         return shouldChangeTextFieldText
     }
     
@@ -260,7 +264,6 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        self.delegate?.userFormViewDidUpdateField?(self)
         
         if (textField == birthdayTextField) {
             var stringWithOnlyDigits = textField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
