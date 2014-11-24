@@ -107,8 +107,6 @@ public class CacheHandler : NSObject {
             return filePath
         }
         
-        println("\ngetFilePathForUrlFromAnyFolder returned nil for url: \(filePath)\n")
-        
         return nil
     }
     
