@@ -131,42 +131,6 @@ class UserDataSource : BaseDataSource {
             println("Logged as \n   First Name: \(AuthenticationHelper.sharedInstance.userInSession.firstName)\n    ID: \(AuthenticationHelper.sharedInstance.userInSession.userID)")
             println("   ")
             
-            // ONLY FOR TESTS
-            var contacts = self.getMyUserContacts()
-            if (contacts.count == 0) {
-                var user4: User! = User.MR_createEntity() as User
-                user4.userID = "637"
-                user4.firstName = "Caio"
-                user4.lastName = "Fonseca"
-                user4.phoneNumber = "4158889999"
-                user4.photoURL = "https://s3.amazonaws.com/flips-pictures/dc652458-41da-4115-87b7-c08a8e715fc1.jpg"
-                var contact111: Contact! = Contact.MR_createEntity() as Contact
-                contact111.contactID = "100"
-                contact111.firstName = "Caio"
-                contact111.lastName = "Contact"
-                contact111.phoneNumber = "4158889999"
-                contact111.contactUser = user4
-                user4.addContactsObject(contact111)
-                
-                var user222: User! = User.MR_createEntity() as User
-                user222.userID = "684"
-                user222.firstName = "Diego"
-                user222.lastName = "Santiviago"
-                user222.phoneNumber = "4153213321"
-                user222.photoURL = "https://s3.amazonaws.com/flips-pictures/1681aaa9-817f-46e5-96e1-8bbe2e089a43.jpg"
-                var contact222: Contact! = Contact.MR_createEntity() as Contact
-                contact222.contactID = "101"
-                contact222.firstName = "Diego"
-                contact222.lastName = "Contact"
-                contact222.phoneNumber = "4153213321"
-                contact222.contactUser = user222
-                user222.addContactsObject(contact222)
-
-                println("NSManagedObjectContext.MR_defaultContext(): \(NSManagedObjectContext.MR_defaultContext())")
-                NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
-            }
-            // ONLY FOR TESTS
-            
             callback(true, nil)
         })
     }

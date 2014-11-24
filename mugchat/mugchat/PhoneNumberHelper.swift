@@ -1,5 +1,5 @@
 //
-//  NewFlipViewController.swift
+//  PhoneNumberHelper.swift
 //  mugchat
 //
 // Copyright 2014 ArcTouch, Inc.
@@ -21,6 +21,25 @@ private let DOT_SEPARATOR = " "
 class PhoneNumberHelper {
     
     class func cleanFormattedPhoneNumber(phoneNumber: String) -> String {
-        return phoneNumber.stringByRemovingStringsIn([HYPHEN, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, DOT_SEPARATOR])
+        let clean = phoneNumber.stringByRemovingStringsIn([HYPHEN, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, DOT_SEPARATOR])
+        return clean.removeWhiteSpaces()
+    }
+    
+    class func formatUsingUSInternational(phoneNumber: String) -> String {
+        println("Formatting phone = \(phoneNumber)")
+        println("Country code \(phoneNumber[0...1])")
+        let countryCode = phoneNumber[0...1]
+        let phoneNumberLength = countElements(phoneNumber)
+        if (countryCode == "+1" && phoneNumberLength == 12) {
+            return phoneNumber
+        } else {
+            let phone = cleanFormattedPhoneNumber(phoneNumber)
+            if (countElements(phone) > 10) {
+                return "+1\(phone[0...10])"
+            } else {
+                return phone
+            }
+        }
+        
     }
 }

@@ -75,6 +75,10 @@ class ContactDataSource : BaseDataSource {
         return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
     }
     
+    func getMyContactsWithFlipsAccount() -> [Contact] {
+        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
+    }
+    
     func retrieveContactWithId(id: String) -> Contact {
         var contact = self.getContactById(id)
         
@@ -99,9 +103,7 @@ class ContactDataSource : BaseDataSource {
         return contactsWithSamePhoneNumber
     }
 
-    func getMyContactsWithFlipsAccount() -> [Contact] {
-        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
-    }
+    
     
     
     // MARK: - Private Methods
@@ -122,7 +124,7 @@ class ContactDataSource : BaseDataSource {
         return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id) as? Contact
     }
     
-    private func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
+    func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
         var predicateValue = ""
         
         if (firstName != nil) {
