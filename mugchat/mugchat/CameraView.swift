@@ -359,14 +359,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
             
-            for input in self.session.inputs {
-                self.session.removeInput(input as AVCaptureInput)
-            }
-            
-            for output in self.session.outputs {
-                self.session.removeOutput(output as AVCaptureOutput)
-            }
-            
             if (self.observersRegistered!) {
                 NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
                 NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
