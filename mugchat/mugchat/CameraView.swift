@@ -92,8 +92,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     private func initSubviews() {
         self.backgroundColor = UIColor.blackColor()
         
-        previewView = AVCamPreviewView()
-        self.addSubview(previewView)
+        self.previewView = AVCamPreviewView()
+        self.addSubview(self.previewView)
         
         if (showAvatarCropArea) {
             avatarCropAreaView = CropOverlayView(cropHoleSize: CGSizeMake(A1_AVATAR_SIZE - A1_BORDER_WIDTH, A1_AVATAR_SIZE - A1_BORDER_WIDTH))
@@ -269,8 +269,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             
             var error: NSError?
             
-            var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front)
-            var deviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error)
+            var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front) as AVCaptureDevice
+            var deviceInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as AVCaptureDeviceInput
             
             self.flashMode = AVCaptureFlashMode.Auto
             CameraView.setFlashMode(self.flashMode, forDevice: videoDevice)
@@ -300,7 +300,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 
                 // We should ask for audio access if we aren't showing the button to record audio.
                 var audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as AVCaptureDevice
-                var audioDeviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error)
+                var audioDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as AVCaptureDeviceInput
                 
                 if (error != nil) {
                     self.isMicrophoneAvailable = false
@@ -316,19 +316,19 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             
             if (self.session.canAddOutput(movieOutput)) {
                 self.session.addOutput(movieOutput)
-                self.movieFileOutput = movieOutput
-                var connection = self.movieFileOutput.connectionWithMediaType(AVMediaTypeVideo)
+                var connection = movieOutput.connectionWithMediaType(AVMediaTypeVideo)
                 connection.videoMirrored = true
                 if (connection.videoStabilizationEnabled) {
                     connection.enablesVideoStabilizationWhenAvailable = true
                 }
+                self.movieFileOutput = movieOutput
             }
             
             var imageOutput = AVCaptureStillImageOutput()
             if (self.session.canAddOutput(imageOutput)) {
+                imageOutput.outputSettings = [ AVVideoCodecKey : AVVideoCodecJPEG ]
+                self.session.addOutput(imageOutput)
                 self.stillImageOutput = imageOutput
-                self.stillImageOutput.outputSettings = [ AVVideoCodecKey : AVVideoCodecJPEG ]
-                self.session.addOutput(self.stillImageOutput)
             }
         })
     }
