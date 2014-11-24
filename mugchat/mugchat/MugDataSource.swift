@@ -92,7 +92,7 @@ class MugDataSource : BaseDataSource {
             }
             
             if (soundURL != nil) {
-                cacheHandler.saveDataAtPath(soundURL!.absoluteString!, withUrl: mug.soundURL, isTemporary: false)
+                cacheHandler.saveDataAtPath(soundURL!.relativePath!, withUrl: mug.soundURL, isTemporary: false)
             }
             
             createMugSuccess(mug)
