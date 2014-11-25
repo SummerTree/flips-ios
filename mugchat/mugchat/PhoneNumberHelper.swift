@@ -28,12 +28,13 @@ class PhoneNumberHelper {
     class func formatUsingUSInternational(phoneNumber: String) -> String {
         println("Formatting phone = \(phoneNumber)")
         println("Country code \(phoneNumber[0...1])")
-        let countryCode = phoneNumber[0...1]
-        let phoneNumberLength = countElements(phoneNumber)
+        let phone = cleanFormattedPhoneNumber(phoneNumber)
+        let countryCode = phone[0...1]
+        let phoneNumberLength = countElements(phone)
+        
         if (countryCode == "+1" && phoneNumberLength == 12) {
-            return phoneNumber
+            return phone
         } else {
-            let phone = cleanFormattedPhoneNumber(phoneNumber)
             if (countElements(phone) > 10) {
                 return "+1\(phone[0...10])"
             } else {

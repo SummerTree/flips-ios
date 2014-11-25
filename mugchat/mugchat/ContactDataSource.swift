@@ -102,20 +102,18 @@ class ContactDataSource : BaseDataSource {
         }
         return contactsWithSamePhoneNumber
     }
-
-    
     
     
     // MARK: - Private Methods
     
     private func nextContactID() -> Int {
         let contacts = Contact.MR_findAllSortedBy(ContactAttributes.CONTACT_ID, ascending: false)
-        
-        if (contacts.first == nil) {
+        let contact: Contact = contacts.first as Contact
+        if (contacts == nil || contact.contactID == nil) {
             return 0
         }
         
-        var contactID: String = contacts.first!.contactID
+        var contactID: String = contact.contactID
         var nextID: Int = contactID.toInt()!
         return ++nextID
     }
