@@ -119,11 +119,16 @@ class ContactDataSource : BaseDataSource {
         return contactsWithSamePhoneNumber
     }
     
+    func setContactUserAndUpdateContact(user: User!, contact: Contact!) {
+        contact.contactUser = user
+        self.save()
+    }
+    
     
     // MARK: - Private Methods
     
     private func nextContactID() -> Int {
-        let contacts = Contact.MR_findAllSortedBy(ContactAttributes.CONTACT_ID, ascending: false)
+        let contacts = Contact.MR_findAllSortedBy("contactID.intValue", ascending: false)
         let contact: Contact = contacts.first as Contact
         if (contacts == nil || contact.contactID == nil) {
             return 0
