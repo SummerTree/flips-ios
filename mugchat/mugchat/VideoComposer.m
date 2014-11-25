@@ -202,7 +202,7 @@
 
     AVMutableComposition *composition;
 
-    if (flip.soundURL) {
+    if ([flip hasAudio]) {
         NSString *audioPath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.soundURL];
         AVAsset *audioAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:audioPath]];
         composition = [self compositionFromVideoAsset:videoAsset audioAsset:audioAsset];
