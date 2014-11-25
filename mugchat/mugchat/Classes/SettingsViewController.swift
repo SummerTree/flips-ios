@@ -83,8 +83,8 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapImportContacts(settingsView: SettingsView) {
-        let importContactTableViewController = ImportContactsTableViewController()
-        let navigationController = UINavigationController(rootViewController: importContactTableViewController)
+        let importContactViewController = ImportContactViewController()
+        let navigationController = UINavigationController(rootViewController: importContactViewController)
         self.presentViewController(navigationController, animated: true, completion: nil)
     }
     

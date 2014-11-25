@@ -24,10 +24,11 @@ public class UserService: MugchatService {
     let UPDATE_USER_URL: String = "/user/{{user_id}}"
     let IMAGE_COMPRESSION: CGFloat = 0.3
     let UPDATE_PASSWORD_URL: String = "/user/password"
+    let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
     
     public class var sharedInstance : UserService {
-    struct Static {
-        static let instance : UserService = UserService()
+        struct Static {
+            static let instance : UserService = UserService()
         }
         return Static.instance
     }
@@ -40,13 +41,13 @@ public class UserService: MugchatService {
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNUP_URL
         let params = [
-                RequestParams.USERNAME : username,
-                RequestParams.PASSWORD : password,
-                RequestParams.FIRSTNAME : firstName,
-                RequestParams.LASTNAME : lastName,
-                RequestParams.BIRTHDAY : birthday,
-                RequestParams.PHONENUMBER: phoneNumber,
-                RequestParams.NICKNAME : nickname!]
+            RequestParams.USERNAME : username,
+            RequestParams.PASSWORD : password,
+            RequestParams.FIRSTNAME : firstName,
+            RequestParams.LASTNAME : lastName,
+            RequestParams.BIRTHDAY : birthday,
+            RequestParams.PHONENUMBER: phoneNumber,
+            RequestParams.NICKNAME : nickname!]
         
         // first create user
         request.POST(url,
@@ -107,7 +108,7 @@ public class UserService: MugchatService {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FACEBOOK_SIGNIN_URL
-
+        
         request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
         request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.TOKEN)
         
@@ -238,7 +239,7 @@ public class UserService: MugchatService {
     func updatePassword(user: User, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-
+        
         let url = HOST + UPDATE_PASSWORD_URL
         let params = [RequestParams.EMAIL : user.username, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
         
@@ -259,6 +260,53 @@ public class UserService: MugchatService {
     }
     
     
+    // MARK: - Upload contacts
+    
+    func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        var numbers = Array<String>()
+        let contactDatasource = ContactDataSource()
+        let userDatasource = UserDataSource()
+        
+        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
+            for contact in contacts! {
+                if (countElements(contact.phoneNumber) > 0) {
+                    let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
+                    numbers.append(cleanPhone)
+                }
+            }
+            
+            let request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            let url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            
+            var params: Dictionary<String, AnyObject> = [
+                RequestParams.PHONENUMBERS : numbers
+            ]
+            
+            request.POST(url, parameters: params,
+                success: { (operation, responseObject) -> Void in
+                    let response = JSON(responseObject)
+                    for (index, user) in response {
+                        let user = userDatasource.createOrUpdateUserWithJson(user)
+                    }
+                    
+                    success(nil)
+                    
+                }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failure(MugError(error: response["error"] as String!, details:nil))
+                    } else {
+                        failure(MugError(error: error.localizedDescription, details:nil))
+                    }
+               
+            })
+        }, failure: { (error) -> Void in
+            failure(MugError(error: "Error retrieving contacts.", details:nil))
+        })
+    }
+    
+    
     // MARK: - Requests constants
     
     private struct RequestHeaders {
@@ -276,6 +324,7 @@ public class UserService: MugchatService {
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
         static let PHONENUMBER = "phoneNumber"
+        static let PHONENUMBERS = "phoneNumbers"
         static let VERIFICATION_CODE = "verification_code"
         static let PHOTO = "photo"
     }
