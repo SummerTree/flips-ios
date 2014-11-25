@@ -128,19 +128,13 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         super.viewDidAppear(animated)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
-                let contactDataSource = ContactDataSource()
-                self.contactsWithFlipsAccount = contactDataSource.getMyContactsWithFlipsAccount()
-                self.contactsWithoutFlipsAccount = contactDataSource.getMyContactsWithoutFlipsAccount()
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.tableView.reloadData()
-                })
-                
-                }, failure: { (error) -> Void in
-                    println("Couldn't retrieve the contact list.")
+            let contactDataSource = ContactDataSource()
+            self.contactsWithFlipsAccount = contactDataSource.getMyContactsWithFlipsAccount()
+            self.contactsWithoutFlipsAccount = contactDataSource.getMyContactsWithoutFlipsAccount()
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.tableView.reloadData()
             })
-
         })
     }
     

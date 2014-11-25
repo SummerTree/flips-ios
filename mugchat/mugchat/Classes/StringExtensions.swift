@@ -15,7 +15,7 @@ extension String {
     func stringByRemovingStringsIn(array: NSArray) -> String {
         var newString = self
         for stringToDelete in array {
-            newString = newString.stringByReplacingOccurrencesOfString(stringToDelete as String, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
+            newString = newString.stringByReplacingOccurrencesOfString(stringToDelete as String, withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
         return newString
     }
@@ -43,6 +43,10 @@ extension String {
         dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         let date : NSDate? = dateStringFormatter.dateFromString(self)
         return date
+    }
+    
+    func removeWhiteSpaces() -> String! {
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
     
     // Allow to use text[0...5] to get substring

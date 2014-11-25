@@ -75,6 +75,10 @@ class ContactDataSource : BaseDataSource {
         return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
     }
     
+    func getMyContactsWithFlipsAccount() -> [Contact] {
+        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
+    }
+    
     func retrieveContactWithId(id: String) -> Contact {
         var contact = self.getContactById(id)
         
@@ -98,22 +102,18 @@ class ContactDataSource : BaseDataSource {
         }
         return contactsWithSamePhoneNumber
     }
-
-    func getMyContactsWithFlipsAccount() -> [Contact] {
-        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
-    }
     
     
     // MARK: - Private Methods
     
     private func nextContactID() -> Int {
         let contacts = Contact.MR_findAllSortedBy(ContactAttributes.CONTACT_ID, ascending: false)
-        
-        if (contacts.first == nil) {
+        let contact: Contact = contacts.first as Contact
+        if (contacts == nil || contact.contactID == nil) {
             return 0
         }
         
-        var contactID: String = contacts.first!.contactID
+        var contactID: String = contact.contactID
         var nextID: Int = contactID.toInt()!
         return ++nextID
     }
