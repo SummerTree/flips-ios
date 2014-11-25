@@ -173,6 +173,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
         
+        if cell.isPlayingFlip() {
+            cell.stopMovie()
+        }
+        
         let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
         cell.setFlipMessageId(flipId!)
         
@@ -208,6 +212,30 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     
     // MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if self.isCell(cell, totallyVisibleOnView: self) {
+                println("Cell \(cell) is totally visible")
+            } else {
+                if cell.isPlayingFlip() {
+                    cell.stopMovie()
+                }
+            }
+        }
+    }
+    
+    func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
+        var videoContainerView = cell.subviews[0].subviews[0].subviews[0] as UIView // Gets video container view from cell
+        var convertedVideoContainerViewFrame = cell.convertRect(videoContainerView.frame, toView:view)
+        if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
+            return true
+        } else {
+            return false
+        }
+    }
     
 //    func scrollViewDidScroll(scrollView: UIScrollView) {
 //        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()

@@ -224,6 +224,9 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
     }
     
+    func isPlayingFlip() -> Bool {
+        return self.isPlaying
+    }
     
     // MARK: - PlayerViewDelegate
     
