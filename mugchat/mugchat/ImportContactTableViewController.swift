@@ -22,16 +22,16 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     private let EVERYONE_ELSE_SECTION: Int = 1
     
     
-    private var contactsWithFlipsAccount: [Contact]!
-    private var contactsWithoutFlipsAccount: [Contact]!
+    private var contactsIdsWithFlipsAccount: [String]!
+    private var contactsIdsWithoutFlipsAccount: [String]!
     private var contactsOnFlipsHeaderView: UIView!
     private var everyoneElseHeaderView: UIView!
 
     override init() {
         super.init(style: UITableViewStyle.Plain)
         let contactDataSource = ContactDataSource()
-        self.contactsWithoutFlipsAccount = contactDataSource.getMyContactsWithoutFlipsAccount()
-        self.contactsWithFlipsAccount = contactDataSource.getMyContactsWithFlipsAccount()
+        self.contactsIdsWithoutFlipsAccount = contactDataSource.getMyContactsIdsWithoutFlipsAccount()
+        self.contactsIdsWithFlipsAccount = contactDataSource.getMyContactsIdsWithFlipsAccount()
         
         self.contactsOnFlipsHeaderView = createContactsOnFlipsHeaderView()
         self.everyoneElseHeaderView = createEveryoneElseHeaderView()
@@ -126,15 +126,8 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let contactDataSource = ContactDataSource()
-            self.contactsWithFlipsAccount = contactDataSource.getMyContactsWithFlipsAccount()
-            self.contactsWithoutFlipsAccount = contactDataSource.getMyContactsWithoutFlipsAccount()
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.tableView.reloadData()
-            })
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.tableView.reloadData()
         })
     }
     
@@ -166,12 +159,16 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let contactDatasource = ContactDataSource()
         var contact: Contact!
         
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
-            contact = self.contactsWithFlipsAccount[indexPath.row]
+            let contactId = self.contactsIdsWithFlipsAccount[indexPath.row]
+            contact = contactDatasource.retrieveContactWithId(contactId)
+            
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
-            contact = self.contactsWithoutFlipsAccount[indexPath.row]
+            let contactId = self.contactsIdsWithoutFlipsAccount[indexPath.row]
+            contact = contactDatasource.retrieveContactWithId(contactId)
         }
 
         let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
@@ -183,11 +180,11 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (section == CONTACTS_ON_FLIPS_SECTION) {
-            return self.contactsWithFlipsAccount.count
+            return self.contactsIdsWithFlipsAccount.count
         }
         
         if (section == EVERYONE_ELSE_SECTION) {
-            return self.contactsWithoutFlipsAccount.count
+            return self.contactsIdsWithoutFlipsAccount.count
         }
         
         return 0
@@ -196,13 +193,16 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier(CONTACT_TABLE_VIEW_IDENTIFIER) as ContactTableViewCell
         
+        let contactDatasource = ContactDataSource()
         var contact: Contact!
         
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
-            contact = self.contactsWithFlipsAccount[indexPath.row]
+            let contactId = self.contactsIdsWithFlipsAccount[indexPath.row]
+            contact = contactDatasource.retrieveContactWithId(contactId)
             cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
-            contact = self.contactsWithoutFlipsAccount[indexPath.row]
+            let contactId = self.contactsIdsWithoutFlipsAccount[indexPath.row]
+            contact = contactDatasource.retrieveContactWithId(contactId)
         }
         
         cell.contact = contact
