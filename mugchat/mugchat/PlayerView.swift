@@ -57,8 +57,10 @@ class PlayerView: UIView {
     }
 
     func pause() {
-        self.player().pause()
-        self.playing = false
+        if (self.playing) {
+            self.player().pause()
+            self.playing = false
+        }
     }
 
     func setupPlayerWithFlips(flips: Array<Mug>, completion: ((player: AVQueuePlayer)  -> Void)) {

@@ -209,6 +209,11 @@
     } else {
         composition = [self compositionFromVideoAsset:videoAsset];
     }
+    
+    if (!composition) {
+        completion(NO, nil);
+        return;
+    }
 
     AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack withText:flip.word];
 
@@ -429,7 +434,7 @@
 
     if (error) {
         NSLog(@"Could not insert video track: %@", error.localizedDescription);
-        error = nil;
+        return nil;
     }
 
     AVAssetTrack *audioTrack = [self audioTrackFromAsset:audioAsset];
@@ -444,7 +449,7 @@
 
         if (error) {
             NSLog(@"Could not insert audio track: %@", error.localizedDescription);
-            error = nil;
+            return nil;
         }
     }
 
