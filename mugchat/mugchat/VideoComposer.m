@@ -223,7 +223,7 @@
 
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void){
         if (exportSession.status == AVAssetExportSessionStatusFailed) {
-            NSLog(@"Could not create video composition.");
+            NSLog(@"Could not create video composition. Error: %@", exportSession.error.description);
             if (completion) {
                 completion(NO, nil);
             }
