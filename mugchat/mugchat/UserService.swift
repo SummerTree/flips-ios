@@ -285,8 +285,8 @@ public class UserService: MugchatService {
             
             request.POST(url, parameters: params,
                 success: { (operation, responseObject) -> Void in
-                    var response = JSON(responseObject)
-                    
+                    var response:JSON = JSON(responseObject)
+
                     for (index, user) in response {
                         var user = userDatasource.createOrUpdateUserWithJson(user)
                     }
