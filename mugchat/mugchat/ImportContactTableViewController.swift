@@ -1,3 +1,4 @@
+
 //
 // Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
@@ -175,7 +176,6 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         var newFlipViewController = navigationController.topViewController as NewFlipViewController
         newFlipViewController.delegate = self
         self.presentViewController(navigationController, animated: true, completion: nil)
-        
     }
     
     // MARK - UITableViewDataSource
