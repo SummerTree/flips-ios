@@ -107,11 +107,22 @@ class PlayerView: UIView {
         }
     }
 
+    func playerItemWithVideoAsset(videoAsset: AVAsset) -> FlipPlayerItem {
+        let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"videoQueueEnded:",
+            name:AVPlayerItemDidPlayToEndTimeNotification, object:playerItem)
+
+        return playerItem
+    }
+
     func videoQueueEnded(notification: NSNotification) {
         delegate?.playerViewDidFinishPlayback(self)
         
-        let playerItem: FlipPlayerItem = notification.object as FlipPlayerItem
         let player: AVQueuePlayer = self.player() as AVQueuePlayer
+        let playerItem: FlipPlayerItem = notification.object as FlipPlayerItem
+        let clonePlayerItem: FlipPlayerItem = self.playerItemWithVideoAsset(playerItem.asset)
+        clonePlayerItem.order = playerItem.order
 
         // Set next item's word
         let wordIndex = (playerItem.order + 1) % self.words.count
@@ -124,15 +135,17 @@ class PlayerView: UIView {
 			if self.playing {
             	self.setWord(self.words[wordIndex])
 
-				if (self.words.count > 1) {
-                	player.removeItem(playerItem)
-					player.insertItem(playerItem, afterItem: nil)
-					} else {
-						player.seekToTime(kCMTimeZero)
-					}
+                if (self.words.count > 1) {
+                    player.removeItem(playerItem)
+                    NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
 
-					player.play()
-				}
+                    player.insertItem(clonePlayerItem, afterItem: nil)
+                } else {
+                    player.seekToTime(kCMTimeZero)
+                }
+                
+                player.play()
+            }
         }
     }
 
