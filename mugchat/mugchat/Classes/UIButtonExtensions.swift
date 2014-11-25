@@ -12,9 +12,6 @@
 
 import AssetsLibrary
 
-let GALLERY_BUTTON_IMAGE_WIDTH : CGFloat = 100.0
-let GALLERY_BUTTON_IMAGE_HEIGHT : CGFloat = 100.0
-let FILTER_PHOTO_IMAGE : UIImage = UIImage(named: "Filter_Photo")!
 
 extension UIButton {
     
@@ -59,38 +56,6 @@ extension UIButton {
     }
     
     func setLastCameraPhotoAsButtonImage() {
-        
-        var assetLib = ALAssetsLibrary()
-        var lastImage = UIImage?()
-        
-        assetLib.enumerateGroupsWithTypes(ALAssetsGroupType(ALAssetsGroupSavedPhotos), usingBlock: { (group: ALAssetsGroup!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-            if group != nil {
-                group!.setAssetsFilter(ALAssetsFilter.allPhotos())
-                if group!.numberOfAssets() > 0 {
-                    group!.enumerateAssetsAtIndexes(NSIndexSet(index: group!.numberOfAssets()-1), options: NSEnumerationOptions.Concurrent, usingBlock: { (result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-                        if result != nil {
-                            var assetRep: ALAssetRepresentation = result.defaultRepresentation()
-                            var iref = assetRep.fullScreenImage().takeUnretainedValue()
-                            lastImage = UIImage(CGImage: iref)!.resizedImageWithWidth(GALLERY_BUTTON_IMAGE_WIDTH, andHeight: GALLERY_BUTTON_IMAGE_HEIGHT)
-                            self.setImage(lastImage, forState: .Normal)
-                        } else {
-                            if lastImage == nil {
-                                self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
-                            }
-                        }
-                    })
-                } else {
-                    self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
-                }
-            } else {
-                if lastImage == nil {
-                    self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
-                }            }
-            }, failureBlock: { (error: NSError!) -> Void in
-                if lastImage == nil {
-                    self.setImage(FILTER_PHOTO_IMAGE, forState: .Normal)
-                }
-                println(error)
-        })
+        GalleryAssetsHelper.sharedInstance.addThumbnailToButton(self)
     }
 }

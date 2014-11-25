@@ -109,6 +109,7 @@
 		7A3733C919FADDE800D1E87B /* MugService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* MugService.swift */; };
 		7A3733DD19FE619300D1E87B /* MugMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */; };
 		7A41CFA11A051EE100746423 /* MugMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A41CFA01A051EE100746423 /* MugMessage.m */; };
+		7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
 		7A8A86381A1D1F9E00CB0B31 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */; };
@@ -301,6 +302,7 @@
 		7A3733DC19FE619300D1E87B /* MugMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugMessageExtension.swift; sourceTree = "<group>"; };
 		7A41CF9F1A051EE100746423 /* MugMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MugMessage.h; path = "Classes/auto-generated/MugMessage.h"; sourceTree = "<group>"; };
 		7A41CFA01A051EE100746423 /* MugMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MugMessage.m; path = "Classes/auto-generated/MugMessage.m"; sourceTree = "<group>"; };
+		7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryAssetsHelper.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
 		7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
@@ -539,6 +541,7 @@
 				7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */,
 				70577C751A13AECF0006B1FD /* ContactListHelper.swift */,
 				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
+				7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1348,6 +1351,7 @@
 				705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
 				7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */,
+				7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */,
 				7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */,
 				7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */,
 				7ACBBEC91A0026DF00A7109C /* MugExtension.swift in Sources */,

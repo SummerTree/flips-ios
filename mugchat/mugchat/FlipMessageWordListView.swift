@@ -155,6 +155,17 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         self.centerScrollViewAtView(mugTextViews[centeredWordIndex!], animated: animated)
     }
     
+    func updataWordState() {
+        if (mugTextViews.count > 0) {
+            for flipText in mugTextViews {
+                flipText.updateLayout()
+            }
+            
+            let centeredWordIndex = dataSource?.flipMessageWordListViewHighlightedWordIndex(self)
+            self.centerScrollViewAtView(mugTextViews[centeredWordIndex!], animated: true)
+        }
+    }
+    
     func showPlusButton() {
         addWordButton.hidden = false
     }
