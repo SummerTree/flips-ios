@@ -275,9 +275,9 @@ public class UserService: MugchatService {
                 }
             }
             
-            let request = AFHTTPRequestOperationManager()
+            var request = AFHTTPRequestOperationManager()
             request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-            let url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
             
             var params: Dictionary<String, AnyObject> = [
                 RequestParams.PHONENUMBERS : numbers
@@ -285,16 +285,17 @@ public class UserService: MugchatService {
             
             request.POST(url, parameters: params,
                 success: { (operation, responseObject) -> Void in
-                    let response = JSON(responseObject)
+                    var response = JSON(responseObject)
+                    
                     for (index, user) in response {
-                        let user = userDatasource.createOrUpdateUserWithJson(user)
+                        var user = userDatasource.createOrUpdateUserWithJson(user)
                     }
                     
                     success(nil)
                     
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
+                        var response = operation.responseObject as NSDictionary
                         failure(MugError(error: response["error"] as String!, details:nil))
                     } else {
                         failure(MugError(error: error.localizedDescription, details:nil))
