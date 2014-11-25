@@ -94,6 +94,22 @@ public class CacheHandler : NSObject {
         return filePath
     }
     
+    func getFilePathForUrlFromAnyFolder(url: String) -> String? {
+        let fileManager = NSFileManager.defaultManager()
+        
+        var filePath = self.getFilePathForUrl(url, isTemporary: false)
+        if (fileManager.fileExistsAtPath(filePath)) {
+            return filePath
+        }
+        
+        filePath = self.getFilePathForUrl(url, isTemporary: true)
+        if (fileManager.fileExistsAtPath(filePath)) {
+            return filePath
+        }
+        
+        return nil
+    }
+    
     private func getFormatedUrl(url: String) -> String {
         return url.lastPathComponent
     }
@@ -129,7 +145,7 @@ public class CacheHandler : NSObject {
     }
     
     func saveDataAtPath(dataPath: String, withUrl url: String, isTemporary: Bool = true) -> String {
-        let data = NSData(contentsOfURL: NSURL(string: dataPath)!)
+        let data = NSData(contentsOfURL: NSURL(fileURLWithPath: dataPath)!)
         return self.save(data!, withUrl: url, isTemporary: isTemporary)
     }
     

@@ -37,6 +37,8 @@
 
 - (NSArray *)videoPartsFromFlips:(NSArray *)flips
 {
+    [self precacheAssetsFromFlips:flips];
+
     NSMutableArray *messageParts = [NSMutableArray array];
 
     for (Mug *flip in flips) {
@@ -48,6 +50,37 @@
     }
 
     return [NSArray arrayWithArray:messageParts];
+}
+
+- (void)precacheAssetsFromFlips:(NSArray *)flips
+{
+    CachingService *cachingService = [CachingService sharedInstance];
+    dispatch_group_t cachingGroup = dispatch_group_create();
+
+    for (Mug *flip in flips) {
+        if ([flip hasBackground]) {
+            dispatch_group_enter(cachingGroup);
+
+            [cachingService cachedFilePathForURL:[NSURL URLWithString:flip.backgroundURL]
+                                      completion:^(NSURL *localFileURL) {
+                                          dispatch_group_leave(cachingGroup);
+                                      }];
+        }
+
+        if ([flip hasAudio]) {
+            dispatch_group_enter(cachingGroup);
+
+            [cachingService cachedFilePathForURL:[NSURL URLWithString:flip.soundURL]
+                                      completion:^(NSURL *localFileURL) {
+                                          dispatch_group_leave(cachingGroup);
+                                      }];
+        }
+        
+
+    }
+
+    // Timeout is number of flips times 30 seconds
+    dispatch_group_wait(cachingGroup, dispatch_time(DISPATCH_TIME_NOW, flips.count * 30 * NSEC_PER_SEC));
 }
 
 - (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage
@@ -155,10 +188,11 @@
 - (void)prepareVideoAssetFromFlip:(Mug *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
 {
     NSURL *videoURL;
+    CacheHandler *cacheHandler = [CacheHandler sharedInstance];
 
     if ([flip isBackgroundContentTypeVideo]) {
-        //    NSString *backgroundContentLocalPath = [mug backgroundContentLocalPath];
-        videoURL = [NSURL URLWithString:flip.backgroundURL];
+        NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
+        videoURL = [NSURL fileURLWithPath:filePath];
     } else {
         videoURL = [NSURL fileURLWithPath:[ImageVideoCreator videoPathForMug:flip]];
     }
@@ -169,7 +203,8 @@
     AVMutableComposition *composition;
 
     if (flip.soundURL) {
-        AVAsset *audioAsset = [AVAsset assetWithURL:[NSURL URLWithString:flip.soundURL]];
+        NSString *audioPath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.soundURL];
+        AVAsset *audioAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:audioPath]];
         composition = [self compositionFromVideoAsset:videoAsset audioAsset:audioAsset];
     } else {
         composition = [self compositionFromVideoAsset:videoAsset];

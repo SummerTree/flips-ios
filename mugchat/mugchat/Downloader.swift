@@ -47,26 +47,26 @@ public class Downloader : NSObject {
     private func downloadDataAndCacheForUrl(urlString: String, withCompletion completion: DownloadFinished, isTemporary: Bool = true) {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         let manager = AFURLSessionManager(sessionConfiguration: configuration)
-
-        downloadInProgressURLs.addObject(urlString)
+        
+        self.downloadInProgressURLs.addObject(urlString)
         
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
-        request.timeoutInterval = TIME_OUT_INTERVAL
+        request.timeoutInterval = self.TIME_OUT_INTERVAL
         
         var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
             let path = CacheHandler.sharedInstance.getFilePathForUrl(urlString, isTemporary: isTemporary)
             return NSURL(fileURLWithPath: path)
-        }) { (response, filePath, error) -> Void in
-            self.downloadInProgressURLs.removeObject(urlString)
-            
-            if let httpResponse = response as? NSHTTPURLResponse {
-                if let contentType = httpResponse.allHeaderFields["Content-Type"] as? NSString {
-                    completion(self.backgroundTypeForContentType(contentType), error)
+            }) { (response, filePath, error) -> Void in
+                self.downloadInProgressURLs.removeObject(urlString)
+                
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    if let contentType = httpResponse.allHeaderFields["Content-Type"] as? NSString {
+                        completion(self.backgroundTypeForContentType(contentType), error)
+                    }
+                } else {
+                    completion(self.backgroundTypeForContentType(""), error)
                 }
-            } else {
-                completion(self.backgroundTypeForContentType(""), error)
-            }
         }
         
         downloadTask.resume()
@@ -103,26 +103,35 @@ public class Downloader : NSObject {
     }
 
     func downloadDataForMug(mug: Mug, isTemporary: Bool = true) {
-        if (self.isValidURL(mug.backgroundURL) && (!downloadInProgressURLs.containsObject(mug.backgroundURL))) {
-            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.backgroundURL).hasCache) {
-                self.downloadDataAndCacheForUrl(mug.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                    mug.setBackgroundContentType(backgroundContentType)
-                    self.sendDownloadFinishedBroadcastForMug(mug, error: error)
-                }, isTemporary: isTemporary)
-            } else {
-                self.sendDownloadFinishedBroadcastForMug(mug, error: nil)
+        dispatch_async(dispatch_queue_create("download mug queue", nil), { () -> Void in
+            var group = dispatch_group_create()
+            
+            var downloadError: NSError?
+            if (self.isValidURL(mug.backgroundURL) && (!self.downloadInProgressURLs.containsObject(mug.backgroundURL))) {
+                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.backgroundURL).hasCache) {
+                    dispatch_group_enter(group)
+                    self.downloadDataAndCacheForUrl(mug.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                        mug.setBackgroundContentType(backgroundContentType)
+                        downloadError = error
+                        dispatch_group_leave(group);
+                        }, isTemporary: isTemporary)
+                }
             }
-        }
-        
-        if (self.isValidURL(mug.soundURL) && (!downloadInProgressURLs.containsObject(mug.soundURL))) {
-            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.soundURL).hasCache) {
-                self.downloadDataAndCacheForUrl(mug.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                    self.sendDownloadFinishedBroadcastForMug(mug, error: error)
-                }, isTemporary: isTemporary)
-            } else {
-                self.sendDownloadFinishedBroadcastForMug(mug, error: nil)
+            
+            if (self.isValidURL(mug.soundURL) && (!self.downloadInProgressURLs.containsObject(mug.soundURL))) {
+                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.soundURL).hasCache) {
+                    dispatch_group_enter(group)
+                    self.downloadDataAndCacheForUrl(mug.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                        downloadError = error
+                        dispatch_group_leave(group);
+                        }, isTemporary: isTemporary)
+                }
             }
-        }
+            
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            
+            self.sendDownloadFinishedBroadcastForMug(mug, error: downloadError)
+        })
     }
     
     private func sendDownloadFinishedBroadcastForMug(mug: Mug, error: NSError?) {
