@@ -46,7 +46,7 @@ extension String {
     }
     
     func removeWhiteSpaces() -> String! {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        return self.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch)
     }
     
     // Allow to use text[0...5] to get substring
