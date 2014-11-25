@@ -20,7 +20,7 @@ class ConversationTableViewCell : UITableViewCell {
     private let DRAG_ANIMATION_DURATION = 0.25
     private let DELETE_BUTTON_WIDTH = 110.0
     
-    private var room: Room!
+    private var roomId: String!
     
     private var mugImageView : UIImageView!
     private var userImageView : RoundImageView!
@@ -151,21 +151,30 @@ class ConversationTableViewCell : UITableViewCell {
         }
     }
     
-    func setRoom(room: Room) {
-        self.room = room
-        self.layoutMessageInfo()
-        self.layoutParticipantsNames()
-        self.layoutNumberOfNotReadMessages()
+    func setRoomId(roomId: String) {
+        self.roomId = roomId
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let roomDataSource = RoomDataSource()
+            var room = roomDataSource.retrieveRoomWithId(roomId)
+            
+            self.layoutMessageInfo(room)
+            self.layoutParticipantsNames(room)
+            self.layoutNumberOfNotReadMessages(room)
+        })
     }
     
     
     // MARK: - Cell Layout Methods
     
-    private func layoutParticipantsNames() {
-        participantsNamesLabel.text = room.roomName()
+    private func layoutParticipantsNames(room: Room) {
+        let roomName = room.roomName()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.participantsNamesLabel.text = roomName
+        })
     }
     
-    private func layoutMessageInfo() {
+    private func layoutMessageInfo(room: Room) {
         // All conversations should be sorted in the inbox by the above time stamp, with most recent at the top, and oldest at the bottom.
         
         let mugMessageDataSource = MugMessageDataSource()
@@ -175,36 +184,45 @@ class ConversationTableViewCell : UITableViewCell {
         if (mugMessage == nil) {
             mugMessage = room.mugMessagesNotRemoved().lastObject as? MugMessage
         }
-        
+
         if (mugMessage != nil) {
-            mugImageView.image = mugMessage!.messageThumbnail()?
-            
-            // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
-            var photoURL = NSURL(string: mugMessage!.from.photoURL)
-            userImageView.setImageWithURL(photoURL)
-            
-            if (mugMessage!.notRead.boolValue) {
-                // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
-                mugMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
-            } else {
-                mugMessageLabel.text = mugMessage!.messagePhrase()
-            }
-            
+            let messageThumbnailImage = mugMessage!.messageThumbnail()?
+            let photoURL = NSURL(string: mugMessage!.from.photoURL)
+            let isMessageNotRead = mugMessage!.notRead.boolValue
+            let messagePhrase = mugMessage!.messagePhrase()
             // The time stamp should reflect the time sent of the oldest unread message in the conversation
             let formatedDate = DateHelper.formatDateToApresentationFormat(mugMessage!.createdAt)
-            mugTimeLabel.text = formatedDate
-            mugTimeLabel.sizeToFit()
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.mugImageView.image = messageThumbnailImage
+                
+                // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
+                self.userImageView.setImageWithURL(photoURL)
+                
+                if (isMessageNotRead) {
+                    // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
+                    self.mugMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
+                } else {
+                    self.mugMessageLabel.text = messagePhrase
+                }
+                
+                self.mugTimeLabel.text = formatedDate
+                self.mugTimeLabel.sizeToFit()
+                
+            })
         }
     }
     
-    private func layoutNumberOfNotReadMessages() {
+    private func layoutNumberOfNotReadMessages(room: Room) {
         // The unread badge count over the avatar should reflect the count of the total number of unread messages in the conversation
         let numberOfNotReadMessages = room.numberOfUnreadMessages()
-        if (numberOfNotReadMessages == 0) {
-            badgeView.hidden = true
-        } else {
-            badgeView.hidden = false
-            badgeView.setBagdeValue("\(numberOfNotReadMessages)")
-        }
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if (numberOfNotReadMessages == 0) {
+                self.badgeView.hidden = true
+            } else {
+                self.badgeView.hidden = false
+                self.badgeView.setBagdeValue("\(numberOfNotReadMessages)")
+            }
+        })
     }
 }

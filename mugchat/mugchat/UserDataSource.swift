@@ -74,12 +74,21 @@ class UserDataSource : BaseDataSource {
         
         user.firstName = json[UserJsonParams.FIRST_NAME].stringValue
         user.lastName = json[UserJsonParams.LAST_NAME].stringValue
-        user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
         user.nickname = json[UserJsonParams.NICKNAME].stringValue
-        user.facebookID = json[UserJsonParams.FACEBOOK_ID].stringValue
         user.photoURL = json[UserJsonParams.PHOTO_URL].stringValue
-        user.pubnubID = json[UserJsonParams.PUBNUB_ID].stringValue
         user.phoneNumber = json[UserJsonParams.PHONE_NUMBER].stringValue
+        
+        if (json[UserJsonParams.BIRTHDAY].stringValue != "") {
+            user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
+        }
+        
+        if (json[UserJsonParams.FACEBOOK_ID].stringValue != "") {
+            user.facebookID = json[UserJsonParams.FACEBOOK_ID].stringValue
+        }
+        
+        if (json[UserJsonParams.PUBNUB_ID].stringValue != "") {
+            user.pubnubID = json[UserJsonParams.PUBNUB_ID].stringValue
+        }
     }
     
     

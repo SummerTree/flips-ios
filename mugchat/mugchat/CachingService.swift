@@ -35,27 +35,28 @@ public class CachingService: NSObject {
 
     public func cachedFilePathForURL(url: NSURL, completion: ((url: NSURL?) -> Void)) {
         let fileManager = NSFileManager.defaultManager()
-        var cachedURL : NSURL?
 
         // Check if there is an already cached copy
         if (self.cacheHandler.hasCachedFileForUrl(url.relativePath!).hasCache) {
-            cachedURL = NSURL(string:self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
+            var localPath = self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true)
 
-            if (fileManager.fileExistsAtPath(cachedURL!.relativePath!)) {
-                completion(url: cachedURL!)
-                return;
+            if (fileManager.fileExistsAtPath(localPath)) {
+                completion(url: NSURL(fileURLWithPath:localPath)!)
+                return
             }
 
-            cachedURL = NSURL(string:self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: false))
+            localPath = self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: false)
 
-            if (fileManager.fileExistsAtPath(cachedURL!.relativePath!)) {
-                completion(url: cachedURL!)
-                return;
+            if (fileManager.fileExistsAtPath(localPath)) {
+                completion(url: NSURL(fileURLWithPath:localPath)!)
+                return
             }
         }
 
+        var localPath = self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true)
+
         // No cached version could be found. Fetch from original source to temp file
-        cachedURL = NSURL(string:self.cacheHandler.getFilePathForUrl(url.relativePath!, isTemporary: true))
+        var cachedURL : NSURL? = NSURL(fileURLWithPath: localPath)
 
         self.downloader.downloadDataFromURL(url,
             localURL: cachedURL!,
