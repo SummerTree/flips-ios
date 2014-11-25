@@ -225,6 +225,8 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             
             if (shouldReloadWords) {
                 self.flipMessageWordListView.reloadWords()
+            } else {
+                self.flipMessageWordListView.updateWordState()
             }
             
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
@@ -313,7 +315,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     private func moveToNextFlipWord() {
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
-            self.showContentForHighlightedWord()
+            self.showContentForHighlightedWord(shouldReloadWords: false)
             if (self.shouldShowPreviewButton()) {
                 // self.openPreview() TODO: it was not working.
             } else {
@@ -322,7 +324,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         } else {
             self.highlightedWordIndex = nextIndex
             let flipWord = self.flipWords[self.highlightedWordIndex]
-            self.showContentForHighlightedWord()
+            self.showContentForHighlightedWord(shouldReloadWords: false)
         }
     }
     
