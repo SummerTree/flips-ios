@@ -91,12 +91,12 @@ class ContactDataSource : BaseDataSource {
 
     func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [Contact] {
         let contacts = Contact.findAll() as [Contact]
-        let cleannedPhoneNumber = PhoneNumberHelper.cleanFormattedPhoneNumber(phoneNumber)
+        let cleannedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
         
         var contactsWithSamePhoneNumber = Array<Contact>()
         for contact in contacts {
             var contactPhoneNumber = contact.phoneNumber as String!
-            if (PhoneNumberHelper.cleanFormattedPhoneNumber(contactPhoneNumber) == cleannedPhoneNumber) {
+            if (PhoneNumberHelper.formatUsingUSInternational(contactPhoneNumber) == cleannedPhoneNumber) {
                contactsWithSamePhoneNumber.append(contact)
             }
         }

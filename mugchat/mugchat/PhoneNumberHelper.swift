@@ -29,13 +29,14 @@ class PhoneNumberHelper {
         
         if (countryCode == "+1" && phoneNumberLength == 12) {
             return phone
+        } else if (phoneNumberLength == 10) {
+            let intPhone = phone[0...9]
+            return "+1\(intPhone)"
+        } else if (phoneNumberLength == 11) {
+            let intPhone = phone[0...10]
+            return "+\(intPhone)"
         } else {
-            if (countElements(phone) > 10) {
-                return "+1\(phone[0...10])"
-            } else {
-                return phone
-            }
+            return phone
         }
-        
     }
 }
