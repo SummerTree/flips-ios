@@ -371,6 +371,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.nextButton.hidden = true
     }
     
+    func clearReplyTextField() {
+        self.replyTextField.text = ""
+    }
+    
     
     // MARK: - Notifications
     

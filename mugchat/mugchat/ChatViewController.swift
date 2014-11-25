@@ -131,5 +131,6 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     
     func composeViewControllerDidSendMessage(viewController: ComposeViewController) {
         self.navigationController?.popToViewController(self, animated: true)
+        self.chatView.clearReplyTextField()
     }
 }
