@@ -23,6 +23,7 @@
 #import <PubNub/PNImports.h>
 #import "MBContactPicker.h"
 #import "UIImage+ImageEffects.h"
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "AVCamPreviewView.h"
 
 #define MR_SHORTHAND

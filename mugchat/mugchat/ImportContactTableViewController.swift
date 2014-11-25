@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class ImportContactsTableViewController: UITableViewController, UITableViewDelegate, UITableViewDataSource {
+class ImportContactsTableViewController: UITableViewController, NewFlipViewControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     private let CONTACT_TABLE_VIEW_IDENTIFIER: String! = "ContactTableViewCell"
     private let IMPORT_CONTACTS_TIMEOUT: dispatch_time_t = 10
@@ -172,6 +172,8 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         }
 
         let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
+        var newFlipViewController = navigationController.topViewController as NewFlipViewController
+        newFlipViewController.delegate = self
         self.presentViewController(navigationController, animated: true, completion: nil)
         
     }
@@ -207,5 +209,12 @@ class ImportContactsTableViewController: UITableViewController, UITableViewDeleg
         
         cell.contact = contact
         return cell
+    }
+    
+    
+    // MARK: - NewFlipViewControllerDelegate
+    
+    func newFlipViewControllerDidSendMessage(viewController: NewFlipViewController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

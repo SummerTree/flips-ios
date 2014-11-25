@@ -16,16 +16,21 @@ import CoreData
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    private let BUGSENSE_KEY = "2b57f78e"
+    
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        // Registering for BugSense
+        Mint.sharedInstance().initAndStartSession(BUGSENSE_KEY)
         
         // Registering for receive messages
         MessageReceiver.sharedInstance.startListeningMessages()
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        //CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
+//        CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
         CoreDataHandler.sharedInstance.setupDatabase()
 
         let splashScreenViewController = SplashScreenViewController()
