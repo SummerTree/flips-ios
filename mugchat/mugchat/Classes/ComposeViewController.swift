@@ -226,7 +226,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             if (shouldReloadWords) {
                 self.flipMessageWordListView.reloadWords()
             } else {
-                self.flipMessageWordListView.updataWordState()
+                self.flipMessageWordListView.updateWordState()
             }
             
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)

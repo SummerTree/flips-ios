@@ -155,7 +155,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         self.centerScrollViewAtView(mugTextViews[centeredWordIndex!], animated: animated)
     }
     
-    func updataWordState() {
+    func updateWordState() {
         if (mugTextViews.count > 0) {
             for flipText in mugTextViews {
                 flipText.updateLayout()
