@@ -26,8 +26,6 @@ class PhoneNumberHelper {
     }
     
     class func formatUsingUSInternational(phoneNumber: String) -> String {
-        println("Formatting phone = \(phoneNumber)")
-        println("Country code \(phoneNumber[0...1])")
         let phone = cleanFormattedPhoneNumber(phoneNumber)
         let countryCode = phone[0...1]
         let phoneNumberLength = countElements(phone)

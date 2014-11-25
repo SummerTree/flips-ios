@@ -122,7 +122,7 @@ class ContactDataSource : BaseDataSource {
         return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id) as? Contact
     }
     
-    func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
+    private func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
         var predicateValue = ""
         
         if (firstName != nil) {
