@@ -62,7 +62,11 @@ extension MugMessage {
                 cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstMug!.backgroundURL)
             }
         } else if (firstMug!.isBackgroundContentTypeVideo()) {
-            // TODO:
+            let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstMug!.backgroundURL)
+            if (videoPath != nil) {
+                let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!)
+                cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstMug!.backgroundURL)
+            }
         }
     }
     
