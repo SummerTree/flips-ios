@@ -85,14 +85,16 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     // MARK: - Room Handlers
     
     private func refreshRooms() {
-        roomIds.removeAll(keepCapacity: false)
-        
-        let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
-        for room in rooms {
-            roomIds.append(room.roomID)
-        }
-        
-        inboxView.setRoomIds(roomIds)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            self.roomIds.removeAll(keepCapacity: false)
+            
+            let rooms = self.roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
+            for room in rooms {
+                self.roomIds.append(room.roomID)
+            }
+            
+            self.inboxView.setRoomIds(self.roomIds)
+        })
     }
     
     
@@ -114,8 +116,11 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     
     // MARK: - NewFlipViewControllerDelegate
     
-    func newFlipViewControllerDidSendMessage(viewController: NewFlipViewController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String) {
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            let room = self.roomDataSource.retrieveRoomWithId(roomID)
+            self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+        })
     }
 }
 

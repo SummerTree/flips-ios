@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias SendMessageCompletion = (Bool, MugError?) -> Void
+public typealias SendMessageCompletion = (Bool, String?, MugError?) -> Void
 
 public class MessageService {
     
@@ -53,7 +53,7 @@ public class MessageService {
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
         
         if (error != nil) {
-            completion(false, error)
+            completion(false, nil, error)
             return
         }
         
@@ -78,7 +78,7 @@ public class MessageService {
         let messageJson = flipMessage.toJSON()
         
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
-            completion(success, nil)
+            completion(success, roomID, nil)
         }
     }
 }

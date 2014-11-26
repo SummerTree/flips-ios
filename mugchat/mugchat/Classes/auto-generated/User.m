@@ -31,11 +31,12 @@
 @dynamic pubnubID;
 @dynamic userID;
 @dynamic username;
+@dynamic isTemporary;
+@dynamic adminRooms;
+@dynamic contacts;
 @dynamic device;
 @dynamic mugs;
 @dynamic mugsSent;
 @dynamic rooms;
-@dynamic contacts;
-@dynamic adminRooms;
 
 @end

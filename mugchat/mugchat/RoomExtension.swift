@@ -74,9 +74,34 @@ extension Room {
     func roomName() -> String {
         var roomName = ""
         var comma = ""
-        for participant in self.participants {
+        
+        let nameDescriptor = NSSortDescriptor(key: "firstName", ascending: true)
+        let lastNameDescriptor = NSSortDescriptor(key: "firstName", ascending: true)
+        let phoneNumberDescriptor = NSSortDescriptor(key: "phoneNumber", ascending: true)
+        var sortedParticipants = self.participants.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
+        
+        for participant in sortedParticipants {
             if (participant.userID != AuthenticationHelper.sharedInstance.userInSession.userID) {
-                roomName = "\(roomName)\(comma)\(participant.firstName)"
+                var userFirstName = participant.firstName
+                if (participant.isTemporary!.boolValue) {
+                    if let phoneNumber = participant.phoneNumber {
+                        userFirstName = phoneNumber!
+                    }
+                    
+                    if let contacts = participant.contacts {
+                        if (contacts.count > 0) {
+                            var contact = contacts.allObjects[0] as Contact
+                            if (contact.firstName != "") {
+                                userFirstName = contact.firstName
+                            } else if (contact.lastName != "") {
+                                userFirstName = contact.lastName
+                            } else if (contact.phoneNumber != "") {
+                                userFirstName = contact.phoneNumber
+                            }
+                        }
+                    }
+                }
+                roomName = "\(roomName)\(comma)\(userFirstName)"
                 comma = ", "
             }
         }

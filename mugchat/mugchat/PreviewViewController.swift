@@ -142,11 +142,11 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
                 })
             } else {
                 // SEND MESSAGE
-                let completionBlock: SendMessageCompletion = { (success, flipError) -> Void in
+                let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.hideActivityIndicator()
                         if (success) {
-                            self.delegate?.previewViewControllerDidSendMessage(self)
+                            self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
                         } else {
                             var message = self.SEND_MESSAGE_ERROR_MESSAGE
                             if (flipError != nil) {
@@ -185,6 +185,6 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
 
 protocol PreviewViewControllerDelegate {
     
-    func previewViewControllerDidSendMessage(viewController: PreviewViewController)
+    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String)
     
 }

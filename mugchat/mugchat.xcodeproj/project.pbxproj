@@ -163,8 +163,8 @@
 		7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719A19FFBF1B002695AC /* Downloader.swift */; };
 		7AFB719E1A000537002695AC /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719D1A000537002695AC /* Device.m */; };
 		7AFB71A11A00053C002695AC /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71A01A00053C002695AC /* Room.m */; };
-		7AFB71A41A00053C002695AC /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71A31A00053C002695AC /* User.m */; };
 		7AFB71AD1A00053D002695AC /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB71AC1A00053D002695AC /* Contact.m */; };
+		7AFD33411A26446C00E2AAFA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD33401A26446C00E2AAFA /* User.m */; };
 		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
 		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
@@ -366,10 +366,10 @@
 		7AFB719D1A000537002695AC /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Device.m; path = "Classes/auto-generated/Device.m"; sourceTree = "<group>"; };
 		7AFB719F1A00053C002695AC /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Room.h; path = "Classes/auto-generated/Room.h"; sourceTree = "<group>"; };
 		7AFB71A01A00053C002695AC /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Room.m; path = "Classes/auto-generated/Room.m"; sourceTree = "<group>"; };
-		7AFB71A21A00053C002695AC /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = "Classes/auto-generated/User.h"; sourceTree = "<group>"; };
-		7AFB71A31A00053C002695AC /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = "Classes/auto-generated/User.m"; sourceTree = "<group>"; };
 		7AFB71AB1A00053D002695AC /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Contact.h; path = "Classes/auto-generated/Contact.h"; sourceTree = "<group>"; };
 		7AFB71AC1A00053D002695AC /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Contact.m; path = "Classes/auto-generated/Contact.m"; sourceTree = "<group>"; };
+		7AFD333F1A26446C00E2AAFA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = "Classes/auto-generated/User.h"; sourceTree = "<group>"; };
+		7AFD33401A26446C00E2AAFA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = "Classes/auto-generated/User.m"; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
@@ -1002,16 +1002,16 @@
 			children = (
 				7AFB71AB1A00053D002695AC /* Contact.h */,
 				7AFB71AC1A00053D002695AC /* Contact.m */,
+				7AFB719C1A000537002695AC /* Device.h */,
+				7AFB719D1A000537002695AC /* Device.m */,
 				7A41CF9F1A051EE100746423 /* MugMessage.h */,
 				7A41CFA01A051EE100746423 /* MugMessage.m */,
 				7ACBBECD1A00290B00A7109C /* Mug.h */,
 				7ACBBECE1A00290B00A7109C /* Mug.m */,
-				7AFB71A21A00053C002695AC /* User.h */,
-				7AFB71A31A00053C002695AC /* User.m */,
 				7AFB719F1A00053C002695AC /* Room.h */,
 				7AFB71A01A00053C002695AC /* Room.m */,
-				7AFB719C1A000537002695AC /* Device.h */,
-				7AFB719D1A000537002695AC /* Device.m */,
+				7AFD333F1A26446C00E2AAFA /* User.h */,
+				7AFD33401A26446C00E2AAFA /* User.m */,
 			);
 			name = "auto-generated";
 			sourceTree = "<group>";
@@ -1389,6 +1389,7 @@
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
 				7AE044FE1A0CE49C00C68313 /* VideoHelper.swift in Sources */,
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
+				7AFD33411A26446C00E2AAFA /* User.m in Sources */,
 				F29324711A1583B700355A4D /* PlayerView.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */,
@@ -1434,7 +1435,6 @@
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
-				7AFB71A41A00053C002695AC /* User.m in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
