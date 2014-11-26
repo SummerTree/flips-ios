@@ -45,4 +45,6 @@
 #import "RHPerson.h"
 #import "RHPersonLabels.h"
 
+#import "SwiftTryCatch.h"
+
 #endif

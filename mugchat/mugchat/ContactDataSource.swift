@@ -148,15 +148,15 @@ class ContactDataSource : BaseDataSource {
         
         if (firstName != nil) {
             var value = firstName!
-            predicateValue = "(\(ContactAttributes.FIRST_NAME) == '\(value)')"
+            predicateValue = "(\(ContactAttributes.FIRST_NAME) == \"\(value)\")"
         }
         
         if (lastName != nil) {
             var value = lastName!
             if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.LAST_NAME) == '\(value)')"
+                predicateValue = "(\(ContactAttributes.LAST_NAME) == \"\(value)\")"
             } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.LAST_NAME) == '\(value)')"
+                predicateValue = "\(predicateValue) AND (\(ContactAttributes.LAST_NAME) == \"\(value)\")"
             }
         }
         

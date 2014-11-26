@@ -288,7 +288,13 @@ public class UserService: MugchatService {
                     var response:JSON = JSON(responseObject)
 
                     for (index, user) in response {
-                        var user = userDatasource.createOrUpdateUserWithJson(user)
+                        SwiftTryCatch.try({ () -> Void in
+                            println("Trying to import: \(user)")
+                            var user = userDatasource.createOrUpdateUserWithJson(user)
+                        }, catch: { (error) -> Void in
+                            println("Error: [\(error))")
+                        }, finally: nil)
+                        
                     }
                     
                     success(nil)

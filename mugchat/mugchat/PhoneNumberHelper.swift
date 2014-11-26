@@ -14,11 +14,12 @@ private let HYPHEN = "-"
 private let LEFT_PARENTHESIS = "("
 private let RIGHT_PARENTHESIS = ")"
 private let DOT_SEPARATOR = " "
+private let PERIOD = "."
 
 class PhoneNumberHelper {
     
     class func cleanFormattedPhoneNumber(phoneNumber: String) -> String {
-        let clean = phoneNumber.stringByRemovingStringsIn([HYPHEN, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, DOT_SEPARATOR])
+        let clean = phoneNumber.stringByRemovingStringsIn([HYPHEN, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, DOT_SEPARATOR, PERIOD])
         return clean.removeWhiteSpaces()
     }
     
