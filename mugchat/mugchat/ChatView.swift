@@ -217,9 +217,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
 
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-            if self.isCell(cell, totallyVisibleOnView: self) {
-                println("Cell \(cell) is totally visible")
-            } else {
+            if !self.isCell(cell, totallyVisibleOnView: self) {
                 if cell.isPlayingFlip() {
                     cell.stopMovie()
                 }

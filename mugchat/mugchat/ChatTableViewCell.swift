@@ -17,8 +17,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Constants
     
-    private let MESSAGE_TOP_MARGIN: CGFloat = 18.0
-    private let MESSAGE_BOTTOM_MARGIN: CGFloat = 18.0
+    private let MESSAGE_TOP_MARGIN: CGFloat = 14.0
     private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
@@ -76,7 +75,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageView.addSubview(messageTextLabel)
         
         avatarView = RoundImageView.avatarA3()
-        messageView.addSubview(avatarView)
+        contentView.addSubview(avatarView)
         
         var button = UIButton()
         button.backgroundColor = UIColor.clearColor()
@@ -110,7 +109,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
         
         messageView.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.bottom.equalTo()(self.contentView)
             make.left.equalTo()(self.contentView)
             make.right.equalTo()(self.contentView)
