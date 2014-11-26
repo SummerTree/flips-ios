@@ -144,40 +144,34 @@ class ContactDataSource : BaseDataSource {
     }
     
     private func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
-        var predicateValue = ""
+        var firstnamePredicate: NSPredicate!
+        var lastnamePredicate: NSPredicate!
+        var phonenumberPredicate: NSPredicate!
+        var phonetypePredicate: NSPredicate!
+        var predicates = [NSPredicate]()
         
         if (firstName != nil) {
-            var value = firstName!
-            predicateValue = "(\(ContactAttributes.FIRST_NAME) == \"\(value)\")"
+            firstnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.FIRST_NAME, firstName!)
+            predicates.append(firstnamePredicate)
         }
         
         if (lastName != nil) {
-            var value = lastName!
-            if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.LAST_NAME) == \"\(value)\")"
-            } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.LAST_NAME) == \"\(value)\")"
-            }
+            lastnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.LAST_NAME, lastName!)
+            predicates.append(lastnamePredicate)
         }
         
         if (phoneNumber != nil) {
-            var value = phoneNumber!
-            if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.PHONE_NUMBER) == '\(value)')"
-            } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_NUMBER) == '\(value)')"
-            }
+            phonenumberPredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_NUMBER, phoneNumber!)
+            predicates.append(phonenumberPredicate)
         }
         
         if (phoneType != nil) {
-            var value = phoneType!
-            if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.PHONE_TYPE) == '\(value)')"
-            } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_TYPE) == '\(value)')"
-            }
+            phonetypePredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_TYPE, phoneType!)
+            predicates.append(phonetypePredicate)
         }
+        
+        let compund = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
 
-        return Contact.findFirstWithPredicate(NSPredicate(format: predicateValue)) as? Contact
+        return Contact.findFirstWithPredicate(compund) as? Contact
     }
 }
