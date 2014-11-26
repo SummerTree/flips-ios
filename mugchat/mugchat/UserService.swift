@@ -25,6 +25,7 @@ public class UserService: MugchatService {
     let IMAGE_COMPRESSION: CGFloat = 0.3
     let UPDATE_PASSWORD_URL: String = "/user/password"
     let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
+    let FACEBOOK_CONTACTS_VERIFY: String = "/user/{{user_id}}/facebook/verify"
     
     public class var sharedInstance : UserService {
         struct Static {
@@ -260,11 +261,77 @@ public class UserService: MugchatService {
     }
     
     
+    // MARK: - Import Facebook Contacts
+    
+    
+    func importFacebookFriends(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        let permissions: [String] = FBSession.activeSession().permissions as [String]
+        println("[DEBUG: Facebook Permissions: \(permissions)]")
+        
+        if (!contains(permissions, "user_friends")) {
+            failure(MugError(error: "user_friends permission not allowed.", details:nil))
+            return
+        }
+        
+        var usersFacebookIDS = [String]()
+        FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
+            if (error != nil) {
+                failure(MugError(error: error.localizedDescription, details:nil))
+                return
+            }
+            
+            let resultDictionary: NSDictionary = result as NSDictionary
+            let usersJSON = JSON(resultDictionary.objectForKey("data")!)
+            
+            if let users = usersJSON.array {
+                let userDatasource = UserDataSource()
+                
+                for user in users {
+                    usersFacebookIDS.append(user["id"].stringValue)
+                }
+                
+                var request = AFHTTPRequestOperationManager()
+                request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+                var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                
+                var params: Dictionary<String, AnyObject> = [
+                    RequestParams.FACEBOOK_IDS : usersFacebookIDS
+                ]
+                
+                request.POST(url, parameters: params,
+                    success: { (operation, responseObject) -> Void in
+                        var response:JSON = JSON(responseObject)
+                        
+                        for (index, user) in response {
+                            SwiftTryCatch.try({ () -> Void in
+                                println("Trying to import: \(user)")
+                                var user = userDatasource.createOrUpdateUserWithJson(user)
+                                }, catch: { (error) -> Void in
+                                    println("Error: [\(error))")
+                                }, finally: nil)
+                            
+                        }
+                        
+                        success(nil)
+                        
+                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                        if (operation.responseObject != nil) {
+                            var response = operation.responseObject as NSDictionary
+                            failure(MugError(error: response["error"] as String!, details:nil))
+                        } else {
+                            failure(MugError(error: error.localizedDescription, details:nil))
+                        }
+                        
+                })
+            }
+        }
+    }
+    
+    
     // MARK: - Upload contacts
     
     func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         var numbers = Array<String>()
-        let contactDatasource = ContactDataSource()
         let userDatasource = UserDataSource()
         
         ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
@@ -294,7 +361,6 @@ public class UserService: MugchatService {
                         }, catch: { (error) -> Void in
                             println("Error: [\(error))")
                         }, finally: nil)
-                        
                     }
                     
                     success(nil)
@@ -334,5 +400,6 @@ public class UserService: MugchatService {
         static let PHONENUMBERS = "phoneNumbers"
         static let VERIFICATION_CODE = "verification_code"
         static let PHOTO = "photo"
+        static let FACEBOOK_IDS = "facebookIDs"
     }
 }

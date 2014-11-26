@@ -29,6 +29,14 @@ public class AuthenticationHelper: NSObject {
         }
     }
     
+    func isAuthenticated() -> Bool {
+        if let user = userInSession {
+            return true
+        }
+        
+        return false
+    }
+    
     private func saveAuthenticatedUsername(username: String) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
