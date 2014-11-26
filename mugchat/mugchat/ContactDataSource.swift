@@ -170,8 +170,8 @@ class ContactDataSource : BaseDataSource {
             predicates.append(phonetypePredicate)
         }
         
-        let compund = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
+        let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
 
-        return Contact.findFirstWithPredicate(compund) as? Contact
+        return Contact.findFirstWithPredicate(compound) as? Contact
     }
 }
