@@ -24,7 +24,7 @@ private struct UserJsonParams {
     static let PHONE_NUMBER = "phoneNumber"
 }
 
-public typealias UserSyncFinished = (Bool, NSError?) -> Void
+public typealias UserSyncFinished = (Bool, MugError?) -> Void
 
 class UserDataSource : BaseDataSource {
     
@@ -128,17 +128,36 @@ class UserDataSource : BaseDataSource {
     
     func syncUserData(callback: UserSyncFinished) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            // TODO: sync my mugs with API
+            println("\nsyncUserData")
+            let roomService = RoomService()
             
-            println("   ")
-            if (NSThread.currentThread() == NSThread.mainThread()) {
-                println("syncUserData IN MAIN THREAD")
-            } else {
-                println("syncUserData NOT IN MAIN THREAD")
+            var error: MugError?
+            
+            let group = dispatch_group_create()
+            dispatch_group_enter(group)
+            roomService.getMyRooms({ (rooms) -> Void in
+                for room in rooms {
+                    println("   - subscribing to room: \(room.roomID)")
+                    PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+                    
+                }
+                dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
+            })
+            
+            println("   waiting sync rooms")
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            
+            
+            if (error != nil) {
+                println("sync fail\n")
+                callback(false, error)
+                return
             }
-            println("   ")
-            println("Logged as \n   First Name: \(AuthenticationHelper.sharedInstance.userInSession.firstName)\n    ID: \(AuthenticationHelper.sharedInstance.userInSession.userID)")
-            println("   ")
+            
+            // TODO: sync my mugs with API
             
             callback(true, nil)
         })
