@@ -58,7 +58,7 @@ class ImportContactViewController: UIViewController {
                 println("Success importing facebook friends")
                 self.navigationController?.pushViewController(ImportContactsTableViewController(), animated: true)
                 }, failure: { (error) -> Void in
-                    println("Error importing facebook friends")
+                    println("Error importing facebook friends: \(error?.error) details: \(error?.details)")
             })
         } else {
             println("No need to import Facebook contacts")
