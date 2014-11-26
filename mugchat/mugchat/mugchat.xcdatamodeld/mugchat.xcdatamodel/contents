@@ -54,6 +54,7 @@
         <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" attributeType="String" syncable="YES"/>
+        <attribute name="isTemporary" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastName" attributeType="String" syncable="YES"/>
         <attribute name="me" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
@@ -75,6 +76,6 @@
         <element name="Mug" positionX="-675" positionY="324" width="128" height="193"/>
         <element name="MugMessage" positionX="-144" positionY="470" width="128" height="165"/>
         <element name="Room" positionX="-974" positionY="428" width="128" height="163"/>
-        <element name="User" positionX="-623" positionY="-54" width="128" height="298"/>
+        <element name="User" positionX="-623" positionY="-54" width="128" height="313"/>
     </elements>
 </model>

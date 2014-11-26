@@ -22,6 +22,7 @@ private struct UserJsonParams {
     static let PHOTO_URL = "photoUrl"
     static let PUBNUB_ID = "pubnubId"
     static let PHONE_NUMBER = "phoneNumber"
+    static let IS_TEMPORARY = "isTemporary"
 }
 
 public typealias UserSyncFinished = (Bool, MugError?) -> Void
@@ -77,6 +78,7 @@ class UserDataSource : BaseDataSource {
         user.nickname = json[UserJsonParams.NICKNAME].stringValue
         user.photoURL = json[UserJsonParams.PHOTO_URL].stringValue
         user.phoneNumber = json[UserJsonParams.PHONE_NUMBER].stringValue
+        user.isTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
         
         if (json[UserJsonParams.BIRTHDAY].stringValue != "") {
             user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)

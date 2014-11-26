@@ -1,13 +1,9 @@
 //
-// Copyright 2014 ArcTouch, Inc.
-// All rights reserved.
+//  User.h
+//  mugchat
 //
-// This file, its contents, concepts, methods, behavior, and operation
-// (collectively the "Software") are protected by trade secret, patent,
-// and copyright laws. The use of the Software is governed by a license
-// agreement. Disclosure of the Software to third parties, in any form,
-// in whole or in part, is expressly prohibited except as authorized by
-// the license agreement.
+//  Created by Bruno Bruggemann on 11/26/14.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -28,15 +24,21 @@
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * isTemporary;
+@property (nonatomic, retain) Room *adminRooms;
+@property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) Device *device;
 @property (nonatomic, retain) NSOrderedSet *mugs;
 @property (nonatomic, retain) NSOrderedSet *mugsSent;
 @property (nonatomic, retain) NSOrderedSet *rooms;
-@property (nonatomic, retain) NSSet *contacts;
-@property (nonatomic, retain) Room *adminRooms;
 @end
 
 @interface User (CoreDataGeneratedAccessors)
+
+- (void)addContactsObject:(Contact *)value;
+- (void)removeContactsObject:(Contact *)value;
+- (void)addContacts:(NSSet *)values;
+- (void)removeContacts:(NSSet *)values;
 
 - (void)insertObject:(Mug *)value inMugsAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromMugsAtIndex:(NSUInteger)idx;
@@ -68,9 +70,4 @@
 - (void)removeRoomsObject:(Room *)value;
 - (void)addRooms:(NSOrderedSet *)values;
 - (void)removeRooms:(NSOrderedSet *)values;
-- (void)addContactsObject:(Contact *)value;
-- (void)removeContactsObject:(Contact *)value;
-- (void)addContacts:(NSSet *)values;
-- (void)removeContacts:(NSSet *)values;
-
 @end
