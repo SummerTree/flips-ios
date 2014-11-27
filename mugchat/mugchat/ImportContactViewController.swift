@@ -51,14 +51,33 @@ class ImportContactViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
+        let localGroup = dispatch_group_create()
+        
+        if (User.loggedUser()?.facebookID != nil) {
+            UserService.sharedInstance.importFacebookFriends({ (success) -> Void in
+                println("Success importing facebook friends")
+            }, failure: { (error) -> Void in
+                println("Error importing facebook friends: \(error?.error) details: \(error?.details)")
+            })
+        } else {
+            println("No need to import Facebook contacts")
+        }
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             UserService.sharedInstance.uploadContacts({ (success) -> Void in
-                println("Success")
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                self.navigationController?.pushViewController(ImportContactsTableViewController(), animated: true)
-                }, failure: { (error) -> Void in
-                    println("Error")
+                println("Success importing local contacts")
+                let importContactsTableViewController = ImportContactsTableViewController()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    self.navigationController?.pushViewController(importContactsTableViewController, animated: true)
+                })
+                
+                }, failure: { (error) -> Void in
+                    println("Error importing local contacts")
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
             })
         })
     }
