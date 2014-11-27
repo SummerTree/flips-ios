@@ -36,6 +36,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.inboxView.viewWillAppear()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
     }
