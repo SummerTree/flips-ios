@@ -132,6 +132,7 @@ class UserDataSource : BaseDataSource {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             println("\nsyncUserData")
             let roomService = RoomService()
+            let builderService = BuilderService()
             
             var error: MugError?
             
@@ -147,6 +148,18 @@ class UserDataSource : BaseDataSource {
             }, failCompletion: { (flipError) -> Void in
                 error = flipError
                 dispatch_group_leave(group)
+            })
+            
+            dispatch_group_enter(group)
+            builderService.getSuggestedWords({ (words) -> Void in
+                for word in words {
+                    println("   - adding word \"\(word)\" to the builder list of suggested words")
+                    // TODO: Add word to the builder list of suggested words.
+                }
+                dispatch_group_leave(group)
+                }, failCompletion: { (flipError) -> Void in
+                    error = flipError
+                    dispatch_group_leave(group)
             })
             
             println("   waiting sync rooms")
