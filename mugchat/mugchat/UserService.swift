@@ -160,7 +160,8 @@ public class UserService: MugchatService {
         request.POST(url,
             parameters: params,
             constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                formData.appendPartWithFileData(UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION), name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
             },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 var user = self.parseUserResponse(responseObject)

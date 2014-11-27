@@ -30,7 +30,7 @@ class UpdateUserProfileView: SignUpView {
     
     override func customNavigationBarDidTapRightButton(navBar: CustomNavigationBar) {
         let userData = getUserData()
-        self.updateUserProfileViewDelegate?.updateUserProfileView(self, didTapSaveButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
+        self.updateUserProfileViewDelegate?.updateUserProfileView(self, didTapSaveButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday, avatar: navBar.getAvatarImage())
     }
     
     override func getBackgroundColor() -> UIColor {
@@ -59,6 +59,6 @@ class UpdateUserProfileView: SignUpView {
 }
 
 protocol UpdateUserProfileViewDelegate {
-    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String)
+    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String, avatar: UIImage!)
     func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapBackButton withEditions: Bool)
 }
