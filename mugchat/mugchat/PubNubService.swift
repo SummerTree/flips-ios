@@ -68,9 +68,12 @@ public class PubNubService: MugchatService, PNDelegate {
         
         let roomDataSource = RoomDataSource()
         var rooms = roomDataSource.getAllRooms() // We need to subscribe even in rooms without messages
+        println("\nSubscribeOnMyChannels")
         for room in rooms {
+            println("   Will subscribe to room: \(room.roomID)")
             channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
         }
+        println("\n")
 
         let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
         
@@ -89,7 +92,14 @@ public class PubNubService: MugchatService, PNDelegate {
 
     private func subscribeToChannel(channel: PNChannel) {
         if (!PubNub.isSubscribedOn(channel)) {
-            PubNub.subscribeOn([channel])
+            PubNub.subscribeOn([channel], withCompletionHandlingBlock: { (state, channels, error) -> Void in
+                if (error != nil) {
+                    println("\nsubcribe error: \(error)\n")
+                } else {
+                    self.loadMessagesHistoryForChannel(channel)
+                }
+            })
+            
             let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
             PubNub.enablePushNotificationsOnChannel(channel, withDevicePushToken: token) { (channels, pnError) -> Void in
                 println("Result of enablePushNotificationsOnChannel: channels=[\(channels), with error: \(pnError)")

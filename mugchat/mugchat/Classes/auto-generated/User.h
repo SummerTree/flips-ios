@@ -28,15 +28,21 @@
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSNumber * isTemporary;
+@property (nonatomic, retain) Room *adminRooms;
+@property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) Device *device;
 @property (nonatomic, retain) NSOrderedSet *mugs;
 @property (nonatomic, retain) NSOrderedSet *mugsSent;
 @property (nonatomic, retain) NSOrderedSet *rooms;
-@property (nonatomic, retain) NSSet *contacts;
-@property (nonatomic, retain) Room *adminRooms;
 @end
 
 @interface User (CoreDataGeneratedAccessors)
+
+- (void)addContactsObject:(Contact *)value;
+- (void)removeContactsObject:(Contact *)value;
+- (void)addContacts:(NSSet *)values;
+- (void)removeContacts:(NSSet *)values;
 
 - (void)insertObject:(Mug *)value inMugsAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromMugsAtIndex:(NSUInteger)idx;
@@ -68,9 +74,4 @@
 - (void)removeRoomsObject:(Room *)value;
 - (void)addRooms:(NSOrderedSet *)values;
 - (void)removeRooms:(NSOrderedSet *)values;
-- (void)addContactsObject:(Contact *)value;
-- (void)removeContactsObject:(Contact *)value;
-- (void)addContacts:(NSSet *)values;
-- (void)removeContacts:(NSSet *)values;
-
 @end

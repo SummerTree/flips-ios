@@ -87,6 +87,13 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         }
     }
     
+    func reload() {
+        self.reloadFlipMessages()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.chatView.reloadFlipMessages()
+        })
+    }
+    
     
     // MARK: - Delegate methods
     
@@ -120,17 +127,16 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     // MARK: - Messages Notification Handler
     
     func notificationReceived(notification: NSNotification) {
-        self.reloadFlipMessages()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.chatView.reloadFlipMessages()
-        })
+        self.reload()
     }
     
     
     // MARK: - ComposeViewControllerDelegate
     
-    func composeViewControllerDidSendMessage(viewController: ComposeViewController) {
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
         self.navigationController?.popToViewController(self, animated: true)
         self.chatView.clearReplyTextField()
+        
+        self.reload()
     }
 }

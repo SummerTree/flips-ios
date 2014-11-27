@@ -623,13 +623,14 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     
     // MARK: - PreviewViewControllerDelegate
-    
-    func previewViewControllerDidSendMessage(viewController: PreviewViewController) {
-        delegate?.composeViewControllerDidSendMessage(self)
+
+    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String) {
+        delegate?.composeViewController(self, didSendMessageToRoom: roomID)
     }
 }
 
 protocol ComposeViewControllerDelegate {
     
-    func composeViewControllerDidSendMessage(viewController: ComposeViewController)
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String)
+
 }

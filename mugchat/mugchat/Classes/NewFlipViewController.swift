@@ -267,13 +267,13 @@ class NewFlipViewController: MugChatViewController,
     
     // MARK: - ComposeViewControllerDelegate
     
-    func composeViewControllerDidSendMessage(viewController: ComposeViewController) {
-        delegate?.newFlipViewControllerDidSendMessage(self)
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
+        delegate?.newFlipViewController(self, didSendMessageToRoom: roomID)
     }
 }
 
 protocol NewFlipViewControllerDelegate {
     
-    func newFlipViewControllerDidSendMessage(viewController: NewFlipViewController)
+    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String)
     
 }
