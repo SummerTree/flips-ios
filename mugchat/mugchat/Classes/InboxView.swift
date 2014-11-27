@@ -93,6 +93,10 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         }
     }
     
+    func viewWillAppear() {
+        navigationBar.setAvatarImageUrl(User.loggedUser()!.photoURL)
+    }
+    
     
     // MARK: - Rooms Setter
     

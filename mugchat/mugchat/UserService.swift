@@ -21,7 +21,7 @@ public class UserService: MugchatService {
     let FORGOT_URL: String = "/user/forgot"
     let VERIFY_URL: String = "/user/verify"
     let UPLOAD_PHOTO_URL: String = "/user/{{user_id}}/photo"
-    let UPDATE_USER_URL: String = "/user/{{user_id}}"
+    let UPDATE_USER_URL: String = "/user/{{user_id}}/update"
     let IMAGE_COMPRESSION: CGFloat = 0.3
     let UPDATE_PASSWORD_URL: String = "/user/password"
     let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
@@ -157,8 +157,11 @@ public class UserService: MugchatService {
             params[RequestParams.PASSWORD] = newPassword
         }
         
-        request.PUT(url,
+        request.POST(url,
             parameters: params,
+            constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
+                formData.appendPartWithFileData(UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION), name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+            },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 var user = self.parseUserResponse(responseObject)
                 success(user)

@@ -329,7 +329,12 @@ class CustomNavigationBar : UIView {
     func setAvatarImageUrl(url: String) {
         if (!url.isEmpty) {
             if (avatarImageView != nil) {
-                avatarImageView.setImageWithURL(NSURL(string: url))
+                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView)
+                avatarImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
+                    })
+                })
             } else {
                 println("Avatar using button is not integrated with images from URLs yet.")
             }

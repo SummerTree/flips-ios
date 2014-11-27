@@ -95,7 +95,7 @@ class UpdateUserProfileViewController : MugChatViewController, SignUpViewDelegat
     
     func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         self.showActivityIndicator()
-        UserService.sharedInstance.update(email, password: password, firstName: firstName, lastName: lastName, avatar: nil, birthday: birthday.dateValue(),
+        UserService.sharedInstance.update(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(),
             success: { (user) -> Void in
                 self.navigationController?.popViewControllerAnimated(true)
                 self.hideActivityIndicator()
