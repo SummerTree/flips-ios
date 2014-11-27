@@ -36,7 +36,7 @@ class SplashScreenView: UIView {
     
     override init() {
         super.init()
-        self.backgroundColor = UIColor.redColor()
+        self.backgroundColor = UIColor.mugOrangeBackground()
         self.addSubviews()
         self.makeConstraints()
     }
