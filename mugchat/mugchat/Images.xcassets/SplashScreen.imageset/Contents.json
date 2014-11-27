@@ -7,11 +7,12 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "default@2x.png"
+      "filename" : "default-iphone6@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "default-iphone6plus@3x-1.png"
     }
   ],
   "info" : {
