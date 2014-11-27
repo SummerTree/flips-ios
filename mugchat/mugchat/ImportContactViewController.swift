@@ -56,9 +56,8 @@ class ImportContactViewController: UIViewController {
         if (User.loggedUser()?.facebookID != nil) {
             UserService.sharedInstance.importFacebookFriends({ (success) -> Void in
                 println("Success importing facebook friends")
-                self.navigationController?.pushViewController(ImportContactsTableViewController(), animated: true)
-                }, failure: { (error) -> Void in
-                    println("Error importing facebook friends: \(error?.error) details: \(error?.details)")
+            }, failure: { (error) -> Void in
+                println("Error importing facebook friends: \(error?.error) details: \(error?.details)")
             })
         } else {
             println("No need to import Facebook contacts")
@@ -67,12 +66,18 @@ class ImportContactViewController: UIViewController {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             UserService.sharedInstance.uploadContacts({ (success) -> Void in
                 println("Success importing local contacts")
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                self.navigationController?.pushViewController(ImportContactsTableViewController(), animated: true)
+                let importContactsTableViewController = ImportContactsTableViewController()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    self.navigationController?.pushViewController(importContactsTableViewController, animated: true)
+                })
+                
                 }, failure: { (error) -> Void in
                     println("Error importing local contacts")
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
             })
         })
     }

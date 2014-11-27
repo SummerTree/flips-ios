@@ -345,7 +345,13 @@ public class UserService: MugchatService {
         var numbers = Array<String>()
         let userDatasource = UserDataSource()
         
-        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
+        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
+            
+            if(countElements(contacts!) == 0) {
+                success(nil)
+                return
+            }
+            
             for contact in contacts! {
                 if (countElements(contact.phoneNumber) > 0) {
                     let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
