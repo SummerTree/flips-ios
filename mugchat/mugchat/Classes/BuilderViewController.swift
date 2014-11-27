@@ -10,12 +10,28 @@
 // the license agreement.
 //
 
-class BuilderViewController : ComposeViewController, BuilderIntroductionViewControllerDelegate {
+class BuilderViewController : ComposeViewController, BuilderIntroductionViewControllerDelegate, BuilderAddWordTableViewControllerDelegate {
     
     private var builderIntroductionViewController: BuilderIntroductionViewController!
-    
 
+    
+    // MARK: - Initialization Methods
+    
+    init() {
+        super.init(composeTitle: NSLocalizedString("Builder", comment: "Builder"))
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    
     // MARK: - Overriden Methods
+    
+    override func viewDidLoad() {
+        self.loadBuilderWords()
+        super.viewDidLoad()
+    }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -36,6 +52,23 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     
     override func shouldShowPlusButtonInWords() -> Bool {
         return true
+    }
+    
+    
+    // MARK: - Load BuilderWords Methods
+    
+    private func loadBuilderWords() {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        let builderWordDataSource = BuilderWordDataSource()
+        let builderWords = builderWordDataSource.getWords()
+        
+        words = Array<String>()
+        for builderWord in builderWords {
+            words.append(builderWord.word)
+        }
+        
+        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+        self.initFlipWords(words)
     }
     
     
@@ -76,8 +109,33 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     // MARK: - FlipMessageWordListView Delegate
     
     override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
-        let builderAddWordTableViewController = BuilderAddWordTableViewController(words: words)
+        var addWordWords = Array<String>()
+        for flipWord in self.flipWords {
+            println(" flipWord: \(flipWord.text) - \(flipWord.state)")
+            if (flipWord.state == FlipState.NewWord) {
+                addWordWords.append(flipWord.text)
+            }
+        }
+        
+        let builderAddWordTableViewController = BuilderAddWordTableViewController(words: addWordWords)
+        builderAddWordTableViewController.delegate = self
         self.navigationController?.pushViewController(builderAddWordTableViewController, animated: true)
     }
 
+    
+    // MARK: - BuilderAddWordTableViewControllerDelegate
+    
+    func builderAddWordTableViewControllerDelegate(tableViewController: BuilderAddWordTableViewController, finishingWithChanges hasChanges: Bool) {
+        if (hasChanges) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                self.loadBuilderWords()
+                if (self.words.count > 0) {
+                    self.highlightedWordIndex = 0
+                    self.reloadMyMugs()
+                    self.updateFlipWordsState()
+                    self.showContentForHighlightedWord()
+                } 
+            })
+        }
+    }
 }

@@ -129,6 +129,8 @@
 		7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E819DC2CF0005E4343 /* SignUpView.swift */; };
 		7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
 		7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
+		7A997DBC1A274F7400346817 /* BuilderWordDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */; };
+		7A997DBF1A27990900346817 /* BuilderWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A997DBE1A27990900346817 /* BuilderWord.m */; };
 		7A9CAB701A04223300791C46 /* ImageVideoCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */; };
 		7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */; };
 		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
@@ -328,6 +330,9 @@
 		7A9619E819DC2CF0005E4343 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpView.swift; path = Classes/SignUpView.swift; sourceTree = "<group>"; };
 		7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewDelegate.swift; sourceTree = "<group>"; };
 		7A9619EF19DC3F01005E4343 /* UserFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormView.swift; path = Classes/UserFormView.swift; sourceTree = "<group>"; };
+		7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderWordDataSource.swift; sourceTree = "<group>"; };
+		7A997DBD1A27990900346817 /* BuilderWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BuilderWord.h; path = "Classes/auto-generated/BuilderWord.h"; sourceTree = "<group>"; };
+		7A997DBE1A27990900346817 /* BuilderWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BuilderWord.m; path = "Classes/auto-generated/BuilderWord.m"; sourceTree = "<group>"; };
 		7A9CAB6E1A04223300791C46 /* ImageVideoCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageVideoCreator.h; sourceTree = "<group>"; };
 		7A9CAB6F1A04223300791C46 /* ImageVideoCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageVideoCreator.m; sourceTree = "<group>"; };
 		7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionViewController.swift; sourceTree = "<group>"; };
@@ -1003,6 +1008,8 @@
 		7A2A7E1019EDBF8800033164 /* auto-generated */ = {
 			isa = PBXGroup;
 			children = (
+				7A997DBD1A27990900346817 /* BuilderWord.h */,
+				7A997DBE1A27990900346817 /* BuilderWord.m */,
 				7AFB71AB1A00053D002695AC /* Contact.h */,
 				7AFB71AC1A00053D002695AC /* Contact.m */,
 				7AFB719C1A000537002695AC /* Device.h */,
@@ -1035,6 +1042,7 @@
 			isa = PBXGroup;
 			children = (
 				7AF82E0419EFED2100D0393F /* BaseDataSource.swift */,
+				7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */,
 				7AF82E0019EFECC900D0393F /* DeviceDataSource.swift */,
 				7AF82DFA19EFEC5800D0393F /* MugMessageDataSource.swift */,
 				7AF82E0219EFECDC00D0393F /* MugDataSource.swift */,
@@ -1451,6 +1459,7 @@
 				078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */,
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
 				70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */,
+				7A997DBC1A274F7400346817 /* BuilderWordDataSource.swift in Sources */,
 				7A18BF4E1A1E496B00C40E16 /* PhoneNumberHelper.swift in Sources */,
 				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				7AFB71A11A00053C002695AC /* Room.m in Sources */,
@@ -1472,6 +1481,7 @@
 				7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */,
 				7AFB71AD1A00053D002695AC /* Contact.m in Sources */,
 				70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */,
+				7A997DBF1A27990900346817 /* BuilderWord.m in Sources */,
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
 				7AF82E0319EFECDC00D0393F /* MugDataSource.swift in Sources */,

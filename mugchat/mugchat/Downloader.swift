@@ -139,6 +139,7 @@ public class Downloader : NSObject {
             println("Error download mug content: \(error)")
         }
         
+        // TODO: we cannot send the mug. We should change for the mugID
         var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY: mug]
         
         var downloadFailed: Bool = (error != nil)

@@ -36,6 +36,7 @@
 #import "Mug.h"
 #import "MugMessage.h"
 #import "Contact.h"
+#import "BuilderWord.h"
 
 #import "NSManagedObject+helpers.h"
 #import "UIImageView+AFNetworking.h"

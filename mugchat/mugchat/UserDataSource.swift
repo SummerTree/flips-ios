@@ -142,7 +142,6 @@ class UserDataSource : BaseDataSource {
                 for room in rooms {
                     println("   - subscribing to room: \(room.roomID)")
                     PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
-                    
                 }
                 dispatch_group_leave(group)
             }, failCompletion: { (flipError) -> Void in
@@ -151,20 +150,18 @@ class UserDataSource : BaseDataSource {
             })
             
             dispatch_group_enter(group)
+            let builderWordDataSource = BuilderWordDataSource()
             builderService.getSuggestedWords({ (words) -> Void in
-                for word in words {
-                    println("   - adding word \"\(word)\" to the builder list of suggested words")
-                    // TODO: Add word to the builder list of suggested words.
-                }
+                let builderWordDataSource = BuilderWordDataSource()
+                builderWordDataSource.addWords(words, fromServer: true)
                 dispatch_group_leave(group)
-                }, failCompletion: { (flipError) -> Void in
-                    error = flipError
-                    dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
             })
             
             println("   waiting sync rooms")
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
-            
             
             if (error != nil) {
                 println("sync fail\n")
