@@ -25,6 +25,7 @@
 		07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */; };
 		07CE2ABA1A1E8FEC00CF1A70 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
+		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
 		5707186519D1AEBB0069064F /* MugchatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* MugchatService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
@@ -213,6 +214,7 @@
 		07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+helpers.m"; path = "Classes/NSManagedObject+helpers.m"; sourceTree = "<group>"; };
 		07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocalizedString.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
+		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* MugchatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugchatService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -472,6 +474,7 @@
 				5784778E19DDB9530063A543 /* DeviceService.swift */,
 				7A3733C819FADDE800D1E87B /* MugService.swift */,
 				7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */,
+				1D48E9E21A27389300FA890E /* BuilderService.swift */,
 			);
 			name = Backend;
 			sourceTree = "<group>";
@@ -1434,6 +1437,7 @@
 				70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */,
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
+				1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */,
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,

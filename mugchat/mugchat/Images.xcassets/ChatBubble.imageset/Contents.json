@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "flipsicon.png"
     },
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "chatbubbles@2x.png"
+      "filename" : "flipsicon@2x.png"
     },
     {
       "idiom" : "iphone",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "flipsicon@3x.png"
     }
   ],
   "info" : {
