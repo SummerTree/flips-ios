@@ -14,7 +14,7 @@ public typealias CreateRoomSuccessResponse = (Room) -> Void
 public typealias GetRoomsSuccessResponse = ([Room]) -> Void
 public typealias RoomFailureResponse = (FlipError?) -> Void
 
-public class RoomService: MugchatService {
+public class RoomService: FlipsService {
 
     private let ROOM_URL: String = "/user/{{user_id}}/rooms"
     

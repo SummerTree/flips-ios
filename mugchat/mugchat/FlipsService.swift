@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
+public class FlipsService : NSObject {
     
     let HOST: String = "http://flips-dev.arctouch.com"
 

@@ -13,7 +13,7 @@
 public typealias DeviceServiceSuccessResponse = (AnyObject?) -> Void
 public typealias DeviceServiceFailureResponse = (FlipError?) -> Void
 
-public class DeviceService: MugchatService {
+public class DeviceService: FlipsService {
     
     let CREATE_URL: String = "/user/{{user_id}}/devices"
     let FIND_ONE_URL: String = "/user/{{user_id}}/devices/{{device_id}}"

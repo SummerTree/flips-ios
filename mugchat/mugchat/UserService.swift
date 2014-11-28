@@ -13,7 +13,7 @@
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
 public typealias UserServiceFailureResponse = (FlipError?) -> Void
 
-public class UserService: MugchatService {
+public class UserService: FlipsService {
     
     let SIGNUP_URL: String = "/signup"
     let SIGNIN_URL: String = "/signin"

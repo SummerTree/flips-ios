@@ -16,7 +16,7 @@ private typealias UploadSuccessResponse = (String?) -> Void
 private typealias UploadFailureResponse = (FlipError?) -> Void
 
 
-public class MugService: MugchatService {
+public class MugService: FlipsService {
     
     private let UPLOAD_BACKGROUND_RESPONSE_URL = "background_url"
     private let UPLOAD_SOUND_RESPONSE_URL = "sound_url"

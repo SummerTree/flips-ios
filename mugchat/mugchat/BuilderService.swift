@@ -14,7 +14,7 @@
 public typealias GetSuggestedWordsSuccessResponse = ([String]) -> Void
 public typealias SuggestedWordsFailureResponse = (FlipError?) -> Void
 
-public class BuilderService: MugchatService {
+public class BuilderService: FlipsService {
     
     private let SUGGESTED_WORDS_URL: String = "/builderword"
     
