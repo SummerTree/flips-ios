@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias SendMessageCompletion = (Bool, String?, MugError?) -> Void
+public typealias SendMessageCompletion = (Bool, String?, FlipError?) -> Void
 
 public class MessageService {
     
@@ -38,7 +38,7 @@ public class MessageService {
         }
         
         var room: Room!
-        var error: MugError?
+        var error: FlipError?
         
         var group = dispatch_group_create()
         dispatch_group_enter(group)

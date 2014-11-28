@@ -11,7 +11,7 @@
 //
 
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
-public typealias UserServiceFailureResponse = (MugError?) -> Void
+public typealias UserServiceFailureResponse = (FlipError?) -> Void
 
 public class UserService: MugchatService {
     
@@ -64,10 +64,10 @@ public class UserService: MugchatService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(MugError(error: response["error"] as String!, details: nil))
+                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -97,9 +97,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -133,9 +133,9 @@ public class UserService: MugchatService {
                         detailsText = detailsMessage as String
                     }
                     
-                    failure(MugError(error: errorText, details: detailsText))
+                    failure(FlipError(error: errorText, details: detailsText))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -183,10 +183,10 @@ public class UserService: MugchatService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(MugError(error: response["error"] as String!, details: nil))
+                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -209,9 +209,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -236,9 +236,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -267,9 +267,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -284,14 +284,14 @@ public class UserService: MugchatService {
         println("[DEBUG: Facebook Permissions: \(permissions)]")
         
         if (!contains(permissions, "user_friends")) {
-            failure(MugError(error: "user_friends permission not allowed.", details:nil))
+            failure(FlipError(error: "user_friends permission not allowed.", details:nil))
             return
         }
         
         var usersFacebookIDS = [String]()
         FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
             if (error != nil) {
-                failure(MugError(error: error.localizedDescription, details:nil))
+                failure(FlipError(error: error.localizedDescription, details:nil))
                 return
             }
             
@@ -332,9 +332,9 @@ public class UserService: MugchatService {
                     }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                         if (operation.responseObject != nil) {
                             var response = operation.responseObject as NSDictionary
-                            failure(MugError(error: response["error"] as String!, details:nil))
+                            failure(FlipError(error: response["error"] as String!, details:nil))
                         } else {
-                            failure(MugError(error: error.localizedDescription, details:nil))
+                            failure(FlipError(error: error.localizedDescription, details:nil))
                         }
                         
                 })
@@ -389,14 +389,14 @@ public class UserService: MugchatService {
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
                         var response = operation.responseObject as NSDictionary
-                        failure(MugError(error: response["error"] as String!, details:nil))
+                        failure(FlipError(error: response["error"] as String!, details:nil))
                     } else {
-                        failure(MugError(error: error.localizedDescription, details:nil))
+                        failure(FlipError(error: error.localizedDescription, details:nil))
                     }
                
             })
         }, failure: { (error) -> Void in
-            failure(MugError(error: "Error retrieving contacts.", details:nil))
+            failure(FlipError(error: "Error retrieving contacts.", details:nil))
         })
     }
     

@@ -64,7 +64,7 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         UserService.sharedInstance.forgotPassword(intlPhoneNumber, success: { (user) -> Void in
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
-        }) { (mugError) -> Void in
+        }) { (flipError) -> Void in
             let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }

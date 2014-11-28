@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public struct MugError {
+public struct FlipError {
     var error: String?
     var details: String?
 }

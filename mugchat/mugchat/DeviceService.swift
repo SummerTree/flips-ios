@@ -11,7 +11,7 @@
 //
 
 public typealias DeviceServiceSuccessResponse = (AnyObject?) -> Void
-public typealias DeviceServiceFailureResponse = (MugError?) -> Void
+public typealias DeviceServiceFailureResponse = (FlipError?) -> Void
 
 public class DeviceService: MugchatService {
     
@@ -50,9 +50,9 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -83,9 +83,9 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -110,9 +110,9 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["error"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["error"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )

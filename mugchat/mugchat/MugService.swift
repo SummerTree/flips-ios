@@ -11,9 +11,9 @@
 //
 
 public typealias CreateMugSuccessResponse = (Mug) -> Void
-public typealias CreateMugFailureResponse = (MugError?) -> Void
+public typealias CreateMugFailureResponse = (FlipError?) -> Void
 private typealias UploadSuccessResponse = (String?) -> Void
-private typealias UploadFailureResponse = (MugError?) -> Void
+private typealias UploadFailureResponse = (FlipError?) -> Void
 
 
 public class MugService: MugchatService {
@@ -46,8 +46,8 @@ public class MugService: MugchatService {
             uploadSoundBlock = { (backgroundImageUrl) -> () in
                 self.uploadSound(soundPath!, successCallback: { (soundUrl) -> Void in
                     uploadMugBlock(backgroundImageUrl, soundUrl!)
-                    }, failCallback: { (mugError) -> Void in
-                        createMugFailCallBack(mugError)
+                    }, failCallback: { (flipError) -> Void in
+                        createMugFailCallBack(flipError)
                 })
             }
         }
@@ -62,8 +62,8 @@ public class MugService: MugchatService {
                 } else {
                     uploadMugBlock(backgroundImageUrl!, "")
                 }
-                }) { (mugError) -> Void in
-                    createMugFailCallBack(mugError)
+                }) { (flipError) -> Void in
+                    createMugFailCallBack(flipError)
             }
         } else if (uploadSoundBlock != nil) {
             uploadSoundBlock!("")
@@ -79,8 +79,8 @@ public class MugService: MugchatService {
         
         self.uploadVideo(videoPath, successCallback: { (videoUrl) -> Void in
             uploadMugBlock(videoUrl!)
-        }) { (mugError) -> Void in
-            createMugFailCallBack(mugError)
+        }) { (flipError) -> Void in
+            createMugFailCallBack(flipError)
         }
     }
     
@@ -101,7 +101,7 @@ public class MugService: MugchatService {
             self.uploadData(soundData!, toUrl: url, withFileName: fileName, partName: "sound", mimeType: "audio/mp4a-latm", successCallback: successCallback, failCallback: failCallback)
         }
         else {
-            failCallback(MugError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
+            failCallback(FlipError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
         }
     }
     
@@ -116,7 +116,7 @@ public class MugService: MugchatService {
             self.uploadData(videoData!, toUrl: url, withFileName: fileName, partName: "background", mimeType: "video/quicktime", successCallback: successCallback, failCallback: failCallback)
         }
         else {
-            failCallback(MugError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))
+            failCallback(FlipError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))
         }
     }
     
@@ -136,9 +136,9 @@ public class MugService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCallback(MugError(error: response["error"] as String!, details: nil))
+                    failCallback(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCallback(MugError(error: error.localizedDescription, details:nil))
+                    failCallback(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -164,9 +164,9 @@ public class MugService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    createMugFailCallBack(MugError(error: response["error"] as String!, details: nil))
+                    createMugFailCallBack(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    createMugFailCallBack(MugError(error: error.localizedDescription, details:nil))
+                    createMugFailCallBack(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
