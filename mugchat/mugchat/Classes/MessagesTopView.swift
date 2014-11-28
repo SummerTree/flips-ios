@@ -122,7 +122,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func showInvalidEmailMessage() {
-        self.showMessage("Your email should look like this\n", secondLineKey: "mug@mail.com", dictionaryKey: EMAIL_MESSAGE_KEY)
+        self.showMessage("Your email should look like this\n", secondLineKey: "flip@mail.com", dictionaryKey: EMAIL_MESSAGE_KEY)
     }
     
     func hideInvalidEmailMessage() {

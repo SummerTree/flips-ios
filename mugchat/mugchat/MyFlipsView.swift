@@ -49,7 +49,7 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         myMugsLabel = UILabel()
         myMugsLabel.numberOfLines = 1
         myMugsLabel.sizeToFit()
-        myMugsLabel.text = NSLocalizedString("My Mugs", comment: "My Mugs")
+        myMugsLabel.text = NSLocalizedString("My Flips", comment: "My Flips")
         myMugsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
         myMugsLabel.textColor = UIColor.plum()
         self.addSubview(myMugsLabel)
