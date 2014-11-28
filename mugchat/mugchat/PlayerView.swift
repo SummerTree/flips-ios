@@ -63,7 +63,7 @@ class PlayerView: UIView {
         }
     }
 
-    func setupPlayerWithFlips(flips: Array<Mug>, completion: ((player: AVQueuePlayer)  -> Void)) {
+    func setupPlayerWithFlips(flips: Array<Flip>, completion: ((player: AVQueuePlayer)  -> Void)) {
         self.words = []
         for flip in flips {
             self.words.append(flip.word)
@@ -71,11 +71,11 @@ class PlayerView: UIView {
 
         // TODO: we need to change to NSOperation to be able to cancel it when the method releaseResources is called. Or find a way to do not run the block if canceled.
         dispatch_async(PlayerView.videoSerialQueue) { () -> Void in
-            var localFlips: Array<Mug> = []
+            var localFlips: Array<Flip> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();
             
             for flip in flips {
-                localFlips.append(moc.objectWithID(flip.objectID) as Mug)
+                localFlips.append(moc.objectWithID(flip.objectID) as Flip)
             }
             
             let videoComposer = VideoComposer()

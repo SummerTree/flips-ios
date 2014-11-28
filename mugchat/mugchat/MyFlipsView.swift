@@ -118,11 +118,11 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
             var flipId = dataSource?.myFlipsView(self, flipIdAtIndex: indexPath.row - 1)
             
             let flipDataSource = MugDataSource()
-            var flip = flipDataSource.retrieveMugWithId(flipId!)
+            var flip = flipDataSource.retrieveFlipWithId(flipId!)
             
-            cell.setMug(flip)
+            cell.setFlip(flip)
             
-            var isSelected = (flip.mugID == dataSource?.myFlipsViewSelectedFlipId())
+            var isSelected = (flip.flipID == dataSource?.myFlipsViewSelectedFlipId())
             cell.setSelected(isSelected)
         }
         

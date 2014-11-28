@@ -75,17 +75,17 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     // MARK: - Flips Methods
     
-    private func createFlipsFromFlipWords() -> [Mug] {
-        var flips = Array<Mug>()
+    private func createFlipsFromFlipWords() -> [Flip] {
+        var flips = Array<Flip>()
         let flipDataSource = MugDataSource()
         
         for flipWord in self.flipWords {
             if (flipWord.associatedFlipId != nil) {
-                var flip = flipDataSource.retrieveMugWithId(flipWord.associatedFlipId!)
+                var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                 flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
                 flips.append(flip)
             } else {
-                var emptyFlip = flipDataSource.createEmptyMugWithWord(flipWord.text)
+                var emptyFlip = flipDataSource.createEmptyFlipWithWord(flipWord.text)
                 flips.append(emptyFlip)
             }
         }
@@ -114,14 +114,14 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
             let flipDataSource = MugDataSource()
             for flipWord in self.flipWords {
                 if (flipWord.associatedFlipId != nil) {
-                    var flip = flipDataSource.retrieveMugWithId(flipWord.associatedFlipId!)
+                    var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                     flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
-                    flipIds.append(flip.mugID)
+                    flipIds.append(flip.flipID)
                 } else {
                     // Create a Flip in the server for each empty Flip
                     dispatch_group_enter(group)
                     flipService.createMug(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createMugSuccessCallback: { (flip) -> Void in
-                        flipIds.append(flip.mugID)
+                        flipIds.append(flip.flipID)
                         dispatch_group_leave(group);
                     }, createMugFailCallBack: { (flipError) -> Void in
                         error = flipError

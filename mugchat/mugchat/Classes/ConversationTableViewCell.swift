@@ -177,21 +177,21 @@ class ConversationTableViewCell : UITableViewCell {
     private func layoutMessageInfo(room: Room) {
         // All conversations should be sorted in the inbox by the above time stamp, with most recent at the top, and oldest at the bottom.
         
-        let mugMessageDataSource = MugMessageDataSource()
+        let flipMessageDataSource = MugMessageDataSource()
 
         // The preview still photo should reflect the first frame of the video of the oldest unread message in the conversation
-        var mugMessage = mugMessageDataSource.oldestNotReadMugMessageForRoomId(room.roomID)
-        if (mugMessage == nil) {
-            mugMessage = room.mugMessagesNotRemoved().lastObject as? MugMessage
+        var flipMessage = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(room.roomID)
+        if (flipMessage == nil) {
+            flipMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
         }
 
-        if (mugMessage != nil) {
-            let messageThumbnailImage = mugMessage!.messageThumbnail()?
-            let photoURL = NSURL(string: mugMessage!.from.photoURL)
-            let isMessageNotRead = mugMessage!.notRead.boolValue
-            let messagePhrase = mugMessage!.messagePhrase()
+        if (flipMessage != nil) {
+            let messageThumbnailImage = flipMessage!.messageThumbnail()?
+            let photoURL = NSURL(string: flipMessage!.from.photoURL)
+            let isMessageNotRead = flipMessage!.notRead.boolValue
+            let messagePhrase = flipMessage!.messagePhrase()
             // The time stamp should reflect the time sent of the oldest unread message in the conversation
-            let formatedDate = DateHelper.formatDateToApresentationFormat(mugMessage!.createdAt)
+            let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage!.createdAt)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.mugImageView.image = messageThumbnailImage

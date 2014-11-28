@@ -30,7 +30,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     internal var highlightedWordIndex: Int!
     
-    private var myMugsDictionary: Dictionary<String, [String]>!
+    private var myFlipsDictionary: Dictionary<String, [String]>!
     
     private var highlightedWordCurrentAssociatedImage: UIImage?
     
@@ -87,13 +87,13 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     }
     
     internal func initFlipWords(words: [String]) {
-        myMugsDictionary = Dictionary<String, [String]>()
+        myFlipsDictionary = Dictionary<String, [String]>()
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
             var word = words[i]
             var mugText: MugText = MugText(position: i, text: word, state: FlipState.NewWord)
             self.flipWords.append(mugText)
-            myMugsDictionary[word] = Array<String>()
+            myFlipsDictionary[word] = Array<String>()
         }
     }
     
@@ -221,7 +221,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
                 self.showFlipCreatedState(flipWord.associatedFlipId!)
             } else {
                 let flipDataSource = MugDataSource()
-                let myFlips = flipDataSource.getMyMugsForWord(flipWord.text)
+                let myFlips = flipDataSource.getMyFlipsForWord(flipWord.text)
                 if (myFlips.count > 0) {
                     self.showNewFlipWithSavedFlipsForWord(flipWord.text)
                 } else {
@@ -274,7 +274,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
             words.append(flipWord.text)
         }
         
-        self.myMugsDictionary = flipDataSource.getMyMugIdsForWords(words)
+        self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
     }
     
     
@@ -289,7 +289,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     internal func updateFlipWordsState() {
         for flipWord in flipWords {
             let word = flipWord.text
-            let myMugsForWord = myMugsDictionary[word]
+            let myMugsForWord = myFlipsDictionary[word]
             
             if (flipWord.associatedFlipId == nil) {
                 if (myMugsForWord!.count == 0) {
@@ -520,7 +520,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
         let flipWord = flipWords[highlightedWordIndex]
-        return myMugsDictionary[flipWord.text]!
+        return myFlipsDictionary[flipWord.text]!
     }
     
     func flipIdForHighlightedWord() -> String? {
@@ -602,10 +602,10 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     // MARK: - ConfirmFlipViewController Delegate
     
-    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, mug: Mug?) {
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, flip: Flip?) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
         if (success) {
-            flipWord.associatedFlipId = mug?.mugID
+            flipWord.associatedFlipId = flip?.flipID
             self.onMugAssociated()
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)

@@ -15,8 +15,8 @@
 
 @implementation BuilderWord
 
+@dynamic addedAt;
 @dynamic fromServer;
 @dynamic word;
-@dynamic addedAt;
 
 @end

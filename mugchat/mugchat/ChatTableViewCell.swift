@@ -139,7 +139,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         self.flipMessageId = flipMessageId
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
         
-        self.setupVideoPlayerWithFlips(flipMessage.mugs.array as [Mug])
+        self.setupVideoPlayerWithFlips(flipMessage.flips.array as [Flip])
         
         let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         timestampLabel.text = formattedDate
@@ -175,7 +175,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
     }
     
-    private func setupVideoPlayerWithFlips(flips: Array<Mug>) {
+    private func setupVideoPlayerWithFlips(flips: Array<Flip>) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.contentView)
         self.videoPlayerView.alpha = 0.0
         self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in

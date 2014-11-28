@@ -90,7 +90,7 @@ class RoomDataSource : BaseDataSource {
         var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false) as [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
-            if (room.mugMessagesNotRemoved().count > 0) {
+            if (room.flipMessagesNotRemoved().count > 0) {
                 roomsWithMessages.append(room)
             }
         }

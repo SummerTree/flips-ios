@@ -181,7 +181,7 @@ class UserDataSource : BaseDataSource {
                 return
             }
             
-            // TODO: sync my mugs with API
+            // TODO: sync my flips with API
             
             callback(true, nil)
         })

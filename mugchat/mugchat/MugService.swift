@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias CreateMugSuccessResponse = (Mug) -> Void
+public typealias CreateMugSuccessResponse = (Flip) -> Void
 public typealias CreateMugFailureResponse = (FlipError?) -> Void
 private typealias UploadSuccessResponse = (String?) -> Void
 private typealias UploadFailureResponse = (FlipError?) -> Void
@@ -189,10 +189,10 @@ public class MugService: MugchatService {
         return nil
     }
     
-    private func parseCreateMugResponse(response: AnyObject) -> Mug? {
+    private func parseCreateMugResponse(response: AnyObject) -> Flip? {
         let json = JSON(response)
-        let mugDataSource = MugDataSource()
-        return mugDataSource.createOrUpdateMugsWithJson(json)
+        let flipDataSource = MugDataSource()
+        return flipDataSource.createOrUpdateFlipsWithJson(json)
     }
     
 }

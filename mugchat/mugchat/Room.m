@@ -11,19 +11,19 @@
 //
 
 #import "Room.h"
-#import "MugMessage.h"
+#import "FlipMessage.h"
 #import "User.h"
 
 
 @implementation Room
 
-@dynamic removed;
 @dynamic lastMessageReceivedAt;
 @dynamic name;
 @dynamic pubnubID;
+@dynamic removed;
 @dynamic roomID;
 @dynamic admin;
-@dynamic mugMessages;
+@dynamic flipMessages;
 @dynamic participants;
 
 @end

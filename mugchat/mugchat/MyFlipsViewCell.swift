@@ -15,7 +15,7 @@ private let MY_MUGS_CELL_HEIGHT: CGFloat = 83.5
 
 class MyFlipsViewCell : UICollectionViewCell {
     
-    private var mug: Mug!
+    private var flip: Flip! // TODO: change it to keep flipID instead of the NSManagedObject
     private var cellImageView: UIImageView!
     private var seletedOverlayView: SelectedMugOverlayView!
     
@@ -37,16 +37,15 @@ class MyFlipsViewCell : UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setMug(mug: Mug) {
-        self.mug = mug
-        println("mug: \(mug.mugID)")
+    func setFlip(flip: Flip) {
+        self.flip = flip
         
-        let mugContentPath = self.mug.backgroundContentLocalPath()
-        if (self.mug.isBackgroundContentTypeVideo()) {
-            let videoThumbnail = VideoHelper.generateThumbImageForFile(mugContentPath)
+        let flipContentPath = self.flip.backgroundContentLocalPath()
+        if (self.flip.isBackgroundContentTypeVideo()) {
+            let videoThumbnail = VideoHelper.generateThumbImageForFile(flipContentPath)
             self.cellImageView.image = videoThumbnail
         } else {
-            let image = UIImage(contentsOfFile: mugContentPath)
+            let image = UIImage(contentsOfFile: flipContentPath)
             self.cellImageView.image = image
         }
     }

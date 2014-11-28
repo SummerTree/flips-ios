@@ -118,38 +118,38 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
-        let mugDataSource = MugDataSource()
+        let flipDataSource = MugDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
         
-        var createMugSuccessBlock : CreateMugSuccess = { (mug) -> Void in
+        var createFlipSuccessBlock : CreateFlipSuccess = { (flip) -> Void in
             self.navigationController?.popViewControllerAnimated(false)
-            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, mug: mug)
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flip: flip)
             self.confirmFlipView.hideActivityIndicator()
         }
-        var createMugFailBlock : CreateMugFail = { (message) -> Void in
+        var createFlipFailBlock : CreateFlipFail = { (message) -> Void in
             self.confirmFlipView.hideActivityIndicator()
-            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flip: nil)
             var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
         
         if (flipVideoURL == nil) {
-            mugDataSource.createMugWithWord(flipView.getWord(),
+            flipDataSource.createFlipWithWord(flipView.getWord(),
                 backgroundImage: self.flipImage,
                 soundURL: self.flipAudioURL,
-                createMugSuccess: createMugSuccessBlock,
-                createMugFail: createMugFailBlock)
+                createFlipSuccess: createFlipSuccessBlock,
+                createFlipFail: createFlipFailBlock)
         } else {
-            mugDataSource.createMugWithWord(self.flipWord,
+            flipDataSource.createFlipWithWord(self.flipWord,
                 videoURL: self.flipVideoURL!,
-                createMugSuccess: createMugSuccessBlock,
-                createMugFail: createMugFailBlock)
+                createFlipSuccess: createFlipSuccessBlock,
+                createFlipFail: createFlipFailBlock)
         }
     }
     
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!) {
-        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, mug: nil)
+        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flip: nil)
         self.navigationController?.popViewControllerAnimated(false)
     }
     
@@ -166,5 +166,5 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
 }
 
 protocol ConfirmFlipViewControllerDelegate {
-    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, mug: Mug?)
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, flip: Flip?)
 }

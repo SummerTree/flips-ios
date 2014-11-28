@@ -13,26 +13,26 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class MugMessage, User;
+@class FlipMessage, User;
 
-@interface Mug : NSManagedObject
+@interface Flip : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * backgroundContentType;
 @property (nonatomic, retain) NSString * backgroundURL;
 @property (nonatomic, retain) NSString * category;
 @property (nonatomic, retain) NSNumber * isPrivate;
-@property (nonatomic, retain) NSString * mugID;
+@property (nonatomic, retain) NSString * flipID;
 @property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSString * soundURL;
 @property (nonatomic, retain) NSString * word;
-@property (nonatomic, retain) NSNumber * backgroundContentType;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) User *owner;
 @end
 
-@interface Mug (CoreDataGeneratedAccessors)
+@interface Flip (CoreDataGeneratedAccessors)
 
-- (void)addMessagesObject:(MugMessage *)value;
-- (void)removeMessagesObject:(MugMessage *)value;
+- (void)addMessagesObject:(FlipMessage *)value;
+- (void)removeMessagesObject:(FlipMessage *)value;
 - (void)addMessages:(NSSet *)values;
 - (void)removeMessages:(NSSet *)values;
 

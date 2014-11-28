@@ -17,11 +17,11 @@
 
 @implementation ImageVideoCreator
 
-+ (NSString *)videoPathForMug:(Mug *)mug {
++ (NSString *)videoPathForFlip:(Flip *)flip {
     CacheHandler *cacheHandler = [CacheHandler sharedInstance];
-    UIImage *backgroundImage = [UIImage imageWithData:[cacheHandler dataForUrl:mug.backgroundContentLocalPath]];
+    UIImage *backgroundImage = [UIImage imageWithData:[cacheHandler dataForUrl:flip.backgroundContentLocalPath]];
     
-    NSString *videoName = [NSString stringWithFormat:@"%@.mov", mug.mugID];
+    NSString *videoName = [NSString stringWithFormat:@"%@.mov", flip.flipID];
     NSString *videoPath = [NSString stringWithFormat:@"%@/%@", cacheHandler.applicationCacheDirectory, videoName];
 
     ImageVideoCreator *instance = [[ImageVideoCreator alloc] init];

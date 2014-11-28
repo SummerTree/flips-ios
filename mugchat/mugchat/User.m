@@ -10,22 +10,33 @@
 // the license agreement.
 //
 
-#import "Mug.h"
-#import "MugMessage.h"
 #import "User.h"
+#import "Contact.h"
+#import "Device.h"
+#import "Flip.h"
+#import "FlipMessage.h"
+#import "Room.h"
 
 
-@implementation Mug
+@implementation User
 
-@dynamic backgroundURL;
-@dynamic category;
-@dynamic isPrivate;
-@dynamic mugID;
-@dynamic removed;
-@dynamic soundURL;
-@dynamic word;
-@dynamic backgroundContentType;
-@dynamic messages;
-@dynamic owner;
+@dynamic birthday;
+@dynamic facebookID;
+@dynamic firstName;
+@dynamic isTemporary;
+@dynamic lastName;
+@dynamic me;
+@dynamic nickname;
+@dynamic phoneNumber;
+@dynamic photoURL;
+@dynamic pubnubID;
+@dynamic userID;
+@dynamic username;
+@dynamic adminRooms;
+@dynamic contacts;
+@dynamic device;
+@dynamic flips;
+@dynamic flipsSent;
+@dynamic rooms;
 
 @end

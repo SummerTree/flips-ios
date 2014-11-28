@@ -67,9 +67,9 @@ public class MessageService {
         let flipDataSource = MugDataSource()
         let roomDataSource = RoomDataSource()
         
-        var flips = Array<Mug>()
+        var flips = Array<Flip>()
         for flipId in flipIds {
-            var flip = flipDataSource.retrieveMugWithId(flipId)
+            var flip = flipDataSource.retrieveFlipWithId(flipId)
             flips.append(flip)
         }
         

@@ -12,7 +12,7 @@
 
 import Foundation
 
-struct MugJsonParams {
+struct FlipJsonParams {
     static let ID = "id"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
@@ -20,135 +20,134 @@ struct MugJsonParams {
     static let OWNER = "owner"
 }
 
-struct MugAttributes {
-    static let MUG_ID = "mugID"
-    static let MUG_OWNER = "owner"
+struct FlipAttributes {
+    static let FLIP_ID = "flipID"
+    static let FLIP_OWNER = "owner"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
     static let SOUND_URL = "soundURL"
 }
 
-public typealias CreateMugSuccess = (Mug) -> Void
-public typealias CreateMugFail = (String) -> Void
+public typealias CreateFlipSuccess = (Flip) -> Void
+public typealias CreateFlipFail = (String) -> Void
 
 class MugDataSource : BaseDataSource {
     
     private let EMPTY_FLIP_ID = "-1"
     
-    private func createEntityWithJson(json: JSON) -> Mug {
-        var entity: Mug! = Mug.createEntity() as Mug
-        self.fillMug(entity, withJsonData: json)
+    private func createEntityWithJson(json: JSON) -> Flip {
+        var entity: Flip! = Flip.createEntity() as Flip
+        self.fillFlip(entity, withJsonData: json)
         self.save()
         
         return entity
     }
     
-    private func fillMug(mug: Mug, withJsonData json: JSON) {
-        if (mug.mugID != json[MugJsonParams.ID].stringValue) {
-            println("Possible error. Will update mug id from (\(mug.mugID)) to (\(json[MugJsonParams.ID].stringValue))")
+    private func fillFlip(flip: Flip, withJsonData json: JSON) {
+        if (flip.flipID != json[FlipJsonParams.ID].stringValue) {
+            println("Possible error. Will update flip id from (\(flip.flipID)) to (\(json[FlipJsonParams.ID].stringValue))")
         }
         
-        mug.mugID = json[MugJsonParams.ID].stringValue
-        mug.word = json[MugJsonParams.WORD].stringValue
-        mug.backgroundURL = json[MugJsonParams.BACKGROUND_URL].stringValue
-        mug.soundURL = json[MugJsonParams.SOUND_URL].stringValue
+        flip.flipID = json[FlipJsonParams.ID].stringValue
+        flip.word = json[FlipJsonParams.WORD].stringValue
+        flip.backgroundURL = json[FlipJsonParams.BACKGROUND_URL].stringValue
+        flip.soundURL = json[FlipJsonParams.SOUND_URL].stringValue
         
-        let mugOwnerID = json[MugJsonParams.OWNER].stringValue
-        if (!mugOwnerID.isEmpty) {
+        let flipOwnerID = json[FlipJsonParams.OWNER].stringValue
+        if (!flipOwnerID.isEmpty) {
             let userDataSource = UserDataSource()
-            mug.owner = userDataSource.retrieveUserWithId(mugOwnerID)
+            flip.owner = userDataSource.retrieveUserWithId(flipOwnerID)
         }
     }
     
     
     // MARK: - Public Methods
     
-    func createOrUpdateMugsWithJson(json: JSON) -> Mug {
-        var mugID = json[MugJsonParams.ID].stringValue
-        var mug = self.getMugById(mugID)
+    func createOrUpdateFlipsWithJson(json: JSON) -> Flip {
+        var flipID = json[FlipJsonParams.ID].stringValue
+        var flip = self.getFlipById(flipID)
         
-        if (mug == nil) {
-            mug = self.createEntityWithJson(json)
+        if (flip == nil) {
+            flip = self.createEntityWithJson(json)
         } else {
-            self.fillMug(mug!, withJsonData: json)
+            self.fillFlip(flip!, withJsonData: json)
             self.save()
         }
         
-        return mug!
+        return flip!
     }
     
-    func createMugWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+    func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
         let cacheHandler = CacheHandler.sharedInstance
-        let mugService = MugService()
+        let flipService = MugService()
         
-        mugService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (mug) -> Void in
+        flipService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (flip) -> Void in
             var userDataSource = UserDataSource()
-            mug.owner = User.loggedUser()
-            mug.setBackgroundContentType(BackgroundContentType.Image)
+            flip.owner = User.loggedUser()
+            flip.setBackgroundContentType(BackgroundContentType.Image)
             
-            // TODO: SAVE IMAGE AND AUDIO IN THE CACHE
             if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: mug.backgroundURL, isTemporary: false)
+                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
             }
             
             if (soundURL != nil) {
-                cacheHandler.saveDataAtPath(soundURL!.relativePath!, withUrl: mug.soundURL, isTemporary: false)
+                cacheHandler.saveDataAtPath(soundURL!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
             }
             
-            createMugSuccess(mug)
+            createFlipSuccess(flip)
         }) { (flipError) -> Void in
             var message = flipError?.error as String!
-            createMugFail(message)
+            createFlipFail(message)
         }
     }
     
-    func createMugWithWord(word: String, videoURL: NSURL, createMugSuccess: CreateMugSuccess, createMugFail: CreateMugFail) {
+    func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
         let cacheHandler = CacheHandler.sharedInstance
-        let mugService = MugService()
+        let flipService = MugService()
         
-        mugService.createMug(word, videoPath: videoURL, isPrivate: true, createMugSuccessCallback: { (mug) -> Void in
+        flipService.createMug(word, videoPath: videoURL, isPrivate: true, createMugSuccessCallback: { (flip) -> Void in
             var userDataSource = UserDataSource()
-            mug.owner = User.loggedUser()
-            mug.setBackgroundContentType(BackgroundContentType.Video)
+            flip.owner = User.loggedUser()
+            flip.setBackgroundContentType(BackgroundContentType.Video)
             
-            cacheHandler.saveThumbnail(VideoHelper.generateThumbImageForFile(videoURL.relativePath!), forUrl: mug.backgroundURL)
-            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: mug.backgroundURL, isTemporary: false)
-            createMugSuccess(mug)
+            cacheHandler.saveThumbnail(VideoHelper.generateThumbImageForFile(videoURL.relativePath!), forUrl: flip.backgroundURL)
+            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
+            createFlipSuccess(flip)
         }) { (flipError) -> Void in
             var message = flipError?.error as String!
-            createMugFail(message)
+            createFlipFail(message)
         }
     }
     
-    // This mug is never uploaded to the server. It is used only via Pubnub
-    func createEmptyMugWithWord(word: String) -> Mug {
-        var mug: Mug! = Mug.MR_createEntity() as Mug
+    // This flip is never uploaded to the server. It is used only via Pubnub
+    func createEmptyFlipWithWord(word: String) -> Flip {
+        var flip: Flip! = Flip.MR_createEntity() as Flip
 
-        mug.word = word
+        flip.word = word
         
-        return mug
+        return flip
     }
 
     
-    func retrieveMugWithId(id: String) -> Mug {
-        var mug = self.getMugById(id)
+    func retrieveFlipWithId(id: String) -> Flip {
+        var flip = self.getFlipById(id)
         
-        if (mug == nil) {
-            println("Mug (\(id)) not found in the database and it mustn't happen. Check why it wasn't added to database yet.")
+        if (flip == nil) {
+            println("Flip (\(id)) not found in the database and it mustn't happen. Check why it wasn't added to database yet.")
         }
         
-        return mug!
+        return flip!
     }
     
-    func getMyMugs() -> [Mug] {
-        return Mug.findAllSortedBy(MugAttributes.MUG_ID, ascending: true, withPredicate: NSPredicate(format: "(\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))")) as [Mug]
+    func getMyFlips() -> [Flip] {
+        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: true, withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))")) as [Flip]
     }
     
-    func getMyMugsForWord(word: String) -> [Mug] {
-        return Mug.findAllWithPredicate(NSPredicate(format: "((\(MugAttributes.MUG_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(MugAttributes.WORD) like[cd] %@) and ( (\(MugAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(MugAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Mug]
+    func getMyFlipsForWord(word: String) -> [Flip] {
+        return Flip.findAllWithPredicate(NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(FlipAttributes.WORD) like[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Flip]
     }
     
-    func getMyMugIdsForWords(words: [String]) -> Dictionary<String, [String]> {
+    func getMyFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {
         var resultDictionary = Dictionary<String, [String]>()
         
         if (words.count == 0) {
@@ -162,9 +161,9 @@ class MugDataSource : BaseDataSource {
             // I've tried in many diffent ways with NSPredicate or NSCompoundPredicate, but none of it worked and for some of it returned an weird error about a selector not found.
             // The error happened when I tried to use: NSPredicate(format: <#String#>, argumentArray: <#[AnyObject]?#>)
             // Error: swift predicate reason: '-[Swift._NSContiguousString countByEnumeratingWithState:objects:count:]: unrecognized selector
-            var mugs = self.getMyMugsForWord(word)
-            for mug in mugs {
-                resultDictionary[word]?.append(mug.mugID)
+            var flips = self.getMyFlipsForWord(word)
+            for flip in flips {
+                resultDictionary[word]?.append(flip.flipID)
             }
         }
         
@@ -174,7 +173,7 @@ class MugDataSource : BaseDataSource {
     
     // MARK: - Private Getters Methods
     
-    private func getMugById(id: String) -> Mug? {
-        return Mug.findFirstByAttribute(MugAttributes.MUG_ID, withValue: id) as? Mug
+    private func getFlipById(id: String) -> Flip? {
+        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as? Flip
     }
 }

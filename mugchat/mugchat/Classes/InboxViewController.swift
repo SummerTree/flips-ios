@@ -102,12 +102,12 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var mug = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Mug
+        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Flip
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-            println("Download failed for mug: \(mug.mugID)")
+            println("Download failed for flip: \(flip.flipID)")
             // TODO: show download fail state
         } else {
-            if (mug.hasAllContentDownloaded()) {
+            if (flip.hasAllContentDownloaded()) {
                 self.refreshRooms()
             }
         }
