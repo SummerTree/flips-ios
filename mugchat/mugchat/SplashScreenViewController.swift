@@ -84,10 +84,14 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                     })
                 }, failure: { (mugError) -> Void in
                     println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
-                    activityIndicator.stopAnimating()
-                    
-                    var alertView = UIAlertView(title: LOGIN_ERROR, message: mugError!.error, delegate: self, cancelButtonTitle: "Retry")
-                    alertView.show()
+                    FBSession.activeSession().closeAndClearTokenInformation()
+                    FBSession.activeSession().close()
+                    FBSession.setActiveSession(nil)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        activityIndicator.stopAnimating()
+                        var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(mugError!.error!)\nDetail: \(mugError!.details!)", delegate: self, cancelButtonTitle: "Retry")
+                        alertView.show()
+                    })
             })
         }
     }
@@ -113,7 +117,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     // MARK: - UIAlertViewDelegate
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        splashScreenViewAttemptLoginWithFacebook()
+        splashScreenViewAttemptLogin()
     }
     
     private func openInboxViewController() {

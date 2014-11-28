@@ -106,6 +106,10 @@ class ContactDataSource : BaseDataSource {
     }
 
     func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [Contact] {
+        if (countElements(phoneNumber) == 0) {
+            return [Contact]()
+        }
+        
         let contacts = Contact.findAll() as [Contact]
         let cleannedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
         

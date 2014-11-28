@@ -16,7 +16,7 @@ private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
 
 class ActivityIndicatorHelper {
     
-    class func showActivityIndicatorAtView(view: UIView) {
+    class func showActivityIndicatorAtView(view: UIView, style: UIActivityIndicatorViewStyle) {
         var activityIndicator: UIActivityIndicatorView?
         for subview in view.subviews {
             if (subview.tag == ACTIVITY_INDICATOR_TAG) {
@@ -25,7 +25,7 @@ class ActivityIndicatorHelper {
         }
         
         if (activityIndicator == nil) {
-            activityIndicator = ActivityIndicatorHelper.setupActivityIndicator()
+            activityIndicator = ActivityIndicatorHelper.setupActivityIndicator(style)
             
             view.addSubview(activityIndicator!)
             
@@ -41,6 +41,10 @@ class ActivityIndicatorHelper {
         UIView.animateWithDuration(ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
             activityIndicator!.alpha = 0.8
         })
+    }
+    
+    class func showActivityIndicatorAtView(view: UIView) {
+        showActivityIndicatorAtView(view, style: UIActivityIndicatorViewStyle.WhiteLarge)
     }
     
     class func hideActivityIndicatorAtView(view: UIView) {
@@ -65,8 +69,15 @@ class ActivityIndicatorHelper {
         })
     }
     
-    private class func setupActivityIndicator() -> UIActivityIndicatorView {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+    private class func setupActivityIndicator(style: UIActivityIndicatorViewStyle?) -> UIActivityIndicatorView {
+        var activityIndicator: UIActivityIndicatorView!
+        
+        if let indicatorStyle = style {
+            activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+        } else {
+            activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        }
+
         activityIndicator.backgroundColor = UIColor.blackColor()
         activityIndicator.alpha = 0
         activityIndicator.layer.cornerRadius = 8

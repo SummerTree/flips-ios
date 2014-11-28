@@ -93,12 +93,19 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         }
     }
     
+    func viewWillAppear() {
+        navigationBar.setAvatarImageUrl(User.loggedUser()!.photoURL)
+    }
+    
     
     // MARK: - Rooms Setter
     
     func setRoomIds(roomIds: [String]) {
         self.roomIds = roomIds
-        self.conversationsTableView.reloadData()
+
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.conversationsTableView.reloadData()
+        })
     }
     
     

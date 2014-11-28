@@ -108,6 +108,18 @@ class UserDataSource : BaseDataSource {
         
         let contactDataSource = ContactDataSource()
         var contacts = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
+        
+        let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
+        let authenticatedId = AuthenticationHelper.sharedInstance.userInSession?.userID
+        
+        if (contacts.isEmpty && isAuthenticated && authenticatedId != user?.userID) {
+            var facebookID = user?.facebookID
+            var phonetype = (facebookID != nil) ? facebookID : ""
+            
+            var contact = contactDataSource.createOrUpdateContactWith(user!.firstName, lastName: user!.lastName, phoneNumber: user!.phoneNumber, phoneType: phonetype!)
+            contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
+        }
+        
         for contact in contacts {
             contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
             user?.addContactsObject(contact)

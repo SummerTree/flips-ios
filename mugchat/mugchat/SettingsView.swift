@@ -251,7 +251,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             
             self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)
             if let photoURL = User.loggedUser()?.photoURL {
-                userProfileCell.setImageURL(NSURL(string: photoURL))
+                userProfileCell.setAvatarURL(photoURL)
             }
         }
     }
@@ -304,6 +304,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
         let fullname = User.loggedUser()!.fullName()
         
+        self.userProfileCell.setAvatarURL(User.loggedUser()!.photoURL)
         self.userProfileCell.setActionLabelText(fullname)
         self.userProfileCell.setActionDetailLabelText(detailedLabel)
     }
