@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class MugText {
+class FlipText {
     
     var position: Int!
     var text: String!

@@ -97,6 +97,6 @@ extension UIViewController {
     private func setNavBarColor() {
         self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.alpha = 0.9
-        self.navigationController?.navigationBar.tintColor = .mugOrange()
+        self.navigationController?.navigationBar.tintColor = .flipOrange()
     }
 }

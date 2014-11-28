@@ -10,11 +10,10 @@
 // the license agreement.
 //
 
-public typealias MugDownloadFinished = (Flip, NSError?) -> Void
 private typealias DownloadFinished = (BackgroundContentType, NSError?) -> Void
 
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
-let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY: String = "download_finished_notification_param_mug_key"
+let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: String = "download_finished_notification_param_flip_key"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY: String = "download_finished_notification_param_fail_key"
 
 public class Downloader : NSObject {
@@ -102,7 +101,7 @@ public class Downloader : NSObject {
         downloadTask.resume()
     }
 
-    func downloadDataForMug(flip: Flip, isTemporary: Bool = true) {
+    func downloadDataForFlip(flip: Flip, isTemporary: Bool = true) {
         dispatch_async(dispatch_queue_create("download flip queue", nil), { () -> Void in
             var group = dispatch_group_create()
             
@@ -130,21 +129,21 @@ public class Downloader : NSObject {
             
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             
-            self.sendDownloadFinishedBroadcastForMug(flip, error: downloadError)
+            self.sendDownloadFinishedBroadcastForFlip(flip, error: downloadError)
         })
     }
     
-    private func sendDownloadFinishedBroadcastForMug(flip: Flip, error: NSError?) {
+    private func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
         if (error != nil) {
             println("Error download flip content: \(error)")
         }
         
         // TODO: we cannot send the flip. We should change for the flipID
-        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY: flip]
+        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip]
         
         var downloadFailed: Bool = (error != nil)
         if (downloadFailed) {
-            userInfo.updateValue(downloadFailed, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY)
+            userInfo.updateValue(downloadFailed, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY)
         }
     
         NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)

@@ -26,7 +26,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private var composeBottomViewContainer: ComposeBottomViewContainer!
     
     private var composeTitle: String!
-    internal var flipWords: [MugText]!
+    internal var flipWords: [FlipText]!
     
     internal var highlightedWordIndex: Int!
     
@@ -91,8 +91,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
             var word = words[i]
-            var mugText: MugText = MugText(position: i, text: word, state: FlipState.NewWord)
-            self.flipWords.append(mugText)
+            var flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NewWord)
+            self.flipWords.append(flipText)
             myFlipsDictionary[word] = Array<String>()
         }
     }
@@ -119,7 +119,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.addConstraints()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            self.reloadMyMugs()
+            self.reloadMyFlips()
             self.updateFlipWordsState()
             self.showContentForHighlightedWord()
         })
@@ -242,7 +242,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private func showFlipCreatedState(flipId: String) {
         if (self.canShowMyFlips()) {
             self.composeTopViewContainer.showFlip(flipId)
-            self.composeBottomViewContainer.showMyMugs()
+            self.composeBottomViewContainer.showMyFlips()
         } else {
             self.composeTopViewContainer.showFlip(flipId)
             self.composeBottomViewContainer.showFlipCreateMessage()
@@ -257,7 +257,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private func showNewFlipWithSavedFlipsForWord(word: String) {
         if (self.canShowMyFlips()) {
             self.composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: word)
-            self.composeBottomViewContainer.showMyMugs()
+            self.composeBottomViewContainer.showMyFlips()
         } else {
             self.showNewFlipWithoutSavedFlipsForWord(word)
         }
@@ -266,7 +266,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - Flips CoreData Loader
     
-    internal func reloadMyMugs() {
+    internal func reloadMyFlips() {
         let flipDataSource = FlipDataSource()
         
         var words = Array<String>()
@@ -280,8 +280,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - FlipWords Methods
     
-    private func onMugAssociated() {
-        self.reloadMyMugs()
+    private func onFlipAssociated() {
+        self.reloadMyFlips()
         self.updateFlipWordsState()
         self.moveToNextFlipWord()
     }
@@ -289,16 +289,16 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     internal func updateFlipWordsState() {
         for flipWord in flipWords {
             let word = flipWord.text
-            let myMugsForWord = myFlipsDictionary[word]
+            let myFlipsForWord = myFlipsDictionary[word]
             
             if (flipWord.associatedFlipId == nil) {
-                if (myMugsForWord!.count == 0) {
+                if (myFlipsForWord!.count == 0) {
                     flipWord.state = .NewWord
                 } else {
                     flipWord.state = .NotAssociatedWithResources
                 }
             } else {
-                if (myMugsForWord!.count == 1) {
+                if (myFlipsForWord!.count == 1) {
                     flipWord.state = .AssociatedWithoutOtherResources
                 } else {
                     flipWord.state = .AssociatedWithOtherResources
@@ -337,7 +337,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - FlipMessageWordListViewDataSource
     
-    func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, flipWordAtIndex index: Int) -> MugText {
+    func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, flipWordAtIndex index: Int) -> FlipText {
         return flipWords[index]
     }
     
@@ -352,7 +352,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - FlipMessageWordListViewDelegate
     
-    func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSelectFlipWord flipWord: MugText!) {
+    func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSelectFlipWord flipWord: FlipText!) {
         highlightedWordIndex = flipWord.position
         
         // If the user moves to another word while we were showing the audio buttons, that Flip will be discarded.
@@ -367,7 +367,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         case FlipState.NotAssociatedWithResources:
             if (self.canShowMyFlips()) {
                 composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
-                composeBottomViewContainer.showMyMugs()
+                composeBottomViewContainer.showMyFlips()
             } else {
                 composeTopViewContainer.showCameraWithWord(flipWord.text)
                 composeBottomViewContainer.showCameraButtons()
@@ -375,24 +375,24 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         case FlipState.AssociatedWithoutOtherResources, FlipState.AssociatedWithOtherResources:
             composeTopViewContainer.showFlip(flipWord.associatedFlipId!)
             if (self.canShowMyFlips()) {
-                composeBottomViewContainer.showMyMugs()
+                composeBottomViewContainer.showMyFlips()
             } else {
                 composeBottomViewContainer.showFlipCreateMessage()
             }
         }
     }
     
-    func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSplitFlipWord flipWord: MugText!) {
-        var splittedTextWords: [String] = MugStringsUtil.splitMugString(flipWord.text);
+    func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSplitFlipWord flipWord: FlipText!) {
+        var splittedTextWords: [String] = FlipStringsUtil.splitFlipString(flipWord.text);
         
-        var newFlipWords = Array<MugText>()
-        var flipWordsToAdd = Array<MugText>()
+        var newFlipWords = Array<FlipText>()
+        var flipWordsToAdd = Array<FlipText>()
         var position = 0
         if (splittedTextWords.count > 1) {
             for oldFlipWord in flipWords {
                 if (flipWord.position == oldFlipWord.position) {
                     for newWord in splittedTextWords {
-                        var newFlipWord = MugText(position: position, text: newWord, state: FlipState.NewWord)
+                        var newFlipWord = FlipText(position: position, text: newWord, state: FlipState.NewWord)
                         newFlipWords.append(newFlipWord)
                         flipWordsToAdd.append(newFlipWord)
                         position++
@@ -405,10 +405,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             flipWords = newFlipWords
             
-            self.reloadMyMugs()
+            self.reloadMyFlips()
             self.updateFlipWordsState()
             
-            self.composeBottomViewContainer.reloadMyMugs() // Refresh selected state
+            self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
             
             if (highlightedWordIndex == flipWord.position) {
                 self.showContentForHighlightedWord(shouldReloadWords: false)
@@ -462,7 +462,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         })
     }
     
-    func composeBottomViewContainerWillOpenMyMugsView(composeBottomViewContainer: ComposeBottomViewContainer) {
+    func composeBottomViewContainerWillOpenMyFlipsView(composeBottomViewContainer: ComposeBottomViewContainer) {
         let flipWord = flipWords[highlightedWordIndex]
         
         if (flipWord.associatedFlipId != nil) {
@@ -470,7 +470,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         } else {
             composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
         }
-        composeBottomViewContainer.reloadMyMugs()
+        composeBottomViewContainer.reloadMyFlips()
     }
     
     func composeBottomViewContainerWillOpenCameraControls(composeBottomViewContainer: ComposeBottomViewContainer) {
@@ -482,7 +482,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
             var imagePickerController = UIImagePickerControllerWithLightStatusBar()
             var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-            imagePickerController.navigationBar.barTintColor = UIColor.mugOrange()
+            imagePickerController.navigationBar.barTintColor = UIColor.flipOrange()
             imagePickerController.navigationBar.translucent = false
             imagePickerController.navigationBar.tintColor = UIColor.whiteColor()
             imagePickerController.navigationBar.titleTextAttributes = textAttributes
@@ -512,7 +512,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.updateFlipWordsState()
         
         self.flipMessageWordListView.reloadWords(animated: false) // Word state can change
-        self.composeBottomViewContainer.reloadMyMugs() // Refresh selected state
+        self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
     }
     
     
@@ -606,7 +606,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let flipWord = self.flipWords[self.highlightedWordIndex]
         if (success) {
             flipWord.associatedFlipId = flip?.flipID
-            self.onMugAssociated()
+            self.onFlipAssociated()
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)
         }

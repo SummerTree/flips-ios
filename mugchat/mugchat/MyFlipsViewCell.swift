@@ -10,14 +10,14 @@
 // the license agreement.
 //
 
-private let MY_MUGS_CELL_WIDTH: CGFloat = 83.5
-private let MY_MUGS_CELL_HEIGHT: CGFloat = 83.5
+private let MY_FLIPS_CELL_WIDTH: CGFloat = 83.5
+private let MY_FLIPS_CELL_HEIGHT: CGFloat = 83.5
 
 class MyFlipsViewCell : UICollectionViewCell {
     
     private var flip: Flip! // TODO: change it to keep flipID instead of the NSManagedObject
     private var cellImageView: UIImageView!
-    private var seletedOverlayView: SelectedMugOverlayView!
+    private var seletedOverlayView: SelectedFlipOverlayView!
     
     var isSelected: Bool!
     
@@ -25,10 +25,10 @@ class MyFlipsViewCell : UICollectionViewCell {
         super.init(frame: frame)
         
         cellImageView = UIImageView()
-        cellImageView.frame.size = CGSizeMake(MY_MUGS_CELL_WIDTH, MY_MUGS_CELL_HEIGHT)
+        cellImageView.frame.size = CGSizeMake(MY_FLIPS_CELL_WIDTH, MY_FLIPS_CELL_HEIGHT)
         self.addSubview(cellImageView);
         
-        self.seletedOverlayView = SelectedMugOverlayView(frame: CGRectMake(0, 0, MY_MUGS_CELL_WIDTH, MY_MUGS_CELL_WIDTH))
+        self.seletedOverlayView = SelectedFlipOverlayView(frame: CGRectMake(0, 0, MY_FLIPS_CELL_WIDTH, MY_FLIPS_CELL_WIDTH))
         self.seletedOverlayView.alpha = 0
         self.addSubview(seletedOverlayView)
     }

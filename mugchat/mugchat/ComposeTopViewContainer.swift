@@ -15,8 +15,6 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     private let ANIMATION_TRANSITON_DURATION: NSTimeInterval = 0.3
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
     
-    private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
-    
     private var cameraPreview: CameraView!
     private var cameraFilterImageView: UIImageView!
     private var cameraWordLabel: UILabel!

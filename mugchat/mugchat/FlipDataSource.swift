@@ -79,9 +79,9 @@ class FlipDataSource : BaseDataSource {
     
     func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
         let cacheHandler = CacheHandler.sharedInstance
-        let flipService = MugService()
+        let flipService = FlipService()
         
-        flipService.createMug(word, backgroundImage: backgroundImage, soundPath: soundURL, createMugSuccessCallback: { (flip) -> Void in
+        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundURL, createFlipSuccessCallback: { (flip) -> Void in
             var userDataSource = UserDataSource()
             flip.owner = User.loggedUser()
             flip.setBackgroundContentType(BackgroundContentType.Image)
@@ -103,9 +103,9 @@ class FlipDataSource : BaseDataSource {
     
     func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
         let cacheHandler = CacheHandler.sharedInstance
-        let flipService = MugService()
+        let flipService = FlipService()
         
-        flipService.createMug(word, videoPath: videoURL, isPrivate: true, createMugSuccessCallback: { (flip) -> Void in
+        flipService.createFlip(word, videoPath: videoURL, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
             var userDataSource = UserDataSource()
             flip.owner = User.loggedUser()
             flip.setBackgroundContentType(BackgroundContentType.Video)

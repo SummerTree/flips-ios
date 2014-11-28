@@ -102,7 +102,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Flip
+        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as Flip
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
             println("Download failed for flip: \(flip.flipID)")
             // TODO: show download fail state

@@ -10,20 +10,20 @@
 // the license agreement.
 //
 
-class MugStringsUtil {
+class FlipStringsUtil {
     
-    class func splitMugString(mugString: String) -> [String] {
-        var newString = Array(mugString).reduce("") { $0 + (String($1) == "!" ? " !" : String($1)) }
+    class func splitFlipString(flipString: String) -> [String] {
+        var newString = Array(flipString).reduce("") { $0 + (String($1) == "!" ? " !" : String($1)) }
         newString = Array(newString).reduce("") { $0 + (String($1) == "?" ? " ?" : String($1)) }
         newString = Array(newString).reduce("") { $0 + (String($1) == "." ? " ." : String($1)) }
         newString = Array(newString).reduce("") { $0 + (String($1) == "," ? " ," : String($1)) }
         newString = Array(newString).reduce("") { $0 + (String($1) == ";" ? " ;" : String($1)) }
         
-        var arrayOfMugs : [String] = newString.componentsSeparatedByCharactersInSet(NSCharacterSet (charactersInString: " "))
+        var arrayOfFlips : [String] = newString.componentsSeparatedByCharactersInSet(NSCharacterSet (charactersInString: " "))
         
         //TODO: Strings of punctuation without whitespace in between are joined together and treated as one word (such as "!!!" or "?!?!").
         
-        return arrayOfMugs
+        return arrayOfFlips
     }
     
 }

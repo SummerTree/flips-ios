@@ -94,7 +94,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         logoutButton.backgroundColor = UIColor.whiteColor()
         logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+        logoutButton.setTitleColor(UIColor.flipOrange(), forState: UIControlState.Normal)
         logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
         tableFooterView.addSubview(logoutButton)
         

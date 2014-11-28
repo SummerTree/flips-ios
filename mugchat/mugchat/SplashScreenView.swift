@@ -18,11 +18,11 @@ class SplashScreenView: UIView {
     
     private let MARGIN_RIGHT:CGFloat = 40.0
     private let MARGIN_LEFT:CGFloat = 40.0
-    private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
+    private let FLIPS_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
     
     private var logoView: UIView!
     private var bubbleChatImageView: UIImageView!
-    private var mugchatWordImageView: UIImageView!
+    private var flipsWordImageView: UIImageView!
     
     // MARK: - Required inits
     
@@ -36,7 +36,7 @@ class SplashScreenView: UIView {
     
     override init() {
         super.init()
-        self.backgroundColor = UIColor.mugOrangeBackground()
+        self.backgroundColor = UIColor.flipOrangeBackground()
         self.addSubviews()
         self.makeConstraints()
     }
@@ -51,10 +51,10 @@ class SplashScreenView: UIView {
         bubbleChatImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(bubbleChatImageView)
         
-        mugchatWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
-        mugchatWordImageView.sizeToFit()
-        mugchatWordImageView.contentMode = UIViewContentMode.Center
-        logoView.addSubview(mugchatWordImageView)
+        flipsWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
+        flipsWordImageView.sizeToFit()
+        flipsWordImageView.contentMode = UIViewContentMode.Center
+        logoView.addSubview(flipsWordImageView)
     }
     
     func makeConstraints() {
@@ -65,7 +65,7 @@ class SplashScreenView: UIView {
             make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
             make.top.equalTo()(self.bubbleChatImageView)
-            make.bottom.equalTo()(self.mugchatWordImageView)
+            make.bottom.equalTo()(self.flipsWordImageView)
         }
         
         bubbleChatImageView.mas_makeConstraints { (make) -> Void in
@@ -76,13 +76,13 @@ class SplashScreenView: UIView {
             make.right.equalTo()(self.logoView)
         }
         
-        mugchatWordImageView.mas_makeConstraints { (make) -> Void in
+        flipsWordImageView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.logoView)
-            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.MUGCHAT_WORD_LOGO_MARGIN_TOP)
+            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.FLIPS_WORD_LOGO_MARGIN_TOP)
             make.left.equalTo()(self.logoView)
             make.right.equalTo()(self.logoView)
             make.bottom.equalTo()(self.logoView)
-            make.height.equalTo()(self.mugchatWordImageView.frame.height)
+            make.height.equalTo()(self.flipsWordImageView.frame.height)
         }
 
     }

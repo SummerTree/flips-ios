@@ -79,7 +79,7 @@
 		70ABC7EA1A09376100A7085A /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */; };
 		70AC67021A23C98A003FE3CA /* ImportContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67011A23C98A003FE3CA /* ImportContactViewController.swift */; };
 		70AC67051A23C99F003FE3CA /* ImportContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67041A23C99F003FE3CA /* ImportContactView.swift */; };
-		70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */; };
+		70B560A219D995E600FE4C34 /* FlipsWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* FlipsWebViewController.swift */; };
 		70B560A519D996F000FE4C34 /* FlipsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A419D996F000FE4C34 /* FlipsWebView.swift */; };
 		70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */; };
 		70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7696119E706B100CAA9A9 /* MessageReceiver.swift */; };
@@ -110,7 +110,7 @@
 		7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */; };
 		7A2ED6AF19FA7AA6000C6B86 /* RoomExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2ED6AE19FA7AA6000C6B86 /* RoomExtension.swift */; };
 		7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A356E4419F95546002D923B /* ContactDataSource.swift */; };
-		7A3733C919FADDE800D1E87B /* MugService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* MugService.swift */; };
+		7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* FlipService.swift */; };
 		7A3733DD19FE619300D1E87B /* FlipMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */; };
 		7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
@@ -172,11 +172,11 @@
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
 		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
 		A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */; };
-		A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */; };
-		A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* MugText.swift */; };
-		A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* MugTextView.swift */; };
+		A2392BF919EEE7C70037B0C0 /* FlipStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* FlipStringsUtil.swift */; };
+		A2392BFA19EEE7C70037B0C0 /* FlipText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* FlipText.swift */; };
+		A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* FlipTextView.swift */; };
 		A2A5C6D719FEBC3500E4CB2C /* MyFlipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* MyFlipsView.swift */; };
-		A2A5C6D91A001E7A00E4CB2C /* SelectedMugOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */; };
+		A2A5C6D91A001E7A00E4CB2C /* SelectedFlipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D81A001E7A00E4CB2C /* SelectedFlipOverlayView.swift */; };
 		A2A5C6DB1A01457A00E4CB2C /* MyFlipsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6DA1A01457A00E4CB2C /* MyFlipsViewCell.swift */; };
 		A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
@@ -273,7 +273,7 @@
 		70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		70AC67011A23C98A003FE3CA /* ImportContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactViewController.swift; sourceTree = "<group>"; };
 		70AC67041A23C99F003FE3CA /* ImportContactView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactView.swift; sourceTree = "<group>"; };
-		70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugChatWebViewController.swift; sourceTree = "<group>"; };
+		70B560A119D995E600FE4C34 /* FlipsWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsWebViewController.swift; sourceTree = "<group>"; };
 		70B560A419D996F000FE4C34 /* FlipsWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsWebView.swift; sourceTree = "<group>"; };
 		70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+StatusBarLight.swift"; sourceTree = "<group>"; };
 		70B7696119E706B100CAA9A9 /* MessageReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageReceiver.swift; sourceTree = "<group>"; };
@@ -307,7 +307,7 @@
 		7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIButtonExtensions.swift; path = Classes/UIButtonExtensions.swift; sourceTree = "<group>"; };
 		7A2ED6AE19FA7AA6000C6B86 /* RoomExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomExtension.swift; sourceTree = "<group>"; };
 		7A356E4419F95546002D923B /* ContactDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactDataSource.swift; sourceTree = "<group>"; };
-		7A3733C819FADDE800D1E87B /* MugService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugService.swift; sourceTree = "<group>"; };
+		7A3733C819FADDE800D1E87B /* FlipService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipService.swift; sourceTree = "<group>"; };
 		7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageExtension.swift; sourceTree = "<group>"; };
 		7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryAssetsHelper.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
@@ -380,11 +380,11 @@
 		A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStringsTextField.swift; sourceTree = "<group>"; };
-		A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugStringsUtil.swift; sourceTree = "<group>"; };
-		A2392BF619EEE7C70037B0C0 /* MugText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugText.swift; sourceTree = "<group>"; };
-		A2392BF819EEE7C70037B0C0 /* MugTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugTextView.swift; sourceTree = "<group>"; };
+		A2392BF519EEE7C70037B0C0 /* FlipStringsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipStringsUtil.swift; sourceTree = "<group>"; };
+		A2392BF619EEE7C70037B0C0 /* FlipText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipText.swift; sourceTree = "<group>"; };
+		A2392BF819EEE7C70037B0C0 /* FlipTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipTextView.swift; sourceTree = "<group>"; };
 		A2A5C6D619FEBC3500E4CB2C /* MyFlipsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFlipsView.swift; sourceTree = "<group>"; };
-		A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedMugOverlayView.swift; sourceTree = "<group>"; };
+		A2A5C6D81A001E7A00E4CB2C /* SelectedFlipOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedFlipOverlayView.swift; sourceTree = "<group>"; };
 		A2A5C6DA1A01457A00E4CB2C /* MyFlipsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFlipsViewCell.swift; sourceTree = "<group>"; };
 		A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
@@ -475,7 +475,7 @@
 				5707186419D1AEBB0069064F /* FlipsService.swift */,
 				5707186619D1AF110069064F /* UserService.swift */,
 				5784778E19DDB9530063A543 /* DeviceService.swift */,
-				7A3733C819FADDE800D1E87B /* MugService.swift */,
+				7A3733C819FADDE800D1E87B /* FlipService.swift */,
 				7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */,
 				1D48E9E21A27389300FA890E /* BuilderService.swift */,
 			);
@@ -767,11 +767,11 @@
 			isa = PBXGroup;
 			children = (
 				7A8BFEDC1A095A6900E7F2A3 /* Utils */,
-				7A8BFEDB1A09597600E7F2A3 /* Mugs Collection */,
+				7A8BFEDB1A09597600E7F2A3 /* Flips Collection */,
 				7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */,
 				7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */,
 				7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */,
-				A2392BF819EEE7C70037B0C0 /* MugTextView.swift */,
+				A2392BF819EEE7C70037B0C0 /* FlipTextView.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -837,7 +837,7 @@
 		70B560A019D995D500FE4C34 /* Web View */ = {
 			isa = PBXGroup;
 			children = (
-				70B560A119D995E600FE4C34 /* MugChatWebViewController.swift */,
+				70B560A119D995E600FE4C34 /* FlipsWebViewController.swift */,
 			);
 			name = "Web View";
 			sourceTree = "<group>";
@@ -960,7 +960,7 @@
 			isa = PBXGroup;
 			children = (
 				7A11792119DA07F30086A66B /* ComposeViewController.swift */,
-				A2392BF619EEE7C70037B0C0 /* MugText.swift */,
+				A2392BF619EEE7C70037B0C0 /* FlipText.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -1025,20 +1025,20 @@
 			name = "Data Sources";
 			sourceTree = "<group>";
 		};
-		7A8BFEDB1A09597600E7F2A3 /* Mugs Collection */ = {
+		7A8BFEDB1A09597600E7F2A3 /* Flips Collection */ = {
 			isa = PBXGroup;
 			children = (
 				A2A5C6D619FEBC3500E4CB2C /* MyFlipsView.swift */,
 				A2A5C6DA1A01457A00E4CB2C /* MyFlipsViewCell.swift */,
-				A2A5C6D81A001E7A00E4CB2C /* SelectedMugOverlayView.swift */,
+				A2A5C6D81A001E7A00E4CB2C /* SelectedFlipOverlayView.swift */,
 			);
-			name = "Mugs Collection";
+			name = "Flips Collection";
 			sourceTree = "<group>";
 		};
 		7A8BFEDC1A095A6900E7F2A3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A2392BF519EEE7C70037B0C0 /* MugStringsUtil.swift */,
+				A2392BF519EEE7C70037B0C0 /* FlipStringsUtil.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1340,7 +1340,7 @@
 				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
-				A2392BF919EEE7C70037B0C0 /* MugStringsUtil.swift in Sources */,
+				A2392BF919EEE7C70037B0C0 /* FlipStringsUtil.swift in Sources */,
 				07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */,
 				705B3DD91A03B9DD00E0D3E9 /* PreviewView.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
@@ -1355,7 +1355,7 @@
 				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
 				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
 				07B66B301A147B5800407A28 /* MBContactCollectionViewPromptCell.m in Sources */,
-				A2A5C6D91A001E7A00E4CB2C /* SelectedMugOverlayView.swift in Sources */,
+				A2A5C6D91A001E7A00E4CB2C /* SelectedFlipOverlayView.swift in Sources */,
 				574156A219D34F2B006F0A2F /* FlipError.swift in Sources */,
 				7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */,
 				0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */,
@@ -1388,7 +1388,7 @@
 				0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */,
 				A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */,
 				0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */,
-				A2392BFA19EEE7C70037B0C0 /* MugText.swift in Sources */,
+				A2392BFA19EEE7C70037B0C0 /* FlipText.swift in Sources */,
 				7049A7A21A111998001D8121 /* ChangeNumberInfoView.swift in Sources */,
 				70577C761A13AECF0006B1FD /* ContactListHelper.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
@@ -1412,7 +1412,7 @@
 				7AF82DFF19EFEC5800D0393F /* UserDataSource.swift in Sources */,
 				5786B2CE19EEADD400021DD3 /* ChatView.swift in Sources */,
 				7046C9B719F18EB100CBD72D /* AudioRecorderService.swift in Sources */,
-				A2392BFC19EEE7C70037B0C0 /* MugTextView.swift in Sources */,
+				A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
@@ -1427,7 +1427,7 @@
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
-				7A3733C919FADDE800D1E87B /* MugService.swift in Sources */,
+				7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */,
 				07B66B321A147B5800407A28 /* MBContactPicker.m in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */,
@@ -1456,7 +1456,7 @@
 				7A9619DC19DB2976005E4343 /* FlipsViewController.swift in Sources */,
 				70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */,
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
-				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
+				70B560A219D995E600FE4C34 /* FlipsWebViewController.swift in Sources */,
 				7AF82E0319EFECDC00D0393F /* FlipDataSource.swift in Sources */,
 				7043DF381A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */,

@@ -62,7 +62,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let downloader = Downloader.sharedInstance
         for var i = 0; i < flipMessage.flips.count; i++ {
             println("       flip #\(flipMessage.flips.objectAtIndex(i).flipID)")
-            downloader.downloadDataForMug(flipMessage.flips.objectAtIndex(i) as Flip, isTemporary: true)
+            downloader.downloadDataForFlip(flipMessage.flips.objectAtIndex(i) as Flip, isTemporary: true)
         }
     }
     
@@ -88,7 +88,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Flip
+        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as Flip
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
             println("Download failed for flip: \(flip.flipID)")
         } else {

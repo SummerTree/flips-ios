@@ -17,13 +17,13 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     var delegate: ConfirmFlipViewDelegate?
     
-    private let MUG_IMAGE_WIDTH: CGFloat = 240.0
-    private let MUG_VIDEO_WIDTH: CGFloat = 240.0
-    private let MUG_WORD_LABEL_MARGIN_BOTTOM: CGFloat = 40.0
+    private let FLIP_IMAGE_WIDTH: CGFloat = 240.0
+    private let FLIP_VIDEO_WIDTH: CGFloat = 240.0
+    private let FLIP_WORD_LABEL_MARGIN_BOTTOM: CGFloat = 40.0
     private let ACTIVITY_INDICATOR_SIZE: CGFloat = 100
     private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
     
-    private var mugContainerView: UIView!
+    private var flipContainerView: UIView!
     private var flipImageView: UIImageView!
     private var moviePlayer: MPMoviePlayerController!
     private var flipWordLabel: UILabel!
@@ -80,16 +80,16 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     }
     
     func addSubviews() {
-        mugContainerView = UIView()
+        flipContainerView = UIView()
         var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
         tapGestureRecognizer.delegate = self
-        mugContainerView.addGestureRecognizer(tapGestureRecognizer)
+        flipContainerView.addGestureRecognizer(tapGestureRecognizer)
         
-        self.addSubview(mugContainerView)
+        self.addSubview(flipContainerView)
         
         if (self.flipImageView != nil) {
             flipImageView.contentMode = UIViewContentMode.ScaleAspectFit
-            mugContainerView.addSubview(self.flipImageView)
+            flipContainerView.addSubview(self.flipImageView)
         }
         
         if (self.moviePlayer != nil) {
@@ -97,18 +97,18 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
             self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
             self.moviePlayer.shouldAutoplay = false
             
-            mugContainerView.addSubview(moviePlayer.view)
+            flipContainerView.addSubview(moviePlayer.view)
             NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
         }
         
         flipWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
         flipWordLabel.textColor = UIColor.whiteColor()
         
-        mugContainerView.addSubview(self.flipWordLabel)
+        flipContainerView.addSubview(self.flipWordLabel)
         
         rejectButton = UIButton()
         rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
-        rejectButton.backgroundColor = UIColor.mugOrange()
+        rejectButton.backgroundColor = UIColor.flipOrange()
         rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(rejectButton)
         
@@ -147,24 +147,24 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     }
     
     func makeConstraints() {
-        mugContainerView.mas_makeConstraints { (make) -> Void in
+        flipContainerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.bottom.equalTo()(self.flipImageView)
         }
         
         // asking help to delegate to align the container with navigation bar
-        self.delegate?.confirmFlipViewMakeConstraintToNavigationBarBottom(mugContainerView)
+        self.delegate?.confirmFlipViewMakeConstraintToNavigationBarBottom(flipContainerView)
         
         flipImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.mugContainerView)
+            make.top.equalTo()(self.flipContainerView)
             
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.centerX.equalTo()(self.mugContainerView)
-                make.width.equalTo()(self.MUG_IMAGE_WIDTH)
+                make.centerX.equalTo()(self.flipContainerView)
+                make.width.equalTo()(self.FLIP_IMAGE_WIDTH)
             } else {
-                make.left.equalTo()(self.mugContainerView)
-                make.right.equalTo()(self.mugContainerView)
+                make.left.equalTo()(self.flipContainerView)
+                make.right.equalTo()(self.flipContainerView)
             }
 
             make.height.equalTo()(self.flipImageView.mas_width)
@@ -172,14 +172,14 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         
         if (self.moviePlayer != nil) {
             self.moviePlayer.view.mas_makeConstraints({ (make) -> Void in
-                make.top.equalTo()(self.mugContainerView)
+                make.top.equalTo()(self.flipContainerView)
                 
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                    make.centerX.equalTo()(self.mugContainerView)
-                    make.width.equalTo()(self.MUG_VIDEO_WIDTH)
+                    make.centerX.equalTo()(self.flipContainerView)
+                    make.width.equalTo()(self.FLIP_VIDEO_WIDTH)
                 } else {
-                    make.left.equalTo()(self.mugContainerView)
-                    make.right.equalTo()(self.mugContainerView)
+                    make.left.equalTo()(self.flipContainerView)
+                    make.right.equalTo()(self.flipContainerView)
                 }
                 
                 make.height.equalTo()(self.moviePlayer.view.mas_width)
@@ -187,12 +187,12 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         }
         
         flipWordLabel.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self.mugContainerView).with().offset()(-self.MUG_WORD_LABEL_MARGIN_BOTTOM)
-            make.centerX.equalTo()(self.mugContainerView)
+            make.bottom.equalTo()(self.flipContainerView).with().offset()(-self.FLIP_WORD_LABEL_MARGIN_BOTTOM)
+            make.centerX.equalTo()(self.flipContainerView)
         }
         
         rejectButton.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.mugContainerView.mas_bottom)
+            make.top.equalTo()(self.flipContainerView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self.mas_centerX)
             make.bottom.equalTo()(self)

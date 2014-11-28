@@ -344,7 +344,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     func didTapNextButton() {
-        self.delegate?.chatView(self, didTapNextButtonWithWords: replyTextField.getMugTexts())
+        self.delegate?.chatView(self, didTapNextButtonWithWords: replyTextField.getFlipTexts())
     }
     
     private func hideReplyButtonAndShowTextField() {

@@ -61,7 +61,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
         
         rejectButton = UIButton()
         rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
-        rejectButton.backgroundColor = UIColor.mugOrange()
+        rejectButton.backgroundColor = UIColor.flipOrange()
         rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         bottomButtonsContainerView.addSubview(rejectButton)
         

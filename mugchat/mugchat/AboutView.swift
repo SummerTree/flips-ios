@@ -41,7 +41,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
 
     func addSubviews() {
         
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = UIColor.flipOrange()
         
         navigationBar = CustomNavigationBar.CustomSmallNavigationBar("", showBackButton: true)
         navigationBar.delegate = self

@@ -15,19 +15,19 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
     
     private var previewView: PreviewView!
-    private var flipWords: [MugText]!
+    private var flipWords: [FlipText]!
     private var roomID: String?
     private var contactIDs: [String]?
     
     var delegate: PreviewViewControllerDelegate?
     
-    convenience init(flipWords: [MugText], roomID: String) {
+    convenience init(flipWords: [FlipText], roomID: String) {
         self.init()
         self.flipWords = flipWords
         self.roomID = roomID
     }
     
-    convenience init(flipWords: [MugText], contactIDs: [String]) {
+    convenience init(flipWords: [FlipText], contactIDs: [String]) {
         self.init()
         self.flipWords = flipWords
         self.contactIDs = contactIDs
@@ -107,7 +107,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             var error: FlipError?
             var flipIds = Array<String>()
-            let flipService = MugService()
+            let flipService = FlipService()
             
             var group = dispatch_group_create()
 
@@ -120,10 +120,10 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 } else {
                     // Create a Flip in the server for each empty Flip
                     dispatch_group_enter(group)
-                    flipService.createMug(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createMugSuccessCallback: { (flip) -> Void in
+                    flipService.createFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
                         flipIds.append(flip.flipID)
                         dispatch_group_leave(group);
-                    }, createMugFailCallBack: { (flipError) -> Void in
+                    }, createFlipFailCallBack: { (flipError) -> Void in
                         error = flipError
                         dispatch_group_leave(group);
                     })

@@ -78,7 +78,7 @@ class TakePictureViewController : FlipsViewController, TakePictureViewDelegate, 
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
             var imagePickerController = UIImagePickerControllerWithLightStatusBar()
             var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-            imagePickerController.navigationBar.barTintColor = UIColor.mugOrange()
+            imagePickerController.navigationBar.barTintColor = UIColor.flipOrange()
             imagePickerController.navigationBar.translucent = false
             imagePickerController.navigationBar.tintColor = UIColor.whiteColor()
             imagePickerController.navigationBar.titleTextAttributes = textAttributes
