@@ -26,9 +26,9 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     private var composeBottomViewContainer: ComposeBottomViewContainer!
     
     private var composeTitle: String!
-    private var flipWords: [MugText]!
+    internal var flipWords: [MugText]!
     
-    private var highlightedWordIndex: Int!
+    internal var highlightedWordIndex: Int!
     
     private var myMugsDictionary: Dictionary<String, [String]>!
     
@@ -43,6 +43,12 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     
     // MARK: - Init Methods
+    
+    init(composeTitle: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.composeTitle = composeTitle
+        self.highlightedWordIndex = 0
+    }
     
     init(composeTitle: String, words : [String]) {
         super.init(nibName: nil, bundle: nil)
@@ -80,7 +86,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initFlipWords(words: [String]) {
+    internal func initFlipWords(words: [String]) {
         myMugsDictionary = Dictionary<String, [String]>()
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
@@ -205,7 +211,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     // MARK: - View States Setters
     
-    private func showContentForHighlightedWord(shouldReloadWords: Bool = true) {
+    internal func showContentForHighlightedWord(shouldReloadWords: Bool = true) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -260,7 +266,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
     
     // MARK: - Flips CoreData Loader
     
-    private func reloadMyMugs() {
+    internal func reloadMyMugs() {
         let flipDataSource = MugDataSource()
         
         var words = Array<String>()
@@ -280,7 +286,7 @@ class ComposeViewController : MugChatViewController, FlipMessageWordListViewDele
         self.moveToNextFlipWord()
     }
     
-    private func updateFlipWordsState() {
+    internal func updateFlipWordsState() {
         for flipWord in flipWords {
             let word = flipWord.text
             let myMugsForWord = myMugsDictionary[word]

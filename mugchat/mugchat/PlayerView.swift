@@ -69,6 +69,7 @@ class PlayerView: UIView {
             self.words.append(flip.word)
         }
 
+        // TODO: we need to change to NSOperation to be able to cancel it when the method releaseResources is called. Or find a way to do not run the block if canceled.
         dispatch_async(PlayerView.videoSerialQueue) { () -> Void in
             var localFlips: Array<Mug> = []
             let moc = NSManagedObjectContext.MR_contextForCurrentThread();

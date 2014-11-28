@@ -71,8 +71,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     }
     
     func inboxViewDidTapBuilderButton(inboxView : InboxView) {
-        let words = [ "San Francisco", "Coffee", "Dracula", "Christmas", "Santa Claus", "Love", "Birthday", "Halloween" ] // TODO: get words from the server
-        var builderViewController = BuilderViewController(composeTitle: NSLocalizedString("Builder", comment: "Builder"), words: words)
+        var builderViewController = BuilderViewController()
         self.navigationController?.pushViewController(builderViewController, animated:true)
     }
     
