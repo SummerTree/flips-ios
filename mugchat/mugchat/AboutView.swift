@@ -26,7 +26,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     private var flipsLogo: UIImageView!
     private var flipsWord: UIImageView!
     private var copyright: UILabel!
-    private var webView: MugChatWebView!
+    private var webView: FlipsWebView!
     
     override init() {
         super.init()
@@ -79,7 +79,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         copyright.textAlignment = NSTextAlignment.Center
         self.logoContainer.addSubview(copyright)
         
-        webView = MugChatWebView(URL: "http://en.wikipedia.org/wiki/Copyright")
+        webView = FlipsWebView(URL: "http://en.wikipedia.org/wiki/Copyright")
         self.addSubview(webView)
     }
     

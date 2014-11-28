@@ -12,7 +12,7 @@
 
 import UIKit
 
-class TermsOfUseView: MugChatWebView {
+class TermsOfUseView: FlipsWebView {
     
     let TERMS_OF_USE_URL = "http://www.arctouch.com"
     

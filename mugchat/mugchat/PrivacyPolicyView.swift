@@ -12,7 +12,7 @@
 
 import UIKit
 
-class PrivacyPolicyView: MugChatWebView {
+class PrivacyPolicyView: FlipsWebView {
     
     let PRIVACY_POLICY_URL = "http://www.arctouch.com"
     

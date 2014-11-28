@@ -14,10 +14,10 @@ import UIKit
 
 class MugChatWebViewController: MugChatViewController {
     
-    var mugChatWebView: MugChatWebView!
+    var mugChatWebView: FlipsWebView!
     var webTitle: String!
     
-    init(view: MugChatWebView, title: String) {
+    init(view: FlipsWebView, title: String) {
         super.init(nibName: nil, bundle: nil)
         self.mugChatWebView = view
         self.webTitle = title
