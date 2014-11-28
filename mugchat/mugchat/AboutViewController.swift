@@ -12,7 +12,7 @@
 
 import Foundation
 
-class AboutViewController : MugChatViewController, AboutViewDelegate {
+class AboutViewController : FlipsViewController, AboutViewDelegate {
     
     private var aboutView: AboutView!
 

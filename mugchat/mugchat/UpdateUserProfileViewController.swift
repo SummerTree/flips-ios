@@ -12,7 +12,7 @@
 
 import UIKit
 
-class UpdateUserProfileViewController : MugChatViewController, SignUpViewDelegate, UpdateUserProfileViewDelegate, TakePictureViewControllerDelegate, UIAlertViewDelegate {
+class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate, UpdateUserProfileViewDelegate, TakePictureViewControllerDelegate, UIAlertViewDelegate {
     
     private var statusBarHidden = false
     private var updateUserProfileView: UpdateUserProfileView!

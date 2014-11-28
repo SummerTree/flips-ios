@@ -12,7 +12,7 @@
 
 import UIKit
 
-class MugChatWebViewController: MugChatViewController {
+class MugChatWebViewController: FlipsViewController {
     
     var mugChatWebView: FlipsWebView!
     var webTitle: String!

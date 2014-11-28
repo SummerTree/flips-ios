@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePictureViewControllerDelegate, NotificationMessageViewDelegate {
+class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictureViewControllerDelegate, NotificationMessageViewDelegate {
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!

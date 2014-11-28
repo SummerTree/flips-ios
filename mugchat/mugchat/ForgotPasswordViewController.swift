@@ -16,7 +16,7 @@ private let INVALID_NUMBER = NSLocalizedString("Invalid Number", comment: "Inval
 private let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not match our records. Please try again.", comment: "No match")
 
 
-class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
+class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
     
     private let US_CODE = "+1"
     

@@ -15,7 +15,7 @@ import UIKit
 private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
 
 
-class LoginViewController: MugChatViewController, LoginViewDelegate {
+class LoginViewController: FlipsViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     

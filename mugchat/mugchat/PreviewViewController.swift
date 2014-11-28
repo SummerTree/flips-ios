@@ -9,7 +9,7 @@
 // in whole or in part, is expressly prohibited except as authorized by
 // the license agreement.
 
-class PreviewViewController : MugChatViewController, PreviewViewDelegate {
+class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")

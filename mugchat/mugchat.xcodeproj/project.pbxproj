@@ -121,7 +121,7 @@
 		7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */; };
 		7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */; };
 		7A8BFEE01A09601200E7F2A3 /* FlipViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFEDF1A09601200E7F2A3 /* FlipViewer.swift */; };
-		7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619DB19DB2976005E4343 /* MugChatViewController.swift */; };
+		7A9619DC19DB2976005E4343 /* FlipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619DB19DB2976005E4343 /* FlipsViewController.swift */; };
 		7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */; };
 		7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */; };
 		7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E519DC2A7A005E4343 /* SignUpViewController.swift */; };
@@ -318,7 +318,7 @@
 		7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeBottomViewContainer.swift; sourceTree = "<group>"; };
 		7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeTopViewContainer.swift; sourceTree = "<group>"; };
 		7A8BFEDF1A09601200E7F2A3 /* FlipViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipViewer.swift; sourceTree = "<group>"; };
-		7A9619DB19DB2976005E4343 /* MugChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MugChatViewController.swift; path = Classes/MugChatViewController.swift; sourceTree = "<group>"; };
+		7A9619DB19DB2976005E4343 /* FlipsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlipsViewController.swift; path = Classes/FlipsViewController.swift; sourceTree = "<group>"; };
 		7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "Classes/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "Classes/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableViewExtensions.swift; path = Classes/UITableViewExtensions.swift; sourceTree = "<group>"; };
@@ -584,7 +584,7 @@
 				709088231A1E1624009915FE /* Import Contact */,
 				7A1892CA19D1E9370026E641 /* Inbox */,
 				704E110D19D0934700D2BB88 /* Login */,
-				7A9619DB19DB2976005E4343 /* MugChatViewController.swift */,
+				7A9619DB19DB2976005E4343 /* FlipsViewController.swift */,
 				0794A9C01A0A981300DA8CFA /* New Flip */,
 				705B3DDD1A03BC0300E0D3E9 /* Preview */,
 				7056FE5819D8827600BD6571 /* Privacy Policy */,
@@ -1453,7 +1453,7 @@
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7AA711721A28D8AF0082165A /* Contact.m in Sources */,
-				7A9619DC19DB2976005E4343 /* MugChatViewController.swift in Sources */,
+				7A9619DC19DB2976005E4343 /* FlipsViewController.swift in Sources */,
 				70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */,
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,

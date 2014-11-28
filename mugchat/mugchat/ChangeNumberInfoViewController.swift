@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChangeNumberInfoViewController : MugChatViewController, ChangeNumberInfoViewDelegate {
+class ChangeNumberInfoViewController : FlipsViewController, ChangeNumberInfoViewDelegate {
     
     private var changeNumberInfoView: ChangeNumberInfoView!
     

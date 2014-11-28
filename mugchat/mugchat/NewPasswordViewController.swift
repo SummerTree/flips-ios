@@ -12,7 +12,7 @@
 
 import UIKit
 
-class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate {
+class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     
     var newPasswordView: NewPasswordView!
     

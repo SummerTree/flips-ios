@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
+class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
     
     private var chatView: ChatView!
     private var chatTitle: String!

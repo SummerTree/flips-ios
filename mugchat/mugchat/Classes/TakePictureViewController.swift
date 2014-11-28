@@ -12,7 +12,7 @@
 
 import AVFoundation
 
-class TakePictureViewController : MugChatViewController, TakePictureViewDelegate, ConfirmPictureViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class TakePictureViewController : FlipsViewController, TakePictureViewDelegate, ConfirmPictureViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private var takePictureView: TakePictureView!
     private var confirmPictureView: ConfirmPictureView!

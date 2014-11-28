@@ -12,7 +12,7 @@
 
 import Foundation
 
-class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
+class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     
     private let US_CODE = "+1"
     

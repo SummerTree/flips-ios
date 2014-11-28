@@ -12,7 +12,7 @@
 
 import Foundation
 
-class VerificationCodeViewController: MugChatViewController, VerificationCodeViewDelegate {
+class VerificationCodeViewController: FlipsViewController, VerificationCodeViewDelegate {
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"

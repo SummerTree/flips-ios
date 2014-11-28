@@ -11,7 +11,7 @@
 //
 
 
-class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipViewControllerDelegate {
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate {
 
     private var inboxView: InboxView!
     private var roomDataSource: RoomDataSource!

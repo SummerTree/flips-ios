@@ -15,7 +15,7 @@ import UIKit
 private let STORYBOARD = "NewFlip"
 
 
-class NewFlipViewController: MugChatViewController,
+class NewFlipViewController: FlipsViewController,
     JoinStringsTextFieldDelegate,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
