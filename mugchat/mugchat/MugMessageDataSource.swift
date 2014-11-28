@@ -135,8 +135,7 @@ class MugMessageDataSource : BaseDataSource {
     private func nextMugMessageID() -> String {
         let loggedUser = User.loggedUser()
         let timestamp = NSDate.timeIntervalSinceReferenceDate()
-        let newMessageId = "\(loggedUser?.userID):\(timestamp)"
-
+        let newMessageId = "\(loggedUser!.userID):\(timestamp)"
         return newMessageId
     }
     
