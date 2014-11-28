@@ -337,7 +337,7 @@ class CustomNavigationBar : UIView {
     func setAvatarImageUrl(url: String) {
         if (!url.isEmpty) {
             if (avatarImageView != nil) {
-                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView)
+                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
                 avatarImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)

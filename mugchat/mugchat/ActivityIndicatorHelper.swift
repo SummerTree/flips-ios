@@ -73,7 +73,7 @@ class ActivityIndicatorHelper {
         var activityIndicator: UIActivityIndicatorView!
         
         if let indicatorStyle = style {
-            activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+            activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: indicatorStyle)
         } else {
             activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
         }
