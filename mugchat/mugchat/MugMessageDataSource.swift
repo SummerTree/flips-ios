@@ -70,7 +70,7 @@ class MugMessageDataSource : BaseDataSource {
         }
 
         var sentAt = json[MugMessageJsonParams.SENT_AT]
-        if (json[MugMessageJsonParams.SENT_AT] == nil) {
+        if (sentAt == nil) {
             return false
         }
 
