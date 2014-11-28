@@ -16,7 +16,6 @@ class UpdateUserProfileViewController : MugChatViewController, SignUpViewDelegat
     
     private var statusBarHidden = false
     private var updateUserProfileView: UpdateUserProfileView!
-    private var avatar: UIImage!
     private var notificationMessageView: NotificationMessageView!
     
     
@@ -87,15 +86,15 @@ class UpdateUserProfileViewController : MugChatViewController, SignUpViewDelegat
     
     func takePictureViewController(viewController: TakePictureViewController, didFinishWithPicture picture: UIImage) {
         updateUserProfileView.setUserPicture(picture)
-        self.avatar = picture
     }
     
     
     // MARK: - UpdateUserProfileViewDidTapSaveButton
     
-    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
+    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String, avatar: UIImage!) {
         self.showActivityIndicator()
-        UserService.sharedInstance.update(email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday.dateValue(),
+
+        UserService.sharedInstance.update(email, password: password, firstName: firstName, lastName: lastName, avatar: avatar, birthday: birthday.dateValue(),
             success: { (user) -> Void in
                 self.navigationController?.popViewControllerAnimated(true)
                 self.hideActivityIndicator()

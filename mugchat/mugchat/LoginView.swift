@@ -581,7 +581,7 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
                 
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
-                    // positioning mugChat word below the top of the screen with a defined offset
+                    // positioning Flips word below the top of the screen with a defined offset
                     var mugchatWordFinalPosition = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
                     self.MUGCHAT_WORD_ANIMATION_OFFSET = self.mugchatWordImageView.frame.origin.y - mugchatWordFinalPosition
                     self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET

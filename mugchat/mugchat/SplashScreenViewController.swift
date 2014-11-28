@@ -70,15 +70,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                     var userDataSource = UserDataSource()
                     userDataSource.syncUserData({ (success, error) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            if (success) {
-                                activityIndicator.stopAnimating()
-                                
-                                let authenticatedUser = User.loggedUser()!
-                                if (self.userHasDevice(authenticatedUser)) {
-                                    self.openInboxViewController()
-                                } else {
-                                    self.openPhoneNumberController(authenticatedUser.userID)
-                                }
+                            activityIndicator.stopAnimating()
+                            
+                            let authenticatedUser = User.loggedUser()!
+                            if (self.userHasDevice(authenticatedUser)) {
+                                self.openInboxViewController()
+                            } else {
+                                self.openPhoneNumberController(authenticatedUser.userID)
                             }
                         })
                     })
@@ -104,9 +102,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
             var userDataSource = UserDataSource()
             userDataSource.syncUserData({ (success, error) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if (success) {
-                        self.openInboxViewController()
-                    }
+                    self.openInboxViewController()
                 })
             })
         } else {

@@ -136,15 +136,13 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                 userDataSource.syncUserData({ (success, error) -> Void in
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if (success) {
-                            let authenticatedUser = User.loggedUser()!
-                            if (authenticatedUser.device == nil) {
-                                var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
-                                self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
-                            } else {
-                                var inboxViewController = InboxViewController()
-                                self.navigationController?.pushViewController(inboxViewController, animated: true)
-                            }
+                        let authenticatedUser = User.loggedUser()!
+                        if (authenticatedUser.device == nil) {
+                            var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
+                            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+                        } else {
+                            var inboxViewController = InboxViewController()
+                            self.navigationController?.pushViewController(inboxViewController, animated: true)
                         }
                     })
                 })
