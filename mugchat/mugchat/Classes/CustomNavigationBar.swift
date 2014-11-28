@@ -306,6 +306,14 @@ class CustomNavigationBar : UIView {
         return CGRectGetHeight(self.frame) - STATUS_BAR_HEIGHT
     }
     
+    func getAvatarImage() -> UIImage! {
+        if (avatarButton != nil) {
+            return avatarButton.imageView?.image
+        } else {
+            return avatarImageView.image
+        }
+    }
+    
     
     // MARK: - Setters
     
