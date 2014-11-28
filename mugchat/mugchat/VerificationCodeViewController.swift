@@ -130,12 +130,10 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 var userDataSource = UserDataSource()
                 userDataSource.syncUserData({ (success, error) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if (success) {
-                            let verificationCodeView = self.view as VerificationCodeView
-                            verificationCodeView.resetVerificationCodeField()
-                            
-                            self.navigateAfterValidateDevice()
-                        }
+                        let verificationCodeView = self.view as VerificationCodeView
+                        verificationCodeView.resetVerificationCodeField()
+                        
+                        self.navigateAfterValidateDevice()
                     })
                 })
             },

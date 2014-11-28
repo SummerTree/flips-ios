@@ -233,8 +233,6 @@
 		5786B2D519EEAE0200021DD3 /* welcome_mugchat.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = welcome_mugchat.mov; sourceTree = "<group>"; };
 		57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
 		57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
-		57D2A09119D310C000FA729D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		57D2A09219D310C000FA729D /* mugchatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mugchatTests.swift; sourceTree = "<group>"; };
 		57D2A0A019D3240E00FA729D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewDelegate.swift; sourceTree = "<group>"; };
 		57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodeViewDelegate.swift; sourceTree = "<group>"; };
@@ -522,23 +520,6 @@
 				57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */,
 			);
 			name = Verification;
-			sourceTree = "<group>";
-		};
-		57D2A08F19D310C000FA729D /* mugchatTests */ = {
-			isa = PBXGroup;
-			children = (
-				57D2A09219D310C000FA729D /* mugchatTests.swift */,
-				57D2A09019D310C000FA729D /* Supporting Files */,
-			);
-			path = mugchatTests;
-			sourceTree = "<group>";
-		};
-		57D2A09019D310C000FA729D /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				57D2A09119D310C000FA729D /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		70057E9219DADEB5004343ED /* Helpers */ = {
@@ -887,7 +868,6 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7219D064450024EBDB /* mugchat */,
-				57D2A08F19D310C000FA729D /* mugchatTests */,
 				70FD4E7119D064450024EBDB /* Products */,
 				EC5A81A5795A49A3B7523B70 /* Frameworks */,
 				F7C1F4A6A883BC105DD3A82D /* Pods */,
