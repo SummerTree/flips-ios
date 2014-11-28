@@ -64,19 +64,22 @@ class MugMessageDataSource : BaseDataSource {
 
 
     private func isValidFlipMessage(json: JSON) -> Bool {
-        if (json[MugMessageJsonParams.FROM_USER_ID] == nil) {
+        var fromUserId = json[MugMessageJsonParams.FROM_USER_ID]
+        if (fromUserId == nil) {
             return false
         }
 
+        var sentAt = json[MugMessageJsonParams.SENT_AT]
         if (json[MugMessageJsonParams.SENT_AT] == nil) {
             return false
         }
 
-        if (json[MugMessageJsonParams.FLIP_MESSAGE_ID] == nil) {
+        var flipMessageId = json[MugMessageJsonParams.FLIP_MESSAGE_ID]
+        if (flipMessageId == nil) {
             return false
         }
 
-        let content = json[MugMessageJsonParams.CONTENT]
+        var content = json[MugMessageJsonParams.CONTENT]
         if (content == nil) {
             return false
         }
