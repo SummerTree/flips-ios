@@ -160,11 +160,11 @@
 		7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
 		7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
-		7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* MugMessageDataSource.swift */; };
+		7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
 		7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */; };
 		7AF82DFF19EFEC5800D0393F /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */; };
 		7AF82E0119EFECC900D0393F /* DeviceDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0019EFECC900D0393F /* DeviceDataSource.swift */; };
-		7AF82E0319EFECDC00D0393F /* MugDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0219EFECDC00D0393F /* MugDataSource.swift */; };
+		7AF82E0319EFECDC00D0393F /* FlipDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0219EFECDC00D0393F /* FlipDataSource.swift */; };
 		7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0419EFED2100D0393F /* BaseDataSource.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
 		7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719A19FFBF1B002695AC /* Downloader.swift */; };
@@ -367,11 +367,11 @@
 		7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheHandler.swift; sourceTree = "<group>"; };
 		7AF82DE519EFEC3300D0393F /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
-		7AF82DFA19EFEC5800D0393F /* MugMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugMessageDataSource.swift; sourceTree = "<group>"; };
+		7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageDataSource.swift; sourceTree = "<group>"; };
 		7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDataSource.swift; sourceTree = "<group>"; };
 		7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDataSource.swift; sourceTree = "<group>"; };
 		7AF82E0019EFECC900D0393F /* DeviceDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataSource.swift; sourceTree = "<group>"; };
-		7AF82E0219EFECDC00D0393F /* MugDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MugDataSource.swift; sourceTree = "<group>"; };
+		7AF82E0219EFECDC00D0393F /* FlipDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipDataSource.swift; sourceTree = "<group>"; };
 		7AF82E0419EFED2100D0393F /* BaseDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDataSource.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
 		7AFB719A19FFBF1B002695AC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
@@ -1016,8 +1016,8 @@
 				7AF82E0419EFED2100D0393F /* BaseDataSource.swift */,
 				7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */,
 				7AF82E0019EFECC900D0393F /* DeviceDataSource.swift */,
-				7AF82DFA19EFEC5800D0393F /* MugMessageDataSource.swift */,
-				7AF82E0219EFECDC00D0393F /* MugDataSource.swift */,
+				7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */,
+				7AF82E0219EFECDC00D0393F /* FlipDataSource.swift */,
 				7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */,
 				7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */,
 				7A356E4419F95546002D923B /* ContactDataSource.swift */,
@@ -1457,14 +1457,14 @@
 				70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */,
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* MugChatWebViewController.swift in Sources */,
-				7AF82E0319EFECDC00D0393F /* MugDataSource.swift in Sources */,
+				7AF82E0319EFECDC00D0393F /* FlipDataSource.swift in Sources */,
 				7043DF381A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */,
 				70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */,
 				70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */,
 				7033584819E462A20030CF11 /* PubNubService.swift in Sources */,
 				7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */,
-				7AF82DFD19EFEC5800D0393F /* MugMessageDataSource.swift in Sources */,
+				7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
 				70DAB3441A1240150044AEC1 /* ChangeNumberVerificationCodeView.swift in Sources */,
 				7A2A7E4D19EEF4E600033164 /* CameraView.swift in Sources */,

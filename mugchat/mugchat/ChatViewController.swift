@@ -20,7 +20,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var roomID: String!
     private var flipMessageIds: [String]!
     
-    private let flipMessageDataSource = MugMessageDataSource()
+    private let flipMessageDataSource = FlipMessageDataSource()
     
     
     // MARK: - Initializers

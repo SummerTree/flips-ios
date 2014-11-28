@@ -31,7 +31,7 @@ struct FlipAttributes {
 public typealias CreateFlipSuccess = (Flip) -> Void
 public typealias CreateFlipFail = (String) -> Void
 
-class MugDataSource : BaseDataSource {
+class FlipDataSource : BaseDataSource {
     
     private let EMPTY_FLIP_ID = "-1"
     

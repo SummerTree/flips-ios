@@ -63,8 +63,8 @@ public class MessageService {
     }
     
     func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
-        let flipMessageDataSource = MugMessageDataSource()
-        let flipDataSource = MugDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
+        let flipDataSource = FlipDataSource()
         let roomDataSource = RoomDataSource()
         
         var flips = Array<Flip>()

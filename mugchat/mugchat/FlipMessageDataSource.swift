@@ -26,7 +26,7 @@ private struct FlipMessageAttributes {
     static let REMOVED = "removed"
 }
 
-class MugMessageDataSource : BaseDataSource {
+class FlipMessageDataSource : BaseDataSource {
     
     private func createEntityWithJson(json: JSON) -> FlipMessage {
         let userDataSource = UserDataSource()
@@ -47,7 +47,7 @@ class MugMessageDataSource : BaseDataSource {
         entity.notRead = true
         entity.receivedAt = NSDate()
 
-        let flipDataSource = MugDataSource()
+        let flipDataSource = FlipDataSource()
         let content = json[FlipMessageJsonParams.CONTENT]
         
         for (index: String, flipJson: JSON) in content {

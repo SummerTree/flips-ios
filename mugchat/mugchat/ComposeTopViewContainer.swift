@@ -119,7 +119,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     }
     
     func showFlip(flipId: String) {
-        let flipDataSource = MugDataSource()
+        let flipDataSource = FlipDataSource()
         var flip = flipDataSource.retrieveFlipWithId(flipId)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in

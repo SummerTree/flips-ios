@@ -21,7 +21,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
-    private let flipMessageDataSource = MugMessageDataSource()
+    private let flipMessageDataSource = FlipMessageDataSource()
     
     // MARK: - Instance variables
     

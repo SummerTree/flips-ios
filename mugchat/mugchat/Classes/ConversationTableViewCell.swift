@@ -177,7 +177,7 @@ class ConversationTableViewCell : UITableViewCell {
     private func layoutMessageInfo(room: Room) {
         // All conversations should be sorted in the inbox by the above time stamp, with most recent at the top, and oldest at the bottom.
         
-        let flipMessageDataSource = MugMessageDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
 
         // The preview still photo should reflect the first frame of the video of the oldest unread message in the conversation
         var flipMessage = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(room.roomID)

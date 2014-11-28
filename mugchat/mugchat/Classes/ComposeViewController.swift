@@ -220,7 +220,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             if (flipWord.associatedFlipId != nil) {
                 self.showFlipCreatedState(flipWord.associatedFlipId!)
             } else {
-                let flipDataSource = MugDataSource()
+                let flipDataSource = FlipDataSource()
                 let myFlips = flipDataSource.getMyFlipsForWord(flipWord.text)
                 if (myFlips.count > 0) {
                     self.showNewFlipWithSavedFlipsForWord(flipWord.text)
@@ -267,7 +267,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - Flips CoreData Loader
     
     internal func reloadMyMugs() {
-        let flipDataSource = MugDataSource()
+        let flipDataSource = FlipDataSource()
         
         var words = Array<String>()
         for flipWord in self.flipWords {

@@ -108,7 +108,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 self.onRoomReceived(messageJson)
             } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
                 // Message Received
-                let flipMessageDataSource = MugMessageDataSource()
+                let flipMessageDataSource = FlipMessageDataSource()
                 let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
 
                 if (flipMessage != nil) {
@@ -117,7 +117,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             }
         } else {
             // TODO: Old format - Should be remove later.
-            let flipMessageDataSource = MugMessageDataSource()
+            let flipMessageDataSource = FlipMessageDataSource()
             let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
             if (flipMessage != nil) {
                 self.onMessageReceived(flipMessage!)

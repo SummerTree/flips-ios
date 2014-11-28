@@ -118,7 +118,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
-        let flipDataSource = MugDataSource()
+        let flipDataSource = FlipDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
         

@@ -191,7 +191,7 @@ public class MugService: FlipsService {
     
     private func parseCreateMugResponse(response: AnyObject) -> Flip? {
         let json = JSON(response)
-        let flipDataSource = MugDataSource()
+        let flipDataSource = FlipDataSource()
         return flipDataSource.createOrUpdateFlipsWithJson(json)
     }
     

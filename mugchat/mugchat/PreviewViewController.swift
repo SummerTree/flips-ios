@@ -77,7 +77,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     
     private func createFlipsFromFlipWords() -> [Flip] {
         var flips = Array<Flip>()
-        let flipDataSource = MugDataSource()
+        let flipDataSource = FlipDataSource()
         
         for flipWord in self.flipWords {
             if (flipWord.associatedFlipId != nil) {
@@ -111,7 +111,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
             
             var group = dispatch_group_create()
 
-            let flipDataSource = MugDataSource()
+            let flipDataSource = FlipDataSource()
             for flipWord in self.flipWords {
                 if (flipWord.associatedFlipId != nil) {
                     var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)

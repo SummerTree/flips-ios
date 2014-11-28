@@ -117,7 +117,7 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         } else {
             var flipId = dataSource?.myFlipsView(self, flipIdAtIndex: indexPath.row - 1)
             
-            let flipDataSource = MugDataSource()
+            let flipDataSource = FlipDataSource()
             var flip = flipDataSource.retrieveFlipWithId(flipId!)
             
             cell.setFlip(flip)

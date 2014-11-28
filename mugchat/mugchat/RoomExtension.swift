@@ -41,7 +41,7 @@ extension Room {
     }
     
     func oldestNotReadMessage() -> FlipMessage? {
-        let flipMessageDataSource = MugMessageDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
         
         var oldestMessageNotRead = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(self.roomID)
         
@@ -67,7 +67,7 @@ extension Room {
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
-        let flipMessageDataSource = MugMessageDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
         flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
     }
     
