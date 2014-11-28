@@ -132,7 +132,10 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     }
     
     private func userHasDevice(user: User) -> Bool {
-        return user.device != nil && user.device.isVerified.integerValue == 1
+        var userHasPhone = user.phoneNumber != nil
+        var phoneNumberLength = countElements(user.phoneNumber)
+        var isDeviceVerified = user.device.isVerified.boolValue
+        return userHasPhone && (phoneNumberLength > 0) && isDeviceVerified
     }
     
     override func prefersStatusBarHidden() -> Bool {
