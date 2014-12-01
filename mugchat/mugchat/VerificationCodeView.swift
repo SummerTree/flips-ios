@@ -167,22 +167,26 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         createHintViewConstraints()
         
         labelsView.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerY.equalTo()(self.hintView)
             make.centerX.equalTo()(self.hintView)
         }
         
         hintText.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerX.equalTo()(self.labelsView)
             make.top.equalTo()(self.labelsView)
         }
         
         phoneNumberLabel.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerX.equalTo()(self.labelsView)
             make.top.equalTo()(self.hintText.mas_bottom)
             make.bottom.equalTo()(self.labelsView)
         }
         
         codeView.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.top.equalTo()(self.hintView.mas_bottom)
             make.height.equalTo()(self.CODE_VIEW_HEIGHT)
             make.left.equalTo()(self)
@@ -190,36 +194,43 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         }
         
         codeViewLeadingSpace.mas_updateConstraints( { (make) in
+            make.removeExisting = true
             make.left.equalTo()(self.codeView)
             make.width.equalTo()(self.codeViewTrailingSpace.mas_width)
         })
         
         codeField0.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerY.equalTo()(self.codeView)
             make.left.equalTo()(self.codeViewLeadingSpace.mas_right)
         }
         
         codeField1.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerY.equalTo()(self.codeView)
             make.left.equalTo()(self.codeField0.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
         }
         
         codeField2.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerY.equalTo()(self.codeView)
             make.left.equalTo()(self.codeField1.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
         }
         
         codeField3.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerY.equalTo()(self.codeView)
             make.left.equalTo()(self.codeField2.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
         }
         
         codeViewTrailingSpace.mas_updateConstraints( { (make) in
+            make.removeExisting = true
             make.left.equalTo()(self.codeField3.mas_right)
             make.right.equalTo()(self.codeView)
         })
         
         resendButtonView.mas_updateConstraints({ (make) in
+            make.removeExisting = true
             make.top.equalTo()(self.codeView.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
@@ -227,12 +238,13 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         })
         
         resendButton.mas_updateConstraints { (make) in
+            make.removeExisting = true
             make.centerY.equalTo()(self.resendButtonView)
             make.centerX.equalTo()(self.resendButtonView)
         }
         
-        
         keyboardFillerView.mas_updateConstraints( { (make) in
+            make.removeExisting = true
             make.top.equalTo()(self.resendButtonView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -356,6 +368,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeView.addSubview(errorSignView)
         
         errorSignView.mas_updateConstraints( { (make) in
+            make.removeExisting = true
             make.width.equalTo()(self.errorSignView.image?.size.width)
             make.centerY.equalTo()(self.codeView)
             make.right.equalTo()(self.codeView.mas_right).with().offset()(-self.CODE_VIEW_MARGIN_RIGHT)
@@ -394,6 +407,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     // MARK: - Buttons delegate
     
     func didFinishTypingVerificationCode(code: String) {
+        self.focusKeyboardOnCodeField()
         self.delegate?.verificationCodeView(self, didFinishTypingVerificationCode: code)
     }
     
