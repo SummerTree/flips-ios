@@ -16,7 +16,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"
-    let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code"
+    let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
     
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
@@ -112,6 +112,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
     }
     
     private func verifyDevice(userId: String, deviceId: String, verificationCode: String) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         DeviceService.sharedInstance.verifyDevice(userId,
             deviceId: deviceId,
             verificationCode: verificationCode,
@@ -134,20 +135,25 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()
                         
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                         self.navigateAfterValidateDevice()
                     })
                 })
             },
             failure: { (flipError) in
-                if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
-                    let verificationCodeView = self.view as VerificationCodeView
-                    verificationCodeView.didEnterWrongVerificationCode()
-                } else {
-                    println("Device code verification error: " + flipError!.error!)
-                    let verificationCodeView = self.view as VerificationCodeView
-                    verificationCodeView.resetVerificationCodeField()
-                    verificationCodeView.focusKeyboardOnCodeField()
-                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+                        let verificationCodeView = self.view as VerificationCodeView
+                        verificationCodeView.didEnterWrongVerificationCode()
+                    } else {
+                        println("Device code verification error: " + flipError!.error!)
+                        let verificationCodeView = self.view as VerificationCodeView
+                        verificationCodeView.resetVerificationCodeField()
+                        verificationCodeView.focusKeyboardOnCodeField()
+                    }
+                })
             })
     }
     
