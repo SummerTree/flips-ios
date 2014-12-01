@@ -81,15 +81,19 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                         })
                     })
                 }, failure: { (flipError) -> Void in
-                    println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                    
                     FBSession.activeSession().closeAndClearTokenInformation()
                     FBSession.activeSession().close()
                     FBSession.setActiveSession(nil)
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        activityIndicator.stopAnimating()
-                        var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
-                        alertView.show()
-                    })
+                    
+                    if (flipError != nil) {
+                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            activityIndicator.stopAnimating()
+                            var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
+                            alertView.show()
+                        })
+                    }
             })
         }
     }
