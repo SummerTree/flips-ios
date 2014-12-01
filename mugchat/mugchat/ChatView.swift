@@ -177,8 +177,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             cell.stopMovie()
         }
         
-        let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
-        cell.setFlipMessageId(flipId!)
+        if let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row) {
+            cell.setFlipMessageId(flipId)
+        }
         
         return cell;
     }
@@ -420,10 +421,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        PlayerView.videoSerialOperationQueue.cancelAllOperations()
+        
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             cell.stopMovie()
+            cell.releaseResources()
         }
+        
     }
     
     

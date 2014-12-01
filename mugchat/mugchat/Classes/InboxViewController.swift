@@ -86,9 +86,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     private func refreshRooms() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            self.roomIds.removeAll(keepCapacity: false)
-            
             let rooms = self.roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
+            
+            self.roomIds.removeAll(keepCapacity: false)
             for room in rooms {
                 self.roomIds.append(room.roomID)
             }
@@ -102,7 +102,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as Flip
+        var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        let flipDataSource = FlipDataSource()
+        let flip = flipDataSource.retrieveFlipWithId(flipID)
+
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
             println("Download failed for flip: \(flip.flipID)")
             // TODO: show download fail state
