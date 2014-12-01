@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class ComposeTopViewContainer: UIView, CameraViewDelegate {
+class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     
     private let ANIMATION_TRANSITON_DURATION: NSTimeInterval = 0.3
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
@@ -59,7 +59,10 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         self.addSubview(cameraWordLabel)
         
         flipViewer = FlipViewer()
+        flipViewer.addGestureRecognizer(UITapGestureRecognizer(target: flipViewer, action: "viewTapped"))
+        flipViewer.delegate = self
         self.addSubview(flipViewer)
+        self.sendSubviewToBack(flipViewer)
     }
     
     private func addConstraints() {
@@ -97,6 +100,16 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
         }
     }
     
+    // MARK: - Life Cycle
+    
+    func viewWillAppear() {
+        self.flipViewer.registerObservers()
+    }
+    
+    func viewWillDisappear() {
+        self.flipViewer.removeOberservers()
+    }
+    
     
     // MARK: - Container State Setter Methods
     
@@ -112,6 +125,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
                 
                 self.flipViewer.alpha = 0.0
                 self.updateConstraintsIfNeeded()
+                
+                self.sendSubviewToBack(self.flipViewer)
             })
         })
     }
@@ -125,10 +140,15 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
             let filePath = flip.backgroundContentLocalPath()
             if (flip.isBackgroundContentTypeVideo()) {
                 image = VideoHelper.generateThumbImageForFile(filePath)
+                self.flipViewer.setVideoURL(NSURL.fileURLWithPath(filePath)!)
             } else {
                 image = UIImage(contentsOfFile: filePath)
+                if let localAudioURL = flip.soundContentLocalPath() {
+                    self.flipViewer.setAudioURL(NSURL.fileURLWithPath(localAudioURL)!)
+                }
+                self.showImage(image, andText: flip.word)
             }
-            self.showImage(image, andText: flip.word)
+            self.bringSubviewToFront(self.flipViewer)
         })
     }
     
@@ -201,6 +221,17 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
         delegate?.composeTopViewContainerDidTapMicrophoneButton(self)
     }
+    
+    
+    // MARK: - FlipViewerDelegate
+    
+    func flipViewerStartedPlayingContent() {
+        delegate?.enableUserInteractionWithComposeView(false)
+    }
+    
+    func flipViewerFinishedPlayingContent() {
+        delegate?.enableUserInteractionWithComposeView(true)
+    }
 }
 
 
@@ -211,5 +242,8 @@ protocol ComposeTopViewContainerDelegate {
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, cameraAvailable available: Bool)
     
     func composeTopViewContainerDidTapMicrophoneButton(composeTopViewContainer: ComposeTopViewContainer)
+    
+    func enableUserInteractionWithComposeView(enable: Bool)
+    
 }
 

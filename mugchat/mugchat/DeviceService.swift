@@ -66,13 +66,20 @@ public class DeviceService: FlipsService {
     
     // MARK: - Verify a Device
     
-    func verifyDevice(userId: String, deviceId: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+    func verifyDevice(userId: String, deviceId: String, verificationCode: String, phoneNumber: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         verifyURL = verifyURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + verifyURL
-        let params = [RequestParams.VERIFICATION_CODE : verificationCode]
+        
+        var params: Dictionary<String, AnyObject> = [
+            RequestParams.VERIFICATION_CODE : verificationCode
+        ]
+        
+        if let phone = phoneNumber {
+            params[RequestParams.PHONE_NUMBER] = PhoneNumberHelper.formatUsingUSInternational(phone)
+        }
         
         request.POST(url,
             parameters: params,

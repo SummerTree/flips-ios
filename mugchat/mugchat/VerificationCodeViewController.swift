@@ -115,6 +115,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         DeviceService.sharedInstance.verifyDevice(userId,
             deviceId: deviceId,
             verificationCode: verificationCode,
+            phoneNumber: self.phoneNumber,
             success: { (device) in
                 if (device == nil) {
                     println("Error verifying device")
