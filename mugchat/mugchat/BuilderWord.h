@@ -10,22 +10,14 @@
 // the license agreement.
 //
 
-#import "Mug.h"
-#import "MugMessage.h"
-#import "User.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 
-@implementation Mug
+@interface BuilderWord : NSManagedObject
 
-@dynamic backgroundURL;
-@dynamic category;
-@dynamic isPrivate;
-@dynamic mugID;
-@dynamic removed;
-@dynamic soundURL;
-@dynamic word;
-@dynamic backgroundContentType;
-@dynamic messages;
-@dynamic owner;
+@property (nonatomic, retain) NSDate * addedAt;
+@property (nonatomic, retain) NSNumber * fromServer;
+@property (nonatomic, retain) NSString * word;
 
 @end

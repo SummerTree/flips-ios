@@ -10,18 +10,18 @@
 // the license agreement.
 //
 
-public typealias CreateMugSuccessResponse = (Mug) -> Void
-public typealias CreateMugFailureResponse = (MugError?) -> Void
+public typealias CreateFlipSuccessResponse = (Flip) -> Void
+public typealias CreateFlipFailureResponse = (FlipError?) -> Void
 private typealias UploadSuccessResponse = (String?) -> Void
-private typealias UploadFailureResponse = (MugError?) -> Void
+private typealias UploadFailureResponse = (FlipError?) -> Void
 
 
-public class MugService: MugchatService {
+public class FlipService: FlipsService {
     
     private let UPLOAD_BACKGROUND_RESPONSE_URL = "background_url"
     private let UPLOAD_SOUND_RESPONSE_URL = "sound_url"
     
-    let CREATE_MUG: String = "/user/{{user_id}}/flips"
+    let CREATE_FLIP: String = "/user/{{user_id}}/flips"
     let UPLOAD_BACKGROUND: String = "/background"
     let UPLOAD_SOUND: String = "/sound"
     
@@ -35,19 +35,19 @@ public class MugService: MugchatService {
         static let IS_PRIVATE = "is_private"
     }
     
-    func createMug(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {
+    func createFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
         
-        var uploadMugBlock: ((String, String) -> Void) = { (backgroundImageUrl, soundUrl) -> () in
-            self.uploadNewMug(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, createMugSuccessCallback: createMugSuccessCallback, createMugFailCallBack: createMugFailCallBack)
+        var uploadFlipBlock: ((String, String) -> Void) = { (backgroundImageUrl, soundUrl) -> () in
+            self.uploadNewFlip(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack)
         }
         
         var uploadSoundBlock: ((String) -> Void)? = nil
         if (soundPath != nil) {
             uploadSoundBlock = { (backgroundImageUrl) -> () in
                 self.uploadSound(soundPath!, successCallback: { (soundUrl) -> Void in
-                    uploadMugBlock(backgroundImageUrl, soundUrl!)
-                    }, failCallback: { (mugError) -> Void in
-                        createMugFailCallBack(mugError)
+                    uploadFlipBlock(backgroundImageUrl, soundUrl!)
+                    }, failCallback: { (flipError) -> Void in
+                        createFlipFailCallBack(flipError)
                 })
             }
         }
@@ -60,27 +60,27 @@ public class MugService: MugchatService {
                 if (uploadSoundBlock != nil) {
                     uploadSoundBlock!(imageUrl!)
                 } else {
-                    uploadMugBlock(backgroundImageUrl!, "")
+                    uploadFlipBlock(backgroundImageUrl!, "")
                 }
-                }) { (mugError) -> Void in
-                    createMugFailCallBack(mugError)
+                }) { (flipError) -> Void in
+                    createFlipFailCallBack(flipError)
             }
         } else if (uploadSoundBlock != nil) {
             uploadSoundBlock!("")
         } else {
-            uploadMugBlock("", "")
+            uploadFlipBlock("", "")
         }
     }
     
-    func createMug(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {
-        var uploadMugBlock: ((String) -> Void) = { (videoURL) -> () in
-            self.uploadNewMug(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, createMugSuccessCallback: createMugSuccessCallback, createMugFailCallBack: createMugFailCallBack)
+    func createFlip(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
+        var uploadFlipBlock: ((String) -> Void) = { (videoURL) -> () in
+            self.uploadNewFlip(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack)
         }
         
         self.uploadVideo(videoPath, successCallback: { (videoUrl) -> Void in
-            uploadMugBlock(videoUrl!)
-        }) { (mugError) -> Void in
-            createMugFailCallBack(mugError)
+            uploadFlipBlock(videoUrl!)
+        }) { (flipError) -> Void in
+            createFlipFailCallBack(flipError)
         }
     }
     
@@ -101,7 +101,7 @@ public class MugService: MugchatService {
             self.uploadData(soundData!, toUrl: url, withFileName: fileName, partName: "sound", mimeType: "audio/mp4a-latm", successCallback: successCallback, failCallback: failCallback)
         }
         else {
-            failCallback(MugError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
+            failCallback(FlipError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
         }
     }
     
@@ -116,7 +116,7 @@ public class MugService: MugchatService {
             self.uploadData(videoData!, toUrl: url, withFileName: fileName, partName: "background", mimeType: "video/quicktime", successCallback: successCallback, failCallback: failCallback)
         }
         else {
-            failCallback(MugError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))
+            failCallback(FlipError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))
         }
     }
     
@@ -136,37 +136,37 @@ public class MugService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCallback(MugError(error: response["error"] as String!, details: nil))
+                    failCallback(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCallback(MugError(error: error.localizedDescription, details:nil))
+                    failCallback(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
     }
     
-    private func uploadNewMug(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createMugSuccessCallback: CreateMugSuccessResponse, createMugFailCallBack: CreateMugFailureResponse) {
+    private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = CREATE_MUG.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let createMugUrl = HOST + createURL
-        let createMugParams = [
+        let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let createFlipUrl = HOST + createURL
+        let createFlipParams = [
             RequestParams.WORD : word,
             RequestParams.BACKGROUND_URL : backgroundUrl,
             RequestParams.SOUND_URL : soundUrl,
             RequestParams.CATEGORY : category,
             RequestParams.IS_PRIVATE : isPrivate]
         
-        request.POST(createMugUrl,
-            parameters: createMugParams,
+        request.POST(createFlipUrl,
+            parameters: createFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                createMugSuccessCallback(self.parseCreateMugResponse(responseObject)!)
+                createFlipSuccessCallback(self.parseCreateFlipResponse(responseObject)!)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    createMugFailCallBack(MugError(error: response["error"] as String!, details: nil))
+                    createFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    createMugFailCallBack(MugError(error: error.localizedDescription, details:nil))
+                    createFlipFailCallBack(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -184,15 +184,15 @@ public class MugService: MugchatService {
             return json[UPLOAD_SOUND_RESPONSE_URL].stringValue
         }
         
-        println("MugService Upload Parser error - response didn't return a valid value.")
+        println("FlipService Upload Parser error - response didn't return a valid value.")
         
         return nil
     }
     
-    private func parseCreateMugResponse(response: AnyObject) -> Mug? {
+    private func parseCreateFlipResponse(response: AnyObject) -> Flip? {
         let json = JSON(response)
-        let mugDataSource = MugDataSource()
-        return mugDataSource.createOrUpdateMugsWithJson(json)
+        let flipDataSource = FlipDataSource()
+        return flipDataSource.createOrUpdateFlipsWithJson(json)
     }
     
 }

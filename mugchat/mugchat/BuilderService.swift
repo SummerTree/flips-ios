@@ -12,9 +12,9 @@
 
 // TODO: change form String to entity Word
 public typealias GetSuggestedWordsSuccessResponse = ([String]) -> Void
-public typealias SuggestedWordsFailureResponse = (MugError?) -> Void
+public typealias SuggestedWordsFailureResponse = (FlipError?) -> Void
 
-public class BuilderService: MugchatService {
+public class BuilderService: FlipsService {
     
     private let SUGGESTED_WORDS_URL: String = "/builderword"
     
@@ -28,9 +28,9 @@ public class BuilderService: MugchatService {
             }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(MugError(error: response["error"] as String!, details: nil))
+                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCompletion(MugError(error: error.localizedDescription, details:nil))
+                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
                 }
         }
     }

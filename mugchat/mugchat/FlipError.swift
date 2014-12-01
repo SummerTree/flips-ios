@@ -10,23 +10,7 @@
 // the license agreement.
 //
 
-class MugText {
-    
-    var position: Int!
-    var text: String!
-    var state: FlipState!
-    var associatedFlipId: String?
-    
-    init(position: Int, text: String, state: FlipState) {
-        self.position = position
-        self.text = text
-        self.state = state
-    }
-}
-
-enum FlipState {
-    case NewWord
-    case AssociatedWithoutOtherResources
-    case NotAssociatedWithResources
-    case AssociatedWithOtherResources
+public struct FlipError {
+    var error: String?
+    var details: String?
 }

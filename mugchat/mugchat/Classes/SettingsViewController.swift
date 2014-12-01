@@ -12,7 +12,7 @@
 
 import Foundation
 
-class SettingsViewController : MugChatViewController, SettingsViewDelegate {
+class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     
     private var settingsView: SettingsView!
     

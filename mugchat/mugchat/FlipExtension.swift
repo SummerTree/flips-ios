@@ -25,11 +25,11 @@ private struct BackgroundContentTypeValue {
 
 private let NO_BACKGROUND_IMAGE_NAME = "no_background_image.jpg"
 
-extension Mug {
+extension Flip {
  
     func setBackgroundContentType(type: BackgroundContentType) {
         if (type == BackgroundContentType.Undefined) {
-            println("Error: trying to set background content type to undefined for mug \(self.mugID).")
+            println("Error: trying to set background content type to undefined for flip \(self.flipID).")
         }
         
         var typeValue: Int!
@@ -66,7 +66,7 @@ extension Mug {
         return (self.soundURL != nil) && (!self.soundURL.isEmpty)
     }
 
-    func isBlankMug() -> Bool {
+    func isBlankFlip() -> Bool {
         let hasBackgroundUrlDefined = self.hasBackground()
         let hasSoundUrlDefined = self.hasAudio()
         

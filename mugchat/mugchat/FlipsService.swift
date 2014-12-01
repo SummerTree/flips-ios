@@ -10,21 +10,8 @@
 // the license agreement.
 //
 
-#import "MugMessage.h"
-#import "Mug.h"
-#import "Room.h"
-#import "User.h"
+public class FlipsService : NSObject {
+    
+    let HOST: String = "http://flips-dev.arctouch.com"
 
-
-@implementation MugMessage
-
-@dynamic createdAt;
-@dynamic notRead;
-@dynamic receivedAt;
-@dynamic removed;
-@dynamic mugMessageID;
-@dynamic from;
-@dynamic mugs;
-@dynamic room;
-
-@end
+}

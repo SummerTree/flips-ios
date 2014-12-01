@@ -15,28 +15,28 @@ private let NOTIFICATION_KEY = "aps"
 private let NOTIFICATION_ALERT_KEY = "alert"
 private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
-extension MugMessage {
+extension FlipMessage {
 
-    func addMug(mug: Mug) {
+    func addFlip(flip: Flip) {
         
-        for (var i: Int = 0; i < self.mugs.count; i++) {
-            if (mug.mugID == self.mugs.objectAtIndex(i).mugID) {
-                println("Mug already added to this MugMessage")
+        for (var i: Int = 0; i < self.flips.count; i++) {
+            if (flip.flipID == self.flips.objectAtIndex(i).flipID) {
+                println("Flip already added to this FlipMessage")
                 return
             }
         }
         
-        var mutableOrderedSet = NSMutableOrderedSet(orderedSet: self.mugs)
-        mutableOrderedSet.addObject(mug)
-        self.mugs = mutableOrderedSet
+        var mutableOrderedSet = NSMutableOrderedSet(orderedSet: self.flips)
+        mutableOrderedSet.addObject(flip)
+        self.flips = mutableOrderedSet
     }
     
     func messagePhrase() -> String {
         var message = ""
         var space = ""
-        for (var i: Int = 0; i < self.mugs.count; i++) {
-            let mug = self.mugs.objectAtIndex(i) as Mug
-            message = "\(message)\(space)\(mug.word)"
+        for (var i: Int = 0; i < self.flips.count; i++) {
+            let flip = self.flips.objectAtIndex(i) as Flip
+            message = "\(message)\(space)\(flip.word)"
             space = " "
         }
         
@@ -44,37 +44,37 @@ extension MugMessage {
     }
     
     func messageThumbnail() -> UIImage? {
-        let firstMug = self.mugs.firstObject as Mug
-        return CacheHandler.sharedInstance.thumbnailForUrl(firstMug.backgroundURL)
+        let firstFlip = self.flips.firstObject as Flip
+        return CacheHandler.sharedInstance.thumbnailForUrl(firstFlip.backgroundURL)
     }
     
     func createThumbnail() {
-        let firstMug = self.mugs.firstObject as? Mug
+        let firstFlip = self.flips.firstObject as? Flip
 
-        if (firstMug == nil) {
+        if (firstFlip == nil) {
             return
         }
 
         let cacheHandler = CacheHandler.sharedInstance
-        if (firstMug!.isBackgroundContentTypeImage()) {
-            let backgroundImageData = cacheHandler.dataForUrl(firstMug!.backgroundURL)
+        if (firstFlip!.isBackgroundContentTypeImage()) {
+            let backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
             if (backgroundImageData != nil) {
-                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstMug!.backgroundURL)
+                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstFlip!.backgroundURL)
             }
-        } else if (firstMug!.isBackgroundContentTypeVideo()) {
-            let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstMug!.backgroundURL)
+        } else if (firstFlip!.isBackgroundContentTypeVideo()) {
+            let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
             if (videoPath != nil) {
                 let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!)
-                cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstMug!.backgroundURL)
+                cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
             }
         }
     }
     
     func hasAllContentDownloaded() -> Bool {
         var allContentReceived = true
-        for var i = 0; i < self.mugs.count; i++ {
-            var mug = self.mugs.objectAtIndex(i) as Mug
-            if (!mug.hasAllContentDownloaded()) {
+        for var i = 0; i < self.flips.count; i++ {
+            var flip = self.flips.objectAtIndex(i) as Flip
+            if (!flip.hasAllContentDownloaded()) {
                 allContentReceived = false
             }
         }
@@ -88,9 +88,9 @@ extension MugMessage {
         var dictionary = Dictionary<String, AnyObject>()
         
         dictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
-        dictionary.updateValue(self.from.userID, forKey: MugMessageJsonParams.FROM_USER_ID)
-        dictionary.updateValue(self.createdAt.toFormattedString(), forKey: MugMessageJsonParams.SENT_AT)
-        dictionary.updateValue(self.mugMessageID, forKey: MugMessageJsonParams.FLIP_MESSAGE_ID)
+        dictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
+        dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
+        dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         let loggedUserFirstName = AuthenticationHelper.sharedInstance.userInSession.firstName
         let notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
@@ -104,18 +104,18 @@ extension MugMessage {
         dictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
         
         var flips = Array<Dictionary<String, String>>()
-        for (var i = 0; i < self.mugs.count; i++) {
-            let flip = self.mugs.objectAtIndex(i) as Mug
+        for (var i = 0; i < self.flips.count; i++) {
+            let flip = self.flips.objectAtIndex(i) as Flip
             var flipDictionary = Dictionary<String, String>()
-            flipDictionary.updateValue(flip.mugID, forKey: MugJsonParams.ID)
-            flipDictionary.updateValue(flip.word, forKey: MugJsonParams.WORD)
-            flipDictionary.updateValue(flip.backgroundURL, forKey: MugJsonParams.BACKGROUND_URL)
-            flipDictionary.updateValue(flip.soundURL, forKey: MugJsonParams.SOUND_URL)
+            flipDictionary.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
+            flipDictionary.updateValue(flip.word, forKey: FlipJsonParams.WORD)
+            flipDictionary.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
+            flipDictionary.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
             
             flips.append(flipDictionary)
         }
         
-        dictionary.updateValue(flips, forKey: MugMessageJsonParams.CONTENT)
+        dictionary.updateValue(flips, forKey: FlipMessageJsonParams.CONTENT)
         return dictionary
     }
 }

@@ -10,8 +10,20 @@
 // the license agreement.
 //
 
-public class MugchatService : NSObject {
-    
-    let HOST: String = "http://flips-dev.arctouch.com"
+#import "Room.h"
+#import "FlipMessage.h"
+#import "User.h"
 
-}
+
+@implementation Room
+
+@dynamic lastMessageReceivedAt;
+@dynamic name;
+@dynamic pubnubID;
+@dynamic removed;
+@dynamic roomID;
+@dynamic admin;
+@dynamic flipMessages;
+@dynamic participants;
+
+@end

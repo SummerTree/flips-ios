@@ -39,7 +39,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     override init() {
         super.init()
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
     }
     

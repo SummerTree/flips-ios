@@ -54,7 +54,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         self.joinedTextRanges.append(joinedTextRange)
 
-        self.updateColorOnJoinedTexts(UIColor.mugOrange())
+        self.updateColorOnJoinedTexts(UIColor.flipOrange())
     }
     
     func updateColorOnJoinedTexts(color: UIColor) {
@@ -75,8 +75,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         self.attributedText = attributedString
     }
     
-    func getMugTexts() -> [String] {
-        var mugTexts : [String] = [String]()
+    func getFlipTexts() -> [String] {
+        var flipTexts : [String] = [String]()
         
         var charIndex = 0
         var lastWord: String = ""
@@ -99,7 +99,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                     lastWord.append(character)
                 } else {
                     if (lastWord != "") {
-                        mugTexts.append(lastWord)
+                        flipTexts.append(lastWord)
                         lastWord = ""
                     }
                 }
@@ -112,7 +112,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                         lastWord.append(character)
                     } else {
                         if (lastWord != "") {
-                            mugTexts.append(lastWord)
+                            flipTexts.append(lastWord)
                             lastWord = ""
                             lastWord.append(character)
                         } else {
@@ -128,10 +128,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
         
         if (lastWord != "") {
-           mugTexts.append(lastWord)
+           flipTexts.append(lastWord)
         }
         
-        return mugTexts
+        return flipTexts
     }
     
     func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, textRange: NSRange?) {
@@ -199,7 +199,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         let textNSString = self.text as NSString
         var stringFromSelection = textNSString.substringWithRange(selectionTextRange)
         
-        var arrayOfWords : [String] = MugStringsUtil.splitMugString(stringFromSelection)
+        var arrayOfWords : [String] = FlipStringsUtil.splitFlipString(stringFromSelection)
         if (arrayOfWords.count > 1) {
             return true
         }

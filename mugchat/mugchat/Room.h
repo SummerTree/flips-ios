@@ -13,32 +13,32 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class MugMessage, User;
+@class FlipMessage, User;
 
 @interface Room : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSDate * lastMessageReceivedAt;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * pubnubID;
+@property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSString * roomID;
 @property (nonatomic, retain) User *admin;
-@property (nonatomic, retain) NSOrderedSet *mugMessages;
+@property (nonatomic, retain) NSOrderedSet *flipMessages;
 @property (nonatomic, retain) NSSet *participants;
 @end
 
 @interface Room (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(MugMessage *)value inMugMessagesAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromMugMessagesAtIndex:(NSUInteger)idx;
-- (void)insertMugMessages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeMugMessagesAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInMugMessagesAtIndex:(NSUInteger)idx withObject:(MugMessage *)value;
-- (void)replaceMugMessagesAtIndexes:(NSIndexSet *)indexes withMugMessages:(NSArray *)values;
-- (void)addMugMessagesObject:(MugMessage *)value;
-- (void)removeMugMessagesObject:(MugMessage *)value;
-- (void)addMugMessages:(NSOrderedSet *)values;
-- (void)removeMugMessages:(NSOrderedSet *)values;
+- (void)insertObject:(FlipMessage *)value inFlipMessagesAtIndex:(NSUInteger)idx;
+- (void)removeObjectFromFlipMessagesAtIndex:(NSUInteger)idx;
+- (void)insertFlipMessages:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
+- (void)removeFlipMessagesAtIndexes:(NSIndexSet *)indexes;
+- (void)replaceObjectInFlipMessagesAtIndex:(NSUInteger)idx withObject:(FlipMessage *)value;
+- (void)replaceFlipMessagesAtIndexes:(NSIndexSet *)indexes withFlipMessages:(NSArray *)values;
+- (void)addFlipMessagesObject:(FlipMessage *)value;
+- (void)removeFlipMessagesObject:(FlipMessage *)value;
+- (void)addFlipMessages:(NSOrderedSet *)values;
+- (void)removeFlipMessages:(NSOrderedSet *)values;
 - (void)addParticipantsObject:(User *)value;
 - (void)removeParticipantsObject:(User *)value;
 - (void)addParticipants:(NSSet *)values;

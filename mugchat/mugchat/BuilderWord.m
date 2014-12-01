@@ -10,7 +10,13 @@
 // the license agreement.
 //
 
-public struct MugError {
-    var error: String?
-    var details: String?
-}
+#import "BuilderWord.h"
+
+
+@implementation BuilderWord
+
+@dynamic addedAt;
+@dynamic fromServer;
+@dynamic word;
+
+@end

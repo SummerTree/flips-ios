@@ -12,7 +12,7 @@
 
 import Foundation
 
-class MugChatViewController : UIViewController {
+class FlipsViewController : UIViewController {
     
     private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
     private let ACTIVITY_INDICATOR_SIZE: CGFloat = 100

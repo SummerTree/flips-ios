@@ -25,7 +25,7 @@ private struct UserJsonParams {
     static let IS_TEMPORARY = "isTemporary"
 }
 
-public typealias UserSyncFinished = (Bool, MugError?) -> Void
+public typealias UserSyncFinished = (Bool, FlipError?) -> Void
 
 class UserDataSource : BaseDataSource {
     
@@ -146,7 +146,7 @@ class UserDataSource : BaseDataSource {
             let roomService = RoomService()
             let builderService = BuilderService()
             
-            var error: MugError?
+            var error: FlipError?
             
             let group = dispatch_group_create()
             dispatch_group_enter(group)
@@ -181,7 +181,7 @@ class UserDataSource : BaseDataSource {
                 return
             }
             
-            // TODO: sync my mugs with API
+            // TODO: sync my flips with API
             
             callback(true, nil)
         })

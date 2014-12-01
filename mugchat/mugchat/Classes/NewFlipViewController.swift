@@ -15,7 +15,7 @@ import UIKit
 private let STORYBOARD = "NewFlip"
 
 
-class NewFlipViewController: MugChatViewController,
+class NewFlipViewController: FlipsViewController,
     JoinStringsTextFieldDelegate,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
@@ -158,14 +158,14 @@ class NewFlipViewController: MugChatViewController,
             let roomDataSource = RoomDataSource()
             var result = roomDataSource.hasRoomWithUserId(contacts[0].contactUser.userID)
             if (result.hasRoom) {
-                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getMugTexts())
+                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getFlipTexts())
                 composeViewController.delegate = self
                 self.navigationController?.pushViewController(composeViewController, animated: true)
                 return
             }
         }
         
-        let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getMugTexts())
+        let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getFlipTexts())
         composeViewController.delegate = self
         self.navigationController?.pushViewController(composeViewController, animated: true)
         

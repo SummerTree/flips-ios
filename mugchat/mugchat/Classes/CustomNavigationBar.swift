@@ -155,7 +155,7 @@ class CustomNavigationBar : UIView {
         super.init(frame: frame)
         
         backgroundImageView = UIImageView(frame: frame)
-        backgroundImageView.backgroundColor = UIColor.mugOrange()
+        backgroundImageView.backgroundColor = UIColor.flipOrange()
         self.addSubview(backgroundImageView)
     }
     
@@ -204,7 +204,7 @@ class CustomNavigationBar : UIView {
             rightButton = UIButton()
             if let rightButtonItem = rightButtonObject as? String {
                 rightButton.setTitle(rightButtonItem, forState: .Normal)
-                rightButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+                rightButton.setTitleColor(UIColor.flipOrange(), forState: UIControlState.Normal)
                 rightButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
                 rightButton.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h3)
             } else if let rightButtonItem = rightButtonObject as? UIImage {
@@ -368,7 +368,7 @@ class CustomNavigationBar : UIView {
     
     func setBackgroundImage(image: UIImage) {
         backgroundImageView.alpha = 1.0
-        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.flipOrange())
     }
     
     func setBackgroundImageColor(color: UIColor) {

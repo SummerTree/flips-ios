@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
+class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
     
     private var chatView: ChatView!
     private var chatTitle: String!
@@ -20,7 +20,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     private var roomID: String!
     private var flipMessageIds: [String]!
     
-    private let flipMessageDataSource = MugMessageDataSource()
+    private let flipMessageDataSource = FlipMessageDataSource()
     
     
     // MARK: - Initializers
@@ -83,7 +83,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         flipMessageIds.removeAll(keepCapacity: false)
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
         for flipMessage in flipMessages {
-            flipMessageIds.append(flipMessage.mugMessageID)
+            flipMessageIds.append(flipMessage.flipMessageID)
         }
     }
     

@@ -12,7 +12,7 @@
 
 import Foundation
 
-public class PubNubService: MugchatService, PNDelegate {
+public class PubNubService: FlipsService, PNDelegate {
     
     private let PUBNUB_ORIGIN = "pubsub.pubnub.com"
     private let PUBNUB_PUBLISH_KEY = "pub-c-579fbcaa-1c0a-44fc-bb1c-e02e43e7eb30"

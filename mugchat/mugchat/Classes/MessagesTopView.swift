@@ -172,7 +172,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     // MARK: - Blur Background hanlder
     
     func setMessagesTopViewBackgroundImage(image: UIImage) {
-        backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+        backgroundBlurImageView.image = image.applyTintEffectWithColor(UIColor.flipOrange())
         backgroundBlurImageView.alpha = 0.98
     }
 }

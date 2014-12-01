@@ -12,7 +12,7 @@
 
 import Foundation
 
-class VerificationCodeViewController: MugChatViewController, VerificationCodeViewDelegate {
+class VerificationCodeViewController: FlipsViewController, VerificationCodeViewDelegate {
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"
@@ -89,8 +89,8 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 }
                 DeviceHelper.sharedInstance.saveDeviceId(device!.deviceID)
             },
-            failure: { (mugError) in
-                println("Error trying to register device: " + mugError!.error!)
+            failure: { (flipError) in
+                println("Error trying to register device: " + flipError!.error!)
         })
     }
     
@@ -106,8 +106,8 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 verificationCodeView.resetVerificationCodeField()
                 verificationCodeView.focusKeyboardOnCodeField()
             },
-            failure: { (mugError) in
-                println("Error trying to resend verification code to device: " + mugError!.error!)
+            failure: { (flipError) in
+                println("Error trying to resend verification code to device: " + flipError!.error!)
             })
     }
     
@@ -137,12 +137,12 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                     })
                 })
             },
-            failure: { (mugError) in
-                if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+            failure: { (flipError) in
+                if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
                     let verificationCodeView = self.view as VerificationCodeView
                     verificationCodeView.didEnterWrongVerificationCode()
                 } else {
-                    println("Device code verification error: " + mugError!.error!)
+                    println("Device code verification error: " + flipError!.error!)
                     let verificationCodeView = self.view as VerificationCodeView
                     verificationCodeView.resetVerificationCodeField()
                     verificationCodeView.focusKeyboardOnCodeField()

@@ -12,7 +12,7 @@
 
 class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavigationBarDelegate {
     
-    private let MUG_CELL_HEIGHT : CGFloat = 169
+    private let FLIP_CELL_HEIGHT : CGFloat = 169
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
     
@@ -123,7 +123,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return MUG_CELL_HEIGHT;
+        return FLIP_CELL_HEIGHT;
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

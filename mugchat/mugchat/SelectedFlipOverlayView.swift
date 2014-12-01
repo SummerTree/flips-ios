@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class SelectedMugOverlayView : UIView {
+class SelectedFlipOverlayView : UIView {
     
     var checkImageView: UIImageView!
 

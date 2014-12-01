@@ -14,7 +14,7 @@ import Foundation
 
 class ConversationTableViewCell : UITableViewCell {
     
-    private let CELL_MUG_IMAGE_VIEW_HEIGHT = 112.5
+    private let CELL_FLIP_IMAGE_VIEW_HEIGHT = 112.5
     private let CELL_INFO_VIEW_HEIGHT = 56
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     private let DRAG_ANIMATION_DURATION = 0.25
@@ -22,12 +22,12 @@ class ConversationTableViewCell : UITableViewCell {
     
     private var roomId: String!
     
-    private var mugImageView : UIImageView!
+    private var flipImageView : UIImageView!
     private var userImageView : RoundImageView!
     private var infoView : UIView!
     private var participantsNamesLabel : UILabel!
-    private var mugMessageLabel : UILabel!
-    private var mugTimeLabel : UILabel!
+    private var flipMessageLabel : UILabel!
+    private var flipTimeLabel : UILabel!
     private var badgeView : CustomBadgeView!
     private var highlightedView : UIView!
     
@@ -43,9 +43,9 @@ class ConversationTableViewCell : UITableViewCell {
         
         contentView.backgroundColor = UIColor.whiteColor()
         
-        mugImageView = UIImageView()
-        mugImageView.contentMode = UIViewContentMode.ScaleAspectFill
-        mugImageView.clipsToBounds = true
+        flipImageView = UIImageView()
+        flipImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        flipImageView.clipsToBounds = true
         
         userImageView = RoundImageView.avatarA3()
         
@@ -58,16 +58,16 @@ class ConversationTableViewCell : UITableViewCell {
         participantsNamesLabel.setContentHuggingPriority(249, forAxis: .Horizontal)
         participantsNamesLabel.setContentCompressionResistancePriority(250, forAxis: .Horizontal)
         
-        mugMessageLabel = UILabel()
-        mugMessageLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
-        mugMessageLabel.textColor = UIColor.deepSea()
-        mugMessageLabel.setContentHuggingPriority(251, forAxis: .Vertical)
+        flipMessageLabel = UILabel()
+        flipMessageLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
+        flipMessageLabel.textColor = UIColor.deepSea()
+        flipMessageLabel.setContentHuggingPriority(251, forAxis: .Vertical)
         
-        mugTimeLabel = UILabel()
-        mugTimeLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        mugTimeLabel.textColor = UIColor.deepSea()
-        mugTimeLabel.textAlignment = .Right
-        mugTimeLabel.setContentHuggingPriority(999, forAxis: .Horizontal)
+        flipTimeLabel = UILabel()
+        flipTimeLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        flipTimeLabel.textColor = UIColor.deepSea()
+        flipTimeLabel.textAlignment = .Right
+        flipTimeLabel.setContentHuggingPriority(999, forAxis: .Horizontal)
         
         badgeView = CustomBadgeView()
         
@@ -82,32 +82,32 @@ class ConversationTableViewCell : UITableViewCell {
     }
     
     func addSubviews() {
-        contentView.addSubview(mugImageView)
+        contentView.addSubview(flipImageView)
         
         contentView.addSubview(infoView)
         contentView.addSubview(userImageView)
         contentView.addSubview(badgeView)
         contentView.addSubview(highlightedView)
         
-        infoView.addSubview(mugMessageLabel)
+        infoView.addSubview(flipMessageLabel)
         infoView.addSubview(participantsNamesLabel)
-        infoView.addSubview(mugTimeLabel)
+        infoView.addSubview(flipTimeLabel)
     }
     
     
     // MARK: - Overridden methods
     
     private func initConstraints() {
-        mugImageView.mas_makeConstraints { (make) -> Void in
+        flipImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.contentView)
-            make.height.equalTo()(self.CELL_MUG_IMAGE_VIEW_HEIGHT)
+            make.height.equalTo()(self.CELL_FLIP_IMAGE_VIEW_HEIGHT)
             make.leading.equalTo()(self.contentView)
             make.trailing.equalTo()(self.contentView).with().offset()(0.5)
         }
         
         userImageView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.contentView).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-            make.centerY.equalTo()(self.mugImageView.mas_bottom)
+            make.centerY.equalTo()(self.flipImageView.mas_bottom)
             make.width.equalTo()(self.userImageView.frame.size.width)
             make.height.equalTo()(self.userImageView.frame.size.height)
         }
@@ -122,22 +122,22 @@ class ConversationTableViewCell : UITableViewCell {
         infoView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.trailing.equalTo()(self.contentView)
-            make.top.equalTo()(self.mugImageView.mas_bottom)
+            make.top.equalTo()(self.flipImageView.mas_bottom)
             make.height.equalTo()(self.CELL_INFO_VIEW_HEIGHT)
         }
         
-        mugTimeLabel.mas_makeConstraints { (make) -> Void in
+        flipTimeLabel.mas_makeConstraints { (make) -> Void in
             make.trailing.equalTo()(self.infoView).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.bottom.equalTo()(self.infoView.mas_centerY)
         }
         
         participantsNamesLabel.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.infoView)
-            make.trailing.equalTo()(self.mugTimeLabel.mas_leading).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.trailing.equalTo()(self.flipTimeLabel.mas_leading).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.bottom.equalTo()(self.infoView.mas_centerY)
         }
         
-        mugMessageLabel.mas_makeConstraints { (make) -> Void in
+        flipMessageLabel.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.participantsNamesLabel)
             make.trailing.equalTo()(self.infoView).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.top.equalTo()(self.participantsNamesLabel.mas_bottom)
@@ -177,37 +177,37 @@ class ConversationTableViewCell : UITableViewCell {
     private func layoutMessageInfo(room: Room) {
         // All conversations should be sorted in the inbox by the above time stamp, with most recent at the top, and oldest at the bottom.
         
-        let mugMessageDataSource = MugMessageDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
 
         // The preview still photo should reflect the first frame of the video of the oldest unread message in the conversation
-        var mugMessage = mugMessageDataSource.oldestNotReadMugMessageForRoomId(room.roomID)
-        if (mugMessage == nil) {
-            mugMessage = room.mugMessagesNotRemoved().lastObject as? MugMessage
+        var flipMessage = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(room.roomID)
+        if (flipMessage == nil) {
+            flipMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
         }
 
-        if (mugMessage != nil) {
-            let messageThumbnailImage = mugMessage!.messageThumbnail()?
-            let photoURL = NSURL(string: mugMessage!.from.photoURL)
-            let isMessageNotRead = mugMessage!.notRead.boolValue
-            let messagePhrase = mugMessage!.messagePhrase()
+        if (flipMessage != nil) {
+            let messageThumbnailImage = flipMessage!.messageThumbnail()?
+            let photoURL = NSURL(string: flipMessage!.from.photoURL)
+            let isMessageNotRead = flipMessage!.notRead.boolValue
+            let messagePhrase = flipMessage!.messagePhrase()
             // The time stamp should reflect the time sent of the oldest unread message in the conversation
-            let formatedDate = DateHelper.formatDateToApresentationFormat(mugMessage!.createdAt)
+            let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage!.createdAt)
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.mugImageView.image = messageThumbnailImage
+                self.flipImageView.image = messageThumbnailImage
                 
                 // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
                 self.userImageView.setImageWithURL(photoURL)
                 
                 if (isMessageNotRead) {
                     // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
-                    self.mugMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
+                    self.flipMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
                 } else {
-                    self.mugMessageLabel.text = messagePhrase
+                    self.flipMessageLabel.text = messagePhrase
                 }
                 
-                self.mugTimeLabel.text = formatedDate
-                self.mugTimeLabel.sizeToFit()
+                self.flipTimeLabel.text = formatedDate
+                self.flipTimeLabel.sizeToFit()
                 
             })
         }

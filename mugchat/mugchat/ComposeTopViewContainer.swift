@@ -15,8 +15,6 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     private let ANIMATION_TRANSITON_DURATION: NSTimeInterval = 0.3
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
     
-    private let MUGWORD_MARGIN_BOTTOM: CGFloat = 40.0
-    
     private var cameraPreview: CameraView!
     private var cameraFilterImageView: UIImageView!
     private var cameraWordLabel: UILabel!
@@ -119,8 +117,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate {
     }
     
     func showFlip(flipId: String) {
-        let flipDataSource = MugDataSource()
-        var flip = flipDataSource.retrieveMugWithId(flipId)
+        let flipDataSource = FlipDataSource()
+        var flip = flipDataSource.retrieveFlipWithId(flipId)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             var image: UIImage!

@@ -12,7 +12,7 @@
 
 import UIKit
 
-class MugChatWebView: UIView, UIWebViewDelegate {
+class FlipsWebView: UIView, UIWebViewDelegate {
     
     let webView: UIWebView! = UIWebView()
     let activityIndicator: UIActivityIndicatorView! = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)

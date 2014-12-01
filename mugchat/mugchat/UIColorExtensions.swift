@@ -35,7 +35,7 @@ extension UIColor {
     
     
     // MARK: Primary Colors
-    class func mugOrange() -> UIColor {
+    class func flipOrange() -> UIColor {
         return UIColor(RRGGBB: UInt(0xEC7061))
     }
     
@@ -85,8 +85,8 @@ extension UIColor {
         return deepSea()
     }
     
-    class func mugOrangeBackground() -> UIColor {
-        return mugOrange()
+    class func flipOrangeBackground() -> UIColor {
+        return flipOrange()
     }
     
     class func lightBackground() -> UIColor {

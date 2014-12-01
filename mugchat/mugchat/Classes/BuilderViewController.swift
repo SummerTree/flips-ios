@@ -131,7 +131,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
                 self.loadBuilderWords()
                 if (self.words.count > 0) {
                     self.highlightedWordIndex = 0
-                    self.reloadMyMugs()
+                    self.reloadMyFlips()
                     self.updateFlipWordsState()
                     self.showContentForHighlightedWord()
                 } 

@@ -12,9 +12,9 @@
 
 public typealias CreateRoomSuccessResponse = (Room) -> Void
 public typealias GetRoomsSuccessResponse = ([Room]) -> Void
-public typealias RoomFailureResponse = (MugError?) -> Void
+public typealias RoomFailureResponse = (FlipError?) -> Void
 
-public class RoomService: MugchatService {
+public class RoomService: FlipsService {
 
     private let ROOM_URL: String = "/user/{{user_id}}/rooms"
     
@@ -45,9 +45,9 @@ public class RoomService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(MugError(error: response["error"] as String!, details: nil))
+                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCompletion(MugError(error: error.localizedDescription, details:nil))
+                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -64,9 +64,9 @@ public class RoomService: MugchatService {
         }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
             if (operation.responseObject != nil) {
                 let response = operation.responseObject as NSDictionary
-                failCompletion(MugError(error: response["error"] as String!, details: nil))
+                failCompletion(FlipError(error: response["error"] as String!, details: nil))
             } else {
-                failCompletion(MugError(error: error.localizedDescription, details:nil))
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
             }
         }
     }

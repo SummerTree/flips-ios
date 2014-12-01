@@ -40,7 +40,7 @@ class NotificationMessageView : UIView {
         
         messageLabel = UILabel()
         messageLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        messageLabel.textColor = UIColor.mugOrange()
+        messageLabel.textColor = UIColor.flipOrange()
         messageLabel.textAlignment = NSTextAlignment.Center
         messageLabel.text = self.message
         messageLabel.sizeToFit()

@@ -12,14 +12,14 @@
 
 import UIKit
 
-class MugChatWebViewController: MugChatViewController {
+class FlipsChatWebViewController: FlipsViewController {
     
-    var mugChatWebView: MugChatWebView!
+    var flipChatWebView: FlipsWebView!
     var webTitle: String!
     
-    init(view: MugChatWebView, title: String) {
+    init(view: FlipsWebView, title: String) {
         super.init(nibName: nil, bundle: nil)
-        self.mugChatWebView = view
+        self.flipChatWebView = view
         self.webTitle = title
     }
 
@@ -42,8 +42,8 @@ class MugChatWebViewController: MugChatViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
-        self.view = self.mugChatWebView
+        self.view = self.flipChatWebView
         self.setupWhiteNavBarWithBackButton(NSLocalizedString(self.webTitle, comment: self.webTitle))
-        self.mugChatWebView.viewDidLoad()
+        self.flipChatWebView.viewDidLoad()
     }
 }

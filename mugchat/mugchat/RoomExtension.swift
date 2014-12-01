@@ -15,10 +15,10 @@ extension Room {
     func numberOfUnreadMessages() -> Int {
         var notReadMessagesCount = 0
         
-        for (var i = 0; i < self.mugMessagesNotRemoved().count; i++) {
-            let mugMessage = self.mugMessages[i] as MugMessage
+        for (var i = 0; i < self.flipMessagesNotRemoved().count; i++) {
+            let flipMessage = self.flipMessages[i] as FlipMessage
             
-            if (mugMessage.notRead.boolValue) {
+            if (flipMessage.notRead.boolValue) {
                 notReadMessagesCount++
             }
         }
@@ -26,40 +26,40 @@ extension Room {
         return notReadMessagesCount
     }
     
-    func lastMessageReceivedWithContent() -> MugMessage? {
-        var currentLastMessageWithContent = self.mugMessagesNotRemoved().lastObject as MugMessage!
+    func lastMessageReceivedWithContent() -> FlipMessage? {
+        var currentLastMessageWithContent = self.flipMessagesNotRemoved().lastObject as FlipMessage!
         
         while (!currentLastMessageWithContent.hasAllContentDownloaded()) {
-            var currentIndex = self.mugMessages.indexOfObject(currentLastMessageWithContent)
+            var currentIndex = self.flipMessages.indexOfObject(currentLastMessageWithContent)
             if (currentIndex == 0) {
                 return nil
             }
-            currentLastMessageWithContent = self.mugMessages[--currentIndex] as MugMessage
+            currentLastMessageWithContent = self.flipMessages[--currentIndex] as FlipMessage
         }
 
         return currentLastMessageWithContent
     }
     
-    func oldestNotReadMessage() -> MugMessage? {
-        let mugMessageDataSource = MugMessageDataSource()
+    func oldestNotReadMessage() -> FlipMessage? {
+        let flipMessageDataSource = FlipMessageDataSource()
         
-        var oldestMessageNotRead = mugMessageDataSource.oldestNotReadMugMessageForRoomId(self.roomID)
+        var oldestMessageNotRead = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(self.roomID)
         
         if (oldestMessageNotRead == nil) {
-            return self.mugMessagesNotRemoved().lastObject as? MugMessage
+            return self.flipMessagesNotRemoved().lastObject as? FlipMessage
         }
         
         return oldestMessageNotRead
     }
     
-    func mugMessagesNotRemoved() -> NSOrderedSet {
+    func flipMessagesNotRemoved() -> NSOrderedSet {
         var notRemovedMessages = NSMutableOrderedSet()
         
-        for (var i = 0; i < self.mugMessages.count; i++) {
-            let mugMessage = self.mugMessages[i] as MugMessage
+        for (var i = 0; i < self.flipMessages.count; i++) {
+            let flipMessage = self.flipMessages[i] as FlipMessage
             
-            if (!mugMessage.removed.boolValue) {
-                notRemovedMessages.addObject(mugMessage)
+            if (!flipMessage.removed.boolValue) {
+                notRemovedMessages.addObject(flipMessage)
             }
         }
         
@@ -67,8 +67,8 @@ extension Room {
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
-        let mugMessageDataSource = MugMessageDataSource()
-        mugMessageDataSource.removeAllMugMessagesFromRoomID(self.roomID, completion)
+        let flipMessageDataSource = FlipMessageDataSource()
+        flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
     }
     
     func roomName() -> String {

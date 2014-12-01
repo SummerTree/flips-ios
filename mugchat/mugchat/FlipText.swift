@@ -10,13 +10,23 @@
 // the license agreement.
 //
 
-#import "BuilderWord.h"
+class FlipText {
+    
+    var position: Int!
+    var text: String!
+    var state: FlipState!
+    var associatedFlipId: String?
+    
+    init(position: Int, text: String, state: FlipState) {
+        self.position = position
+        self.text = text
+        self.state = state
+    }
+}
 
-
-@implementation BuilderWord
-
-@dynamic fromServer;
-@dynamic word;
-@dynamic addedAt;
-
-@end
+enum FlipState {
+    case NewWord
+    case AssociatedWithoutOtherResources
+    case NotAssociatedWithResources
+    case AssociatedWithOtherResources
+}

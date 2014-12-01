@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias SendMessageCompletion = (Bool, String?, MugError?) -> Void
+public typealias SendMessageCompletion = (Bool, String?, FlipError?) -> Void
 
 public class MessageService {
     
@@ -38,7 +38,7 @@ public class MessageService {
         }
         
         var room: Room!
-        var error: MugError?
+        var error: FlipError?
         
         var group = dispatch_group_create()
         dispatch_group_enter(group)
@@ -63,13 +63,13 @@ public class MessageService {
     }
     
     func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
-        let flipMessageDataSource = MugMessageDataSource()
-        let flipDataSource = MugDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
+        let flipDataSource = FlipDataSource()
         let roomDataSource = RoomDataSource()
         
-        var flips = Array<Mug>()
+        var flips = Array<Flip>()
         for flipId in flipIds {
-            var flip = flipDataSource.retrieveMugWithId(flipId)
+            var flip = flipDataSource.retrieveFlipWithId(flipId)
             flips.append(flip)
         }
         

@@ -33,8 +33,8 @@
 #import "Device.h"
 #import "User.h"
 #import "Room.h"
-#import "Mug.h"
-#import "MugMessage.h"
+#import "Flip.h"
+#import "FlipMessage.h"
 #import "Contact.h"
 #import "BuilderWord.h"
 

@@ -13,9 +13,9 @@
 let LABEL_MARGIN_TOP : CGFloat = 7.0
 private let EXTRAS_IMAGE_SIZE : CGFloat = 20.0
 
-class MugTextView : UIView {
+class FlipTextView : UIView {
     
-    var mugText : MugText!
+    var flipText : FlipText!
     var textLabel: UILabel!
     
     var hasExtrasImageView: UIImageView! // "(...)"
@@ -24,10 +24,10 @@ class MugTextView : UIView {
     
     // MARK: - Initialization Methods
     
-    convenience init(mugText : MugText) {
+    convenience init(flipText : FlipText) {
         self.init(frame: CGRect.zeroRect)
         
-        self.mugText = mugText
+        self.flipText = flipText
         
         self.initSubviews()
     }
@@ -40,8 +40,8 @@ class MugTextView : UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setMugText(mugText : MugText) {
-        self.mugText = mugText
+    func setFlipText(flipText : FlipText) {
+        self.flipText = flipText
         initSubviews()
     }
     
@@ -53,7 +53,7 @@ class MugTextView : UIView {
         textLabel.layer.borderColor = UIColor.avacado().CGColor
         textLabel.layer.cornerRadius = 14.0
         textLabel.textAlignment = NSTextAlignment.Center
-        textLabel.text = self.mugText.text
+        textLabel.text = self.flipText.text
         textLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         textLabel.textColor = UIColor.blackColor()
         textLabel.sizeToFit()
@@ -70,7 +70,7 @@ class MugTextView : UIView {
     }
     
     func updateLayout() {
-        var status : FlipState = self.mugText.state
+        var status : FlipState = self.flipText.state
         switch status {
         case FlipState.NewWord:
             textLabel.textColor = UIColor.blackColor()
@@ -110,7 +110,7 @@ class MugTextView : UIView {
     }
     
     func getTextWidth() -> CGFloat{
-        let myString: NSString = self.mugText.text as NSString
+        let myString: NSString = self.flipText.text as NSString
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width

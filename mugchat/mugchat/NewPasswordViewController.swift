@@ -12,7 +12,7 @@
 
 import UIKit
 
-class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate {
+class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     
     var newPasswordView: NewPasswordView!
     
@@ -47,8 +47,8 @@ class NewPasswordViewController: MugChatViewController, NewPasswordViewDelegate 
                 println("updatePassword success")
                 var loginViewController = LoginViewController()
                 self.navigationController?.pushViewController(loginViewController, animated: true)
-            }) { (mugError) -> Void in
-                println(mugError!.error)
+            }) { (flipError) -> Void in
+                println(flipError!.error)
         }
     }
   
