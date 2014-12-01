@@ -12,7 +12,7 @@
 
 import UIKit
 
-class TermsOfUseViewController: MugChatWebViewController {
+class TermsOfUseViewController: FlipsChatWebViewController {
 
     init() {
         super.init(view: TermsOfUseView(), title: "Terms of Use")

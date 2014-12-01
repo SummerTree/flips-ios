@@ -11,7 +11,7 @@
 //
 
 #import "VideoComposer.h"
-#import "Mug.h"
+#import "Flip.h"
 
 #import "Flips-Swift.h"
 
@@ -28,9 +28,9 @@
     return self;
 }
 
-- (NSURL *)videoFromMugs:(NSArray *)mugs
+- (NSURL *)videoFromFlips:(NSArray *)flips
 {
-    NSArray *messageParts = [self videoPartsFromFlips:mugs];
+    NSArray *messageParts = [self videoPartsFromFlips:flips];
     
     return [self videoJoiningParts:messageParts];
 }
@@ -41,8 +41,8 @@
 
     NSMutableArray *messageParts = [NSMutableArray array];
 
-    for (Mug *flip in flips) {
-        AVAsset *videoTrack = [self videoFromMug:flip];
+    for (Flip *flip in flips) {
+        AVAsset *videoTrack = [self videoFromFlip:flip];
 
         if (videoTrack) {
             [messageParts addObject:videoTrack];
@@ -57,7 +57,7 @@
     CachingService *cachingService = [CachingService sharedInstance];
     dispatch_group_t cachingGroup = dispatch_group_create();
 
-    for (Mug *flip in flips) {
+    for (Flip *flip in flips) {
         if ([flip hasBackground]) {
             dispatch_group_enter(cachingGroup);
 
@@ -83,12 +83,12 @@
     dispatch_group_wait(cachingGroup, dispatch_time(DISPATCH_TIME_NOW, flips.count * 30 * NSEC_PER_SEC));
 }
 
-- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage
+- (NSURL *)videoFromFlipMessage:(FlipMessage *)flipMessage
 {
     NSMutableArray *messageParts = [NSMutableArray array];
 
-    for (Mug *mug in mugMessage.mugs) {
-        AVAsset *videoTrack = [self videoFromMug:mug];
+    for (Flip *flip in flipMessage.flips) {
+        AVAsset *videoTrack = [self videoFromFlip:flip];
 
         if (videoTrack) {
             [messageParts addObject:videoTrack];
@@ -98,7 +98,7 @@
     return [self videoJoiningParts:messageParts];
 }
 
-- (AVAsset *)videoFromMug:(Mug *)flip {
+- (AVAsset *)videoFromFlip:(Flip *)flip {
     __block AVAsset *track;
     
     NSLog(@"flip word: %@", flip.word);
@@ -106,10 +106,10 @@
 
     dispatch_group_t group = dispatch_group_create();
 
-    // Empty mugs doesn't exist
-    Mug *flipInContext = [flip MR_inThreadContext];
+    // Empty flips doesn't exist
+    Flip *flipInContext = [flip MR_inThreadContext];
     if (flipInContext == nil) {
-        flipInContext = [Mug MR_createEntity];
+        flipInContext = [Flip MR_createEntity];
         flipInContext.word = word;
     }
 
@@ -159,7 +159,7 @@
     }
 
     NSURL *outputFolder = [self outputFolderPath];
-    __block NSURL *videoUrl = [outputFolder URLByAppendingPathComponent:@"generated-mug-message.mov"]; // TODO: Should get unique ID of mug message to use as filename
+    __block NSURL *videoUrl = [outputFolder URLByAppendingPathComponent:@"generated-flip-message.mov"]; // TODO: Should get unique ID of flip message to use as filename
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtURL:videoUrl error:nil];
@@ -185,7 +185,7 @@
     return videoUrl;
 }
 
-- (void)prepareVideoAssetFromFlip:(Mug *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
+- (void)prepareVideoAssetFromFlip:(Flip *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
 {
     NSURL *videoURL;
     CacheHandler *cacheHandler = [CacheHandler sharedInstance];
@@ -194,7 +194,7 @@
         NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
         videoURL = [NSURL fileURLWithPath:filePath];
     } else {
-        videoURL = [NSURL fileURLWithPath:[ImageVideoCreator videoPathForMug:flip]];
+        videoURL = [NSURL fileURLWithPath:[ImageVideoCreator videoPathForFlip:flip]];
     }
 
     AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:videoURL options:nil];

@@ -33,9 +33,10 @@
 #import "Device.h"
 #import "User.h"
 #import "Room.h"
-#import "Mug.h"
-#import "MugMessage.h"
+#import "Flip.h"
+#import "FlipMessage.h"
 #import "Contact.h"
+#import "BuilderWord.h"
 
 #import "NSManagedObject+helpers.h"
 #import "UIImageView+AFNetworking.h"
@@ -44,5 +45,7 @@
 #import "RHAddressBook.h"
 #import "RHPerson.h"
 #import "RHPersonLabels.h"
+
+#import "SwiftTryCatch.h"
 
 #endif

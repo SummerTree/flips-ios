@@ -22,9 +22,10 @@ private struct UserJsonParams {
     static let PHOTO_URL = "photoUrl"
     static let PUBNUB_ID = "pubnubId"
     static let PHONE_NUMBER = "phoneNumber"
+    static let IS_TEMPORARY = "isTemporary"
 }
 
-public typealias UserSyncFinished = (Bool, NSError?) -> Void
+public typealias UserSyncFinished = (Bool, FlipError?) -> Void
 
 class UserDataSource : BaseDataSource {
     
@@ -77,6 +78,7 @@ class UserDataSource : BaseDataSource {
         user.nickname = json[UserJsonParams.NICKNAME].stringValue
         user.photoURL = json[UserJsonParams.PHOTO_URL].stringValue
         user.phoneNumber = json[UserJsonParams.PHONE_NUMBER].stringValue
+        user.isTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
         
         if (json[UserJsonParams.BIRTHDAY].stringValue != "") {
             user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
@@ -106,6 +108,18 @@ class UserDataSource : BaseDataSource {
         
         let contactDataSource = ContactDataSource()
         var contacts = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
+        
+        let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
+        let authenticatedId = AuthenticationHelper.sharedInstance.userInSession?.userID
+        
+        if (contacts.isEmpty && isAuthenticated && authenticatedId != user?.userID) {
+            var facebookID = user?.facebookID
+            var phonetype = (facebookID != nil) ? facebookID : ""
+            
+            var contact = contactDataSource.createOrUpdateContactWith(user!.firstName, lastName: user!.lastName, phoneNumber: user!.phoneNumber, phoneType: phonetype!)
+            contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
+        }
+        
         for contact in contacts {
             contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
             user?.addContactsObject(contact)
@@ -128,17 +142,46 @@ class UserDataSource : BaseDataSource {
     
     func syncUserData(callback: UserSyncFinished) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            // TODO: sync my mugs with API
+            println("\nsyncUserData")
+            let roomService = RoomService()
+            let builderService = BuilderService()
             
-            println("   ")
-            if (NSThread.currentThread() == NSThread.mainThread()) {
-                println("syncUserData IN MAIN THREAD")
-            } else {
-                println("syncUserData NOT IN MAIN THREAD")
+            var error: FlipError?
+            
+            let group = dispatch_group_create()
+            dispatch_group_enter(group)
+            roomService.getMyRooms({ (rooms) -> Void in
+                for room in rooms {
+                    println("   - subscribing to room: \(room.roomID)")
+                    PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+                }
+                dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
+            })
+            
+            dispatch_group_enter(group)
+            let builderWordDataSource = BuilderWordDataSource()
+            builderService.getSuggestedWords({ (words) -> Void in
+                let builderWordDataSource = BuilderWordDataSource()
+                builderWordDataSource.addWords(words, fromServer: true)
+                dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
+            })
+            
+            println("   waiting sync rooms")
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            
+            if (error != nil) {
+                println("sync fail\n")
+                callback(false, error)
+                return
             }
-            println("   ")
-            println("Logged as \n   First Name: \(AuthenticationHelper.sharedInstance.userInSession.firstName)\n    ID: \(AuthenticationHelper.sharedInstance.userInSession.userID)")
-            println("   ")
+            
+            // TODO: sync my flips with API
             
             callback(true, nil)
         })

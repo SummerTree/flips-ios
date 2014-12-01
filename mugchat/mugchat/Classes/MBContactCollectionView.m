@@ -111,7 +111,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     
     UIFont *font = [UIFont fontWithName:@"AvenirNext-Regular" size:16];
     
-    [[MBContactCollectionViewContactCell appearance] setTintColor:[UIColor mugOrange]];
+    [[MBContactCollectionViewContactCell appearance] setTintColor:[UIColor flipOrange]];
     [[MBContactCollectionViewEntryCell appearance] setFont:font];
     [[MBContactCollectionViewPromptCell appearance] setFont:font];
     

@@ -12,16 +12,16 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#import "MugMessage.h"
+#import "FlipMessage.h"
 
 
 @interface VideoComposer : NSObject
 
 @property (nonatomic) BOOL renderOverlays;
 
-- (NSURL *)videoFromMugs:(NSArray *)mugs;
-- (NSURL *)videoFromMugMessage:(MugMessage *)mugMessage;
-- (AVAsset *)videoFromMug:(Mug *)mug;
+- (NSURL *)videoFromFlips:(NSArray *)flips;
+- (NSURL *)videoFromFlipMessage:(FlipMessage *)flipMessage;
+- (AVAsset *)videoFromFlip:(Flip *)flip;
 
 - (NSArray *)videoPartsFromFlips:(NSArray *)flips;
 

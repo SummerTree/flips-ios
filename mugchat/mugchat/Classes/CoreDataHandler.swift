@@ -14,7 +14,7 @@ import Foundation
 
 public class CoreDataHandler: NSObject {
     
-    private let databaseStoreName = "mugchat.sqlite"
+    private let databaseStoreName = "flips.sqlite"
     
     public class var sharedInstance : CoreDataHandler {
     struct Static {

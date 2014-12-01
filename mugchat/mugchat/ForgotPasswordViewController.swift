@@ -16,7 +16,7 @@ private let INVALID_NUMBER = NSLocalizedString("Invalid Number", comment: "Inval
 private let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not match our records. Please try again.", comment: "No match")
 
 
-class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
+class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
     
     private let US_CODE = "+1"
     
@@ -64,7 +64,7 @@ class ForgotPasswordViewController: MugChatViewController, ForgotPasswordViewDel
         UserService.sharedInstance.forgotPassword(intlPhoneNumber, success: { (user) -> Void in
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
-        }) { (mugError) -> Void in
+        }) { (flipError) -> Void in
             let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }

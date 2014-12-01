@@ -696,8 +696,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 //Not granted access to mediaType
                 self.deviceAuthorized = false
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    var title = NSLocalizedString("MugChat", comment: "MugChat")
-                    var message = NSLocalizedString("MugChat doesn't have permission to use Camera, please change privacy settings", comment: "MugChat doesn't have permission to use Camera, please change privacy settings")
+                    var title = NSLocalizedString("Flips", comment: "Flips")
+                    var message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings", comment: "Flips doesn't have permission to use Camera, please change privacy settings")
                     var alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 })

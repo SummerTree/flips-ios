@@ -17,12 +17,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Constants
     
-    private let MESSAGE_TOP_MARGIN: CGFloat = 18.0
-    private let MESSAGE_BOTTOM_MARGIN: CGFloat = 18.0
+    private let MESSAGE_TOP_MARGIN: CGFloat = 14.0
     private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
-    private let flipMessageDataSource = MugMessageDataSource()
+    private let flipMessageDataSource = FlipMessageDataSource()
     
     // MARK: - Instance variables
     
@@ -76,7 +75,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageView.addSubview(messageTextLabel)
         
         avatarView = RoundImageView.avatarA3()
-        messageView.addSubview(avatarView)
+        contentView.addSubview(avatarView)
         
         var button = UIButton()
         button.backgroundColor = UIColor.clearColor()
@@ -110,7 +109,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
         
         messageView.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.bottom.equalTo()(self.contentView)
             make.left.equalTo()(self.contentView)
             make.right.equalTo()(self.contentView)
@@ -141,7 +139,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         self.flipMessageId = flipMessageId
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
         
-        self.setupVideoPlayerWithFlips(flipMessage.mugs.array as [Mug])
+        self.setupVideoPlayerWithFlips(flipMessage.flips.array as [Flip])
         
         let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         timestampLabel.text = formattedDate
@@ -177,7 +175,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
     }
     
-    private func setupVideoPlayerWithFlips(flips: Array<Mug>) {
+    private func setupVideoPlayerWithFlips(flips: Array<Flip>) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.contentView)
         self.videoPlayerView.alpha = 0.0
         self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in

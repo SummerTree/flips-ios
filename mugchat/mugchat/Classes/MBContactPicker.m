@@ -251,7 +251,7 @@ static CGFloat const ROW_HEIGHT = 56.0;
     
     if (user) {
         // Flips user
-        cell.photoView.borderColor = [UIColor mugOrange];
+        cell.photoView.borderColor = [UIColor flipOrange];
         
         NSString *photoURLString = user.photoURL;
         

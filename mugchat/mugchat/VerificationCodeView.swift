@@ -140,7 +140,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func defineBackgroundColor() -> UIColor {
-        return UIColor.mugOrange()
+        return UIColor.flipOrange()
     }
     
     func createHintViewConstraints() {

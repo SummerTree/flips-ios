@@ -155,7 +155,7 @@ class CustomNavigationBar : UIView {
         super.init(frame: frame)
         
         backgroundImageView = UIImageView(frame: frame)
-        backgroundImageView.backgroundColor = UIColor.mugOrange()
+        backgroundImageView.backgroundColor = UIColor.flipOrange()
         self.addSubview(backgroundImageView)
     }
     
@@ -204,7 +204,7 @@ class CustomNavigationBar : UIView {
             rightButton = UIButton()
             if let rightButtonItem = rightButtonObject as? String {
                 rightButton.setTitle(rightButtonItem, forState: .Normal)
-                rightButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+                rightButton.setTitleColor(UIColor.flipOrange(), forState: UIControlState.Normal)
                 rightButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
                 rightButton.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h3)
             } else if let rightButtonItem = rightButtonObject as? UIImage {
@@ -306,6 +306,14 @@ class CustomNavigationBar : UIView {
         return CGRectGetHeight(self.frame) - STATUS_BAR_HEIGHT
     }
     
+    func getAvatarImage() -> UIImage! {
+        if (avatarButton != nil) {
+            return avatarButton.imageView?.image
+        } else {
+            return avatarImageView.image
+        }
+    }
+    
     
     // MARK: - Setters
     
@@ -329,7 +337,12 @@ class CustomNavigationBar : UIView {
     func setAvatarImageUrl(url: String) {
         if (!url.isEmpty) {
             if (avatarImageView != nil) {
-                avatarImageView.setImageWithURL(NSURL(string: url))
+                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
+                avatarImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
+                    })
+                })
             } else {
                 println("Avatar using button is not integrated with images from URLs yet.")
             }
@@ -355,7 +368,7 @@ class CustomNavigationBar : UIView {
     
     func setBackgroundImage(image: UIImage) {
         backgroundImageView.alpha = 1.0
-        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.flipOrange())
     }
     
     func setBackgroundImageColor(color: UIColor) {

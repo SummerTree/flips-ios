@@ -12,7 +12,7 @@
 
 import Foundation
 
-class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate {
+class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     
     private let US_CODE = "+1"
     
@@ -86,10 +86,10 @@ class PhoneNumberViewController: MugChatViewController, PhoneNumberViewDelegate 
                     self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
                     self.hideActivityIndicator()
                     
-                }) { (mugError) -> Void in
+                }) { (flipError) -> Void in
                     self.hideActivityIndicator()
-                    println("Error in the sign up [error=\(mugError!.error), details=\(mugError!.details)]")
-                    var alertView = UIAlertView(title: "SignUp Error", message: mugError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                    println("Error in the sign up [error=\(flipError!.error), details=\(flipError!.details)]")
+                    var alertView = UIAlertView(title: "SignUp Error", message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
             }
         } else {

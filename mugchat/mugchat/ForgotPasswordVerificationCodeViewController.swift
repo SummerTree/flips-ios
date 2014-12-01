@@ -42,11 +42,11 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 var newPasswordViewController = NewPasswordViewController(user: user, phoneNumber: self.phoneNumber, verificationCode: verificationCode)
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
-            failure: { (mugError) in
-                if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+            failure: { (flipError) in
+                if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
                     self.verificationCodeView.didEnterWrongVerificationCode()
                 } else {
-                    println("Device code verification error: " + mugError!.error!)
+                    println("Device code verification error: " + flipError!.error!)
                     self.verificationCodeView.resetVerificationCodeField()
                     self.verificationCodeView.focusKeyboardOnCodeField()
                 }

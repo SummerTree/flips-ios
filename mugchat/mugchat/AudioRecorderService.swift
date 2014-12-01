@@ -156,10 +156,18 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     func isPlaying() -> Bool {
         return player.playing
     }
+    
+    public func audioPlayerDidFinishPlaying(player: AVAudioPlayer!, successfully flag: Bool) {
+        delegate?.audioRecorderServiceDidFinishPlaying(self)
+    }
 }
 
 protocol AudioRecorderServiceDelegate {
+    
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL: NSURL?, success: Bool!)
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool)
+    
+    func audioRecorderServiceDidFinishPlaying(audioRecorderService: AudioRecorderService!)
+    
 }

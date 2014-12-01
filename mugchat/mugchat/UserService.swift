@@ -11,9 +11,9 @@
 //
 
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
-public typealias UserServiceFailureResponse = (MugError?) -> Void
+public typealias UserServiceFailureResponse = (FlipError?) -> Void
 
-public class UserService: MugchatService {
+public class UserService: FlipsService {
     
     let SIGNUP_URL: String = "/signup"
     let SIGNIN_URL: String = "/signin"
@@ -21,10 +21,11 @@ public class UserService: MugchatService {
     let FORGOT_URL: String = "/user/forgot"
     let VERIFY_URL: String = "/user/verify"
     let UPLOAD_PHOTO_URL: String = "/user/{{user_id}}/photo"
-    let UPDATE_USER_URL: String = "/user/{{user_id}}"
+    let UPDATE_USER_URL: String = "/user/{{user_id}}/update"
     let IMAGE_COMPRESSION: CGFloat = 0.3
     let UPDATE_PASSWORD_URL: String = "/user/password"
     let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
+    let FACEBOOK_CONTACTS_VERIFY: String = "/user/{{user_id}}/facebook/verify"
     
     public class var sharedInstance : UserService {
         struct Static {
@@ -63,10 +64,10 @@ public class UserService: MugchatService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(MugError(error: response["error"] as String!, details: nil))
+                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -96,9 +97,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -121,9 +122,20 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    var errorText: String = ""
+                    var detailsText: String = ""
+                    
+                    if let errorMessage = response["error"] {
+                        errorText = errorMessage as String
+                    }
+                    
+                    if let detailsMessage = response["details"] {
+                        detailsText = detailsMessage as String
+                    }
+                    
+                    failure(FlipError(error: errorText, details: detailsText))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -157,8 +169,12 @@ public class UserService: MugchatService {
             params[RequestParams.PASSWORD] = newPassword
         }
         
-        request.PUT(url,
+        request.POST(url,
             parameters: params,
+            constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
+                let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+            },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 var user = self.parseUserResponse(responseObject)
                 success(user)
@@ -167,10 +183,10 @@ public class UserService: MugchatService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(MugError(error: response["error"] as String!, details: nil))
+                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -193,9 +209,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -220,9 +236,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -251,12 +267,79 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
+    }
+    
+    
+    // MARK: - Import Facebook Contacts
+    
+    
+    func importFacebookFriends(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        let permissions: [String] = FBSession.activeSession().permissions as [String]
+        println("[DEBUG: Facebook Permissions: \(permissions)]")
+        
+        if (!contains(permissions, "user_friends")) {
+            failure(FlipError(error: "user_friends permission not allowed.", details:nil))
+            return
+        }
+        
+        var usersFacebookIDS = [String]()
+        FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
+            if (error != nil) {
+                failure(FlipError(error: error.localizedDescription, details:nil))
+                return
+            }
+            
+            let resultDictionary: NSDictionary = result as NSDictionary
+            let usersJSON = JSON(resultDictionary.objectForKey("data")!)
+            
+            if let users = usersJSON.array {
+                let userDatasource = UserDataSource()
+                
+                for user in users {
+                    usersFacebookIDS.append(user["id"].stringValue)
+                }
+                
+                var request = AFHTTPRequestOperationManager()
+                request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+                var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                
+                var params: Dictionary<String, AnyObject> = [
+                    RequestParams.FACEBOOK_IDS : usersFacebookIDS
+                ]
+                
+                request.POST(url, parameters: params,
+                    success: { (operation, responseObject) -> Void in
+                        var response:JSON = JSON(responseObject)
+                        
+                        for (index, user) in response {
+                            SwiftTryCatch.try({ () -> Void in
+                                println("Trying to import: \(user)")
+                                var user = userDatasource.createOrUpdateUserWithJson(user)
+                                }, catch: { (error) -> Void in
+                                    println("Error: [\(error))")
+                                }, finally: nil)
+                            
+                        }
+                        
+                        success(nil)
+                        
+                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                        if (operation.responseObject != nil) {
+                            var response = operation.responseObject as NSDictionary
+                            failure(FlipError(error: response["error"] as String!, details:nil))
+                        } else {
+                            failure(FlipError(error: error.localizedDescription, details:nil))
+                        }
+                        
+                })
+            }
+        }
     }
     
     
@@ -264,10 +347,15 @@ public class UserService: MugchatService {
     
     func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         var numbers = Array<String>()
-        let contactDatasource = ContactDataSource()
         let userDatasource = UserDataSource()
         
-        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts) -> Void in
+        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
+            
+            if(countElements(contacts!) == 0) {
+                success(nil)
+                return
+            }
+            
             for contact in contacts! {
                 if (countElements(contact.phoneNumber) > 0) {
                     let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
@@ -288,7 +376,12 @@ public class UserService: MugchatService {
                     var response:JSON = JSON(responseObject)
 
                     for (index, user) in response {
-                        var user = userDatasource.createOrUpdateUserWithJson(user)
+                        SwiftTryCatch.try({ () -> Void in
+                            println("Trying to import: \(user)")
+                            var user = userDatasource.createOrUpdateUserWithJson(user)
+                        }, catch: { (error) -> Void in
+                            println("Error: [\(error))")
+                        }, finally: nil)
                     }
                     
                     success(nil)
@@ -296,14 +389,14 @@ public class UserService: MugchatService {
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
                         var response = operation.responseObject as NSDictionary
-                        failure(MugError(error: response["error"] as String!, details:nil))
+                        failure(FlipError(error: response["error"] as String!, details:nil))
                     } else {
-                        failure(MugError(error: error.localizedDescription, details:nil))
+                        failure(FlipError(error: error.localizedDescription, details:nil))
                     }
                
             })
         }, failure: { (error) -> Void in
-            failure(MugError(error: "Error retrieving contacts.", details:nil))
+            failure(FlipError(error: "Error retrieving contacts.", details:nil))
         })
     }
     
@@ -328,5 +421,6 @@ public class UserService: MugchatService {
         static let PHONENUMBERS = "phoneNumbers"
         static let VERIFICATION_CODE = "verification_code"
         static let PHOTO = "photo"
+        static let FACEBOOK_IDS = "facebookIDs"
     }
 }

@@ -12,22 +12,22 @@
 
 class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
-    private let MY_MUGS_LABEL_MARGIN_TOP: CGFloat = 5.0
-    private let MY_MUGS_LABEL_MARGIN_LEFT: CGFloat = 10.0
+    private let MY_FLIPS_LABEL_MARGIN_TOP: CGFloat = 5.0
+    private let MY_FLIPS_LABEL_MARGIN_LEFT: CGFloat = 10.0
     
-    private let MY_MUGS_CELL_MARGIN_TOP: CGFloat = 10.0
-    private let MY_MUGS_CELL_MARGIN_LEFT: CGFloat = 5.0
-    private let MY_MUGS_CELL_MARGIN_RIGHT: CGFloat = 5.0
-    private let MY_MUGS_CELL_MARGIN_BOTTOM: CGFloat = 10.0
+    private let MY_FLIPS_CELL_MARGIN_TOP: CGFloat = 10.0
+    private let MY_FLIPS_CELL_MARGIN_LEFT: CGFloat = 5.0
+    private let MY_FLIPS_CELL_MARGIN_RIGHT: CGFloat = 5.0
+    private let MY_FLIPS_CELL_MARGIN_BOTTOM: CGFloat = 10.0
     
-    private let MY_MUGS_CELL_WIDTH: CGFloat = 83.5
-    private let MY_MUGS_CELL_HEIGHT: CGFloat = 83.5
+    private let MY_FLIPS_CELL_WIDTH: CGFloat = 83.5
+    private let MY_FLIPS_CELL_HEIGHT: CGFloat = 83.5
     
-    private var myMugsLabel: UILabel!
-    private var addMugButton: UIButton!
-    private var myMugsCollectionView: UICollectionView!
+    private var myFlipsLabel: UILabel!
+    private var addFlipButton: UIButton!
+    private var myFlipsCollectionView: UICollectionView!
     
-    var mugText : MugText!
+    var flipText : FlipText!
     
     var delegate: MyFlipsViewDelegate?
     var dataSource: MyFlipsViewDataSource?
@@ -46,48 +46,48 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     }
     
     private func addSubviews() {
-        myMugsLabel = UILabel()
-        myMugsLabel.numberOfLines = 1
-        myMugsLabel.sizeToFit()
-        myMugsLabel.text = NSLocalizedString("My Mugs", comment: "My Mugs")
-        myMugsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
-        myMugsLabel.textColor = UIColor.plum()
-        self.addSubview(myMugsLabel)
+        myFlipsLabel = UILabel()
+        myFlipsLabel.numberOfLines = 1
+        myFlipsLabel.sizeToFit()
+        myFlipsLabel.text = NSLocalizedString("My Flips", comment: "My Flips")
+        myFlipsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
+        myFlipsLabel.textColor = UIColor.plum()
+        self.addSubview(myFlipsLabel)
         
-        addMugButton = UIButton()
-        addMugButton.addTarget(self, action: "addMugButtonTapped:", forControlEvents: .TouchUpInside)
-        addMugButton.setImage(UIImage(named: "AddMediaButton"), forState: .Normal)
-        addMugButton.sizeToFit()
+        addFlipButton = UIButton()
+        addFlipButton.addTarget(self, action: "addFlipButtonTapped:", forControlEvents: .TouchUpInside)
+        addFlipButton.setImage(UIImage(named: "AddMediaButton"), forState: .Normal)
+        addFlipButton.sizeToFit()
         
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: self.MY_MUGS_CELL_MARGIN_TOP, left: self.MY_MUGS_CELL_MARGIN_LEFT, bottom: self.MY_MUGS_CELL_MARGIN_BOTTOM, right: self.MY_MUGS_CELL_MARGIN_RIGHT)
-        layout.itemSize = CGSize(width: self.MY_MUGS_CELL_WIDTH, height: self.MY_MUGS_CELL_HEIGHT)
-        myMugsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
-        myMugsCollectionView!.dataSource = self
-        myMugsCollectionView!.delegate = self
-        myMugsCollectionView.registerClass(MyFlipsViewCell.self, forCellWithReuseIdentifier:"Cell");
-        myMugsCollectionView!.backgroundColor = self.backgroundColor
-        myMugsCollectionView!.allowsSelection = true
-        self.addSubview(myMugsCollectionView!)
+        layout.sectionInset = UIEdgeInsets(top: self.MY_FLIPS_CELL_MARGIN_TOP, left: self.MY_FLIPS_CELL_MARGIN_LEFT, bottom: self.MY_FLIPS_CELL_MARGIN_BOTTOM, right: self.MY_FLIPS_CELL_MARGIN_RIGHT)
+        layout.itemSize = CGSize(width: self.MY_FLIPS_CELL_WIDTH, height: self.MY_FLIPS_CELL_HEIGHT)
+        myFlipsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
+        myFlipsCollectionView!.dataSource = self
+        myFlipsCollectionView!.delegate = self
+        myFlipsCollectionView.registerClass(MyFlipsViewCell.self, forCellWithReuseIdentifier:"Cell");
+        myFlipsCollectionView!.backgroundColor = self.backgroundColor
+        myFlipsCollectionView!.allowsSelection = true
+        self.addSubview(myFlipsCollectionView!)
         
         makeConstraints()
     }
     
     private func makeConstraints() {
-        myMugsLabel.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self).with().offset()(self.MY_MUGS_LABEL_MARGIN_TOP)
-            make.left.equalTo()(self).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
+        myFlipsLabel.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_TOP)
+            make.left.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_LEFT)
         }
 
-        myMugsCollectionView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.myMugsLabel.mas_bottom).with().offset()(self.MY_MUGS_LABEL_MARGIN_TOP)
-            make.left.equalTo()(self).with().offset()(self.MY_MUGS_LABEL_MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.MY_MUGS_LABEL_MARGIN_LEFT)
-            make.bottom.equalTo()(self).with().offset()(-self.MY_MUGS_LABEL_MARGIN_TOP)
+        myFlipsCollectionView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.myFlipsLabel.mas_bottom).with().offset()(self.MY_FLIPS_LABEL_MARGIN_TOP)
+            make.left.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_LEFT)
+            make.right.equalTo()(self).with().offset()(-self.MY_FLIPS_LABEL_MARGIN_LEFT)
+            make.bottom.equalTo()(self).with().offset()(-self.MY_FLIPS_LABEL_MARGIN_TOP)
         }
     }
     
-    func addMugButtonTapped(sender: UIButton!) {
+    func addFlipButtonTapped(sender: UIButton!) {
         delegate?.myFlipsViewDidTapAddFlip(self)
     }
     
@@ -95,7 +95,7 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     // MARK: - Data Handler Methods
     
     func reload() {
-        myMugsCollectionView.reloadData()
+        myFlipsCollectionView.reloadData()
     }
     
     
@@ -106,23 +106,23 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         if (numberOfFlips == nil) {
             numberOfFlips = 0
         }
-        return numberOfFlips! + 1 //addMugButton
+        return numberOfFlips! + 1 //addFlipButton
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MyFlipsViewCell
         
         if (indexPath.section == 0 && indexPath.row == 0) {
-            cell.addSubview(addMugButton)
+            cell.addSubview(addFlipButton)
         } else {
             var flipId = dataSource?.myFlipsView(self, flipIdAtIndex: indexPath.row - 1)
             
-            let flipDataSource = MugDataSource()
-            var flip = flipDataSource.retrieveMugWithId(flipId!)
+            let flipDataSource = FlipDataSource()
+            var flip = flipDataSource.retrieveFlipWithId(flipId!)
             
-            cell.setMug(flip)
+            cell.setFlip(flip)
             
-            var isSelected = (flip.mugID == dataSource?.myFlipsViewSelectedFlipId())
+            var isSelected = (flip.flipID == dataSource?.myFlipsViewSelectedFlipId())
             cell.setSelected(isSelected)
         }
         

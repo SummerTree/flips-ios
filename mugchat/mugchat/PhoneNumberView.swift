@@ -41,7 +41,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     override init() {
         super.init()
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()
     }

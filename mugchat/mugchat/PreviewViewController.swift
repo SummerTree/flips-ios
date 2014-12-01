@@ -9,25 +9,25 @@
 // in whole or in part, is expressly prohibited except as authorized by
 // the license agreement.
 
-class PreviewViewController : MugChatViewController, PreviewViewDelegate {
+class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
     
     private var previewView: PreviewView!
-    private var flipWords: [MugText]!
+    private var flipWords: [FlipText]!
     private var roomID: String?
     private var contactIDs: [String]?
     
     var delegate: PreviewViewControllerDelegate?
     
-    convenience init(flipWords: [MugText], roomID: String) {
+    convenience init(flipWords: [FlipText], roomID: String) {
         self.init()
         self.flipWords = flipWords
         self.roomID = roomID
     }
     
-    convenience init(flipWords: [MugText], contactIDs: [String]) {
+    convenience init(flipWords: [FlipText], contactIDs: [String]) {
         self.init()
         self.flipWords = flipWords
         self.contactIDs = contactIDs
@@ -75,17 +75,17 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
     
     // MARK: - Flips Methods
     
-    private func createFlipsFromFlipWords() -> [Mug] {
-        var flips = Array<Mug>()
-        let flipDataSource = MugDataSource()
+    private func createFlipsFromFlipWords() -> [Flip] {
+        var flips = Array<Flip>()
+        let flipDataSource = FlipDataSource()
         
         for flipWord in self.flipWords {
             if (flipWord.associatedFlipId != nil) {
-                var flip = flipDataSource.retrieveMugWithId(flipWord.associatedFlipId!)
+                var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                 flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
                 flips.append(flip)
             } else {
-                var emptyFlip = flipDataSource.createEmptyMugWithWord(flipWord.text)
+                var emptyFlip = flipDataSource.createEmptyFlipWithWord(flipWord.text)
                 flips.append(emptyFlip)
             }
         }
@@ -105,25 +105,25 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
 
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            var error: MugError?
+            var error: FlipError?
             var flipIds = Array<String>()
-            let flipService = MugService()
+            let flipService = FlipService()
             
             var group = dispatch_group_create()
 
-            let flipDataSource = MugDataSource()
+            let flipDataSource = FlipDataSource()
             for flipWord in self.flipWords {
                 if (flipWord.associatedFlipId != nil) {
-                    var flip = flipDataSource.retrieveMugWithId(flipWord.associatedFlipId!)
+                    var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                     flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
-                    flipIds.append(flip.mugID)
+                    flipIds.append(flip.flipID)
                 } else {
                     // Create a Flip in the server for each empty Flip
                     dispatch_group_enter(group)
-                    flipService.createMug(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createMugSuccessCallback: { (flip) -> Void in
-                        flipIds.append(flip.mugID)
+                    flipService.createFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
+                        flipIds.append(flip.flipID)
                         dispatch_group_leave(group);
-                    }, createMugFailCallBack: { (flipError) -> Void in
+                    }, createFlipFailCallBack: { (flipError) -> Void in
                         error = flipError
                         dispatch_group_leave(group);
                     })
@@ -142,11 +142,11 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
                 })
             } else {
                 // SEND MESSAGE
-                let completionBlock: SendMessageCompletion = { (success, flipError) -> Void in
+                let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.hideActivityIndicator()
                         if (success) {
-                            self.delegate?.previewViewControllerDidSendMessage(self)
+                            self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
                         } else {
                             var message = self.SEND_MESSAGE_ERROR_MESSAGE
                             if (flipError != nil) {
@@ -185,6 +185,6 @@ class PreviewViewController : MugChatViewController, PreviewViewDelegate {
 
 protocol PreviewViewControllerDelegate {
     
-    func previewViewControllerDidSendMessage(viewController: PreviewViewController)
+    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String)
     
 }

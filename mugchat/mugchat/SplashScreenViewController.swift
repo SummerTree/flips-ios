@@ -70,24 +70,31 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                     var userDataSource = UserDataSource()
                     userDataSource.syncUserData({ (success, error) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            if (success) {
-                                activityIndicator.stopAnimating()
-                                
-                                let authenticatedUser = User.loggedUser()!
-                                if (self.userHasDevice(authenticatedUser)) {
-                                    self.openInboxViewController()
-                                } else {
-                                    self.openPhoneNumberController(authenticatedUser.userID)
-                                }
+                            activityIndicator.stopAnimating()
+                            
+                            let authenticatedUser = User.loggedUser()!
+                            if (self.userHasDevice(authenticatedUser)) {
+                                self.openInboxViewController()
+                            } else {
+                                self.openPhoneNumberController(authenticatedUser.userID)
                             }
                         })
                     })
-                }, failure: { (mugError) -> Void in
-                    println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
-                    activityIndicator.stopAnimating()
+                }, failure: { (flipError) -> Void in
                     
-                    var alertView = UIAlertView(title: LOGIN_ERROR, message: mugError!.error, delegate: self, cancelButtonTitle: "Retry")
-                    alertView.show()
+                    FBSession.activeSession().closeAndClearTokenInformation()
+                    FBSession.activeSession().close()
+                    FBSession.setActiveSession(nil)
+                    
+                    if (flipError != nil) {
+                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
+                            alertView.show()
+                        })
+                    }
+                    
+                    activityIndicator.stopAnimating()
             })
         }
     }
@@ -100,9 +107,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
             var userDataSource = UserDataSource()
             userDataSource.syncUserData({ (success, error) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if (success) {
-                        self.openInboxViewController()
-                    }
+                    self.openInboxViewController()
                 })
             })
         } else {
@@ -113,7 +118,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     // MARK: - UIAlertViewDelegate
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        splashScreenViewAttemptLoginWithFacebook()
+        splashScreenViewAttemptLogin()
     }
     
     private func openInboxViewController() {
@@ -132,7 +137,10 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     }
     
     private func userHasDevice(user: User) -> Bool {
-        return user.device != nil && user.device.isVerified.integerValue == 1
+        var userHasPhone = user.phoneNumber != nil
+        var phoneNumberLength = countElements(user.phoneNumber)
+        var isDeviceVerified = user.device.isVerified.boolValue
+        return userHasPhone && (phoneNumberLength > 0) && isDeviceVerified
     }
     
     override func prefersStatusBarHidden() -> Bool {

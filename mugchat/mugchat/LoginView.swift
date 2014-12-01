@@ -19,15 +19,12 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MARGIN_BOTTOM:CGFloat = 10.0
     private let MARGIN_LEFT:CGFloat = 40.0
 
-    private let MUGCHAT_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
-    private var MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat! = 20.0
-    private var MUGCHAT_WORD_ANIMATION_OFFSET: CGFloat!
-    private var MUGCHAT_WORD_MARGIN_BOTTOM:CGFloat! = 20.0
+    private let FLIPS_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
+    private var FLIPS_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat! = 20.0
+    private var FLIPS_WORD_ANIMATION_OFFSET: CGFloat!
 
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
     private var LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
-    private var MUGCHAT_WORD_LAST_CENTER_Y: CGFloat!
-    private let MUGCHAT_WORD_OFFSET: CGFloat = 20.0
     private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
     private var FORGOT_PASSWORD_ANIMATION_OFFSET: CGFloat!
 
@@ -49,7 +46,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     private var logoView: UIView!
     private var bubbleChatImageView: UIImageView!
-    private var mugchatWordImageView: UIImageView!
+    private var flipsWordImageView: UIImageView!
     private var credentialsView: UIView!
     private var emailImageView: UIImageView!
     private var emailTextField: UITextField!
@@ -69,8 +66,8 @@ class LoginView : UIView, UITextFieldDelegate {
     private var privacyPolicy: UIButton!
     private var isInitialized = false
     
-    private var spaceBetweenTopAndMugchat: UIView!
-    private var spaceBetweenMugchatAndCredentials: UIView!
+    private var spaceBetweenTopAndFlips: UIView!
+    private var spaceBetweenFlipsAndCredentials: UIView!
     private var spaceBetweenCredentialsAndFacebook: UIView!
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
@@ -87,7 +84,7 @@ class LoginView : UIView, UITextFieldDelegate {
         super.init()
         
         self.animator = UIDynamicAnimator(referenceView: self)
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()
     }
@@ -182,8 +179,8 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func addSubviews() {
         
-        spaceBetweenTopAndMugchat = UIView()
-        self.addSubview(spaceBetweenTopAndMugchat)
+        spaceBetweenTopAndFlips = UIView()
+        self.addSubview(spaceBetweenTopAndFlips)
         
         logoView = UIView()
         self.addSubview(logoView)
@@ -193,13 +190,13 @@ class LoginView : UIView, UITextFieldDelegate {
         bubbleChatImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(bubbleChatImageView)
         
-        mugchatWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
-        mugchatWordImageView.sizeToFit()
-        mugchatWordImageView.contentMode = UIViewContentMode.Center
-        logoView.addSubview(mugchatWordImageView)
+        flipsWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
+        flipsWordImageView.sizeToFit()
+        flipsWordImageView.contentMode = UIViewContentMode.Center
+        logoView.addSubview(flipsWordImageView)
         
-        spaceBetweenMugchatAndCredentials = UIView()
-        self.addSubview(spaceBetweenMugchatAndCredentials)
+        spaceBetweenFlipsAndCredentials = UIView()
+        self.addSubview(spaceBetweenFlipsAndCredentials)
         
         credentialsView = UIView()
         self.addSubview(credentialsView)
@@ -327,7 +324,7 @@ class LoginView : UIView, UITextFieldDelegate {
         logoView.mas_updateConstraints { (make) -> Void in
             make.removeExisting = true
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self.spaceBetweenTopAndMugchat.mas_bottom)
+            make.top.equalTo()(self.spaceBetweenTopAndFlips.mas_bottom)
             make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
         }
@@ -335,7 +332,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func makeConstraints() {
         
-        spaceBetweenTopAndMugchat.mas_makeConstraints { (make) -> Void in
+        spaceBetweenTopAndFlips.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.top.equalTo()(self)
             make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
@@ -349,7 +346,7 @@ class LoginView : UIView, UITextFieldDelegate {
             make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
             make.top.equalTo()(self.bubbleChatImageView)
-            make.bottom.equalTo()(self.mugchatWordImageView)
+            make.bottom.equalTo()(self.flipsWordImageView)
         }
 
         bubbleChatImageView.mas_makeConstraints { (make) -> Void in
@@ -360,16 +357,16 @@ class LoginView : UIView, UITextFieldDelegate {
             make.right.equalTo()(self.logoView)
         }
         
-        mugchatWordImageView.mas_makeConstraints { (make) -> Void in
+        flipsWordImageView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.logoView)
-            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.MUGCHAT_WORD_LOGO_MARGIN_TOP)
+            make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.FLIPS_WORD_LOGO_MARGIN_TOP)
             make.left.equalTo()(self.logoView)
             make.right.equalTo()(self.logoView)
             make.bottom.equalTo()(self.logoView)
-            make.height.equalTo()(self.mugchatWordImageView.frame.height)
+            make.height.equalTo()(self.flipsWordImageView.frame.height)
         }
         
-        spaceBetweenMugchatAndCredentials.mas_makeConstraints { (make) -> Void in
+        spaceBetweenFlipsAndCredentials.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.logoView.mas_bottom)
             make.bottom.equalTo()(self.credentialsView.mas_top)
             make.left.equalTo()(self)
@@ -385,7 +382,7 @@ class LoginView : UIView, UITextFieldDelegate {
         credentialsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.bubbleChatImageView)
             make.right.equalTo()(self.bubbleChatImageView)
-            make.top.equalTo()(self.spaceBetweenMugchatAndCredentials.mas_bottom)
+            make.top.equalTo()(self.spaceBetweenFlipsAndCredentials.mas_bottom)
             make.bottom.equalTo()(self.passwordTextField)
         }
         
@@ -440,9 +437,9 @@ class LoginView : UIView, UITextFieldDelegate {
         
         spaceBetweenCredentialsAndFacebook.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.credentialsView.mas_bottom)
-            make.left.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.right.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.height.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.left.equalTo()(self.spaceBetweenFlipsAndCredentials)
+            make.right.equalTo()(self.spaceBetweenFlipsAndCredentials)
+            make.height.equalTo()(self.spaceBetweenFlipsAndCredentials)
         }
 
         facebookButton.mas_makeConstraints { (make) -> Void in
@@ -452,8 +449,8 @@ class LoginView : UIView, UITextFieldDelegate {
 
         spaceBetweenFacebookAndSignUp.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.facebookButton.mas_bottom)
-            make.left.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.right.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.left.equalTo()(self.spaceBetweenFlipsAndCredentials)
+            make.right.equalTo()(self.spaceBetweenFlipsAndCredentials)
             make.height.equalTo()(self.spaceBetweenSignUpAndAcceptance)
         }
 
@@ -465,8 +462,8 @@ class LoginView : UIView, UITextFieldDelegate {
         spaceBetweenSignUpAndAcceptance.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.signupButton.mas_bottom)
             make.bottom.equalTo()(self.acceptanceView.mas_top)
-            make.left.equalTo()(self.spaceBetweenMugchatAndCredentials)
-            make.right.equalTo()(self.spaceBetweenMugchatAndCredentials)
+            make.left.equalTo()(self.spaceBetweenFlipsAndCredentials)
+            make.right.equalTo()(self.spaceBetweenFlipsAndCredentials)
             make.height.equalTo()(self.SIGNUP_MARGIN_BOTTOM)
         }
         
@@ -581,15 +578,15 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
                 
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
-                    // positioning mugChat word below the top of the screen with a defined offset
-                    var mugchatWordFinalPosition = self.MUGCHAT_WORD_LOGO_POSITION_WHEN_ERROR
-                    self.MUGCHAT_WORD_ANIMATION_OFFSET = self.mugchatWordImageView.frame.origin.y - mugchatWordFinalPosition
-                    self.mugchatWordImageView.frame.origin.y -= self.MUGCHAT_WORD_ANIMATION_OFFSET
+                    // positioning Flips word below the top of the screen with a defined offset
+                    var flipsWordFinalPosition = self.FLIPS_WORD_LOGO_POSITION_WHEN_ERROR
+                    self.FLIPS_WORD_ANIMATION_OFFSET = self.flipsWordImageView.frame.origin.y - flipsWordFinalPosition
+                    self.flipsWordImageView.frame.origin.y -= self.FLIPS_WORD_ANIMATION_OFFSET
                     self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                 }
                 
-                // positioning forgot password button between credentials and MugChat word
-                var forgotPasswordFinalPosition = (self.credentialsView.center.y + self.mugchatWordImageView.frame.origin.y) / 2
+                // positioning forgot password button between credentials and Flips word
+                var forgotPasswordFinalPosition = (self.credentialsView.center.y + self.flipsWordImageView.frame.origin.y) / 2
                 self.FORGOT_PASSWORD_ANIMATION_OFFSET = self.forgotPasswordButton.frame.origin.y - forgotPasswordFinalPosition
                 self.forgotPasswordButton.center.y -= self.FORGOT_PASSWORD_ANIMATION_OFFSET
                 
@@ -599,7 +596,7 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.forgotPasswordButton.center.y += self.FORGOT_PASSWORD_ANIMATION_OFFSET
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                    self.mugchatWordImageView.frame.origin.y += self.MUGCHAT_WORD_ANIMATION_OFFSET
+                    self.flipsWordImageView.frame.origin.y += self.FLIPS_WORD_ANIMATION_OFFSET
                 }
             }
         })

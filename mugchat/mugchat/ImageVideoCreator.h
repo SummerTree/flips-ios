@@ -12,11 +12,11 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "Mug.h"
+#import "Flip.h"
 
 
 @interface ImageVideoCreator : NSObject
 
-+ (NSString *)videoPathForMug:(Mug *)mug;
++ (NSString *)videoPathForFlip:(Flip *)flip;
 
 @end
