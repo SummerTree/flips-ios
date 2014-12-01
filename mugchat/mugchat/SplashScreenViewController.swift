@@ -89,11 +89,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                     if (flipError != nil) {
                         println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            activityIndicator.stopAnimating()
                             var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
                             alertView.show()
                         })
                     }
+                    
+                    activityIndicator.stopAnimating()
             })
         }
     }
