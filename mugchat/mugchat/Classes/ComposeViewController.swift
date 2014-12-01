@@ -129,6 +129,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         composeBottomViewContainer.updateGalleryButtonImage()
+        composeTopViewContainer.viewWillAppear()
+        AudioRecorderService.sharedInstance.delegate = self
+        self.shouldEnableUserInteraction(true)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        composeTopViewContainer.viewWillDisappear()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -425,7 +433,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
     func composeBottomViewContainerDidTapCaptureAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
-        AudioRecorderService.sharedInstance.delegate = self
         AudioRecorderService.sharedInstance.startRecording()
     }
     
@@ -563,6 +570,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         composeBottomViewContainer.showAudioRecordButton()
     }
     
+    func enableUserInteractionWithComposeView(enable: Bool) {
+        self.shouldEnableUserInteraction(enable)
+    }
     
     // MARK: - Gallery control
     
@@ -577,6 +587,20 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)
         composeBottomViewContainer.showAudioRecordButton()
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK: User Interaction Methods
+    
+    func shouldEnableUserInteraction(enabled: Bool) {
+        if enabled {
+            self.view.userInteractionEnabled = true
+            self.navigationController?.view.userInteractionEnabled = true
+            println("User interaction enabled for compose view")
+        } else {
+            self.view.userInteractionEnabled = false
+            self.navigationController?.view.userInteractionEnabled = false
+            println("User interaction disabled for compose view")
+        }
     }
     
     
@@ -597,6 +621,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if (didRequestRecordPermission) {
             self.composeTopViewContainer.startRecordingProgressBar()
         }
+    }
+    
+    func audioRecorderServiceDidFinishPlaying(audioRecorderService: AudioRecorderService!) {
+        self.shouldEnableUserInteraction(true)
     }
     
     
