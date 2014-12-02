@@ -55,13 +55,37 @@ class PlayerView: UIView {
         let playerItem: FlipPlayerItem = self.player().currentItem as FlipPlayerItem
         self.setWord(self.words[playerItem.order])
         self.playing = true
+        self.player().volume = 1.0
         self.player().play()
+    }
+    
+    private func fadeOutVolume() {
+        if (self.player().volume > 0) {
+            if (self.player().volume <= 0.2) {
+                self.player().volume = 0.0
+            } else {
+                self.player().volume -= 0.2
+            }
+
+            weak var weakSelf = self
+            
+            let seconds = 0.1 * Double(NSEC_PER_SEC)
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds))
+            dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
+                weakSelf?.fadeOutVolume()
+                return ()
+            })
+        } else {
+            self.player().pause()
+        }
     }
 
     func pause() {
         if (self.playing) {
-            self.player().pause()
             self.playing = false
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.fadeOutVolume()
+            })
         }
     }
 
