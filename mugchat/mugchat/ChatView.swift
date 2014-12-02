@@ -168,6 +168,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.tableView.reloadData()
     }
     
+    
     // MARK: - Table view data source
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -177,8 +178,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             cell.stopMovie()
         }
         
-        if let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row) {
-            cell.setFlipMessageId(flipId)
+        let flipMessageId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
+        if (flipMessageId != nil) {
+            cell.setFlipMessageId(flipMessageId!)
         }
         
         return cell;

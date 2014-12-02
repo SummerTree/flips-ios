@@ -143,7 +143,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
                 self.flipViewer.setVideoURL(NSURL.fileURLWithPath(filePath)!)
             } else {
                 image = UIImage(contentsOfFile: filePath)
-                if (flip.soundContentLocalPath() != nil && countElements(flip.soundContentLocalPath()!) > 0) {
+                if (flip.hasAudio()) {
                     self.flipViewer.setAudioURL(NSURL.fileURLWithPath(flip.soundContentLocalPath()!)!)
                 }
                 self.showImage(image, andText: flip.word)
