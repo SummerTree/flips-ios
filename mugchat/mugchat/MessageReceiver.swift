@@ -88,7 +88,11 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var flip = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as Flip
+        var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        
+        let flipDataSource = FlipDataSource()
+        let flip = flipDataSource.retrieveFlipWithId(flipID)
+        
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
             println("Download failed for flip: \(flip.flipID)")
         } else {

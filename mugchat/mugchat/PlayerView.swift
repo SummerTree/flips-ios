@@ -12,7 +12,7 @@
 
 import UIKit
 
-private let _queue = dispatch_queue_create("com.flips.queue.player-view", DISPATCH_QUEUE_SERIAL)
+private let _operationQueue = NSOperationQueue()
 
 class PlayerView: UIView {
 
@@ -20,16 +20,18 @@ class PlayerView: UIView {
     private var wordLabel: UILabel!
     private var words: Array<String>!
     
-
     var delegate: PlayerViewDelegate?
+    
+    private var videoComposeOperation: VideoComposeOperation?
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-    private class var videoSerialQueue: dispatch_queue_t {
-        return _queue
-	}
+    class var videoSerialOperationQueue: NSOperationQueue {
+        _operationQueue.maxConcurrentOperationCount = 1
+        return _operationQueue
+    }
 
     override class func layerClass() -> AnyClass {
         return AVPlayerLayer.self
@@ -53,13 +55,37 @@ class PlayerView: UIView {
         let playerItem: FlipPlayerItem = self.player().currentItem as FlipPlayerItem
         self.setWord(self.words[playerItem.order])
         self.playing = true
+        self.player().volume = 1.0
         self.player().play()
+    }
+    
+    private func fadeOutVolume() {
+        if (self.player().volume > 0) {
+            if (self.player().volume <= 0.2) {
+                self.player().volume = 0.0
+            } else {
+                self.player().volume -= 0.2
+            }
+
+            weak var weakSelf = self
+            
+            let seconds = 0.1 * Double(NSEC_PER_SEC)
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds))
+            dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
+                weakSelf?.fadeOutVolume()
+                return ()
+            })
+        } else {
+            self.player().pause()
+        }
     }
 
     func pause() {
         if (self.playing) {
-            self.player().pause()
             self.playing = false
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.fadeOutVolume()
+            })
         }
     }
 
@@ -68,46 +94,35 @@ class PlayerView: UIView {
         for flip in flips {
             self.words.append(flip.word)
         }
-
-        // TODO: we need to change to NSOperation to be able to cancel it when the method releaseResources is called. Or find a way to do not run the block if canceled.
-        dispatch_async(PlayerView.videoSerialQueue) { () -> Void in
-            var localFlips: Array<Flip> = []
-            let moc = NSManagedObjectContext.MR_contextForCurrentThread();
-            
-            for flip in flips {
-                localFlips.append(moc.objectWithID(flip.objectID) as Flip)
-            }
-            
-            let videoComposer = VideoComposer()
-            videoComposer.renderOverlays = false
-            
-            var videoAssets: Array<AVAsset> = videoComposer.videoPartsFromFlips(localFlips as Array<AnyObject>) as Array<AVAsset>
-            
-            let videoPlayer = AVQueuePlayer()
-            videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.Pause
-            
-            var i = 0
-            
-            for videoAsset in videoAssets {
-                let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
-                
-                playerItem.order = i
-                
-                NSNotificationCenter.defaultCenter().addObserver(self, selector:"videoQueueEnded:",
-                    name:AVPlayerItemDidPlayToEndTimeNotification, object:playerItem)
-                
-                videoPlayer.insertItem(playerItem, afterItem: nil)
-                
-                i++
-            }
-            
-            self.setPlayer(videoPlayer)
-
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.setWord(self.words.first!)
-                completion(player: videoPlayer)
-            })
+        
+        weak var weakSelf : PlayerView? = self
+        
+        if (videoComposeOperation != nil) {
+            videoComposeOperation?.cancel()
         }
+        
+        // Reduce others operations' priority
+        for (var i = 0; i < PlayerView.videoSerialOperationQueue.operationCount; i++) {
+            if let operation = PlayerView.videoSerialOperationQueue.operations[i] as? NSOperation {
+                operation.queuePriority = NSOperationQueuePriority.Low
+            }
+        }
+        
+        
+        videoComposeOperation = VideoComposeOperation(flips: flips, queueObserver: self)
+        videoComposeOperation?.queuePriority = NSOperationQueuePriority.High
+        videoComposeOperation?.completion = ( { player -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                weakSelf?.setPlayer(player)
+                
+                if (weakSelf != nil) {
+                    weakSelf!.setWord(weakSelf!.words.first!)
+                }
+                completion(player: player)
+            })
+        })
+        
+        PlayerView.videoSerialOperationQueue.addOperation(videoComposeOperation!)
     }
 
     func playerItemWithVideoAsset(videoAsset: AVAsset) -> FlipPlayerItem {
@@ -180,6 +195,10 @@ class PlayerView: UIView {
     
     func releaseResources() {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        if (videoComposeOperation != nil) {
+            videoComposeOperation?.cancel()
+        }
     }
 
 }

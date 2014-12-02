@@ -166,7 +166,29 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func reloadFlipMessages() {
         self.tableView.reloadData()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let flipMessagaDataSource = FlipMessageDataSource()
+            if let numberOfMessages = self.dataSource?.numberOfFlipMessages(self) as Int? {
+                var firstNotReadMessageIndex = numberOfMessages - 1
+                for (var i = 0; i < numberOfMessages; i++) {
+                    let flipMessageId = self.dataSource?.chatView(self, flipMessageIdAtIndex: i)
+                    if (flipMessageId != nil) {
+                        var flipMessage = flipMessagaDataSource.retrieveFlipMessageById(flipMessageId!)
+                        if (flipMessage.notRead.boolValue) {
+                            firstNotReadMessageIndex = i
+                            break
+                        }
+                    }
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                })
+            }
+        })
     }
+    
     
     // MARK: - Table view data source
     
@@ -177,8 +199,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             cell.stopMovie()
         }
         
-        let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
-        cell.setFlipMessageId(flipId!)
+        let flipMessageId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
+        if (flipMessageId != nil) {
+            cell.setFlipMessageId(flipMessageId!)
+        }
         
         return cell;
     }
@@ -420,10 +444,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        PlayerView.videoSerialOperationQueue.cancelAllOperations()
+        
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             cell.stopMovie()
+            cell.releaseResources()
         }
+        
     }
     
     
