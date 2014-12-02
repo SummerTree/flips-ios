@@ -31,6 +31,11 @@ public class DeviceService: FlipsService {
     // MARK: - Create Device
     
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -67,6 +72,11 @@ public class DeviceService: FlipsService {
     // MARK: - Verify a Device
     
     func verifyDevice(userId: String, deviceId: String, verificationCode: String, phoneNumber: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -102,6 +112,11 @@ public class DeviceService: FlipsService {
     // MARK: - Resend Verification Code to Device
     
     func resendVerificationCode(userId: String, deviceId: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var resendURL = RESEND_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)

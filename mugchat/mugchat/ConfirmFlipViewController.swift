@@ -127,10 +127,12 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
             self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flip: flip)
             self.confirmFlipView.hideActivityIndicator()
         }
-        var createFlipFailBlock : CreateFlipFail = { (message) -> Void in
+        var createFlipFailBlock : CreateFlipFail = { (flipError) -> Void in
+            let errorTitle = flipError.error?
+            let errorMessage = flipError.details?
             self.confirmFlipView.hideActivityIndicator()
             self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flip: nil)
-            var alertView = UIAlertView(title: message, message: nil, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
         

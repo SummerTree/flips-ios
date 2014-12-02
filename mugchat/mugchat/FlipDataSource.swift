@@ -29,7 +29,7 @@ struct FlipAttributes {
 }
 
 public typealias CreateFlipSuccess = (Flip) -> Void
-public typealias CreateFlipFail = (String) -> Void
+public typealias CreateFlipFail = (FlipError) -> Void
 
 class FlipDataSource : BaseDataSource {
     
@@ -96,8 +96,7 @@ class FlipDataSource : BaseDataSource {
             
             createFlipSuccess(flip)
         }) { (flipError) -> Void in
-            var message = flipError?.error as String!
-            createFlipFail(message)
+            createFlipFail(flipError!)
         }
     }
     
@@ -114,8 +113,7 @@ class FlipDataSource : BaseDataSource {
             cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
             createFlipSuccess(flip)
         }) { (flipError) -> Void in
-            var message = flipError?.error as String!
-            createFlipFail(message)
+            createFlipFail(flipError!)
         }
     }
     

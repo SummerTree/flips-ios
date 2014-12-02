@@ -67,6 +67,7 @@
 		708BC2721A0BA80C00EE0DA5 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */; };
 		708E2E9619D1EF2F0076C3E4 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
 		709088251A1E163B009915FE /* ImportContactTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709088241A1E163B009915FE /* ImportContactTableViewController.swift */; };
+		709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D8EB91A2E1C9A007A119F /* NetworkReachabilityHelper.swift */; };
 		709EC33C1A26074B00C13F05 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 709EC33B1A26074B00C13F05 /* SwiftTryCatch.m */; };
 		70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B51A0A8DFE00725953 /* AboutView.swift */; };
 		70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */; };
@@ -254,6 +255,7 @@
 		708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtensions.swift; sourceTree = "<group>"; };
 		709088241A1E163B009915FE /* ImportContactTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactTableViewController.swift; sourceTree = "<group>"; };
+		709D8EB91A2E1C9A007A119F /* NetworkReachabilityHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkReachabilityHelper.swift; sourceTree = "<group>"; };
 		709EC33A1A26074B00C13F05 /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTryCatch.h; sourceTree = "<group>"; };
 		709EC33B1A26074B00C13F05 /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftTryCatch.m; sourceTree = "<group>"; };
 		70A2A5B51A0A8DFE00725953 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -445,13 +447,13 @@
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				F2BF597E1A01632500C44CC6 /* VideoComposer */,
-				7AFB719919FFBF08002695AC /* Downloader */,
+				5707185719D19D580069064F /* Backend */,
 				7AE2B47519FEC794002E4F66 /* Cache Handler */,
 				7AF82E2719F07CF700D0393F /* Chat Handler */,
-				5707185719D19D580069064F /* Backend */,
+				7AFB719919FFBF08002695AC /* Downloader */,
 				70E59C6119F584B2008DE18E /* Media */,
 				5707185819D19D600069064F /* PubNub */,
+				F2BF597E1A01632500C44CC6 /* VideoComposer */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -459,13 +461,13 @@
 		5707185719D19D580069064F /* Backend */ = {
 			isa = PBXGroup;
 			children = (
-				574156A119D34F2B006F0A2F /* FlipError.swift */,
-				5707186419D1AEBB0069064F /* FlipsService.swift */,
-				5707186619D1AF110069064F /* UserService.swift */,
-				5784778E19DDB9530063A543 /* DeviceService.swift */,
-				7A3733C819FADDE800D1E87B /* FlipService.swift */,
-				7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */,
 				1D48E9E21A27389300FA890E /* BuilderService.swift */,
+				5784778E19DDB9530063A543 /* DeviceService.swift */,
+				574156A119D34F2B006F0A2F /* FlipError.swift */,
+				7A3733C819FADDE800D1E87B /* FlipService.swift */,
+				5707186419D1AEBB0069064F /* FlipsService.swift */,
+				7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */,
+				5707186619D1AF110069064F /* UserService.swift */,
 			);
 			name = Backend;
 			sourceTree = "<group>";
@@ -520,12 +522,13 @@
 			children = (
 				7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */,
 				7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */,
-				70057E9319DADF59004343ED /* DeviceHelper.swift */,
-				7ACBBED01A024F4300A7109C /* DateHelper.swift */,
-				7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */,
 				70577C751A13AECF0006B1FD /* ContactListHelper.swift */,
-				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
+				7ACBBED01A024F4300A7109C /* DateHelper.swift */,
+				70057E9319DADF59004343ED /* DeviceHelper.swift */,
 				7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */,
+				709D8EB91A2E1C9A007A119F /* NetworkReachabilityHelper.swift */,
+				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
+				7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1402,6 +1405,7 @@
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
+				709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */,
 				07B66B321A147B5800407A28 /* MBContactPicker.m in Sources */,

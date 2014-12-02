@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        NetworkReachabilityHelper.sharedInstance.startMonitoring()
+
         // Registering for BugSense
         Mint.sharedInstance().initAndStartSession(BUGSENSE_KEY)
         
@@ -30,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-//        CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
+        //CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
         CoreDataHandler.sharedInstance.setupDatabase()
 
         let splashScreenViewController = SplashScreenViewController()
