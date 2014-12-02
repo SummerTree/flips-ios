@@ -28,6 +28,8 @@ struct RoomAttributes {
 
 class RoomDataSource : BaseDataSource {
     
+    private let FLIPBOYS_USERNAME: String = "flipboys@flips.com"
+    
     // MARK: - Creators
     
     private func createEntityWithJson(json: JSON) -> Room {
@@ -84,6 +86,20 @@ class RoomDataSource : BaseDataSource {
     
     func getAllRooms() -> [Room] {
         return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true) as [Room]
+    }
+    
+    func getFlipboysRoom() -> Room? {
+        var rooms = getAllRooms()
+        for room in rooms {
+            var allParticipants = room.participants.allObjects as [User]
+            for participant in allParticipants {
+                if (participant.username == FLIPBOYS_USERNAME) {
+                    return room
+                }
+            }
+        }
+        
+        return nil
     }
     
     func getMyRooms() -> [Room] {
