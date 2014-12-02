@@ -23,4 +23,5 @@ struct LocalizedString {
     static let OK = NSLocalizedString("OK", comment: "OK")
     static let FLIPBOYS_ROOM_NOT_FOUND = NSLocalizedString("Feedback room not found", comment: "Feedback room not found")
     static let ERROR = NSLocalizedString("Error", comment: "Error")
+    static let NO_INTERNET_CONNECTION = NSLocalizedString("Unable to connect to server.  Please try again later", comment: "No internet connection")
 }
