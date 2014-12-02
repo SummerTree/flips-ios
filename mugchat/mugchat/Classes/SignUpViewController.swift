@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePictureViewControllerDelegate, NotificationMessageViewDelegate {
+class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictureViewControllerDelegate, NotificationMessageViewDelegate {
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!
@@ -86,7 +86,7 @@ class SignUpViewController : MugChatViewController, SignUpViewDelegate, TakePict
     // MARK: - NotificationMessageView Methods
     
     func setupNotificationMessage() {
-        notificationMessageView = NotificationMessageView(message: NSLocalizedString("Hey, faceless wonder!  Looks like your Mug is missing!", comment: "Hey, faceless wonder!  Looks like your Mug is missing!"))
+        notificationMessageView = NotificationMessageView(message: NSLocalizedString("Hey, faceless wonder!  Looks like your Flip is missing!", comment: "Hey, faceless wonder!  Looks like your Flip is missing!"))
         notificationMessageView.backgroundColor = UIColor.clearColor()
         notificationMessageView.delegate = self
         self.view.addSubview(notificationMessageView)

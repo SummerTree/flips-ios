@@ -61,7 +61,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         alertView.show()
     }
 
-    func setupVideoPlayerWithFlips(flips: Array<Mug>) {
+    func setupVideoPlayerWithFlips(flips: Array<Flip>) {
         self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
             if (player.status == AVPlayerStatus.ReadyToPlay) {
                 self.playMovie()
@@ -115,7 +115,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
             } else {
                 make.height.equalTo()(self.mas_width)
             }
-
         }
 
         // asking help to delegate to align the container with navigation bar

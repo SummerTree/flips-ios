@@ -11,9 +11,9 @@
 //
 
 public typealias DeviceServiceSuccessResponse = (AnyObject?) -> Void
-public typealias DeviceServiceFailureResponse = (MugError?) -> Void
+public typealias DeviceServiceFailureResponse = (FlipError?) -> Void
 
-public class DeviceService: MugchatService {
+public class DeviceService: FlipsService {
     
     let CREATE_URL: String = "/user/{{user_id}}/devices"
     let FIND_ONE_URL: String = "/user/{{user_id}}/devices/{{device_id}}"
@@ -31,6 +31,11 @@ public class DeviceService: MugchatService {
     // MARK: - Create Device
     
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -50,9 +55,9 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -66,13 +71,25 @@ public class DeviceService: MugchatService {
     
     // MARK: - Verify a Device
     
-    func verifyDevice(userId: String, deviceId: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+    func verifyDevice(userId: String, deviceId: String, verificationCode: String, phoneNumber: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         verifyURL = verifyURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + verifyURL
-        let params = [RequestParams.VERIFICATION_CODE : verificationCode]
+        
+        var params: Dictionary<String, AnyObject> = [
+            RequestParams.VERIFICATION_CODE : verificationCode
+        ]
+        
+        if let phone = phoneNumber {
+            params[RequestParams.PHONE_NUMBER] = PhoneNumberHelper.formatUsingUSInternational(phone)
+        }
         
         request.POST(url,
             parameters: params,
@@ -83,9 +100,9 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -95,6 +112,11 @@ public class DeviceService: MugchatService {
     // MARK: - Resend Verification Code to Device
     
     func resendVerificationCode(userId: String, deviceId: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var resendURL = RESEND_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -110,9 +132,9 @@ public class DeviceService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["error"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["error"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )

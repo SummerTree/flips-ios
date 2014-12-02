@@ -10,11 +10,10 @@
 // the license agreement.
 //
 
-public typealias MugDownloadFinished = (Mug, NSError?) -> Void
 private typealias DownloadFinished = (BackgroundContentType, NSError?) -> Void
 
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
-let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY: String = "download_finished_notification_param_mug_key"
+let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: String = "download_finished_notification_param_flip_key"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY: String = "download_finished_notification_param_fail_key"
 
 public class Downloader : NSObject {
@@ -47,26 +46,26 @@ public class Downloader : NSObject {
     private func downloadDataAndCacheForUrl(urlString: String, withCompletion completion: DownloadFinished, isTemporary: Bool = true) {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         let manager = AFURLSessionManager(sessionConfiguration: configuration)
-
-        downloadInProgressURLs.addObject(urlString)
+        
+        self.downloadInProgressURLs.addObject(urlString)
         
         let url = NSURL(string: urlString)
         let request = NSMutableURLRequest(URL: url!)
-        request.timeoutInterval = TIME_OUT_INTERVAL
+        request.timeoutInterval = self.TIME_OUT_INTERVAL
         
         var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
             let path = CacheHandler.sharedInstance.getFilePathForUrl(urlString, isTemporary: isTemporary)
             return NSURL(fileURLWithPath: path)
-        }) { (response, filePath, error) -> Void in
-            self.downloadInProgressURLs.removeObject(urlString)
-            
-            if let httpResponse = response as? NSHTTPURLResponse {
-                if let contentType = httpResponse.allHeaderFields["Content-Type"] as? NSString {
-                    completion(self.backgroundTypeForContentType(contentType), error)
+            }) { (response, filePath, error) -> Void in
+                self.downloadInProgressURLs.removeObject(urlString)
+                
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    if let contentType = httpResponse.allHeaderFields["Content-Type"] as? NSString {
+                        completion(self.backgroundTypeForContentType(contentType), error)
+                    }
+                } else {
+                    completion(self.backgroundTypeForContentType(""), error)
                 }
-            } else {
-                completion(self.backgroundTypeForContentType(""), error)
-            }
         }
         
         downloadTask.resume()
@@ -102,39 +101,48 @@ public class Downloader : NSObject {
         downloadTask.resume()
     }
 
-    func downloadDataForMug(mug: Mug, isTemporary: Bool = true) {
-        if (self.isValidURL(mug.backgroundURL) && (!downloadInProgressURLs.containsObject(mug.backgroundURL))) {
-            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.backgroundURL).hasCache) {
-                self.downloadDataAndCacheForUrl(mug.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                    mug.setBackgroundContentType(backgroundContentType)
-                    self.sendDownloadFinishedBroadcastForMug(mug, error: error)
-                }, isTemporary: isTemporary)
-            } else {
-                self.sendDownloadFinishedBroadcastForMug(mug, error: nil)
+    func downloadDataForFlip(flip: Flip, isTemporary: Bool = true) {
+        dispatch_async(dispatch_queue_create("download flip queue", nil), { () -> Void in
+            var group = dispatch_group_create()
+            
+            var downloadError: NSError?
+            if (self.isValidURL(flip.backgroundURL) && (!self.downloadInProgressURLs.containsObject(flip.backgroundURL))) {
+                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(flip.backgroundURL).hasCache) {
+                    dispatch_group_enter(group)
+                    self.downloadDataAndCacheForUrl(flip.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                        flip.setBackgroundContentType(backgroundContentType)
+                        downloadError = error
+                        dispatch_group_leave(group);
+                        }, isTemporary: isTemporary)
+                }
             }
-        }
-        
-        if (self.isValidURL(mug.soundURL) && (!downloadInProgressURLs.containsObject(mug.soundURL))) {
-            if (!CacheHandler.sharedInstance.hasCachedFileForUrl(mug.soundURL).hasCache) {
-                self.downloadDataAndCacheForUrl(mug.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                    self.sendDownloadFinishedBroadcastForMug(mug, error: error)
-                }, isTemporary: isTemporary)
-            } else {
-                self.sendDownloadFinishedBroadcastForMug(mug, error: nil)
+            
+            if (self.isValidURL(flip.soundURL) && (!self.downloadInProgressURLs.containsObject(flip.soundURL))) {
+                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(flip.soundURL).hasCache) {
+                    dispatch_group_enter(group)
+                    self.downloadDataAndCacheForUrl(flip.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                        downloadError = error
+                        dispatch_group_leave(group);
+                        }, isTemporary: isTemporary)
+                }
             }
-        }
+            
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            
+            self.sendDownloadFinishedBroadcastForFlip(flip, error: downloadError)
+        })
     }
     
-    private func sendDownloadFinishedBroadcastForMug(mug: Mug, error: NSError?) {
+    private func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
         if (error != nil) {
-            println("Error download mug content: \(error)")
+            println("Error download flip content: \(error)")
         }
         
-        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY: mug]
+        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID]
         
         var downloadFailed: Bool = (error != nil)
         if (downloadFailed) {
-            userInfo.updateValue(downloadFailed, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY)
+            userInfo.updateValue(downloadFailed, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
         }
     
         NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)

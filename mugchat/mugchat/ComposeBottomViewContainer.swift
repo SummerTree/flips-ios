@@ -29,7 +29,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     
     private var builderFlipCreateLabel: UILabel!
     
-    private var myMugsView: MyFlipsView!
+    private var myFlipsView: MyFlipsView!
     
     var delegate: ComposeBottomViewContainerDelegate?
     var dataSource: ComposeBottomViewContainerDataSource?
@@ -60,11 +60,11 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         
         self.addCameraButtons()
         
-        myMugsView = MyFlipsView()
-        myMugsView.delegate = self
-        myMugsView.dataSource = self
-        myMugsView.alpha = 0.0
-        self.addSubview(myMugsView)
+        myFlipsView = MyFlipsView()
+        myFlipsView.delegate = self
+        myFlipsView.dataSource = self
+        myFlipsView.alpha = 0.0
+        self.addSubview(myFlipsView)
     }
     
     private func addConstraints() {
@@ -77,7 +77,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         
         self.addCameraButtonsViewConstraints()
         
-        myMugsView.mas_makeConstraints { (make) -> Void in
+        myFlipsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.cameraButtonsView.mas_right)
             make.top.equalTo()(self)
             make.width.equalTo()(self.cameraButtonsView)
@@ -124,7 +124,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         cameraButtonsView.addSubview(gridButton)
         
         galleryButton = UIButton()
-        galleryButton.setImage(UIImage(named: "Church"), forState: .Normal)
+        galleryButton.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(galleryButton)
     }
@@ -195,10 +195,10 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         }
     }
     
-    func showMyMugs() {
+    func showMyFlips() {
         self.hideFlipCreatedMessage()
-        self.reloadMyMugs()
-        self.slideToMyMugsView(notifyDelegate: false)
+        self.reloadMyFlips()
+        self.slideToMyFlipsView(notifyDelegate: false)
     }
     
     func showAudioRecordButton() {
@@ -266,7 +266,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     }
     
     func gridButtonTapped(sender: UIButton!) {
-        self.slideToMyMugsView()
+        self.slideToMyFlipsView()
     }
     
     func galleryButtonTapped(sender: UIButton!) {
@@ -274,10 +274,10 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     }
     
     
-    // MARK: - MyMugs Load Methods
+    // MARK: - MyFlips Load Methods
     
-    func reloadMyMugs() {
-        myMugsView.reload()
+    func reloadMyFlips() {
+        myFlipsView.reload()
     }
     
     func updateGalleryButtonImage() {
@@ -286,15 +286,15 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     
     // MARK: - Views Transitions
     
-    private func slideToMyMugsView(notifyDelegate: Bool = true) {
+    private func slideToMyFlipsView(notifyDelegate: Bool = true) {
         if (notifyDelegate) {
-            delegate?.composeBottomViewContainerWillOpenMyMugsView(self)
+            delegate?.composeBottomViewContainerWillOpenMyFlipsView(self)
         }
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.myMugsView.alpha = 1.0
+            self.myFlipsView.alpha = 1.0
             
-            self.myMugsView.mas_updateConstraints({ (make) -> Void in
+            self.myFlipsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.left.equalTo()(self)
                 make.right.equalTo()(self)
@@ -304,7 +304,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
             
             self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
-                make.left.equalTo()(self.myMugsView.mas_right)
+                make.left.equalTo()(self.myFlipsView.mas_right)
                 make.width.equalTo()(self)
                 make.top.equalTo()(self)
                 make.height.equalTo()(self)
@@ -318,9 +318,9 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         }
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.myMugsView.alpha = 0.0
+            self.myFlipsView.alpha = 0.0
             
-            self.myMugsView.mas_updateConstraints({ (make) -> Void in
+            self.myFlipsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.width.equalTo()(self)
                 make.right.equalTo()(self.mas_left)
@@ -381,7 +381,7 @@ protocol ComposeBottomViewContainerDelegate {
     
     func composeBottomViewContainerDidTapTakePictureButton(composeBottomViewContainer: ComposeBottomViewContainer)
     
-    func composeBottomViewContainerWillOpenMyMugsView(composeBottomViewContainer: ComposeBottomViewContainer)
+    func composeBottomViewContainerWillOpenMyFlipsView(composeBottomViewContainer: ComposeBottomViewContainer)
     
     func composeBottomViewContainerWillOpenCameraControls(composeBottomViewContainer: ComposeBottomViewContainer)
     

@@ -13,28 +13,29 @@
 import Foundation
 import MediaPlayer
 
-class ChatTableViewCell: UITableViewCell {
+public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Constants
     
-    private let MESSAGE_TOP_MARGIN: CGFloat = 18.0
-    private let MESSAGE_BOTTOM_MARGIN: CGFloat = 18.0
+    private let MESSAGE_TOP_MARGIN: CGFloat = 14.0
     private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
-    private let flipMessageDataSource = MugMessageDataSource()
-    
+    private let flipMessageDataSource = FlipMessageDataSource()
     
     // MARK: - Instance variables
     
-    private var videoView : UIView!
+    private var flipMessageId: String!
+    private var videoPlayerView: PlayerView!
+    private var videoPlayerContainerView : UIView!
     private var messageView : UIView!
-    private var avatarView : UIImageView!
+    private var avatarView : RoundImageView!
     private var timestampLabel : UILabel!
     private var messageTextLabel : UILabel!
-    private var player : MPMoviePlayerController!
-    private var thumbnailView : UIImageView!
     
+    private var isPlaying = false
+    
+    var delegate: ChatTableViewCellDelegate?
     
     // MARK: - Required initializers
     
@@ -45,28 +46,20 @@ class ChatTableViewCell: UITableViewCell {
         self.addConstraints()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func addSubviews() {
-        videoView = UIView()
-        contentView.addSubview(videoView)
+        videoPlayerContainerView = UIView()
+        contentView.addSubview(videoPlayerContainerView)
         
-        player = MPMoviePlayerController()
-        player.controlStyle = MPMovieControlStyle.None
-        player.scalingMode = MPMovieScalingMode.AspectFill
-        videoView.addSubview(player.view)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
+        videoPlayerView = PlayerView()
+        videoPlayerView.delegate = self
+        videoPlayerContainerView.addSubview(videoPlayerView)
         
         messageView = UIView()
         contentView.addSubview(messageView)
-        
-        thumbnailView = UIImageView()
-        thumbnailView.userInteractionEnabled = true
-        thumbnailView.frame = videoView.frame
-        messageView.addSubview(thumbnailView)
         
         timestampLabel = UILabel()
         timestampLabel.contentMode = .Center
@@ -81,12 +74,12 @@ class ChatTableViewCell: UITableViewCell {
         messageTextLabel.alpha = 0
         messageView.addSubview(messageTextLabel)
         
-        avatarView = UIImageView.avatarA3()
-        messageView.addSubview(avatarView)
+        avatarView = RoundImageView.avatarA3()
+        contentView.addSubview(avatarView)
         
         var button = UIButton()
         button.backgroundColor = UIColor.clearColor()
-        button.addTarget(self, action: "buttonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        button.addTarget(self, action: "playOrPausePreview", forControlEvents: UIControlEvents.TouchUpInside)
         contentView.addSubview(button)
         
         button.mas_makeConstraints { (make) -> Void in
@@ -96,7 +89,7 @@ class ChatTableViewCell: UITableViewCell {
     }
     
     func addConstraints() {
-        videoView.mas_makeConstraints({ (make) in
+        videoPlayerContainerView.mas_makeConstraints({ (make) in
             make.top.equalTo()(self.contentView)
             make.centerX.equalTo()(self.contentView)
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
@@ -107,28 +100,15 @@ class ChatTableViewCell: UITableViewCell {
                 make.height.equalTo()(self.contentView.mas_width)
             }
         })
-        
-        thumbnailView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.videoView)
-            make.centerX.equalTo()(self.videoView)
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
-                make.height.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
-            } else {
-                make.width.equalTo()(self.contentView.mas_width)
-                make.height.equalTo()(self.contentView.mas_width)
-            }
-        }
-        
-        player.view.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.videoView)
-            make.bottom.equalTo()(self.videoView)
-            make.leading.equalTo()(self.videoView)
-            make.trailing.equalTo()(self.videoView)
+
+        videoPlayerView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.videoPlayerContainerView)
+            make.bottom.equalTo()(self.videoPlayerContainerView)
+            make.leading.equalTo()(self.videoPlayerContainerView)
+            make.trailing.equalTo()(self.videoPlayerContainerView)
         }
         
         messageView.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.videoView.mas_bottom)
             make.bottom.equalTo()(self.contentView)
             make.left.equalTo()(self.contentView)
             make.right.equalTo()(self.contentView)
@@ -136,13 +116,13 @@ class ChatTableViewCell: UITableViewCell {
         
         avatarView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-            make.centerY.equalTo()(self.videoView.mas_bottom)
+            make.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.width.equalTo()(self.avatarView.frame.size.width)
             make.height.equalTo()(self.avatarView.frame.size.height)
         }
         
         timestampLabel.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.videoView.mas_bottom).with().offset()(self.MESSAGE_TOP_MARGIN)
+            make.top.equalTo()(self.videoPlayerContainerView.mas_bottom).with().offset()(self.MESSAGE_TOP_MARGIN)
             make.centerX.equalTo()(self.messageView)
         })
         
@@ -156,27 +136,30 @@ class ChatTableViewCell: UITableViewCell {
     // MARK: - Set FlipMessage
     
     func setFlipMessageId(flipMessageId: String) {
+        self.flipMessageId = flipMessageId
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
-
-        // TODO: we don't have the movie created yet
-        let moviePath = NSBundle.mainBundle().pathForResource("welcome_mugchat", ofType: "mov")
-        player.contentURL = NSURL.fileURLWithPath(moviePath!)
-        thumbnailView.image = UIImage(named: "movie_thumbnail.png")
+        
+        self.setupVideoPlayerWithFlips(flipMessage.flips.array as [Flip])
         
         let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         timestampLabel.text = formattedDate
         
+        if (flipMessage.notRead.boolValue) {
+            messageTextLabel.alpha = 0
+        } else {
+            messageTextLabel.alpha = 1
+        }
         self.messageTextLabel.text = flipMessage.messagePhrase()
         self.messageTextLabel.sizeToFit()
         
         avatarView.setImageWithURL(NSURL(string: flipMessage.from.photoURL))
-
+        
         if (flipMessage.from.userID == AuthenticationHelper.sharedInstance.userInSession.userID) {
             // Sent by the user
             avatarView.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
                 update.trailing.equalTo()(self).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-                update.centerY.equalTo()(self.videoView.mas_bottom)
+                update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
                 update.width.equalTo()(self.avatarView.frame.size.width)
                 update.height.equalTo()(self.avatarView.frame.size.height)
             })
@@ -185,63 +168,99 @@ class ChatTableViewCell: UITableViewCell {
             avatarView.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
                 update.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-                update.centerY.equalTo()(self.videoView.mas_bottom)
+                update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
                 update.width.equalTo()(self.avatarView.frame.size.width)
                 update.height.equalTo()(self.avatarView.frame.size.height)
             })
         }
     }
     
-    
-    // MARK: - Mug interaction handlers
-    
-    func playbackFinished(sender: AnyObject?) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.thumbnailView.alpha = 1.0
-                self.messageTextLabel.alpha = 1
+    private func setupVideoPlayerWithFlips(flips: Array<Flip>) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.contentView)
+        self.videoPlayerView.alpha = 0.0
+        self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.contentView)
+            self.videoPlayerView.alpha = 1.0
         })
-        self.player.currentPlaybackTime = 0
     }
     
     
-    // MARK: - Playback controls
+    // MARK: - Overridden Methods
     
-    func prepareToPlay() {
-        self.player.prepareToPlay()
+    public override func prepareForReuse() {
+        self.videoPlayerView.releaseResources()
+        
+        super.prepareForReuse()
+    }
+
+
+    // MARK: - Movie player controls
+    
+    func player() -> AVQueuePlayer {
+        let layer = self.videoPlayerView.layer as AVPlayerLayer
+        return layer.player as AVQueuePlayer
     }
     
     func playMovie() {
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.thumbnailView.alpha = 0.0
-        }) { (finished) -> Void in
-            self.player.play()
-        }
+        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+        self.isPlaying = true
+        self.videoPlayerView.play()
+    }
+    
+    func pauseMovie() {
+        self.isPlaying = false
+        self.videoPlayerView.pause()
     }
     
     func stopMovie() {
-        self.player.stop()
+        self.pauseMovie()
+    }
+    
+    func playOrPausePreview() {
+        if (self.isPlaying) {
+            self.pauseMovie()
+        } else {
+            self.playMovie()
+        }
+    }
+    
+    func isPlayingFlip() -> Bool {
+        return self.isPlaying
     }
     
     
-    // MARK: - Button Handler
+    // MARK: - PlayerViewDelegate
     
-    func buttonTapped() {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            switch self.player.playbackState {
-            case MPMoviePlaybackState.Stopped, MPMoviePlaybackState.Paused:
-                self.playMovie()
-            case MPMoviePlaybackState.Playing:
-                self.player.pause()
-            default:
-                ()
-            }
-        })
+    func playerViewDidFinishPlayback(playerView: PlayerView) {
+        if (self.messageTextLabel.alpha == 0) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                self.flipMessageDataSource.markFlipMessageAsRead(self.flipMessageId)
+            })
+            
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.messageTextLabel.alpha = 1
+            })
+        }
+    }
+    
+    func playerViewIsVisible(playerView: PlayerView) -> Bool {
+        var isVisible = false
+        if (delegate != nil) {
+            isVisible = delegate!.chatTableViewCellIsVisible(self)
+        }
+        return isVisible
     }
     
     
-    // MARK - View handler
+    // MARK: - Memory Management
     
-    func viewWillDisappear() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
+    func releaseResources() {
+        self.videoPlayerView.releaseResources()
     }
+}
+
+protocol ChatTableViewCellDelegate {
+    
+    func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool
+
 }

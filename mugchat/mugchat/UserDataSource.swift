@@ -22,9 +22,10 @@ private struct UserJsonParams {
     static let PHOTO_URL = "photoUrl"
     static let PUBNUB_ID = "pubnubId"
     static let PHONE_NUMBER = "phoneNumber"
+    static let IS_TEMPORARY = "isTemporary"
 }
 
-public typealias UserSyncFinished = (Bool, NSError?) -> Void
+public typealias UserSyncFinished = (Bool, FlipError?) -> Void
 
 class UserDataSource : BaseDataSource {
     
@@ -74,12 +75,22 @@ class UserDataSource : BaseDataSource {
         
         user.firstName = json[UserJsonParams.FIRST_NAME].stringValue
         user.lastName = json[UserJsonParams.LAST_NAME].stringValue
-        user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
         user.nickname = json[UserJsonParams.NICKNAME].stringValue
-        user.facebookID = json[UserJsonParams.FACEBOOK_ID].stringValue
         user.photoURL = json[UserJsonParams.PHOTO_URL].stringValue
-        user.pubnubID = json[UserJsonParams.PUBNUB_ID].stringValue
         user.phoneNumber = json[UserJsonParams.PHONE_NUMBER].stringValue
+        user.isTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
+        
+        if (json[UserJsonParams.BIRTHDAY].stringValue != "") {
+            user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
+        }
+        
+        if (json[UserJsonParams.FACEBOOK_ID].stringValue != "") {
+            user.facebookID = json[UserJsonParams.FACEBOOK_ID].stringValue
+        }
+        
+        if (json[UserJsonParams.PUBNUB_ID].stringValue != "") {
+            user.pubnubID = json[UserJsonParams.PUBNUB_ID].stringValue
+        }
     }
     
     
@@ -96,10 +107,21 @@ class UserDataSource : BaseDataSource {
         }
         
         let contactDataSource = ContactDataSource()
-        var contactIds = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
-        for contactId in contactIds {
-            let contact = contactDataSource.retrieveContactWithId(contactId)
-            contact.contactUser = user
+        var contacts = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
+        
+        let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
+        let authenticatedId = AuthenticationHelper.sharedInstance.userInSession?.userID
+        
+        if (contacts.isEmpty && isAuthenticated && authenticatedId != user?.userID) {
+            var facebookID = user?.facebookID
+            var phonetype = (facebookID != nil) ? facebookID : ""
+            
+            var contact = contactDataSource.createOrUpdateContactWith(user!.firstName, lastName: user!.lastName, phoneNumber: user!.phoneNumber, phoneType: phonetype!)
+            contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
+        }
+        
+        for contact in contacts {
+            contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
             user?.addContactsObject(contact)
         }
         
@@ -120,197 +142,46 @@ class UserDataSource : BaseDataSource {
     
     func syncUserData(callback: UserSyncFinished) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            // TODO: sync my mugs with API
+            println("\nsyncUserData")
+            let roomService = RoomService()
+            let builderService = BuilderService()
             
-            println("   ")
-            if (NSThread.currentThread() == NSThread.mainThread()) {
-                println("syncUserData IN MAIN THREAD")
-            } else {
-                println("syncUserData NOT IN MAIN THREAD")
-            }
-            println("   ")
-            println("Logged as \n   First Name: \(AuthenticationHelper.sharedInstance.userInSession.firstName)\n    ID: \(AuthenticationHelper.sharedInstance.userInSession.userID)")
-            println("   ")
+            var error: FlipError?
             
-            // ONLY FOR TESTS
-            var contacts = self.getMyUserContacts()
-            if (contacts.count == 0) {
-//                var mug = Mug.createEntity() as Mug
-//                mug.mugID = "2"
-//                mug.word = "I"
-//                mug.backgroundURL = "http://theburnedhand.files.wordpress.com/2012/06/you.png"
-//                mug.soundURL = ""
-//                mug.setBackgroundContentType(BackgroundContentType.Image)
-//                mug.owner = User.loggedUser()
-//                mug.isPrivate = true
-//
-//                var mug2 = Mug.createEntity() as Mug
-//                mug2.mugID = "3"
-//                mug2.word = "Love"
-//                mug2.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/88a2af31-b250-4918-b773-9943a15406c7.jpg"
-//                mug2.soundURL = ""
-//                mug2.setBackgroundContentType(BackgroundContentType.Image)
-//                mug2.owner = User.loggedUser()
-//                mug2.isPrivate = true
-//
-//                var mug21 = Mug.createEntity() as Mug
-//                mug21.mugID = "30"
-//                mug21.word = "love"
-//                mug21.backgroundURL = "http://lovesign.com.au/wp-content/uploads/2009/11/Stop-In-the-Name-of-Love-Alan-James-2003.jpg"
-//                mug21.soundURL = ""
-//                mug21.setBackgroundContentType(BackgroundContentType.Image)
-//                mug21.owner = User.loggedUser()
-//                mug21.isPrivate = true
-//
-//                var mug3 = Mug.createEntity() as Mug
-//                mug3.mugID = "4"
-//                mug3.word = "San Francisco"
-//                mug3.backgroundURL = "https://s3.amazonaws.com/mugchat-pictures/Screen+Shot+2014-10-10+at+11.27.00+AM.png"
-//                mug3.setBackgroundContentType(BackgroundContentType.Image)
-//                mug3.owner = User.loggedUser()
-//                mug3.isPrivate = true
-                
-                var user: User! = User.MR_createEntity() as User
-                user.userID = "3"
-                user.firstName = "Bruno"
-                user.lastName = "User"
-                user.phoneNumber = "+141512345678"
-                user.photoURL = "http://upload.wikimedia.org/wikipedia/pt/9/9d/Maggie_Simpson.png"
-                
-                var user3: User! = User.MR_createEntity() as User
-                user3.userID = "5"
-                user3.firstName = "Ecil"
-                user3.lastName = "User"
-                user3.phoneNumber = "+144423455555"
-                user3.photoURL = "http://3.bp.blogspot.com/_339JZmAslb0/TG3x4LbfGeI/AAAAAAAAABU/QATFhgxPMvA/s200/Lisa_Simpson150.jpg"
-
-                var contact: Contact! = Contact.MR_createEntity() as Contact
-                contact.contactID = "1"
-                contact.firstName = "Bruno"
-                contact.lastName = "Contact"
-                contact.phoneNumber = "+141512345678"
-                contact.contactUser = user
-                user.addContactsObject(contact)
-                
-                // Simulating a user that is only contact on my agenda
-                var contact2: Contact! = Contact.MR_createEntity() as Contact
-                contact2.contactID = "2"
-                contact2.firstName = "Fernando"
-                contact2.lastName = "Contact"
-                contact2.phoneNumber = "+144423456789"
-                contact2.phoneType = "iPhone"
-                
-                var user4: User! = User.MR_createEntity() as User
-                user4.userID = "637"
-                user4.firstName = "Caio"
-                user4.lastName = "Fonseca"
-                user4.phoneNumber = "4158889999"
-                user4.photoURL = "https://s3.amazonaws.com/flips-pictures/dc652458-41da-4115-87b7-c08a8e715fc1.jpg"
-                var contact111: Contact! = Contact.MR_createEntity() as Contact
-                contact111.contactID = "100"
-                contact111.firstName = "Caio"
-                contact111.lastName = "Contact"
-                contact111.phoneNumber = "4158889999"
-                contact111.contactUser = user4
-                user4.addContactsObject(contact111)
-                
-                var user222: User! = User.MR_createEntity() as User
-                user222.userID = "684"
-                user222.firstName = "Diego"
-                user222.lastName = "Santiviago"
-                user222.phoneNumber = "4153213321"
-                user222.photoURL = "https://s3.amazonaws.com/flips-pictures/1681aaa9-817f-46e5-96e1-8bbe2e089a43.jpg"
-                var contact222: Contact! = Contact.MR_createEntity() as Contact
-                contact222.contactID = "101"
-                contact222.firstName = "Diego"
-                contact222.lastName = "Contact"
-                contact222.phoneNumber = "4153213321"
-                contact222.contactUser = user222
-                user222.addContactsObject(contact222)
-
-                
-                var room: Room! = Room.MR_createEntity() as Room
-                room.roomID = "1"
-                room.pubnubID = "$2a$10$Rhq0o6l75GdKZepEUJ9nUO7iKxdEMbZ.jLy45qRLJYR.tjF0PXuEW"
-                room.name = "Test"
-                room.addParticipantsObject(user)
-                room.addParticipantsObject(user3)
-                PubNubService.sharedInstance.subscribeToChannel(room.pubnubID)
-                
-                var room2: Room! = Room.MR_createEntity() as Room
-                room2.roomID = "2"
-                room2.pubnubID = "$2a$10$LbkpRd14zxcSacF3kBnqTu8GHRDpI.LqHWOLQkx8qiL3n/H7vJci"
-                room2.name = "Chat"
-                room2.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room2.pubnubID)
-                
-                var room3: Room! = Room.MR_createEntity() as Room
-                room3.roomID = "3"
-                room3.pubnubID = "$2a$10$tHnGMFLALJpwAZzygOA7uOiG3KHMVMpsvZMW/3ojgi.eb7gfNXXS"
-                room3.name = "Chat"
-                room3.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room3.pubnubID)
-                
-                var room4: Room! = Room.MR_createEntity() as Room
-                room4.roomID = "4"
-                room4.pubnubID = "$2a$10$5ooP3jZY.tjvOBNydDkJ7.kd.VT8LTOMvDu8fz6lCdNxBdPxhOEW"
-                room4.name = "Chat"
-                room4.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room4.pubnubID)
-                
-                var room5: Room! = Room.MR_createEntity() as Room
-                room5.roomID = "5"
-                room5.pubnubID = "$2a$10$ipXtNr1gtFbOGWsf26nLWOKDYETNDwyYn.zA5SkOHD4SevtT41rS"
-                room5.name = "Chat"
-                room5.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room5.pubnubID)
-                
-                var room6: Room! = Room.MR_createEntity() as Room
-                room6.roomID = "6"
-                room6.pubnubID = "$2a$10$z1pMh0oBiuzZF4sbRRC1desEImzj4G0K3CP7wLz.kafQKWjOWfVw."
-                room6.name = "Chat"
-                room6.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room6.pubnubID)
-                
-                var room7: Room! = Room.MR_createEntity() as Room
-                room7.roomID = "7"
-                room7.pubnubID = "$2a$10$.0zxIsZ1.zQJ2ZkrZm.WW.NMy/kMAzRr79rGkeizZ/AkvQogFeAC"
-                room7.name = "Chat"
-                room7.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room7.pubnubID)
-                
-                var room8: Room! = Room.MR_createEntity() as Room
-                room8.roomID = "8"
-                room8.pubnubID = "$2a$10$XDyoTHXDSVVzJqqVsLtC.ejbaz5jFE2x55cK480IjHhoqaz8AKmm"
-                room8.name = "Chat"
-                room8.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room8.pubnubID)
-                
-                var room9: Room! = Room.MR_createEntity() as Room
-                room9.roomID = "9"
-                room9.pubnubID = "$2a$10$88salVtKxvNJ8Vll1POyFOorUFf7CLdeKok2Hg3k4HIG12Qy8xRiG"
-                room9.name = "Chat"
-                room9.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room9.pubnubID)
-                
-                var room10: Room! = Room.MR_createEntity() as Room
-                room10.roomID = "10"
-                room10.pubnubID = "$2a$10$IdbkXv3RK6WPy4039I8QoegAjdJZ.hoZXqqGLZkMVHt3iVOIk3gVi"
-                room10.name = "Chat"
-                room10.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room10.pubnubID)
-                
-                var room11: Room! = Room.MR_createEntity() as Room
-                room11.roomID = "11"
-                room11.pubnubID = "$2a$10$t.pA7LXizbWYAhlYOLf22OWrekd6ONjsaaG36iqvaKhbewuodsua"
-                room11.name = "Chat"
-                room11.addParticipantsObject(user)
-                PubNubService.sharedInstance.subscribeToChannel(room11.pubnubID)
-                
-                println("NSManagedObjectContext.MR_defaultContext(): \(NSManagedObjectContext.MR_defaultContext())")
-                NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
+            let group = dispatch_group_create()
+            dispatch_group_enter(group)
+            roomService.getMyRooms({ (rooms) -> Void in
+                for room in rooms {
+                    println("   - subscribing to room: \(room.roomID)")
+                    PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+                }
+                dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
+            })
+            
+            dispatch_group_enter(group)
+            let builderWordDataSource = BuilderWordDataSource()
+            builderService.getSuggestedWords({ (words) -> Void in
+                let builderWordDataSource = BuilderWordDataSource()
+                builderWordDataSource.addWords(words, fromServer: true)
+                dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
+            })
+            
+            println("   waiting sync rooms")
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+            
+            if (error != nil) {
+                println("sync fail\n")
+                callback(false, error)
+                return
             }
-            // ONLY FOR TESTS
+            
+            // TODO: sync my flips with API
             
             callback(true, nil)
         })

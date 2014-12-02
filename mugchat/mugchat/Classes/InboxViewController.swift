@@ -11,7 +11,7 @@
 //
 
 
-class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipViewControllerDelegate {
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate {
 
     private var inboxView: InboxView!
     private var roomDataSource: RoomDataSource!
@@ -36,6 +36,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.inboxView.viewWillAppear()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
     }
@@ -70,8 +71,7 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     }
     
     func inboxViewDidTapBuilderButton(inboxView : InboxView) {
-        let words = [ "San Francisco", "Coffee", "Dracula", "Christmas", "Santa Claus", "Love", "Birthday", "Halloween" ] // TODO: get words from the server
-        var builderViewController = BuilderViewController(composeTitle: NSLocalizedString("Builder", comment: "Builder"), words: words)
+        var builderViewController = BuilderViewController()
         self.navigationController?.pushViewController(builderViewController, animated:true)
     }
     
@@ -85,14 +85,16 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     // MARK: - Room Handlers
     
     private func refreshRooms() {
-        roomIds.removeAll(keepCapacity: false)
-        
-        let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
-        for room in rooms {
-            roomIds.append(room.roomID)
-        }
-        
-        inboxView.setRooms(rooms)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let rooms = self.roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
+            
+            self.roomIds.removeAll(keepCapacity: false)
+            for room in rooms {
+                self.roomIds.append(room.roomID)
+            }
+            
+            self.inboxView.setRoomIds(self.roomIds)
+        })
     }
     
     
@@ -100,12 +102,15 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var mug = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Mug
+        var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        let flipDataSource = FlipDataSource()
+        let flip = flipDataSource.retrieveFlipWithId(flipID)
+
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-            println("Download failed for mug: \(mug.mugID)")
+            println("Download failed for flip: \(flip.flipID)")
             // TODO: show download fail state
         } else {
-            if (mug.hasAllContentDownloaded()) {
+            if (flip.hasAllContentDownloaded()) {
                 self.refreshRooms()
             }
         }
@@ -114,8 +119,11 @@ class InboxViewController : MugChatViewController, InboxViewDelegate, NewFlipVie
     
     // MARK: - NewFlipViewControllerDelegate
     
-    func newFlipViewControllerDidSendMessage(viewController: NewFlipViewController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String) {
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            let room = self.roomDataSource.retrieveRoomWithId(roomID)
+            self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+        })
     }
 }
 

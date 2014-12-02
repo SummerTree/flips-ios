@@ -12,7 +12,7 @@
 
 import UIKit
 
-class PrivacyPolicyViewController: MugChatWebViewController {
+class PrivacyPolicyViewController: FlipsChatWebViewController {
     
     init() {
         super.init(view: PrivacyPolicyView(), title: "Privacy Policy")

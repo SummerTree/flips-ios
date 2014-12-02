@@ -22,6 +22,10 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     
     private var newWordTextField: UITextField!
     
+    private var didUpdateWordList = false
+    
+    var delegate: BuilderAddWordTableViewControllerDelegate?
+    
     override init() {
         super.init()
         self.view.backgroundColor = UIColor.whiteColor()
@@ -68,6 +72,8 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.newWordTextField.resignFirstResponder()
+        
+        delegate?.builderAddWordTableViewControllerDelegate(self, finishingWithChanges: didUpdateWordList)
     }
     
     
@@ -113,8 +119,16 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            self.words.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                let builderWordDataSource = BuilderWordDataSource()
+                builderWordDataSource.removeBuilderWordWithWord(self.words[indexPath.row])
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.didUpdateWordList = true
+                    self.words.removeAtIndex(indexPath.row)
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                })
+            })
         }
     }
     
@@ -123,7 +137,13 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if (countElements(textField.text!) > 0) {
-            words.insert(textField.text!, atIndex: 0)
+            let word = textField.text!
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                let builderWordDataSource = BuilderWordDataSource()
+                builderWordDataSource.addWord(word, fromServer: false)
+            })
+            self.didUpdateWordList = true
+            words.insert(word, atIndex: 0)
             tableView.reloadData()
             
             textField.text = ""
@@ -133,4 +153,10 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
         
         return false
     }
+}
+
+protocol BuilderAddWordTableViewControllerDelegate {
+    
+    func builderAddWordTableViewControllerDelegate(tableViewController: BuilderAddWordTableViewController, finishingWithChanges hasChanges: Bool)
+    
 }

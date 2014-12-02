@@ -286,6 +286,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     // MARK: - Getters
     
+    func getAvatarImage() -> UIImage! {
+        return self.navigationBar.getAvatarImage()
+    }
+    
     func getBackgroundColor() -> UIColor {
         return UIColor.deepSea()
     }

@@ -94,7 +94,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         logoutButton.backgroundColor = UIColor.whiteColor()
         logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
-        logoutButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+        logoutButton.setTitleColor(UIColor.flipOrange(), forState: UIControlState.Normal)
         logoutButton.setTitle(NSLocalizedString("Log Out", comment: "Log Out"), forState: UIControlState.Normal)
         tableFooterView.addSubview(logoutButton)
         
@@ -251,7 +251,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             
             self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)
             if let photoURL = User.loggedUser()?.photoURL {
-                userProfileCell.setImageURL(NSURL(string: photoURL))
+                userProfileCell.setAvatarURL(photoURL)
             }
         }
     }
@@ -304,6 +304,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
         let fullname = User.loggedUser()!.fullName()
         
+        self.userProfileCell.setAvatarURL(User.loggedUser()!.photoURL)
         self.userProfileCell.setActionLabelText(fullname)
         self.userProfileCell.setActionDetailLabelText(detailedLabel)
     }

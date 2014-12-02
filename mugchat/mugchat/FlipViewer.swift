@@ -31,6 +31,8 @@ class FlipViewer: UIView {
     
     private var isShowingVideo: Bool = false
     
+    var delegate: FlipViewerDelegate?
+    
     // MARK: - Initialization Methods
     
     override init() {
@@ -45,18 +47,17 @@ class FlipViewer: UIView {
     }
     
     private func addSubviews() {
+        
         flipImageView = UIImageView()
         flipImageView.contentMode = UIViewContentMode.ScaleAspectFill
         flipImageView.clipsToBounds = true
         flipImageView.alpha = 0
         self.addSubview(flipImageView)
         
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "viewTapped")
-        flipImageView.addGestureRecognizer(tapGestureRecognizer)
-        
         flipMoviePlayer = MPMoviePlayerController()
+        flipMoviePlayer.controlStyle = MPMovieControlStyle.None
+        flipMoviePlayer.scalingMode = MPMovieScalingMode.AspectFill
         flipMoviePlayer.view.alpha = 0
-        flipMoviePlayer.view.addGestureRecognizer(tapGestureRecognizer)
         self.addSubview(flipMoviePlayer.view)
         
         flipFilterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
@@ -114,12 +115,12 @@ class FlipViewer: UIView {
     
     // MARK: - View State Methods
     
-    func viewWillAppear() {
+    func registerObservers() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackFinished:", name: MPMoviePlayerPlaybackDidFinishNotification, object: flipMoviePlayer)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerLoadStateChanged:", name: MPMoviePlayerLoadStateDidChangeNotification, object: flipMoviePlayer)
     }
     
-    func viewWillDisapear() {
+    func removeOberservers() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: flipMoviePlayer)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerLoadStateDidChangeNotification, object: flipMoviePlayer)
     }
@@ -127,21 +128,16 @@ class FlipViewer: UIView {
     
     // MARK: - Gesture Recognizer Methods
     
-    private func viewTapped() {
-        if (isShowingVideo) {
-            if (flipMoviePlayer.playbackState == MPMoviePlaybackState.Playing) {
-                flipMoviePlayer.stop()
-                flipMoviePlayer.currentPlaybackTime = 0
-            } else {
-                flipMoviePlayer.currentPlaybackTime = 0
-                flipMoviePlayer.play()
-            }
+    func viewTapped() {
+        
+        if isShowingVideo {
+            self.flipMoviePlayer.currentPlaybackTime = 0
+            self.delegate?.flipViewerStartedPlayingContent()
+            self.flipMoviePlayer.play()
         } else {
-            let audioService = AudioRecorderService.sharedInstance
-            if (audioService.isPlaying()) {
-                audioService.stopAudio()
-            } else {
-                audioService.playAudio(flipAudioURL)
+            if self.flipAudioURL != nil {
+                self.delegate?.flipViewerStartedPlayingContent()
+                AudioRecorderService.sharedInstance.playAudio(self.flipAudioURL)
             }
         }
     }
@@ -154,10 +150,6 @@ class FlipViewer: UIView {
     }
     
     func setImage(image: UIImage) {
-        if (isShowingVideo) {
-            flipMoviePlayer.stop()
-        }
-        
         isShowingVideo = false
         flipImageView.image = image
         
@@ -170,34 +162,34 @@ class FlipViewer: UIView {
     func setAudioURL(audioURL: NSURL) {
         isShowingVideo = false
         self.flipAudioURL = audioURL
-        
-        let oneSecond = 1 * Double(NSEC_PER_SEC)
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-        dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            AudioRecorderService.sharedInstance.playAudio(self.flipAudioURL)
-        })
+        self.delegate?.flipViewerStartedPlayingContent()
+        AudioRecorderService.sharedInstance.playAudio(self.flipAudioURL)
     }
     
     func setVideoURL(videoURL: NSURL) {
         isShowingVideo = true
-        flipMoviePlayer.contentURL = videoURL
+        self.flipMoviePlayer.contentURL = videoURL
         
         UIView.animateWithDuration(ANIMATION_TRANSITION_DURATION, animations: { () -> Void in
             self.flipImageView.alpha = 0
             self.flipMoviePlayer.view.alpha = 1
-        })
+        }) { (finished) -> Void in
+            self.delegate?.flipViewerStartedPlayingContent()
+            self.flipMoviePlayer.play()
+        }
     }
     
     
     // MARK: - Notification Handlers
     
-    private func playbackFinished(notification: NSNotification) {
+    func playbackFinished(notification: NSNotification) {
         flipMoviePlayer.currentPlaybackTime = 0
         println("playbackFinished")
+        self.delegate?.flipViewerFinishedPlayingContent()
     }
     
-    private func moviePlayerLoadStateChanged(notification: NSNotification) {
-        println("moviePlayerLoadStateChanged")
+    func moviePlayerLoadStateChanged(notification: NSNotification) {
+        println("moviePlayerLoadStateChangedWithNotification: \(notification)")
     }
     
     
@@ -208,4 +200,13 @@ class FlipViewer: UIView {
             AudioRecorderService.sharedInstance.playAudio(flipAudioURL)
         }
     }
+    
+}
+
+protocol FlipViewerDelegate {
+    
+    func flipViewerStartedPlayingContent()
+    
+    func flipViewerFinishedPlayingContent()
+    
 }

@@ -15,7 +15,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     private var navigationBar: CustomNavigationBar!
     
     private var pictureContainerView: UIView!
-    private var pictureImageView: UIImageView!
+    private var pictureImageView: RoundImageView!
     
     private var bottomButtonsContainerView: UIView!
     private var rejectButton: UIButton!
@@ -53,7 +53,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
         pictureContainerView = UIView()
         self.addSubview(pictureContainerView)
         
-        pictureImageView = UIImageView.avatarA1()
+        pictureImageView = RoundImageView.avatarA1()
         pictureContainerView.addSubview(pictureImageView)
         
         bottomButtonsContainerView = UIView()
@@ -61,7 +61,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
         
         rejectButton = UIButton()
         rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
-        rejectButton.backgroundColor = UIColor.mugOrange()
+        rejectButton.backgroundColor = UIColor.flipOrange()
         rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         bottomButtonsContainerView.addSubview(rejectButton)
         
@@ -130,7 +130,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     // MARK: - Setters
     
     func setPicture(picture: UIImage) {
-        pictureImageView.setAvatarImage(picture)
+        pictureImageView.image = picture
         self.updateConstraints()
     }
     

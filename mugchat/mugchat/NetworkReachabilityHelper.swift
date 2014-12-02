@@ -17,8 +17,6 @@ import Foundation
 
 public class NetworkReachabilityHelper {
     
-    private var hasConnection: Bool! = true
-    
     
     // MARK: - Singleton
     
@@ -31,25 +29,26 @@ public class NetworkReachabilityHelper {
     
     func startMonitoring() {
         AFNetworkReachabilityManager.sharedManager().startMonitoring()
-        println("Starting with connect \(self.hasConnection)")
         AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
             
             let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
             
             switch(status) {
-            case AFNetworkReachabilityStatus.ReachableViaWiFi,
-                AFNetworkReachabilityStatus.ReachableViaWWAN:
+            case AFNetworkReachabilityStatus.ReachableViaWiFi:
+                println("Reachable via WiFi")
                 
-                println("Reachable")
-                self.hasConnection = true
+            case AFNetworkReachabilityStatus.ReachableViaWWAN:
+                println("Reachable via WWAN 3G/4G")
                 
             case AFNetworkReachabilityStatus.NotReachable:
                 println("Not Reachable")
-                self.hasConnection = false
             default:
                 println("Default [status=\(status.rawValue)]")
-                
             }
         }
+    }
+    
+    func hasInternetConnection() -> Bool {
+        return AFNetworkReachabilityManager.sharedManager().reachable
     }
 }

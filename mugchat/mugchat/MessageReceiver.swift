@@ -29,7 +29,7 @@ let MESSAGE_FLIPS_INFO_TYPE = "2"
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
-    var mugMessagesWaitingDownload: NSHashTable!
+    var flipMessagesWaitingDownload: NSHashTable!
     
     public class var sharedInstance : MessageReceiver {
     struct Static {
@@ -44,41 +44,41 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     override init() {
         super.init()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
-        mugMessagesWaitingDownload = NSHashTable()
+        flipMessagesWaitingDownload = NSHashTable()
     }
     
     
     // MARK: - Events Methods
     
-    private func onMessageReceived(mugMessage: MugMessage) {
+    private func onMessageReceived(flipMessage: FlipMessage) {
         // Notify any screen that there is a new message
         println("New Message Received")
-        println("   From: \(mugMessage.from.firstName)")
-        println("   Sent at: \(mugMessage.createdAt)")
-        println("   #mugs: \(mugMessage.mugs.count)")
+        println("   From: \(flipMessage.from.firstName)")
+        println("   Sent at: \(flipMessage.createdAt)")
+        println("   #flips: \(flipMessage.flips.count)")
         
-        mugMessagesWaitingDownload.addObject(mugMessage)
+        flipMessagesWaitingDownload.addObject(flipMessage)
         
         let downloader = Downloader.sharedInstance
-        for var i = 0; i < mugMessage.mugs.count; i++ {
-            println("       mug #\(mugMessage.mugs.objectAtIndex(i).mugID)")
-            downloader.downloadDataForMug(mugMessage.mugs.objectAtIndex(i) as Mug, isTemporary: true)
+        for var i = 0; i < flipMessage.flips.count; i++ {
+            println("       flip #\(flipMessage.flips.objectAtIndex(i).flipID)")
+            downloader.downloadDataForFlip(flipMessage.flips.objectAtIndex(i) as Flip, isTemporary: true)
         }
     }
     
-    private func onMugContentDownloadFinished(mug: Mug) {
-        if (mug.hasAllContentDownloaded()) {
-            var mugMessagesToRemove = Array<MugMessage>()
+    private func onFlipContentDownloadFinished(flip: Flip) {
+        if (flip.hasAllContentDownloaded()) {
+            var flipMessagesToRemove = Array<FlipMessage>()
             
-            for mugMessage: MugMessage in mugMessagesWaitingDownload.allObjects as [MugMessage] {
-                if (mugMessage.hasAllContentDownloaded()) {
-                    mugMessagesToRemove.append(mugMessage)
-                    mugMessage.createThumbnail()
+            for flipMessage: FlipMessage in flipMessagesWaitingDownload.allObjects as [FlipMessage] {
+                if (flipMessage.hasAllContentDownloaded()) {
+                    flipMessagesToRemove.append(flipMessage)
+                    flipMessage.createThumbnail()
                 }
             }
             
-            for mugMessage in mugMessagesToRemove {
-                mugMessagesWaitingDownload.removeObject(mugMessage)
+            for flipMessage in flipMessagesToRemove {
+                flipMessagesWaitingDownload.removeObject(flipMessage)
             }
         }
     }
@@ -88,19 +88,23 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var mug = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MUG_KEY] as Mug
+        var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        
+        let flipDataSource = FlipDataSource()
+        let flip = flipDataSource.retrieveFlipWithId(flipID)
+        
         if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-            println("Download failed for mug: \(mug.mugID)")
+            println("Download failed for flip: \(flip.flipID)")
         } else {
-            println("Download finished for mug: \(mug.mugID)")
-            self.onMugContentDownloadFinished(mug)
+            println("Download finished for flip: \(flip.flipID)")
+            self.onFlipContentDownloadFinished(flip)
         }
     }
     
     
     // MARK: - PubnubServiceDelegate
     
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, fromChannelName: String) {
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
         println("\nMessage received:\n\(messageJson)\n")
         
         if (messageJson[MESSAGE_TYPE] != nil) {
@@ -108,15 +112,20 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 self.onRoomReceived(messageJson)
             } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
                 // Message Received
-                let mugMessageDataSource = MugMessageDataSource()
-                let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName)
-                self.onMessageReceived(mugMessage)
+                let flipMessageDataSource = FlipMessageDataSource()
+                let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+
+                if (flipMessage != nil) {
+                    self.onMessageReceived(flipMessage!)
+                }
             }
         } else {
             // TODO: Old format - Should be remove later.
-            let mugMessageDataSource = MugMessageDataSource()
-            let mugMessage = mugMessageDataSource.createMugMessageWithJson(messageJson, receivedAtChannel: fromChannelName)
-            self.onMessageReceived(mugMessage)
+            let flipMessageDataSource = FlipMessageDataSource()
+            let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            if (flipMessage != nil) {
+                self.onMessageReceived(flipMessage!)
+            }
         }
     }
     
@@ -131,6 +140,6 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func onRoomReceived(messageJson: JSON) {
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
-        PubNubService.sharedInstance.subscribeToChannel(room.pubnubID)
+        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }

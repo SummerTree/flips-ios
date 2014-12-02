@@ -117,16 +117,21 @@ class SettingsTableViewCell: UITableViewCell {
         self.actionDetailLabel.text = text
     }
     
-    func setImageURL(url: NSURL!) {
-        self.actionImageView.setImageWithURL(url)
-        self.actionImageView.image = self.actionImageView.image?.cropImageInCenter()
-        self.actionImageView.layer.cornerRadius = self.actionImageView.frame.size.width / 2
-        self.actionImageView.layer.masksToBounds = true
-        actionImageView.mas_updateConstraints({ (update) -> Void in
-            update.removeExisting = true
-            update.center.equalTo()(self.imageContainerView)
-            update.width.equalTo()(self.actionImageView.frame.width)
-            update.height.equalTo()(self.actionImageView.frame.height)
+    func setAvatarURL(url: String!) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.actionImageView, style: UIActivityIndicatorViewStyle.White)
+        self.actionImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.actionImageView.image = self.actionImageView.image?.cropImageInCenter()
+                self.actionImageView.layer.cornerRadius = self.actionImageView.frame.size.width / 2
+                self.actionImageView.layer.masksToBounds = true
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.actionImageView)
+                self.actionImageView.mas_updateConstraints({ (update) -> Void in
+                    update.removeExisting = true
+                    update.center.equalTo()(self.imageContainerView)
+                    update.width.equalTo()(self.actionImageView.frame.width)
+                    update.height.equalTo()(self.actionImageView.frame.height)
+                })
+            })
         })
     }
 }

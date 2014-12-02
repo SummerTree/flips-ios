@@ -71,8 +71,28 @@ class ContactDataSource : BaseDataSource {
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
     
-    func getMyContactsWithoutFlipsAccount() -> [Contact] {
-        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
+    func getMyContactsIdsWithoutFlipsAccount() -> [String] {
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
+        
+        var contactIds = [String]()
+        
+        for contact in contacts {
+            contactIds.append(contact.contactID)
+        }
+        
+        return contactIds
+    }
+    
+    func getMyContactsIdsWithFlipsAccount() -> [String] {
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
+        
+        var contactIds = [String]()
+        
+        for contact in contacts {
+            contactIds.append(contact.contactID)
+        }
+        
+        return contactIds
     }
     
     func retrieveContactWithId(id: String) -> Contact {
@@ -85,35 +105,40 @@ class ContactDataSource : BaseDataSource {
         return contact!
     }
 
-    func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [String] {
-        let contacts = Contact.findAll()
-        let cleannedPhoneNumber = PhoneNumberHelper.cleanFormattedPhoneNumber(phoneNumber)
+    func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [Contact] {
+        if (countElements(phoneNumber) == 0) {
+            return [Contact]()
+        }
         
-        var contactIdsWithSamePhoneNumber = Array<String>()
+        let contacts = Contact.findAll() as [Contact]
+        let cleannedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
+        
+        var contactsWithSamePhoneNumber = Array<Contact>()
         for contact in contacts {
             var contactPhoneNumber = contact.phoneNumber as String!
-            if (PhoneNumberHelper.cleanFormattedPhoneNumber(contactPhoneNumber) == cleannedPhoneNumber) {
-               contactIdsWithSamePhoneNumber.append(contact.contactID)
+            if (PhoneNumberHelper.formatUsingUSInternational(contactPhoneNumber) == cleannedPhoneNumber) {
+               contactsWithSamePhoneNumber.append(contact)
             }
         }
-        return contactIdsWithSamePhoneNumber
+        return contactsWithSamePhoneNumber
     }
-
-    func getMyContactsWithFlipsAccount() -> [Contact] {
-        return Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
+    
+    func setContactUserAndUpdateContact(user: User!, contact: Contact!) {
+        contact.contactUser = user
+        self.save()
     }
     
     
     // MARK: - Private Methods
     
     private func nextContactID() -> Int {
-        let contacts = Contact.MR_findAllSortedBy(ContactAttributes.CONTACT_ID, ascending: false)
-        
-        if (contacts.first == nil) {
+        let contacts = Contact.MR_findAllSortedBy("contactID.intValue", ascending: false)
+        let contact: Contact = contacts.first as Contact
+        if (contacts == nil || contact.contactID == nil) {
             return 0
         }
         
-        var contactID: String = contacts.first!.contactID
+        var contactID: String = contact.contactID
         var nextID: Int = contactID.toInt()!
         return ++nextID
     }
@@ -123,40 +148,34 @@ class ContactDataSource : BaseDataSource {
     }
     
     private func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
-        var predicateValue = ""
+        var firstnamePredicate: NSPredicate!
+        var lastnamePredicate: NSPredicate!
+        var phonenumberPredicate: NSPredicate!
+        var phonetypePredicate: NSPredicate!
+        var predicates = [NSPredicate]()
         
         if (firstName != nil) {
-            var value = firstName!
-            predicateValue = "(\(ContactAttributes.FIRST_NAME) == '\(value)')"
+            firstnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.FIRST_NAME, firstName!)
+            predicates.append(firstnamePredicate)
         }
         
         if (lastName != nil) {
-            var value = lastName!
-            if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.LAST_NAME) == '\(value)')"
-            } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.LAST_NAME) == '\(value)')"
-            }
+            lastnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.LAST_NAME, lastName!)
+            predicates.append(lastnamePredicate)
         }
         
         if (phoneNumber != nil) {
-            var value = phoneNumber!
-            if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.PHONE_NUMBER) == '\(value)')"
-            } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_NUMBER) == '\(value)')"
-            }
+            phonenumberPredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_NUMBER, phoneNumber!)
+            predicates.append(phonenumberPredicate)
         }
         
         if (phoneType != nil) {
-            var value = phoneType!
-            if (predicateValue.isEmpty) {
-                predicateValue = "(\(ContactAttributes.PHONE_TYPE) == '\(value)')"
-            } else {
-                predicateValue = "\(predicateValue) AND (\(ContactAttributes.PHONE_TYPE) == '\(value)')"
-            }
+            phonetypePredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_TYPE, phoneType!)
+            predicates.append(phonetypePredicate)
         }
+        
+        let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
 
-        return Contact.findFirstWithPredicate(NSPredicate(format: predicateValue)) as? Contact
+        return Contact.findFirstWithPredicate(compound) as? Contact
     }
 }

@@ -12,8 +12,8 @@
 
 public class CacheHandler : NSObject {
     
-    let MUG_CHAT_CACHE_FOLDER = "mugs_resources"
-    let MUG_CHAT_THUMBNAILS_FOLDER = "thumbnails"
+    let FLIPS_CACHE_FOLDER = "flips_resources"
+    let FLIPS_THUMBNAILS_FOLDER = "thumbnails"
     let DEFAULT_JPEG_COMPRESSION_QUALITY: CGFloat = 0.9
     
     var applicationSupportDirectory: String!
@@ -44,19 +44,19 @@ public class CacheHandler : NSObject {
     private func initSupportDirectory() {
         var paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         var applicationSupportDirPath = paths.first! as String
-        applicationSupportDirectory = "\(NSHomeDirectory())\(applicationSupportDirPath)/\(MUG_CHAT_CACHE_FOLDER)"
+        applicationSupportDirectory = "\(NSHomeDirectory())\(applicationSupportDirPath)/\(FLIPS_CACHE_FOLDER)"
         self.initDirectory(applicationSupportDirectory)
     }
     
     private func initTemporaryDirectory() {
         var cachePaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         var cacheDirPath = cachePaths.first! as String
-        applicationCacheDirectory = "\(NSHomeDirectory())\(cacheDirPath)/\(MUG_CHAT_CACHE_FOLDER)"
+        applicationCacheDirectory = "\(NSHomeDirectory())\(cacheDirPath)/\(FLIPS_CACHE_FOLDER)"
         self.initDirectory(applicationCacheDirectory)
     }
     
     private func initThumbnailsDirectory() {
-        thumbnailsDirectory = "\(applicationSupportDirectory)/\(MUG_CHAT_THUMBNAILS_FOLDER)"
+        thumbnailsDirectory = "\(applicationSupportDirectory)/\(FLIPS_THUMBNAILS_FOLDER)"
         self.initDirectory(thumbnailsDirectory)
     }
     
@@ -94,6 +94,22 @@ public class CacheHandler : NSObject {
         return filePath
     }
     
+    func getFilePathForUrlFromAnyFolder(url: String) -> String? {
+        let fileManager = NSFileManager.defaultManager()
+        
+        var filePath = self.getFilePathForUrl(url, isTemporary: false)
+        if (fileManager.fileExistsAtPath(filePath)) {
+            return filePath
+        }
+        
+        filePath = self.getFilePathForUrl(url, isTemporary: true)
+        if (fileManager.fileExistsAtPath(filePath)) {
+            return filePath
+        }
+        
+        return nil
+    }
+    
     private func getFormatedUrl(url: String) -> String {
         return url.lastPathComponent
     }
@@ -129,7 +145,7 @@ public class CacheHandler : NSObject {
     }
     
     func saveDataAtPath(dataPath: String, withUrl url: String, isTemporary: Bool = true) -> String {
-        let data = NSData(contentsOfURL: NSURL(string: dataPath)!)
+        let data = NSData(contentsOfURL: NSURL(fileURLWithPath: dataPath)!)
         return self.save(data!, withUrl: url, isTemporary: isTemporary)
     }
     

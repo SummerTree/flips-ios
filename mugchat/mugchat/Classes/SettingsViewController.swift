@@ -12,7 +12,9 @@
 
 import Foundation
 
-class SettingsViewController : MugChatViewController, SettingsViewDelegate {
+class SettingsViewController : FlipsViewController, SettingsViewDelegate {
+    
+    private let FLIPSBOYS_CHAT_TITLE: String = "FlipBoys"
     
     private var settingsView: SettingsView!
     
@@ -74,7 +76,16 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapSendFeedback(settingsView: SettingsView) {
-        println("settingsViewDidTapSendFeedback")
+        let roomDataSource = RoomDataSource()
+        let flipboysRoom: Room? = roomDataSource.getFlipboysRoom()
+        
+        if let room = flipboysRoom {
+            var chatViewController = ChatViewController(chatTitle: FLIPSBOYS_CHAT_TITLE, roomID: room.roomID)
+            self.navigationController?.pushViewController(chatViewController, animated: true)
+        } else {
+            var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.FLIPBOYS_ROOM_NOT_FOUND, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertMessage.show()
+        }
     }
     
     func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView) {
@@ -83,8 +94,8 @@ class SettingsViewController : MugChatViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapImportContacts(settingsView: SettingsView) {
-        let importContactTableViewController = ImportContactsTableViewController()
-        let navigationController = UINavigationController(rootViewController: importContactTableViewController)
+        let importContactViewController = ImportContactViewController()
+        let navigationController = UINavigationController(rootViewController: importContactViewController)
         self.presentViewController(navigationController, animated: true, completion: nil)
     }
     

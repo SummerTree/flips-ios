@@ -29,6 +29,14 @@ public class AuthenticationHelper: NSObject {
         }
     }
     
+    func isAuthenticated() -> Bool {
+        if let user = userInSession {
+            return true
+        }
+        
+        return false
+    }
+    
     private func saveAuthenticatedUsername(username: String) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
@@ -63,6 +71,7 @@ public class AuthenticationHelper: NSObject {
         DeviceHelper.sharedInstance.setBuilderIntroductionShown(false)
         
         CoreDataHandler.sharedInstance.resetDatabase()
+        PubNub.disconnect()
         
         // Unregister for push notifications
         UIApplication.sharedApplication().unregisterForRemoteNotifications()

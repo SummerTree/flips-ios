@@ -12,7 +12,7 @@
 
 class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavigationBarDelegate {
     
-    private let MUG_CELL_HEIGHT : CGFloat = 169
+    private let FLIP_CELL_HEIGHT : CGFloat = 169
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
     
@@ -22,7 +22,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     var delegate : InboxViewDelegate?
     
-    private var rooms: Array<Room>!
+    private var roomIds: Array<String>!
     
     
     // MARK: - Initialization Methods
@@ -34,7 +34,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        rooms = Array<Room>()
+        roomIds = Array<String>()
         
         self.initSubviews()
         self.initConstraints()
@@ -93,12 +93,19 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         }
     }
     
+    func viewWillAppear() {
+        navigationBar.setAvatarImageUrl(User.loggedUser()!.photoURL)
+    }
+    
     
     // MARK: - Rooms Setter
     
-    func setRooms(rooms: [Room]) {
-        self.rooms = rooms
-        self.conversationsTableView.reloadData()
+    func setRoomIds(roomIds: [String]) {
+        self.roomIds = roomIds
+
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.conversationsTableView.reloadData()
+        })
     }
     
     
@@ -106,17 +113,17 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ConversationTableViewCell
-        cell.setRoom(rooms[indexPath.row]) 
+        cell.setRoomId(roomIds[indexPath.row])
         cell.selectionStyle = UITableViewCellSelectionStyle.Gray
         return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rooms.count
+        return roomIds.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return MUG_CELL_HEIGHT;
+        return FLIP_CELL_HEIGHT;
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -129,13 +136,24 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            var room = rooms[indexPath.row]
+            
             ActivityIndicatorHelper.showActivityIndicatorAtView(self)
-            room.markAllMessagesAsRemoved({ (success) -> Void in
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                var roomId = self.roomIds[indexPath.row]
+                let roomDataSource = RoomDataSource()
+                var room = roomDataSource.retrieveRoomWithId(roomId)
+                
+                room.markAllMessagesAsRemoved({ (success) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+                    })
+                })
+                self.roomIds.removeAtIndex(indexPath.row)
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+                })
             })
-            rooms.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
         }
     }
     

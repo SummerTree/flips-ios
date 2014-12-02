@@ -11,9 +11,9 @@
 //
 
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
-public typealias UserServiceFailureResponse = (MugError?) -> Void
+public typealias UserServiceFailureResponse = (FlipError?) -> Void
 
-public class UserService: MugchatService {
+public class UserService: FlipsService {
     
     let SIGNUP_URL: String = "/signup"
     let SIGNIN_URL: String = "/signin"
@@ -21,13 +21,15 @@ public class UserService: MugchatService {
     let FORGOT_URL: String = "/user/forgot"
     let VERIFY_URL: String = "/user/verify"
     let UPLOAD_PHOTO_URL: String = "/user/{{user_id}}/photo"
-    let UPDATE_USER_URL: String = "/user/{{user_id}}"
+    let UPDATE_USER_URL: String = "/user/{{user_id}}/update"
     let IMAGE_COMPRESSION: CGFloat = 0.3
     let UPDATE_PASSWORD_URL: String = "/user/password"
+    let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
+    let FACEBOOK_CONTACTS_VERIFY: String = "/user/{{user_id}}/facebook/verify"
     
     public class var sharedInstance : UserService {
-    struct Static {
-        static let instance : UserService = UserService()
+        struct Static {
+            static let instance : UserService = UserService()
         }
         return Static.instance
     }
@@ -36,17 +38,23 @@ public class UserService: MugchatService {
     // MARK: - Sign-up
     
     func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNUP_URL
         let params = [
-                RequestParams.USERNAME : username,
-                RequestParams.PASSWORD : password,
-                RequestParams.FIRSTNAME : firstName,
-                RequestParams.LASTNAME : lastName,
-                RequestParams.BIRTHDAY : birthday,
-                RequestParams.PHONENUMBER: phoneNumber,
-                RequestParams.NICKNAME : nickname!]
+            RequestParams.USERNAME : username,
+            RequestParams.PASSWORD : password,
+            RequestParams.FIRSTNAME : firstName,
+            RequestParams.LASTNAME : lastName,
+            RequestParams.BIRTHDAY : birthday,
+            RequestParams.PHONENUMBER: phoneNumber,
+            RequestParams.NICKNAME : nickname!]
         
         // first create user
         request.POST(url,
@@ -62,10 +70,10 @@ public class UserService: MugchatService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(MugError(error: response["error"] as String!, details: nil))
+                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -81,6 +89,11 @@ public class UserService: MugchatService {
     // MARK: - Sign-in
     
     func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNIN_URL
@@ -95,19 +108,24 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
     }
     
     func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FACEBOOK_SIGNIN_URL
-
+        
         request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
         request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.TOKEN)
         
@@ -120,9 +138,20 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    var errorText: String = ""
+                    var detailsText: String = ""
+                    
+                    if let errorMessage: String = response["error"] as? String {
+                        errorText = errorMessage
+                    }
+                    
+                    if let detailsMessage: String = response["details"] as? String {
+                        detailsText = detailsMessage
+                    }
+                    
+                    failure(FlipError(error: errorText, details: detailsText))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -141,6 +170,11 @@ public class UserService: MugchatService {
     // MARK: Update user profile
     
     func update(username: String, password: String?, firstName: String, lastName: String, avatar: UIImage?, birthday: NSDate, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -156,8 +190,12 @@ public class UserService: MugchatService {
             params[RequestParams.PASSWORD] = newPassword
         }
         
-        request.PUT(url,
+        request.POST(url,
             parameters: params,
+            constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
+                let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+            },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 var user = self.parseUserResponse(responseObject)
                 success(user)
@@ -166,10 +204,10 @@ public class UserService: MugchatService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(MugError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(MugError(error: response["error"] as String!, details: nil))
+                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -178,11 +216,16 @@ public class UserService: MugchatService {
     
     // MARK: - Forgot password
     
-    func forgotPassword(email: String, phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func forgotPassword(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FORGOT_URL
-        let params = [RequestParams.EMAIL : email, RequestParams.PHONE_NUMBER : phoneNumber]
+        let params = [RequestParams.PHONE_NUMBER : phoneNumber]
         
         request.POST(url,
             parameters: params,
@@ -192,9 +235,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -204,6 +247,11 @@ public class UserService: MugchatService {
     // MARK: - Verify a Device
     
     func verifyDevice(phoneNumber: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
@@ -219,9 +267,9 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -236,9 +284,14 @@ public class UserService: MugchatService {
     // MARK: - UPDATE password
     
     func updatePassword(user: User, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-
+        
         let url = HOST + UPDATE_PASSWORD_URL
         let params = [RequestParams.EMAIL : user.username, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
         
@@ -250,12 +303,147 @@ public class UserService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(MugError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
-                    failure(MugError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
+    }
+    
+    
+    // MARK: - Import Facebook Contacts
+    
+    
+    func importFacebookFriends(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
+        let permissions: [String] = FBSession.activeSession().permissions as [String]
+        println("[DEBUG: Facebook Permissions: \(permissions)]")
+        
+        if (!contains(permissions, "user_friends")) {
+            failure(FlipError(error: "user_friends permission not allowed.", details:nil))
+            return
+        }
+        
+        var usersFacebookIDS = [String]()
+        FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
+            if (error != nil) {
+                failure(FlipError(error: error.localizedDescription, details:nil))
+                return
+            }
+            
+            let resultDictionary: NSDictionary = result as NSDictionary
+            let usersJSON = JSON(resultDictionary.objectForKey("data")!)
+            
+            if let users = usersJSON.array {
+                let userDatasource = UserDataSource()
+                
+                for user in users {
+                    usersFacebookIDS.append(user["id"].stringValue)
+                }
+                
+                var request = AFHTTPRequestOperationManager()
+                request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+                var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                
+                var params: Dictionary<String, AnyObject> = [
+                    RequestParams.FACEBOOK_IDS : usersFacebookIDS
+                ]
+                
+                request.POST(url, parameters: params,
+                    success: { (operation, responseObject) -> Void in
+                        var response:JSON = JSON(responseObject)
+                        
+                        for (index, user) in response {
+                            SwiftTryCatch.try({ () -> Void in
+                                println("Trying to import: \(user)")
+                                var user = userDatasource.createOrUpdateUserWithJson(user)
+                                }, catch: { (error) -> Void in
+                                    println("Error: [\(error))")
+                                }, finally: nil)
+                            
+                        }
+                        
+                        success(nil)
+                        
+                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                        if (operation.responseObject != nil) {
+                            var response = operation.responseObject as NSDictionary
+                            failure(FlipError(error: response["error"] as String!, details:nil))
+                        } else {
+                            failure(FlipError(error: error.localizedDescription, details:nil))
+                        }
+                        
+                })
+            }
+        }
+    }
+    
+    
+    // MARK: - Upload contacts
+    
+    func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
+        var numbers = Array<String>()
+        let userDatasource = UserDataSource()
+        
+        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
+            
+            if(countElements(contacts!) == 0) {
+                success(nil)
+                return
+            }
+            
+            for contact in contacts! {
+                if (countElements(contact.phoneNumber) > 0) {
+                    let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
+                    numbers.append(cleanPhone)
+                }
+            }
+            
+            var request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            
+            var params: Dictionary<String, AnyObject> = [
+                RequestParams.PHONENUMBERS : numbers
+            ]
+            
+            request.POST(url, parameters: params,
+                success: { (operation, responseObject) -> Void in
+                    var response:JSON = JSON(responseObject)
+
+                    for (index, user) in response {
+                        SwiftTryCatch.try({ () -> Void in
+                            println("Trying to import: \(user)")
+                            var user = userDatasource.createOrUpdateUserWithJson(user)
+                        }, catch: { (error) -> Void in
+                            println("Error: [\(error))")
+                        }, finally: nil)
+                    }
+                    
+                    success(nil)
+                    
+                }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        var response = operation.responseObject as NSDictionary
+                        failure(FlipError(error: response["error"] as String!, details:nil))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details:nil))
+                    }
+               
+            })
+        }, failure: { (error) -> Void in
+            failure(FlipError(error: "Error retrieving contacts.", details:nil))
+        })
     }
     
     
@@ -276,7 +464,9 @@ public class UserService: MugchatService {
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
         static let PHONENUMBER = "phoneNumber"
+        static let PHONENUMBERS = "phoneNumbers"
         static let VERIFICATION_CODE = "verification_code"
         static let PHOTO = "photo"
+        static let FACEBOOK_IDS = "facebookIDs"
     }
 }

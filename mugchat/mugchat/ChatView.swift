@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate {
+class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate,ChatTableViewCellDelegate {
     
     private let CELL_IDENTIFIER = "flipChatCell"
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
@@ -166,15 +166,43 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func reloadFlipMessages() {
         self.tableView.reloadData()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let flipMessagaDataSource = FlipMessageDataSource()
+            if let numberOfMessages = self.dataSource?.numberOfFlipMessages(self) as Int? {
+                var firstNotReadMessageIndex = numberOfMessages - 1
+                for (var i = 0; i < numberOfMessages; i++) {
+                    let flipMessageId = self.dataSource?.chatView(self, flipMessageIdAtIndex: i)
+                    if (flipMessageId != nil) {
+                        var flipMessage = flipMessagaDataSource.retrieveFlipMessageById(flipMessageId!)
+                        if (flipMessage.notRead.boolValue) {
+                            firstNotReadMessageIndex = i
+                            break
+                        }
+                    }
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                })
+            }
+        })
     }
+    
     
     // MARK: - Table view data source
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
         
-        let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
-        cell.setFlipMessageId(flipId!)
+        if cell.isPlayingFlip() {
+            cell.stopMovie()
+        }
+        
+        let flipMessageId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
+        if (flipMessageId != nil) {
+            cell.setFlipMessageId(flipMessageId!)
+        }
         
         return cell;
     }
@@ -208,6 +236,28 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     
     // MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if !self.isCell(cell, totallyVisibleOnView: self) {
+                if cell.isPlayingFlip() {
+                    cell.stopMovie()
+                }
+            }
+        }
+    }
+    
+    func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
+        var videoContainerView = cell.subviews[0].subviews[0].subviews[0] as UIView // Gets video container view from cell
+        var convertedVideoContainerViewFrame = cell.convertRect(videoContainerView.frame, toView:view)
+        if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
+            return true
+        } else {
+            return false
+        }
+    }
     
 //    func scrollViewDidScroll(scrollView: UIScrollView) {
 //        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
@@ -308,11 +358,17 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func didTapReplyButton() {
         hideReplyButtonAndShowTextField()
+        
+        let visibleCells = tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            cell.stopMovie()
+        }
+        
         self.replyTextField.becomeFirstResponder()
     }
     
     func didTapNextButton() {
-        self.delegate?.chatView(self, didTapNextButtonWithWords: replyTextField.getMugTexts())
+        self.delegate?.chatView(self, didTapNextButtonWithWords: replyTextField.getFlipTexts())
     }
     
     private func hideReplyButtonAndShowTextField() {
@@ -337,6 +393,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.nextButton.hidden = true
     }
     
+    func clearReplyTextField() {
+        self.replyTextField.text = ""
+    }
+    
     
     // MARK: - Notifications
     
@@ -352,8 +412,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         if (numberOfMessages > 0) {
             let indexPath = NSIndexPath(forRow: numberOfMessages! - 1, inSection: 0)
-            self.frame.size.height -= keyboardHeight
-            super.updateConstraints()
+            
+            replyView.mas_updateConstraints( { (make) in
+                make.left.equalTo()(self)
+                make.right.equalTo()(self)
+                make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+                make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
+            })
+            self.updateConstraints()
             self.layoutIfNeeded()
             self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
@@ -364,15 +430,28 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillAppear() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        
+        replyView.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.bottom.equalTo()(self)
+        })
+        self.updateConstraints()
+        
         self.replyTextField.viewWillAppear()
     }
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        PlayerView.videoSerialOperationQueue.cancelAllOperations()
+        
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-            cell.viewWillDisappear()
+            cell.stopMovie()
+            cell.releaseResources()
         }
+        
     }
     
     
@@ -383,7 +462,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
-            make.bottom.equalTo()(self)
+            make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
         })
         
         replyTextField.mas_updateConstraints( { (make) in
@@ -395,6 +474,19 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.updateConstraints()
     }
     
+    
+    // MARK: - ChatTableViewCellDelegate
+    
+    func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool {
+        let visibleCells = tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (cell == chatTableViewCell) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 @objc protocol ChatViewDelegate {

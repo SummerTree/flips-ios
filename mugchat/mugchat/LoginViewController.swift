@@ -15,7 +15,7 @@ import UIKit
 private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
 
 
-class LoginViewController: MugChatViewController, LoginViewDelegate {
+class LoginViewController: FlipsViewController, LoginViewDelegate {
     
     var loginView: LoginView!
     
@@ -79,9 +79,9 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                     }
                 })
             })
-        }) { (mugError) -> Void in
+        }) { (flipError) -> Void in
             self.hideActivityIndicator()
-            println(mugError!.error)
+            println(flipError!.error)
             self.loginView.showValidationErrorInCredentialFields()
         }
     }
@@ -136,22 +136,20 @@ class LoginViewController: MugChatViewController, LoginViewDelegate {
                 userDataSource.syncUserData({ (success, error) -> Void in
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if (success) {
-                            let authenticatedUser = User.loggedUser()!
-                            if (authenticatedUser.device == nil) {
-                                var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
-                                self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
-                            } else {
-                                var inboxViewController = InboxViewController()
-                                self.navigationController?.pushViewController(inboxViewController, animated: true)
-                            }
+                        let authenticatedUser = User.loggedUser()!
+                        if (authenticatedUser.device == nil) {
+                            var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
+                            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+                        } else {
+                            var inboxViewController = InboxViewController()
+                            self.navigationController?.pushViewController(inboxViewController, animated: true)
                         }
                     })
                 })
-            }, failure: { (mugError) -> Void in
-                println("Error on authenticating with Facebook [error=\(mugError!.error), details=\(mugError!.details)]")
+            }, failure: { (flipError) -> Void in
+                println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
                 self.hideActivityIndicator()
-                var alertView = UIAlertView(title: LOGIN_ERROR, message: mugError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         })
     }

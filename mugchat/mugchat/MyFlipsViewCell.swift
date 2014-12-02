@@ -10,14 +10,14 @@
 // the license agreement.
 //
 
-private let MY_MUGS_CELL_WIDTH: CGFloat = 83.5
-private let MY_MUGS_CELL_HEIGHT: CGFloat = 83.5
+private let MY_FLIPS_CELL_WIDTH: CGFloat = 83.5
+private let MY_FLIPS_CELL_HEIGHT: CGFloat = 83.5
 
 class MyFlipsViewCell : UICollectionViewCell {
     
-    private var mug: Mug!
+    private var flip: Flip! // TODO: change it to keep flipID instead of the NSManagedObject
     private var cellImageView: UIImageView!
-    private var seletedOverlayView: SelectedMugOverlayView!
+    private var seletedOverlayView: SelectedFlipOverlayView!
     
     var isSelected: Bool!
     
@@ -25,10 +25,10 @@ class MyFlipsViewCell : UICollectionViewCell {
         super.init(frame: frame)
         
         cellImageView = UIImageView()
-        cellImageView.frame.size = CGSizeMake(MY_MUGS_CELL_WIDTH, MY_MUGS_CELL_HEIGHT)
+        cellImageView.frame.size = CGSizeMake(MY_FLIPS_CELL_WIDTH, MY_FLIPS_CELL_HEIGHT)
         self.addSubview(cellImageView);
         
-        self.seletedOverlayView = SelectedMugOverlayView(frame: CGRectMake(0, 0, MY_MUGS_CELL_WIDTH, MY_MUGS_CELL_WIDTH))
+        self.seletedOverlayView = SelectedFlipOverlayView(frame: CGRectMake(0, 0, MY_FLIPS_CELL_WIDTH, MY_FLIPS_CELL_WIDTH))
         self.seletedOverlayView.alpha = 0
         self.addSubview(seletedOverlayView)
     }
@@ -37,16 +37,15 @@ class MyFlipsViewCell : UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setMug(mug: Mug) {
-        self.mug = mug
-        println("mug: \(mug.mugID)")
+    func setFlip(flip: Flip) {
+        self.flip = flip
         
-        let mugContentPath = self.mug.backgroundContentLocalPath()
-        if (self.mug.isBackgroundContentTypeVideo()) {
-            let videoThumbnail = VideoHelper.generateThumbImageForFile(mugContentPath)
+        let flipContentPath = self.flip.backgroundContentLocalPath()
+        if (self.flip.isBackgroundContentTypeVideo()) {
+            let videoThumbnail = VideoHelper.generateThumbImageForFile(flipContentPath)
             self.cellImageView.image = videoThumbnail
         } else {
-            let image = UIImage(contentsOfFile: mugContentPath)
+            let image = UIImage(contentsOfFile: flipContentPath)
             self.cellImageView.image = image
         }
     }

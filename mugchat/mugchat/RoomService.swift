@@ -11,11 +11,12 @@
 //
 
 public typealias CreateRoomSuccessResponse = (Room) -> Void
-public typealias CreateRoomFailureResponse = (MugError?) -> Void
+public typealias GetRoomsSuccessResponse = ([Room]) -> Void
+public typealias RoomFailureResponse = (FlipError?) -> Void
 
-public class RoomService: MugchatService {
+public class RoomService: FlipsService {
 
-    private let CREATE_ROOM: String = "/user/{{user_id}}/rooms"
+    private let ROOM_URL: String = "/user/{{user_id}}/rooms"
     
     private struct RequestParams {
         static let NAME = "name"
@@ -23,10 +24,15 @@ public class RoomService: MugchatService {
         static let PHONE_NUMBERS = "phoneNumbers"
     }
 
-    func createRoom(userIds: [String], contactNumbers: [String], successCompletion: CreateRoomSuccessResponse, failCompletion: CreateRoomFailureResponse) {
+    func createRoom(userIds: [String], contactNumbers: [String], successCompletion: CreateRoomSuccessResponse, failCompletion: RoomFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = CREATE_ROOM.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let createRoomUrl = HOST + createURL
         let createRoomParams = [
             RequestParams.NAME : "Name",
@@ -44,13 +50,37 @@ public class RoomService: MugchatService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(MugError(error: response["error"] as String!, details: nil))
+                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCompletion(MugError(error: error.localizedDescription, details:nil))
+                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
     }
+    
+    func getMyRooms(successCompletion: GetRoomsSuccessResponse, failCompletion: RoomFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let getRoomsUrl = HOST + getURL
+
+        request.GET(getRoomsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
+            successCompletion(self.parseGetRoomsResponse(responseObject))
+        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            if (operation.responseObject != nil) {
+                let response = operation.responseObject as NSDictionary
+                failCompletion(FlipError(error: response["error"] as String!, details: nil))
+            } else {
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
+            }
+        }
+    }
+    
 
     private func parseCreateRoomResponse(response: AnyObject) -> Room {
         let json = JSON(response)
@@ -59,4 +89,21 @@ public class RoomService: MugchatService {
         return roomDataSource.createOrUpdateWithJson(json)
     }
     
+    private func parseGetRoomsResponse(response: AnyObject) -> [Room] {
+        let json = JSON(response)
+        println("created room json: \(json)")
+        let roomDataSource = RoomDataSource()
+        
+        var rooms = Array<Room>()
+        
+        if let jsonArray = json.array {
+            for roomJson in jsonArray {
+                var room = roomDataSource.createOrUpdateWithJson(roomJson)
+                rooms.append(room)
+            }
+        }
+        
+        
+        return rooms
+    }
 }

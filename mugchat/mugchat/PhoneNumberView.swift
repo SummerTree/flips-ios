@@ -41,7 +41,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     override init() {
         super.init()
-        self.backgroundColor = UIColor.mugOrange()
+        self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()
     }
@@ -150,6 +150,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         mobileNumberField.mas_makeConstraints { (make) in
             make.removeExisting = true
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.mobileNumberView)
             make.centerY.equalTo()(self.mobileNumberView)
         }
         

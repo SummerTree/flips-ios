@@ -28,7 +28,7 @@ class CustomNavigationBar : UIView {
     private var backgroundImageView : UIImageView!
     
     private var avatarButton : UIButton!
-    private var avatarImageView : UIImageView!
+    private var avatarImageView : RoundImageView!
     private var titleTextView : UITextView!
     
     private var leftButton : UIButton!
@@ -57,7 +57,7 @@ class CustomNavigationBar : UIView {
         var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
         var navigationBar = CustomNavigationBar(frame: navBarFrame)
         
-        var imageView = UIImageView.avatarA4()
+        var imageView = RoundImageView.avatarA4()
         imageView.image = avatarImage
         
         navigationBar.setup(imageView, leftButtonImage: settingsButtonImage, rightButtonObject: builderButtonImage)
@@ -69,7 +69,7 @@ class CustomNavigationBar : UIView {
         
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_White")
         }
         
         var navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
@@ -87,7 +87,7 @@ class CustomNavigationBar : UIView {
         
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_White")
         }
         
         var navBarHeight = NORMAL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
@@ -102,7 +102,7 @@ class CustomNavigationBar : UIView {
     class func CustomLargeNavigationBar(avatarImage: UIImage, isAvatarButtonInteractionEnabled: Bool = false, showBackButton: Bool, showNextButton: Bool) -> CustomNavigationBar {
         var backButtonImage : UIImage?
         if (showBackButton) {
-            backButtonImage = UIImage(named: "Back")
+            backButtonImage = UIImage(named: "Back_White")
         }
         
         var nextButtonImage : UIImage?
@@ -155,7 +155,7 @@ class CustomNavigationBar : UIView {
         super.init(frame: frame)
         
         backgroundImageView = UIImageView(frame: frame)
-        backgroundImageView.backgroundColor = UIColor.mugOrange()
+        backgroundImageView.backgroundColor = UIColor.flipOrange()
         self.addSubview(backgroundImageView)
     }
     
@@ -176,7 +176,7 @@ class CustomNavigationBar : UIView {
             titleTextView.backgroundColor = UIColor.clearColor()
             titleTextView.sizeToFit()
             self.addSubview(titleTextView)
-        } else if let imageView = titleObject as? UIImageView {
+        } else if let imageView = titleObject as? RoundImageView {
             avatarImageView = imageView
             self.addSubview(avatarImageView)
         } else if let imageButton = titleObject as? UIButton {
@@ -204,7 +204,7 @@ class CustomNavigationBar : UIView {
             rightButton = UIButton()
             if let rightButtonItem = rightButtonObject as? String {
                 rightButton.setTitle(rightButtonItem, forState: .Normal)
-                rightButton.setTitleColor(UIColor.mugOrange(), forState: UIControlState.Normal)
+                rightButton.setTitleColor(UIColor.flipOrange(), forState: UIControlState.Normal)
                 rightButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
                 rightButton.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h3)
             } else if let rightButtonItem = rightButtonObject as? UIImage {
@@ -306,6 +306,14 @@ class CustomNavigationBar : UIView {
         return CGRectGetHeight(self.frame) - STATUS_BAR_HEIGHT
     }
     
+    func getAvatarImage() -> UIImage! {
+        if (avatarButton != nil) {
+            return avatarButton.imageView?.image
+        } else {
+            return avatarImageView.image
+        }
+    }
+    
     
     // MARK: - Setters
     
@@ -322,14 +330,19 @@ class CustomNavigationBar : UIView {
             avatarButton.setAvatarImage(image, forState: .Normal)
             avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
         } else if (avatarImageView != nil) {
-            avatarImageView.setAvatarImage(image)
+            avatarImageView.image = image
         }
     }
     
     func setAvatarImageUrl(url: String) {
         if (!url.isEmpty) {
             if (avatarImageView != nil) {
-                avatarImageView.setImageWithURL(NSURL(string: url))
+                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
+                avatarImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
+                    })
+                })
             } else {
                 println("Avatar using button is not integrated with images from URLs yet.")
             }
@@ -355,7 +368,7 @@ class CustomNavigationBar : UIView {
     
     func setBackgroundImage(image: UIImage) {
         backgroundImageView.alpha = 1.0
-        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.mugOrange())
+        backgroundImageView.image = image.applyTintEffectWithColor(UIColor.flipOrange())
     }
     
     func setBackgroundImageColor(color: UIColor) {

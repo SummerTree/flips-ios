@@ -17,11 +17,11 @@
 
 @implementation ImageVideoCreator
 
-+ (NSString *)videoPathForMug:(Mug *)mug {
++ (NSString *)videoPathForFlip:(Flip *)flip {
     CacheHandler *cacheHandler = [CacheHandler sharedInstance];
-    UIImage *backgroundImage = [UIImage imageWithData:[cacheHandler dataForUrl:mug.backgroundContentLocalPath]];
+    UIImage *backgroundImage = [UIImage imageWithData:[cacheHandler dataForUrl:flip.backgroundContentLocalPath]];
     
-    NSString *videoName = [NSString stringWithFormat:@"%@.mov", mug.mugID];
+    NSString *videoName = [NSString stringWithFormat:@"%@.mov", flip.flipID];
     NSString *videoPath = [NSString stringWithFormat:@"%@/%@", cacheHandler.applicationCacheDirectory, videoName];
 
     ImageVideoCreator *instance = [[ImageVideoCreator alloc] init];
@@ -103,11 +103,18 @@
     }
     [NSThread sleepForTimeInterval:0.02];
 
+    
+    dispatch_group_t group = dispatch_group_create();
+    
     //Finish the session:
     [writerVideoInput markAsFinished];
+    dispatch_group_enter(group);
     [videoWriter finishWritingWithCompletionHandler:^{
         NSLog(@"Finished writing video");
+        dispatch_group_leave(group);
     }];
+    dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 30 * NSEC_PER_SEC));
+    
     CVPixelBufferPoolRelease(adaptor.pixelBufferPool);
 }
 

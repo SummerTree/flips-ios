@@ -84,3 +84,9 @@
 #define COCOAPODS_VERSION_MINOR_RHAddressBook 1
 #define COCOAPODS_VERSION_PATCH_RHAddressBook 1
 
+// SplunkMint-iOS
+#define COCOAPODS_POD_AVAILABLE_SplunkMint_iOS
+#define COCOAPODS_VERSION_MAJOR_SplunkMint_iOS 4
+#define COCOAPODS_VERSION_MINOR_SplunkMint_iOS 0
+#define COCOAPODS_VERSION_PATCH_SplunkMint_iOS 21
+

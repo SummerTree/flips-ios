@@ -12,7 +12,7 @@
 
 import Foundation
 
-class VerificationCodeViewController: MugChatViewController, VerificationCodeViewDelegate {
+class VerificationCodeViewController: FlipsViewController, VerificationCodeViewDelegate {
     
     private let PLATFORM = "ios"
     private let US_CODE = "+1"
@@ -89,8 +89,8 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 }
                 DeviceHelper.sharedInstance.saveDeviceId(device!.deviceID)
             },
-            failure: { (mugError) in
-                println("Error trying to register device: " + mugError!.error!)
+            failure: { (flipError) in
+                println("Error trying to register device: " + flipError!.error!)
         })
     }
     
@@ -106,15 +106,17 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 verificationCodeView.resetVerificationCodeField()
                 verificationCodeView.focusKeyboardOnCodeField()
             },
-            failure: { (mugError) in
-                println("Error trying to resend verification code to device: " + mugError!.error!)
+            failure: { (flipError) in
+                println("Error trying to resend verification code to device: " + flipError!.error!)
             })
     }
     
     private func verifyDevice(userId: String, deviceId: String, verificationCode: String) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         DeviceService.sharedInstance.verifyDevice(userId,
             deviceId: deviceId,
             verificationCode: verificationCode,
+            phoneNumber: self.phoneNumber,
             success: { (device) in
                 if (device == nil) {
                     println("Error verifying device")
@@ -130,25 +132,28 @@ class VerificationCodeViewController: MugChatViewController, VerificationCodeVie
                 var userDataSource = UserDataSource()
                 userDataSource.syncUserData({ (success, error) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if (success) {
-                            let verificationCodeView = self.view as VerificationCodeView
-                            verificationCodeView.resetVerificationCodeField()
-                            
-                            self.navigateAfterValidateDevice()
-                        }
+                        let verificationCodeView = self.view as VerificationCodeView
+                        verificationCodeView.resetVerificationCodeField()
+                        
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                        self.navigateAfterValidateDevice()
                     })
                 })
             },
-            failure: { (mugError) in
-                if (mugError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
-                    let verificationCodeView = self.view as VerificationCodeView
-                    verificationCodeView.didEnterWrongVerificationCode()
-                } else {
-                    println("Device code verification error: " + mugError!.error!)
-                    let verificationCodeView = self.view as VerificationCodeView
-                    verificationCodeView.resetVerificationCodeField()
-                    verificationCodeView.focusKeyboardOnCodeField()
-                }
+            failure: { (flipError) in
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+                        let verificationCodeView = self.view as VerificationCodeView
+                        verificationCodeView.didEnterWrongVerificationCode()
+                    } else {
+                        println("Device code verification error: " + flipError!.error!)
+                        let verificationCodeView = self.view as VerificationCodeView
+                        verificationCodeView.resetVerificationCodeField()
+                        verificationCodeView.focusKeyboardOnCodeField()
+                    }
+                })
             })
     }
     

@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias SendMessageCompletion = (Bool, MugError?) -> Void
+public typealias SendMessageCompletion = (Bool, String?, FlipError?) -> Void
 
 public class MessageService {
     
@@ -38,7 +38,7 @@ public class MessageService {
         }
         
         var room: Room!
-        var error: MugError?
+        var error: FlipError?
         
         var group = dispatch_group_create()
         dispatch_group_enter(group)
@@ -53,21 +53,23 @@ public class MessageService {
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
         
         if (error != nil) {
-            completion(false, error)
+            completion(false, nil, error)
             return
         }
+        
+        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
         
         self.sendMessage(flipIds, roomID: room.roomID, completion: completion)
     }
     
     func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
-        let flipMessageDataSource = MugMessageDataSource()
-        let flipDataSource = MugDataSource()
+        let flipMessageDataSource = FlipMessageDataSource()
+        let flipDataSource = FlipDataSource()
         let roomDataSource = RoomDataSource()
         
-        var flips = Array<Mug>()
+        var flips = Array<Flip>()
         for flipId in flipIds {
-            var flip = flipDataSource.retrieveMugWithId(flipId)
+            var flip = flipDataSource.retrieveFlipWithId(flipId)
             flips.append(flip)
         }
         
@@ -76,7 +78,7 @@ public class MessageService {
         let messageJson = flipMessage.toJSON()
         
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
-            completion(success, nil)
+            completion(success, roomID, nil)
         }
     }
 }

@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
+class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
     
     private var chatView: ChatView!
     private var chatTitle: String!
@@ -20,7 +20,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     private var roomID: String!
     private var flipMessageIds: [String]!
     
-    private let flipMessageDataSource = MugMessageDataSource()
+    private let flipMessageDataSource = FlipMessageDataSource()
     
     
     // MARK: - Initializers
@@ -60,15 +60,7 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
-
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.chatView.reloadFlipMessages()
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.chatView)
-            })
-        })
+        self.chatView.reloadFlipMessages()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -91,8 +83,15 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
         flipMessageIds.removeAll(keepCapacity: false)
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
         for flipMessage in flipMessages {
-            flipMessageIds.append(flipMessage.mugMessageID.stringValue)
+            flipMessageIds.append(flipMessage.flipMessageID)
         }
+    }
+    
+    func reload() {
+        self.reloadFlipMessages()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.chatView.reloadFlipMessages()
+        })
     }
     
     
@@ -128,16 +127,16 @@ class ChatViewController: MugChatViewController, ChatViewDelegate, ChatViewDataS
     // MARK: - Messages Notification Handler
     
     func notificationReceived(notification: NSNotification) {
-        self.reloadFlipMessages()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.chatView.reloadFlipMessages()
-        })
+        self.reload()
     }
     
     
     // MARK: - ComposeViewControllerDelegate
     
-    func composeViewControllerDidSendMessage(viewController: ComposeViewController) {
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
         self.navigationController?.popToViewController(self, animated: true)
+        self.chatView.clearReplyTextField()
+        
+        self.reload()
     }
 }

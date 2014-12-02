@@ -1,7 +1,4 @@
 //
-//  NewFlipViewController.swift
-//  mugchat
-//
 // Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
@@ -46,7 +43,7 @@ public class ContactListHelper {
         } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusNotDetermined.value) {
             addressBook.requestAuthorizationWithCompletion({ (granted, error) -> Void in
                 let contacts = self.retrieveContacts()
-                self.retrieveContacts()
+                success(contacts)
             })
         } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusDenied.value
             || RHAddressBook.authorizationStatus().value == RHAuthorizationStatusRestricted.value) {
