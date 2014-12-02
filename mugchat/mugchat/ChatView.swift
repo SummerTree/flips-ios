@@ -188,6 +188,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         })
     }
     
+    
     // MARK: - Table view data source
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -197,8 +198,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             cell.stopMovie()
         }
         
-        let flipId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
-        cell.setFlipMessageId(flipId!)
+        let flipMessageId = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
+        if (flipMessageId != nil) {
+            cell.setFlipMessageId(flipMessageId!)
+        }
         
         return cell;
     }
@@ -440,10 +443,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        PlayerView.videoSerialOperationQueue.cancelAllOperations()
+        
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             cell.stopMovie()
+            cell.releaseResources()
         }
+        
     }
     
     
