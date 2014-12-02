@@ -331,7 +331,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
             self.showContentForHighlightedWord(shouldReloadWords: false)
             if (self.shouldShowPreviewButton()) {
-                // self.openPreview() TODO: it was not working.
+                self.openPreview()
             } else {
                 self.composeBottomViewContainer.showAllFlipCreateMessage()
             }
@@ -643,15 +643,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - Internal Methods (methods to be overriden by Builder
     
-    internal func shouldShowPreviewButton() -> Bool {
+    func shouldShowPreviewButton() -> Bool {
         return true
     }
     
-    internal func canShowMyFlips() -> Bool {
+    func canShowMyFlips() -> Bool {
         return true
     }
     
-    internal func shouldShowPlusButtonInWords() -> Bool {
+    func shouldShowPlusButtonInWords() -> Bool {
         return false
     }
     

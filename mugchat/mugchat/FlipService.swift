@@ -121,6 +121,11 @@ public class FlipService: FlipsService {
     }
     
     private func uploadData(data: NSData, toUrl url: String, withFileName fileName: String, partName: String, mimeType: String, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failCallback(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
@@ -145,6 +150,12 @@ public class FlipService: FlipsService {
     }
     
     private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
+        
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            createFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)

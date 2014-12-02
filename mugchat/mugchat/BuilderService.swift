@@ -19,6 +19,11 @@ public class BuilderService: FlipsService {
     private let SUGGESTED_WORDS_URL: String = "/builderword"
     
     func getSuggestedWords(successCompletion: GetSuggestedWordsSuccessResponse, failCompletion: SuggestedWordsFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let getSuggestedWordsUrl = HOST + SUGGESTED_WORDS_URL

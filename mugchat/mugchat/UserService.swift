@@ -38,6 +38,12 @@ public class UserService: FlipsService {
     // MARK: - Sign-up
     
     func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNUP_URL
@@ -83,6 +89,11 @@ public class UserService: FlipsService {
     // MARK: - Sign-in
     
     func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNIN_URL
@@ -106,6 +117,11 @@ public class UserService: FlipsService {
     }
     
     func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FACEBOOK_SIGNIN_URL
@@ -125,12 +141,12 @@ public class UserService: FlipsService {
                     var errorText: String = ""
                     var detailsText: String = ""
                     
-                    if let errorMessage = response["error"] {
-                        errorText = errorMessage as String
+                    if let errorMessage: String = response["error"] as? String {
+                        errorText = errorMessage
                     }
                     
-                    if let detailsMessage = response["details"] {
-                        detailsText = detailsMessage as String
+                    if let detailsMessage: String = response["details"] as? String {
+                        detailsText = detailsMessage
                     }
                     
                     failure(FlipError(error: errorText, details: detailsText))
@@ -154,6 +170,11 @@ public class UserService: FlipsService {
     // MARK: Update user profile
     
     func update(username: String, password: String?, firstName: String, lastName: String, avatar: UIImage?, birthday: NSDate, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -196,6 +217,11 @@ public class UserService: FlipsService {
     // MARK: - Forgot password
     
     func forgotPassword(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + FORGOT_URL
@@ -221,6 +247,11 @@ public class UserService: FlipsService {
     // MARK: - Verify a Device
     
     func verifyDevice(phoneNumber: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
@@ -253,6 +284,11 @@ public class UserService: FlipsService {
     // MARK: - UPDATE password
     
     func updatePassword(user: User, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
@@ -280,6 +316,11 @@ public class UserService: FlipsService {
     
     
     func importFacebookFriends(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         let permissions: [String] = FBSession.activeSession().permissions as [String]
         println("[DEBUG: Facebook Permissions: \(permissions)]")
         
@@ -346,6 +387,11 @@ public class UserService: FlipsService {
     // MARK: - Upload contacts
     
     func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+
         var numbers = Array<String>()
         let userDatasource = UserDataSource()
         
