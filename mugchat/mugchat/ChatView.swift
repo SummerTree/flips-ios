@@ -172,8 +172,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             if let numberOfMessages = self.dataSource?.numberOfFlipMessages(self) as Int? {
                 var firstNotReadMessageIndex = numberOfMessages - 1
                 for (var i = 0; i < numberOfMessages; i++) {
-                    if let flipMessageId = self.dataSource?.chatView(self, flipMessageIdAtIndex: i) {
-                        var flipMessage = flipMessagaDataSource.retrieveFlipMessageById(flipMessageId)
+                    let flipMessageId = self.dataSource?.chatView(self, flipMessageIdAtIndex: i)
+                    if (flipMessageId != nil) {
+                        var flipMessage = flipMessagaDataSource.retrieveFlipMessageById(flipMessageId!)
                         if (flipMessage.notRead.boolValue) {
                             firstNotReadMessageIndex = i
                             break

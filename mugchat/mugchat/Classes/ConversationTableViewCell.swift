@@ -70,6 +70,7 @@ class ConversationTableViewCell : UITableViewCell {
         flipTimeLabel.setContentHuggingPriority(999, forAxis: .Horizontal)
         
         badgeView = CustomBadgeView()
+        badgeView.hidden = true
         
         highlightedView = UIView()
         highlightedView.userInteractionEnabled = false
