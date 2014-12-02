@@ -228,6 +228,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         return self.isPlaying
     }
     
+    
     // MARK: - PlayerViewDelegate
     
     func playerViewDidFinishPlayback(playerView: PlayerView) {
@@ -248,6 +249,13 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             isVisible = delegate!.chatTableViewCellIsVisible(self)
         }
         return isVisible
+    }
+    
+    
+    // MARK: - Memory Management
+    
+    func releaseResources() {
+        self.videoPlayerView.releaseResources()
     }
 }
 
