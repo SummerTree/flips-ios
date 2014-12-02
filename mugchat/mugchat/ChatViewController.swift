@@ -80,8 +80,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - FlipMessages Load Methods
     
     func reloadFlipMessages() {
-        flipMessageIds.removeAll(keepCapacity: false)
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
+        flipMessageIds.removeAll(keepCapacity: false)
         for flipMessage in flipMessages {
             flipMessageIds.append(flipMessage.flipMessageID)
         }
