@@ -111,7 +111,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        super.setupWhiteNavBarWithCancelButton("Contacts")
+        super.setupWhiteNavBarWithCloseButton("Contacts")
         self.navigationController?.navigationBar.alpha = 1.0
         self.navigationController?.navigationBar.translucent = false
         var textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
