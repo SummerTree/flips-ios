@@ -49,8 +49,11 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     func viewWillDisappear() {
         self.player().removeObserver(self, forKeyPath: "status")
         self.stopMovie()
+
+        let videoComposer = VideoComposer()
+        videoComposer.clearTempCache()
     }
-    
+
     func showVideoCreationError() {
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
         
@@ -62,7 +65,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
 
     func setupVideoPlayerWithFlips(flips: Array<Flip>) {
-        self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
+        self.videoPlayerView.setupPlayerWithFlips(flips, useCache: false, completion: { (player) -> Void in
             if (player.status == AVPlayerStatus.ReadyToPlay) {
                 self.playMovie()
             }

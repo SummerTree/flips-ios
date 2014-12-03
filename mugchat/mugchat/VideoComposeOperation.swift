@@ -17,13 +17,15 @@ public typealias VideoOperationCompletionBlock = (AVQueuePlayer) -> Void
 class VideoComposeOperation: NSOperation {
     
     private var flips: [Flip]!
+    private var useCache = false
     private var queueObserver: AnyObject!
     
     var completion: VideoOperationCompletionBlock?
     
-    init(flips: [Flip], queueObserver: AnyObject) {
+    init(flips: [Flip], useCache: Bool, queueObserver: AnyObject) {
         super.init()
         self.flips = flips
+        self.useCache = useCache
         self.queueObserver = queueObserver
     }
     
@@ -33,14 +35,21 @@ class VideoComposeOperation: NSOperation {
         }
      
         var localFlips: Array<Flip> = []
+        var localFlipIDs: Array<String> = []
         let moc = NSManagedObjectContext.MR_contextForCurrentThread();
-        
+
         for flip in flips {
-            localFlips.append(moc.objectWithID(flip.objectID) as Flip)
+            let localFlip = moc.objectWithID(flip.objectID) as Flip
+            localFlips.append(localFlip)
+            localFlipIDs.append(localFlip.flipID)
         }
         
         let videoComposer = VideoComposer()
         videoComposer.renderOverlays = false
+
+        if (self.useCache) {
+            videoComposer.cacheKey = "-".join(localFlipIDs).md5()
+        }
         
         if (self.cancelled) {
             return

@@ -30,6 +30,8 @@
 #define MR_ENABLE_ACTIVE_RECORD_LOGGING 1
 #import <CoreData+MagicalRecord.h>
 
+#import <CommonCrypto/CommonCrypto.h>
+
 #import "Device.h"
 #import "User.h"
 #import "Room.h"

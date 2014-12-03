@@ -57,7 +57,15 @@
     CachingService *cachingService = [CachingService sharedInstance];
     dispatch_group_t cachingGroup = dispatch_group_create();
 
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
     for (Flip *flip in flips) {
+        // If we're using cached generated videos, do not preload the asset's for the ones that are already done
+        NSURL *outputURL = [self videoPartOutputFileURLForFlip:flip];
+        if ([fileManager fileExistsAtPath:[outputURL relativePath] isDirectory:nil]) {
+            continue;
+        }
+
         if ([flip hasBackground]) {
             dispatch_group_enter(cachingGroup);
 
@@ -187,6 +195,18 @@
 
 - (void)prepareVideoAssetFromFlip:(Flip *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
 {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *outputURL = [self videoPartOutputFileURLForFlip:flip];
+    if ([fileManager fileExistsAtPath:[outputURL relativePath] isDirectory:nil]) {
+        AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:outputURL options:nil];
+
+        if (videoAsset) {
+            NSLog(@"Loading generated video from cache for flipID: %@", flip.flipID);
+            completion(YES, videoAsset);
+            return;
+        }
+    }
+
     NSURL *videoURL;
     CacheHandler *cacheHandler = [CacheHandler sharedInstance];
 
@@ -217,9 +237,7 @@
 
     AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack withText:flip.word];
 
-    NSURL *outputURL = [self tempOutputFileURL];
-
-    /// exporting
+    // exporting
     AVAssetExportSession *exportSession;
     exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
     exportSession.videoComposition = videoComposition;
@@ -243,16 +261,52 @@
     
 }
 
-- (NSURL *)outputFolderPath
+- (void)clearTempCache
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    NSURL *tempOutputFolder = [self tempOutputFolder];
+
+    if ([fileManager fileExistsAtPath:[tempOutputFolder relativePath] isDirectory:nil]) {
+        [fileManager removeItemAtURL:tempOutputFolder error:nil];
+    }
+}
+
+- (NSURL *)baseOutputFolder
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSURL *outputFolder = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
     outputFolder = [outputFolder URLByAppendingPathComponent:@"VideoComposerOutput"];
 
+    return outputFolder;
+}
+
+- (NSURL *)tempOutputFolder
+{
+    return [[self baseOutputFolder] URLByAppendingPathComponent:@"temp"];
+}
+
+- (NSURL *)cachedOutputFolder
+{
+    return [[self baseOutputFolder] URLByAppendingPathComponent:self.cacheKey];
+}
+
+- (NSURL *)outputFolderPath
+{
+    NSURL *outputFolder;
+
+    if (self.cacheKey) {
+        outputFolder = [self cachedOutputFolder];
+    } else {
+        outputFolder = [self tempOutputFolder];
+    }
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
     if (![fileManager fileExistsAtPath:[outputFolder relativePath] isDirectory:nil]) {
         [fileManager createDirectoryAtPath:[outputFolder relativePath]
-               withIntermediateDirectories:NO
+               withIntermediateDirectories:YES
                                 attributes:nil
                                      error:nil];
     }
@@ -260,19 +314,26 @@
     return outputFolder;
 }
 
-- (NSURL *)tempOutputFileURL
+- (NSURL *)videoPartOutputFileURLForFlip:(Flip *)flip
 {
     NSURL *outputFolder = [self outputFolderPath];
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
-    NSUInteger index = 0;
     NSURL *outputPath;
 
-    do {
-        index++;
-        NSString *filename = [NSString stringWithFormat:@"temp-flip-%lu.mov", (unsigned long)index];
+    if (self.cacheKey) {
+        NSString *filename = [NSString stringWithFormat:@"flip-video-%@.mov", flip.flipID];
         outputPath = [outputFolder URLByAppendingPathComponent:filename];
-    } while ([fileManager fileExistsAtPath:[outputPath relativePath] isDirectory:nil]);
+
+    } else {
+        NSUInteger index = 0;
+
+        do {
+            index++;
+            NSString *filename = [NSString stringWithFormat:@"flip-video-%lu.mov", (unsigned long)index];
+            outputPath = [outputFolder URLByAppendingPathComponent:filename];
+        } while ([fileManager fileExistsAtPath:[outputPath relativePath] isDirectory:nil]);
+    }
 
     return outputPath;
 }

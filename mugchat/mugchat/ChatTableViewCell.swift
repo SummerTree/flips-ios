@@ -178,7 +178,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     private func setupVideoPlayerWithFlips(flips: Array<Flip>) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.contentView)
         self.videoPlayerView.alpha = 0.0
-        self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
+        self.videoPlayerView.setupPlayerWithFlips(flips, useCache: true, completion: { (player) -> Void in
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.contentView)
             self.videoPlayerView.alpha = 1.0
         })

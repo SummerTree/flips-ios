@@ -89,7 +89,7 @@ class PlayerView: UIView {
         }
     }
 
-    func setupPlayerWithFlips(flips: Array<Flip>, completion: ((player: AVQueuePlayer)  -> Void)) {
+    func setupPlayerWithFlips(flips: Array<Flip>, useCache: Bool, completion: ((player: AVQueuePlayer)  -> Void)) {
         self.words = []
         for flip in flips {
             self.words.append(flip.word)
@@ -109,7 +109,7 @@ class PlayerView: UIView {
         }
         
         
-        videoComposeOperation = VideoComposeOperation(flips: flips, queueObserver: self)
+        videoComposeOperation = VideoComposeOperation(flips: flips, useCache: useCache, queueObserver: self)
         videoComposeOperation?.queuePriority = NSOperationQueuePriority.High
         videoComposeOperation?.completion = ( { player -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
