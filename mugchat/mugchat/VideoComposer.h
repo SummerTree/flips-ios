@@ -18,11 +18,14 @@
 @interface VideoComposer : NSObject
 
 @property (nonatomic) BOOL renderOverlays;
+@property (nonatomic, strong) NSString *cacheKey;
 
 - (NSURL *)videoFromFlips:(NSArray *)flips;
 - (NSURL *)videoFromFlipMessage:(FlipMessage *)flipMessage;
 - (AVAsset *)videoFromFlip:(Flip *)flip;
 
 - (NSArray *)videoPartsFromFlips:(NSArray *)flips;
+
+- (void)clearTempCache;
 
 @end
