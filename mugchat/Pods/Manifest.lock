@@ -1,11 +1,11 @@
 PODS:
   - AFNetworking (2.4.1):
-    - AFNetworking/NSURLConnection
-    - AFNetworking/NSURLSession
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-    - AFNetworking/UIKit
+    - AFNetworking/NSURLConnection (= 2.4.1)
+    - AFNetworking/NSURLSession (= 2.4.1)
+    - AFNetworking/Reachability (= 2.4.1)
+    - AFNetworking/Security (= 2.4.1)
+    - AFNetworking/Serialization (= 2.4.1)
+    - AFNetworking/UIKit (= 2.4.1)
   - AFNetworking/NSURLConnection (2.4.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
@@ -27,6 +27,7 @@ PODS:
   - Masonry (0.5.3)
   - PubNub (3.7.0)
   - RHAddressBook (1.1.1)
+  - SplunkMint-iOS (4.0.21)
 
 DEPENDENCIES:
   - AFNetworking (= 2.4.1)
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - Masonry (= 0.5.3)
   - PubNub (= 3.7)
   - RHAddressBook (= 1.1.1)
+  - SplunkMint-iOS (= 4.0.21)
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
@@ -44,5 +46,6 @@ SPEC CHECKSUMS:
   Masonry: 35368c2ca9577ca87722c12fc52c4bad9b1c1516
   PubNub: b374a88f661ff58ee3c42c5e8dc9ac52403e3954
   RHAddressBook: 0cad9d33b9494d1e28323b62e5c7afc109cc4294
+  SplunkMint-iOS: f5cb289736a4310c9326f0972b58bc55c660e67a
 
-COCOAPODS: 0.34.4
+COCOAPODS: 0.35.0
