@@ -140,7 +140,7 @@
                                                  8,
                                                  CVPixelBufferGetBytesPerRow(pxbuffer),
                                                  rgbColorSpace,
-                                                 kCGImageAlphaNoneSkipFirst);
+                                                 (CGBitmapInfo)kCGImageAlphaNoneSkipFirst);
 
     CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
     CGColorSpaceRelease(rgbColorSpace);
