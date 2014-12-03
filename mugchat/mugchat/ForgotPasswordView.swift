@@ -44,7 +44,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     }
     
     func addSubviews() {
-        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Forgot Password", showBackButton: true)
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar(LocalizedString.FORGOT_PASSWORD, showBackButton: true)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
         

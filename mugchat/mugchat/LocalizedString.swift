@@ -16,12 +16,13 @@ import Foundation
  * Alphabetical listing of reused localized strings
  */
 struct LocalizedString {
+    static let CONSECUTIVE_INCORRECT_ENTRIES = NSLocalizedString("3 incorrect entries. Check your messages for a new code", comment: "Wrong verification code message")
+    static let ERROR = NSLocalizedString("Error", comment: "Error")
+    static let FLIPBOYS_ROOM_NOT_FOUND = NSLocalizedString("Feedback room not found", comment: "Feedback room not found")
+    static let FORGOT_PASSWORD = NSLocalizedString("Forgot Password", comment: "Forgot Password")
     static let MICROPHONE_ACCESS = NSLocalizedString("Microphone Access", comment: "Microphone access title")
     static let MICROPHONE_MESSAGE = NSLocalizedString("Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.  If you do not wish to record audio, tap the \"X\" to bypass the recording.", comment: "Microphone message")
-    static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
-    static let CONSECUTIVE_INCORRECT_ENTRIES = NSLocalizedString("3 incorrect entries. Check your messages for a new code", comment: "Wrong verification code message")
-    static let OK = NSLocalizedString("OK", comment: "OK")
-    static let FLIPBOYS_ROOM_NOT_FOUND = NSLocalizedString("Feedback room not found", comment: "Feedback room not found")
-    static let ERROR = NSLocalizedString("Error", comment: "Error")
     static let NO_INTERNET_CONNECTION = NSLocalizedString("Unable to connect to server.  Please try again later", comment: "No internet connection")
+    static let OK = NSLocalizedString("OK", comment: "OK")
+    static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
 }
