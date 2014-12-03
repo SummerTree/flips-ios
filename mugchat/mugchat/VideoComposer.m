@@ -277,25 +277,6 @@
     return outputPath;
 }
 
-- (UIInterfaceOrientation)orientationForTrack:(AVAssetTrack *)videoTrack
-{
-    CGSize size = [videoTrack naturalSize];
-    CGAffineTransform transform = [videoTrack preferredTransform];
-
-    if (size.width == transform.tx && size.height == transform.ty) {
-        return UIInterfaceOrientationLandscapeRight;
-
-    } else if (transform.tx == 0 && transform.ty == 0) {
-        return UIInterfaceOrientationLandscapeLeft;
-
-    } else if (transform.tx == 0 && transform.ty == size.width) {
-        return UIInterfaceOrientationPortraitUpsideDown;
-
-    } else {
-        return UIInterfaceOrientationPortrait;
-    }
-}
-
 - (CATextLayer *)layerForText:(NSString *)text
 {
     CATextLayer *titleLayer = [CATextLayer layer];
@@ -331,21 +312,24 @@
 
 - (CALayer *)squareCroppedVideoLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
 {
-    CGSize videoSize = [self croppedVideoSize:videoTrack];
-    videoLayer.frame = CGRectMake(0, 0, videoSize.width, videoSize.height);
+    CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
+
+    videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
 
     return videoLayer;
 }
 
 - (CALayer *)orientationFixedVideoLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
 {
-    // No need to worry about other orientations while we only support portrait
-    if ([self orientationForTrack:videoTrack] == UIInterfaceOrientationLandscapeLeft) {
-        CGAffineTransform rotation = CGAffineTransformMakeRotation(-M_PI_2);
-        CGAffineTransform translateToCenter = CGAffineTransformMakeTranslation(CGRectGetWidth(videoLayer.frame), CGRectGetHeight(videoLayer.frame));
+    // NOTE: We only support portrait video capture. Other orientations will look rotated in the final result.
 
-        videoLayer.affineTransform = CGAffineTransformConcat(rotation, translateToCenter);
-    }
+    // Apply preferred transform to account for different front and back camera fixed capture orientations
+    CGAffineTransform preferred = videoTrack.preferredTransform;
+
+    // After preferred transform video is upside-down. Flip it vertically.
+    CGAffineTransform flip = CGAffineTransformMakeScale(-1, -1);
+
+    videoLayer.affineTransform = CGAffineTransformConcat(preferred, flip);
 
     return videoLayer;
 }
