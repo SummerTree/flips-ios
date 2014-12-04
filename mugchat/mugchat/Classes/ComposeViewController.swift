@@ -234,7 +234,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             } else {
                 let flipDataSource = FlipDataSource()
                 let myFlips = flipDataSource.getMyFlipsForWord(flipWord.text)
-                if (myFlips.count > 0) {
+                let stockFlips = flipDataSource.getStockFlipsForWord(flipWord.text)
+                let numberOfFlips = myFlips.count + stockFlips.count
+                
+                if (numberOfFlips > 0) {
                     self.showNewFlipWithSavedFlipsForWord(flipWord.text)
                 } else {
                     self.showNewFlipWithoutSavedFlipsForWord(flipWord.text)
@@ -303,17 +306,18 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         for flipWord in flipWords {
             let word = flipWord.text
             let myFlipsForWord = myFlipsDictionary[word]
-
-            // TODO: we need to confirm if we should show the "..." when the word only has stock flips associated.
+            let stockFlipsForWord = stockFlipsDictionary[word]
+            
+            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsDictionary!.count
             
             if (flipWord.associatedFlipId == nil) {
-                if (myFlipsForWord!.count == 0) {
+                if (numberOfFlipsForWord == 0) {
                     flipWord.state = .NewWord
                 } else {
                     flipWord.state = .NotAssociatedWithResources
                 }
             } else {
-                if (myFlipsForWord!.count == 1) {
+                if (numberOfFlipsForWord == 1) {
                     flipWord.state = .AssociatedWithoutOtherResources
                 } else {
                     flipWord.state = .AssociatedWithOtherResources

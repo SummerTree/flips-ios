@@ -58,7 +58,10 @@ class FlipsViewCell : UICollectionViewCell {
             } else {
                 let url = NSURL(string: flip.thumbnailURL)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.cellImageView.setImageWithURL(url, placeholderImage: UIImage())
+                    ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White)
+                    self.cellImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                    })
                 })
             }
         })

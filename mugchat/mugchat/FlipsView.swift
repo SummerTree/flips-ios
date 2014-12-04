@@ -11,19 +11,24 @@
 //
 
 class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-
+    
     private let MY_FLIPS_LABEL_MARGIN_TOP: CGFloat = 5.0
     private let MY_FLIPS_LABEL_MARGIN_LEFT: CGFloat = 10.0
     
-    private let MY_FLIPS_CELL_MARGIN_TOP: CGFloat = 10.0
+    private let MY_FLIPS_CELL_MARGIN_TOP: CGFloat = 5.0
     private let MY_FLIPS_CELL_MARGIN_LEFT: CGFloat = 5.0
     private let MY_FLIPS_CELL_MARGIN_RIGHT: CGFloat = 5.0
-    private let MY_FLIPS_CELL_MARGIN_BOTTOM: CGFloat = 10.0
+    private let MY_FLIPS_CELL_MARGIN_BOTTOM: CGFloat = 5.0
     
     private let MY_FLIPS_CELL_WIDTH: CGFloat = 83.5
     private let MY_FLIPS_CELL_HEIGHT: CGFloat = 83.5
     
-    private var myFlipsLabel: UILabel!
+    private let MY_FLIPS_TITLE = NSLocalizedString("My Flips", comment: "My Flips")
+    private let STOCK_FLIPS_TITLE = NSLocalizedString("Stock Flips", comment: "Stock Flips")
+    
+    private let FLIP_VIEW_CELL_REUSE_IDENTIFIER = "flipCell"
+    private let FLIP_VIEW_HEADER_REUSE_IDENTIFIER = "flipHeader"
+    
     private var addFlipButton: UIButton!
     private var myFlipsCollectionView: UICollectionView!
     
@@ -40,20 +45,12 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func addSubviews() {
-        myFlipsLabel = UILabel()
-        myFlipsLabel.numberOfLines = 1
-        myFlipsLabel.sizeToFit()
-        myFlipsLabel.text = NSLocalizedString("My Flips", comment: "My Flips")
-        myFlipsLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
-        myFlipsLabel.textColor = UIColor.plum()
-        self.addSubview(myFlipsLabel)
-        
         addFlipButton = UIButton()
         addFlipButton.addTarget(self, action: "addFlipButtonTapped:", forControlEvents: .TouchUpInside)
         addFlipButton.setImage(UIImage(named: "AddMediaButton"), forState: .Normal)
@@ -65,7 +62,8 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         myFlipsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         myFlipsCollectionView!.dataSource = self
         myFlipsCollectionView!.delegate = self
-        myFlipsCollectionView.registerClass(FlipsViewCell.self, forCellWithReuseIdentifier:"Cell");
+        myFlipsCollectionView.registerClass(FlipsViewCell.self, forCellWithReuseIdentifier:FLIP_VIEW_CELL_REUSE_IDENTIFIER);
+        myFlipsCollectionView.registerClass(FlipsHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: FLIP_VIEW_HEADER_REUSE_IDENTIFIER)
         myFlipsCollectionView!.backgroundColor = self.backgroundColor
         myFlipsCollectionView!.allowsSelection = true
         self.addSubview(myFlipsCollectionView!)
@@ -74,13 +72,8 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     }
     
     private func makeConstraints() {
-        myFlipsLabel.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_TOP)
-            make.left.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_LEFT)
-        }
-
         myFlipsCollectionView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.myFlipsLabel.mas_bottom).with().offset()(self.MY_FLIPS_LABEL_MARGIN_TOP)
+            make.top.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_TOP)
             make.left.equalTo()(self).with().offset()(self.MY_FLIPS_LABEL_MARGIN_LEFT)
             make.right.equalTo()(self).with().offset()(-self.MY_FLIPS_LABEL_MARGIN_LEFT)
             make.bottom.equalTo()(self).with().offset()(-self.MY_FLIPS_LABEL_MARGIN_TOP)
@@ -108,9 +101,10 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         if (numberOfStockFlips == nil) {
             numberOfStockFlips = 0
         }
-
+        
         return (numberOfMyFlips!, numberOfStockFlips!)
     }
+    
     
     // MARK: - UICollectionViewDataSource
     
@@ -130,7 +124,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         if (numberOfSections == 0) {
             return 1
         }
-
+        
         return numberOfSections
     }
     
@@ -149,7 +143,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as FlipsViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FLIP_VIEW_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
         
         if (indexPath.section == 0 && indexPath.row == 0) {
             cell.addSubview(addFlipButton)
@@ -159,7 +153,6 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
                     addFlipButton.removeFromSuperview()
                 }
             }
-            
             
             let numberOfFlips = self.getNumberOfFlips()
             
@@ -185,6 +178,35 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         
         return cell
     }
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        let reusableView: FlipsHeaderView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader,
+            withReuseIdentifier: FLIP_VIEW_HEADER_REUSE_IDENTIFIER,
+            forIndexPath: indexPath) as FlipsHeaderView
+        
+        if (kind == UICollectionElementKindSectionHeader) {
+            let numberOfFlips = self.getNumberOfFlips()
+            
+            if (indexPath.section == 1) {
+                reusableView.setTitle(STOCK_FLIPS_TITLE)
+            } else {
+                if (numberOfFlips.myFlips > 0) {
+                    reusableView.setTitle(MY_FLIPS_TITLE)
+                } else {
+                    reusableView.setTitle(STOCK_FLIPS_TITLE)
+                }
+            }
+        }
+        
+        return reusableView
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSizeMake(self.frame.width, 30)
+    }
+    
+    
+    // MARK: - UICollectionViewDelegate
     
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         let numberOfFlips = self.getNumberOfFlips()
@@ -217,7 +239,6 @@ protocol FlipsViewDataSource {
     func flipsView(flipsView: FlipsView, flipIdAtIndex index: Int) -> String
     func flipsView(flipsView: FlipsView, stockFlipIdAtIndex index: Int) -> String
     func flipsViewSelectedFlipId() -> String?
-    
     func flipsViewNumberOfStockFlips() -> Int
     
 }
