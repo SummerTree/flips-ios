@@ -23,7 +23,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
     private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
     
-    private let HINT_TEXT: String = "Enter your phone number below\n to reset your password"
+    private let HINT_TEXT: String = NSLocalizedString("Enter your phone number below\n to reset your password", comment: "")
     
     var navigationBar: CustomNavigationBar!
     
@@ -44,7 +44,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     }
     
     func addSubviews() {
-        navigationBar = CustomNavigationBar.CustomNormalNavigationBar("Forgot Password", showBackButton: true)
+        navigationBar = CustomNavigationBar.CustomNormalNavigationBar(LocalizedString.FORGOT_PASSWORD, showBackButton: true)
         navigationBar.delegate = self
         self.addSubview(navigationBar)
         
