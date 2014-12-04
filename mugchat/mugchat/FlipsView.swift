@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     private let MY_FLIPS_LABEL_MARGIN_TOP: CGFloat = 5.0
     private let MY_FLIPS_LABEL_MARGIN_LEFT: CGFloat = 10.0
@@ -29,8 +29,8 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     
     var flipText : FlipText!
     
-    var delegate: MyFlipsViewDelegate?
-    var dataSource: MyFlipsViewDataSource?
+    var delegate: FlipsViewDelegate?
+    var dataSource: FlipsViewDataSource?
     
     override init() {
         super.init(frame: CGRect.zeroRect)
@@ -65,7 +65,7 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         myFlipsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
         myFlipsCollectionView!.dataSource = self
         myFlipsCollectionView!.delegate = self
-        myFlipsCollectionView.registerClass(MyFlipsViewCell.self, forCellWithReuseIdentifier:"Cell");
+        myFlipsCollectionView.registerClass(FlipsViewCell.self, forCellWithReuseIdentifier:"Cell");
         myFlipsCollectionView!.backgroundColor = self.backgroundColor
         myFlipsCollectionView!.allowsSelection = true
         self.addSubview(myFlipsCollectionView!)
@@ -88,7 +88,7 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     }
     
     func addFlipButtonTapped(sender: UIButton!) {
-        delegate?.myFlipsViewDidTapAddFlip(self)
+        delegate?.flipsViewDidTapAddFlip(self)
     }
     
     
@@ -98,31 +98,88 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
         myFlipsCollectionView.reloadData()
     }
     
+    private func getNumberOfFlips() -> (myFlips: Int, stockFlips: Int) {
+        var numberOfMyFlips = self.dataSource?.flipsViewNumberOfFlips()
+        if (numberOfMyFlips == nil) {
+            numberOfMyFlips = 0
+        }
+        
+        var numberOfStockFlips = self.dataSource?.flipsViewNumberOfStockFlips()
+        if (numberOfStockFlips == nil) {
+            numberOfStockFlips = 0
+        }
+
+        return (numberOfMyFlips!, numberOfStockFlips!)
+    }
     
     // MARK: - UICollectionViewDataSource
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var numberOfFlips = self.dataSource?.myFlipsViewNumberOfFlips()
-        if (numberOfFlips == nil) {
-            numberOfFlips = 0
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        let numberOfFlips = self.getNumberOfFlips()
+        
+        var numberOfSections = 0
+        
+        if (numberOfFlips.myFlips > 0) {
+            numberOfSections++
         }
-        return numberOfFlips! + 1 //addFlipButton
+        
+        if (numberOfFlips.stockFlips > 0) {
+            numberOfSections++
+        }
+        
+        if (numberOfSections == 0) {
+            return 1
+        }
+
+        return numberOfSections
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let numberOfFlips = self.getNumberOfFlips()
+        
+        if (section == 1) {
+            return numberOfFlips.stockFlips
+        } else {
+            if (numberOfFlips.myFlips > 0) {
+                return numberOfFlips.myFlips + 1 //addFlipButton
+            } else {
+                return numberOfFlips.stockFlips + 1 //addFlipButton
+            }
+        }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as MyFlipsViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as FlipsViewCell
         
         if (indexPath.section == 0 && indexPath.row == 0) {
             cell.addSubview(addFlipButton)
         } else {
-            var flipId = dataSource?.myFlipsView(self, flipIdAtIndex: indexPath.row - 1)
+            for subview in cell.subviews {
+                if (subview as NSObject == addFlipButton) {
+                    addFlipButton.removeFromSuperview()
+                }
+            }
+            
+            
+            let numberOfFlips = self.getNumberOfFlips()
+            
+            var flipId: String!
+            if (indexPath.section == 1) {
+                flipId = dataSource?.flipsView(self, stockFlipIdAtIndex: indexPath.row)
+            } else {
+                if (numberOfFlips.myFlips > 0) {
+                    flipId = dataSource?.flipsView(self, flipIdAtIndex: indexPath.row - 1)
+                } else {
+                    flipId = dataSource?.flipsView(self, stockFlipIdAtIndex: indexPath.row - 1)
+                }
+            }
             
             let flipDataSource = FlipDataSource()
             var flip = flipDataSource.retrieveFlipWithId(flipId!)
             
-            cell.setFlip(flip)
+            cell.setFlipId(flip.flipID)
             
-            var isSelected = (flip.flipID == dataSource?.myFlipsViewSelectedFlipId())
+            var isSelected = (flip.flipID == dataSource?.flipsViewSelectedFlipId())
             cell.setSelected(isSelected)
         }
         
@@ -130,24 +187,37 @@ class MyFlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionView
     }
     
     func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        self.delegate?.myFlipsView(self, didTapAtIndex: indexPath.row - 1)
+        let numberOfFlips = self.getNumberOfFlips()
+        
+        if (indexPath.section == 1) {
+            self.delegate?.flipsView(self, didTapAtIndex: indexPath.row, fromStockFlips: true)
+        } else {
+            if (numberOfFlips.myFlips > 0) {
+                self.delegate?.flipsView(self, didTapAtIndex: indexPath.row - 1, fromStockFlips: false)
+            } else {
+                self.delegate?.flipsView(self, didTapAtIndex: indexPath.row - 1, fromStockFlips: true)
+            }
+        }
     }
 }
 
 
 // MARK: - View Delegate
 
-protocol MyFlipsViewDelegate {
+protocol FlipsViewDelegate {
     
-    func myFlipsViewDidTapAddFlip(myFlipsView: MyFlipsView!)
-    func myFlipsView(myFlipsView: MyFlipsView!, didTapAtIndex index: Int)
+    func flipsViewDidTapAddFlip(flipsView: FlipsView!)
+    func flipsView(flipsView: FlipsView!, didTapAtIndex index: Int, fromStockFlips isStockFlip: Bool)
     
 }
 
-protocol MyFlipsViewDataSource {
+protocol FlipsViewDataSource {
     
-    func myFlipsViewNumberOfFlips() -> Int
-    func myFlipsView(myFlipsView: MyFlipsView, flipIdAtIndex index: Int) -> String
-    func myFlipsViewSelectedFlipId() -> String?
+    func flipsViewNumberOfFlips() -> Int
+    func flipsView(flipsView: FlipsView, flipIdAtIndex index: Int) -> String
+    func flipsView(flipsView: FlipsView, stockFlipIdAtIndex index: Int) -> String
+    func flipsViewSelectedFlipId() -> String?
+    
+    func flipsViewNumberOfStockFlips() -> Int
     
 }

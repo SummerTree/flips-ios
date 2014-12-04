@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataSource {
+class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSource {
     
     private let GRID_BUTTON_MARGIN_LEFT: CGFloat = 37.5
     private let GALLERY_BUTTON_MARGIN_RIGHT: CGFloat = 37.5
@@ -29,7 +29,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     
     private var builderFlipCreateLabel: UILabel!
     
-    private var myFlipsView: MyFlipsView!
+    private var flipsView: FlipsView!
     
     var delegate: ComposeBottomViewContainerDelegate?
     var dataSource: ComposeBottomViewContainerDataSource?
@@ -60,11 +60,11 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         
         self.addCameraButtons()
         
-        myFlipsView = MyFlipsView()
-        myFlipsView.delegate = self
-        myFlipsView.dataSource = self
-        myFlipsView.alpha = 0.0
-        self.addSubview(myFlipsView)
+        flipsView = FlipsView()
+        flipsView.delegate = self
+        flipsView.dataSource = self
+        flipsView.alpha = 0.0
+        self.addSubview(flipsView)
     }
     
     private func addConstraints() {
@@ -77,7 +77,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         
         self.addCameraButtonsViewConstraints()
         
-        myFlipsView.mas_makeConstraints { (make) -> Void in
+        flipsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.cameraButtonsView.mas_right)
             make.top.equalTo()(self)
             make.width.equalTo()(self.cameraButtonsView)
@@ -277,7 +277,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     // MARK: - MyFlips Load Methods
     
     func reloadMyFlips() {
-        myFlipsView.reload()
+        flipsView.reload()
     }
     
     func updateGalleryButtonImage() {
@@ -292,9 +292,9 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         }
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.myFlipsView.alpha = 1.0
+            self.flipsView.alpha = 1.0
             
-            self.myFlipsView.mas_updateConstraints({ (make) -> Void in
+            self.flipsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.left.equalTo()(self)
                 make.right.equalTo()(self)
@@ -304,7 +304,7 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
             
             self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
-                make.left.equalTo()(self.myFlipsView.mas_right)
+                make.left.equalTo()(self.flipsView.mas_right)
                 make.width.equalTo()(self)
                 make.top.equalTo()(self)
                 make.height.equalTo()(self)
@@ -318,9 +318,9 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
         }
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.myFlipsView.alpha = 0.0
+            self.flipsView.alpha = 0.0
             
-            self.myFlipsView.mas_updateConstraints({ (make) -> Void in
+            self.flipsView.mas_updateConstraints({ (make) -> Void in
                 make.removeExisting = true
                 make.width.equalTo()(self)
                 make.right.equalTo()(self.mas_left)
@@ -341,31 +341,48 @@ class ComposeBottomViewContainer : UIView, MyFlipsViewDelegate, MyFlipsViewDataS
     }
     
     
-    // MARK: - MyFlipsView Delegate
+    // MARK: - FlipsView Delegate
     
-    func myFlipsViewDidTapAddFlip(myFlipsView: MyFlipsView!) {
+    func flipsViewDidTapAddFlip(flipsView: FlipsView!) {
         slideToCameraView()
     }
     
-    func myFlipsView(myFlipsView: MyFlipsView!, didTapAtIndex index: Int) {
-        let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
-        delegate?.composeBottomViewContainer(self, didTapAtFlipWithId: flipIds[index])
+    func flipsView(flipsView: FlipsView!, didTapAtIndex index: Int, fromStockFlips isStockFlip: Bool) {
+        var flipId: String!
+        if (isStockFlip) {
+            let stockFlipIds = dataSource?.composeBottomViewContainerStockFlipIdsForHighlightedWord(self) as [String]!
+            flipId = stockFlipIds[index]
+        } else {
+            let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
+            flipId = flipIds[index]
+        }
+        delegate?.composeBottomViewContainer(self, didTapAtFlipWithId: flipId)
     }
     
     
     // MARK: - MyFlipsViewDataSource
     
-    func myFlipsViewNumberOfFlips() -> Int {
+    func flipsViewNumberOfFlips() -> Int {
         let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
         return flipIds.count
     }
     
-    func myFlipsView(myFlipsView: MyFlipsView, flipIdAtIndex index: Int) -> String {
+    func flipsView(flipsView: FlipsView, flipIdAtIndex index: Int) -> String {
         let flipIds = dataSource?.composeBottomViewContainerFlipIdsForHighlightedWord(self) as [String]!
         return flipIds[index]
     }
+
+    func flipsViewNumberOfStockFlips() -> Int {
+        let stockFlipsIds = dataSource?.composeBottomViewContainerStockFlipIdsForHighlightedWord(self) as [String]!
+        return stockFlipsIds.count
+    }
+
+    func flipsView(flipsView: FlipsView, stockFlipIdAtIndex index: Int) -> String {
+        let stockFlipsIds = dataSource?.composeBottomViewContainerStockFlipIdsForHighlightedWord(self) as [String]!
+        return stockFlipsIds[index]
+    }
     
-    func myFlipsViewSelectedFlipId() -> String? {
+    func flipsViewSelectedFlipId() -> String? {
         let flipId = dataSource?.flipIdForHighlightedWord()
         return flipId
     }
@@ -393,6 +410,8 @@ protocol ComposeBottomViewContainerDelegate {
 protocol ComposeBottomViewContainerDataSource {
     
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String]
+
+    func composeBottomViewContainerStockFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String]
     
     func flipIdForHighlightedWord() -> String?
     

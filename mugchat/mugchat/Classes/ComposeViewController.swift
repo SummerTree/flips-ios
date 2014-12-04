@@ -31,6 +31,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     internal var highlightedWordIndex: Int!
     
     private var myFlipsDictionary: Dictionary<String, [String]>!
+    private var stockFlipsDictionary: Dictionary<String, [String]>!
     
     private var highlightedWordCurrentAssociatedImage: UIImage?
     
@@ -88,12 +89,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal func initFlipWords(words: [String]) {
         myFlipsDictionary = Dictionary<String, [String]>()
+        stockFlipsDictionary = Dictionary<String, [String]>()
+        
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
             var word = words[i]
             var flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NewWord)
             self.flipWords.append(flipText)
             myFlipsDictionary[word] = Array<String>()
+            stockFlipsDictionary[word] = Array<String>()
         }
     }
     
@@ -283,6 +287,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         }
         
         self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
+        self.stockFlipsDictionary = flipDataSource.getStockFlipsIdsForWords(words)
     }
     
     
@@ -298,6 +303,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         for flipWord in flipWords {
             let word = flipWord.text
             let myFlipsForWord = myFlipsDictionary[word]
+
+            // TODO: we need to confirm if we should show the "..." when the word only has stock flips associated.
             
             if (flipWord.associatedFlipId == nil) {
                 if (myFlipsForWord!.count == 0) {
@@ -528,6 +535,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
         let flipWord = flipWords[highlightedWordIndex]
         return myFlipsDictionary[flipWord.text]!
+    }
+    
+    func composeBottomViewContainerStockFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
+        let flipWord = flipWords[highlightedWordIndex]
+        return stockFlipsDictionary[flipWord.text]!
     }
     
     func flipIdForHighlightedWord() -> String? {
