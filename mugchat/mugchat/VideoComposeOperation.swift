@@ -41,7 +41,12 @@ class VideoComposeOperation: NSOperation {
         for flip in flips {
             let localFlip = moc.objectWithID(flip.objectID) as Flip
             localFlips.append(localFlip)
-            localFlipIDs.append(localFlip.flipID)
+
+            if (localFlip.isBlankFlip()) {
+                localFlipIDs.append(localFlip.word)
+            } else {
+                localFlipIDs.append(localFlip.flipID)
+            }
         }
         
         let videoComposer = VideoComposer()
