@@ -263,7 +263,7 @@
         return;
     }
 
-    AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack withText:flip.word];
+    AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack flip:flip];
 
     // exporting
     AVAssetExportSession *exportSession;
@@ -408,7 +408,7 @@
     return videoLayer;
 }
 
-- (CALayer *)orientationFixedVideoLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
+- (CALayer *)orientationFixedVideoSourceLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
 {
     // NOTE: We only support portrait video capture. Other orientations will look rotated in the final result.
 
@@ -419,6 +419,16 @@
     CGAffineTransform flip = CGAffineTransformMakeScale(-1, -1);
 
     videoLayer.affineTransform = CGAffineTransformConcat(preferred, flip);
+
+    return videoLayer;
+}
+
+- (CALayer *)orientationFixedImageSourceLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
+{
+    // NOTE: We only support portrait image capture. Other orientations will look rotated in the final result.
+
+    // Rotate 90 degrees clockwise
+    videoLayer.affineTransform = CGAffineTransformMakeRotation(-M_PI_2);
 
     return videoLayer;
 }
@@ -452,7 +462,7 @@
     return videoComposition;
 }
 
-- (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack withText:(NSString *)text
+- (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack flip:(Flip *)flip
 {
     CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
 
@@ -463,11 +473,17 @@
     CALayer *parentLayer = [self squareCroppedVideoLayer:[CALayer layer] fromTrack:videoTrack];
 
     CALayer *videoLayer = [CALayer layer];
-    videoLayer = [self orientationFixedVideoLayer:videoLayer fromTrack:videoTrack];
+
+    if ([flip isBackgroundContentTypeVideo]) {
+        videoLayer = [self orientationFixedVideoSourceLayer:videoLayer fromTrack:videoTrack];
+    } else {
+        videoLayer = [self orientationFixedImageSourceLayer:videoLayer fromTrack:videoTrack];
+    }
+
     [parentLayer addSublayer:videoLayer];
 
     if (self.renderOverlays) {
-        CATextLayer *wordLayer = [self layerForText:text];
+        CATextLayer *wordLayer = [self layerForText:flip.word];
         wordLayer.frame = CGRectMake(0, 50, croppedVideoSize.width, 50);
         [parentLayer addSublayer:wordLayer];
         [wordLayer display];
