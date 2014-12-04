@@ -108,7 +108,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
             cell = UITableViewCell(style:.Default, reuseIdentifier: CELL_IDENTIFIER)
         }
         
-        cell?.textLabel?.text = words[indexPath.row]
+        cell!.textLabel!.text = words[indexPath.row]
         
         return cell!
     }

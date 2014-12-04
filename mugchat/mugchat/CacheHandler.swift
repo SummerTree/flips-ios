@@ -215,7 +215,8 @@ public class CacheHandler : NSObject {
     // MARK: - Thumbnail Save/Load Methods
     
     func saveThumbnail(thumbnail: UIImage, forUrl url: String) {
-        self.saveData(UIImageJPEGRepresentation(thumbnail, DEFAULT_JPEG_COMPRESSION_QUALITY), forUrl: url, atDirectoryPath: thumbnailsDirectory)
+        let thumbnailPath = url.stringByAppendingPathExtension("jpg")
+        self.saveData(UIImageJPEGRepresentation(thumbnail, DEFAULT_JPEG_COMPRESSION_QUALITY), forUrl: thumbnailPath!, atDirectoryPath: thumbnailsDirectory)
     }
     
     func thumbnailForUrl(url: String) -> UIImage? {
@@ -223,7 +224,8 @@ public class CacheHandler : NSObject {
         
         let formatedUrl = self.getFormatedUrl(url)
         
-        let path = "\(thumbnailsDirectory)/\(formatedUrl)"
+        var path = "\(thumbnailsDirectory)/\(formatedUrl)"
+        path = path.stringByAppendingPathExtension("jpg")!
         
         if (fileManager.fileExistsAtPath(path)) {
             let data = fileManager.contentsAtPath(path)

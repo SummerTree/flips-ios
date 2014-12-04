@@ -28,4 +28,6 @@
 
 - (void)clearTempCache;
 
+- (UIImage *)thumbnailForVideo:(NSURL *)videoURL;
+
 @end

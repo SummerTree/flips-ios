@@ -10,6 +10,8 @@
 // the license agreement.
 //
 
+public typealias StockFlipsSuccessResponse = (JSON?) -> Void
+public typealias StockFlipsFailureResponse = (FlipError?) -> Void
 public typealias CreateFlipSuccessResponse = (Flip) -> Void
 public typealias CreateFlipFailureResponse = (FlipError?) -> Void
 private typealias UploadSuccessResponse = (String?) -> Void
@@ -21,9 +23,10 @@ public class FlipService: FlipsService {
     private let UPLOAD_BACKGROUND_RESPONSE_URL = "background_url"
     private let UPLOAD_SOUND_RESPONSE_URL = "sound_url"
     
-    let CREATE_FLIP: String = "/user/{{user_id}}/flips"
-    let UPLOAD_BACKGROUND: String = "/background"
-    let UPLOAD_SOUND: String = "/sound"
+    private let CREATE_FLIP: String = "/user/{{user_id}}/flips"
+    private let UPLOAD_BACKGROUND: String = "/background"
+    private let UPLOAD_SOUND: String = "/sound"
+    private let STOCK_FLIPS: String = "/flips/stock"
     
     let IMAGE_COMPRESSION: CGFloat = 0.3
     
@@ -82,6 +85,35 @@ public class FlipService: FlipsService {
         }) { (flipError) -> Void in
             createFlipFailCallBack(flipError)
         }
+    }
+    
+    func stockFlipsForWord(word: String, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        let stockFlipUrl = HOST + STOCK_FLIPS
+        let stockFlipParams = [
+            RequestParams.WORD : word,
+        ]
+        
+        request.GET(stockFlipUrl,
+            parameters: stockFlipParams,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(JSON(responseObject))
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(FlipError(error: response["error"] as String!, details: nil))
+                } else {
+                    failure(FlipError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
     }
     
     private func uploadBackgroundImage(image: UIImage, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
