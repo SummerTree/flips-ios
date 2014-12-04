@@ -17,30 +17,40 @@ private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
 class ActivityIndicatorHelper {
     
     class func showActivityIndicatorAtView(view: UIView, style: UIActivityIndicatorViewStyle) {
-        var activityIndicator: UIActivityIndicatorView?
-        for subview in view.subviews {
-            if (subview.tag == ACTIVITY_INDICATOR_TAG) {
-                activityIndicator = subview as? UIActivityIndicatorView
+        let block = { () -> Void in
+            var activityIndicator: UIActivityIndicatorView?
+            for subview in view.subviews {
+                if (subview.tag == ACTIVITY_INDICATOR_TAG) {
+                    activityIndicator = subview as? UIActivityIndicatorView
+                }
             }
+            
+            if (activityIndicator == nil) {
+                activityIndicator = ActivityIndicatorHelper.setupActivityIndicator(style)
+                
+                view.addSubview(activityIndicator!)
+                
+                activityIndicator!.mas_makeConstraints { (make) -> Void in
+                    make.center.equalTo()(view)
+                    make.width.equalTo()(ACTIVITY_INDICATOR_SIZE)
+                    make.height.equalTo()(ACTIVITY_INDICATOR_SIZE)
+                }
+            }
+            
+            view.userInteractionEnabled = false
+            activityIndicator!.startAnimating()
+            UIView.animateWithDuration(ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+                activityIndicator!.alpha = 0.8
+            })
         }
         
-        if (activityIndicator == nil) {
-            activityIndicator = ActivityIndicatorHelper.setupActivityIndicator(style)
-            
-            view.addSubview(activityIndicator!)
-            
-            activityIndicator!.mas_makeConstraints { (make) -> Void in
-                make.center.equalTo()(view)
-                make.width.equalTo()(ACTIVITY_INDICATOR_SIZE)
-                make.height.equalTo()(ACTIVITY_INDICATOR_SIZE)
-            }
+        if (NSThread.currentThread() == NSThread.mainThread()) {
+            block()
+        } else {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                block()
+            })
         }
-        
-        view.userInteractionEnabled = false
-        activityIndicator!.startAnimating()
-        UIView.animateWithDuration(ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-            activityIndicator!.alpha = 0.8
-        })
     }
     
     class func showActivityIndicatorAtView(view: UIView) {
