@@ -311,12 +311,12 @@ class LoginView : UIView, UITextFieldDelegate {
         forgotPasswordButton.alpha = 0.0
         forgotPasswordButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         forgotPasswordButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
-        forgotPasswordButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Forgot Password", comment: "Forgot Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
+        forgotPasswordButton.titleLabel?.textColor = .whiteColor()
         forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
         forgotPasswordButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
         forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Normal)
         forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Highlighted)
-        forgotPasswordButton.setTitle(NSLocalizedString("Forgot Password", comment: "Forgot Password"), forState: UIControlState.Normal)
+        forgotPasswordButton.setTitle(LocalizedString.FORGOT_PASSWORD, forState: UIControlState.Normal)
         self.addSubview(forgotPasswordButton)
     }
     
