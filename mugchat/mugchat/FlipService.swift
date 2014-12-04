@@ -116,6 +116,35 @@ public class FlipService: FlipsService {
         )
     }
     
+    func stockFlipsForWords(words: [String], success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        let stockFlipUrl = HOST + STOCK_FLIPS
+        let stockFlipParams = [
+            RequestParams.WORD : words,
+        ]
+        
+        request.GET(stockFlipUrl,
+            parameters: stockFlipParams,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(JSON(responseObject))
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(FlipError(error: response["error"] as String!, details: nil))
+                } else {
+                    failure(FlipError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
     private func uploadBackgroundImage(image: UIImage, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         let url = HOST + UPLOAD_BACKGROUND
         let imageData = UIImageJPEGRepresentation(image, self.IMAGE_COMPRESSION)

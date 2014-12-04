@@ -88,6 +88,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     internal func initFlipWords(words: [String]) {
+        
+        findAndSaveStockFlips(words)
+        
         myFlipsDictionary = Dictionary<String, [String]>()
         stockFlipsDictionary = Dictionary<String, [String]>()
         
@@ -99,6 +102,25 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             myFlipsDictionary[word] = Array<String>()
             stockFlipsDictionary[word] = Array<String>()
         }
+    }
+    
+    private func findAndSaveStockFlips(words: [String]) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let flipService = FlipService()
+            let flipDataSource = FlipDataSource()
+            flipService.stockFlipsForWords(words, success: { (responseAsJSON) -> Void in
+                let stockFlipsAsJSON = responseAsJSON?.array
+                println("Were found: \(countElements(stockFlipsAsJSON!)) stock flips.")
+                for stockFlip in stockFlipsAsJSON! {
+                    println("Stock mug: (stockFlips)")
+                    flipDataSource.createOrUpdateFlipsWithJson(stockFlip)
+                }
+                }, failure: { (flipError) -> Void in
+                    if (flipError != nil) {
+                        println("Error \(flipError)")
+                    }
+            })
+        })
     }
     
     
