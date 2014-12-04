@@ -14,8 +14,6 @@ import Foundation
 
 class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     
-    private let US_CODE = "+1"
-    
     var phoneNumberView: PhoneNumberView!
     var userId: String!
     
@@ -65,10 +63,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     
     // MARK: - PhoneNumberViewDelegate Methods
     
-    func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {
-        let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-        
+    func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {        
         self.showActivityIndicator()
         if (self.userId == nil) {
             UserService.sharedInstance.signUp(self.username,
@@ -78,7 +73,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
                 avatar: self.avatar,
                 birthday: self.birthday,
                 nickname: self.nickname,
-                phoneNumber: intlPhoneNumber,
+                phoneNumber: mobileNumber.intlPhoneNumber,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
                     var userEntity = user as User
