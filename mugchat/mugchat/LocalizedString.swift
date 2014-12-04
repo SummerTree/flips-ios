@@ -26,3 +26,7 @@ struct LocalizedString {
     static let OK = NSLocalizedString("OK", comment: "OK")
     static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
 }
+
+func NSLocalizedString(key: String) -> String {
+    return NSLocalizedString(key, comment: "")
+}
