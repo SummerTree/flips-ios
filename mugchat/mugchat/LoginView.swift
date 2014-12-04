@@ -529,7 +529,12 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func forgotPasswordButtonTapped(sender: AnyObject?) {
-        self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text)
+        if (emailTextField.text.isEmpty) {
+            var alertView = UIAlertView(title: NSLocalizedString("Empty Field"), message: NSLocalizedString("Please enter your email address, then touch the \(LocalizedString.FORGOT_PASSWORD) button."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+        } else {
+            self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text)
+        }
     }
     
     func signUpButtonTapped(sender: AnyObject?) {
