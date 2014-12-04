@@ -26,9 +26,13 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
     }
     
     private func verifyUserDevice(phoneNumber: String, verificationCode: String) {
-        UserService.sharedInstance.verifyDevice(phoneNumber,
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        
+        UserService.sharedInstance.verifyDevice(phoneNumber.intlPhoneNumber,
             verificationCode: verificationCode,
             success: { (device) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                
                 if (device == nil) {
                     println("Error verifying device")
                     return ()
@@ -43,6 +47,8 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
             failure: { (flipError) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                
                 if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
                     self.verificationCodeView.didEnterWrongVerificationCode()
                 } else {
