@@ -31,6 +31,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     internal var highlightedWordIndex: Int!
     
     private var myFlipsDictionary: Dictionary<String, [String]>!
+    private var stockFlipsDictionary: Dictionary<String, [String]>!
     
     private var highlightedWordCurrentAssociatedImage: UIImage?
     
@@ -88,12 +89,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal func initFlipWords(words: [String]) {
         myFlipsDictionary = Dictionary<String, [String]>()
+        stockFlipsDictionary = Dictionary<String, [String]>()
+        
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
             var word = words[i]
             var flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NewWord)
             self.flipWords.append(flipText)
             myFlipsDictionary[word] = Array<String>()
+            stockFlipsDictionary[word] = Array<String>()
         }
     }
     
@@ -230,7 +234,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             } else {
                 let flipDataSource = FlipDataSource()
                 let myFlips = flipDataSource.getMyFlipsForWord(flipWord.text)
-                if (myFlips.count > 0) {
+                let stockFlips = flipDataSource.getStockFlipsForWord(flipWord.text)
+                let numberOfFlips = myFlips.count + stockFlips.count
+                
+                if (numberOfFlips > 0) {
                     self.showNewFlipWithSavedFlipsForWord(flipWord.text)
                 } else {
                     self.showNewFlipWithoutSavedFlipsForWord(flipWord.text)
@@ -283,6 +290,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         }
         
         self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
+        self.stockFlipsDictionary = flipDataSource.getStockFlipsIdsForWords(words)
     }
     
     
@@ -298,15 +306,18 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         for flipWord in flipWords {
             let word = flipWord.text
             let myFlipsForWord = myFlipsDictionary[word]
+            let stockFlipsForWord = stockFlipsDictionary[word]
+            
+            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsDictionary!.count
             
             if (flipWord.associatedFlipId == nil) {
-                if (myFlipsForWord!.count == 0) {
+                if (numberOfFlipsForWord == 0) {
                     flipWord.state = .NewWord
                 } else {
                     flipWord.state = .NotAssociatedWithResources
                 }
             } else {
-                if (myFlipsForWord!.count == 1) {
+                if (numberOfFlipsForWord == 1) {
                     flipWord.state = .AssociatedWithoutOtherResources
                 } else {
                     flipWord.state = .AssociatedWithOtherResources
@@ -528,6 +539,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
         let flipWord = flipWords[highlightedWordIndex]
         return myFlipsDictionary[flipWord.text]!
+    }
+    
+    func composeBottomViewContainerStockFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
+        let flipWord = flipWords[highlightedWordIndex]
+        return stockFlipsDictionary[flipWord.text]!
     }
     
     func flipIdForHighlightedWord() -> String? {

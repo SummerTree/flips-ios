@@ -18,6 +18,8 @@ struct FlipJsonParams {
     static let BACKGROUND_URL = "backgroundURL"
     static let SOUND_URL = "soundURL"
     static let OWNER = "owner"
+    static let IS_PRIVATE = "isPrivate"
+    static let THUMBNAIL_URL = "thumbnailURL"
 }
 
 struct FlipAttributes {
@@ -26,6 +28,7 @@ struct FlipAttributes {
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
     static let SOUND_URL = "soundURL"
+    static let IS_PRIVATE = "isPrivate"
 }
 
 public typealias CreateFlipSuccess = (Flip) -> Void
@@ -52,6 +55,8 @@ class FlipDataSource : BaseDataSource {
         flip.word = json[FlipJsonParams.WORD].stringValue
         flip.backgroundURL = json[FlipJsonParams.BACKGROUND_URL].stringValue
         flip.soundURL = json[FlipJsonParams.SOUND_URL].stringValue
+        flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
+        flip.thumbnailURL = json[FlipJsonParams.THUMBNAIL_URL].stringValue
         
         let flipOwnerID = json[FlipJsonParams.OWNER].stringValue
         if (!flipOwnerID.isEmpty) {
@@ -162,6 +167,27 @@ class FlipDataSource : BaseDataSource {
             var flips = self.getMyFlipsForWord(word)
             for flip in flips {
                 resultDictionary[word]?.append(flip.flipID)
+            }
+        }
+        
+        return resultDictionary
+    }
+    
+    func getStockFlipsForWord(word: String) -> [Flip] {
+        return Flip.findAllWithPredicate(NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) like[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Flip]
+    }
+    
+    func getStockFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {
+        var resultDictionary = Dictionary<String, [String]>()
+        
+        if (words.count > 0) {
+            for word in words {
+                resultDictionary[word] = Array<String>()
+
+                var flips = self.getStockFlipsForWord(word)
+                for flip in flips {
+                    resultDictionary[word]?.append(flip.flipID)
+                }
             }
         }
         

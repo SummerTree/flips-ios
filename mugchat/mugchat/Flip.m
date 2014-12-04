@@ -20,11 +20,12 @@
 @dynamic backgroundContentType;
 @dynamic backgroundURL;
 @dynamic category;
-@dynamic isPrivate;
 @dynamic flipID;
+@dynamic isPrivate;
 @dynamic removed;
 @dynamic soundURL;
 @dynamic word;
+@dynamic thumbnailURL;
 @dynamic messages;
 @dynamic owner;
 
