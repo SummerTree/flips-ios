@@ -52,6 +52,34 @@
     return [NSArray arrayWithArray:messageParts];
 }
 
+- (UIImage *)thumbnailForVideo:(NSURL *)videoURL
+{
+    AVAsset *asset = [AVAsset assetWithURL:videoURL];
+    AVAssetTrack *videoTrack = [self videoTrackFromAsset:asset];
+    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+
+    CGImageRef cgImage = [imageGenerator copyCGImageAtTime:kCMTimeZero actualTime:nil error:nil];
+
+    CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
+    CGSize naturalVideoSize = videoTrack.naturalSize;
+
+    UIGraphicsBeginImageContext([self croppedVideoSize:videoTrack]);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    CGContextConcatCTM(context, videoTrack.preferredTransform);
+
+    CGFloat xOffset = (croppedVideoSize.width - naturalVideoSize.width) / 2;
+    CGFloat yOffset = (croppedVideoSize.height - naturalVideoSize.height) / 2;
+
+    CGContextDrawImage(context, CGRectMake(xOffset, yOffset, naturalVideoSize.width, naturalVideoSize.height), cgImage);
+
+    UIImage *thumbnail = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+
+    return thumbnail;
+}
+
 - (void)precacheAssetsFromFlips:(NSArray *)flips
 {
     CachingService *cachingService = [CachingService sharedInstance];

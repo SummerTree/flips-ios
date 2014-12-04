@@ -45,29 +45,40 @@ extension FlipMessage {
     
     func messageThumbnail() -> UIImage? {
         let firstFlip = self.flips.firstObject as Flip
-        return CacheHandler.sharedInstance.thumbnailForUrl(firstFlip.backgroundURL)
+        var thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(firstFlip.backgroundURL)
+
+        if (thumbnail == nil) {
+            thumbnail = self.createThumbnail()
+        }
+
+        return thumbnail
     }
     
-    func createThumbnail() {
+    func createThumbnail() -> UIImage? {
         let firstFlip = self.flips.firstObject as? Flip
 
         if (firstFlip == nil) {
-            return
+            return nil
         }
 
         let cacheHandler = CacheHandler.sharedInstance
         if (firstFlip!.isBackgroundContentTypeImage()) {
             let backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
             if (backgroundImageData != nil) {
-                cacheHandler.saveThumbnail(UIImage(data: backgroundImageData!)!, forUrl: firstFlip!.backgroundURL)
+                let thumbnailImage = UIImage(data: backgroundImageData!)
+                cacheHandler.saveThumbnail(thumbnailImage!, forUrl: firstFlip!.backgroundURL)
+                return thumbnailImage
             }
         } else if (firstFlip!.isBackgroundContentTypeVideo()) {
             let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
             if (videoPath != nil) {
                 let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!)
                 cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
+                return videoThumbnailImage
             }
         }
+
+        return nil
     }
     
     func hasAllContentDownloaded() -> Bool {

@@ -17,11 +17,10 @@ class VideoHelper {
 
     class func generateThumbImageForFile(filePath: String) -> UIImage {
         let url = NSURL(fileURLWithPath: filePath)
-        
-        let asset: AVAsset! = AVAsset.assetWithURL(url) as AVAsset
-        let imageGenerator = AVAssetImageGenerator(asset: asset)
 
-        let imageRef = imageGenerator.copyCGImageAtTime(kCMTimeZero, actualTime: nil, error: nil)
-        return UIImage(CGImage: imageRef)!
+        let videoComposer = VideoComposer()
+        let thumbnail = videoComposer.thumbnailForVideo(url)
+
+        return thumbnail;
     }
 }
