@@ -58,16 +58,21 @@
     AVAssetTrack *videoTrack = [self videoTrackFromAsset:asset];
     AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
 
-    struct CGImage *cgImage = [imageGenerator copyCGImageAtTime:kCMTimeZero actualTime:nil error:nil];
+    CGImageRef cgImage = [imageGenerator copyCGImageAtTime:kCMTimeZero actualTime:nil error:nil];
 
-    CALayer *thumbnailLayer = [self squareCroppedVideoLayer:[CALayer layer] fromTrack:videoTrack];
-    thumbnailLayer.contents = CFBridgingRelease(cgImage);
-    thumbnailLayer = [self orientationFixedVideoLayer:thumbnailLayer fromTrack:videoTrack];
+    CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
+    CGSize naturalVideoSize = videoTrack.naturalSize;
 
-    UIGraphicsBeginImageContext(thumbnailLayer.bounds.size);
+    UIGraphicsBeginImageContext([self croppedVideoSize:videoTrack]);
     CGContextRef context = UIGraphicsGetCurrentContext();
 
-    [thumbnailLayer renderInContext:context];
+    CGContextConcatCTM(context, videoTrack.preferredTransform);
+
+    CGFloat xOffset = (croppedVideoSize.width - naturalVideoSize.width) / 2;
+    CGFloat yOffset = (croppedVideoSize.height - naturalVideoSize.height) / 2;
+
+    CGContextDrawImage(context, CGRectMake(xOffset, yOffset, naturalVideoSize.width, naturalVideoSize.height), cgImage);
+
     UIImage *thumbnail = UIGraphicsGetImageFromCurrentImageContext();
 
     UIGraphicsEndImageContext();
