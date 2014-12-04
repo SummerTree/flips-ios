@@ -186,7 +186,6 @@ class FlipDataSource : BaseDataSource {
 
                 var flips = self.getStockFlipsForWord(word)
                 for flip in flips {
-                    println("flip.flipID: \(flip.flipID)")
                     resultDictionary[word]?.append(flip.flipID)
                 }
             }
