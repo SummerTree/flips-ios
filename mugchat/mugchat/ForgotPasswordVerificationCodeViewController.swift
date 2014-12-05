@@ -13,7 +13,7 @@ import UIKit
 
 class ForgotPasswordVerificationCodeViewController: VerificationCodeViewController {
 
-    init(phoneNumber: String!) {
+    init(phoneNumber: String) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
     }
@@ -22,28 +22,16 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
     // MARK: - VerificationCodeViewDelegate Methods
     
     override func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
-        self.verifyUserDevice(self.phoneNumber, verificationCode: verificationCode)
-    }
-    
-    private func verifyUserDevice(phoneNumber: String, verificationCode: String) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
-        UserService.sharedInstance.verifyDevice(phoneNumber.intlPhoneNumber,
+        UserService.sharedInstance.verify(phoneNumber.intlPhoneNumber,
             verificationCode: verificationCode,
-            success: { (device) in
+            success: { (username) in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                
-                if (device == nil) {
-                    println("Error verifying device")
-                    return ()
-                }
                 
                 self.verificationCodeView.resetVerificationCodeField()
                 
-                var userDevice: Device! = device as Device;
-                var user: User! = userDevice.user
-                
-                var newPasswordViewController = NewPasswordViewController(user: user, phoneNumber: self.phoneNumber, verificationCode: verificationCode)
+                var newPasswordViewController = NewPasswordViewController(username: username, phoneNumber: self.phoneNumber, verificationCode: verificationCode)
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
             failure: { (flipError) in

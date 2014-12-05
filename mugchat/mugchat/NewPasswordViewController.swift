@@ -16,15 +16,15 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     
     var newPasswordView: NewPasswordView!
     
-    private var user: User!
+    private var username: String!
     private var phoneNumber: String!;
     private var verificationCode: String!
     
-    init(user: User, phoneNumber: String, verificationCode: String) {
+    init(username: String, phoneNumber: String, verificationCode: String) {
         super.init(nibName: nil, bundle: nil)
-        self.user = user
-        self.verificationCode = verificationCode;
-        self.phoneNumber = phoneNumber;
+        self.username = username
+        self.verificationCode = verificationCode
+        self.phoneNumber = phoneNumber
     }
     
     required init(coder: NSCoder) {
@@ -42,13 +42,15 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     
     // MARK: - NewPasswordViewDelegate Methods
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
-        UserService.sharedInstance.updatePassword(self.user, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
-            success: { (user) -> Void in
+        UserService.sharedInstance.updatePassword(self.username, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
+            success: { () -> Void in
                 println("updatePassword success")
                 var loginViewController = LoginViewController()
                 self.navigationController?.pushViewController(loginViewController, animated: true)
             }) { (flipError) -> Void in
                 println(flipError!.error)
+                let alertView = UIAlertView(title: NSLocalizedString("Update Error"), message: flipError!.error, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
         }
     }
   
