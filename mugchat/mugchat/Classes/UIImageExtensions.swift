@@ -19,30 +19,66 @@ extension UIImage {
         return CGFloat(result)
     }
 
-    func cropImageToRect(rect: CGRect) -> UIImage {
-        var rectTransform: CGAffineTransform
+    func cropImageToRect(rect: CGRect, shouldMirror: Bool) -> UIImage {
+        var rotate: CGAffineTransform
+        var center: CGAffineTransform
+
+        var width = self.size.width
+        var height = self.size.height
+
         switch (self.imageOrientation) {
         case UIImageOrientation.Left:
-            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(self.rad(90)), 0, -self.size.height)
+            rotate = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+            center = CGAffineTransformMakeTranslation(-self.size.height, 0)
+            width = self.size.height
+            height = self.size.width
             break
         case UIImageOrientation.Right:
-            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(self.rad(-90)), -self.size.width, 0)
+            rotate = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+            center = CGAffineTransformMakeTranslation(0, -self.size.width)
+            width = self.size.height
+            height = self.size.width
             break
         case UIImageOrientation.Down:
-            rectTransform = CGAffineTransformTranslate(CGAffineTransformMakeRotation(self.rad(-180)), -self.size.width, -self.size.height)
+            rotate = CGAffineTransformMakeRotation(CGFloat(M_PI))
+            center = CGAffineTransformMakeTranslation(-self.size.height, -self.size.width)
             break
         default:
-            rectTransform = CGAffineTransformIdentity
+            rotate = CGAffineTransformIdentity
+            if (shouldMirror) {
+                center = CGAffineTransformMakeTranslation(0, -height)
+            } else {
+                center = CGAffineTransformIdentity
+            }
+            break
         }
-        
-        rectTransform = CGAffineTransformScale(rectTransform, self.scale, self.scale)
-        
-        var imageRef = CGImageCreateWithImageInRect(self.CGImage, CGRectApplyAffineTransform(rect, rectTransform));
-        var croppedImage = UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
+
+        UIGraphicsBeginImageContext(rect.size)
+
+        let context = UIGraphicsGetCurrentContext()
+
+        CGContextConcatCTM(context, rotate)
+        CGContextConcatCTM(context, center)
+
+        if (shouldMirror) {
+            let mirror = CGAffineTransformMakeScale(1.0, -1.0)
+            CGContextConcatCTM(context, mirror)
+            CGContextConcatCTM(context, center)
+        }
+
+        var xOffset = (rect.size.width - width) / 2
+        var yOffset = (rect.size.height - height) / 2
+
+        CGContextDrawImage(context, CGRectMake(xOffset, yOffset, width, height), self.CGImage)
+
+        let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        UIGraphicsEndImageContext()
+
         return croppedImage!
     }
     
-    func cropImageInCenter() -> UIImage {
+    func cropImageInCenter(shouldMirror: Bool) -> UIImage {
         var squaredRect : CGRect
         if (self.size.width > self.size.height) {
             var cropX = (self.size.width / 2) - (self.size.height / 2)
@@ -52,7 +88,7 @@ extension UIImage {
             squaredRect = CGRectMake(0, cropY, self.size.width, self.size.width)
         }
         
-        return self.cropImageToRect(squaredRect)
+        return self.cropImageToRect(squaredRect, shouldMirror: shouldMirror)
     }
     
     func resizedImageWithWidth(width: CGFloat, andHeight height: CGFloat) -> UIImage {
@@ -84,14 +120,14 @@ extension UIImage {
         var resizedImage = self.resizedImageWithWidth(screenWidth, andHeight: screenHeight)
 
         // We need the squared image to know exactly where we should crop
-        var squaredImage = resizedImage.cropImageToRect(cropRectFrameInView)
+        var squaredImage = resizedImage.cropImageToRect(cropRectFrameInView, shouldMirror: false)
 
         var avatarImageSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
         if ((resizedImage.size.width > avatarImageSize) || (resizedImage.size.height > avatarImageSize)) {
             var cropX = (resizedImage.size.width / 2) - (avatarImageSize / 2)
             var cropY = (resizedImage.size.height / 2) - (avatarImageSize / 2)
             var cropRect = CGRectMake(cropX, cropY, avatarImageSize, avatarImageSize)
-            var croppedImage = resizedImage.cropImageToRect(cropRect)
+            var croppedImage = resizedImage.cropImageToRect(cropRect, shouldMirror: false)
             
             return croppedImage
         } else {
@@ -110,7 +146,7 @@ extension UIImage {
             var cropY : CGFloat = (self.size.height / 2) - (proportionalCropSize / 2)
             var cropRect = CGRectMake( ceil(cropX), ceil(cropY), proportionalCropSize, proportionalCropSize)
             
-            return self.cropImageToRect(cropRect)
+            return self.cropImageToRect(cropRect, shouldMirror: false)
         } else {
             return self
         }

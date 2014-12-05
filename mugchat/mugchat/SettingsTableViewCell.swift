@@ -121,7 +121,7 @@ class SettingsTableViewCell: UITableViewCell {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.actionImageView, style: UIActivityIndicatorViewStyle.White)
         self.actionImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.actionImageView.image = self.actionImageView.image?.cropImageInCenter()
+                self.actionImageView.image = self.actionImageView.image?.cropImageInCenter(false)
                 self.actionImageView.layer.cornerRadius = self.actionImageView.frame.size.width / 2
                 self.actionImageView.layer.masksToBounds = true
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.actionImageView)
