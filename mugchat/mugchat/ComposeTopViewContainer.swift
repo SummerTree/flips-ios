@@ -131,22 +131,21 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
         })
     }
     
-    func showFlip(flipId: String) {
+    func showFlip(flipId: String, withWord word: String) {
         let flipDataSource = FlipDataSource()
         var flip = flipDataSource.retrieveFlipWithId(flipId)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            var image: UIImage!
             let filePath = flip.backgroundContentLocalPath()
             if (flip.isBackgroundContentTypeVideo()) {
-                image = VideoHelper.generateThumbImageForFile(filePath)
+                self.flipViewer.setWord(word)
                 self.flipViewer.setVideoURL(NSURL.fileURLWithPath(filePath)!)
             } else {
-                image = UIImage(contentsOfFile: filePath)
+                var image = UIImage(contentsOfFile: filePath)
                 if (flip.hasAudio()) {
                     self.flipViewer.setAudioURL(NSURL.fileURLWithPath(flip.soundContentLocalPath()!)!)
                 }
-                self.showImage(image, andText: flip.word)
+                self.showImage(image!, andText: word)
             }
             self.bringSubviewToFront(self.flipViewer)
         })

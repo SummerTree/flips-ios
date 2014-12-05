@@ -11,6 +11,7 @@
 //
 
 private typealias DownloadFinished = (BackgroundContentType, NSError?) -> Void
+typealias DownloadFinishedCompletion = (error: NSError?) -> Void
 
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: String = "download_finished_notification_param_flip_key"
@@ -101,35 +102,42 @@ public class Downloader : NSObject {
         downloadTask.resume()
     }
 
-    func downloadDataForFlip(flip: Flip, isTemporary: Bool = true) {
+    func downloadDataForFlip(flip: Flip, isTemporary: Bool = true, completion: DownloadFinishedCompletion? = nil) {
         dispatch_async(dispatch_queue_create("download flip queue", nil), { () -> Void in
             var group = dispatch_group_create()
             
+            let moc = NSManagedObjectContext.MR_contextForCurrentThread()
+            let localFlip = moc.objectWithID(flip.objectID) as Flip
+            
             var downloadError: NSError?
-            if (self.isValidURL(flip.backgroundURL) && (!self.downloadInProgressURLs.containsObject(flip.backgroundURL))) {
-                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(flip.backgroundURL).hasCache) {
+            if (self.isValidURL(localFlip.backgroundURL) && (!self.downloadInProgressURLs.containsObject(localFlip.backgroundURL))) {
+                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(localFlip.backgroundURL).hasCache) {
                     dispatch_group_enter(group)
-                    self.downloadDataAndCacheForUrl(flip.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                        flip.setBackgroundContentType(backgroundContentType)
+                    self.downloadDataAndCacheForUrl(localFlip.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                        localFlip.setBackgroundContentType(backgroundContentType)
                         downloadError = error
                         dispatch_group_leave(group);
-                        }, isTemporary: isTemporary)
+                    }, isTemporary: isTemporary)
                 }
             }
             
-            if (self.isValidURL(flip.soundURL) && (!self.downloadInProgressURLs.containsObject(flip.soundURL))) {
-                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(flip.soundURL).hasCache) {
+            if (self.isValidURL(localFlip.soundURL) && (!self.downloadInProgressURLs.containsObject(localFlip.soundURL))) {
+                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(localFlip.soundURL).hasCache) {
                     dispatch_group_enter(group)
-                    self.downloadDataAndCacheForUrl(flip.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
+                    self.downloadDataAndCacheForUrl(localFlip.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
                         downloadError = error
                         dispatch_group_leave(group);
-                        }, isTemporary: isTemporary)
+                    }, isTemporary: isTemporary)
                 }
             }
             
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             
-            self.sendDownloadFinishedBroadcastForFlip(flip, error: downloadError)
+            if (completion == nil) {
+                self.sendDownloadFinishedBroadcastForFlip(localFlip, error: downloadError)
+            } else {
+                completion!(error: downloadError)
+            }
         })
     }
     
