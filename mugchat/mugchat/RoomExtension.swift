@@ -14,9 +14,9 @@ extension Room {
     
     func numberOfUnreadMessages() -> Int {
         var notReadMessagesCount = 0
-        
-        for (var i = 0; i < self.flipMessagesNotRemoved().count; i++) {
-            let flipMessage = self.flipMessages[i] as FlipMessage
+        let flipMessagesNotRemoved = self.flipMessagesNotRemoved()
+        for (var i = 0; i < flipMessagesNotRemoved.count; i++) {
+            let flipMessage = flipMessagesNotRemoved[i] as FlipMessage
             
             if (flipMessage.notRead.boolValue) {
                 notReadMessagesCount++

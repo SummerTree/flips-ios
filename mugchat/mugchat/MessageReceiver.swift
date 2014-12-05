@@ -62,7 +62,8 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let downloader = Downloader.sharedInstance
         for var i = 0; i < flipMessage.flips.count; i++ {
             println("       flip #\(flipMessage.flips.objectAtIndex(i).flipID)")
-            downloader.downloadDataForFlip(flipMessage.flips.objectAtIndex(i) as Flip, isTemporary: true)
+            let flip = flipMessage.flips.objectAtIndex(i) as Flip
+            downloader.downloadDataForFlip(flip, isTemporary: true)
         }
     }
     

@@ -56,10 +56,16 @@ class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDeleg
     // MARK: - ForgotPasswordViewDelegate Methods
     
     func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        
         UserService.sharedInstance.forgotPassword(mobileNumber.intlPhoneNumber, success: { (user) -> Void in
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+            
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (flipError) -> Void in
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+            
             let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
