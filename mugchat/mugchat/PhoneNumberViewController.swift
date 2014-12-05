@@ -84,7 +84,13 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
                 }) { (flipError) -> Void in
                     self.hideActivityIndicator()
                     println("Error in the sign up [error=\(flipError!.error), details=\(flipError!.details)]")
-                    var alertView = UIAlertView(title: "SignUp Error", message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                    var detail = flipError!.error
+                    
+                    if let hasDetail = flipError!.details {
+                        detail = hasDetail
+                    }
+                    
+                    var alertView = UIAlertView(title: flipError!.error, message: detail, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
             }
         } else {
