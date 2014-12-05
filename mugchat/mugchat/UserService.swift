@@ -10,8 +10,11 @@
 // the license agreement.
 //
 
+public typealias UserServicePasswordSuccessResponse = () -> Void
+public typealias UserServiceVerifySuccessResponse = (username: String) -> Void
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
 public typealias UserServiceFailureResponse = (FlipError?) -> Void
+
 
 public class UserService: FlipsService {
     
@@ -246,7 +249,7 @@ public class UserService: FlipsService {
     
     // MARK: - Verify a Device
     
-    func verifyDevice(phoneNumber: String, verificationCode: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
+    func verify(phoneNumber: String, verificationCode: String, success: UserServiceVerifySuccessResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -261,8 +264,14 @@ public class UserService: FlipsService {
         request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let device = self.parseDeviceResponse(responseObject)
-                success(device)
+                let json = JSON(responseObject)
+                let username = json["user", "username"].stringValue
+                
+                if !username.isEmpty {
+                    success(username: username)
+                } else {
+                    failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number.")))
+                }
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
@@ -275,15 +284,10 @@ public class UserService: FlipsService {
         )
     }
     
-    private func parseDeviceResponse(response: AnyObject) -> Device? {
-        let deviceDataSource = DeviceDataSource()
-        return deviceDataSource.createEntityWithObject(response)
-    }
-    
     
     // MARK: - UPDATE password
     
-    func updatePassword(user: User, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func updatePassword(username: String, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServicePasswordSuccessResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -293,12 +297,12 @@ public class UserService: FlipsService {
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         
         let url = HOST + UPDATE_PASSWORD_URL
-        let params = [RequestParams.EMAIL : user.username, RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
+        let params = [RequestParams.EMAIL : username, RequestParams.PHONE_NUMBER : phoneNumber.intlPhoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
         
-        request.PUT(url,
+        request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                success(nil)
+                success()
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {

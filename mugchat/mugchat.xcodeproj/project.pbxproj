@@ -14,6 +14,7 @@
 		078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078D4BD81A1FC71100F24262 /* RoundImageView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
 		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
+		07B5B7691A30E59E0087AD61 /* StringPhoneNumberExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B5B7681A30E59E0087AD61 /* StringPhoneNumberExtensions.swift */; };
 		07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B011A14340C00407A28 /* ContactExtensions.swift */; };
 		07B66B2C1A147B5800407A28 /* MBContactCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B1F1A147B5800407A28 /* MBContactCollectionView.m */; };
 		07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B211A147B5800407A28 /* MBContactCollectionViewContactCell.m */; };
@@ -193,6 +194,7 @@
 		078D4BD81A1FC71100F24262 /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundImageView.swift; path = Classes/RoundImageView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
 		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
+		07B5B7681A30E59E0087AD61 /* StringPhoneNumberExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringPhoneNumberExtensions.swift; path = Classes/StringPhoneNumberExtensions.swift; sourceTree = "<group>"; };
 		07B66B011A14340C00407A28 /* ContactExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactExtensions.swift; path = Classes/ContactExtensions.swift; sourceTree = "<group>"; };
 		07B66B1E1A147B5800407A28 /* MBContactCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBContactCollectionView.h; path = Classes/MBContactCollectionView.h; sourceTree = "<group>"; };
 		07B66B1F1A147B5800407A28 /* MBContactCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBContactCollectionView.m; path = Classes/MBContactCollectionView.m; sourceTree = "<group>"; };
@@ -674,6 +676,7 @@
 				07C53DC81A11C6B40011E6A2 /* NSManagedObject+helpers.h */,
 				07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */,
 				7AB946D719DED95900779C73 /* StringExtensions.swift */,
+				07B5B7681A30E59E0087AD61 /* StringPhoneNumberExtensions.swift */,
 				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
 				708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */,
 				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
@@ -1429,6 +1432,7 @@
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* FlipsService.swift in Sources */,
+				07B5B7691A30E59E0087AD61 /* StringPhoneNumberExtensions.swift in Sources */,
 				70ABC7EA1A09376100A7085A /* SettingsTableViewCell.swift in Sources */,
 				F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,

@@ -18,8 +18,6 @@ private let INVALID_MESSAGE = NSLocalizedString("Phone number entered does not m
 
 class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDelegate, UIAlertViewDelegate {
     
-    private let US_CODE = "+1"
-    
     var forgotPasswordView: ForgotPasswordView!
     
     private var username: String!
@@ -58,10 +56,7 @@ class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDeleg
     // MARK: - ForgotPasswordViewDelegate Methods
     
     func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!) {
-        let trimmedPhoneNumber = mobileNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
-        
-        UserService.sharedInstance.forgotPassword(intlPhoneNumber, success: { (user) -> Void in
+        UserService.sharedInstance.forgotPassword(mobileNumber.intlPhoneNumber, success: { (user) -> Void in
             var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (flipError) -> Void in
