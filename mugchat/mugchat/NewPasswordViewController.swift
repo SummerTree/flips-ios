@@ -55,7 +55,20 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     }
   
     func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!) {
+        if let viewControllers = navigationController?.viewControllers as? [UIViewController] {
+            let count = viewControllers.count
+            
+            if count >= 3 {
+                let parentIndex = count - 2
+                
+                if viewControllers[parentIndex] is VerificationCodeViewController {
+                    let grandparentIndex = count - 3
+                    navigationController?.popToViewController(viewControllers[grandparentIndex], animated: true)
+                    return
+                }
+            }
+        }
+        
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
 }
