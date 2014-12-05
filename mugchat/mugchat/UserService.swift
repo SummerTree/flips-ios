@@ -73,8 +73,9 @@ public class UserService: FlipsService {
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(FlipError(error: response["error"] as String!, details: nil))
+                    let errorMessage: String? = response["error"] as String?
+                    let errorDetail: String? = response["details"] as String?
+                    failure(FlipError(error: errorMessage, details: errorDetail))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
                 }
