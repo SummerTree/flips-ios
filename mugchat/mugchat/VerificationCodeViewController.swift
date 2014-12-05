@@ -15,7 +15,6 @@ import Foundation
 class VerificationCodeViewController: FlipsViewController, VerificationCodeViewDelegate {
     
     private let PLATFORM = "ios"
-    private let US_CODE = "+1"
     let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
     
     var verificationCodeView: VerificationCodeView!
@@ -28,11 +27,9 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         self.phoneNumber = phoneNumber
         self.userId = userId
         
-        let trimmedPhoneNumber = phoneNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let intlPhoneNumber = "\(US_CODE)\(trimmedPhoneNumber)"
         let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
         
-        createDeviceForUser(userId, phoneNumber: intlPhoneNumber, platform: PLATFORM, token: token)
+        createDeviceForUser(userId, phoneNumber: phoneNumber.intlPhoneNumber, platform: PLATFORM, token: token)
     }
     
     override func loadView() {

@@ -14,6 +14,9 @@ import Foundation
 
 private let GROUP_CHAT = NSLocalizedString("Group Chat", comment: "Group Chat")
 
+private let STOCK_FLIP_DOWNLOAD_FAILED_TITLE = NSLocalizedString("Download Failed", comment: "Download Failed")
+private let STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE = NSLocalizedString("Flips failed to download content for the selected Flip. \nPlease try again.", comment: "Flips failed to download content for the selected Flip. \nPlease try again.")
+
 class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
     
     private let NO_EMPTY_FLIP_INDEX = -1
@@ -277,11 +280,12 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     private func showFlipCreatedState(flipId: String) {
+        let flipWord = self.flipWords[self.highlightedWordIndex]
+        
+        self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
         if (self.canShowMyFlips()) {
-            self.composeTopViewContainer.showFlip(flipId)
             self.composeBottomViewContainer.showMyFlips()
         } else {
-            self.composeTopViewContainer.showFlip(flipId)
             self.composeBottomViewContainer.showFlipCreateMessage()
         }
     }
@@ -330,7 +334,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             let myFlipsForWord = myFlipsDictionary[word]
             let stockFlipsForWord = stockFlipsDictionary[word]
             
-            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsDictionary!.count
+            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsForWord!.count
             
             if (flipWord.associatedFlipId == nil) {
                 if (numberOfFlipsForWord == 0) {
@@ -414,7 +418,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 composeBottomViewContainer.showCameraButtons()
             }
         case FlipState.AssociatedWithoutOtherResources, FlipState.AssociatedWithOtherResources:
-            composeTopViewContainer.showFlip(flipWord.associatedFlipId!)
+            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
             if (self.canShowMyFlips()) {
                 composeBottomViewContainer.showMyFlips()
             } else {
@@ -506,7 +510,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let flipWord = flipWords[highlightedWordIndex]
         
         if (flipWord.associatedFlipId != nil) {
-            composeTopViewContainer.showFlip(flipWord.associatedFlipId!)
+            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
         } else {
             composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
         }
@@ -535,26 +539,59 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlipWithId flipId: String) {
-        let flipWord = self.flipWords[self.highlightedWordIndex]
-        
-        if (flipWord.associatedFlipId == nil) {
-            flipWord.associatedFlipId = flipId
-            self.composeTopViewContainer.showFlip(flipId)
-        } else {
-            if (flipWord.associatedFlipId == flipId) {
-                flipWord.associatedFlipId = nil
-                self.composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let flipDataSource = FlipDataSource()
+            let selectedFlip = flipDataSource.retrieveFlipWithId(flipId)
+            
+            if (selectedFlip.isPrivate.boolValue) {
+                self.onFlipSelected(flipId)
+                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
             } else {
-                flipWord.associatedFlipId = flipId
-                self.composeTopViewContainer.showFlip(flipId)
+                let flipWord = self.flipWords[self.highlightedWordIndex]
+                if ((flipWord.associatedFlipId == nil) && (!selectedFlip.hasAllContentDownloaded())) {
+                    Downloader.sharedInstance.downloadDataForFlip(selectedFlip, isTemporary: true, completion: { (error) -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                        if (error == nil) {
+                            self.onFlipSelected(flipId)
+                        } else {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                println("Downloading stock flip(id: \(flipId)) error: \(error)")
+                                let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                alertView.show()
+                            })
+                        }
+                    })
+                } else {
+                    self.onFlipSelected(flipId)
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                }
             }
-        }
-        self.updateFlipWordsState()
-        
-        self.flipMessageWordListView.reloadWords(animated: false) // Word state can change
-        self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
+        })
     }
     
+    private func onFlipSelected(flipId: String) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let flipWord = self.flipWords[self.highlightedWordIndex]
+            
+            if (flipWord.associatedFlipId == nil) {
+                flipWord.associatedFlipId = flipId
+                self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
+            } else {
+                if (flipWord.associatedFlipId == flipId) {
+                    flipWord.associatedFlipId = nil
+                    self.composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
+                } else {
+                    flipWord.associatedFlipId = flipId
+                    self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
+                }
+            }
+            self.updateFlipWordsState()
+            
+            self.flipMessageWordListView.reloadWords(animated: false) // Word state can change
+            self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
+        })
+    }
     
     // MARK: - ComposeBottomViewContainerDataSource
     
