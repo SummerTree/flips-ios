@@ -299,7 +299,7 @@ public class UserService: FlipsService {
         let url = HOST + UPDATE_PASSWORD_URL
         let params = [RequestParams.EMAIL : username, RequestParams.PHONE_NUMBER : phoneNumber.intlPhoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
         
-        request.PUT(url,
+        request.POST(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 success()
