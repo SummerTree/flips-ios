@@ -43,6 +43,9 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                     println("Device code verification error: " + flipError!.error!)
                     self.verificationCodeView.resetVerificationCodeField()
                     self.verificationCodeView.focusKeyboardOnCodeField()
+                    
+                    let alertView = UIAlertView(title: NSLocalizedString("Verification Error"), message: flipError!.error, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
                 }
             })
     }
