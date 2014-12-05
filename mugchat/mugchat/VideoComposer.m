@@ -366,18 +366,6 @@
     return outputPath;
 }
 
-- (CATextLayer *)layerForText:(NSString *)text
-{
-    CATextLayer *titleLayer = [CATextLayer layer];
-    titleLayer.string = text;
-    titleLayer.foregroundColor = [[UIColor whiteColor] CGColor];
-    titleLayer.shadowOpacity = 0.5;
-    titleLayer.alignmentMode = kCAAlignmentCenter;
-    titleLayer.font = CGFontCreateWithFontName((CFStringRef)@"AvenirNext-Bold");
-    titleLayer.fontSize = 32.0;
-    return titleLayer;
-}
-
 - (AVAssetTrack *)videoTrackFromAsset:(AVAsset *)asset
 {
     return [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
@@ -399,67 +387,27 @@
 
 #pragma mark - Video manipulation
 
-- (CALayer *)squareCroppedVideoLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
+- (CGAffineTransform)transformForVideoSource:(AVAssetTrack *)videoTrack
 {
     CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
 
-    videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
+    CGSize naturalVideoSize = videoTrack.naturalSize;
 
-    return videoLayer;
-}
-
-- (CALayer *)orientationFixedVideoSourceLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
-{
-    // NOTE: We only support portrait video capture. Other orientations will look rotated in the final result.
+    CGFloat xOffset = (croppedVideoSize.width - naturalVideoSize.width) / 2;
+    CGFloat yOffset = (croppedVideoSize.height - naturalVideoSize.height) / 2;
 
     // Apply preferred transform to account for different front and back camera fixed capture orientations
     CGAffineTransform preferred = videoTrack.preferredTransform;
 
-    // After preferred transform video is upside-down. Flip it vertically.
-    CGAffineTransform flip = CGAffineTransformMakeScale(-1, -1);
+    // Crop to the center of the video
+    CGAffineTransform centerCrop = CGAffineTransformMakeTranslation(yOffset, xOffset);
 
-    videoLayer.affineTransform = CGAffineTransformConcat(preferred, flip);
-
-    return videoLayer;
+    return CGAffineTransformConcat(preferred, centerCrop);
 }
 
-- (CALayer *)orientationFixedImageSourceLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
+- (CGAffineTransform)transformForImageSource
 {
-    // NOTE: We only support portrait image capture. Other orientations will look rotated in the final result.
-
-    // Rotate 90 degrees clockwise
-    videoLayer.affineTransform = CGAffineTransformMakeRotation(-M_PI_2);
-
-    return videoLayer;
-}
-
-- (AVMutableVideoComposition *)videoCompositionFromImage:(UIImage *)image withText:(NSString *)text
-{
-    CGSize compositionSize = image.size;
-
-    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoComposition];
-    videoComposition.renderSize = compositionSize;
-    videoComposition.frameDuration = CMTimeMake(1, 30);
-
-
-    CALayer *imageLayer = [CALayer layer];
-    imageLayer.contents = CFBridgingRelease(image.CGImage);
-    imageLayer.frame = CGRectMake(0, 0, compositionSize.width, compositionSize.height);
-
-    CATextLayer *wordLayer = [self layerForText:text];
-    wordLayer.frame = CGRectMake(0, 50, compositionSize.width, 50);
-
-    [imageLayer addSublayer:wordLayer];
-    [wordLayer display];
-
-    videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithAdditionalLayer:imageLayer asTrackID:kCMPersistentTrackID_Invalid];
-
-    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMake(30, 30));
-
-    videoComposition.instructions = @[instruction];
-
-    return videoComposition;
+    return CGAffineTransformIdentity;
 }
 
 - (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack flip:(Flip *)flip
@@ -470,32 +418,20 @@
     videoComposition.renderSize = croppedVideoSize;
     videoComposition.frameDuration = CMTimeMake(1, 30);
 
-    CALayer *parentLayer = [self squareCroppedVideoLayer:[CALayer layer] fromTrack:videoTrack];
-
-    CALayer *videoLayer = [CALayer layer];
-
-    if ([flip isBackgroundContentTypeVideo]) {
-        videoLayer = [self orientationFixedVideoSourceLayer:videoLayer fromTrack:videoTrack];
-    } else {
-        videoLayer = [self orientationFixedImageSourceLayer:videoLayer fromTrack:videoTrack];
-    }
-
-    [parentLayer addSublayer:videoLayer];
-
-    if (self.renderOverlays) {
-        CATextLayer *wordLayer = [self layerForText:flip.word];
-        wordLayer.frame = CGRectMake(0, 50, croppedVideoSize.width, 50);
-        [parentLayer addSublayer:wordLayer];
-        [wordLayer display];
-    }
-
-    videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithPostProcessingAsVideoLayer:videoLayer inLayer:parentLayer];
-    videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
-
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     instruction.timeRange = CMTimeRangeMake(kCMTimeZero, videoTrack.asset.duration);
 
     AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+
+    CGAffineTransform transform;
+    if ([flip isBackgroundContentTypeVideo]) {
+        transform = [self transformForVideoSource:videoTrack];
+    } else {
+        transform = [self transformForImageSource];
+    }
+
+    [layerInstruction setTransform:transform atTime:kCMTimeZero];
+
     instruction.layerInstructions = @[layerInstruction];
     videoComposition.instructions = @[instruction];
 

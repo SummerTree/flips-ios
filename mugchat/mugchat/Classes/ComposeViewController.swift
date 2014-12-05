@@ -657,7 +657,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        self.highlightedWordCurrentAssociatedImage = image.cropImageInCenter()
+        self.highlightedWordCurrentAssociatedImage = image.cropImageInCenter(true)
         
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)
         composeBottomViewContainer.showAudioRecordButton()

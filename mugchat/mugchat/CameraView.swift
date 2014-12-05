@@ -528,13 +528,15 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 if (imageDataSampleBuffer != nil) {
                     var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     var image = UIImage(data: imageData)
-                    
-                    var squaredImage = image!.cropImageInCenter()
-                    
+
+                    var squaredImage: UIImage
+
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
-                        // We need to flip the image captured by the front camera
-                        squaredImage = UIImage(CGImage: squaredImage.CGImage, scale: squaredImage.scale, orientation: UIImageOrientation.LeftMirrored)!
+                        squaredImage = image!.cropImageInCenter(false)
+                    } else {
+                        squaredImage = image!.cropImageInCenter(true)
                     }
+
                     success(squaredImage)
                 } else {
                     fail(error)
