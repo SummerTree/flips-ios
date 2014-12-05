@@ -52,7 +52,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     func viewDidAppear() {
         passwordField.becomeFirstResponder()
-        updatePasswordFieldEnabled(passwordField.text)
     }
     
     func addSubviews() {
@@ -174,10 +173,6 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         super.updateConstraints()
     }
     
-    func updatePasswordFieldEnabled(text: String!) {
-        passwordField.enabled = text != nil && !text.isEmpty
-    }
-    
     
     // MARK: - Notifications
     func keyboardOnScreen(notification: NSNotification) {
@@ -233,9 +228,8 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     // MARK: - UITextFieldDelegate
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let newText = (textField.text as NSString).stringByReplacingCharactersInRange(range, withString: string)
-        updatePasswordFieldEnabled(newText)
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        didTapDoneButton()
         return true
     }
     
