@@ -142,6 +142,11 @@ class FlipDataSource : BaseDataSource {
         return flip!
     }
     
+    func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
+        flip.setBackgroundContentType(contentType)
+        self.save()
+    }
+    
     func getMyFlips() -> [Flip] {
         return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: true, withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))")) as [Flip]
     }

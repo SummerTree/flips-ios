@@ -187,7 +187,11 @@ class ConversationTableViewCell : UITableViewCell {
         }
 
         if (flipMessage != nil) {
-            let messageThumbnailImage = flipMessage!.messageThumbnail()?
+            var messageThumbnailImage = flipMessage!.messageThumbnail()?
+            if (messageThumbnailImage == nil) {
+                messageThumbnailImage = flipMessage?.createThumbnail()
+            }
+            
             let photoURL = NSURL(string: flipMessage!.from.photoURL)
             let isMessageNotRead = flipMessage!.notRead.boolValue
             let messagePhrase = flipMessage!.messagePhrase()
