@@ -109,38 +109,6 @@ public class DeviceService: FlipsService {
     }
     
     
-    // MARK: - Resend Verification Code to Device
-    
-    func resendVerificationCode(userId: String, deviceId: String, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
-        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
-            return
-        }
-
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        var resendURL = RESEND_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        resendURL = resendURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let url = HOST + resendURL
-        
-        request.POST(url,
-            parameters: nil,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let device = self.parseDeviceResponse(responseObject)
-                success(device)
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["error"] as String?))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
-                }
-            }
-        )
-    }
-    
-    
     // MARK: - Data Structures
     
     struct RequestParams {
