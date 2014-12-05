@@ -366,18 +366,6 @@
     return outputPath;
 }
 
-- (CATextLayer *)layerForText:(NSString *)text
-{
-    CATextLayer *titleLayer = [CATextLayer layer];
-    titleLayer.string = text;
-    titleLayer.foregroundColor = [[UIColor whiteColor] CGColor];
-    titleLayer.shadowOpacity = 0.5;
-    titleLayer.alignmentMode = kCAAlignmentCenter;
-    titleLayer.font = CGFontCreateWithFontName((CFStringRef)@"AvenirNext-Bold");
-    titleLayer.fontSize = 32.0;
-    return titleLayer;
-}
-
 - (AVAssetTrack *)videoTrackFromAsset:(AVAsset *)asset
 {
     return [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
@@ -398,15 +386,6 @@
 
 
 #pragma mark - Video manipulation
-
-- (CALayer *)squareCroppedVideoLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
-{
-    CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
-
-    videoLayer.frame = CGRectMake(0, 0, croppedVideoSize.width, croppedVideoSize.height);
-
-    return videoLayer;
-}
 
 - (CGAffineTransform)transformForVideoSource:(AVAssetTrack *)videoTrack
 {
@@ -429,60 +408,6 @@
 - (CGAffineTransform)transformForImageSource
 {
     return CGAffineTransformIdentity;
-}
-
-- (CALayer *)orientationFixedVideoSourceLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
-{
-    // NOTE: We only support portrait video capture. Other orientations will look rotated in the final result.
-
-    // Apply preferred transform to account for different front and back camera fixed capture orientations
-    CGAffineTransform preferred = videoTrack.preferredTransform;
-
-    // After preferred transform video is upside-down. Flip it vertically.
-    CGAffineTransform flip = CGAffineTransformMakeScale(-1, -1);
-
-    videoLayer.affineTransform = CGAffineTransformConcat(preferred, flip);
-
-    return videoLayer;
-}
-
-- (CALayer *)orientationFixedImageSourceLayer:(CALayer *)videoLayer fromTrack:(AVAssetTrack *)videoTrack
-{
-    // NOTE: We only support portrait image capture. Other orientations will look rotated in the final result.
-
-    // Rotate 90 degrees clockwise
-    videoLayer.affineTransform = CGAffineTransformMakeRotation(-M_PI_2);
-
-    return videoLayer;
-}
-
-- (AVMutableVideoComposition *)videoCompositionFromImage:(UIImage *)image withText:(NSString *)text
-{
-    CGSize compositionSize = image.size;
-
-    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoComposition];
-    videoComposition.renderSize = compositionSize;
-    videoComposition.frameDuration = CMTimeMake(1, 30);
-
-
-    CALayer *imageLayer = [CALayer layer];
-    imageLayer.contents = CFBridgingRelease(image.CGImage);
-    imageLayer.frame = CGRectMake(0, 0, compositionSize.width, compositionSize.height);
-
-    CATextLayer *wordLayer = [self layerForText:text];
-    wordLayer.frame = CGRectMake(0, 50, compositionSize.width, 50);
-
-    [imageLayer addSublayer:wordLayer];
-    [wordLayer display];
-
-    videoComposition.animationTool = [AVVideoCompositionCoreAnimationTool videoCompositionCoreAnimationToolWithAdditionalLayer:imageLayer asTrackID:kCMPersistentTrackID_Invalid];
-
-    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMake(30, 30));
-
-    videoComposition.instructions = @[instruction];
-
-    return videoComposition;
 }
 
 - (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack flip:(Flip *)flip
