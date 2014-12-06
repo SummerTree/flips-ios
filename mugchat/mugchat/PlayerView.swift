@@ -16,10 +16,17 @@ private let _operationQueue = NSOperationQueue()
 
 class PlayerView: UIView {
 
-    var playing = false
-    private var wordLabel: UILabel!
+    var isPlaying = false
+    var loadPlayerOnInit = false
+    var useCache = true
+
     private var words: Array<String>!
-    
+    private var flips: Array<Flip>!
+
+    private var wordLabel: UILabel!
+    private var thumbnailView: UIImageView!
+    private var playButtonView: UIImageView!
+
     var delegate: PlayerViewDelegate?
     
     private var videoComposeOperation: VideoComposeOperation?
@@ -52,14 +59,23 @@ class PlayerView: UIView {
     }
 
     func play() {
-        let playerItem: FlipPlayerItem = self.player().currentItem as FlipPlayerItem
-        self.setWord(self.words[playerItem.order])
-        self.playing = true
-        self.player().volume = 1.0
-        self.player().play()
+        self.preparePlayer { (player) -> Void in
+            self.thumbnailView.hidden = true
+            self.playButtonView.hidden = true
+
+            let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
+            self.setWord(self.words[playerItem.order])
+            self.isPlaying = true
+            player!.volume = 1.0
+            player!.play()
+        }
     }
     
     private func fadeOutVolume() {
+        if (!self.hasPlayer()) {
+            return
+        }
+
         if (self.player().volume > 0) {
             if (self.player().volume <= 0.2) {
                 self.player().volume = 0.0
@@ -81,48 +97,42 @@ class PlayerView: UIView {
     }
 
     func pause() {
-        if (self.playing) {
-            self.playing = false
+        if (self.isPlaying) {
+            self.isPlaying = false
+            self.playButtonView.hidden = false
+
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.fadeOutVolume()
             })
         }
     }
 
-    func setupPlayerWithFlips(flips: Array<Flip>, useCache: Bool, completion: ((player: AVQueuePlayer)  -> Void)) {
+    func pauseResume() {
+        if (self.isPlaying) {
+            self.pause()
+        } else {
+            self.play()
+        }
+    }
+
+    func setupPlayerWithFlips(flips: Array<Flip>, completion: ((player: AVQueuePlayer?)  -> Void)) {
+        self.flips = flips
         self.words = []
+        let layer = self.layer as AVPlayerLayer
+        layer.player = nil
+        self.isPlaying = false
+
         for flip in flips {
             self.words.append(flip.word)
         }
-        
-        weak var weakSelf : PlayerView? = self
-        
-        if (videoComposeOperation != nil) {
-            videoComposeOperation?.cancel()
+
+        self.showThumbnail()
+
+        if (self.loadPlayerOnInit) {
+            self.preparePlayer(completion)
+        } else {
+            completion(player: nil)
         }
-        
-        // Reduce others operations' priority
-        for (var i = 0; i < PlayerView.videoSerialOperationQueue.operationCount; i++) {
-            if let operation = PlayerView.videoSerialOperationQueue.operations[i] as? NSOperation {
-                operation.queuePriority = NSOperationQueuePriority.Low
-            }
-        }
-        
-        
-        videoComposeOperation = VideoComposeOperation(flips: flips, useCache: useCache, queueObserver: self)
-        videoComposeOperation?.queuePriority = NSOperationQueuePriority.High
-        videoComposeOperation?.completion = ( { player -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                weakSelf?.setPlayer(player)
-                
-                if (weakSelf != nil) {
-                    weakSelf!.setWord(weakSelf!.words.first!)
-                }
-                completion(player: player)
-            })
-        })
-        
-        PlayerView.videoSerialOperationQueue.addOperation(videoComposeOperation!)
     }
 
     func playerItemWithVideoAsset(videoAsset: AVAsset) -> FlipPlayerItem {
@@ -150,7 +160,7 @@ class PlayerView: UIView {
         }
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(pauseGap)), dispatch_get_main_queue()) { () -> Void in
-			if self.playing {
+			if self.isPlaying {
             	self.setWord(self.words[wordIndex])
 
                 if (self.words.count > 1) {
@@ -167,8 +177,60 @@ class PlayerView: UIView {
         }
     }
 
+    private func hasPlayer() -> Bool {
+        let layer = self.layer as AVPlayerLayer
+        return layer.player != nil
+    }
+
+    private func preparePlayer(completion: ((player: AVQueuePlayer?)  -> Void)) {
+        if (self.hasPlayer()) {
+            completion(player: self.player() as? AVQueuePlayer)
+            return;
+        }
+
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self)
+
+        weak var weakSelf : PlayerView? = self
+
+        if (videoComposeOperation != nil) {
+            videoComposeOperation?.cancel()
+        }
+
+        // Reduce others operations' priority
+        for (var i = 0; i < PlayerView.videoSerialOperationQueue.operationCount; i++) {
+            if let operation = PlayerView.videoSerialOperationQueue.operations[i] as? NSOperation {
+                operation.queuePriority = NSOperationQueuePriority.Low
+            }
+        }
+
+        videoComposeOperation = VideoComposeOperation(flips: flips, useCache: self.useCache, queueObserver: self)
+        videoComposeOperation?.queuePriority = NSOperationQueuePriority.High
+        videoComposeOperation?.completion = ( { player -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                weakSelf?.setPlayer(player)
+
+                if (weakSelf != nil) {
+                    weakSelf!.setWord(weakSelf!.words.first!)
+                }
+
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+                completion(player: player)
+            })
+        })
+
+        PlayerView.videoSerialOperationQueue.addOperation(videoComposeOperation!)
+    }
+
+
+    // MARK - View lifetime
+
     override func layoutSubviews() {
         if (self.wordLabel == nil) {
+            self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
+
+            self.thumbnailView = UIImageView()
+            self.addSubview(self.thumbnailView)
+
             var gradientLayer = CALayer()
             gradientLayer.contents = UIImage(named: "Filter_Photo")?.CGImage
             gradientLayer.frame = self.layer.bounds
@@ -176,13 +238,51 @@ class PlayerView: UIView {
 
             self.wordLabel = UILabel.flipWordLabel()
             self.wordLabel.textAlignment = NSTextAlignment.Center
-
             self.addSubview(self.wordLabel)
 
+            self.playButtonView = UIImageView()
+            self.playButtonView.alpha = 0.6
+            self.playButtonView.contentMode = UIViewContentMode.Center
+            self.playButtonView.image = UIImage(named: "PlayButton")
+            self.addSubview(self.playButtonView)
+
             self.makeConstraints()
+
+            self.showThumbnail()
         }
         
         super.layoutSubviews()
+    }
+
+    private func firstThumbnail() -> UIImage {
+        // Get the first non-blank flip
+        var thumbnailFlip: Flip?
+        for flip in self.flips {
+            if (!flip.isBlankFlip()) {
+                thumbnailFlip = flip
+                break;
+            }
+        }
+
+        var thumbnailImage: UIImage?
+
+        // Only blank flips?
+        if (thumbnailFlip == nil) {
+            thumbnailImage = UIImage.emptyFlipImage()
+        } else {
+            thumbnailImage = CacheHandler.sharedInstance.thumbnailForUrl(thumbnailFlip!.backgroundURL)
+        }
+
+        return thumbnailImage!
+    }
+
+    private func showThumbnail() {
+        if (self.thumbnailView != nil) {
+            let thumbnailImage = self.firstThumbnail()
+            self.thumbnailView.image = thumbnailImage
+            self.thumbnailView.hidden = false
+            self.setWord(self.words.first!)
+        }
     }
 
     private func makeConstraints() {
@@ -191,8 +291,19 @@ class PlayerView: UIView {
             make.bottom.equalTo()(self).with().offset()(FLIP_WORD_LABEL_MARGIN_BOTTOM)
             make.centerX.equalTo()(self)
         }
+
+        self.thumbnailView.mas_makeConstraints({ (make) -> Void in
+            make.width.equalTo()(self)
+            make.height.equalTo()(self)
+            make.center.equalTo()(self)
+        })
+        self.playButtonView.mas_makeConstraints({ (make) -> Void in
+            make.width.equalTo()(self.thumbnailView)
+            make.height.equalTo()(self.thumbnailView)
+            make.center.equalTo()(self.thumbnailView)
+        })
     }
-    
+
     func releaseResources() {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         
