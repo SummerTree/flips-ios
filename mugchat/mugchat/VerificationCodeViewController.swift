@@ -68,7 +68,17 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
     func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
         view.resetVerificationCodeField()
         view.focusKeyboardOnCodeField()
-        self.resendVerificationCode(userId, deviceId: DeviceHelper.sharedInstance.retrieveDeviceId()!)
+        
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        
+        UserService.sharedInstance.forgotPassword(phoneNumber.intlPhoneNumber, success: { (user) -> Void in
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+            }) { (flipError) -> Void in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                
+                let alertView = UIAlertView(title: NSLocalizedString("Verification Error"), message: flipError?.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+        }
     }
     
     
@@ -89,23 +99,6 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
             failure: { (flipError) in
                 println("Error trying to register device: " + flipError!.error!)
         })
-    }
-    
-    private func resendVerificationCode(userId: String, deviceId: String) {
-        DeviceService.sharedInstance.resendVerificationCode(userId,
-            deviceId: deviceId,
-            success: { (device) in
-                if (device == nil) {
-                    println("Error: Verification Code was not resent")
-                    return ()
-                }
-                let verificationCodeView = self.view as VerificationCodeView
-                verificationCodeView.resetVerificationCodeField()
-                verificationCodeView.focusKeyboardOnCodeField()
-            },
-            failure: { (flipError) in
-                println("Error trying to resend verification code to device: " + flipError!.error!)
-            })
     }
     
     private func verifyDevice(userId: String, deviceId: String, verificationCode: String) {

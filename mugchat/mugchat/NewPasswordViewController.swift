@@ -39,6 +39,10 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
         self.view = newPasswordView
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        newPasswordView.viewDidAppear()
+}
     
     // MARK: - NewPasswordViewDelegate Methods
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
