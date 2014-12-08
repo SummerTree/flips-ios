@@ -22,8 +22,6 @@ public typealias CapturePictureFail = (NSError?) -> Void
 
 class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
-    private let CAMERA_ERROR = NSLocalizedString("Camera Error")
-    private let CAMERA_ERROR_MESSAGE = NSLocalizedString("Unable to find a camera")
     private let DEVICE_AUTHORIZED_KEY_PATH = "sessionRunningAndDeviceAuthorized"
     private let CAPTURING_STILL_IMAGE_KEY_PATH = "stillImageOutput.capturingStillImage"
     private let RECORDING_KEY_PATH = "movieFileOutput.recording"
@@ -63,7 +61,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     // Utilities
     var backgroundRecordingId: UIBackgroundTaskIdentifier!
-    private var deviceAuthorized: Bool = false
+    private var deviceAuthorized: Bool!
     private var sessionRunningAndDeviceAuthorized: Bool!
     var lockInterfaceRotation: Bool!
     var runtimeErrorHandlingObserver: AnyObject!
@@ -257,13 +255,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         }
     }
     
-    private func showAlert(title: String, message: String) {
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-            alertView.show()
-        }
-    }
-    
     private func initCamera() {
         self.session = AVCaptureSession()
         
@@ -278,31 +269,19 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             
             var error: NSError?
             
-            var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front)
-            
-            if (videoDevice == nil) {
-                self.showAlert(self.CAMERA_ERROR, message: NSLocalizedString("Unable to find a camera"))
-                self.activityIndicator.stopAnimating()
-                return;
-            }
-            
-            var deviceInput: AVCaptureDeviceInput! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as? AVCaptureDeviceInput
-            
-            if (deviceInput == nil || error != nil) {
-                self.toggleCameraButton.enabled = false
-                
-                println("TakePicture error: \(error)")
-                self.showAlert(self.CAMERA_ERROR, message: error?.localizedDescription ?? self.CAMERA_ERROR_MESSAGE)
-                self.activityIndicator.stopAnimating()
-                return
-            }
+            var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front) as AVCaptureDevice
+            var deviceInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as AVCaptureDeviceInput
             
             self.flashMode = AVCaptureFlashMode.Auto
             CameraView.setFlashMode(self.flashMode, forDevice: videoDevice)
             
-            if (self.session.canAddInput(deviceInput)) {
-                self.session.addInput(deviceInput)
-                self.videoDeviceInput = deviceInput
+            if (error != nil) {
+                println("TakePicture error: \(error)")
+            }
+            
+            if (self.session.canAddInput(deviceInput as AVCaptureInput)) {
+                self.session.addInput(deviceInput as AVCaptureInput)
+                self.videoDeviceInput = deviceInput as AVCaptureDeviceInput
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     // Why are we dispatching this to the main queue?
                     // Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView can only be manipulated on main thread.
@@ -360,9 +339,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
             self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: RecordingContext)
             
-            if let deviceInput = self.videoDeviceInput {
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
-            }
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
             
             weak var weakSelf = self
             self.runtimeErrorHandlingObserver = NSNotificationCenter.defaultCenter().addObserverForName(AVCaptureSessionRuntimeErrorNotification, object: self.session, queue: nil, usingBlock: { (notification) -> Void in
@@ -383,11 +360,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.session.stopRunning()
             
             if (self.observersRegistered!) {
-                
-                if let deviceInput = self.videoDeviceInput {
-                    NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
-                }
-                
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput.device)
                 NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
                 
                 self.removeObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, context: SessionRunningAndDeviceAuthorizedContext)
@@ -452,68 +425,67 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func toggleCameraButtonTapped() {
         self.delegate?.cameraView(self, cameraAvailable: false)
         self.toggleCameraButton.enabled = false
-        
+
         dispatch_async(self.sessionQueue, { () -> Void in
-            if let currentVideoDevice = self.videoDeviceInput?.device {
-                var preferredPosition = AVCaptureDevicePosition.Unspecified
-                var currentPosition = currentVideoDevice.position
-                
-                var flashEnabled = false
-                switch currentPosition {
-                case AVCaptureDevicePosition.Front:
-                    preferredPosition = AVCaptureDevicePosition.Back
-                    flashEnabled = true
-                    break
-                default:
-                    preferredPosition = AVCaptureDevicePosition.Front
-                    break
-                }
-                
-                var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: preferredPosition)
-                var deviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: nil)
-                
-                self.session.beginConfiguration()
-                self.session.removeInput(self.videoDeviceInput)
-                if (self.session.canAddInput(deviceInput as AVCaptureInput)) {
-                    NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: currentVideoDevice)
-                    
-                    CameraView.setFlashMode(self.flashMode, forDevice: videoDevice)
-                    
-                    NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: videoDevice)
-                    
-                    self.videoDeviceInput = deviceInput as AVCaptureDeviceInput
-                    self.session.addInput(self.videoDeviceInput)
-                } else {
-                    self.session.addInput(self.videoDeviceInput)
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if (self.showingFrontCamera) {
-                        UIView.transitionFromView(self.frontCameraButtonView, toView: self.backCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromRight, completion: { (finished) -> Void in
-                            self.frontCameraButtonView.alpha = 0
-                            self.backCameraButtonView.alpha = 1
-                            self.bringButtonsToFront()
-                        })
-                    } else {
-                        UIView.transitionFromView(self.backCameraButtonView, toView: self.frontCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromLeft, completion: { (finished) -> Void in
-                            self.frontCameraButtonView.alpha = 1
-                            self.backCameraButtonView.alpha = 0
-                            self.bringButtonsToFront()
-                        })
-                    }
-                    self.showingFrontCamera = !self.showingFrontCamera
-                })
-                
-                self.session.commitConfiguration()
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.flashButton.enabled = flashEnabled
-                    self.flashLabel.hidden = !flashEnabled
-                    
-                    self.delegate?.cameraView(self, cameraAvailable: true)
-                    self.toggleCameraButton.enabled = true
-                })
+            var currentVideoDevice = self.videoDeviceInput.device
+            var preferredPosition = AVCaptureDevicePosition.Unspecified
+            var currentPosition = currentVideoDevice.position
+            
+            var flashEnabled = false
+            switch currentPosition {
+            case AVCaptureDevicePosition.Front:
+                preferredPosition = AVCaptureDevicePosition.Back
+                flashEnabled = true
+                break
+            default:
+                preferredPosition = AVCaptureDevicePosition.Front
+                break
             }
+            
+            var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: preferredPosition)
+            var deviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: nil)
+            
+            self.session.beginConfiguration()
+            self.session.removeInput(self.videoDeviceInput)
+            if (self.session.canAddInput(deviceInput as AVCaptureInput)) {
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: currentVideoDevice)
+                
+                CameraView.setFlashMode(self.flashMode, forDevice: videoDevice)
+                
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: videoDevice)
+                
+                self.videoDeviceInput = deviceInput as AVCaptureDeviceInput
+                self.session.addInput(self.videoDeviceInput)
+            } else {
+                self.session.addInput(self.videoDeviceInput)
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if (self.showingFrontCamera) {
+                    UIView.transitionFromView(self.frontCameraButtonView, toView: self.backCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromRight, completion: { (finished) -> Void in
+                        self.frontCameraButtonView.alpha = 0
+                        self.backCameraButtonView.alpha = 1
+                        self.bringButtonsToFront()
+                    })
+                } else {
+                    UIView.transitionFromView(self.backCameraButtonView, toView: self.frontCameraButtonView, duration: 0.5, options: UIViewAnimationOptions.TransitionFlipFromLeft, completion: { (finished) -> Void in
+                        self.frontCameraButtonView.alpha = 1
+                        self.backCameraButtonView.alpha = 0
+                        self.bringButtonsToFront()
+                    })
+                }
+                self.showingFrontCamera = !self.showingFrontCamera
+            })
+            
+            self.session.commitConfiguration()
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.flashButton.enabled = flashEnabled
+                self.flashLabel.hidden = !flashEnabled
+                
+                self.delegate?.cameraView(self, cameraAvailable: true)
+                self.toggleCameraButton.enabled = true
+            })
         })
     }
     
@@ -529,9 +501,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             flashLabel.text = NSLocalizedString("On",comment: "On")
         }
         
-        if let device = self.videoDeviceInput?.device {
-            CameraView.setFlashMode(self.flashMode, forDevice: device)
-        }
+        CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
     }
     
     func microphoneButtonTapped() {
@@ -664,24 +634,23 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func focusWithMode(focusMode: AVCaptureFocusMode, exposesWithMode exposureMode: AVCaptureExposureMode, atDevicePoint point: CGPoint, monitorSubjectAreaChange: Bool) {
         dispatch_async(self.sessionQueue, { () -> Void in
-            if let device = self.videoDeviceInput?.device {
-                var error: NSError? = nil
-                
-                if (device.lockForConfiguration(&error)) {
-                    if (device.focusPointOfInterestSupported && device.isFocusModeSupported(focusMode)) {
-                        device.focusMode = focusMode
-                        device.focusPointOfInterest = point
-                    }
-                    if (device.exposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode)) {
-                        device.exposureMode = exposureMode
-                        device.exposurePointOfInterest = point
-                    }
-                    
-                    device.subjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
-                    device.unlockForConfiguration()
-                } else {
-                    println("error configuring device: \(error)")
+            var device = self.videoDeviceInput.device
+            var error: NSError? = nil
+            
+            if (device.lockForConfiguration(&error)) {
+                if (device.focusPointOfInterestSupported && device.isFocusModeSupported(focusMode)) {
+                    device.focusMode = focusMode
+                    device.focusPointOfInterest = point
                 }
+                if (device.exposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode)) {
+                    device.exposureMode = exposureMode
+                    device.exposurePointOfInterest = point
+                }
+                
+                device.subjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
+                device.unlockForConfiguration()
+            } else {
+                println("error configuring device: \(error)")
             }
         })
     }
@@ -698,13 +667,13 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         }
     }
     
-    class func deviceWithMediaType(mediaType: String, preferringPosition position: AVCaptureDevicePosition) -> AVCaptureDevice! {
+    class func deviceWithMediaType(mediaType: String, preferringPosition position: AVCaptureDevicePosition) -> AVCaptureDevice {
         var devices = AVCaptureDevice.devicesWithMediaType(mediaType)
-        var captureDevice: AVCaptureDevice! = devices.first as? AVCaptureDevice
+        var captureDevice : AVCaptureDevice = devices.first as AVCaptureDevice
         
-        for device in devices as [AVCaptureDevice]! {
+        for device in devices {
             if (device.position == position) {
-                captureDevice = device
+                captureDevice = device as AVCaptureDevice
                 break
             }
         }
@@ -721,20 +690,21 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func checkDeviceAuthorizationStatus() {
         var mediaType = AVMediaTypeVideo
         
-        let title = NSLocalizedString("Flips", comment: "Flips")
-        let message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings", comment: "Flips doesn't have permission to use Camera, please change privacy settings")
-        
-        switch AVCaptureDevice.authorizationStatusForMediaType(mediaType) {
-        case .NotDetermined:
-            AVCaptureDevice.requestAccessForMediaType(mediaType, completionHandler: { (granted) -> Void in
-                self.checkDeviceAuthorizationStatus()
-            })
-        case .Authorized:
-            self.deviceAuthorized = true
-        default:
-            self.deviceAuthorized = false
-            showAlert(title, message: message)
-        }
+        AVCaptureDevice.requestAccessForMediaType(mediaType, completionHandler: { (granted) -> Void in
+            if (granted) {
+                //Granted access to mediaType
+                self.deviceAuthorized = true
+            } else {
+                //Not granted access to mediaType
+                self.deviceAuthorized = false
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    var title = NSLocalizedString("Flips", comment: "Flips")
+                    var message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings", comment: "Flips doesn't have permission to use Camera, please change privacy settings")
+                    var alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                })
+            }
+        })
     }
     
     
