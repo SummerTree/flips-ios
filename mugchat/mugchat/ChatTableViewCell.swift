@@ -76,16 +76,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         
         avatarView = RoundImageView.avatarA3()
         contentView.addSubview(avatarView)
-        
-        var button = UIButton()
-        button.backgroundColor = UIColor.clearColor()
-        button.addTarget(self, action: "playOrPausePreview", forControlEvents: UIControlEvents.TouchUpInside)
-        contentView.addSubview(button)
-        
-        button.mas_makeConstraints { (make) -> Void in
-            make.center.equalTo()(self.contentView)
-            make.size.equalTo()(self.contentView)
-        }
     }
     
     func addConstraints() {
@@ -138,9 +128,10 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     func setFlipMessageId(flipMessageId: String) {
         self.flipMessageId = flipMessageId
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
-        
-        self.setupVideoPlayerWithFlips(flipMessage.flips.array as [Flip])
-        
+
+        self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips.array as [Flip], completion: { (player) -> Void in
+        })
+
         let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         timestampLabel.text = formattedDate
         
@@ -174,17 +165,8 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             })
         }
     }
-    
-    private func setupVideoPlayerWithFlips(flips: Array<Flip>) {
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self.contentView)
-        self.videoPlayerView.alpha = 0.0
-        self.videoPlayerView.setupPlayerWithFlips(flips, useCache: true, completion: { (player) -> Void in
-            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.contentView)
-            self.videoPlayerView.alpha = 1.0
-        })
-    }
-    
-    
+
+
     // MARK: - Overridden Methods
     
     public override func prepareForReuse() {
@@ -196,36 +178,20 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 
     // MARK: - Movie player controls
     
-    func player() -> AVQueuePlayer {
-        let layer = self.videoPlayerView.layer as AVPlayerLayer
-        return layer.player as AVQueuePlayer
-    }
-    
     func playMovie() {
-        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-        self.isPlaying = true
         self.videoPlayerView.play()
     }
     
     func pauseMovie() {
-        self.isPlaying = false
         self.videoPlayerView.pause()
     }
     
     func stopMovie() {
         self.pauseMovie()
     }
-    
-    func playOrPausePreview() {
-        if (self.isPlaying) {
-            self.pauseMovie()
-        } else {
-            self.playMovie()
-        }
-    }
-    
+
     func isPlayingFlip() -> Bool {
-        return self.isPlaying
+        return self.videoPlayerView.isPlaying
     }
     
     

@@ -62,11 +62,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.previewView.viewDidAppear()
-    }
-    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.previewView.viewWillDisappear()
