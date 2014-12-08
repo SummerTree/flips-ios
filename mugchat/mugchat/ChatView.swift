@@ -52,6 +52,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         self.addSubviews()
         self.makeConstraints()
+        
+        self.updateNextButtonState()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -474,6 +476,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.updateConstraints()
     }
     
+    func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
+        updateNextButtonState()
+    }
     
     // MARK: - ChatTableViewCellDelegate
     
@@ -486,6 +491,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
         
         return false
+    }
+    
+    // MARK: - Private methods
+    
+    private func updateNextButtonState() {
+        nextButton.enabled = !replyTextField.text.isEmpty
     }
 }
 
