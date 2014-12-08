@@ -63,7 +63,7 @@ public class ContactListHelper {
                 if (person.firstName != nil && countElements(person.firstName) > 0) {
                     var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
                     let phoneNumber: String! = phones.valueAtIndex(i) as String
-                    let phoneType = ABAddressBookCopyLocalizedLabel(phones.labelAtIndex(i)).takeRetainedValue() as NSString
+                    let phoneType: String! = retrievePhoneTypeByLabel(phones.labelAtIndex(i)) as String
                     contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
                     contacts.append(contact)
                 }
@@ -71,5 +71,22 @@ public class ContactListHelper {
         }
         
         return contacts
+    }
+    
+    private func retrievePhoneTypeByLabel(label: String!) -> String! {
+        switch label {
+        case .Some(kABPersonPhoneMobileLabel):
+            return "Mobile"
+        case .Some(kABPersonPhoneIPhoneLabel):
+            return "iPhone"
+        case .Some(kABPersonPhoneMainLabel):
+            return "Main"
+        case .Some(kABWorkLabel):
+            return "Work"
+        case .Some(kABHomeLabel):
+            return "Home"
+        default:
+            return ""
+        }
     }
 }
