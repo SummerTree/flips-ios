@@ -238,6 +238,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 
 - (void)insertText:(NSString *)text
 {
+    NSLog(@"insert");
 }
 
 #pragma mark - Helper Methods
@@ -395,12 +396,14 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MBContactCollectionViewContactCell *cell = (MBContactCollectionViewContactCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    [self becomeFirstResponder];
-    cell.focused = YES;
     
-    if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:didSelectContact:)])
-    {
-        [self.contactDelegate contactCollectionView:self didSelectContact:cell.model];
+    if ([self becomeFirstResponder]) {
+        cell.focused = YES;
+        
+        if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:didSelectContact:)])
+        {
+            [self.contactDelegate contactCollectionView:self didSelectContact:cell.model];
+        }
     }
 }
 
