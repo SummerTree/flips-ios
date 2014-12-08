@@ -30,8 +30,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     private var sendImage: UIImage!
     private var sendImageButton: UIButton!
     
-    private var isPlaying = false
-    
     override init() {
         super.init()
         
@@ -41,13 +39,9 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     func viewDidLoad() {
         makeConstraints()
     }
-    
-    func viewDidAppear() {
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self)
-    }
-    
+
     func viewWillDisappear() {
-        self.player().removeObserver(self, forKeyPath: "status")
+        self.videoPlayerView.player().removeObserver(self, forKeyPath: "status")
         self.stopMovie()
 
         let videoComposer = VideoComposer()
@@ -55,8 +49,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
 
     func showVideoCreationError() {
-        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-        
         var alertView = UIAlertView(title: "",
             message: NSLocalizedString("Preview couldn't be created. Please try again later.", comment: "Preview couldn't be created. Please try again later."),
             delegate: nil,
@@ -65,20 +57,17 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
 
     func setupVideoPlayerWithFlips(flips: Array<Flip>) {
-        self.videoPlayerView.setupPlayerWithFlips(flips, useCache: false, completion: { (player) -> Void in
-            if (player.status == AVPlayerStatus.ReadyToPlay) {
+        self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
+            if (player!.status == AVPlayerStatus.ReadyToPlay) {
                 self.playMovie()
             }
 
-            player.addObserver(self, forKeyPath: "status", options:NSKeyValueObservingOptions.New, context:nil);
+            player!.addObserver(self, forKeyPath: "status", options:NSKeyValueObservingOptions.New, context:nil);
         })
     }
 
     func addSubviews() {
         flipContainerView = UIView()
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
-        tapGestureRecognizer.delegate = self
-        flipContainerView.addGestureRecognizer(tapGestureRecognizer)
         flipContainerView.backgroundColor = UIColor.deepSea()
         self.addSubview(flipContainerView)
         
@@ -105,6 +94,8 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
 
     func addVideoPlayerView() {
         self.videoPlayerView = PlayerView()
+        self.videoPlayerView.useCache = false
+        self.videoPlayerView.loadPlayerOnInit = true
         self.flipContainerView.addSubview(self.videoPlayerView)
     }
 
@@ -173,32 +164,16 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     
     // MARK: - Movie player controls
 
-    func player() -> AVQueuePlayer {
-        let layer = self.videoPlayerView.layer as AVPlayerLayer
-        return layer.player as AVQueuePlayer
-    }
-
-    func playMovie() {
-        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-        self.isPlaying = true
+    private func playMovie() {
         self.videoPlayerView.play()
     }
     
-    func pauseMovie() {
-        self.isPlaying = false
+    private func pauseMovie() {
         self.videoPlayerView.pause()
     }
     
     func stopMovie() {
         self.pauseMovie()
-    }
-    
-    func playOrPausePreview() {
-        if (self.isPlaying) {
-            self.pauseMovie()
-        } else {
-            self.playMovie()
-        }
     }
 
 
@@ -208,7 +183,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         if (keyPath == "status" && ofObject is AVQueuePlayer) {
             let player: AVQueuePlayer = ofObject as AVQueuePlayer
 
-            if (player.status == AVPlayerStatus.ReadyToPlay && !self.isPlaying) {
+            if (player.status == AVPlayerStatus.ReadyToPlay && !self.videoPlayerView.isPlaying) {
                 self.playMovie()
             } else {
                 self.showVideoCreationError()
