@@ -21,8 +21,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private var composeButton : UIButton!
     
     var delegate : InboxViewDelegate?
-    
-    private var roomIds: Array<String>!
+    var dataSource: InboxViewDataSource?
     
     
     // MARK: - Initialization Methods
@@ -33,9 +32,6 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        roomIds = Array<String>()
-        
         self.initSubviews()
         self.initConstraints()
     }
@@ -94,15 +90,15 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func viewWillAppear() {
-        navigationBar.setAvatarImageUrl(User.loggedUser()!.photoURL)
+        if let loggedUser = User.loggedUser() {
+            navigationBar.setAvatarImageUrl(loggedUser.photoURL)
+        }
     }
     
     
     // MARK: - Rooms Setter
     
-    func setRoomIds(roomIds: [String]) {
-        self.roomIds = roomIds
-
+    func reloadData() {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.conversationsTableView.reloadData()
         })
@@ -113,13 +109,19 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ConversationTableViewCell
-        cell.setRoomId(roomIds[indexPath.row])
+        
+        if let roomId = dataSource?.inboxView(self, roomAtIndex: indexPath.row) {
+            cell.setRoomId(roomId)
+        }
         cell.selectionStyle = UITableViewCellSelectionStyle.Gray
         return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return roomIds.count
+        if (dataSource == nil) {
+            return 0
+        }
+        return dataSource!.numberOfRooms()
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -139,20 +141,22 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             
             ActivityIndicatorHelper.showActivityIndicatorAtView(self)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                var roomId = self.roomIds[indexPath.row]
-                let roomDataSource = RoomDataSource()
-                var room = roomDataSource.retrieveRoomWithId(roomId)
-                
-                room.markAllMessagesAsRemoved({ (success) -> Void in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+                if let roomId = self.dataSource?.inboxView(self, roomAtIndex: indexPath.row) {
+                    let roomDataSource = RoomDataSource()
+                    var room = roomDataSource.retrieveRoomWithId(roomId)
+                    
+                    room.markAllMessagesAsRemoved({ (success) -> Void in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+                        })
                     })
-                })
-                self.roomIds.removeAtIndex(indexPath.row)
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
-                })
+
+                    self.dataSource?.inboxView(self, didRemoveRoomAtIndex: indexPath.row)
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+                    })
+                }
             })
         }
     }
@@ -189,4 +193,10 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         delegate?.inboxViewDidTapBuilderButton(self)
     }
+}
+
+protocol InboxViewDataSource {
+    func numberOfRooms() -> Int
+    func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String
+    func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int)
 }
