@@ -11,7 +11,7 @@
 //
 
 
-class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate {
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
 
     private var inboxView: InboxView!
     private var roomDataSource: RoomDataSource!
@@ -24,6 +24,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     override func loadView() {
         inboxView = InboxView()
         inboxView.delegate = self
+        inboxView.dataSource = self
         self.view = inboxView
     }
     
@@ -93,7 +94,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 self.roomIds.append(room.roomID)
             }
             
-            self.inboxView.setRoomIds(self.roomIds)
+            self.inboxView.reloadData()
         })
     }
     
@@ -124,6 +125,21 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             let room = self.roomDataSource.retrieveRoomWithId(roomID)
             self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
         })
+    }
+    
+    
+    // MARK: - InboxViewDataSource
+
+    func numberOfRooms() -> Int {
+        return self.roomIds.count
+    }
+    
+    func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String {
+        return self.roomIds[index]
+    }
+    
+    func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
+        self.roomIds.removeAtIndex(index)
     }
 }
 
