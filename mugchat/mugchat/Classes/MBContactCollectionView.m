@@ -19,6 +19,7 @@ NSString * const kDefaultEntryText = @" ";
 @interface MBContactCollectionView() <UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegateImproved, MBContactCollectionViewDelegateFlowLayout, UIKeyInput>
 
 @property (nonatomic, readonly) NSIndexPath *indexPathOfSelectedCell;
+@property (nonatomic, assign, readonly, getter=isInvalidContact) BOOL invalidContact;
 @property (nonatomic, assign) BOOL notBecomeFirstResponder;
 @property (nonatomic) MBContactCollectionViewContactCell *prototypeCell;
 @property (nonatomic) MBContactCollectionViewPromptCell *promptCell;
@@ -124,6 +125,10 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 }
 
 #pragma mark - Properties
+
+- (BOOL)isInvalidContact {
+    return ![self.searchText isEqual:kDefaultEntryText];
+}
 
 - (CGFloat)maxContentWidth
 {
@@ -233,6 +238,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 
 - (void)insertText:(NSString *)text
 {
+    NSLog(@"insert");
 }
 
 #pragma mark - Helper Methods
@@ -390,12 +396,14 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MBContactCollectionViewContactCell *cell = (MBContactCollectionViewContactCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    [self becomeFirstResponder];
-    cell.focused = YES;
     
-    if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:didSelectContact:)])
-    {
-        [self.contactDelegate contactCollectionView:self didSelectContact:cell.model];
+    if ([self becomeFirstResponder]) {
+        cell.focused = YES;
+        
+        if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:didSelectContact:)])
+        {
+            [self.contactDelegate contactCollectionView:self didSelectContact:cell.model];
+        }
     }
 }
 
@@ -541,6 +549,21 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     }
 }
 
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if (self.isInvalidContact) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid Contact", @"")
+                                                            message:NSLocalizedString(@"Please choose a valid contact.", @"")
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                                                  otherButtonTitles:nil];
+        [alertView show];
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     BOOL result = YES;
@@ -556,6 +579,12 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     }
     
     return result;
+}
+
+#pragma mark - KVO
+
++ (NSSet *)keyPathsForValuesAffectingInvalidContact {
+    return [NSSet setWithObject:@"invalidContact"];
 }
 
 @end
