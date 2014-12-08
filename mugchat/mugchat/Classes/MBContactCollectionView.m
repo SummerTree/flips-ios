@@ -231,8 +231,14 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     return YES;
 }
 
+// This method is called when a contact is selected and the user touches a keyboard key.
 - (void)insertText:(NSString *)text
 {
+    [self deleteBackward];
+    [self setFocusOnEntry];
+    
+    MBContactCollectionViewEntryCell *entryCell = (MBContactCollectionViewEntryCell *)[self cellForItemAtIndexPath:[self entryCellIndexPath]];
+    entryCell.text = [kDefaultEntryText stringByAppendingString:text];
 }
 
 #pragma mark - Helper Methods
