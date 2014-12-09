@@ -17,7 +17,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private let CELL_IDENTIFIER = "conversationCell"
     
     private let ONBOARDING_BUBBLE_TITLE = NSLocalizedString("Welcome to Flips", comment: "Welcome to Flips")
-    private let ONBOARDING_BUBBLE_MESSAGE = NSLocalizedString("You have a message. Must be nice to be so popular.", comment: "You have a message. Must be nice to be so popular.")
+    private let ONBOARDING_BUBBLE_MESSAGE = NSLocalizedString("You have a message. Must be nice to\nbe so popular.", comment: "You have a message. Must be nice to\nbe so popular.")
 
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
@@ -74,7 +74,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             navigationBar.userInteractionEnabled = false
             composeButton.userInteractionEnabled = false
             
-            bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, isUpsideDown: true)
+            bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, bubbleType: BubbleType.arrowUp)
             bubbleView.hidden = true
             self.addSubview(bubbleView)
         } else {
@@ -106,6 +106,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         if (showOnboarding) {
             bubbleView.mas_makeConstraints { (make) -> Void in
                 make.top.equalTo()(self.navigationBar.mas_bottom).with().offset()(self.FLIP_CELL_HEIGHT)
+                make.width.equalTo()(self.bubbleView.getWidth())
+                make.height.equalTo()(self.bubbleView.getHeight())
                 make.centerX.equalTo()(self)
             }
         }

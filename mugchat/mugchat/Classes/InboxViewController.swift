@@ -25,7 +25,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             showOnboarding = true
         }
 
-        //inboxView = InboxView(showOnboarding: showOnboarding) // TODO: remove line below and uncoment this. I don't wanna block anyone when I merge it to master.
+//        inboxView = InboxView(showOnboarding: showOnboarding) // TODO: remove line below and uncoment this. I don't wanna block anyone when I merge it to master.
         inboxView = InboxView(showOnboarding: false)
         inboxView.delegate = self
         inboxView.dataSource = self
