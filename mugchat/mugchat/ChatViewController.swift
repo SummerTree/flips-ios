@@ -120,7 +120,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func chatView(chatView: ChatView, shouldAutoPlayFlipMessageAtIndex index: Int) -> Bool {
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageIds[index])
-        return flipMessage.notRead.boolValue
+//        return flipMessage.notRead.boolValue
+        return true
     }
     
     

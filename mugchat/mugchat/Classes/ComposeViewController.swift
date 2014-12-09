@@ -132,40 +132,56 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.whiteColor()
+        let mediaType = AVMediaTypeVideo
         
-        self.setupWhiteNavBarWithBackButton(self.composeTitle)
-        
-        if (self.shouldShowPreviewButton()) {
-            var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
-            previewBarButton.tintColor = UIColor.orangeColor()
-            self.navigationItem.rightBarButtonItem = previewBarButton
+        switch AVCaptureDevice.authorizationStatusForMediaType(mediaType) {
+        case .NotDetermined:
+            AVCaptureDevice.requestAccessForMediaType(mediaType, completionHandler: nil)
+            
+            navigationController?.popViewControllerAnimated(true)
+        case .Authorized:
+            self.view.backgroundColor = UIColor.whiteColor()
+            
+            self.setupWhiteNavBarWithBackButton(self.composeTitle)
+            
+            if (self.shouldShowPreviewButton()) {
+                var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+                previewBarButton.tintColor = UIColor.orangeColor()
+                self.navigationItem.rightBarButtonItem = previewBarButton
+            }
+            
+            self.setNeedsStatusBarAppearanceUpdate()
+            
+            self.addSubviews()
+            self.addConstraints()
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                self.reloadMyFlips()
+                self.updateFlipWordsState()
+                self.showContentForHighlightedWord()
+            })
+        default:
+            var message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings", comment: "Flips doesn't have permission to use Camera, please change privacy settings")
+
+            let alertView = UIAlertView(title: NSLocalizedString("Flips"), message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+            
+            navigationController?.popViewControllerAnimated(true)
         }
-        
-        self.setNeedsStatusBarAppearanceUpdate()
-        
-        self.addSubviews()
-        self.addConstraints()
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            self.reloadMyFlips()
-            self.updateFlipWordsState()
-            self.showContentForHighlightedWord()
-        })
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        composeBottomViewContainer.updateGalleryButtonImage()
-        composeTopViewContainer.viewWillAppear()
+        composeBottomViewContainer?.updateGalleryButtonImage()
+        composeTopViewContainer?.viewWillAppear()
         AudioRecorderService.sharedInstance.delegate = self
         self.shouldEnableUserInteraction(true)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        composeTopViewContainer.viewWillDisappear()
+        composeTopViewContainer?.viewWillDisappear()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -657,7 +673,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        self.highlightedWordCurrentAssociatedImage = image.cropImageInCenter(true)
+        self.highlightedWordCurrentAssociatedImage = image.squareCrop(UIImageSource.Unknown)
         
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)
         composeBottomViewContainer.showAudioRecordButton()

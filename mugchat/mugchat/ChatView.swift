@@ -20,6 +20,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private let REPLY_VIEW_MARGIN : CGFloat = 10.0
     private let TEXT_VIEW_MARGIN : CGFloat = 3.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
+    private let AUTOPLAY_ON_LOAD_DELAY : Double = 0.3
     
     private let CELL_FLIP_AREA_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.width
     private let CELL_FLIP_AREA_HEIGHT_IPHONE_4S : CGFloat = 240.0
@@ -52,6 +53,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         self.addSubviews()
         self.makeConstraints()
+        
+        self.updateNextButtonState()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -184,6 +187,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(self.AUTOPLAY_ON_LOAD_DELAY * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+                        self.playVideoForVisibleCell()
+                    })
                 })
             }
         })
@@ -238,7 +245,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
+        let visibleCells = self.tableView.visibleCells()
 
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             if !self.isCell(cell, totallyVisibleOnView: self) {
@@ -249,7 +256,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
     }
     
-    func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
+    private func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
         var videoContainerView = cell.subviews[0].subviews[0].subviews[0] as UIView // Gets video container view from cell
         var convertedVideoContainerViewFrame = cell.convertRect(videoContainerView.frame, toView:view)
         if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
@@ -258,101 +265,40 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             return false
         }
     }
+
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if (!decelerate) {
+                self.playVideoForVisibleCell()
+            }
+        })
+    }
     
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
-//
-//        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-//            if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
-//                var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
-//                if (indexPath == nil) {
-//                    return
-//                }
-//                var row = indexPath?.row
-//                var shouldAutoPlay: Bool = dataSource!.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!) as Bool
-//                if (shouldAutoPlay) {
-//                    cell.prepareToPlay()
-//                    cell.playMovie()
-//                }
-//                
-//                // AUTO PLAY - OLD VERSION
-////                if (self.shouldPlayUnreadMessage) {
-////                    self.shouldPlayUnreadMessage = false
-////                    cell.player.prepareToPlay()
-////                    UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
-////                        delay: 0.5,
-////                        options: nil,
-////                        animations: { () -> Void in
-////                            cell.thumbnailView.alpha = 0.0
-////                        },
-////                        completion: { (animationsFinished) -> Void in
-////                            cell.player.play()
-////                    })
-////                }
-//            } else {
-//                cell.stopMovie()
-//            }
-//        }
-//    }
-//    
-//    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            if (!decelerate) {
-//                self.playVideoForVisibleCellOnScrollView(scrollView)
-//            }
-//        })
-//    }
-//    
-//    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            self.playVideoForVisibleCellOnScrollView(scrollView)
-//        })
-//    }
-//    
-//    func isCell(cell: ChatTableViewCell, totallyVisibleInScrollView aScrollView: UIScrollView) -> Bool {
-//        var thumbnailRect = cell.convertRect(cell.thumbnailView.frame, toView: cell.superview)
-////        var thumbnailRect = cell.convertRect(cell.frame, toView: cell.superview)
-//        thumbnailRect.origin.y = thumbnailRect.origin.y + (thumbnailRect.height - CELL_FLIP_TEXT_AREA_HEIGHT)
-//        let convertedRect = aScrollView.convertRect(thumbnailRect, toView: aScrollView.superview)
-//        if (CGRectContainsRect(aScrollView.frame, convertedRect)) {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
-//    
-//    private func playVideoForVisibleCellOnScrollView(scrollView: UIScrollView) {
-//        let visibleCells = (scrollView.superview as ChatView).tableView.visibleCells()
-//        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-//            if (self.isCell(cell, totallyVisibleInScrollView: scrollView)) {
-//                var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
-//                if (indexPath == nil) {
-//                    return
-//                }
-//                var row = indexPath?.row
-//                var shouldAutoPlay: Bool = dataSource!.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!) as Bool
-//                if (shouldAutoPlay) {
-//                    cell.prepareToPlay()
-//                    cell.playMovie()
-//                }
-//                // AUTO PLAY OLD VERSION
-////                cell.player.prepareToPlay()
-////                UIView.animateWithDuration(self.THUMBNAIL_FADE_DURATION,
-////                    delay: 0.5,
-////                    options: nil,
-////                    animations: { () -> Void in
-////                        cell.thumbnailView.alpha = 0.0
-////                    },
-////                    completion: { (animationsFinished) -> Void in
-////                        cell.player.play()
-////                })
-//            } else {
-////                cell.player.stop()
-//                cell.stopMovie()
-//            }
-//        }
-//    }
-    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.playVideoForVisibleCell()
+        })
+    }
+
+    private func playVideoForVisibleCell() {
+        let visibleCells = self.tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (self.isCell(cell, totallyVisibleOnView: self)) {
+                var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
+                if (indexPath == nil) {
+                    return
+                }
+                var row = indexPath?.row
+                var shouldAutoPlay: Bool = dataSource!.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!) as Bool
+                if (shouldAutoPlay) {
+                    cell.playMovie()
+                }
+            } else {
+                cell.stopMovie()
+            }
+        }
+    }
+
     
     // MARK: - Button Handlers
     
@@ -474,6 +420,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.updateConstraints()
     }
     
+    func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
+        updateNextButtonState()
+    }
     
     // MARK: - ChatTableViewCellDelegate
     
@@ -486,6 +435,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
         
         return false
+    }
+    
+    // MARK: - Private methods
+    
+    private func updateNextButtonState() {
+        nextButton.enabled = !replyTextField.text.isEmpty
     }
 }
 
