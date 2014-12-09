@@ -18,6 +18,7 @@ public class PubNubService: FlipsService, PNDelegate {
     private let PUBNUB_PUBLISH_KEY = "pub-c-579fbcaa-1c0a-44fc-bb1c-e02e43e7eb30"
     private let PUBNUB_SUBSCRIBE_KEY = "sub-c-3bcb7c42-59ff-11e4-9632-02ee2ddab7fe"
     private let PUBNUB_SECRET_KEY = "sec-c-MTA5MjJmZWUtOGI4Ni00NTUwLTgzN2ItNWU0ZGIyZmI0MWY4"
+    private let PUBNUB_CIPHER_KEY = "FFC27DABA9708D16F9612E7AB37E81C26B76B2031946F6CF9458CD22419E6B22"
     
     private let PRODUCTION_PUBLISH_KEY = "pub-c-18de6448-8924-43b5-9f5b-a333e7d7e6d9"
     private let PRODUCTION_SUBSCRIBE_KEY = "sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe"
@@ -32,7 +33,12 @@ public class PubNubService: FlipsService, PNDelegate {
         var pubnubConfiguration = PNConfiguration(forOrigin: PUBNUB_ORIGIN,
             publishKey: PUBNUB_PUBLISH_KEY,
             subscribeKey: PUBNUB_SUBSCRIBE_KEY,
-            secretKey: PUBNUB_SECRET_KEY)
+            secretKey: PUBNUB_SECRET_KEY,
+            cipherKey: PUBNUB_CIPHER_KEY)
+        
+        pubnubConfiguration.useSecureConnection = true
+        pubnubConfiguration.reduceSecurityLevelOnError = false
+        pubnubConfiguration.ignoreSecureConnectionRequirement = false
         
         PubNub.setConfiguration(pubnubConfiguration)
         PubNub.setDelegate(self)
