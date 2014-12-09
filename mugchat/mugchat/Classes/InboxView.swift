@@ -16,6 +16,9 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
     
+    private let ONBOARDING_BUBBLE_TITLE = NSLocalizedString("Welcome to Flips", comment: "Welcome to Flips")
+    private let ONBOARDING_BUBBLE_MESSAGE = NSLocalizedString("You have a message. Must be nice to be so popular.", comment: "You have a message. Must be nice to be so popular.")
+
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
@@ -71,7 +74,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             navigationBar.userInteractionEnabled = false
             composeButton.userInteractionEnabled = false
             
-            bubbleView = BubbleView(title: "Welcome to Flips", message: "You have a message. Must be nice to be so popular.", isUpsideDown: true)
+            bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, isUpsideDown: true)
             bubbleView.hidden = true
             self.addSubview(bubbleView)
         } else {
