@@ -28,6 +28,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     private let THUMBNAIL_FADE_DURATION: NSTimeInterval = 0.2
     
+    private let ONBOARDING_BUBBLE_TITLE = NSLocalizedString("Pretty cool, huh?", comment: "Pretty cool, huh?")
+    private let ONBOARDING_BUBBLE_MESSAGE = NSLocalizedString("Now it's your turn.", comment: "Now it's your turn.")
+    
     private var tableView: UITableView!
     private var darkHorizontalRulerView: UIView!
     private var replyView: UIView!
@@ -41,16 +44,16 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     var delegate: ChatViewDelegate?
     var dataSource : ChatViewDataSource?
     
+    private var showOnboarding = false
+    private var bubbleView: BubbleView!
+    
     
     // MARK: - Required initializers
     
-    convenience override init() {
-        self.init(frame: CGRect.zeroRect)
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(showOnboarding: Bool) {
+        super.init(frame: CGRect.zeroRect)
         
+        self.showOnboarding = showOnboarding
         self.addSubviews()
         self.makeConstraints()
         
@@ -105,6 +108,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         nextButton.addTarget(self, action: "didTapNextButton", forControlEvents: UIControlEvents.TouchUpInside)
         nextButton.sizeToFit()
         replyView.addSubview(nextButton)
+        
+        if (showOnboarding) {
+            bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, bubbleType: BubbleType.arrowDownFirstLineBold)
+            self.addSubview(bubbleView)
+        } 
     }
     
     func makeConstraints() {
@@ -139,7 +147,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.getTextHeight())
+            make.height.equalTo()(self.getReplyTextHeight())
         })
         
         nextButton.mas_makeConstraints( { (make) in
@@ -148,9 +156,19 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.bottom.equalTo()(self.replyView)
             make.width.equalTo()(self.nextButton.frame.width)
         })
+        
+        if (showOnboarding) {
+            bubbleView.mas_makeConstraints({ (make) -> Void in
+                make.bottom.equalTo()(self.tableView.mas_bottom)
+                make.width.equalTo()(self.bubbleView.getWidth())
+                make.height.equalTo()(self.bubbleView.getHeight())
+                make.centerX.equalTo()(self)
+            })
+        }
     }
     
-    func getTextHeight() -> CGFloat{
+    
+    func getReplyTextHeight() -> CGFloat{
         let myString: NSString = self.replyTextField.text as NSString
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
@@ -325,7 +343,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         self.updateConstraints()
@@ -362,7 +380,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             replyView.mas_updateConstraints( { (make) in
                 make.left.equalTo()(self)
                 make.right.equalTo()(self)
-                make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+                make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
                 make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
             })
             self.updateConstraints()
@@ -380,7 +398,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         self.updateConstraints()
@@ -407,7 +425,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
         })
         
@@ -415,7 +433,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.getTextHeight())
+            make.height.equalTo()(self.getReplyTextHeight())
         })
         self.updateConstraints()
     }

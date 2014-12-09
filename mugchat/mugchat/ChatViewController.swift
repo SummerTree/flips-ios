@@ -39,7 +39,13 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK - Overridden Methods
     
     override func loadView() {
-        self.chatView = ChatView()
+        var showOnboarding = false
+        if (!OnboardingHelper.onboardingHasBeenShown()) {
+            showOnboarding = true
+        }
+        
+//        self.chatView = ChatView(showOnboarding: showOnboarding) // TODO: uncoment it.
+        self.chatView = ChatView(showOnboarding: false) // TODO: remove it
         self.chatView.delegate = self
         self.view = self.chatView
         

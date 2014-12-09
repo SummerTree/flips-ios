@@ -10,10 +10,14 @@
 // the license agreement.
 //
 
+enum BubbleType {
+    case arrowUp
+    case arrowDownFirstLineBold
+    case arrowDownSecondLineBold
+}
+
 class BubbleView: UIView {
     
-    private let BUBBLE_VERTICAL_MARGIN_WITH_ARROW: CGFloat = 24
-    private let BUBBLE_VERTICAL_MARGIN_WITHOUT_ARROW: CGFloat = 16
     private let BUBBLE_HORIZONTAL_MARGIN: CGFloat = 16
     
     private var bubbleImageView: UIImageView!
@@ -22,18 +26,20 @@ class BubbleView: UIView {
    
     private var title: String!
     private var message: String!
-    private var isBubbleUpsideDown: Bool = false
+    private var bubbleType: BubbleType!
+    
+    private let bubbleImage = UIImage(named: "tutorial_bubble")
+
     
     // MARK: - Initialization Methods
     
-    init(title: String, message: String, isUpsideDown: Bool) {
+    init(title: String, message: String, bubbleType: BubbleType) {
         super.init(frame: CGRectZero)
         self.title = title
         self.message = message
-        self.isBubbleUpsideDown = isUpsideDown
+        self.bubbleType = bubbleType
         
         self.addSubviews()
-        self.backgroundColor = UIColor.greenColor()
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -44,10 +50,10 @@ class BubbleView: UIView {
     // MARK: - View methods
     
     private func addSubviews() {
-        bubbleImageView = UIImageView(image: UIImage(named: "tutorial_bubble"))
+        bubbleImageView = UIImageView(image: bubbleImage)
         bubbleImageView.sizeToFit()
         
-        if (self.isBubbleUpsideDown) {
+        if (self.bubbleType == BubbleType.arrowUp) {
             let fullRotation = CGFloat(M_PI)
             bubbleImageView.transform = CGAffineTransformMakeRotation(fullRotation)
         }
@@ -59,7 +65,7 @@ class BubbleView: UIView {
         titleLabel.textColor = UIColor.whiteColor()
         titleLabel.text = self.title
         titleLabel.textAlignment = NSTextAlignment.Center
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 1
         self.addSubview(titleLabel)
         
         messageLabel = UILabel()
@@ -67,7 +73,7 @@ class BubbleView: UIView {
         messageLabel.textColor = UIColor.whiteColor()
         messageLabel.text = self.message
         messageLabel.textAlignment = NSTextAlignment.Center
-        messageLabel.numberOfLines = 4
+        messageLabel.numberOfLines = 2
         self.addSubview(messageLabel)
     }
     
@@ -77,37 +83,41 @@ class BubbleView: UIView {
     override func updateConstraints() {
         titleLabel.sizeToFit()
         messageLabel.sizeToFit()
-
+        
         bubbleImageView.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
             update.top.equalTo()(self)
             update.centerX.equalTo()(self)
-            update.width.equalTo()(self.bubbleImageView.frame.size.width)
-            update.height.equalTo()(self.bubbleImageView.frame.size.height)
+            update.width.equalTo()(self.bubbleImage!.size.width)
+            update.height.equalTo()(self.bubbleImage!.size.height)
         }
 
-        var topMargin, bottomMargin: CGFloat!
-        if (isBubbleUpsideDown) {
-            topMargin = BUBBLE_VERTICAL_MARGIN_WITH_ARROW
-            bottomMargin = BUBBLE_VERTICAL_MARGIN_WITHOUT_ARROW
-        } else {
-            topMargin = BUBBLE_VERTICAL_MARGIN_WITHOUT_ARROW
-            bottomMargin = BUBBLE_VERTICAL_MARGIN_WITH_ARROW
-        }
+        var marginFromCenter: CGFloat = 5
         
-        titleLabel.mas_makeConstraints { (update) -> Void in
-            update.top.equalTo()(self).with().offset()(topMargin)
+        titleLabel.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
+            update.bottom.equalTo()(self.mas_centerY).with().offset()(-marginFromCenter)
             update.height.equalTo()(self.titleLabel.frame.size.height)
             update.left.equalTo()(self.bubbleImageView).with().offset()(self.BUBBLE_HORIZONTAL_MARGIN)
             update.right.equalTo()(self.bubbleImageView).with().offset()(-self.BUBBLE_HORIZONTAL_MARGIN)
         }
         
-        messageLabel.mas_makeConstraints { (update) -> Void in
-            update.top.equalTo()(self.titleLabel.mas_bottom)
-            update.height.equalTo()(self).with().offset()(bottomMargin)
+        messageLabel.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
+            update.top.equalTo()(self.mas_centerY).with().offset()(marginFromCenter)
+            update.height.equalTo()(self.messageLabel.frame.size.height)
             update.left.equalTo()(self.bubbleImageView).with().offset()(self.BUBBLE_HORIZONTAL_MARGIN)
             update.right.equalTo()(self.bubbleImageView).with().offset()(-self.BUBBLE_HORIZONTAL_MARGIN)
         }
         
         super.updateConstraints()
     }
-}
+    
+    func getHeight() -> CGFloat {
+        return bubbleImage!.size.height
+    }
+    
+    func getWidth() -> CGFloat {
+        return bubbleImage!.size.width
+    }
+ }
