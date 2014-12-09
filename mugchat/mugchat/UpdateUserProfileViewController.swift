@@ -37,9 +37,11 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let userPictureData = NSData(contentsOfURL: NSURL(string: User.loggedUser()!.photoURL)!)
 
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.updateUserProfileView.setUserPicture(UIImage(data: userPictureData!)!)
-            })
+            if (userPictureData != nil) {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.updateUserProfileView.setUserPicture(UIImage(data: userPictureData!)!)
+                })
+            }
         })
         
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)

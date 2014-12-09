@@ -95,8 +95,8 @@ class TakePictureViewController : FlipsViewController, TakePictureViewDelegate, 
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        self.picture = image
-        confirmPictureView.setPicture(image.avatarProportional())
+        self.picture = image.squareCrop(UIImageSource.Unknown)
+        confirmPictureView.setPicture(self.picture)
         self.showConfirmPictureView()
         self.dismissViewControllerAnimated(true, completion: nil)
     }

@@ -562,9 +562,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     var squaredImage: UIImage
 
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
-                        squaredImage = image!.cropImageInCenter(false)
+                        squaredImage = image!.squareCrop(UIImageSource.FrontCamera)
                     } else {
-                        squaredImage = image!.cropImageInCenter(true)
+                        squaredImage = image!.squareCrop(UIImageSource.BackCamera)
                     }
 
                     success(squaredImage)

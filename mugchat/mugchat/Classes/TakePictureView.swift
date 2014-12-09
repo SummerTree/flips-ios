@@ -140,7 +140,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             if (image != nil) {
                 var receivedImage = image as UIImage!
                 
-                var avatarImage: UIImage! = receivedImage.avararA1Image(self.cameraView.frame)
+                var avatarImage: UIImage! = receivedImage.avatarA1Image(self.cameraView.frame)
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.delegate?.takePictureView(self, didTakePicture: avatarImage)
