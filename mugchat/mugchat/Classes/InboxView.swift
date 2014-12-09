@@ -16,6 +16,9 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
     
+    private let ONBOARDING_BUBBLE_TITLE = NSLocalizedString("Welcome to Flips", comment: "Welcome to Flips")
+    private let ONBOARDING_BUBBLE_MESSAGE = NSLocalizedString("You have a message. Must be nice to be so popular.", comment: "You have a message. Must be nice to be so popular.")
+
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
@@ -23,15 +26,15 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     var delegate : InboxViewDelegate?
     var dataSource: InboxViewDataSource?
     
+    private var showOnboarding = false
+    private var bubbleView: BubbleView!
     
     // MARK: - Initialization Methods
     
-    convenience override init() {
-        self.init(frame: CGRect.zeroRect)
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(showOnboarding: Bool) {
+        super.init(frame: CGRect.zeroRect)
+        
+        self.showOnboarding = showOnboarding
         self.initSubviews()
         self.initConstraints()
     }
@@ -66,6 +69,18 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         composeButton.addTarget(self, action: "composeButtonTapped", forControlEvents: .TouchUpInside)
         composeButton.sizeToFit()
         self.addSubview(composeButton)
+        
+        if (showOnboarding) {
+            navigationBar.userInteractionEnabled = false
+            composeButton.userInteractionEnabled = false
+            
+            bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, isUpsideDown: true)
+            bubbleView.hidden = true
+            self.addSubview(bubbleView)
+        } else {
+            navigationBar.userInteractionEnabled = true
+            composeButton.userInteractionEnabled = true
+        }
     }
     
     private func initConstraints() {
@@ -87,6 +102,13 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             make.bottom.equalTo()(self).with().offset()(-self.COMPOSE_BUTTON_BOTTOM_MARGIN)
             make.centerX.equalTo()(self)
         }
+        
+        if (showOnboarding) {
+            bubbleView.mas_makeConstraints { (make) -> Void in
+                make.top.equalTo()(self.navigationBar.mas_bottom).with().offset()(self.FLIP_CELL_HEIGHT)
+                make.centerX.equalTo()(self)
+            }
+        }
     }
     
     func viewWillAppear() {
@@ -100,6 +122,14 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func reloadData() {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if (self.showOnboarding) {
+                if let numberOfRooms = self.dataSource?.numberOfRooms() {
+                    if (numberOfRooms > 0) {
+                        self.bubbleView.hidden = false
+                    }
+                }
+            }
+            
             self.conversationsTableView.reloadData()
         })
     }

@@ -111,6 +111,7 @@
 		7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */; };
 		7A63817F1A2C9E1200BEB79D /* VideoComposeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A63817E1A2C9E1200BEB79D /* VideoComposeOperation.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
+		7A7202EC1A36196F00FF5784 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7202EB1A36196F00FF5784 /* BubbleView.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
 		7A7937A11A3085E500136144 /* FlipsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7937A01A3085E500136144 /* FlipsHeaderView.swift */; };
 		7A8A86381A1D1F9E00CB0B31 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */; };
@@ -156,6 +157,7 @@
 		7AE044FE1A0CE49C00C68313 /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */; };
 		7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
 		7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */; };
+		7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
 		7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
 		7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */; };
@@ -306,6 +308,7 @@
 		7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryAssetsHelper.swift; sourceTree = "<group>"; };
 		7A63817E1A2C9E1200BEB79D /* VideoComposeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoComposeOperation.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
+		7A7202EB1A36196F00FF5784 /* BubbleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
 		7A7937A01A3085E500136144 /* FlipsHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsHeaderView.swift; sourceTree = "<group>"; };
 		7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
@@ -360,6 +363,7 @@
 		7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
 		7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheHandler.swift; sourceTree = "<group>"; };
+		7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingHelper.swift; sourceTree = "<group>"; };
 		7AF82DE519EFEC3300D0393F /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
 		7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageDataSource.swift; sourceTree = "<group>"; };
 		7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDataSource.swift; sourceTree = "<group>"; };
@@ -531,6 +535,7 @@
 				70057E9319DADF59004343ED /* DeviceHelper.swift */,
 				7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */,
 				709D8EB91A2E1C9A007A119F /* NetworkReachabilityHelper.swift */,
+				7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */,
 				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
 				7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */,
 			);
@@ -607,6 +612,7 @@
 				70AC67031A23C992003FE3CA /* Import Contact */,
 				7A1892C919D1E9210026E641 /* Inbox */,
 				704E111019D0936800D2BB88 /* Login */,
+				7A7202E51A360F6400FF5784 /* Onboarding */,
 				F293246D1A15833D00355A4D /* Player */,
 				705B3DDC1A03BBBA00E0D3E9 /* Preview */,
 				7056FE5719D8822F00BD6571 /* Privacy Policy */,
@@ -1014,6 +1020,14 @@
 			name = "Data Sources";
 			sourceTree = "<group>";
 		};
+		7A7202E51A360F6400FF5784 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				7A7202EB1A36196F00FF5784 /* BubbleView.swift */,
+			);
+			name = Onboarding;
+			sourceTree = "<group>";
+		};
 		7A8BFEDB1A09597600E7F2A3 /* Flips Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -1391,6 +1405,7 @@
 				7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */,
 				7A8A86381A1D1F9E00CB0B31 /* RoomService.swift in Sources */,
 				7056FE5619D8822900BD6571 /* PrivacyPolicyView.swift in Sources */,
+				7A7202EC1A36196F00FF5784 /* BubbleView.swift in Sources */,
 				705EF07A19F973A600D4CF74 /* ConfirmFlipView.swift in Sources */,
 				7AD93F9419E574B6009CC59A /* UIImageExtensions.swift in Sources */,
 				7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */,
@@ -1399,6 +1414,7 @@
 				7046C9B719F18EB100CBD72D /* AudioRecorderService.swift in Sources */,
 				A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
 				7A2A7E2419EDBFB800033164 /* CoreDataHandler.swift in Sources */,
