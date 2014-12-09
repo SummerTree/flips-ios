@@ -348,7 +348,8 @@ public class UserService: FlipsService {
                 let userDatasource = UserDataSource()
                 
                 for user in users {
-                    usersFacebookIDS.append(user["id"].stringValue)
+                    var userId = user["id"]
+                    usersFacebookIDS.append(userId.stringValue)
                 }
                 
                 var request = AFHTTPRequestOperationManager()
@@ -370,7 +371,6 @@ public class UserService: FlipsService {
                                 }, catch: { (error) -> Void in
                                     println("Error: [\(error))")
                                 }, finally: nil)
-                            
                         }
                         
                         success(nil)
