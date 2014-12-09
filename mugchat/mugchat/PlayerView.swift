@@ -265,15 +265,12 @@ class PlayerView: UIView {
         }
 
         var thumbnailImage: UIImage?
-
-        // Only blank flips?
-        if (thumbnailFlip == nil) {
-            thumbnailImage = UIImage.emptyFlipImage()
-        } else {
+        
+        if (thumbnailFlip != nil) {
             thumbnailImage = CacheHandler.sharedInstance.thumbnailForUrl(thumbnailFlip!.backgroundURL)
         }
 
-        return thumbnailImage!
+        return thumbnailImage ?? UIImage.emptyFlipImage()
     }
 
     private func showThumbnail() {
