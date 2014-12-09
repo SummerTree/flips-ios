@@ -147,7 +147,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.getTextHeight())
+            make.height.equalTo()(self.getReplyTextHeight())
         })
         
         nextButton.mas_makeConstraints( { (make) in
@@ -168,7 +168,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     
-    func getTextHeight() -> CGFloat{
+    func getReplyTextHeight() -> CGFloat{
         let myString: NSString = self.replyTextField.text as NSString
         var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
@@ -343,7 +343,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         self.updateConstraints()
@@ -380,7 +380,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             replyView.mas_updateConstraints( { (make) in
                 make.left.equalTo()(self)
                 make.right.equalTo()(self)
-                make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+                make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
                 make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
             })
             self.updateConstraints()
@@ -398,7 +398,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         self.updateConstraints()
@@ -425,7 +425,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.getTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
         })
         
@@ -433,7 +433,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.getTextHeight())
+            make.height.equalTo()(self.getReplyTextHeight())
         })
         self.updateConstraints()
     }
