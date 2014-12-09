@@ -10,11 +10,13 @@
 // the license agreement.
 //
 
+private let ONBORDING_HAS_BEEN_SHOWN_KEY = "onboardingHasBeenShown"
+
 class OnboardingHelper: NSObject {
     
     class func onboardingHasBeenShown() -> Bool {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        if let showOnboarding = userDefaults.valueForKey("onboardingHasBeenShown") as? Bool {
+        if let showOnboarding = userDefaults.valueForKey(ONBORDING_HAS_BEEN_SHOWN_KEY) as? Bool {
             return showOnboarding
         }
         return false
@@ -22,7 +24,7 @@ class OnboardingHelper: NSObject {
     
     class func setOnboardingHasShown() {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setValue(true, forKey: "onboardingHasBeenShown")
+        userDefaults.setValue(true, forKey: ONBORDING_HAS_BEEN_SHOWN_KEY)
         userDefaults.synchronize()
     }
     
