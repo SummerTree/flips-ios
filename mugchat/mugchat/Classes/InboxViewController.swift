@@ -14,15 +14,19 @@
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
 
     private var inboxView: InboxView!
-    private var roomDataSource: RoomDataSource!
-    
     private var roomIds: [String]!
     
     
     // MARK: - UIViewController overridden methods
 
     override func loadView() {
-        inboxView = InboxView()
+        var showOnboarding = false
+        if (!OnboardingHelper.onboardingHasBeenShown()) {
+            showOnboarding = true
+        }
+
+        //inboxView = InboxView(showOnboarding: showOnboarding) // TODO: remove line below and uncoment this. I don't wanna block anyone when I merge it to master.
+        inboxView = InboxView(showOnboarding: false)
         inboxView.delegate = self
         inboxView.dataSource = self
         self.view = inboxView
@@ -30,8 +34,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.roomDataSource = RoomDataSource()
         self.roomIds = Array<String>()
     }
     
@@ -78,6 +82,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
         let roomID = roomIds[index]
+        let roomDataSource = RoomDataSource()
         let room = roomDataSource.retrieveRoomWithId(roomID)
         self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
     }
@@ -87,13 +92,12 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     private func refreshRooms() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let rooms = self.roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
-            
+            let roomDataSource = RoomDataSource()
+            let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
             self.roomIds.removeAll(keepCapacity: false)
             for room in rooms {
                 self.roomIds.append(room.roomID)
             }
-            
             self.inboxView.reloadData()
         })
     }
@@ -122,7 +126,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String) {
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
-            let room = self.roomDataSource.retrieveRoomWithId(roomID)
+            let roomDataSource = RoomDataSource()
+            let room = roomDataSource.retrieveRoomWithId(roomID)
             self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
         })
     }
