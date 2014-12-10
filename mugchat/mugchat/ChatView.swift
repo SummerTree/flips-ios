@@ -457,7 +457,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Private methods
     
     private func updateNextButtonState() {
-        nextButton.enabled = !replyTextField.text.isEmpty
+        nextButton.enabled = !replyTextField.text.removeWhiteSpaces().isEmpty
     }
 }
 
