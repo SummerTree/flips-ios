@@ -46,7 +46,11 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private func initSubviews() {
         let loggedUser = AuthenticationHelper.sharedInstance.userInSession
         navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User")!, showSettingsButton: true, showBuilderButton: true)
-        navigationBar.setAvatarImageUrl(loggedUser.photoURL)
+        
+        if let url = NSURL(string: loggedUser.photoURL) {
+            navigationBar.setAvatarImageURL(url)
+        }
+        
         navigationBar.alpha = 0.99 // FOR iOS7.
         // TODO: apply blur for iOS8 using new methods.
         
@@ -115,7 +119,9 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     
     func viewWillAppear() {
         if let loggedUser = User.loggedUser() {
-            navigationBar.setAvatarImageUrl(loggedUser.photoURL)
+            if let url = NSURL(string: loggedUser.photoURL) {
+                navigationBar.setAvatarImageURL(url)
+            }
         }
     }
     

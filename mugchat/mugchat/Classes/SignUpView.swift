@@ -283,6 +283,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.navigationBar.setAvatarImage(picture)
     }
     
+    func setUserPictureURL(url: NSURL) {
+        self.navigationBar.setAvatarImageURL(url)
+    }
+    
     
     // MARK: - Getters
     

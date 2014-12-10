@@ -18,6 +18,8 @@
 #endif
 
 #import <AFNetworking/AFNetworking.h>
+#import "UIKit+AFNetworking.h"
+
 #import <Masonry/Masonry.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <PubNub/PNImports.h>
@@ -41,7 +43,6 @@
 #import "BuilderWord.h"
 
 #import "NSManagedObject+helpers.h"
-#import "UIImageView+AFNetworking.h"
 #import "VideoComposer.h"
 #import "ImageVideoCreator.h"
 #import "RHAddressBook.h"
