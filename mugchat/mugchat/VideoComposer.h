@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import "FlipMessage.h"
+#import "Flip.h"
 
 
 @interface VideoComposer : NSObject
