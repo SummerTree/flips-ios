@@ -152,7 +152,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getMyFlipsForWord(word: String) -> [Flip] {
-        return Flip.findAllWithPredicate(NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(FlipAttributes.WORD) like[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Flip]
+        return Flip.findAllWithPredicate(NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Flip]
     }
     
     func getMyFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {
@@ -179,7 +179,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getStockFlipsForWord(word: String) -> [Flip] {
-        return Flip.findAllWithPredicate(NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) like[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Flip]
+        return Flip.findAllWithPredicate(NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)) as [Flip]
     }
     
     func getStockFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {

@@ -94,7 +94,6 @@ class FlipMessageDataSource : BaseDataSource {
         let room = roomDataSource.getRoomWithPubnubID(pubnubID)
 
         if (room == nil) {
-            // FIXME: This can actually happen if receiving a message from user's personal channel. There's no local room for that.
             println("Room with pubnubID (\(pubnubID)) not found - It cannot happen, because if user received a message, is because he is subscribed at a channel.")
         }
 
