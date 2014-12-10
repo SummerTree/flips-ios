@@ -17,35 +17,44 @@ private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
 extension FlipMessage {
 
-    func addFlip(flip: Flip) {
-        
-        for (var i: Int = 0; i < self.flips.count; i++) {
-            if (flip.flipID == self.flips.objectAtIndex(i).flipID) {
-                println("Flip already added to this FlipMessage")
-                return
+    var flips: Array<Flip> {
+        get {
+            var flips = Array<Flip>()
+            let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
+            var orderedEntries = self.entries.sortedArrayUsingDescriptors([sortDescriptor])
+
+            for entry in orderedEntries {
+                flips.append((entry as FlipEntry).flip)
             }
+
+            return flips
         }
-        
-        var mutableOrderedSet = NSMutableOrderedSet(orderedSet: self.flips)
-        mutableOrderedSet.addObject(flip)
-        self.flips = mutableOrderedSet
+    }
+
+    func addFlip(flip: Flip) {
+        let nextEntryOrder = self.entries.count
+
+        var entry: FlipEntry! = FlipEntry.createEntity() as FlipEntry
+        entry.order = nextEntryOrder
+        entry.flip = flip
+        entry.message = self
+
+        self.addEntriesObject(entry)
     }
     
     func messagePhrase() -> String {
-        var message = ""
-        var space = ""
-        for (var i: Int = 0; i < self.flips.count; i++) {
-            let flip = self.flips.objectAtIndex(i) as Flip
-            message = "\(message)\(space)\(flip.word)"
-            space = " "
+        let flips = self.flips
+        let words = flips.map {
+            (var flip) -> String in
+            return flip.word
         }
-        
-        return message
+
+        return " ".join(words)
     }
     
     func messageThumbnail() -> UIImage? {
-        let firstFlip = self.flips.firstObject as Flip
-        var thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(firstFlip.backgroundURL)
+        let firstFlip = self.flips.first
+        var thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(firstFlip!.backgroundURL)
 
         if (thumbnail == nil) {
             thumbnail = self.createThumbnail()
@@ -55,7 +64,7 @@ extension FlipMessage {
     }
     
     func createThumbnail() -> UIImage? {
-        let firstFlip = self.flips.firstObject as? Flip
+        let firstFlip = self.flips.first
 
         if (firstFlip == nil) {
             return nil
@@ -82,14 +91,16 @@ extension FlipMessage {
     }
     
     func hasAllContentDownloaded() -> Bool {
-        var allContentReceived = true
-        for var i = 0; i < self.flips.count; i++ {
-            var flip = self.flips.objectAtIndex(i) as Flip
+        let flips = self.flips
+
+        for var i = 0; i < flips.count; i++ {
+            var flip = flips[i] as Flip
             if (!flip.hasAllContentDownloaded()) {
-                allContentReceived = false
+                return false
             }
         }
-        return allContentReceived
+
+        return true
     }
     
     
@@ -114,19 +125,21 @@ extension FlipMessage {
         
         dictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
         
-        var flips = Array<Dictionary<String, String>>()
-        for (var i = 0; i < self.flips.count; i++) {
-            let flip = self.flips.objectAtIndex(i) as Flip
-            var flipDictionary = Dictionary<String, String>()
-            flipDictionary.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
-            flipDictionary.updateValue(flip.word, forKey: FlipJsonParams.WORD)
-            flipDictionary.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
-            flipDictionary.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
+        var flipsDictionary = Array<Dictionary<String, String>>()
+        let flips = self.flips
+        for (var i = 0; i < flips.count; i++) {
+            let flip = flips[i]
+            var dic = Dictionary<String, String>()
+
+            dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
+            dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
+            dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
+            dic.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
             
-            flips.append(flipDictionary)
+            flipsDictionary.append(dic)
         }
         
-        dictionary.updateValue(flips, forKey: FlipMessageJsonParams.CONTENT)
+        dictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
         return dictionary
     }
 }
