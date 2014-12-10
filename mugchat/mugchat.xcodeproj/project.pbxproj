@@ -395,6 +395,7 @@
 		F29324741A19A36700355A4D /* FlipPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipPlayerItem.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
 		F2BF59801A0166CF00C44CC6 /* VideoComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoComposer.m; sourceTree = "<group>"; };
+		F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mugchat 2 - added FlipEntry.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1699,9 +1700,10 @@
 		70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */,
 				70FD4E7819D064450024EBDB /* mugchat.xcdatamodel */,
 			);
-			currentVersion = 70FD4E7819D064450024EBDB /* mugchat.xcdatamodel */;
+			currentVersion = F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */;
 			path = mugchat.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
