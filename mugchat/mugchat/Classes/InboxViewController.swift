@@ -160,6 +160,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
         synced(roomIds, closure: { () -> () in
             self.roomIds.removeAtIndex(index)
+            return ()
         })
     }
 }
