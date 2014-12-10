@@ -61,10 +61,17 @@ public class Downloader : NSObject {
                 self.downloadInProgressURLs.removeObject(urlString)
                 
                 if let httpResponse = response as? NSHTTPURLResponse {
-                    if let contentType = httpResponse.allHeaderFields["Content-Type"] as? NSString {
+                    var responseContentType = httpResponse.allHeaderFields["Content-Type"] as String?
+                    if let contentType = responseContentType {
+                        println("### content-type = \(contentType) ###")
                         completion(self.backgroundTypeForContentType(contentType), error)
+                    } else {
+                        println("### Error ###")
+                        println("### Content type is not included in response object. ###")
                     }
                 } else {
+                    println("### Error ###")
+                    println("### Response is invalid. ###")
                     completion(self.backgroundTypeForContentType(""), error)
                 }
         }
@@ -166,6 +173,9 @@ public class Downloader : NSObject {
         } else if (contentType.hasPrefix("video")) {
             return BackgroundContentType.Video
         }
+        
+        println("### Error ###")
+        println("### Content-type undefined with value = \(contentType)")
 
         return BackgroundContentType.Undefined
     }
