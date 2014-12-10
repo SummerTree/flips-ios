@@ -307,8 +307,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                     return
                 }
                 var row = indexPath?.row
-                var shouldAutoPlay: Bool = dataSource!.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!) as Bool
-                if (shouldAutoPlay) {
+                var shouldAutoPlay: Bool? = dataSource?.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!)
+                if (shouldAutoPlay != nil) {
                     cell.playMovie()
                 }
             } else {
@@ -415,7 +415,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             cell.stopMovie()
             cell.releaseResources()
         }
-        
     }
     
     

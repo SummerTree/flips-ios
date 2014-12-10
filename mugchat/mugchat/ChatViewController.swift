@@ -64,6 +64,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
+        self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
         self.chatView.reloadFlipMessages()
@@ -74,8 +75,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
-        self.chatView.dataSource = nil
         self.chatView.viewWillDisappear()
+        self.chatView.dataSource = nil
+        self.chatView.delegate = nil
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
