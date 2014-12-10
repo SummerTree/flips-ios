@@ -13,7 +13,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class FlipMessage, User;
+@class FlipEntry, User;
 
 @interface Flip : NSManagedObject
 
@@ -24,17 +24,17 @@
 @property (nonatomic, retain) NSNumber * isPrivate;
 @property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSString * soundURL;
-@property (nonatomic, retain) NSString * word;
 @property (nonatomic, retain) NSString * thumbnailURL;
-@property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSString * word;
 @property (nonatomic, retain) User *owner;
+@property (nonatomic, retain) NSSet *entries;
 @end
 
 @interface Flip (CoreDataGeneratedAccessors)
 
-- (void)addMessagesObject:(FlipMessage *)value;
-- (void)removeMessagesObject:(FlipMessage *)value;
-- (void)addMessages:(NSSet *)values;
-- (void)removeMessages:(NSSet *)values;
+- (void)addEntriesObject:(FlipEntry *)value;
+- (void)removeEntriesObject:(FlipEntry *)value;
+- (void)addEntries:(NSSet *)values;
+- (void)removeEntries:(NSSet *)values;
 
 @end

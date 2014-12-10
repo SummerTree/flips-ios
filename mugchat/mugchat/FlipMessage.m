@@ -11,7 +11,7 @@
 //
 
 #import "FlipMessage.h"
-#import "Flip.h"
+#import "FlipEntry.h"
 #import "Room.h"
 #import "User.h"
 
@@ -24,7 +24,7 @@
 @dynamic receivedAt;
 @dynamic removed;
 @dynamic from;
-@dynamic flips;
 @dynamic room;
+@dynamic entries;
 
 @end
