@@ -81,7 +81,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
-        let roomID = roomIds[index]
+        var roomID: String!
+        synced(roomIds, closure: { () -> () in
+            roomID = self.roomIds[index]
+        })
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.retrieveRoomWithId(roomID)
         self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
@@ -94,10 +97,12 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let roomDataSource = RoomDataSource()
             let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
-            self.roomIds.removeAll(keepCapacity: false)
-            for room in rooms {
-                self.roomIds.append(room.roomID)
-            }
+            self.synced(self.roomIds, closure: { () -> () in
+                self.roomIds.removeAll(keepCapacity: true)
+                for room in rooms {
+                    self.roomIds.append(room.roomID)
+                }
+            })
             self.inboxView.reloadData()
         })
     }
@@ -136,15 +141,26 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     // MARK: - InboxViewDataSource
 
     func numberOfRooms() -> Int {
-        return self.roomIds.count
+        var numberOfRooms: Int!
+        synced(roomIds, closure: { () -> () in
+            numberOfRooms = self.roomIds.count
+        })
+        return numberOfRooms
     }
     
     func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String {
-        return self.roomIds[index]
+        var roomId: String!
+        synced(roomIds, closure: { () -> () in
+            roomId = self.roomIds[index]
+        })
+
+        return roomId
     }
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
-        self.roomIds.removeAtIndex(index)
+        synced(roomIds, closure: { () -> () in
+            self.roomIds.removeAtIndex(index)
+        })
     }
 }
 
