@@ -122,6 +122,8 @@ extension FlipMessage {
             flipDictionary.updateValue(flip.word, forKey: FlipJsonParams.WORD)
             flipDictionary.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
             flipDictionary.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
+            flipDictionary.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
+            flipDictionary.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
             
             flips.append(flipDictionary)
         }
