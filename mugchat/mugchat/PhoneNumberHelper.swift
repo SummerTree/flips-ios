@@ -25,17 +25,23 @@ class PhoneNumberHelper {
     
     class func formatUsingUSInternational(phoneNumber: String) -> String {
         let phone = cleanFormattedPhoneNumber(phoneNumber)
-        let countryCode = phone[0...1]
         let phoneNumberLength = countElements(phone)
         
-        if (countryCode == "+1" && phoneNumberLength == 12) {
-            return phone
-        } else if (phoneNumberLength == 10) {
-            let intPhone = phone[0...9]
-            return "+1\(intPhone)"
-        } else if (phoneNumberLength == 11) {
-            let intPhone = phone[0...10]
-            return "+\(intPhone)"
+        if (phoneNumberLength >= 2) {
+            let countryCode = phone[0...1]
+        
+            
+            if (countryCode == "+1" && phoneNumberLength == 12) {
+                return phone
+            } else if (phoneNumberLength == 10) {
+                let intPhone = phone[0...9]
+                return "+1\(intPhone)"
+            } else if (phoneNumberLength == 11) {
+                let intPhone = phone[0...10]
+                return "+\(intPhone)"
+            } else {
+                return phone
+            }
         } else {
             return phone
         }

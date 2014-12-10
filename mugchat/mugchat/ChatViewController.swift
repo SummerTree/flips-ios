@@ -64,6 +64,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
+        self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
         self.chatView.reloadFlipMessages()
@@ -74,8 +75,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
-        self.chatView.dataSource = nil
         self.chatView.viewWillDisappear()
+        self.chatView.dataSource = nil
+        self.chatView.delegate = nil
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -87,10 +89,12 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func reloadFlipMessages() {
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
-        flipMessageIds.removeAll(keepCapacity: false)
-        for flipMessage in flipMessages {
-            flipMessageIds.append(flipMessage.flipMessageID)
-        }
+        synced(flipMessageIds, closure: { () -> () in
+            self.flipMessageIds.removeAll(keepCapacity: true)
+            for flipMessage in flipMessages {
+                self.flipMessageIds.append(flipMessage.flipMessageID)
+            }
+        })
     }
     
     func reload() {
@@ -117,15 +121,23 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - ChatViewDataSource
     
     func numberOfFlipMessages(chatView: ChatView) -> Int {
-        return self.flipMessageIds.count
+        var numberOfFlipMessages: Int!
+        synced(flipMessageIds, closure: { () -> () in
+            numberOfFlipMessages = self.flipMessageIds.count
+        })
+        return numberOfFlipMessages
     }
     
     func chatView(chatView: ChatView, flipMessageIdAtIndex index: Int) -> String {
-        return self.flipMessageIds[index]
+        var flipMessageId: String!
+        synced(flipMessageIds, closure: { () -> () in
+            flipMessageId = self.flipMessageIds[index]
+        })
+        return flipMessageId
     }
     
     func chatView(chatView: ChatView, shouldAutoPlayFlipMessageAtIndex index: Int) -> Bool {
-        let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageIds[index])
+//        let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageIds[index])
 //        return flipMessage.notRead.boolValue
         return true
     }

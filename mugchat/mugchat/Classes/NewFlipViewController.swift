@@ -147,7 +147,7 @@ class NewFlipViewController: FlipsViewController,
     
     private func updateNextButtonState() {
         let hasContacts = contacts.count > 0
-        let hasText = !flipTextField.text.isEmpty
+        let hasText = !flipTextField.text.removeWhiteSpaces().isEmpty
         nextButton.enabled = hasContacts && hasText
     }
     

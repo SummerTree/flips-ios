@@ -164,7 +164,7 @@ extension UIImage {
     func squareCrop(imageSource: UIImageSource) -> UIImage {
         switch imageSource {
         case UIImageSource.FrontCamera:
-            return cropFromFrontCamera()
+            return cropFromBackCamera()
         case UIImageSource.BackCamera:
             return cropFromBackCamera()
         case UIImageSource.Unknown:

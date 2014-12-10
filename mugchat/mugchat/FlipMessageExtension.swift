@@ -135,7 +135,9 @@ extension FlipMessage {
             dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
             dic.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
-            
+            dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
+            dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
+
             flipsDictionary.append(dic)
         }
         
