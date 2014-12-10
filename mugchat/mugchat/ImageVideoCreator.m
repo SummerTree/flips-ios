@@ -31,6 +31,10 @@
 }
 
 - (void)createVideoWithImage:(UIImage *)image atPath:(NSString *)path {
+    
+    if (image == nil) {
+        NSLog(@"Image is nil, it shouldn't happen.");
+    }
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:path]) {
@@ -45,6 +49,10 @@
     }
     
     CGSize frameSize = image.size;
+    if (frameSize.width == 0.0) {
+        NSLog(@"Frame width is 0.0, it shouldn't happen.");
+    }
+    
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                    AVVideoCodecH264, AVVideoCodecKey,
                                    [NSNumber numberWithInt:frameSize.width], AVVideoWidthKey,

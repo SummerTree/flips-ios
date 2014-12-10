@@ -140,12 +140,15 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
             if (flip.isBackgroundContentTypeVideo()) {
                 self.flipViewer.setWord(word)
                 self.flipViewer.setVideoURL(NSURL.fileURLWithPath(filePath)!)
-            } else {
+            } else if (flip.isBackgroundContentTypeImage()) {
                 var image = UIImage(contentsOfFile: filePath)
                 if (flip.hasAudio()) {
                     self.flipViewer.setAudioURL(NSURL.fileURLWithPath(flip.soundContentLocalPath()!)!)
                 }
                 self.showImage(image!, andText: word)
+            } else {
+                println("### Error ###")
+                println("### Flip id [\(flipId)) contains a wrong content type.")
             }
             self.bringSubviewToFront(self.flipViewer)
         })
