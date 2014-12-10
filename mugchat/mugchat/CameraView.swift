@@ -338,10 +338,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             if (self.session.canAddOutput(movieOutput)) {
                 self.session.addOutput(movieOutput)
                 var connection = movieOutput.connectionWithMediaType(AVMediaTypeVideo)
-                
-                // video should only be mirrored for preview
-                connection.videoMirrored = self.showingFrontCamera && connection.supportsVideoMirroring
-                
+                connection.videoMirrored = true
                 if (connection.videoStabilizationEnabled) {
                     connection.enablesVideoStabilizationWhenAvailable = true
                 }
