@@ -38,6 +38,8 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         super.init(frame: CGRect.zeroRect)
         self.flipTextViews = Array<FlipTextView>()
         
+        clipsToBounds = true
+        
         self.addSubviews()
         self.addConstraints()
         
