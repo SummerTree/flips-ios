@@ -18,7 +18,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var chatTitle: String!
     
     private var roomID: String!
-    private var flipMessageIds: [String]!
+    private var flipMessageIds = NSMutableOrderedSet()
     
     private let flipMessageDataSource = FlipMessageDataSource()
     
@@ -54,7 +54,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        flipMessageIds = Array<String>()
         self.reloadFlipMessages()
     }
     
@@ -89,12 +88,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func reloadFlipMessages() {
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
-        synced(flipMessageIds, closure: { () -> () in
-            self.flipMessageIds.removeAll(keepCapacity: true)
-            for flipMessage in flipMessages {
-                self.flipMessageIds.append(flipMessage.flipMessageID)
-            }
-        })
+        for flipMessage in flipMessages {
+            self.flipMessageIds.addObject(flipMessage.flipMessageID)
+        }
     }
     
     func reload() {
@@ -122,17 +118,13 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func numberOfFlipMessages(chatView: ChatView) -> Int {
         var numberOfFlipMessages: Int!
-        synced(flipMessageIds, closure: { () -> () in
-            numberOfFlipMessages = self.flipMessageIds.count
-        })
+        numberOfFlipMessages = self.flipMessageIds.count
         return numberOfFlipMessages
     }
     
     func chatView(chatView: ChatView, flipMessageIdAtIndex index: Int) -> String {
         var flipMessageId: String!
-        synced(flipMessageIds, closure: { () -> () in
-            flipMessageId = self.flipMessageIds[index]
-        })
+        flipMessageId = self.flipMessageIds.objectAtIndex(index) as String
         return flipMessageId
     }
     
