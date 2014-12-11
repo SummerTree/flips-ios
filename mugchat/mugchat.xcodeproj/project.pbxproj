@@ -26,6 +26,7 @@
 		07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */; };
 		07CE2ABA1A1E8FEC00CF1A70 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
+		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
@@ -218,6 +219,7 @@
 		07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+helpers.m"; path = "Classes/NSManagedObject+helpers.m"; sourceTree = "<group>"; };
 		07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocalizedString.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
+		07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSErrorExtensions.swift; path = Classes/NSErrorExtensions.swift; sourceTree = "<group>"; };
 		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
@@ -687,11 +689,12 @@
 			children = (
 				709EC3391A26073300C13F05 /* Exception */,
 				5741569E19D33F30006F0A2F /* NSDateExtension.swift */,
+				07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */,
 				07C53DC81A11C6B40011E6A2 /* NSManagedObject+helpers.h */,
 				07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */,
+				7AFECD7E1A38A98B00552A7B /* NSObjectExtension.swift */,
 				7AB946D719DED95900779C73 /* StringExtensions.swift */,
 				07B5B7681A30E59E0087AD61 /* StringPhoneNumberExtensions.swift */,
-				7AFECD7E1A38A98B00552A7B /* NSObjectExtension.swift */,
 				70B7695D19E6FF1000CAA9A9 /* SwiftyJSON */,
 				708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */,
 				7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */,
@@ -1375,6 +1378,7 @@
 				7AA711751A28D8B00082165A /* BuilderWord.m in Sources */,
 				7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */,
 				7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */,
+				07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */,
 				709EC33C1A26074B00C13F05 /* SwiftTryCatch.m in Sources */,
 				7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */,
 				7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */,
