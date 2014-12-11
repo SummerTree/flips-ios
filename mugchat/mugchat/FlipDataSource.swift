@@ -57,6 +57,14 @@ class FlipDataSource : BaseDataSource {
         flip.soundURL = json[FlipJsonParams.SOUND_URL].stringValue
         flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
         flip.thumbnailURL = json[FlipJsonParams.THUMBNAIL_URL].stringValue
+
+        if ((flip.backgroundURL == nil) || (flip.backgroundURL.isEmpty)) {
+            flip.setBackgroundContentType(BackgroundContentType.Image)
+        } else if (flip.backgroundURL.hasSuffix("jpg")) {
+            flip.setBackgroundContentType(BackgroundContentType.Image)
+        } else if (flip.backgroundURL.hasSuffix("mov")) {
+            flip.setBackgroundContentType(BackgroundContentType.Video)
+        }
         
         let flipOwnerID = json[FlipJsonParams.OWNER].stringValue
         if (!flipOwnerID.isEmpty) {

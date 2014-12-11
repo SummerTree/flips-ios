@@ -36,10 +36,13 @@ extension Flip {
         switch(type) {
         case BackgroundContentType.Undefined:
             typeValue = BackgroundContentTypeValue.Undefined
+            break
         case BackgroundContentType.Image:
             typeValue = BackgroundContentTypeValue.Image
+            break
         case BackgroundContentType.Video:
             typeValue = BackgroundContentTypeValue.Video
+            break
         }
         
         self.backgroundContentType = typeValue
@@ -51,7 +54,7 @@ extension Flip {
     }
     
     func isBackgroundContentTypeImage() -> Bool {
-        return (self.backgroundContentType == BackgroundContentTypeValue.Image)
+        return (self.backgroundContentType == BackgroundContentTypeValue.Image) || (self.backgroundURL.hasSuffix("jpg"))
     }
     
     func isBackgroundContentTypeVideo() -> Bool {
