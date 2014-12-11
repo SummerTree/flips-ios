@@ -10,12 +10,13 @@
 // the license agreement.
 //
 
+import Foundation
 
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
 
     private var inboxView: InboxView!
-    private var roomIds: [String]!
-    
+    private var roomIds = Dictionary<Int, String>()
+    private let roomsQueue =  dispatch_queue_create("rooms inbox queue", nil)
     
     // MARK: - UIViewController overridden methods
 
@@ -36,7 +37,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         super.viewDidLoad()
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.roomIds = Array<String>()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,7 +82,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
         var roomID: String!
-        synced(roomIds, closure: { () -> () in
+        dispatch_sync(roomsQueue, { () -> Void in
             roomID = self.roomIds[index]
         })
         let roomDataSource = RoomDataSource()
@@ -97,13 +97,15 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let roomDataSource = RoomDataSource()
             let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
-            self.synced(self.roomIds, closure: { () -> () in
-                self.roomIds.removeAll(keepCapacity: true)
-                for room in rooms {
-                    self.roomIds.append(room.roomID)
+            dispatch_sync(self.roomsQueue, { () -> Void in
+                for (index, room) in enumerate(rooms) {
+                    self.roomIds[index] = room.roomID
                 }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.inboxView.reloadData()
+                })
             })
-            self.inboxView.reloadData()
         })
     }
     
@@ -142,7 +144,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
 
     func numberOfRooms() -> Int {
         var numberOfRooms: Int!
-        synced(roomIds, closure: { () -> () in
+        dispatch_sync(roomsQueue, { () -> Void in
             numberOfRooms = self.roomIds.count
         })
         return numberOfRooms
@@ -150,7 +152,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String {
         var roomId: String!
-        synced(roomIds, closure: { () -> () in
+        dispatch_sync(roomsQueue, { () -> Void in
             roomId = self.roomIds[index]
         })
 
@@ -158,8 +160,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
-        synced(roomIds, closure: { () -> () in
-            self.roomIds.removeAtIndex(index)
+        dispatch_sync(roomsQueue, { () -> Void in
+            self.roomIds.removeValueForKey(index)
             return ()
         })
     }
