@@ -54,7 +54,11 @@ extension FlipMessage {
     
     func messageThumbnail() -> UIImage? {
         let firstFlip = self.flips.first
-        var thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(firstFlip!.backgroundURL)
+        var thumbnail: UIImage?
+        
+        if let backgroundURL = firstFlip?.backgroundURL {
+            thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(backgroundURL)
+        }
 
         if (thumbnail == nil) {
             thumbnail = self.createThumbnail()
