@@ -19,7 +19,6 @@ NSString * const kDefaultEntryText = @" ";
 @interface MBContactCollectionView() <UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegateImproved, MBContactCollectionViewDelegateFlowLayout, UIKeyInput>
 
 @property (nonatomic, readonly) NSIndexPath *indexPathOfSelectedCell;
-@property (nonatomic, assign, readonly, getter=isInvalidContact) BOOL invalidContact;
 @property (nonatomic, assign) BOOL notBecomeFirstResponder;
 @property (nonatomic) MBContactCollectionViewContactCell *prototypeCell;
 @property (nonatomic) MBContactCollectionViewPromptCell *promptCell;
@@ -552,21 +551,6 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     {
         [self.contactDelegate contactCollectionView:self entryTextDidChange:textField.text];
     }
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    if (self.isInvalidContact) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid Contact", @"")
-                                                            message:NSLocalizedString(@"Please choose a valid contact.", @"")
-                                                           delegate:nil
-                                                  cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                                                  otherButtonTitles:nil];
-        [alertView show];
-        
-        return NO;
-    }
-    
-    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
