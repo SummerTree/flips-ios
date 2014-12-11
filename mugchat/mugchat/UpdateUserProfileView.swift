@@ -42,6 +42,14 @@ class UpdateUserProfileView: SignUpView {
         navigationBar.setRightButtonEnabled(false)
     }
     
+    override func setUserPicture(picture: UIImage) {
+        super.setUserPicture(picture)
+        
+        if (!isUserProfileChanged) {
+            navigationBar.setRightButtonEnabled(true)
+        }
+    }
+
     override func enableRightButton(allFieldsCompleted: Bool) {
         if (allFieldsCompleted && isUserProfileChanged) {
             navigationBar.setRightButtonEnabled(true)
