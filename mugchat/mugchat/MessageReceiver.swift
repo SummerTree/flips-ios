@@ -52,17 +52,19 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     private func onMessageReceived(flipMessage: FlipMessage) {
         // Notify any screen that there is a new message
-        println("New Message Received")
-        println("   From: \(flipMessage.from.firstName)")
-        println("   Sent at: \(flipMessage.createdAt)")
-        println("   #flips: \(flipMessage.flips.count)")
-        
         flipMessagesWaitingDownload.addObject(flipMessage)
         
         let downloader = Downloader.sharedInstance
-        for var i = 0; i < flipMessage.flips.count; i++ {
-            println("       flip #\(flipMessage.flips.objectAtIndex(i).flipID)")
-            let flip = flipMessage.flips.objectAtIndex(i) as Flip
+        let flips = flipMessage.flips
+
+        println("New Message Received")
+        println("   From: \(flipMessage.from.firstName)")
+        println("   Sent at: \(flipMessage.createdAt)")
+        println("   #flips: \(flips.count)")
+
+        for var i = 0; i < flips.count; i++ {
+            println("       flip #\(flips[i].flipID)")
+            let flip = flips[i]
             downloader.downloadDataForFlip(flip, isTemporary: true)
         }
     }

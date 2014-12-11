@@ -36,6 +36,7 @@
 #import "User.h"
 #import "Room.h"
 #import "Flip.h"
+#import "FlipEntry.h"
 #import "FlipMessage.h"
 #import "Contact.h"
 #import "BuilderWord.h"

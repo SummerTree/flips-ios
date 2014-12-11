@@ -10,23 +10,15 @@
 // the license agreement.
 //
 
-#import "Flip.h"
-#import "FlipEntry.h"
-#import "User.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
+@class Flip, FlipMessage;
 
-@implementation Flip
+@interface FlipEntry : NSManagedObject
 
-@dynamic backgroundContentType;
-@dynamic backgroundURL;
-@dynamic category;
-@dynamic flipID;
-@dynamic isPrivate;
-@dynamic removed;
-@dynamic soundURL;
-@dynamic thumbnailURL;
-@dynamic word;
-@dynamic owner;
-@dynamic entries;
+@property (nonatomic, retain) NSNumber * order;
+@property (nonatomic, retain) Flip *flip;
+@property (nonatomic, retain) FlipMessage *message;
 
 @end

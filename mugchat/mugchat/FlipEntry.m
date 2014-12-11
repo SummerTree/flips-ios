@@ -10,23 +10,15 @@
 // the license agreement.
 //
 
-#import "Flip.h"
 #import "FlipEntry.h"
-#import "User.h"
+#import "Flip.h"
+#import "FlipMessage.h"
 
 
-@implementation Flip
+@implementation FlipEntry
 
-@dynamic backgroundContentType;
-@dynamic backgroundURL;
-@dynamic category;
-@dynamic flipID;
-@dynamic isPrivate;
-@dynamic removed;
-@dynamic soundURL;
-@dynamic thumbnailURL;
-@dynamic word;
-@dynamic owner;
-@dynamic entries;
+@dynamic order;
+@dynamic flip;
+@dynamic message;
 
 @end

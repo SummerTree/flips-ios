@@ -129,7 +129,8 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         self.flipMessageId = flipMessageId
         let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
 
-        self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips.array as [Flip], completion: { (player) -> Void in
+        self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips, completion: { (player) -> Void in
+
         })
 
         let formattedDate = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)

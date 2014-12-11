@@ -13,7 +13,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Flip, Room, User;
+@class FlipEntry, Room, User;
 
 @interface FlipMessage : NSManagedObject
 
@@ -23,20 +23,15 @@
 @property (nonatomic, retain) NSDate * receivedAt;
 @property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) User *from;
-@property (nonatomic, retain) NSOrderedSet *flips;
 @property (nonatomic, retain) Room *room;
+@property (nonatomic, retain) NSSet *entries;
 @end
 
 @interface FlipMessage (CoreDataGeneratedAccessors)
 
-- (void)insertObject:(Flip *)value inFlipsAtIndex:(NSUInteger)idx;
-- (void)removeObjectFromFlipsAtIndex:(NSUInteger)idx;
-- (void)insertFlips:(NSArray *)value atIndexes:(NSIndexSet *)indexes;
-- (void)removeFlipsAtIndexes:(NSIndexSet *)indexes;
-- (void)replaceObjectInFlipsAtIndex:(NSUInteger)idx withObject:(Flip *)value;
-- (void)replaceFlipsAtIndexes:(NSIndexSet *)indexes withFlips:(NSArray *)values;
-- (void)addFlipsObject:(Flip *)value;
-- (void)removeFlipsObject:(Flip *)value;
-- (void)addFlips:(NSOrderedSet *)values;
-- (void)removeFlips:(NSOrderedSet *)values;
+- (void)addEntriesObject:(FlipEntry *)value;
+- (void)removeEntriesObject:(FlipEntry *)value;
+- (void)addEntries:(NSSet *)values;
+- (void)removeEntries:(NSSet *)values;
+
 @end
