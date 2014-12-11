@@ -157,6 +157,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 self.reloadMyFlips()
+                
+                for flipWord in self.flipWords {
+                    if let firstFlipId: String = self.myFlipsDictionary[flipWord.text]?.first {
+                        flipWord.associatedFlipId = firstFlipId
+                    }
+                }
+                
                 self.updateFlipWordsState()
                 self.showContentForHighlightedWord()
             })

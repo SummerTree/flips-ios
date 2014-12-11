@@ -139,7 +139,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     private func userHasDevice(user: User) -> Bool {
         var userHasPhone = user.phoneNumber != nil
         var phoneNumberLength = countElements(user.phoneNumber)
-        var isDeviceVerified = user.device.isVerified.boolValue
+        var isDeviceVerified: Bool = false
+        
+        if let isVerified = user.device.isVerified {
+            isDeviceVerified = user.device.isVerified.boolValue
+        }
+        
         return userHasPhone && (phoneNumberLength > 0) && isDeviceVerified
     }
     
