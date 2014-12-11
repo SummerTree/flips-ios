@@ -175,6 +175,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return size.height * 2 - self.TEXT_VIEW_MARGIN
     }
     
+    func changeFlipWords(words: [String]) {
+        self.replyTextField.setWords(words)
+    }
     
     // MARK: - CustomNavigationBarDelegate
     

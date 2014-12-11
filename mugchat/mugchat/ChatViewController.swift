@@ -158,4 +158,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         self.reload()
     }
+    
+    func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
+        self.chatView.changeFlipWords(words)
+    }
 }
