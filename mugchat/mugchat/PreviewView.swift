@@ -41,8 +41,10 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
 
     func viewWillDisappear() {
-        self.videoPlayerView.player().removeObserver(self, forKeyPath: "status")
-        self.stopMovie()
+        if (self.videoPlayerView.hasPlayer()) {
+            self.videoPlayerView.player().removeObserver(self, forKeyPath: "status")
+            self.stopMovie()
+        }
 
         let videoComposer = VideoComposer()
         videoComposer.clearTempCache()
