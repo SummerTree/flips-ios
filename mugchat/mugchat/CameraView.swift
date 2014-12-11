@@ -317,19 +317,23 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             }
             
             if (self.showMicrophoneButton) {
-                error = nil
-                
                 // We should ask for audio access if we aren't showing the button to record audio.
-                var audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as AVCaptureDevice
-                var audioDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as AVCaptureDeviceInput
-                
-                if (error != nil) {
-                    self.isMicrophoneAvailable = false
-                } else {
-                    self.isMicrophoneAvailable = true
-                    if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
-                        self.session.addInput(audioDeviceInput as AVCaptureInput)
+                if let audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as? AVCaptureDevice {
+                    error = nil
+
+                    if let audioDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as? AVCaptureDeviceInput {
+                        self.isMicrophoneAvailable = true
+                        if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
+                            self.session.addInput(audioDeviceInput as AVCaptureInput)
+                        }
+                    } else {
+                        self.isMicrophoneAvailable = false
+                        
+                        let alertView = UIAlertView(title: NSLocalizedString("Microphone Error"), message: error?.localizedFailureReasonOrDescription, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                        alertView.show()
                     }
+                } else {
+                    self.isMicrophoneAvailable = false
                 }
             }
             
