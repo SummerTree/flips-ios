@@ -334,18 +334,27 @@ class CustomNavigationBar : UIView {
         }
     }
     
-    func setAvatarImageUrl(url: String) {
-        if (!url.isEmpty) {
-            if (avatarImageView != nil) {
-                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
-                avatarImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
-                    })
+    func setAvatarImageURL(url: NSURL) {
+        if (avatarButton != nil) {
+            ActivityIndicatorHelper.showActivityIndicatorAtView(avatarButton, style: UIActivityIndicatorViewStyle.Gray)
+            let urlRequest = NSURLRequest(URL: url)
+            
+            avatarButton.setImageForState(.Normal, withURLRequest: urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
+                
+                self.avatarButton.setAvatarImage(image, forState: .Normal)
+                self.avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
+                
+                }, failure: { (error) -> Void in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
+            })
+        } else if (avatarImageView != nil) {
+            ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
+            avatarImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
                 })
-            } else {
-                println("Avatar using button is not integrated with images from URLs yet.")
-            }
+            })
         }
     }
     
