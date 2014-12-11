@@ -270,6 +270,11 @@ class NewFlipViewController: FlipsViewController,
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
         delegate?.newFlipViewController(self, didSendMessageToRoom: roomID)
     }
+    
+    func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
+        self.flipTextField.setWords(words)
+    }
+
 }
 
 protocol NewFlipViewControllerDelegate {

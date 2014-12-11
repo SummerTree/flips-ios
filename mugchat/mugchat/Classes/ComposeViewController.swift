@@ -468,6 +468,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             flipWords = newFlipWords
             
+            self.delegate?.composeViewController?(self, didChangeFlipWords: flipWords.map { $0.text})
+            
             self.reloadMyFlips()
             self.updateFlipWordsState()
             
@@ -756,8 +758,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
 }
 
-protocol ComposeViewControllerDelegate {
+@objc protocol ComposeViewControllerDelegate {
     
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String)
+    
+    optional func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String])
 
 }

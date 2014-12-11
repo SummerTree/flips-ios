@@ -249,6 +249,36 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return true
     }
     
+    func setWords(words: [String]) {
+        let joiner = " "
+        var text = "";
+        var firstWord = true
+        joinedTextRanges = []
+        for word in words {
+            if (!firstWord) {
+                text += " "
+            } else {
+                firstWord = false
+            }
+            if (isCompoundText(word)) {
+                var compoundTextRange = NSMakeRange(countElements(text), countElements(word))
+                joinedTextRanges.append(compoundTextRange)
+            }
+            text += word
+        }
+        self.text = text
+        self.updateColorOnJoinedTexts(UIColor.flipOrange())
+    }
+    
+    private func isCompoundText(word: String) -> Bool {
+        let wordWithoutSpaces = word.removeWhiteSpaces()
+        if (wordWithoutSpaces != word) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
 }
 
 // MARK: - View Delegate
