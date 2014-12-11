@@ -238,7 +238,7 @@
     NSURL *videoURL;
     CacheHandler *cacheHandler = [CacheHandler sharedInstance];
 
-    if ([flip isBackgroundContentTypeVideo]) {
+    if ([flip isBackgroundContentTypeVideo] || [flip.backgroundURL hasSuffix:@"mov"]) {
         NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
         videoURL = [NSURL fileURLWithPath:filePath];
     } else {

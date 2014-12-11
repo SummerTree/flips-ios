@@ -20,7 +20,7 @@ let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY: String = "download_finished_n
 public class Downloader : NSObject {
     
     let TIME_OUT_INTERVAL: NSTimeInterval = 60 //secconds
-    
+    let downloadQueue =  dispatch_queue_create("download flip queue", nil)
     private var downloadInProgressURLs: NSHashTable!
     
     
@@ -110,7 +110,7 @@ public class Downloader : NSObject {
     }
 
     func downloadDataForFlip(flip: Flip, isTemporary: Bool = true, completion: DownloadFinishedCompletion? = nil) {
-        dispatch_async(dispatch_queue_create("download flip queue", nil), { () -> Void in
+        dispatch_async(downloadQueue, { () -> Void in
             var group = dispatch_group_create()
             
             var downloadError: NSError?
