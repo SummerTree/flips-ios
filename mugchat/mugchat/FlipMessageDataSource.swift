@@ -40,13 +40,20 @@ class FlipMessageDataSource : BaseDataSource {
         }
 
         entity = FlipMessage.createEntity() as FlipMessage
-        entity.flipMessageID = self.nextFlipMessageID()
+        entity.flipMessageID = flipMessageID
         
         entity.from = userDataSource.retrieveUserWithId(fromUserID)
         entity.createdAt = NSDate(dateTimeString: json[FlipMessageJsonParams.SENT_AT].stringValue)
-        entity.notRead = true
         entity.receivedAt = NSDate()
-
+        
+        var notRead = true
+        if let loggedUser = AuthenticationHelper.sharedInstance.userInSession {
+            if (entity.from.userID == loggedUser.userID) {
+                notRead = false
+            }
+        }
+        entity.notRead = notRead
+        
         let flipDataSource = FlipDataSource()
         let content = json[FlipMessageJsonParams.CONTENT]
         
@@ -131,7 +138,7 @@ class FlipMessageDataSource : BaseDataSource {
     private func nextFlipMessageID() -> String {
         let loggedUser = User.loggedUser()
         let timestamp = NSDate.timeIntervalSinceReferenceDate()
-        let newMessageId = "\(loggedUser?.userID):\(timestamp)"
+        let newMessageId = "\(loggedUser!.userID):\(timestamp)"
 
         return newMessageId
     }
