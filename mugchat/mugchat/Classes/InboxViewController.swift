@@ -98,9 +98,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 self.roomIds.addObject(room.roomID)
             }
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.inboxView.reloadData()
-            })
+            self.inboxView.reloadData()
         })
     }
     
