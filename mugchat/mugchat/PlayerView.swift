@@ -177,7 +177,7 @@ class PlayerView: UIView {
         }
     }
 
-    private func hasPlayer() -> Bool {
+    func hasPlayer() -> Bool {
         let layer = self.layer as AVPlayerLayer
         return layer.player != nil
     }
