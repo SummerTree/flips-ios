@@ -60,9 +60,9 @@ class FlipDataSource : BaseDataSource {
 
         if ((flip.backgroundURL == nil) || (flip.backgroundURL.isEmpty)) {
             flip.setBackgroundContentType(BackgroundContentType.Image)
-        } else if (flip.backgroundURL.hasSuffix("jpg")) {
+        } else if (flip.backgroundURL.isImagePath()) {
             flip.setBackgroundContentType(BackgroundContentType.Image)
-        } else if (flip.backgroundURL.hasSuffix("mov")) {
+        } else if (flip.backgroundURL.isVideoPath()) {
             flip.setBackgroundContentType(BackgroundContentType.Video)
         }
         
