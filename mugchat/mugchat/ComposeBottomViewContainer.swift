@@ -198,7 +198,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     func showMyFlips() {
         self.hideFlipCreatedMessage()
         self.reloadMyFlips()
-        self.slideToMyFlipsView(notifyDelegate: false)
+        self.slideToMyFlipsView()
     }
     
     func showAudioRecordButton() {
@@ -291,23 +291,27 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
             delegate?.composeBottomViewContainerWillOpenMyFlipsView(self)
         }
         
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.flipsView.alpha = 1.0
-            
-            self.flipsView.mas_updateConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.left.equalTo()(self)
-                make.right.equalTo()(self)
-                make.top.equalTo()(self)
-                make.height.equalTo()(self)
-            })
-            
-            self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.left.equalTo()(self.flipsView.mas_right)
-                make.width.equalTo()(self)
-                make.top.equalTo()(self)
-                make.height.equalTo()(self)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.flipsView.alpha = 1.0
+                
+                self.flipsView.mas_updateConstraints({ (make) -> Void in
+                    make.removeExisting = true
+                    make.left.equalTo()(self)
+                    make.right.equalTo()(self)
+                    make.top.equalTo()(self)
+                    make.height.equalTo()(self)
+                })
+                
+                self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
+                    make.removeExisting = true
+                    make.left.equalTo()(self.flipsView.mas_right)
+                    make.width.equalTo()(self)
+                    make.top.equalTo()(self)
+                    make.height.equalTo()(self)
+                })
+                
+                self.layoutIfNeeded()
             })
         })
     }
@@ -317,26 +321,28 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
             delegate?.composeBottomViewContainerWillOpenCameraControls(self)
         }
         
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.flipsView.alpha = 0.0
-            
-            self.flipsView.mas_updateConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.width.equalTo()(self)
-                make.right.equalTo()(self.mas_left)
-                make.top.equalTo()(self)
-                make.height.equalTo()(self)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.flipsView.alpha = 0.0
+                
+                self.flipsView.mas_updateConstraints({ (make) -> Void in
+                    make.removeExisting = true
+                    make.width.equalTo()(self)
+                    make.right.equalTo()(self.mas_left)
+                    make.top.equalTo()(self)
+                    make.height.equalTo()(self)
+                })
+                
+                self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
+                    make.removeExisting = true
+                    make.left.equalTo()(self)
+                    make.right.equalTo()(self)
+                    make.top.equalTo()(self)
+                    make.height.equalTo()(self)
+                })
+                
+                self.layoutIfNeeded()
             })
-            
-            self.cameraButtonsView.mas_updateConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.left.equalTo()(self)
-                make.right.equalTo()(self)
-                make.top.equalTo()(self)
-                make.height.equalTo()(self)
-            })
-            
-            self.layoutIfNeeded()
         })
     }
     
