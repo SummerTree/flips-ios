@@ -66,7 +66,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
         tableView.separatorStyle = .None
         self.addSubview(tableView)
         
-        arrowDismissImageView = UIImageView(image: UIImage(named: "Arrow_Dismiss"))
+        arrowDismissImageView = UIImageView(image: UIImage(named: "arrow_dismiss"))
         arrowDismissImageView.sizeToFit()
         self.addSubview(arrowDismissImageView)
     }
