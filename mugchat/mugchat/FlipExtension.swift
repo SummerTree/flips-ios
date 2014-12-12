@@ -51,11 +51,11 @@ extension Flip {
     }
     
     func isBackgroundContentTypeImage() -> Bool {
-        return (self.backgroundContentType == BackgroundContentTypeValue.Image)
+        return (self.backgroundContentType == BackgroundContentTypeValue.Image) || (self.backgroundURL.isImagePath())
     }
     
     func isBackgroundContentTypeVideo() -> Bool {
-        return (self.backgroundContentType == BackgroundContentTypeValue.Video) || (self.backgroundURL.hasSuffix("mov"))
+        return (self.backgroundContentType == BackgroundContentTypeValue.Video) || (self.backgroundURL.isVideoPath())
     }
 
     func hasBackground() -> Bool {
