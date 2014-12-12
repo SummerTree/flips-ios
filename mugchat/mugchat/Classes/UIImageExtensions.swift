@@ -51,70 +51,12 @@ extension UIImage {
         return croppedImage!
     }
 
-    private func cropImageToRect2(rect: CGRect, shouldMirror: Bool) -> UIImage {
-        var rotate: CGAffineTransform
-        var center: CGAffineTransform
-
-        var width = self.size.width
-        var height = self.size.height
-
-        switch (self.imageOrientation) {
-        case UIImageOrientation.Left:
-            rotate = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
-            center = CGAffineTransformMakeTranslation(-self.size.height, 0)
-            width = self.size.height
-            height = self.size.width
-            break
-        case UIImageOrientation.Right:
-            rotate = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
-            center = CGAffineTransformMakeTranslation(0, -self.size.width)
-            width = self.size.height
-            height = self.size.width
-            break
-        case UIImageOrientation.Down:
-            rotate = CGAffineTransformMakeRotation(CGFloat(M_PI))
-            center = CGAffineTransformMakeTranslation(-self.size.height, -self.size.width)
-            break
-        default:
-            rotate = CGAffineTransformIdentity
-            if (shouldMirror) {
-                center = CGAffineTransformMakeTranslation(0, -height)
-            } else {
-                center = CGAffineTransformIdentity
-            }
-            break
-        }
-
-        UIGraphicsBeginImageContext(rect.size)
-
-        let context = UIGraphicsGetCurrentContext()
-
-        CGContextConcatCTM(context, rotate)
-        CGContextConcatCTM(context, center)
-
-        if (shouldMirror) {
-            let mirror = CGAffineTransformMakeScale(1.0, -1.0)
-            CGContextConcatCTM(context, mirror)
-            CGContextConcatCTM(context, center)
-        }
-
-        var xOffset = (rect.size.width - width) / 2
-        var yOffset = (rect.size.height - height) / 2
-
-        CGContextDrawImage(context, CGRectMake(xOffset, yOffset, width, height), self.CGImage)
-
-        let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
-
-        UIGraphicsEndImageContext()
-
-        return croppedImage!
-    }
-
     private func cropFromFrontCamera() -> UIImage {
         let rect = self.cropRectangle()
 
         let rotate = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
         let center = CGAffineTransformMakeTranslation(0, -self.size.width)
+        let mirror = CGAffineTransformMakeScale(0.0, -1.0)
 
         let width = self.size.height
         let height = self.size.width
@@ -164,7 +106,7 @@ extension UIImage {
     func squareCrop(imageSource: UIImageSource) -> UIImage {
         switch imageSource {
         case UIImageSource.FrontCamera:
-            return cropFromBackCamera()
+            return cropFromFrontCamera()
         case UIImageSource.BackCamera:
             return cropFromBackCamera()
         case UIImageSource.Unknown:
