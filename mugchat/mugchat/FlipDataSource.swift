@@ -76,7 +76,7 @@ class FlipDataSource : BaseDataSource {
     
     // MARK: - Public Methods
     
-    func createOrUpdateFlipsWithJson(json: JSON) -> Flip {
+    func createOrUpdateFlipWithJson(json: JSON) -> Flip {
         var flipID = json[FlipJsonParams.ID].stringValue
         var flip = self.getFlipById(flipID)
         
