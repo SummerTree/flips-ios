@@ -264,7 +264,7 @@ public class FlipService: FlipsService {
     private func parseCreateFlipResponse(response: AnyObject) -> Flip? {
         let json = JSON(response)
         let flipDataSource = FlipDataSource()
-        return flipDataSource.createOrUpdateFlipsWithJson(json)
+        return flipDataSource.createOrUpdateFlipWithJson(json)
     }
     
 }
