@@ -229,6 +229,10 @@ static CGFloat const ROW_HEIGHT = 56.0;
     self.contactCollectionView.showPrompt = showPrompt;
 }
 
+- (BOOL)isInvalidContact {
+    return self.contactCollectionView.isInvalidContact;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -328,6 +332,10 @@ static CGFloat const ROW_HEIGHT = 56.0;
         }
         self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
         [self.searchTableView reloadData];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(contactPicker:didChangeEntryText:)]) {
+        [self.delegate contactPicker:self didChangeEntryText:text];
     }
 }
 
