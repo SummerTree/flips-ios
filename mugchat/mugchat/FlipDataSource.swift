@@ -65,7 +65,6 @@ class FlipDataSource : BaseDataSource {
         }
     }
     
-    
     // MARK: - Public Methods
     
     func createOrUpdateFlipsWithJson(json: JSON) -> Flip {
