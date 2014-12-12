@@ -158,6 +158,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
         self.roomIds.removeObjectAtIndex(index)
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.inboxView.reloadData()
+        })
     }
 }
 
