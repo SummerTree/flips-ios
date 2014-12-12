@@ -116,7 +116,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 println("Were found: \(countElements(stockFlipsAsJSON!)) stock flips.")
                 for stockFlip in stockFlipsAsJSON! {
                     println("Stock mug: (stockFlips)")
-                    flipDataSource.createOrUpdateFlipsWithJson(stockFlip)
+                    flipDataSource.createOrUpdateFlipWithJson(stockFlip)
                 }
                 }, failure: { (flipError) -> Void in
                     if (flipError != nil) {

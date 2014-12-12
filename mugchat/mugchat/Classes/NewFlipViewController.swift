@@ -148,7 +148,7 @@ class NewFlipViewController: FlipsViewController,
     private func updateNextButtonState() {
         let hasContacts = contacts.count > 0
         let hasText = !flipTextField.text.removeWhiteSpaces().isEmpty
-        nextButton.enabled = hasContacts && hasText
+        nextButton.enabled = hasContacts && hasText && !contactPicker.invalidContact
     }
     
     // MARK: - Actions
@@ -249,6 +249,10 @@ class NewFlipViewController: FlipsViewController,
         if (self.contactPickerHeightConstraint.constant > contactPicker.currentContentHeight) {
             self.updateContactPickerHeight(contactPicker.currentContentHeight)
         }
+    }
+    
+    func contactPicker(contactPicker: MBContactPicker!, didChangeEntryText entryText: String!) {
+        updateNextButtonState()
     }
     
     func contactPicker(contactPicker: MBContactPicker!, didUpdateContentHeightTo newHeight: CGFloat) {

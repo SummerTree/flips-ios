@@ -30,6 +30,7 @@
 @optional
 
 - (void)contactPicker:(MBContactPicker*)contactPicker didUpdateContentHeightTo:(CGFloat)newHeight;
+- (void)contactPicker:(MBContactPicker *)contactPicker didChangeEntryText:(NSString *)entryText;
 - (void)didShowFilteredContactsForContactPicker:(MBContactPicker*)contactPicker;
 - (void)didHideFilteredContactsForContactPicker:(MBContactPicker*)contactPicker;
 
@@ -50,6 +51,7 @@
 @property (nonatomic) BOOL enabled;
 @property (nonatomic) BOOL showPrompt;
 @property (nonatomic, strong) UIFont *font UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign, readonly, getter=isInvalidContact) BOOL invalidContact;
 
 - (void)reloadData;
 

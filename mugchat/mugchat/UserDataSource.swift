@@ -145,10 +145,12 @@ class UserDataSource : BaseDataSource {
             println("\nsyncUserData")
             let roomService = RoomService()
             let builderService = BuilderService()
+            let userService = UserService()
             
             var error: FlipError?
             
             let group = dispatch_group_create()
+
             dispatch_group_enter(group)
             roomService.getMyRooms({ (rooms) -> Void in
                 for room in rooms {
@@ -172,7 +174,24 @@ class UserDataSource : BaseDataSource {
                 dispatch_group_leave(group)
             })
             
-            println("   waiting sync rooms")
+            dispatch_group_enter(group)
+            let flipDataSource = FlipDataSource()
+            userService.getMyFlips({ (jsonResponse) -> Void in
+                let myFlipsAsJSON = jsonResponse.array
+                for myFlip in myFlipsAsJSON! {
+                    let flip = flipDataSource.createOrUpdateFlipWithJson(myFlip)
+                    Downloader.sharedInstance.downloadDataForFlip(flip, isTemporary: false, completion: { (error) -> Void in
+                        if (error != nil) {
+                            println("Error downloading data for my flip (\(flip.flipID))")
+                        }
+                    })
+                }
+                dispatch_group_leave(group)
+            }, failCompletion: { (flipError) -> Void in
+                error = flipError
+                dispatch_group_leave(group)
+            })
+            
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             
             if (error != nil) {
@@ -180,8 +199,6 @@ class UserDataSource : BaseDataSource {
                 callback(false, error)
                 return
             }
-            
-            // TODO: sync my flips with API
             
             callback(true, nil)
         })
@@ -193,6 +210,7 @@ class UserDataSource : BaseDataSource {
         var result = User.MR_findAllSortedBy("\(UserAttributes.FIRST_NAME)", ascending: true, withPredicate: predicate)
         return result as [User]
     }
+    
     
     // MARK: - Private Getters Methods
     
