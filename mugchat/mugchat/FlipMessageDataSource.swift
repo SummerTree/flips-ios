@@ -58,7 +58,7 @@ class FlipMessageDataSource : BaseDataSource {
         let content = json[FlipMessageJsonParams.CONTENT]
         
         for (index: String, flipJson: JSON) in content {
-            var flip = flipDataSource.createOrUpdateFlipsWithJson(flipJson)
+            var flip = flipDataSource.createOrUpdateFlipWithJson(flipJson)
             entity.addFlip(flip)
         }
         

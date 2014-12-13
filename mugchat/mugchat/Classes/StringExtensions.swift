@@ -66,6 +66,26 @@ extension String {
         
         return String(format: hash)
     }
+
+    func hasPathExtension(extensions: Array<String>) -> Bool {
+        let pathExtension = (self.pathExtension as NSString).lowercaseString
+
+        for ext in extensions {
+            if (ext == pathExtension) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    func isImagePath() -> Bool {
+        return self.hasPathExtension(["jpg", "jpeg", "png", "gif", "bmp"])
+    }
+
+    func isVideoPath() -> Bool {
+        return self.hasPathExtension(["mov"])
+    }
     
     // Allow to use text[0...5] to get substring
     subscript (r: Range<Int>) -> String {

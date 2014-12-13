@@ -61,11 +61,18 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         println("   From: \(flipMessage.from.firstName)")
         println("   Sent at: \(flipMessage.createdAt)")
         println("   #flips: \(flips.count)")
+        
+        var isTemporary = true
+        if let loggedUser = AuthenticationHelper.sharedInstance.userInSession {
+            if (loggedUser.userID == flipMessage.from.userID) {
+                isTemporary = false
+            }
+        }
 
         for var i = 0; i < flips.count; i++ {
             println("       flip #\(flips[i].flipID)")
             let flip = flips[i]
-            downloader.downloadDataForFlip(flip, isTemporary: true)
+            downloader.downloadDataForFlip(flip, isTemporary: isTemporary)
         }
     }
     
