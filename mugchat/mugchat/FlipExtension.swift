@@ -55,7 +55,7 @@ extension Flip {
     }
     
     func isBackgroundContentTypeVideo() -> Bool {
-        return (self.backgroundContentType == BackgroundContentTypeValue.Video) || (self.backgroundURL.isVideoPath())
+        return (self.backgroundContentType == BackgroundContentTypeValue.Video) || (self.backgroundURL != nil && self.backgroundURL.isVideoPath())
     }
 
     func hasBackground() -> Bool {
