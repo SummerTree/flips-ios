@@ -274,6 +274,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - View States Setters
     
     internal func showContentForHighlightedWord(shouldReloadWords: Bool = true) {
+        if (self.flipWords.count == 0) {
+            self.composeBottomViewContainer.showAllFlipCreateMessage()
+            return
+        }
+        
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -623,11 +628,19 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - ComposeBottomViewContainerDataSource
     
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
+        if (flipWords.count == 0) {
+            return Array<String>()
+        }
+        
         let flipWord = flipWords[highlightedWordIndex]
         return myFlipsDictionary[flipWord.text]!
     }
     
     func composeBottomViewContainerStockFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
+        if (flipWords.count == 0) {
+            return Array<String>()
+        }
+
         let flipWord = flipWords[highlightedWordIndex]
         return stockFlipsDictionary[flipWord.text]!
     }
