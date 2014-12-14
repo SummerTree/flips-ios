@@ -17,6 +17,11 @@ private let GROUP_CHAT = NSLocalizedString("Group Chat", comment: "Group Chat")
 private let STOCK_FLIP_DOWNLOAD_FAILED_TITLE = NSLocalizedString("Download Failed", comment: "Download Failed")
 private let STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE = NSLocalizedString("Flips failed to download content for the selected Flip. \nPlease try again.", comment: "Flips failed to download content for the selected Flip. \nPlease try again.")
 
+private let NO_SPACE_VIDEO_ERROR_TITLE = "Cannot Record Video"
+private let NO_SPACE_VIDEO_ERROR_MESSAGE = "There is not enough available storage to record video. You manage your storage in Settings."
+private let NO_SPACE_PHOTO_ERROR_TITLE = "Cannot Take Photo"
+private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storage to take a photo. You manage your storage in Settings."
+
 class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
     
     private let NO_EMPTY_FLIP_INDEX = -1
@@ -532,9 +537,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 })
             } else {
                 println("Capturing picture problem. Image is nil")
+                var alertMessage = UIAlertView(title: NO_SPACE_PHOTO_ERROR_TITLE, message: NO_SPACE_PHOTO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertMessage.show()
             }
             }, fail: { (error) -> Void in
                 println("Error capturing picture: \(error)")
+                var alertMessage = UIAlertView(title: NO_SPACE_PHOTO_ERROR_TITLE, message: NO_SPACE_PHOTO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertMessage.show()
         })
     }
     
@@ -668,7 +677,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             confirmFlipViewController.delegate = self
             self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
         } else {
-            println("Did finish recording with success = false")
+            var alertMessage = UIAlertView(title: NO_SPACE_VIDEO_ERROR_TITLE, message: NO_SPACE_VIDEO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertMessage.show()
         }
     }
     
