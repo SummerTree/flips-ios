@@ -117,15 +117,17 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         var userInfo: Dictionary = notification.userInfo!
         var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
         let flipDataSource = FlipDataSource()
-        let flip = flipDataSource.retrieveFlipWithId(flipID)
-
-        if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-            println("Download failed for flip: \(flip.flipID)")
-            // TODO: show download fail state
-        } else {
-            if (flip.hasAllContentDownloaded()) {
-                self.refreshRooms()
+        if let flip = flipDataSource.retrieveFlipWithId(flipID) {
+            if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
+                println("Download failed for flip: \(flip.flipID)")
+                // TODO: show download fail state
+            } else {
+                if (flip.hasAllContentDownloaded()) {
+                    self.refreshRooms()
+                }
             }
+        } else {
+            UIAlertView.showUnableToLoadFlip()
         }
     }
     

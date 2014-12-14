@@ -168,12 +168,14 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
             }
             
             let flipDataSource = FlipDataSource()
-            var flip = flipDataSource.retrieveFlipWithId(flipId!)
-            
-            cell.setFlipId(flip.flipID)
-            
-            var isSelected = (flip.flipID == dataSource?.flipsViewSelectedFlipId())
-            cell.setSelected(isSelected)
+            if let flip = flipDataSource.retrieveFlipWithId(flipId!) {
+                cell.setFlipId(flip.flipID)
+                
+                var isSelected = (flip.flipID == dataSource?.flipsViewSelectedFlipId())
+                cell.setSelected(isSelected)
+            } else {
+                UIAlertView.showUnableToLoadFlip()
+            }
         }
         
         return cell

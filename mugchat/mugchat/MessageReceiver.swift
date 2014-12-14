@@ -101,13 +101,15 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
         
         let flipDataSource = FlipDataSource()
-        let flip = flipDataSource.retrieveFlipWithId(flipID)
-        
-        if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-            println("Download failed for flip: \(flip.flipID)")
+        if let flip = flipDataSource.retrieveFlipWithId(flipID) {
+            if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
+                println("Download failed for flip: \(flip.flipID)")
+            } else {
+                println("Download finished for flip: \(flip.flipID)")
+                self.onFlipContentDownloadFinished(flip)
+            }
         } else {
-            println("Download finished for flip: \(flip.flipID)")
-            self.onFlipContentDownloadFinished(flip)
+            UIAlertView.showUnableToLoadFlip()
         }
     }
     

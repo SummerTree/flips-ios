@@ -69,8 +69,9 @@ public class MessageService {
         
         var flips = Array<Flip>()
         for flipId in flipIds {
-            var flip = flipDataSource.retrieveFlipWithId(flipId)
-            flips.append(flip)
+            if let flip = flipDataSource.retrieveFlipWithId(flipId) {
+                flips.append(flip)
+            }
         }
         
         let room = roomDataSource.retrieveRoomWithId(roomID)
