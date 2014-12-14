@@ -147,7 +147,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
         self.navigationController?.popToViewController(self, animated: true)
         self.chatView.clearReplyTextField()
-        
+        self.chatView.hideTextFieldAndShowReplyButton()
         self.reload()
     }
     

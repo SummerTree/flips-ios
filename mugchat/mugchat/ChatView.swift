@@ -364,18 +364,18 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.bottom.equalTo()(self)
         })
         self.updateConstraints()
-        
-        
     }
     
-    private func hideTextFieldAndShowReplyButton() {
+    func hideTextFieldAndShowReplyButton() {
         self.replyButton.hidden = false
         self.replyTextField.hidden = true
         self.nextButton.hidden = true
+        self.updateNextButtonState()
     }
     
     func clearReplyTextField() {
         self.replyTextField.text = ""
+        self.updateNextButtonState()
     }
     
     
