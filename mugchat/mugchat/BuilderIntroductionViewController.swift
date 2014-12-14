@@ -83,7 +83,7 @@ class BuilderIntroductionViewController : UIViewController {
         self.descriptionLabel = UILabel()
         self.descriptionLabel.numberOfLines = 0
         
-        self.descriptionLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        self.descriptionLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h5)
         self.descriptionLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         
         self.descriptionLabel.text = NSLocalizedString(DESCRIPTION_TEXT_MESSAGE, comment: DESCRIPTION_TEXT_MESSAGE)

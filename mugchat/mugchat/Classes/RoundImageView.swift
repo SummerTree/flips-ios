@@ -135,10 +135,10 @@ class RoundImageView: UIView {
     func setup() {
         self.clipsToBounds = true
         self.layer.masksToBounds = true
-        self.layer.shouldRasterize = true
+        self.layer.shouldRasterize = false
         self.imageView = UIImageView()
         self.imageView.layer.masksToBounds = true
-        self.imageView.layer.shouldRasterize = true
+        self.imageView.layer.shouldRasterize = false
         
         self.addSubview(self.imageView)
 

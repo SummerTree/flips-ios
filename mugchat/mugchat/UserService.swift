@@ -14,6 +14,8 @@ public typealias UserServicePasswordSuccessResponse = () -> Void
 public typealias UserServiceVerifySuccessResponse = (username: String) -> Void
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
 public typealias UserServiceFailureResponse = (FlipError?) -> Void
+public typealias UserServiceMyFlipsSuccessResponse = (JSON) -> Void
+public typealias UserServiceMyFlipsFailResponse = (FlipError?) -> Void
 
 
 public class UserService: FlipsService {
@@ -29,6 +31,7 @@ public class UserService: FlipsService {
     let UPDATE_PASSWORD_URL: String = "/user/password"
     let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
     let FACEBOOK_CONTACTS_VERIFY: String = "/user/{{user_id}}/facebook/verify"
+    let MY_FLIPS: String = "/user/{{user_id}}/flips"
     
     public class var sharedInstance : UserService {
         struct Static {
@@ -449,6 +452,34 @@ public class UserService: FlipsService {
         }, failure: { (error) -> Void in
             failure(FlipError(error: "Error retrieving contacts.", details:nil))
         })
+    }
+    
+    
+    // MARK: - My Flips
+    
+    func getMyFlips(successCompletion: UserServiceMyFlipsSuccessResponse, failCompletion: UserServiceMyFlipsFailResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
+        let request = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        
+        request.GET(url, parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                successCompletion(JSON(responseObject))
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
+                } else {
+                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
     }
     
     

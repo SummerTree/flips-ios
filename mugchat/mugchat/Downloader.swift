@@ -115,7 +115,8 @@ public class Downloader : NSObject {
             
             var downloadError: NSError?
             if (self.isValidURL(flip.backgroundURL) && (!self.downloadInProgressURLs.containsObject(flip.backgroundURL))) {
-                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(flip.backgroundURL).hasCache) {
+                let result = CacheHandler.sharedInstance.hasCachedFileForUrl(flip.backgroundURL)
+                if (!result.hasCache || isTemporary != result.isTemporary) {
                     dispatch_group_enter(group)
                     let flipId = flip.flipID
                     self.downloadDataAndCacheForUrl(flip.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
@@ -130,7 +131,8 @@ public class Downloader : NSObject {
             }
             
             if (self.isValidURL(flip.soundURL) && (!self.downloadInProgressURLs.containsObject(flip.soundURL))) {
-                if (!CacheHandler.sharedInstance.hasCachedFileForUrl(flip.soundURL).hasCache) {
+                let result = CacheHandler.sharedInstance.hasCachedFileForUrl(flip.soundURL)
+                if (!result.hasCache || isTemporary != result.isTemporary) {
                     dispatch_group_enter(group)
                     self.downloadDataAndCacheForUrl(flip.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
                         downloadError = error
