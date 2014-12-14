@@ -292,7 +292,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     private func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
-        var videoContainerView = cell.subviews[0].subviews[0].subviews[0] as UIView // Gets video container view from cell
+        var videoContainerView = cell.subviews[0] as UIView // Gets video container view from cell
         var convertedVideoContainerViewFrame = cell.convertRect(videoContainerView.frame, toView:view)
         if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
             return true
