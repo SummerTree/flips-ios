@@ -75,8 +75,12 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
         
         delegate?.builderAddWordTableViewControllerDelegate(self, finishingWithChanges: didUpdateWordList)
     }
-    
-    
+
+    override func doneButtonTapped() {
+        self.addWord()
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+
     // MARK: UITableViewDelegate
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -131,27 +135,28 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
             })
         }
     }
-    
+
+    func addWord() -> Bool {
+        if (countElements(self.newWordTextField.text!) > 0) {
+            let word = self.newWordTextField.text!
+            let builderWordDataSource = BuilderWordDataSource()
+            builderWordDataSource.addWord(word, fromServer: false)
+            self.didUpdateWordList = true
+            words.insert(word, atIndex: 0)
+            tableView.reloadData()
+
+            self.newWordTextField.text = ""
+            self.newWordTextField.becomeFirstResponder()
+            return true
+        }
+
+        return false
+    }
     
     // MARK: UITextFieldDelegate
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if (countElements(textField.text!) > 0) {
-            let word = textField.text!
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                let builderWordDataSource = BuilderWordDataSource()
-                builderWordDataSource.addWord(word, fromServer: false)
-            })
-            self.didUpdateWordList = true
-            words.insert(word, atIndex: 0)
-            tableView.reloadData()
-            
-            textField.text = ""
-            textField.becomeFirstResponder()
-            return true
-        }
-        
-        return false
+        return self.addWord()
     }
 }
 
