@@ -60,7 +60,11 @@ class ContactDataSource : BaseDataSource {
     }
     
     func sortedByUserFirstNameLastName() -> [NSSortDescriptor] {
-        let sortedBy = [NSSortDescriptor(key: ContactAttributes.CONTACT_USER, ascending: false), NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true), NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true)]
+        let sortedBy = [
+            NSSortDescriptor(key: ContactAttributes.CONTACT_USER, ascending: false),
+            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
+            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+        ]
 
         return sortedBy
     }
@@ -72,11 +76,16 @@ class ContactDataSource : BaseDataSource {
 	}
     
     func getMyContactsIdsWithoutFlipsAccount() -> [String] {
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as [Contact]
+        let sortedBy = [
+            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
+            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+        ]
         
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as NSArray
+        var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
-        for contact in contacts {
+        for contact in sortedContacts {
             contactIds.append(contact.contactID)
         }
         
@@ -84,11 +93,16 @@ class ContactDataSource : BaseDataSource {
     }
     
     func getMyContactsIdsWithFlipsAccount() -> [String] {
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as [Contact]
-        
+        let sortedBy = [
+            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
+            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+        ]
+
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as NSArray
+        var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
-        for contact in contacts {
+        for contact in sortedContacts {
             contactIds.append(contact.contactID)
         }
         
