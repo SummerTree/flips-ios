@@ -20,7 +20,7 @@ private let STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE = NSLocalizedString("Flips failed
 private let NO_SPACE_VIDEO_ERROR_TITLE = "Cannot Record Video"
 private let NO_SPACE_VIDEO_ERROR_MESSAGE = "There is not enough available storage to record video. You manage your storage in Settings."
 private let NO_SPACE_PHOTO_ERROR_TITLE = "Cannot Take Photo"
-private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storage to take a photo. You managa your storage in Settings."
+private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storage to take a photo. You manage your storage in Settings."
 
 class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
     
