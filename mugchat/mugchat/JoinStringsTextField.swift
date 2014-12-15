@@ -58,14 +58,18 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func updateColorOnJoinedTexts(color: UIColor) {
-        var attributedString = NSMutableAttributedString(string:self.text)
+        var attributedString = NSMutableAttributedString(string:self.text + " ")
         attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text))) //looses the current font, if we don't set here explicitly
         
         for joinedTextRange in joinedTextRanges {
             attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: joinedTextRange)
         }
         
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: countElements(self.text), length: 1))
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: countElements(self.text), length: 1))
+        
         self.attributedText = attributedString
+
     }
     
     func resetTextColor() {
