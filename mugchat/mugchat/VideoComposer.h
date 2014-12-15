@@ -24,6 +24,7 @@
 - (NSURL *)videoFromFlips:(NSArray *)flips;
 - (NSURL *)videoFromFlipMessage:(FlipMessage *)flipMessage;
 - (AVAsset *)videoFromFlip:(Flip *)flip;
+- (NSURL *)videoFromOriginalVideo:(NSURL *)videoURL;
 
 - (NSArray *)videoPartsFromFlips:(NSArray *)flips;
 

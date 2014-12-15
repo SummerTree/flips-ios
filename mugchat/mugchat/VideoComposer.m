@@ -163,6 +163,46 @@
     return track;
 }
 
+- (NSURL *)videoFromOriginalVideo:(NSURL *)videoURL
+{
+    AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:videoURL options:nil];
+    AVAssetTrack *videoTrack = [self videoTrackFromAsset:videoAsset];
+
+    AVMutableComposition *composition = [self compositionFromVideoAsset:videoAsset];
+
+    if (!composition) {
+        return nil;
+    }
+
+    AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack];
+
+    // exporting
+    __block NSURL *outputURL = [self videoPartOutputFileURLForFlip:nil];
+
+    AVAssetExportSession *exportSession;
+    exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
+    exportSession.videoComposition = videoComposition;
+    exportSession.outputURL = outputURL;
+    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter(group);
+
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void){
+        if (exportSession.status == AVAssetExportSessionStatusFailed) {
+            NSLog(@"Could not create video composition. Error: %@", exportSession.error.description);
+            outputURL = nil;
+            dispatch_group_leave(group);
+        } else  if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+            dispatch_group_leave(group);
+        }
+    }];
+
+    dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 20 * NSEC_PER_SEC));
+
+    return outputURL;
+}
+
 
 #pragma mark - Private
 
@@ -223,7 +263,22 @@
 
 - (void)prepareVideoAssetFromFlip:(Flip *)flip completion:(void (^)(BOOL success, AVAsset *videoAsset))completion
 {
+    CacheHandler *cacheHandler = [CacheHandler sharedInstance];
     NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    // If video is already square it means it was uploaded after being processed.
+    // (should be always the case after this is pushed to prod)
+    if ([self isSquareVideo:flip]) {
+        NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
+        AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:filePath] options:nil];
+
+        if (videoAsset) {
+            NSLog(@"Video for flipID: %@ is already processed. No need to generate another one.", flip.flipID);
+            completion(YES, videoAsset);
+            return;
+        }
+    }
+
     NSURL *outputURL = [self videoPartOutputFileURLForFlip:flip];
     if ([fileManager fileExistsAtPath:[outputURL relativePath] isDirectory:nil]) {
         AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:outputURL options:nil];
@@ -236,7 +291,6 @@
     }
 
     NSURL *videoURL;
-    CacheHandler *cacheHandler = [CacheHandler sharedInstance];
 
     if ([flip isBackgroundContentTypeVideo]) {
         NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
@@ -356,7 +410,7 @@
 
     NSURL *outputPath;
 
-    if (self.cacheKey) {
+    if (self.cacheKey && flip != nil) {
         NSString *filename = [NSString stringWithFormat:@"flip-video-%@.mov", flip.flipID];
         outputPath = [outputFolder URLByAppendingPathComponent:filename];
 
@@ -391,6 +445,19 @@
     return videoSize;
 }
 
+- (BOOL)isSquareVideo:(Flip *)flip
+{
+    if ([flip isBackgroundContentTypeVideo]) {
+        CacheHandler *cacheHandler = [CacheHandler sharedInstance];
+        NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
+        AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:filePath] options:nil];
+        AVAssetTrack *videoTrack = [self videoTrackFromAsset:videoAsset];
+
+        return videoTrack.naturalSize.width == videoTrack.naturalSize.height;
+    }
+
+    return NO;
+}
 
 #pragma mark - Video manipulation
 
@@ -415,6 +482,29 @@
 - (CGAffineTransform)transformForImageSource
 {
     return CGAffineTransformIdentity;
+}
+
+- (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack
+{
+    CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
+
+    AVMutableVideoComposition *videoComposition = [AVMutableVideoComposition videoComposition];
+    videoComposition.renderSize = croppedVideoSize;
+    videoComposition.frameDuration = CMTimeMake(1, 30);
+
+    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, videoTrack.asset.duration);
+
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+
+    CGAffineTransform transform = [self transformForVideoSource:videoTrack];
+
+    [layerInstruction setTransform:transform atTime:kCMTimeZero];
+
+    instruction.layerInstructions = @[layerInstruction];
+    videoComposition.instructions = @[instruction];
+
+    return videoComposition;
 }
 
 - (AVMutableVideoComposition *)videoCompositionFromTrack:(AVAssetTrack *)videoTrack flip:(Flip *)flip

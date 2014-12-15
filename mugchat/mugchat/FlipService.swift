@@ -168,7 +168,12 @@ public class FlipService: FlipsService {
     
     private func uploadVideo(videoPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         var error: NSError?
-        let videoData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
+
+        let videoComposer = VideoComposer()
+        let croppedVideoURL = videoComposer.videoFromOriginalVideo(videoPathUrl)
+
+        let videoData: NSData? = NSData(contentsOfURL: croppedVideoURL, options: NSDataReadingOptions.allZeros, error: &error)
+
         if (videoData != nil) {
             println("Uploading a video with size = \(videoData?.length)")
             
