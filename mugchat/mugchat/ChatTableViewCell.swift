@@ -17,8 +17,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Constants
     
-    private let MESSAGE_TOP_MARGIN: CGFloat = 14.0
-    private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
     private let CELL_INFO_VIEW_HORIZONTAL_SPACING : CGFloat = 7.5
     
     private let flipMessageDataSource = FlipMessageDataSource()
@@ -26,100 +24,55 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     // MARK: - Instance variables
     
     private var flipMessageId: String!
-    private var videoPlayerView: PlayerView!
-    private var videoPlayerContainerView : UIView!
-    private var messageView : UIView!
-    private var avatarView : RoundImageView!
-    private var timestampLabel : UILabel!
-    private var messageTextLabel : UILabel!
+    @IBOutlet weak var videoPlayerView: PlayerView!
+    @IBOutlet weak var videoPlayerContainerView : UIView!
+    @IBOutlet weak var videoPlayerContainerViewWidthConstraint: NSLayoutConstraint!
+    var avatarView : RoundImageView!
+    @IBOutlet weak var timestampLabel : UILabel!
+    @IBOutlet weak var messageTextLabel : UILabel!
+    @IBOutlet weak var messageView : UIView!
     
     private var isPlaying = false
     
     var delegate: ChatTableViewCellDelegate?
-    
+
+
     // MARK: - Required initializers
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.whiteColor()
+    required public init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+
+        videoPlayerView.delegate = self
+
+        timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        timestampLabel.textColor = UIColor.deepSea()
+
+        messageTextLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
+        messageTextLabel.textColor = UIColor.deepSea()
+        messageTextLabel.alpha = 0
+        messageTextLabel.lineBreakMode = .ByWordWrapping
+        messageTextLabel.numberOfLines = 0
+
         self.addSubviews()
         self.addConstraints()
     }
     
-    required public init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     func addSubviews() {
-        videoPlayerContainerView = UIView()
-        contentView.addSubview(videoPlayerContainerView)
-        
-        videoPlayerView = PlayerView()
-        videoPlayerView.delegate = self
-        videoPlayerContainerView.addSubview(videoPlayerView)
-        
-        messageView = UIView()
-        contentView.addSubview(messageView)
-        
-        timestampLabel = UILabel()
-        timestampLabel.contentMode = .Center
-        timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        timestampLabel.textColor = UIColor.deepSea()
-        messageView.addSubview(timestampLabel)
-        
-        messageTextLabel = UILabel()
-        messageTextLabel.contentMode = .Center
-        messageTextLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
-        messageTextLabel.textColor = UIColor.deepSea()
-        messageTextLabel.alpha = 0
-        messageView.addSubview(messageTextLabel)
-        
         avatarView = RoundImageView.avatarA3()
         contentView.addSubview(avatarView)
     }
     
     func addConstraints() {
-        videoPlayerContainerView.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.contentView)
-            make.centerX.equalTo()(self.contentView)
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
-                make.height.equalTo()(self.contentView.mas_width).with().offset()(-self.CELL_PADDING_FOR_IPHONE_4S * 2.0)
-            } else {
-                make.width.equalTo()(self.contentView.mas_width)
-                make.height.equalTo()(self.contentView.mas_width)
-            }
-        })
-
-        videoPlayerView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.videoPlayerContainerView)
-            make.bottom.equalTo()(self.videoPlayerContainerView)
-            make.leading.equalTo()(self.videoPlayerContainerView)
-            make.trailing.equalTo()(self.videoPlayerContainerView)
-        }
-        
-        messageView.mas_makeConstraints({ (make) in
-            make.bottom.equalTo()(self.contentView)
-            make.left.equalTo()(self.contentView)
-            make.right.equalTo()(self.contentView)
-        })
-        
         avatarView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.width.equalTo()(self.avatarView.frame.size.width)
             make.height.equalTo()(self.avatarView.frame.size.height)
         }
-        
-        timestampLabel.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.videoPlayerContainerView.mas_bottom).with().offset()(self.MESSAGE_TOP_MARGIN)
-            make.centerX.equalTo()(self.messageView)
-        })
-        
-        messageTextLabel.mas_makeConstraints({ (make) in
-            make.top.equalTo()(self.timestampLabel.mas_bottom)
-            make.centerX.equalTo()(self.messageView)
-        })
     }
     
     
@@ -170,10 +123,18 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 
     // MARK: - Overridden Methods
     
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutIfNeeded()
+        messageTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(messageTextLabel.frame)
+        timestampLabel.preferredMaxLayoutWidth = CGRectGetWidth(messageTextLabel.frame)
+    }
+    
     public override func prepareForReuse() {
-        self.videoPlayerView.releaseResources()
-        
         super.prepareForReuse()
+        
+        self.videoPlayerView.releaseResources()
+        messageTextLabel.text = nil
     }
 
 

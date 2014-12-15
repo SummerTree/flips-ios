@@ -246,8 +246,15 @@
     if ([flip isBackgroundContentTypeVideo]) {
         NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
         videoURL = [NSURL fileURLWithPath:filePath];
-    } else {
+    } else if ([flip isBackgroundContentTypeImage]) {
         videoURL = [NSURL fileURLWithPath:[ImageVideoCreator videoPathForFlip:flip]];
+    } else {
+        NSLog(@"Flip (%@) has undefined content type.", flip.flipID);
+    }
+
+    if (!videoURL) {
+        completion(NO, nil);
+        return;
     }
 
     AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:videoURL options:nil];

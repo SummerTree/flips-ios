@@ -21,11 +21,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private let TEXT_VIEW_MARGIN : CGFloat = 3.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     private let AUTOPLAY_ON_LOAD_DELAY : Double = 0.3
-    
-    private let CELL_FLIP_AREA_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.width
-    private let CELL_FLIP_AREA_HEIGHT_IPHONE_4S : CGFloat = 240.0
-    private let CELL_FLIP_TEXT_AREA_HEIGHT: CGFloat = 62
-    
+    private let CELL_PADDING_FOR_IPHONE_4S : CGFloat = 40.0
+
     private let THUMBNAIL_FADE_DURATION: NSTimeInterval = 0.2
     
     private let ONBOARDING_BUBBLE_TITLE = NSLocalizedString("Pretty cool, huh?", comment: "Pretty cool, huh?")
@@ -46,6 +43,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     private var showOnboarding = false
     private var bubbleView: BubbleView!
+    
+    private lazy var chatPrototypeCell: ChatTableViewCell = {
+        [unowned self] in
+        return self.tableView.dequeueReusableCellWithIdentifier(self.CELL_IDENTIFIER) as ChatTableViewCell
+    }()
     
     
     // MARK: - Required initializers
@@ -70,7 +72,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func addSubviews() {
         tableView = UITableView(frame: self.frame, style: .Plain)
         tableView.backgroundColor = UIColor.whiteColor()
-        tableView.registerClass(ChatTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
+        tableView.registerNib(UINib(nibName: "ChatTableViewCell", bundle: nil), forCellReuseIdentifier: CELL_IDENTIFIER)
         tableView.separatorStyle = .None
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.contentOffset = CGPointMake(0, 0)
@@ -220,9 +222,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     // MARK: - Table view data source
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
-        
+    func configureCell(cell: ChatTableViewCell, atIndexPath indexPath: NSIndexPath) {
         if cell.isPlayingFlip() {
             cell.stopMovie()
         }
@@ -231,6 +231,18 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         if (flipMessageId != nil) {
             cell.setFlipMessageId(flipMessageId!)
         }
+        
+        cell.videoPlayerContainerViewWidthConstraint.constant = CGRectGetWidth(tableView.bounds)
+        
+        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+            cell.videoPlayerContainerViewWidthConstraint.constant -= CELL_PADDING_FOR_IPHONE_4S * 2.0
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
+        
+        configureCell(cell, atIndexPath: indexPath)
         
         return cell;
     }
@@ -244,15 +256,17 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return numberOfMessages!
     }
     
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var cellHeightForRowAtIndexPath : CGFloat
-        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-            cellHeightForRowAtIndexPath = CELL_FLIP_AREA_HEIGHT_IPHONE_4S + CELL_FLIP_TEXT_AREA_HEIGHT
-        } else {
-            cellHeightForRowAtIndexPath = CELL_FLIP_AREA_HEIGHT + CELL_FLIP_TEXT_AREA_HEIGHT
-        }
-        return cellHeightForRowAtIndexPath
-
+        configureCell(chatPrototypeCell, atIndexPath: indexPath)
+        chatPrototypeCell.bounds = CGRectMake(0.0, 0.0, CGRectGetWidth(tableView.bounds), CGRectGetHeight(chatPrototypeCell.bounds))
+        chatPrototypeCell.layoutIfNeeded()
+        
+        let size: CGSize = chatPrototypeCell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        return size.height
     }
     
     
@@ -278,7 +292,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     private func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
-        var videoContainerView = cell.subviews[0].subviews[0].subviews[0] as UIView // Gets video container view from cell
+        var videoContainerView = cell.subviews[0] as UIView // Gets video container view from cell
         var convertedVideoContainerViewFrame = cell.convertRect(videoContainerView.frame, toView:view)
         if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
             return true
@@ -350,18 +364,18 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.bottom.equalTo()(self)
         })
         self.updateConstraints()
-        
-        
     }
     
-    private func hideTextFieldAndShowReplyButton() {
+    func hideTextFieldAndShowReplyButton() {
         self.replyButton.hidden = false
         self.replyTextField.hidden = true
         self.nextButton.hidden = true
+        self.updateNextButtonState()
     }
     
     func clearReplyTextField() {
         self.replyTextField.text = ""
+        self.updateNextButtonState()
     }
     
     
