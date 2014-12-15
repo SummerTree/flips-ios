@@ -66,7 +66,12 @@
     UIGraphicsBeginImageContext([self croppedVideoSize:videoTrack]);
     CGContextRef context = UIGraphicsGetCurrentContext();
 
+    CGAffineTransform center = CGAffineTransformMakeTranslation(0.0, -croppedVideoSize.height);
+    CGAffineTransform mirror = CGAffineTransformMakeScale(1.0, -1.0);
+
     CGContextConcatCTM(context, videoTrack.preferredTransform);
+    CGContextConcatCTM(context, mirror);
+    CGContextConcatCTM(context, center);
 
     CGFloat xOffset = (croppedVideoSize.width - naturalVideoSize.width) / 2;
     CGFloat yOffset = (croppedVideoSize.height - naturalVideoSize.height) / 2;
