@@ -93,12 +93,12 @@ extension Room {
                             var contact: Contact = contacts.allObjects[0] as Contact
                             
                             for userContact in contacts.allObjects {
-                                if (!isValidUUID(userContact.firstName)) {
+                                if (!hasTemporaryName(userContact.firstName)) {
                                     contact = userContact as Contact
                                 }
                             }
                             
-                            if (isValidUUID(contact.firstName)) {
+                            if (hasTemporaryName(contact.firstName)) {
                                 userFirstName = contact.phoneNumber
                             } else if (contact.firstName != "") {
                                 userFirstName = contact.firstName
@@ -117,7 +117,11 @@ extension Room {
         return roomName
     }
     
-    func isValidUUID( uuidString: String) -> Bool {
+    private func hasTemporaryName(firstName: String) -> Bool {
+        return isValidUUID(firstName)
+    }
+    
+    private func isValidUUID(uuidString: String) -> Bool {
         let uuid = NSUUID(UUIDString: uuidString)
         return uuid != nil
     }
