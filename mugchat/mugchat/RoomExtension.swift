@@ -90,8 +90,17 @@ extension Room {
                     
                     if let contacts = participant.contacts {
                         if (contacts.count > 0) {
-                            var contact = contacts.allObjects[0] as Contact
-                            if (contact.firstName != "") {
+                            var contact: Contact = contacts.allObjects[0] as Contact
+                            
+                            for userContact in contacts.allObjects {
+                                if (!hasTemporaryName(userContact.firstName)) {
+                                    contact = userContact as Contact
+                                }
+                            }
+                            
+                            if (hasTemporaryName(contact.firstName)) {
+                                userFirstName = contact.phoneNumber
+                            } else if (contact.firstName != "") {
                                 userFirstName = contact.firstName
                             } else if (contact.lastName != "") {
                                 userFirstName = contact.lastName
@@ -106,5 +115,14 @@ extension Room {
             }
         }
         return roomName
+    }
+    
+    private func hasTemporaryName(firstName: String) -> Bool {
+        return isValidUUID(firstName)
+    }
+    
+    private func isValidUUID(uuidString: String) -> Bool {
+        let uuid = NSUUID(UUIDString: uuidString)
+        return uuid != nil
     }
 }
