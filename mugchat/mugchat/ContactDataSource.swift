@@ -70,7 +70,7 @@ class ContactDataSource : BaseDataSource {
     }
 	
 	func fetchedResultsController(contains: String, delegate: NSFetchedResultsControllerDelegate?) -> NSFetchedResultsController {
-		let predicate = NSPredicate(format: "%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@ and \(ContactAttributes.CONTACT_USER).me == false", ContactAttributes.FIRST_NAME, contains, ContactAttributes.LAST_NAME, contains)
+		let predicate = NSPredicate(format: "(%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@) and (\(ContactAttributes.CONTACT_USER).me == false)", ContactAttributes.FIRST_NAME, contains, ContactAttributes.LAST_NAME, contains)
 				
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
