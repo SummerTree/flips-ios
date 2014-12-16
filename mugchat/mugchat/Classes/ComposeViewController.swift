@@ -583,30 +583,32 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let flipDataSource = FlipDataSource()
-            let selectedFlip = flipDataSource.retrieveFlipWithId(flipId)
-            
-            if (selectedFlip.isPrivate.boolValue) {
-                self.onFlipSelected(flipId)
-                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-            } else {
-                let flipWord = self.flipWords[self.highlightedWordIndex]
-                if ((flipWord.associatedFlipId == nil) && (!selectedFlip.hasAllContentDownloaded())) {
-                    Downloader.sharedInstance.downloadDataForFlip(selectedFlip, isTemporary: true, completion: { (error) -> Void in
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                        if (error == nil) {
-                            self.onFlipSelected(flipId)
-                        } else {
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                println("Downloading stock flip(id: \(flipId)) error: \(error)")
-                                let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                                alertView.show()
-                            })
-                        }
-                    })
-                } else {
+            if let selectedFlip = flipDataSource.retrieveFlipWithId(flipId) {
+                if (selectedFlip.isPrivate.boolValue) {
                     self.onFlipSelected(flipId)
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                } else {
+                    let flipWord = self.flipWords[self.highlightedWordIndex]
+                    if ((flipWord.associatedFlipId == nil) && (!selectedFlip.hasAllContentDownloaded())) {
+                        Downloader.sharedInstance.downloadDataForFlip(selectedFlip, isTemporary: true, completion: { (error) -> Void in
+                            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                            if (error == nil) {
+                                self.onFlipSelected(flipId)
+                            } else {
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    println("Downloading stock flip(id: \(flipId)) error: \(error)")
+                                    let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                    alertView.show()
+                                })
+                            }
+                        })
+                    } else {
+                        self.onFlipSelected(flipId)
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    }
                 }
+            } else {
+                UIAlertView.showUnableToLoadFlip()
             }
         })
     }

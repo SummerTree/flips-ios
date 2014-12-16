@@ -15,7 +15,17 @@
 
 import Foundation
 
+let FlipsErrorDomain = "FlipsErrorDomain"
+
+enum FlipsErrorCode: Int {
+    case BadFlipID = 1
+}
+
 extension NSError {
+    class func flipsError(#code: FlipsErrorCode, userInfo: [NSObject : AnyObject]?) -> NSError {
+        return NSError(domain: FlipsErrorDomain, code: code.rawValue, userInfo: userInfo)
+    }
+    
     var localizedFailureReasonOrDescription: String {
         if (self.localizedFailureReason != nil) {
             return self.localizedFailureReason!

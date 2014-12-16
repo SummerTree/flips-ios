@@ -82,11 +82,11 @@ class FlipDataSource : BaseDataSource {
         if (flip == nil) {
             flip = self.createEntityWithJson(json)
         } else {
-            self.fillFlip(flip!, withJsonData: json)
+            self.fillFlip(flip, withJsonData: json)
             self.save()
         }
         
-        return flip!
+        return flip
     }
     
     func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
@@ -139,14 +139,8 @@ class FlipDataSource : BaseDataSource {
     }
 
     
-    func retrieveFlipWithId(id: String) -> Flip {
-        var flip = self.getFlipById(id)
-        
-        if (flip == nil) {
-            println("Flip (\(id)) not found in the database and it mustn't happen. Check why it wasn't added to database yet.")
-        }
-        
-        return flip!
+    func retrieveFlipWithId(id: String) -> Flip! {
+        return self.getFlipById(id)
     }
     
     func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
@@ -212,7 +206,7 @@ class FlipDataSource : BaseDataSource {
     
     // MARK: - Private Getters Methods
     
-    private func getFlipById(id: String) -> Flip? {
-        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as? Flip
+    private func getFlipById(id: String) -> Flip! {
+        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as Flip!
     }
 }

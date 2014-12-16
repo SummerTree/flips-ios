@@ -120,11 +120,15 @@ public class Downloader : NSObject {
                     dispatch_group_enter(group)
                     let flipId = flip.flipID
                     self.downloadDataAndCacheForUrl(flip.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                        let flipDataSource = FlipDataSource()
-                        let localFlip = flipDataSource.retrieveFlipWithId(flipId)
-                        flipDataSource.setFlipBackgroundContentType(backgroundContentType, forFlip: localFlip)
-                        
                         downloadError = error
+                        
+                        let flipDataSource = FlipDataSource()
+                        if let localFlip = flipDataSource.retrieveFlipWithId(flipId) {
+                            flipDataSource.setFlipBackgroundContentType(backgroundContentType, forFlip: localFlip)
+                        } else {
+                            downloadError = NSError.flipsError(code: .BadFlipID, userInfo: nil)
+                        }
+                        
                         dispatch_group_leave(group);
                     }, isTemporary: isTemporary)
                 }
