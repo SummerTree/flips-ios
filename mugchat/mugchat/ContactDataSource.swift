@@ -70,7 +70,7 @@ class ContactDataSource : BaseDataSource {
     }
 	
 	func fetchedResultsController(contains: String, delegate: NSFetchedResultsControllerDelegate?) -> NSFetchedResultsController {
-		let predicate = NSPredicate(format: "%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@", ContactAttributes.FIRST_NAME, contains, ContactAttributes.LAST_NAME, contains)
+		let predicate = NSPredicate(format: "%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@ and \(ContactAttributes.CONTACT_USER).me == false", ContactAttributes.FIRST_NAME, contains, ContactAttributes.LAST_NAME, contains)
 				
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
@@ -98,7 +98,7 @@ class ContactDataSource : BaseDataSource {
             NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
         ]
 
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil)")) as NSArray
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false)")) as NSArray
         var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
