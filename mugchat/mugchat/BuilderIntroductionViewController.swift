@@ -39,7 +39,7 @@ class BuilderIntroductionViewController : UIViewController {
     
     private let HI_MESSAGE = "Hi"
     private let THIS_IS_YOUR_WORD_MESSAGE = "this is your word builder."
-    private let DESCRIPTION_TEXT_MESSAGE = "It's a quick & easy tool to define & add\nwords to use for future messages. We have\nsuggested words to get you started, but feel free\nto add as many words as you like."
+    private let DESCRIPTION_TEXT_MESSAGE = "It's a quick & easy tool to define & add words to use for future messages. We have suggested words to get you started, but feel free to add as many words as you like."
     private let OK_SWEET_MESSAGE = "ok, sweet!"
     
     
