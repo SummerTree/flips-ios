@@ -359,16 +359,12 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     }
     
     private func centerScrollViewAtView(view: UIView, animated: Bool = true) {
-        scrollView.scrollEnabled = false
-        
         var flipTextViewToBeCenteredMidX: CGFloat = CGRectGetMidX(view.frame)
         var scrollViewCenterX: CGFloat = CGRectGetMidX(scrollView.frame)
         var contentOffsetX = flipTextViewToBeCenteredMidX - scrollViewCenterX
         
         if (scrollView.contentOffset.x != contentOffsetX) {
             scrollView.setContentOffset(CGPointMake(contentOffsetX, 0.0), animated: animated)
-        } else {
-            scrollView.scrollEnabled = true
         }
     }
     
