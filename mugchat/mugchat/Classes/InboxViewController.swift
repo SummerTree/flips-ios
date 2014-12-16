@@ -15,7 +15,7 @@ import Foundation
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
 
     private var inboxView: InboxView!
-    private var roomIds = NSMutableOrderedSet()
+    private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
     
     // MARK: - UIViewController overridden methods
 
@@ -146,20 +146,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     // MARK: - InboxViewDataSource
 
     func numberOfRooms() -> Int {
-        var numberOfRooms: Int!
-            numberOfRooms = self.roomIds.count
-        return numberOfRooms
+        return self.roomIds.count
     }
     
     func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String {
-        var roomId: String!
-            roomId = self.roomIds.objectAtIndex(index) as String
-
-        return roomId
+        return self.roomIds.objectAtIndex(index) as String
     }
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
         self.roomIds.removeObjectAtIndex(index)
     }
 }
-

@@ -62,12 +62,17 @@ class FlipViewer: UIView {
         
         flipFilterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
         flipFilterImageView.alpha = 1.0
+        flipFilterImageView.userInteractionEnabled = true
+        flipFilterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "flipFilterImageViewTapped"))
         flipFilterImageView.contentMode = UIViewContentMode.ScaleAspectFit
         self.addSubview(flipFilterImageView)
         
         flipWordLabel = UILabel.flipWordLabel()
-//        flipWordLabel.alpha = 0
         self.addSubview(flipWordLabel)
+    }
+    
+    func flipFilterImageViewTapped() {
+        self.viewTapped()
     }
     
     private func addConstraints() {
@@ -200,7 +205,6 @@ class FlipViewer: UIView {
             AudioRecorderService.sharedInstance.playAudio(flipAudioURL)
         }
     }
-    
 }
 
 protocol FlipViewerDelegate {
