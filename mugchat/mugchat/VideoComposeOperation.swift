@@ -19,6 +19,7 @@ class VideoComposeOperation: NSOperation {
     private var flips: [Flip]!
     private var useCache = false
     private var queueObserver: AnyObject!
+    private var videoComposer: VideoComposer!
     
     var completion: VideoOperationCompletionBlock?
     
@@ -27,6 +28,10 @@ class VideoComposeOperation: NSOperation {
         self.flips = flips
         self.useCache = useCache
         self.queueObserver = queueObserver
+        self.videoComposer = VideoComposer()
+        if (self.useCache) {
+            videoComposer.cacheKey = self.getCacheKey()
+        }
     }
     
     override func main() {
@@ -34,27 +39,9 @@ class VideoComposeOperation: NSOperation {
             return
         }
      
-        var localFlips: Array<Flip> = []
-        var localFlipIDs: Array<String> = []
-        let moc = NSManagedObjectContext.MR_contextForCurrentThread();
-
-        for flip in flips {
-            let localFlip = moc.objectWithID(flip.objectID) as Flip
-            localFlips.append(localFlip)
-
-            if (localFlip.isBlankFlip()) {
-                localFlipIDs.append(localFlip.word)
-            } else {
-                localFlipIDs.append(localFlip.flipID)
-            }
-        }
+        var localFlips = self.getLocalFlips()
         
-        let videoComposer = VideoComposer()
         videoComposer.renderOverlays = false
-
-        if (self.useCache) {
-            videoComposer.cacheKey = "-".join(localFlipIDs).md5()
-        }
         
         if (self.cancelled) {
             return
@@ -92,4 +79,34 @@ class VideoComposeOperation: NSOperation {
             completion!(videoPlayer)
         }
     }
+    
+    func areFlipsCached(flips: Array<Flip>) -> Bool {
+        return self.videoComposer.areFlipsCached(flips)
+    }
+    
+    func getCacheKey() -> String {
+        var localFlipIDs: Array<String> = []
+        let moc = NSManagedObjectContext.MR_contextForCurrentThread();
+        
+        for flip in flips {
+            let localFlip = moc.objectWithID(flip.objectID) as Flip
+            if (localFlip.isBlankFlip()) {
+                localFlipIDs.append(localFlip.word)
+            } else {
+                localFlipIDs.append(localFlip.flipID)
+            }
+        }
+        return "-".join(localFlipIDs).md5()
+    }
+    
+    private func getLocalFlips() -> Array<Flip> {
+        var localFlips: Array<Flip> = []
+        let moc = NSManagedObjectContext.MR_contextForCurrentThread();
+        for flip in flips {
+            let localFlip = moc.objectWithID(flip.objectID) as Flip
+            localFlips.append(localFlip)
+        }
+        return localFlips
+    }
+    
 }
