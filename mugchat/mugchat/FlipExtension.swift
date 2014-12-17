@@ -63,7 +63,7 @@ extension Flip {
     }
 
     func hasAudio() -> Bool {
-        return (self.soundURL != nil) && (!self.soundURL.isEmpty)
+        return (self.soundURL != nil) && (countElements(self.soundURL) > 0)
     }
 
     func isBlankFlip() -> Bool {
@@ -119,7 +119,7 @@ extension Flip {
     func soundContentLocalPath() -> String? {
         let cacheHandler = CacheHandler.sharedInstance
         
-        if ((self.soundURL == nil) || (self.soundURL.isEmpty)) {
+        if ((self.soundURL == nil) || countElements(self.soundURL) == 0) {
             return ""
         }
         
