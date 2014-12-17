@@ -15,7 +15,7 @@ import AVFoundation
 
 class VideoHelper {
 
-    class func generateThumbImageForFile(filePath: String) -> UIImage {
+    class func generateThumbImageForFile(filePath: String) -> UIImage! {
         let url = NSURL(fileURLWithPath: filePath)
 
         let videoComposer = VideoComposer()

@@ -85,9 +85,10 @@ extension FlipMessage {
         } else if (firstFlip!.isBackgroundContentTypeVideo()) {
             let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
             if (videoPath != nil) {
-                let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!)
-                cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
-                return videoThumbnailImage
+                if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!) {
+                    cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
+                    return videoThumbnailImage
+                }
             }
         }
 
