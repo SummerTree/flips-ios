@@ -26,6 +26,7 @@
 		07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */; };
 		07CB53721A3E4A3C00853A78 /* UIAlertViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CB53711A3E4A3C00853A78 /* UIAlertViewExtensions.swift */; };
 		07CE2ABA1A1E8FEC00CF1A70 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */; };
+		07DAAF781A40ED9D0017DBA1 /* ChatLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		07E47BA21A3B60B3001B3809 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */; };
@@ -220,6 +221,7 @@
 		07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObject+helpers.m"; path = "Classes/NSManagedObject+helpers.m"; sourceTree = "<group>"; };
 		07CB53711A3E4A3C00853A78 /* UIAlertViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertViewExtensions.swift; path = Classes/UIAlertViewExtensions.swift; sourceTree = "<group>"; };
 		07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LocalizedString.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatLabel.swift; path = Classes/ChatLabel.swift; sourceTree = "<group>"; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
 		07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSErrorExtensions.swift; path = Classes/NSErrorExtensions.swift; sourceTree = "<group>"; };
 		07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
@@ -509,6 +511,7 @@
 		5786B2CF19EEADD900021DD3 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */,
 				5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */,
 				07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */,
 				5786B2CC19EEADD400021DD3 /* ChatView.swift */,
@@ -1368,6 +1371,7 @@
 				7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */,
 				07B66B2E1A147B5800407A28 /* MBContactCollectionViewEntryCell.m in Sources */,
 				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
+				07DAAF781A40ED9D0017DBA1 /* ChatLabel.swift in Sources */,
 				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
 				07B66B301A147B5800407A28 /* MBContactCollectionViewPromptCell.m in Sources */,
 				A2A5C6D91A001E7A00E4CB2C /* SelectedFlipOverlayView.swift in Sources */,
