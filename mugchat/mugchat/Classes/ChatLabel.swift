@@ -1,6 +1,5 @@
 //
 //  ChatLabel.swift
-//  mugchat
 //
 // Copyright 2014 ArcTouch, Inc.
 // All rights reserved.

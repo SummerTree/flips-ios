@@ -95,7 +95,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             messageTextLabel.alpha = 1
         }
         self.messageTextLabel.text = flipMessage.messagePhrase()
-//        self.messageTextLabel.sizeToFit()
         
         avatarView.setImageWithURL(NSURL(string: flipMessage.from.photoURL))
         

@@ -276,11 +276,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
 
         configureCell(Static.sizingCell, atIndexPath: indexPath)
         
-        let height = calculateHeightForConfiguredSizingCell(Static.sizingCell)
-        
-        println("\(indexPath) height: \(height)")
-        
-        return height
+        return calculateHeightForConfiguredSizingCell(Static.sizingCell)
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
