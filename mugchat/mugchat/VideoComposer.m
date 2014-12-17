@@ -76,26 +76,24 @@
 
     __block UIImage *thumbnail = nil;
     
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        UIGraphicsBeginImageContext([self croppedVideoSize:videoTrack]);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        CGAffineTransform center = CGAffineTransformMakeTranslation(0.0, -croppedVideoSize.height);
-        CGAffineTransform mirror = CGAffineTransformMakeScale(1.0, -1.0);
-        
-        CGContextConcatCTM(context, videoTrack.preferredTransform);
-        CGContextConcatCTM(context, mirror);
-        CGContextConcatCTM(context, center);
-        
-        CGFloat xOffset = (croppedVideoSize.width - naturalVideoSize.width) / 2;
-        CGFloat yOffset = (croppedVideoSize.height - naturalVideoSize.height) / 2;
-        
-        CGContextDrawImage(context, CGRectMake(xOffset, yOffset, naturalVideoSize.width, naturalVideoSize.height), cgImage);
-        
-        thumbnail = UIGraphicsGetImageFromCurrentImageContext();
-        
-        UIGraphicsEndImageContext();
-    });
+    UIGraphicsBeginImageContext([self croppedVideoSize:videoTrack]);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGAffineTransform center = CGAffineTransformMakeTranslation(0.0, -croppedVideoSize.height);
+    CGAffineTransform mirror = CGAffineTransformMakeScale(1.0, -1.0);
+    
+    CGContextConcatCTM(context, videoTrack.preferredTransform);
+    CGContextConcatCTM(context, mirror);
+    CGContextConcatCTM(context, center);
+    
+    CGFloat xOffset = (croppedVideoSize.width - naturalVideoSize.width) / 2;
+    CGFloat yOffset = (croppedVideoSize.height - naturalVideoSize.height) / 2;
+    
+    CGContextDrawImage(context, CGRectMake(xOffset, yOffset, naturalVideoSize.width, naturalVideoSize.height), cgImage);
+    
+    thumbnail = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
 
     return thumbnail;
 }
