@@ -15,7 +15,7 @@ import Foundation
 class VerificationCodeViewController: FlipsViewController, VerificationCodeViewDelegate {
     
     private let PLATFORM = "ios"
-    let VERIFICATION_CODE_DID_NOT_MATCH = "Wrong validation code."
+    let VERIFICATION_CODE_DID_NOT_MATCH = "Incorrect Validation Code. Please try again."
     
     var verificationCodeView: VerificationCodeView!
     var phoneNumber: String!
