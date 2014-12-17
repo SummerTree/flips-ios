@@ -25,6 +25,8 @@ struct LocalizedString {
     static let NO_INTERNET_CONNECTION = NSLocalizedString("Unable to connect to server.  Please try again later", comment: "No internet connection")
     static let OK = NSLocalizedString("OK", comment: "OK")
     static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
+    static let CONTACTS_ACCESS_TITLE = NSLocalizedString("Contacts")
+    static let CONTACTS_ACCESS_MESSAGE = NSLocalizedString("Flips does not have access to your contacts. Please grant access under Settings > Privacy > Contacts.")
 }
 
 func NSLocalizedString(key: String) -> String {
