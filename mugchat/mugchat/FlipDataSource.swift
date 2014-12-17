@@ -121,7 +121,10 @@ class FlipDataSource : BaseDataSource {
             flip.owner = User.loggedUser()
             flip.setBackgroundContentType(BackgroundContentType.Video)
             
-            cacheHandler.saveThumbnail(VideoHelper.generateThumbImageForFile(videoURL.relativePath!), forUrl: flip.backgroundURL)
+            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
+                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
+            }
+            
             cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
             createFlipSuccess(flip)
         }) { (flipError) -> Void in
