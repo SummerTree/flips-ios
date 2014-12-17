@@ -52,6 +52,17 @@
     return [NSArray arrayWithArray:messageParts];
 }
 
+- (BOOL)areFlipsCached:(NSArray *)flips
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL flipsCached = true;
+    for (Flip *flip in flips) {
+        NSURL *outputURL = [self videoPartOutputFileURLForFlip:flip];
+        flipsCached = flipsCached && [fileManager fileExistsAtPath:[outputURL relativePath] isDirectory:nil];
+    }
+    return flipsCached;
+}
+
 - (UIImage *)thumbnailForVideo:(NSURL *)videoURL
 {
     AVAsset *asset = [AVAsset assetWithURL:videoURL];

@@ -188,8 +188,6 @@ class PlayerView: UIView {
             return;
         }
 
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self)
-
         weak var weakSelf : PlayerView? = self
 
         if (videoComposeOperation != nil) {
@@ -204,6 +202,9 @@ class PlayerView: UIView {
         }
 
         videoComposeOperation = VideoComposeOperation(flips: flips, useCache: self.useCache, queueObserver: self)
+        if (!videoComposeOperation!.areFlipsCached(flips)) {
+            ActivityIndicatorHelper.showActivityIndicatorAtView(self)
+        }
         videoComposeOperation?.queuePriority = NSOperationQueuePriority.High
         videoComposeOperation?.completion = ( { player -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in

@@ -32,4 +32,6 @@
 
 - (UIImage *)thumbnailForVideo:(NSURL *)videoURL;
 
+- (BOOL)areFlipsCached:(NSArray *)flips;
+
 @end
