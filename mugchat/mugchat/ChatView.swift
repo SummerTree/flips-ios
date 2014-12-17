@@ -208,13 +208,15 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                     }
                 }
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(self.AUTOPLAY_ON_LOAD_DELAY * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-                        self.playVideoForVisibleCell()
+                if (firstNotReadMessageIndex > 0) {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(self.AUTOPLAY_ON_LOAD_DELAY * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+                            self.playVideoForVisibleCell()
+                        })
                     })
-                })
+                }
             }
         })
     }
