@@ -28,8 +28,8 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     @IBOutlet weak var videoPlayerContainerView : UIView!
     @IBOutlet weak var videoPlayerContainerViewWidthConstraint: NSLayoutConstraint!
     var avatarView : RoundImageView!
-    @IBOutlet weak var timestampLabel : UILabel!
-    @IBOutlet weak var messageTextLabel : UILabel!
+    @IBOutlet weak var timestampLabel : ChatLabel!
+    @IBOutlet weak var messageTextLabel : ChatLabel!
     @IBOutlet weak var messageView : UIView!
     
     private var isPlaying = false
@@ -95,7 +95,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             messageTextLabel.alpha = 1
         }
         self.messageTextLabel.text = flipMessage.messagePhrase()
-        self.messageTextLabel.sizeToFit()
+//        self.messageTextLabel.sizeToFit()
         
         avatarView.setImageWithURL(NSURL(string: flipMessage.from.photoURL))
         
@@ -122,13 +122,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 
 
     // MARK: - Overridden Methods
-    
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.layoutIfNeeded()
-        messageTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(messageTextLabel.frame)
-        timestampLabel.preferredMaxLayoutWidth = CGRectGetWidth(messageTextLabel.frame)
-    }
     
     public override func prepareForReuse() {
         super.prepareForReuse()

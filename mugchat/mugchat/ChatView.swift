@@ -44,12 +44,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var showOnboarding = false
     private var bubbleView: BubbleView!
     
-    private lazy var chatPrototypeCell: ChatTableViewCell = {
-        [unowned self] in
-        return self.tableView.dequeueReusableCellWithIdentifier(self.CELL_IDENTIFIER) as ChatTableViewCell
-    }()
-    
-    
+
     // MARK: - Required initializers
     
     init(showOnboarding: Bool) {
@@ -260,13 +255,36 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return UITableViewAutomaticDimension
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        configureCell(chatPrototypeCell, atIndexPath: indexPath)
-        chatPrototypeCell.bounds = CGRectMake(0.0, 0.0, CGRectGetWidth(tableView.bounds), CGRectGetHeight(chatPrototypeCell.bounds))
-        chatPrototypeCell.layoutIfNeeded()
+    func calculateHeightForConfiguredSizingCell(sizingCell: UITableViewCell) -> CGFloat {
+        sizingCell.bounds = CGRectMake(0, 0, CGRectGetWidth(tableView.frame), CGRectGetHeight(sizingCell.bounds))
         
-        let size: CGSize = chatPrototypeCell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        sizingCell.setNeedsLayout()
+        sizingCell.layoutIfNeeded()
+        
+        let size: CGSize = sizingCell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
         return size.height
+    }
+    
+    func heightForChatTableViewCellAtIndexPath(indexPath: NSIndexPath) -> CGFloat {
+        struct Static {
+            static var sizingCell: ChatTableViewCell!
+        }
+        
+        if (Static.sizingCell == nil) {
+            Static.sizingCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
+        }
+
+        configureCell(Static.sizingCell, atIndexPath: indexPath)
+        
+        let height = calculateHeightForConfiguredSizingCell(Static.sizingCell)
+        
+        println("\(indexPath) height: \(height)")
+        
+        return height
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return heightForChatTableViewCellAtIndexPath(indexPath)
     }
     
     
