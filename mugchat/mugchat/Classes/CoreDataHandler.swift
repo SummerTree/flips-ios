@@ -27,7 +27,7 @@ public class CoreDataHandler: NSObject {
     // MARK: - Database Handlers
     
     func setupDatabase() {
-        MagicalRecord.setupCoreDataStackWithAutoMigratingSqliteStoreNamed(databaseStoreName)
+        MagicalRecord.setupCoreDataStackWithStoreNamed(databaseStoreName)
     }
 
     func resetDatabase() {
