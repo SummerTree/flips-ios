@@ -74,7 +74,7 @@
     CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
     CGSize naturalVideoSize = videoTrack.naturalSize;
     
-    NSAssert(CGSizeEqualToSize(croppedVideoSize, CGSizeZero), @"Crop size is zero!");
+    NSAssert(!CGSizeEqualToSize(croppedVideoSize, CGSizeZero), @"Crop size is zero!");
     
     UIGraphicsBeginImageContext(croppedVideoSize);
     CGContextRef context = UIGraphicsGetCurrentContext();
