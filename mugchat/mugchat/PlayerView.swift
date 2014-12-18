@@ -67,7 +67,7 @@ class PlayerView: UIView {
 
             if (currentItem == nil) {
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    let alertView = UIAlertView(title: "Video is not ready", message: "Video is being created", delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    let alertView = UIAlertView(title: LocalizedString.VIDEO_IS_NOT_READY, message: LocalizedString.VIDEO_IS_BEING_CREATED, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 }
             } else {
