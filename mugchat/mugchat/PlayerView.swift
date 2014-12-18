@@ -62,12 +62,21 @@ class PlayerView: UIView {
         self.preparePlayer { (player) -> Void in
             self.thumbnailView.hidden = true
             self.playButtonView.hidden = true
+            
+            var currentItem = player!.currentItem
 
-            let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
-            self.setWord(self.words[playerItem.order])
-            self.isPlaying = true
-            player!.volume = 1.0
-            player!.play()
+            if (currentItem == nil) {
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    let alertView = UIAlertView(title: "Video is not ready", message: "Video is being created", delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
+            } else {
+                let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
+                self.setWord(self.words[playerItem.order])
+                self.isPlaying = true
+                player!.volume = 1.0
+                player!.play()
+            }
         }
     }
     
