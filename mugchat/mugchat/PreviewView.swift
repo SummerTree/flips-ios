@@ -77,6 +77,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         
         self.sendContainerView = UIView()
         self.sendContainerView.backgroundColor = UIColor.avacado()
+        self.sendContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "sendButtonTapped:"))
         self.addSubview(sendContainerView)
         
         
@@ -88,7 +89,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         
         self.sendImage = UIImage(named: "Send")
         self.sendImageButton = UIButton()
-        self.sendImageButton.addTarget(self, action: "sendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         self.sendImageButton.setImage(self.sendImage, forState: UIControlState.Normal)
         
         self.sendContainerView.addSubview(sendImageButton)
@@ -146,9 +146,11 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
             make.centerX.equalTo()(self.sendContainerView)
             make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.SEND_BUTTON_SUBVIEWS_CENTER_MARGIN)
         }
+        
     }
     
     func sendButtonTapped(sendButton: UIButton!) {
+        self.sendImageButton.highlighted = true
         self.delegate?.previewButtonDidTapSendButton(self)
     }
     
