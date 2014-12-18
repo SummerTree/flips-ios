@@ -27,6 +27,8 @@ struct LocalizedString {
     static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
     static let CONTACTS_ACCESS_TITLE = NSLocalizedString("Contacts")
     static let CONTACTS_ACCESS_MESSAGE = NSLocalizedString("Flips does not have access to your contacts. Please grant access under Settings > Privacy > Contacts.")
+    static let VIDEO_IS_NOT_READY = NSLocalizedString("Video is not ready")
+    static let VIDEO_IS_BEING_CREATED = NSLocalizedString("Video is being created")
 }
 
 func NSLocalizedString(key: String) -> String {
