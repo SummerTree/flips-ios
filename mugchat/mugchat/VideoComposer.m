@@ -73,10 +73,10 @@
 
     CGSize croppedVideoSize = [self croppedVideoSize:videoTrack];
     CGSize naturalVideoSize = videoTrack.naturalSize;
-
-    __block UIImage *thumbnail = nil;
     
-    UIGraphicsBeginImageContext([self croppedVideoSize:videoTrack]);
+    NSAssert(CGSizeEqualToSize(croppedVideoSize, CGSizeZero), @"Crop size is zero!");
+    
+    UIGraphicsBeginImageContext(croppedVideoSize);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGAffineTransform center = CGAffineTransformMakeTranslation(0.0, -croppedVideoSize.height);
@@ -91,7 +91,7 @@
     
     CGContextDrawImage(context, CGRectMake(xOffset, yOffset, naturalVideoSize.width, naturalVideoSize.height), cgImage);
     
-    thumbnail = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *thumbnail = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
 
