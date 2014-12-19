@@ -137,6 +137,7 @@ class FlipDataSource : BaseDataSource {
         var flip: Flip! = Flip.MR_createEntity() as Flip
 
         flip.word = word
+        flip.setBackgroundContentType(BackgroundContentType.Image)
         
         return flip
     }
