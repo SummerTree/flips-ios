@@ -75,6 +75,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     if (success) {
                         var inboxViewController = InboxViewController()
+                        inboxViewController.userDataSource = userDataSource
                         self.navigationController?.pushViewController(inboxViewController, animated: true)
                     }
                 })
@@ -142,6 +143,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
                         } else {
                             var inboxViewController = InboxViewController()
+                            inboxViewController.userDataSource = userDataSource
                             self.navigationController?.pushViewController(inboxViewController, animated: true)
                         }
                     })

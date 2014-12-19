@@ -12,8 +12,9 @@
 
 import Foundation
 
-class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
-
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UserDataSourceDelegate {
+    var userDataSource: UserDataSource?
+    
     private var inboxView: InboxView!
     private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
     
@@ -43,6 +44,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.inboxView.viewWillAppear()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        
+        if userDataSource?.isDownloadingFlips == true {
+            // display sync view
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -155,5 +160,20 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
         self.roomIds.removeObjectAtIndex(index)
+    }
+    
+    
+    // MARK: - UserDataSourceDelegate
+    
+    func userDataSource(userDataSource: UserDataSource, didDownloadFlip: Flip) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            // update sync counter
+        })
+    }
+    
+    func userDataSourceDidFinishFlipsDownload(userDataSource: UserDataSource) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            // dismiss sync view
+        })
     }
 }

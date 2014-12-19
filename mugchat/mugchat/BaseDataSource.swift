@@ -12,7 +12,7 @@
 
 public typealias CompletionBlock = (Bool) -> Void
 
-class BaseDataSource {
+class BaseDataSource: NSObject {
     
     func save() {
         if (NSThread.currentThread() == NSThread.mainThread()) {

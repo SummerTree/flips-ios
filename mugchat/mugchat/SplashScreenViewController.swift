@@ -74,7 +74,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                             
                             let authenticatedUser = User.loggedUser()!
                             if (self.userHasDevice(authenticatedUser)) {
-                                self.openInboxViewController()
+                                self.openInboxViewController(userDataSource)
                             } else {
                                 self.openPhoneNumberController(authenticatedUser.userID)
                             }
@@ -107,7 +107,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
             var userDataSource = UserDataSource()
             userDataSource.syncUserData({ (success, error) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.openInboxViewController()
+                    self.openInboxViewController(userDataSource)
                 })
             })
         } else {
@@ -121,8 +121,9 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         splashScreenViewAttemptLogin()
     }
     
-    private func openInboxViewController() {
+    private func openInboxViewController(userDataSource: UserDataSource) {
         var inboxViewController = InboxViewController()
+        inboxViewController.userDataSource = userDataSource
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     

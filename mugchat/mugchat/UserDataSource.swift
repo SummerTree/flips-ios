@@ -27,9 +27,22 @@ private struct UserJsonParams {
 
 public typealias UserSyncFinished = (Bool, FlipError?) -> Void
 
+@objc protocol UserDataSourceDelegate: NSObjectProtocol {
+    optional func userDataSource(userDataSource: UserDataSource, didDownloadFlip: Flip)
+    optional func userDataSourceDidFinishFlipsDownload(userDataSource: UserDataSource)
+}
+
+
 class UserDataSource : BaseDataSource {
+    weak var delegate: UserDataSourceDelegate?
     
     let deviceDataSource = DeviceDataSource()
+    var flipsDownloadCount = ThreadSafe(0)
+    var flipsDownloadCounter = ThreadSafe(0)
+    
+    var isDownloadingFlips: Bool {
+        return (flipsDownloadCount.value - flipsDownloadCounter.value) > 0
+    }
     
     
     // MARK: - CoreData Creator Methods
@@ -178,11 +191,25 @@ class UserDataSource : BaseDataSource {
             let flipDataSource = FlipDataSource()
             userService.getMyFlips({ (jsonResponse) -> Void in
                 let myFlipsAsJSON = jsonResponse.array
+                
+                self.flipsDownloadCount.value = countElements(myFlipsAsJSON!)
+                self.flipsDownloadCounter.value = 1
+                
                 for myFlip in myFlipsAsJSON! {
                     let flip = flipDataSource.createOrUpdateFlipWithJson(myFlip)
                     Downloader.sharedInstance.downloadDataForFlip(flip, isTemporary: false, completion: { (error) -> Void in
                         if (error != nil) {
                             println("Error downloading data for my flip (\(flip.flipID))")
+                        }
+                        
+                        if (self.isDownloadingFlips) {
+                            NSLog("Downloaded flips: \(self.flipsDownloadCounter.value) of \(self.flipsDownloadCount.value)")
+                            self.delegate?.userDataSource?(self, didDownloadFlip: flip)
+                            
+                            self.flipsDownloadCounter.value++
+                        } else {
+                            NSLog("Downloads complete!")
+                            self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
                         }
                     })
                 }
