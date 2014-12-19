@@ -507,7 +507,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
     func composeBottomViewContainerDidTapCaptureAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
-        AudioRecorderService.sharedInstance.startRecording()
+        AudioRecorderService.sharedInstance.startRecording { (error) -> Void in
+            if let error = error {
+                self.composeTopViewContainer.showCameraWithWord(self.flipWords[self.highlightedWordIndex].text)
+                var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertMessage.show()
+            }
+        }
     }
     
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
@@ -542,7 +548,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             }, fail: { (error) -> Void in
                 println("Error capturing picture: \(error)")
-                var alertMessage = UIAlertView(title: NO_SPACE_PHOTO_ERROR_TITLE, message: NO_SPACE_PHOTO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: error?.localizedDescription, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertMessage.show()
         })
     }
