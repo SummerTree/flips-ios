@@ -89,6 +89,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         
         self.sendImage = UIImage(named: "Send")
         self.sendImageButton = UIButton()
+        self.sendImageButton.userInteractionEnabled = false
         self.sendImageButton.setImage(self.sendImage, forState: UIControlState.Normal)
         
         self.sendContainerView.addSubview(sendImageButton)
