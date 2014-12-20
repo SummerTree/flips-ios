@@ -13,9 +13,18 @@
 import Foundation
 
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UserDataSourceDelegate {
-    var userDataSource: UserDataSource?
+    var userDataSource: UserDataSource? {
+        didSet {
+            if userDataSource != nil {
+                userDataSource?.delegate = self
+            }
+        }
+    }
+    
+    private let animationDuration: NSTimeInterval = 0.25
     
     private var inboxView: InboxView!
+    private var syncView: SyncView!
     private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
     
     // MARK: - UIViewController overridden methods
@@ -31,6 +40,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         inboxView.delegate = self
         inboxView.dataSource = self
         self.view = inboxView
+        
+        setupSyncView()
     }
     
     override func viewDidLoad() {
@@ -45,9 +56,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
-        if userDataSource?.isDownloadingFlips == true {
-            // display sync view
-        }
+        syncView.hidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -58,9 +67,51 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        if let userDataSource = self.userDataSource {
+            if userDataSource.isDownloadingFlips == true {
+                syncView.image = imageForView()
+                syncView.setDownloadCount(1, ofTotal: userDataSource.flipsDownloadCount.value)
+                syncView.alpha = 0
+                syncView.hidden = false
+                
+                UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+                    self.syncView.alpha = 1
+                })
+            }
+        }
+        
         self.refreshRooms()
     }
     
+    func imageForView() -> UIImage {
+        UIGraphicsBeginImageContext(view.bounds.size)
+        view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        return image
+    }
+    
+    func setupSyncView() {
+        if let views = NSBundle.mainBundle().loadNibNamed("SyncView", owner: self, options: nil) {
+            if let syncView = views[0] as? SyncView {
+                syncView.hidden = true
+                
+                self.syncView = syncView
+                
+                view.addSubview(syncView)
+                
+                syncView.mas_makeConstraints { (make) -> Void in
+                    make.top.equalTo()(self.view)
+                    make.trailing.equalTo()(self.view)
+                    make.leading.equalTo()(self.view)
+                }
+            }
+        }
+    }
     
     // MARK: - InboxViewDelegate
     
@@ -168,12 +219,19 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func userDataSource(userDataSource: UserDataSource, didDownloadFlip: Flip) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             // update sync counter
+            self.syncView.setDownloadCount(userDataSource.flipsDownloadCounter.value, ofTotal: userDataSource.flipsDownloadCount.value)
         })
     }
     
     func userDataSourceDidFinishFlipsDownload(userDataSource: UserDataSource) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             // dismiss sync view
+            UIView.animateWithDuration(self.animationDuration, animations: { () -> Void in
+                self.syncView.alpha = 0
+            }, completion: { (done) -> Void in
+                self.syncView.hidden = true
+                self.syncView.alpha = 1
+            })
         })
     }
 }

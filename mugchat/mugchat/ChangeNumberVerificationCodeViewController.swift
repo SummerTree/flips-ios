@@ -50,7 +50,7 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
         }
     }
     
-    override func navigateAfterValidateDevice() {
+    func navigateAfterValidateDevice() {
         for viewController in self.navigationController!.viewControllers {
             
             let lastViewController = viewController as UIViewController
