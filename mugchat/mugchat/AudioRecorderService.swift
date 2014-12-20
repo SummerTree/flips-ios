@@ -12,6 +12,8 @@
 
 import AVFoundation
 
+public typealias RecordError = (String?) -> Void
+
 public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     private var recorder: AVAudioRecorder!
@@ -109,7 +111,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         self.recorder.deleteRecording()
     }
     
-    func startRecording() {
+    func startRecording(error: RecordError) {
         AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool) -> Void in
             self.delegate?.audioRecorderService(self, didRequestRecordPermission: granted)
             
@@ -120,8 +122,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
                 self.recorder.record()
                 NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
             } else {
-                var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                alertMessage.show()
+                error(LocalizedString.ERROR)
             }
         })
     }

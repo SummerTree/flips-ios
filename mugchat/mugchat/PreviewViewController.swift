@@ -97,30 +97,37 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     func previewButtonDidTapSendButton(previewView: PreviewView!) {
         self.previewView.stopMovie()
         self.showActivityIndicator()
-
+        
+        var flipMessageIds = Dictionary<String, String>()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            let flipService = FlipService()
             var error: FlipError?
             var flipIds = Array<String>()
-            let flipService = FlipService()
+            
+            for flipWord in self.flipWords {
+                flipMessageIds[flipWord.text] = ""
+            }
             
             var group = dispatch_group_create()
 
             let flipDataSource = FlipDataSource()
             for flipWord in self.flipWords {
+                dispatch_group_enter(group)
                 if (flipWord.associatedFlipId != nil) {
                     var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                     flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
-                    flipIds.append(flip.flipID)
+                    flipMessageIds[flipWord.text] = flip.flipID
+                    dispatch_group_leave(group)
                 } else {
                     // Create a Flip in the server for each empty Flip
-                    dispatch_group_enter(group)
                     flipService.createFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
-                        flipIds.append(flip.flipID)
-                        dispatch_group_leave(group);
+                        flipMessageIds[flipWord.text] = flip.flipID
+                        dispatch_group_leave(group)
                     }, createFlipFailCallBack: { (flipError) -> Void in
                         error = flipError
-                        dispatch_group_leave(group);
+                        flipMessageIds[flipWord.text] = "-1"
+                        dispatch_group_leave(group)
                     })
                 }
             }
@@ -152,6 +159,10 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                             alertView.show()
                         }
                     })
+                }
+                
+                for flipWord in self.flipWords {
+                    flipIds.append(flipMessageIds[flipWord.text]!)
                 }
                 
                 let messageService = MessageService.sharedInstance
