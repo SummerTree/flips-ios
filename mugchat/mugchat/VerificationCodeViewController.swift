@@ -49,8 +49,9 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         verificationCodeView.viewWillDisappear()
     }
     
-    func navigateAfterValidateDevice() {
+    func navigateAfterValidateDevice(userDataSource: UserDataSource) {
         var inboxViewController = InboxViewController()
+        inboxViewController.userDataSource = userDataSource
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     
@@ -126,7 +127,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         verificationCodeView.resetVerificationCodeField()
                         
                         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                        self.navigateAfterValidateDevice()
+                        self.navigateAfterValidateDevice(userDataSource)
                     })
                 })
             },

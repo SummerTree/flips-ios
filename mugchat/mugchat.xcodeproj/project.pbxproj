@@ -11,6 +11,9 @@
 		072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
 		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
 		0757ECB11A11A61600D0277C /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
+		075A0C091A43A1F800E92760 /* ThreadSafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075A0C081A43A1F800E92760 /* ThreadSafe.swift */; };
+		075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
+		075A0C0D1A44B86300E92760 /* SyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075A0C0C1A44B86300E92760 /* SyncView.swift */; };
 		078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078D4BD81A1FC71100F24262 /* RoundImageView.swift */; };
 		0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
 		0794A9C41A0A9AAD00DA8CFA /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
@@ -198,6 +201,9 @@
 		072AD71E1A16B01B0011B212 /* NextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NextButton.swift; path = Classes/NextButton.swift; sourceTree = "<group>"; };
 		0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactTableViewCell.swift; path = Classes/ContactTableViewCell.swift; sourceTree = "<group>"; };
 		0757ECB01A11A61600D0277C /* ContactPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactPhotoView.swift; path = Classes/ContactPhotoView.swift; sourceTree = "<group>"; };
+		075A0C081A43A1F800E92760 /* ThreadSafe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreadSafe.swift; path = Classes/ThreadSafe.swift; sourceTree = "<group>"; };
+		075A0C0A1A44B84B00E92760 /* SyncView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SyncView.xib; path = Classes/SyncView.xib; sourceTree = "<group>"; };
+		075A0C0C1A44B86300E92760 /* SyncView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncView.swift; path = Classes/SyncView.swift; sourceTree = "<group>"; };
 		078D4BD81A1FC71100F24262 /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoundImageView.swift; path = Classes/RoundImageView.swift; sourceTree = "<group>"; };
 		0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = NewFlip.storyboard; sourceTree = "<group>"; };
 		0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFlipViewController.swift; path = Classes/NewFlipViewController.swift; sourceTree = "<group>"; };
@@ -453,6 +459,14 @@
 				07B66B2B1A147B5800407A28 /* MBContactPicker.m */,
 			);
 			name = Contact;
+			sourceTree = "<group>";
+		};
+		075A0C071A43A1C100E92760 /* Untilities */ = {
+			isa = PBXGroup;
+			children = (
+				075A0C081A43A1F800E92760 /* ThreadSafe.swift */,
+			);
+			name = Untilities;
 			sourceTree = "<group>";
 		};
 		0794A9C01A0A981300DA8CFA /* New Flip */ = {
@@ -934,6 +948,7 @@
 				07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */,
 				5707185619D19D180069064F /* Services */,
 				70FD4E7319D064450024EBDB /* Supporting Files */,
+				075A0C071A43A1C100E92760 /* Untilities */,
 				704E110B19D08E4700D2BB88 /* View */,
 			);
 			path = mugchat;
@@ -981,9 +996,11 @@
 		7A1892C919D1E9210026E641 /* Inbox */ = {
 			isa = PBXGroup;
 			children = (
+				7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */,
 				7A76C68819D303F500D0ACA7 /* InboxView.swift */,
 				7A11792319DA08800086A66B /* InboxViewDelegate.swift */,
-				7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */,
+				075A0C0C1A44B86300E92760 /* SyncView.swift */,
+				075A0C0A1A44B84B00E92760 /* SyncView.xib */,
 			);
 			name = Inbox;
 			sourceTree = "<group>";
@@ -1296,6 +1313,7 @@
 				07E47BA21A3B60B3001B3809 /* ChatTableViewCell.xib in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
+				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1384,6 +1402,7 @@
 				705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */,
 				7A1892CC19D1E97A0026E641 /* InboxViewController.swift in Sources */,
 				7AA711751A28D8B00082165A /* BuilderWord.m in Sources */,
+				075A0C0D1A44B86300E92760 /* SyncView.swift in Sources */,
 				7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */,
 				7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */,
 				07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */,
@@ -1460,6 +1479,7 @@
 				57A3A6BE19D5E3160043790E /* PhoneNumberView.swift in Sources */,
 				70736C381A0D582A004E55E4 /* UpdateUserProfileView.swift in Sources */,
 				7A997DBC1A274F7400346817 /* BuilderWordDataSource.swift in Sources */,
+				075A0C091A43A1F800E92760 /* ThreadSafe.swift in Sources */,
 				7A18BF4E1A1E496B00C40E16 /* PhoneNumberHelper.swift in Sources */,
 				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */,
