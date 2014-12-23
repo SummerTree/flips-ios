@@ -27,6 +27,7 @@
 #import "UIImage+ImageEffects.h"
 #import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "AVCamPreviewView.h"
+#import <FlurrySDK/Flurry.h>
 
 #define MR_SHORTHAND
 #define MR_ENABLE_ACTIVE_RECORD_LOGGING 1

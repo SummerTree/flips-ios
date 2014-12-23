@@ -60,6 +60,18 @@
 #define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK 19
 #define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK 0
 
+// FlurrySDK
+#define COCOAPODS_POD_AVAILABLE_FlurrySDK
+#define COCOAPODS_VERSION_MAJOR_FlurrySDK 5
+#define COCOAPODS_VERSION_MINOR_FlurrySDK 4
+#define COCOAPODS_VERSION_PATCH_FlurrySDK 0
+
+// FlurrySDK/FlurrySDK
+#define COCOAPODS_POD_AVAILABLE_FlurrySDK_FlurrySDK
+#define COCOAPODS_VERSION_MAJOR_FlurrySDK_FlurrySDK 5
+#define COCOAPODS_VERSION_MINOR_FlurrySDK_FlurrySDK 4
+#define COCOAPODS_VERSION_PATCH_FlurrySDK_FlurrySDK 0
+
 // MagicalRecord/Shorthand
 #define COCOAPODS_POD_AVAILABLE_MagicalRecord_Shorthand
 #define COCOAPODS_VERSION_MAJOR_MagicalRecord_Shorthand 2

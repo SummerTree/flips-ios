@@ -27,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Registering for BugSense
         Mint.sharedInstance().initAndStartSession(BUGSENSE_KEY)
         
+        Flurry.startSession("2YZNJVH9MJGSTR72SRXS")
+        
         // Registering for receive messages
         MessageReceiver.sharedInstance.startListeningMessages()
         
