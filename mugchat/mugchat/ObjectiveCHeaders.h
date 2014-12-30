@@ -30,7 +30,7 @@
 #import <FlurrySDK/Flurry.h>
 
 #define MR_SHORTHAND
-#define MR_ENABLE_ACTIVE_RECORD_LOGGING 1
+#define MR_ENABLE_ACTIVE_RECORD_LOGGING 0
 #import <CoreData+MagicalRecord.h>
 
 #import <CommonCrypto/CommonCrypto.h>
