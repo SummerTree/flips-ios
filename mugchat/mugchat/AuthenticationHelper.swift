@@ -71,6 +71,7 @@ public class AuthenticationHelper: NSObject {
         DeviceHelper.sharedInstance.setBuilderIntroductionShown(false)
         
         CoreDataHandler.sharedInstance.resetDatabase()
+
         PubNub.disconnect()
         
         // Unregister for push notifications

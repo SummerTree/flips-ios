@@ -163,29 +163,6 @@ class UserDataSource : BaseDataSource {
             var error: FlipError?
             
             let group = dispatch_group_create()
-
-            dispatch_group_enter(group)
-            roomService.getMyRooms({ (rooms) -> Void in
-                for room in rooms {
-                    println("   - subscribing to room: \(room.roomID)")
-                    PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
-                }
-                dispatch_group_leave(group)
-            }, failCompletion: { (flipError) -> Void in
-                error = flipError
-                dispatch_group_leave(group)
-            })
-            
-            dispatch_group_enter(group)
-            let builderWordDataSource = BuilderWordDataSource()
-            builderService.getSuggestedWords({ (words) -> Void in
-                let builderWordDataSource = BuilderWordDataSource()
-                builderWordDataSource.addWords(words, fromServer: true)
-                dispatch_group_leave(group)
-            }, failCompletion: { (flipError) -> Void in
-                error = flipError
-                dispatch_group_leave(group)
-            })
             
             dispatch_group_enter(group)
             let flipDataSource = FlipDataSource()
@@ -217,6 +194,29 @@ class UserDataSource : BaseDataSource {
             }, failCompletion: { (flipError) -> Void in
                 error = flipError
                 dispatch_group_leave(group)
+            })
+            
+            dispatch_group_enter(group)
+            roomService.getMyRooms({ (rooms) -> Void in
+                for room in rooms {
+                    println("   - subscribing to room: \(room.roomID)")
+                    PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+                }
+                dispatch_group_leave(group)
+                }, failCompletion: { (flipError) -> Void in
+                    error = flipError
+                    dispatch_group_leave(group)
+            })
+            
+            dispatch_group_enter(group)
+            let builderWordDataSource = BuilderWordDataSource()
+            builderService.getSuggestedWords({ (words) -> Void in
+                let builderWordDataSource = BuilderWordDataSource()
+                builderWordDataSource.addWords(words, fromServer: true)
+                dispatch_group_leave(group)
+                }, failCompletion: { (flipError) -> Void in
+                    error = flipError
+                    dispatch_group_leave(group)
             })
             
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)

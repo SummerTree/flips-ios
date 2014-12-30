@@ -34,13 +34,16 @@ public class CoreDataHandler: NSObject {
         var error: NSError?
         var storeURL = NSPersistentStore.MR_urlForStoreName(databaseStoreName)
         
-        MagicalRecord.cleanUp()
+//        MagicalRecord.cleanUp()
         
-        if (NSFileManager.defaultManager().removeItemAtURL(storeURL, error: &error)) {
-            self.setupDatabase()
-        } else {
-            println("An error has occurred while deleting \(databaseStoreName)")
-            println("Error description: \(error?.description)")
+        var user: User? = User.loggedUser()
+        
+        if let user = user {
+            let userDataSource = UserDataSource()
+            user.me = false
+            userDataSource.save()
         }
+        
+        Room.truncateAll()
     }
 }
