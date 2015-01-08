@@ -177,10 +177,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         UIView.animateWithDuration(self.MESSAGES_TOP_VIEW_ANIMATION_DURATION, animations: { () -> Void in
             self.messagesTopView.mas_makeConstraints({ (make) -> Void in
                 make.removeExisting = true
+                make.top.equalTo()(self)
                 make.bottom.equalTo()(self.navigationBar)
                 make.centerX.equalTo()(self.navigationBar)
                 make.width.equalTo()(self.navigationBar)
-                make.height.equalTo()(self.navigationBar)
             })
             self.messagesTopView.layoutIfNeeded()
         })

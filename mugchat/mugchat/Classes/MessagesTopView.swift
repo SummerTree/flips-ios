@@ -66,7 +66,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
         tableView.separatorStyle = .None
         self.addSubview(tableView)
         
-        arrowDismissImageView = UIImageView(image: UIImage(named: "arrow_dismiss"))
+        arrowDismissImageView = UIImageView(image: UIImage(named: "Arrow_Dismiss"))
         arrowDismissImageView.sizeToFit()
         self.addSubview(arrowDismissImageView)
     }
@@ -85,7 +85,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
             make.top.equalTo()(self).with().offset()(self.STATUS_BAR_HEIGHT / 2)
             make.bottom.equalTo()(self)
             make.leading.equalTo()(self).with().offset()(self.FIELDS_MARGIN)
-            make.trailing.equalTo()(self).with().offset()(self.FIELDS_MARGIN)
+            make.trailing.equalTo()(self).with().offset()(-self.FIELDS_MARGIN)
         }
         
         arrowDismissImageView.mas_makeConstraints { (make) -> Void in
