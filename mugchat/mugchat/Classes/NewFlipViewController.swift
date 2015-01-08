@@ -30,6 +30,8 @@ class NewFlipViewController: FlipsViewController,
     private let DELETE = NSLocalizedString("Delete", comment: "Delete")
     private let NO = NSLocalizedString("No", comment: "No")
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
+    private let INVALID_CONTACT_TITLE = NSLocalizedString("Invalid Contact", comment: "Invalid Contact")
+    private let INVALID_CONTACT_MESSAGE = NSLocalizedString("Please choose a valid contact.", comment: "Please choose a valid contact.")
     
     var delegate: NewFlipViewControllerDelegate?
     
@@ -148,27 +150,34 @@ class NewFlipViewController: FlipsViewController,
     private func updateNextButtonState() {
         let hasContacts = contacts.count > 0
         let hasText = !flipTextField.text.removeWhiteSpaces().isEmpty
-        nextButton.enabled = hasContacts && hasText && !contactPicker.invalidContact
+        nextButton.enabled = hasContacts && hasText
     }
     
     // MARK: - Actions
     
     @IBAction func nextButtonAction(sender: UIButton) {
-        if ((contacts.count == 1) && (contacts[0].contactUser != nil)) {
-            let roomDataSource = RoomDataSource()
-            var result = roomDataSource.hasRoomWithUserId(contacts[0].contactUser.userID)
-            if (result.hasRoom) {
-                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getFlipTexts())
-                composeViewController.delegate = self
-                self.navigationController?.pushViewController(composeViewController, animated: true)
-                return
+        
+        if (self.contactPicker.invalidContact) {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                let alertView = UIAlertView(title: self.INVALID_CONTACT_TITLE, message: self.INVALID_CONTACT_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
             }
+        } else {
+            if ((contacts.count == 1) && (contacts[0].contactUser != nil)) {
+                let roomDataSource = RoomDataSource()
+                var result = roomDataSource.hasRoomWithUserId(contacts[0].contactUser.userID)
+                if (result.hasRoom) {
+                    let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getFlipTexts())
+                    composeViewController.delegate = self
+                    self.navigationController?.pushViewController(composeViewController, animated: true)
+                    return
+                }
+            }
+            
+            let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getFlipTexts())
+            composeViewController.delegate = self
+            self.navigationController?.pushViewController(composeViewController, animated: true)
         }
-        
-        let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getFlipTexts())
-        composeViewController.delegate = self
-        self.navigationController?.pushViewController(composeViewController, animated: true)
-        
     }
     
     override func closeButtonTapped() {

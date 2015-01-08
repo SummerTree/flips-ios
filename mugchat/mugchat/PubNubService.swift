@@ -183,9 +183,6 @@ public class PubNubService: FlipsService, PNDelegate {
     public func pubnubClient(client: PubNub!, error: PNError!) {
         println("Error connecting \(client) with error \(error)")
     }
-	
-	
-    // MARK: - PNDelegate
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
         println("Did receive message. Forwading it to delegate.")
