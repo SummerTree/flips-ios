@@ -14,7 +14,7 @@ import UIKit
 
 class TermsOfUseView: FlipsWebView {
     
-    let TERMS_OF_USE_URL = "http://www.arctouch.com"
+    let TERMS_OF_USE_URL = "http://www.flipsapp.com/terms.html"
     
     init() {
         super.init(URL: TERMS_OF_USE_URL)
