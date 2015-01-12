@@ -61,7 +61,6 @@ class ContactDataSource : BaseDataSource {
     
     func sortedByUserFirstNameLastName() -> [NSSortDescriptor] {
         let sortedBy = [
-            NSSortDescriptor(key: ContactAttributes.CONTACT_USER, ascending: false),
             NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
             NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
         ]
