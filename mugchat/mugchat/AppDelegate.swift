@@ -17,6 +17,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private let BUGSENSE_KEY = "2b57f78e"
+    private let FLURRY_KEY = "7CCBCSMWJQ395RJKDP5Y"
     
     var window: UIWindow?
     
@@ -27,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Registering for BugSense
         Mint.sharedInstance().initAndStartSession(BUGSENSE_KEY)
         
-        Flurry.startSession("2YZNJVH9MJGSTR72SRXS")
+        Flurry.startSession(FLURRY_KEY)
         
         // Registering for receive messages
         MessageReceiver.sharedInstance.startListeningMessages()
