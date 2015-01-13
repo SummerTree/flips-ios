@@ -355,7 +355,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         
         self.wrongVerificationCodeCounter++
         if self.wrongVerificationCodeCounter >= 3 {
-            var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.CONSECUTIVE_INCORRECT_ENTRIES, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.INCORRECT_VALIDATION_CODE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
             self.wrongVerificationCodeCounter = 0
         }
