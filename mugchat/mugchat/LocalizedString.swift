@@ -17,18 +17,19 @@ import Foundation
  */
 struct LocalizedString {
     static let CONSECUTIVE_INCORRECT_ENTRIES = NSLocalizedString("3 incorrect entries. Check your messages for a new code", comment: "Wrong verification code message")
+    static let CONTACTS_ACCESS_TITLE = NSLocalizedString("Contacts")
+    static let CONTACTS_ACCESS_MESSAGE = NSLocalizedString("Flips does not have access to your contacts. Please grant access under Settings > Privacy > Contacts.")
     static let ERROR = NSLocalizedString("Error", comment: "Error")
     static let FLIPBOYS_ROOM_NOT_FOUND = NSLocalizedString("Feedback room not found", comment: "Feedback room not found")
     static let FORGOT_PASSWORD = NSLocalizedString("Forgot Password", comment: "Forgot Password")
+    static let INCORRECT_VALIDATION_CODE = NSLocalizedString("Incorrect Validation Code. Please try again.", comment: "")
     static let MICROPHONE_ACCESS = NSLocalizedString("Microphone Access", comment: "Microphone access title")
     static let MICROPHONE_MESSAGE = NSLocalizedString("Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.  If you do not wish to record audio, tap the \"X\" to bypass the recording.", comment: "Microphone message")
     static let NO_INTERNET_CONNECTION = NSLocalizedString("Unable to connect to server.  Please try again later", comment: "No internet connection")
     static let OK = NSLocalizedString("OK", comment: "OK")
-    static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
-    static let CONTACTS_ACCESS_TITLE = NSLocalizedString("Contacts")
-    static let CONTACTS_ACCESS_MESSAGE = NSLocalizedString("Flips does not have access to your contacts. Please grant access under Settings > Privacy > Contacts.")
     static let VIDEO_IS_NOT_READY = NSLocalizedString("Video is not ready")
     static let VIDEO_IS_BEING_CREATED = NSLocalizedString("Video is being created")
+    static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
 }
 
 func NSLocalizedString(key: String) -> String {
