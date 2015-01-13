@@ -20,12 +20,8 @@ class BaseDataSource: NSObject {
             println("   SAVING IN MAIN THREAD!! FIX IT!")
             println("   INCLUDING DISPATCH BACKGROUND!")
             println("   ")
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
-            })
-        } else {
-            NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
         }
+        
+        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
     }
 }
