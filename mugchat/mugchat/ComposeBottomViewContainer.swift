@@ -226,6 +226,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     func showFlipCreateMessage() {
         self.bringSubviewToFront(self.builderFlipCreateLabel)
         self.builderFlipCreateLabel.hidden = false
+        setCreationButtonsEnabled(false)
     }
     
     func showAllFlipCreateMessage() {
@@ -241,6 +242,15 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     func hideFlipCreatedMessage() {
         self.sendSubviewToBack(self.builderFlipCreateLabel)
         self.builderFlipCreateLabel.hidden = true
+        setCreationButtonsEnabled(true)
+    }
+    
+    private func setCreationButtonsEnabled(enabled: Bool) {
+        self.captureAudioButton.enabled = enabled
+        self.cancelCaptureAudioButton.enabled = enabled
+        self.takePictureButton.enabled = enabled
+        self.galleryButton.enabled = enabled
+        self.gridButton.enabled = enabled
     }
     
     // MARK: - Button Handlers
