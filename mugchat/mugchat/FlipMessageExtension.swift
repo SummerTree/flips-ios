@@ -75,13 +75,27 @@ extension FlipMessage {
         }
 
         let cacheHandler = CacheHandler.sharedInstance
+        
         if (firstFlip!.isBackgroundContentTypeImage()) {
-            let backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
-            if (backgroundImageData != nil) {
-                let thumbnailImage = UIImage(data: backgroundImageData!)
-                cacheHandler.saveThumbnail(thumbnailImage!, forUrl: firstFlip!.backgroundURL)
-                return thumbnailImage
+            var backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
+            
+            var thumbnailImage: UIImage
+            
+            if (backgroundImageData == nil) {
+                thumbnailImage = UIImage.emptyFlipImage()
+            } else {
+                thumbnailImage = UIImage(data: backgroundImageData!)!
             }
+            
+            var url = firstFlip!.backgroundURL
+            if (url == nil || countElements(url) == 0) {
+                url = "greenBackground"
+            }
+            
+            cacheHandler.saveThumbnail(thumbnailImage, forUrl: url)
+
+            return thumbnailImage
+            
         } else if (firstFlip!.isBackgroundContentTypeVideo()) {
             let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
             if (videoPath != nil) {
