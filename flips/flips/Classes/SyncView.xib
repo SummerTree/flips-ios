@@ -20,9 +20,18 @@
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Downloading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jrz-ce-06m">
+                    <rect key="frame" x="243" y="317" width="115" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tfH-Wp-m7V">
+                    <rect key="frame" x="218" y="346" width="165" height="2"/>
+                </progressView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLU-JR-dZD">
-                    <rect key="frame" x="8" y="136" width="584" height="159"/>
+                    <rect key="frame" x="8" y="137" width="584" height="159"/>
                     <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="159" id="c4j-sY-LD4"/>
                         <constraint firstAttribute="height" constant="159" id="em6-hi-KtC"/>
                     </constraints>
                     <string key="text">Before you get started, your previous 
@@ -34,15 +43,12 @@ your library and your
 Internet connection.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="em6-hi-KtC"/>
+                        </mask>
+                    </variation>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jrz-ce-06m">
-                    <rect key="frame" x="243" y="317" width="115" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tfH-Wp-m7V">
-                    <rect key="frame" x="218" y="346" width="165" height="2"/>
-                </progressView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
@@ -51,8 +57,8 @@ Internet connection.</string>
                 <constraint firstAttribute="bottom" secondItem="tfH-Wp-m7V" secondAttribute="bottom" constant="234" id="59R-dI-Lea"/>
                 <constraint firstAttribute="trailing" secondItem="7JR-ng-vfz" secondAttribute="trailing" id="Hvd-Xz-07i"/>
                 <constraint firstItem="7JR-ng-vfz" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Obd-Vn-G9Y"/>
+                <constraint firstItem="vLU-JR-dZD" firstAttribute="centerX" secondItem="7JR-ng-vfz" secondAttribute="centerX" id="QrH-kY-T5H"/>
                 <constraint firstAttribute="centerX" secondItem="jrz-ce-06m" secondAttribute="centerX" id="UZg-A6-5Wp"/>
-                <constraint firstItem="vLU-JR-dZD" firstAttribute="centerX" secondItem="n8O-hd-Mqy" secondAttribute="centerX" id="Udp-bs-MGj"/>
                 <constraint firstItem="tfH-Wp-m7V" firstAttribute="leading" secondItem="vLU-JR-dZD" secondAttribute="leading" id="Xs4-qK-aHQ"/>
                 <constraint firstItem="n8O-hd-Mqy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" priority="750" constant="108" id="Z1h-Gs-yc9"/>
                 <constraint firstAttribute="centerX" secondItem="tfH-Wp-m7V" secondAttribute="centerX" id="ZTg-NP-7dI"/>
