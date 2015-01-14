@@ -252,7 +252,6 @@ class LoginView : UIView, UITextFieldDelegate {
         
         facebookLogoImage = UIImage(named: "FacebookLogo")
         facebookButton = UIButton()
-        facebookButton.hidden = true
         facebookButton.addTarget(self, action: "facebookSignInTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         facebookButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         facebookButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
