@@ -1,0 +1,35 @@
+dependencies: \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/UI/FBLikeActionController.m \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/UI/FBLikeActionController.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSDKMacros.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Insights/FBAppEvents+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAppEvents.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSession.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBDataDiskCache.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBDialogs+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBDialogs.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAppCall.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAccessTokenData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAppLinkData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBDialogsData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBLinkShareParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBDialogsParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphActionParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphAction.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBPhotoParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBLikeDialogParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBError.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBErrorUtility+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBErrorUtility.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBInternalSettings.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSettings.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBLikeButtonPopWAV.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBAudioResourceLoader.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBLogger.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequest+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBRequest.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBRequestConnection.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBUtility.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBFetchedAppSettings.h

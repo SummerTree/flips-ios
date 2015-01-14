@@ -1,0 +1,28 @@
+dependencies: \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNResponseParser.m \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelGroupNamespaceRemoveResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNPushNotificationsEnabledChannelsParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNAccessRightsResponseParser+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNAccessRightsResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelGroupNamespacesResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelGroupRemoveResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNClientStateUpdateResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelsForGroupResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNActionResponseParser+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelHistoryParser+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelHistoryParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNGroupChannelsListChangeParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNOperationStatusResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNErrorResponseParser+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelEventsResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNChannelGroupsResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNClientStateResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Misc/PNServiceResponseCallbacks.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNTimeTokenResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNWhereNowResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNHereNowResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNActionResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Parsers/PNErrorResponseParser.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNResponse+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNResponse.h

@@ -1,0 +1,24 @@
+dependencies: \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/UI/FBPeoplePickerViewController.m \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBPeoplePickerViewController.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBGraphObjectPickerViewController.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSession.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSDKMacros.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBViewController.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/UI/FBPeoplePickerViewController+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBError.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBFriendPickerViewDefaultPNG.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/UI/FBGraphObjectPickerViewController+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBGraphObjectPagingLoader.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBGraphObjectTableDataSource.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBGraphObjectTableCell.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBGraphObjectTableSelection.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBGraphPerson.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBRequest.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphAction.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBRequestConnection.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBUtility.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBFetchedAppSettings.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBLogger.h

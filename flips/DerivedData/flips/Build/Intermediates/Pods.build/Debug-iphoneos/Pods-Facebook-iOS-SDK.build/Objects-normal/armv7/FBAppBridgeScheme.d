@@ -1,0 +1,26 @@
+dependencies: \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBAppBridgeScheme.m \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBAppBridgeScheme+Subclass.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBAppBridgeScheme.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBAppBridge.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAppCall.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAccessTokenData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSession.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSDKMacros.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAppLinkData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBDialogsData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/_FBMAppBridgeScheme.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBDialogConfig.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBDialogsParams+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBDialogsParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBInternalSettings.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSettings.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBLinkShareParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBLogger.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBOpenGraphActionParams+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphActionParams.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphAction.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBUtility.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBFetchedAppSettings.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/DeviceAPI/FBWebAppBridgeScheme.h

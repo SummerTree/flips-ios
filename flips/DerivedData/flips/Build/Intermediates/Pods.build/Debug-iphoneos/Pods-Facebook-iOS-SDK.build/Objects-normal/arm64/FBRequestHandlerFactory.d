@@ -1,0 +1,25 @@
+dependencies: \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequestHandlerFactory.m \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequestHandlerFactory.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBRequestConnection.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSDKMacros.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAccessTokenData.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBSession.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Insights/FBAppEvents+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBAppEvents.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBError.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Core/FBErrorUtility+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBErrorUtility.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequest+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBRequest.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphAction.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBOpenGraphObject.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequestConnection+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequestMetadata.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Network/FBRequestConnectionRetryManager.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Login/FBSession+Internal.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Login/FBSessionAppEventsState.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/Login/FBSystemAccountStoreAdapter.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBTask.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/Facebook-iOS-SDK/src/FBTaskCompletionSource.h

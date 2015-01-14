@@ -1,0 +1,20 @@
+dependencies: \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNAccessRightOptions.m \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNAccessRightOptions+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/Channels/PNChannel+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Misc/PNPrivateImports.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Core/PNObservationCenter+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNConfiguration+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNMessage+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNJSONSerialization.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNHereNow+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNClient+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNError+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Core/PubNub+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Misc/Protocols/PNConnectionChannelDelegate.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Misc/Protocols/PNServiceChannelDelegate.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Misc/Protocols/PNMessageChannelDelegate.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Network/Packets/PNBaseRequest+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Network/Packets/PNBaseRequest.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Data/PNWhereNow+Protected.h \
+  /Development/ArcTouch/iOS/Swift/1.0/flips-ios/flips/Pods/PubNub/iOS/iPadDemoApp/pubnub/libs/PubNub/Misc/PNHelper.h
