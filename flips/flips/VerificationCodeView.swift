@@ -322,7 +322,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeField.textColor = UIColor.whiteColor()
         codeField.tintColor = UIColor.clearColor()
         codeField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h1)
-        codeField.keyboardType = UIKeyboardType.PhonePad
+        codeField.keyboardType = UIKeyboardType.NumberPad
         codeField.attributedPlaceholder = NSAttributedString(string: "\(BULLET)", attributes: [NSForegroundColorAttributeName: UIColor.whiteColor()])
         return codeField
     }
@@ -354,11 +354,17 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     func didEnterWrongVerificationCode() {
         
         self.wrongVerificationCodeCounter++
-        if self.wrongVerificationCodeCounter >= 3 {
-            var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.INCORRECT_VALIDATION_CODE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-            alertMessage.show()
-            self.wrongVerificationCodeCounter = 0
-        }
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if self.wrongVerificationCodeCounter >= 3 {
+                var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.CONSECUTIVE_INCORRECT_ENTRIES, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertMessage.show()
+                self.wrongVerificationCodeCounter = 0
+            } else {
+                var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.INCORRECT_VALIDATION_CODE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertMessage.show()
+            }
+        })
         
         resetVerificationCodeField()
         focusKeyboardOnCodeField()

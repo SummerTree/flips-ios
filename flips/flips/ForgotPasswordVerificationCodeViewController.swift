@@ -13,6 +13,8 @@ import UIKit
 
 class ForgotPasswordVerificationCodeViewController: VerificationCodeViewController {
 
+    let FORGOT_CODE_DID_NOT_MATCH = "Wrong validation code"
+    
     init(phoneNumber: String) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
@@ -37,15 +39,12 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
             failure: { (flipError) in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 
-                if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH) {
+                if (flipError!.error == self.FORGOT_CODE_DID_NOT_MATCH || flipError!.error == self.RESENT_SMS_MESSAGE) {
                     self.verificationCodeView.didEnterWrongVerificationCode()
                 } else {
                     println("Device code verification error: " + flipError!.error!)
                     self.verificationCodeView.resetVerificationCodeField()
                     self.verificationCodeView.focusKeyboardOnCodeField()
-                    
-                    let alertView = UIAlertView(title: NSLocalizedString("Verification Error"), message: flipError!.error, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                    alertView.show()
                 }
             })
     }
