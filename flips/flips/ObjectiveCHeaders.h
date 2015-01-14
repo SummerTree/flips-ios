@@ -10,8 +10,8 @@
 // the license agreement.
 //
 
-#ifndef mugchat_ObjectiveCHeaders_h
-#define mugchat_ObjectiveCHeaders_h
+#ifndef flips_ObjectiveCHeaders_h
+#define flips_ObjectiveCHeaders_h
 
 #ifndef DBSwiftTest_Bridging_Header_h
 #define DBSwiftTest_Bridging_Header_h

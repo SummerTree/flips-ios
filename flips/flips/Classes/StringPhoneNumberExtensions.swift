@@ -1,7 +1,4 @@
 //
-//  UIAlertViewExtensions.swift
-//  mugchat
-//
 // Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
@@ -15,12 +12,16 @@
 
 import Foundation
 
-extension UIAlertView {
-    class func showUnableToLoadFlip() {
-        let alertView = UIAlertView(title: NSLocalizedString("Flip Error"),
-            message: NSLocalizedString("Unable to load Flip."),
-            delegate: nil,
-            cancelButtonTitle: LocalizedString.OK)
-        alertView.show()
+private let US_CODE = "+1"
+
+
+extension String {
+    
+    var trimmedPhoneNumber: String {
+        return stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+    }
+
+    var intlPhoneNumber: String {
+        return "\(US_CODE)\(trimmedPhoneNumber)"
     }
 }

@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
                BuildableName = "Flips.app"
-               BlueprintName = "mugchat"
-               ReferencedContainer = "container:mugchat.xcodeproj">
+               BlueprintName = "flips"
+               ReferencedContainer = "container:flips.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "57D2A08D19D310C000FA729D"
-               BuildableName = "mugchatTests.xctest"
-               BlueprintName = "mugchatTests"
-               ReferencedContainer = "container:mugchat.xcodeproj">
+               BuildableName = "flipsTests.xctest"
+               BlueprintName = "flipsTests"
+               ReferencedContainer = "container:flips.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,8 +44,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
             BuildableName = "Flips.app"
-            BlueprintName = "mugchat"
-            ReferencedContainer = "container:mugchat.xcodeproj">
+            BlueprintName = "flips"
+            ReferencedContainer = "container:flips.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -63,8 +63,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
             BuildableName = "Flips.app"
-            BlueprintName = "mugchat"
-            ReferencedContainer = "container:mugchat.xcodeproj">
+            BlueprintName = "flips"
+            ReferencedContainer = "container:flips.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -81,8 +81,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
             BuildableName = "Flips.app"
-            BlueprintName = "mugchat"
-            ReferencedContainer = "container:mugchat.xcodeproj">
+            BlueprintName = "flips"
+            ReferencedContainer = "container:flips.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

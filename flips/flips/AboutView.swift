@@ -54,7 +54,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         flipsLogo.sizeToFit()
         self.logoContainer.addSubview(flipsLogo)
         
-        flipsWord = UIImageView(image: UIImage(named: "MugChatWord"))
+        flipsWord = UIImageView(image: UIImage(named: "FlipWord"))
         flipsWord.sizeToFit()
         self.logoContainer.addSubview(flipsWord)
         

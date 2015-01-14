@@ -51,7 +51,7 @@ class SplashScreenView: UIView {
         bubbleChatImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(bubbleChatImageView)
         
-        flipsWordImageView = UIImageView(image: UIImage(named: "MugChatWord"))
+        flipsWordImageView = UIImageView(image: UIImage(named: "FlipWord"))
         flipsWordImageView.sizeToFit()
         flipsWordImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(flipsWordImageView)

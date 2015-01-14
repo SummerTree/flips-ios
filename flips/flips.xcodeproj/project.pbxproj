@@ -92,7 +92,7 @@
 		70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
 		70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
-		70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */; };
+		70FD4E7919D064450024EBDB /* flips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* flips.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		70FD4E8019D064450024EBDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
 		7A03911C1A1CFD8300846BA1 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
@@ -296,7 +296,7 @@
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		70FD4E7819D064450024EBDB /* mugchat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mugchat.xcdatamodel; sourceTree = "<group>"; };
+		70FD4E7819D064450024EBDB /* flips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = flips.xcdatamodel; sourceTree = "<group>"; };
 		70FD4E7A19D064450024EBDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		70FD4E7F19D064450024EBDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7A03911B1A1CFD8300846BA1 /* MessageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
@@ -659,7 +659,7 @@
 			isa = PBXGroup;
 			children = (
 				7A2A7E1119EDBF9400033164 /* Extensions */,
-				70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */,
+				70FD4E7719D064450024EBDB /* flips.xcdatamodeld */,
 				F2DA965C1A38D06700BAA359 /* FlipMessage.h */,
 				F2DA965D1A38D06700BAA359 /* FlipMessage.m */,
 				F2DA965F1A38F89500BAA359 /* Flip.h */,
@@ -919,7 +919,7 @@
 		70FD4E6719D064450024EBDB = {
 			isa = PBXGroup;
 			children = (
-				70FD4E7219D064450024EBDB /* mugchat */,
+				70FD4E7219D064450024EBDB /* flips */,
 				70FD4E7119D064450024EBDB /* Products */,
 				EC5A81A5795A49A3B7523B70 /* Frameworks */,
 				F7C1F4A6A883BC105DD3A82D /* Pods */,
@@ -934,7 +934,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		70FD4E7219D064450024EBDB /* mugchat */ = {
+		70FD4E7219D064450024EBDB /* flips */ = {
 			isa = PBXGroup;
 			children = (
 				70FD4E7519D064450024EBDB /* AppDelegate.swift */,
@@ -951,7 +951,7 @@
 				075A0C071A43A1C100E92760 /* Untilities */,
 				704E110B19D08E4700D2BB88 /* View */,
 			);
-			path = mugchat;
+			path = flips;
 			sourceTree = "<group>";
 		};
 		70FD4E7319D064450024EBDB /* Supporting Files */ = {
@@ -1260,9 +1260,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		70FD4E6F19D064450024EBDB /* mugchat */ = {
+		70FD4E6F19D064450024EBDB /* flips */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "mugchat" */;
+			buildConfigurationList = 70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "flips" */;
 			buildPhases = (
 				5703BC6994854CA9A34690DC /* Check Pods Manifest.lock */,
 				70FD4E6C19D064450024EBDB /* Sources */,
@@ -1274,8 +1274,8 @@
 			);
 			dependencies = (
 			);
-			name = mugchat;
-			productName = mugchat;
+			name = flips;
+			productName = flips;
 			productReference = 70FD4E7019D064450024EBDB /* Flips.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -1287,7 +1287,7 @@
 			attributes = {
 				LastUpgradeCheck = 0600;
 			};
-			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */;
+			buildConfigurationList = 70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "flips" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1299,7 +1299,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				70FD4E6F19D064450024EBDB /* mugchat */,
+				70FD4E6F19D064450024EBDB /* flips */,
 			);
 		};
 /* End PBXProject section */
@@ -1467,7 +1467,7 @@
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
-				70FD4E7919D064450024EBDB /* mugchat.xcdatamodeld in Sources */,
+				70FD4E7919D064450024EBDB /* flips.xcdatamodeld in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
@@ -1630,14 +1630,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = mugchat/Info.plist;
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
+				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Debug;
 		};
@@ -1651,13 +1651,13 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = mugchat/Info.plist;
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
+				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Release;
 		};
@@ -1706,20 +1706,20 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = mugchat/Info.plist;
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = mugchat/ObjectiveCHeaders.h;
+				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Distribution;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "mugchat" */ = {
+		70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "flips" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70FD4E9019D064450024EBDB /* Debug */,
@@ -1729,7 +1729,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "mugchat" */ = {
+		70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "flips" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70FD4E9319D064450024EBDB /* Debug */,
@@ -1742,14 +1742,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		70FD4E7719D064450024EBDB /* mugchat.xcdatamodeld */ = {
+		70FD4E7719D064450024EBDB /* flips.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */,
-				70FD4E7819D064450024EBDB /* mugchat.xcdatamodel */,
+				70FD4E7819D064450024EBDB /* flips.xcdatamodel */,
 			);
 			currentVersion = F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */;
-			path = mugchat.xcdatamodeld;
+			path = flips.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

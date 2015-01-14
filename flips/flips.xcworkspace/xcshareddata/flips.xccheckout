@@ -5,23 +5,23 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>A85976D1-4204-4FC2-BDA2-F3C8FD4235AF</string>
+	<string>DBEFACCC-9E5A-4D26-8E8D-9565874EE3A4</string>
 	<key>IDESourceControlProjectName</key>
-	<string>mugchat</string>
+	<string>flips</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
-		<string>https://github.com/arctouch/mugchat-ios</string>
+		<string>https://github.com/arctouch/flips-ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>mugchat/mugchat.xcodeproj</string>
+	<string>flips/flips.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
-		<string>../../..</string>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/arctouch/mugchat-ios</string>
+	<string>https://github.com/arctouch/flips-ios.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
 			<key>IDESourceControlWCCName</key>
-			<string>mugchat-ios</string>
+			<string>flips-ios</string>
 		</dict>
 	</array>
 </dict>
