@@ -1,10 +1,10 @@
 spikes/pubnub/DerivedData
 spikes/pubnub/Pods/
 spikes/pubnub/Podfile.lock
-mugchat/DerivedData
-mugchat/mugchat.xcodeproj/xcuserdata
-mugchat/mugchat.xcworkspace/xcuserdata
-mugchat/mugchat/Images.xcassets/.DS_Store
+flips/DerivedData
+flips/flips.xcodeproj/xcuserdata
+flips/flips.xcworkspace/xcuserdata
+flips/flips/Images.xcassets/.DS_Store
 .DS_Store
 xcuserdata
-mugchat/Pods/PubNub/iOS/.DS_Store
+flips/Pods/PubNub/iOS/.DS_Store

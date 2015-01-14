@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>A85976D1-4204-4FC2-BDA2-F3C8FD4235AF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>flips</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
+		<string>https://github.com/arctouch/flips-ios</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>flips/flips.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>66AF28443922B4D54B7D8492DD453462D324260A</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/arctouch/flips-ios</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>66AF28443922B4D54B7D8492DD453462D324260A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>flips-ios</string>
+		</dict>
+	</array>
+</dict>
+</plist>
