@@ -1,7 +1,7 @@
-Feature: Change the number set up on my MugChat
+Feature: Change the number set up on my Flips
   As a user
   I want to change my number
-  So, I can update it on MugChat app
+  So, I can update it on Flips app
 
 Scenario: Access Change Number screen
   Given I am on the "Settings" scren
@@ -36,13 +36,13 @@ Scenario: Informing a right number
   And I should receive the message
 
 Scenario: New Number by iPod
-  Given I am access MugChat on my iPod
+  Given I am access Flips on my iPod
   And I am on the "New Number" screen
   When I type my cellphone number
   Then I should receive the code on my cellphone
 
 Scenario: New Number by another cellphone
-  Given I am access MugChat on my cellphone
+  Given I am access Flips on my cellphone
   And I am on the "New Number" screen
   When I type  my cellphone number's friend
   Then I should receive the code on my cellphone's friend

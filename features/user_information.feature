@@ -51,10 +51,10 @@ Scenario Outline: Changes to a invalid email
   Given I am on the "User Information" screen
   When I change the value of "Email" to "<email>"
   And I touch "Save" button
-  Then I should see the message: "Your email should look like this mug@mail.com"
+  Then I should see the message: "Your email should look like this flip@mail.com"
   | email             |
-  | mugchat.com       |
-  | mugchat@gmail     |
+  | flips.com       |
+  | flips@gmail     |
 
 Scenario: Verifying design screen
   Given I am on the "User Information" screen

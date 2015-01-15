@@ -1,7 +1,7 @@
 Feature: Splash screen
   As a user
   I want to use the app
-  So I open the MugChat
+  So I open the Flips
 
 Scenario: Seeing Default screen
 	Given I am opening the app

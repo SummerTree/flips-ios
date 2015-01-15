@@ -13,7 +13,7 @@ Scenario: Access Album Galery screen
 Scenario: Selecting a picture
   Given I am on the "Album Galery" screen
   When I touch a photo
-  Then I should see "Confirm Mug" screen
+  Then I should see "Confirm Flip" screen
 
 @7174 @7454
 Scenario: Touching Back button on Album Galery screen
@@ -34,7 +34,7 @@ Scenario: Touching Cancel button on Album Galery screen
 @7174 @7454
 Scenario: Verifying title screen
   Given I am on the "Album Galery" screen
-  Then I should see "Camera Roll" as a title
+  Then I should see "<file's name>" as a title
 
 @7174 @7454
 Scenario: Verifying design screen

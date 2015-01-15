@@ -16,6 +16,7 @@ Scenario: Access Verification code screen by Forgot Password screen
 @7172 @7173
 Scenario: Typed 3 times the wrong code
   Given I am on the "<screen>" screen
+  And I go to "Verification Code" screen
   When I type the wrong code 3 times
   Then I should see a message: 3 incorrect entries. Check your messages for a new code.
   And I should see "OK" button
@@ -28,6 +29,7 @@ Scenario: Typed 3 times the wrong code
 @7172 @7173
 Scenario: I received a new code and I put an old code
   Given I am on the "<screen>" screen
+  And I go to "Verification Code" screen
   And I touch 3 times the wrong code
   And I receive a new code
   When I type correctly the old code
@@ -38,7 +40,7 @@ Scenario: I received a new code and I put an old code
   | Phone Number    |
   | Type Number     |
 
-@7172 @7173
+@7172 @7173 #I couldn't test because is crashing
 Scenario: Touching Resend Code without code typed
   Given I am on the "Verification Code" screen
   When Don't type the code
@@ -52,7 +54,7 @@ Scenario: Entring with a wrong verification code
   Then I should see a blue background on the code
   And I should see "!" icon
 
-@7172 @7173
+@7172 @7173 #I couldn't test because is crashing
 Scenario: Resend Code when my code is wrong
   Given I am on the "Verification Code" screen
   And I type a wrong code
@@ -73,7 +75,7 @@ Scenario: Update the wrong code to a right one
   | Phone Number    | Inbox        |
   | Type Number     | Settings     |
 
-@7172 @7173
+@7172 @7173 #I couldn't test because is crashing
 Scenario: Touching Resend Code button when the code is right on Forgot Password screen
   Given I am on the "<screen1>" screen
   And I go to "Verification Code" screen

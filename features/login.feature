@@ -1,6 +1,6 @@
 Feature: Login screen
   As a user
-  I want to enter on MugChat
+  I want to enter on Flips
   So, I can do login
 
 @7224 @7171
@@ -9,9 +9,10 @@ Scenario Outline: Showing keyboard
   Given I am on the "Login" screen
   When I touch the field: "<field>"
   Then I should see the keyboard
-  And The MugChat icon should animate off the top
-  And MugChat text should animates further up
+  And The Flips icon should animate off the top
+  And Flips text should animates further up
   And The fields should animate up
+  And I should see "Forgot Password" button
   | field    |
   | Email    |
   | Password |
@@ -23,8 +24,9 @@ Scenario: Dismissing keyboard when the fields are empty
   And The cursor are on some field
   When I touch somewhere on "Login" screen
   Then The keyboard should dismiss
-  And I should see MugChat icon
-  And MugChat text and fields should animate down
+  And I should see Flips icon
+  And Flips text and fields should animate down
+  And I shouldn't see "Forgot Password" button
 
 @7224 @7171
 Scenario: Dismissing keyboard when the fields are filled
@@ -66,13 +68,14 @@ Scenario Outline: Invalid values
   When I fill "<field>" field with the value "<value>"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  | field    | value    |
-  | Email    | mug@mail |
-  | Email    | mug.com  |
-  | Password | Mugcha1  |
-  | Password | 12345678 |
-  | Password | Mugcchat |
-  | Password | mugchat1 |
+  And I should see icon "!" in both fields
+  | field    | value     |
+  | Email    | flip@mail |
+  | Email    | flip.com  |
+  | Password | Passwo1   |
+  | Password | 12345678  |
+  | Password | Password  |
+  | Password | passwor1  |
 
 @7171
 Scenario: I already logged in on the app in this device
@@ -83,20 +86,20 @@ Scenario: I already logged in on the app in this device
 @7171
 Scenario: Login with right email and wrong password
   Given I am on the "Login" screen
-  When I fill "Email" with the value: "mug@mail.com"
-  And I fill "Password" with the value: "Mugchat2"
+  When I fill "Email" with the value: "flip@mail.com"
+  And I fill "Password" with the value: "Password2"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  And I should see the icon "!" for each field
+  And I should see the icon "!" in both fields
 
 @7171
 Scenario: Login with wrong email and right password
   Given I am on the "Login" screen
   When I fill "Email" with the value: "mag@mail.com"
-  And I fill "Password" with the value: "Mugchat1"
+  And I fill "Password" with the value: "Password1"
   And I touch "Done" button
   Then I should see "Forgot Password" button
-  And I should see the icon "!" for each field
+  And I should see the icon "!" in both fields
 
 @7171
 Scenario: Showing Email keyboard

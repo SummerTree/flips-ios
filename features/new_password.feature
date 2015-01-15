@@ -21,17 +21,17 @@ Scenario Outline: Invalid Password
   When I fill "New Password" with "<value>"
   And I touch "Done" button
   Then I should see the message: "Your password should be 8+ Characters, Mixed Case, 1 Number"
-  | mugchat8 |
-  | mugChatt |
+  | passwor8 |
+  | Password |
   | 12345678 |
-  | mugCha8  |
+  | Passwo8  |
 
 @7172
 Scenario: Informing on the new password the password that I forgot
   Given I am on the "New Password" screen
-  When I fill "New Password" whit the password that I forgot
+  When I fill "New Password" with the password that I forgot
   And I touch "Done" button
-  Then I should see "Inbox" screen
+  Then I should see "Login" screen
 
 @7172
 Scenario: Touching Back button on New Password

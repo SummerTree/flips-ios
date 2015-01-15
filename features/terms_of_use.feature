@@ -1,6 +1,6 @@
-Feature: Terms of use on MugChat
+Feature: Terms of use on Flips
   As a user
-  I want to know about terms of use on MugChat
+  I want to know about terms of use on Flips
   So, I can understand what I can do or not
 
 @7167

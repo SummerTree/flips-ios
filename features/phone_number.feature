@@ -38,14 +38,14 @@ Scenario: Informing a right number
 
 @7173
 Scenario: Forgot password by iPod
-  Given I am access MugChat on my iPod
+  Given I am access Flips on my iPod
   And I am on the "Phone Number" screen
   When I type my cellphone number
   Then I should receive the code on my cellphone
 
 @7173
 Scenario: Forgot password by another cellphone
-  Given I am access MugChat on my cellphone
+  Given I am access Flips on my cellphone
   And I am on the "Phone Number" screen
   When I type  my friend's cellphone number
   Then I should receive the code on my friend's cellphone

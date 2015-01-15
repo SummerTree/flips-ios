@@ -31,13 +31,13 @@ Scenario: Informing a right number
   Then I should receive the message
 
 Scenario: Change Number by iPod
-  Given I am access MugChat on my iPod
+  Given I am access Flips on my iPod
   And I am on the "Type Number" screen
   When I type other cellphone number
   Then I should receive the code on this cellphone number
 
 Scenario: Change Number by another cellphone
-  Given I am access MugChat on my cellphone
+  Given I am access Flips on my cellphone
   And I am on the "Type Number" screen
   When I type  my cellphone number's friend
   Then I should receive the code on my cellphone's friend

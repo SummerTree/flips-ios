@@ -1,6 +1,6 @@
 Feature: Send FeedBack screen
   As a user
-  I want to send suggestions to mugchat time
+  I want to send suggestions to flips team
   So I can access Send Feedback on settings
 
 Scenario: Access Send FeedBack screen
@@ -11,9 +11,9 @@ Scenario: Access Send FeedBack screen
 Scenario: Showing Send feedback screen
   Given I am on the "Settings" scren
   When I touch "Send FeedBack" option
-  Then I should see the MugBoys Welcome message
+  Then I should see the FlipBoys Welcome message
   But The video shouldn't starts
-  And I should see all words of the mug
+  And I should see all words of the flips
 
 Scenario: Writing a message
   Given I am on the "Send FeedBack" screen
@@ -42,7 +42,7 @@ Scenario: Writing a lot of words on text field
 
 Scenario: Verifying title screen
   Given I am on the "Send FeedBack" screen
-  Then I should see "MugBoys" as a title
+  Then I should see "FlipBoys" as a title
 
 Scenario: Verifying design screen
   Given I am on the "Send FeedBack" screen

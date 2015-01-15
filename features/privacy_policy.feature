@@ -1,6 +1,6 @@
-Feature: Privacy Policy on MugChat
+Feature: Privacy Policy on Flips
   As a user
-  I want to know about Privacy Policy on MugChat
+  I want to know about Privacy Policy on Flips
   So, I can understand how my personal data will be used
 
 @7168

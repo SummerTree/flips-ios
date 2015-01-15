@@ -6,8 +6,7 @@ Feature: Forgot Password
 @7172
 Scenario: Seeing Forgot Password screen
   Given I am on the "Login" screen
-  And I write invalid values on the fields
-  And I type "Done" button
+  And I touch Email or Password fields
   When I touch "Forgot Password" button
   Then I should see "Forgot Password" screen
 
@@ -20,7 +19,7 @@ Scenario: Seeing message on the Forgot Password screen
 Scenario: Auto-formatted when the user types a number
   Given I am on the "Forgot Password" screen
   When The user taps the number
-  Then The field should auto-formatted on this way: "###-###-####""
+  Then The field should auto-formatted on this way: "###-###-####"
 
 @7172
 Scenario: Informing 9 numbers
@@ -42,21 +41,21 @@ Scenario: Informing a right number
   Then I should see "Verification Code" screen
   And I should receive the message
 
-@7172
+@7172 # not tested yet
 Scenario: Forgot password by iPod
-  Given I am access MugChat on my iPod
+  Given I am access Flips on my iPod
   And I am on the "Forgot Password" screen
   When I type my cellphone number
   Then I should receive the code on my cellphone
 
-@7172
+@7172 # not tested yet
 Scenario: Forgot password by another cellphone
-  Given I am access MugChat on my cellphone
+  Given I am access Flips on my cellphone
   And I am on the "Forgot Password" screen
   When I type  my friend's cellphone number
   Then I should receive the code on my friend's cellphone
 
-@7172
+@7172 # not tested yet
 Scenario: Informing a code received on my friend's cellphone
   Given I am on my cellphone
   And I receive a code on my friend's cellphone

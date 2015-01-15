@@ -1,7 +1,7 @@
 Feature: Microphone recorder
   As a user
   I want to recorder a voice
-  So, I can send a MugChat to my friends with image and voice
+  So, I can send a Flips to my friends with image and voice
 
 @7453
 Scenario: Accessing Microphone screen
@@ -14,6 +14,14 @@ Scenario: Accessing Microphone screen
   | Microphone |
 
 @7453
+Scenario: Recording voice when the microphone is disable on device
+   Given I am on the "Microphone" screen
+   And My microphone is disable
+   When I touch "Microphone" icon
+   Then I should see a friendly message saying that my microphone is disable
+   And I shouldn't see the green progress bar
+
+@7453
 Scenario: Microphone screen
   Given I am on the "Microphone" screen
   Then I should see "Microphone Recorder" icon
@@ -23,13 +31,13 @@ Scenario: Microphone screen
 Scenario: It is the first time that I am accessing Microphone screen
   Given I am never access "Microphone" screen in this device
   When I go to "Microphone" screen
-  Then I should see a message: ""MugChat" Would Like to Access Your Microphone" buttons: "Don't Allow", "Allow"
+  Then I should see a message: ""Flips" Would Like to Access Your Microphone" buttons: "Don't Allow", "Allow"
 
 @7453
 Scenario: It is not the first time that I am accessing Microphone screen
   Given I am already access "Microphone" screen in this device
   When I go to "Microphone" screen
-  Then I should not see a message: ""MugChat" Would Like to Access Your Microphone" buttons: "Don't Allow", "Allow"
+  Then I should not see a message: ""Flips" Would Like to Access Your Microphone" buttons: "Don't Allow", "Allow"
 
 @7453
 Scenario: Don't allow the microphone
@@ -50,7 +58,7 @@ Scenario: Touching X button without record
   Given I am on the "Microphone" screen
   And I didn't record anything
   When I touch "X" button
-  Then I should see "Confirm Mug" screen
+  Then I should see "Confirm Flips" screen
   And The audio shouldn't be saved
 
 @7453
@@ -63,7 +71,7 @@ Scenario: Holding Microphone button more than one second
 Scenario: Tapping Microphone button
   Given I am on the "Microphone" screen
   When I tap "Yellow Microphone" button
-  Then Nothing should happen
+  Then A record with 1 second should be recorder
   And I should stay in the "Microphone" screen
 
 @7453
@@ -83,7 +91,7 @@ Scenario: Finishing audio record
   Given I am on the "Microphone" screen
   When I touch "Yellow Microphone" button
   And 1 second is gone
-  Then I should see "Confirm Mug" screen
+  Then I should see "Confirm Flips" screen
   And The audio should be saved
 
 Scenario: Verifying title screen when the message has only one person

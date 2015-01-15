@@ -66,7 +66,7 @@ Scenario Outline: Verifying title screen
   When I go to "Album" screen
   Then I should see "<title>" as a title
   | screen      | title  |
-  | Camera View | Photo  |
+  | Camera View | Photos |
   | Compose     | Albums |
 
 @7174 @7454

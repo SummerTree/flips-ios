@@ -31,14 +31,14 @@ Scenario: Touching and holding recorder icon
   And I should see a thermometer with the progress
   And After one second I should see the "Confirm" screen
 
-Scenario: Words that already have a mug
+Scenario: Words that already have a Flips
   Given I am on the "Recorder" screen
-  When The word already has another mug
+  When The word already has another Flips
   Then I should see "..." icon on the top of word
 
-Scenario: Words that don't have a mug
+Scenario: Words that don't have a Flips
   Given I am on the "Recorder" screen
-  When The word doesn't hahave another mug
+  When The word doesn't hahave another Flips
   Then I shouldn't see "..." icon on the top of word
 
 #Waiting for Ben
@@ -54,14 +54,14 @@ Scenario: Don't selecting a word
   When I try don't have any word selected
   Then I should not do it
 
-Scenario: Verifying title screen when the mug has only one person
+Scenario: Verifying title screen when the flips has only one person
   Given I am on the "Recorder" screen
-  When I have a mug with only one person
-  Then I should see person's name who send me the mug as a title
+  When I have a flips with only one person
+  Then I should see person's name who send me the flips as a title
 
-Scenario: Verifying title screen when the mug has more than one person
+Scenario: Verifying title screen when the flips has more than one person
   Given I am on the "Recorder" screen
-  When I have a mug with only more than one person
+  When I have a flips with only more than one person
   Then I should see "Group Chat" as a title
 
 Scenario: Verifying design screen

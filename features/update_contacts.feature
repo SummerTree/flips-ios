@@ -1,7 +1,7 @@
 Feature: Update contacts list
   As a user
-  I want to add new contacts on my cellphone or facebook and I want to see them on MugChat
-  So, I can send mugs to these contacts too
+  I want to add new contacts on my cellphone or facebook and I want to see them on Flips
+  So, I can send flips to these contacts too
 
 #Ben, what should happen here?
 Scenario: Touching Next time
@@ -13,7 +13,7 @@ Scenario: Touching Yeah,duh
   Given I am on the "Update Contacts" screen
   And I logged in with registration option
   When I touch "Yeah,duh" button
-  Then I should see a message: ""MugChat" Would Like to Access your Contact"
+  Then I should see a message: ""Flips" Would Like to Access your Contact"
   And I should see buttons: "Cancel" and "OK"
 
 #waiting Ben
@@ -33,7 +33,7 @@ Scenario: User logged in by facebook
   Given I am on the "Update Contacts" screen
   And I logged in with facebook option
   When I touch "Yeah,duh" button
-  Then I should see a message: ""MugChat" Would Like to Access your Contact"
+  Then I should see a message: ""Flips" Would Like to Access your Contact"
   And I should see buttons: "Cancel" and "OK"
 
 Scenario: Verifying design screen
