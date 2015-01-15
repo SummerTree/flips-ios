@@ -106,6 +106,8 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             println("User is already authenticated with session = \(FBSession.activeSession().accessTokenData.accessToken)")
             
             authenticateWithFacebook(FBSession.activeSession().accessTokenData.accessToken)
+            
+            return
         }
         
         // If the session state is not any of the two "open" states when the button is clicked
@@ -115,17 +117,25 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             var scope = ["public_profile", "email", "user_birthday", "user_friends"]
             FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
                 completionHandler: { (session, state, error) -> Void in
-                    if (error != nil || session == nil || session!.accessTokenData == nil) {
-                        println("Error authenticating: \(error)")
-                    } else {
-                        self.authenticateWithFacebook(session!.accessTokenData.accessToken)
-                    }
+                    UserService.sharedInstance.getFacebookUserInfo(
+                        { (success) -> Void in
+                            self.goSignUpWithFacebook(success)
+                        }, failure: { (error) -> Void in
+                            println("Error getting facebook user info: \(error?.error) details: \(error?.details)")
+                        }
+                    )
             })
         }
     }
     
 
     // MARK: - Private methods
+    
+    private func goSignUpWithFacebook(userInfo: JSON) {
+        var signUpController = SignUpViewController()
+        signUpController.facebookInput = userInfo
+        self.navigationController?.pushViewController(signUpController, animated: true)
+    }
     
     private func authenticateWithFacebook(token: String) {
         showActivityIndicator()

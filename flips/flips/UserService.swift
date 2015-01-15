@@ -13,6 +13,7 @@
 public typealias UserServicePasswordSuccessResponse = () -> Void
 public typealias UserServiceVerifySuccessResponse = (username: String) -> Void
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
+public typealias UserServiceSuccessJSONResponse = (JSON) -> Void
 public typealias UserServiceFailureResponse = (FlipError?) -> Void
 public typealias UserServiceMyFlipsSuccessResponse = (JSON) -> Void
 public typealias UserServiceMyFlipsFailResponse = (FlipError?) -> Void
@@ -394,33 +395,25 @@ public class UserService: FlipsService {
     
     // MARK: - Get Facebook User Info
     
-    func getFacebookUserInfo(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func getFacebookUserInfo(success: UserServiceSuccessJSONResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
         
-        FBRequestConnection.startWithGraphPath("me?fields=id,first_name,last_name,email,picture.width(160)") { (connection, result, error) -> Void in
+        let graphPath = "me?fields=id,first_name,last_name,email,picture.width(160)"
+        FBRequestConnection.startWithGraphPath(graphPath) { (connection, result, error) -> Void in
             if (error != nil) {
                 failure(FlipError(error: error.localizedDescription, details:nil))
                 return
             }
             
-            if result != nil {
-                let userInfo = result! as NSDictionary
-                let userId = userInfo["id"] as? String
-                let userFirstName = userInfo["first_name"] as? String
-                let userLastName = userInfo["last_name"] as? String
-                let userEmail = userInfo["email"] as? String
-                var userPictureUrl: String? = nil
-                if let userPictureDic = userInfo["picture"] as? NSDictionary {
-                    if let userPictureData = userPictureDic["data"] as? NSDictionary {
-                        userPictureUrl = userPictureData["url"] as? String
-                    }
-                }
-
-                //Go to the SignUpView
+            if result == nil {
+                failure(FlipError(error: "User info json is nil.", details:nil))
+                return
             }
+            
+            success(JSON(result! as NSDictionary))
         }
     }
 
