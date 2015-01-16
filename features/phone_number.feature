@@ -5,7 +5,7 @@ Feature: Phone Number
 
 @7173
 Scenario: Access Phone Number screen by Register screen
-  Given I am on the "Register" screen
+  Given I am on the "Sign Up" screen
   When I fill all fields with valid values
   And I touch "Next" button
   Then I should see "Phone Number" screen

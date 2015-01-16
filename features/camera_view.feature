@@ -5,7 +5,7 @@ Feature: Camera View screen
 
 @7174
 Scenario: Accessing Camera View screen by Avatar icon
-  Given I am on the "Register" screen
+  Given I am on the "Sign Up" screen
   And All fields are filled
   When I touch "Avatar" icon
   Then I should see "Camera View" screen
@@ -23,7 +23,7 @@ Scenario: Touching Back button
   When I touch "Back" button
   Then I should see "<screen>" screen
   | screen           |
-  | Register         |
+  | Sign Up          |
   | User Information |
 
 @7174

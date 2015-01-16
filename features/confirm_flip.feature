@@ -33,7 +33,7 @@ Scenario: Accepting a picture through Camera View screen
   Given I am on the "Camera View" screen
   And I go to "Confirm Flips" screen
   When I touch "√" icon
-  Then I should see "Register" screen
+  Then I should see "Sign Up" screen
   And I should see the photo on the avatar
 
 @7456 @ok
