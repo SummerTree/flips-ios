@@ -117,10 +117,11 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             var scope = ["public_profile", "email", "user_birthday", "user_friends"]
             FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
                 completionHandler: { (session, state, error) -> Void in
-                    let signUpController = SignUpViewController()
-                    self.navigationController?.pushViewController(signUpController, animated: true)
                     UserService.sharedInstance.getFacebookUserInfo(
                         { (success) -> Void in
+                            //TODO check if already signed up. if so, sign in and go to inbox
+                            let signUpController = SignUpViewController()
+                            self.navigationController?.pushViewController(signUpController, animated: true)
                             signUpController.facebookInput = success
                         }, failure: { (error) -> Void in
                             println("Error getting facebook user info: \(error?.error) details: \(error?.details)")
