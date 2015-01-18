@@ -16,11 +16,20 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     private var signUpView: SignUpView!
     private var avatar: UIImage!
     private var notificationMessageView: NotificationMessageView!
-    private var askForPassword: Bool = true
     
     var facebookInput: JSON? = nil {
         didSet {
-            askForPassword = facebookInput == nil
+            if facebookInput != nil {
+                signUpView.setUserData(facebookInput!)
+                let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
+                signUpView.setUserPictureURL(NSURL(string: profilePicture)!) {
+                    (image) -> Void in
+                    self.avatar = image
+                }
+                signUpView.setPasswordFieldVisible(false)
+            }else{
+                signUpView.setPasswordFieldVisible(true)
+            }
         }
     }
     
@@ -29,14 +38,8 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     override func loadView() {
         super.loadView()
         
-        signUpView = SignUpView(userData: facebookInput)
+        signUpView = SignUpView()
         signUpView.delegate = self
-        if facebookInput != nil {
-            let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
-            signUpView.setUserPictureURL(NSURL(string: profilePicture)!)
-        }
-        signUpView.setPasswordFieldVisible(askForPassword)
-        
         self.view = signUpView
         
         signUpView.loadView()
@@ -70,7 +73,17 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         if (self.avatar == nil) {
             self.showNoPictureMessage()
         } else {
-            var phoneNumberViewController = PhoneNumberViewController(username: email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
+            var actualEmail = email
+            var actualPassword = password
+            if self.facebookInput != nil {
+                if actualEmail.isEmpty {
+                    let facebookId = self.facebookInput!["id"].stringValue
+                    actualEmail = "\(facebookId)@facebook.com"
+                }
+                actualPassword = "f\(NSUUID().UUIDString)"
+            }
+            
+            var phoneNumberViewController = PhoneNumberViewController(username: actualEmail, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
             
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }

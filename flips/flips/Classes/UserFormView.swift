@@ -214,7 +214,11 @@ class UserFormView : UIView, UITextFieldDelegate {
         } else if (textField == lastNameTextField) {
             emailTextField.becomeFirstResponder()
         } else if (textField == self.emailTextField) {
-            passwordTextField.becomeFirstResponder()
+            if !passwordTextField.hidden {
+                passwordTextField.becomeFirstResponder()
+            } else {
+                birthdayTextField.becomeFirstResponder()
+            }
         } else if (textField == self.passwordTextField) {
             birthdayTextField.becomeFirstResponder()
         } else if (textField == self.birthdayTextField) {
@@ -287,8 +291,8 @@ class UserFormView : UIView, UITextFieldDelegate {
         
         if (firstNameTextField.text.isEmpty ||
             lastNameTextField.text.isEmpty ||
-            emailTextField.text.isEmpty ||
-            passwordTextField.text.isEmpty ||
+            (!passwordTextField.hidden && emailTextField.text.isEmpty) ||
+            (!passwordTextField.hidden && passwordTextField.text.isEmpty) ||
             birthdayTextField.text.isEmpty) {
                 allFieldsAreValid = false
         }
@@ -448,7 +452,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func setPasswordFieldVisible(visible: Bool) {
         passwordTextField.hidden = !visible
-        self.updateConstraintsIfNeeded()
+        self.updateConstraints()
     }
     
     // MARK: - Getters

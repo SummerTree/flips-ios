@@ -117,9 +117,11 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             var scope = ["public_profile", "email", "user_birthday", "user_friends"]
             FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
                 completionHandler: { (session, state, error) -> Void in
+                    let signUpController = SignUpViewController()
+                    self.navigationController?.pushViewController(signUpController, animated: true)
                     UserService.sharedInstance.getFacebookUserInfo(
                         { (success) -> Void in
-                            self.goSignUpWithFacebook(success)
+                            signUpController.facebookInput = success
                         }, failure: { (error) -> Void in
                             println("Error getting facebook user info: \(error?.error) details: \(error?.details)")
                         }
@@ -130,12 +132,6 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     
 
     // MARK: - Private methods
-    
-    private func goSignUpWithFacebook(userInfo: JSON) {
-        var signUpController = SignUpViewController()
-        signUpController.facebookInput = userInfo
-        self.navigationController?.pushViewController(signUpController, animated: true)
-    }
     
     private func authenticateWithFacebook(token: String) {
         showActivityIndicator()

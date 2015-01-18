@@ -334,7 +334,7 @@ class CustomNavigationBar : UIView {
         }
     }
     
-    func setAvatarImageURL(url: NSURL) {
+    func setAvatarImageURL(url: NSURL, success: ((UIImage) -> Void)? = nil) {
         if (avatarButton != nil) {
             ActivityIndicatorHelper.showActivityIndicatorAtView(avatarButton, style: UIActivityIndicatorViewStyle.Gray)
             let urlRequest = NSURLRequest(URL: url)
@@ -344,6 +344,9 @@ class CustomNavigationBar : UIView {
                 
                 self.avatarButton.setAvatarImage(image, forState: .Normal)
                 self.avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
+                if success != nil {
+                    success!(image)
+                }
                 
                 }, failure: { (error) -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
@@ -354,6 +357,9 @@ class CustomNavigationBar : UIView {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
                 })
+                if success != nil {
+                    success!(image)
+                }
             })
         }
     }

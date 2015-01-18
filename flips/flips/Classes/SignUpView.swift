@@ -26,18 +26,10 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.init(frame: CGRect.zeroRect)
     }
     
-    convenience override init(frame: CGRect) {
-        self.init(userData: nil, frame: frame)
-    }
-    
-    convenience init(userData: JSON?) {
-        self.init(userData: userData, frame: CGRect.zeroRect)
-    }
-    
-    init(userData: JSON?, frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.initSubviews(userData)
+        self.initSubviews()
         self.initConstraints()
         
         var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
@@ -48,7 +40,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initSubviews(userData: JSON?) {
+    private func initSubviews() {
         self.backgroundColor = getBackgroundColor()
         
         navigationBar = addCustomNavigationBar()
@@ -62,9 +54,6 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         
         userFormView = UserFormView()
         userFormView.delegate = self
-        if userData != nil {
-            userFormView.setUserData(userData!)
-        }
         self.addSubview(userFormView)
     }
     
@@ -294,8 +283,12 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.navigationBar.setAvatarImage(picture)
     }
     
-    func setUserPictureURL(url: NSURL) {
-        self.navigationBar.setAvatarImageURL(url)
+    func setUserPictureURL(url: NSURL, success: ((UIImage) -> Void)? = nil) {
+        self.navigationBar.setAvatarImageURL(url, success)
+    }
+    
+    func setUserData(userData: JSON!) {
+        userFormView.setUserData(userData)
     }
     
     func setPasswordFieldVisible(visible: Bool) {
