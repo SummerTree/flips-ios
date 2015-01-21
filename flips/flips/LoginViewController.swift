@@ -105,36 +105,61 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             
             println("User is already authenticated with session = \(FBSession.activeSession().accessTokenData.accessToken)")
             
-            authenticateWithFacebook(FBSession.activeSession().accessTokenData.accessToken)
-            
+            authenticateWithFacebook() {
+                (flipError) -> Void in
+                println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                self.hideActivityIndicator()
+                var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
             return
         }
         
         // If the session state is not any of the two "open" states when the button is clicked
-        if (FBSession.activeSession().state != FBSessionState.Closed) {
-            // Open a session showing the user the login UI
-            // You must ALWAYS ask for public_profile permissions when opening a session
-            var scope = ["public_profile", "email", "user_birthday", "user_friends"]
-            FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
-                completionHandler: { (session, state, error) -> Void in
-                    UserService.sharedInstance.getFacebookUserInfo(
-                        { (success) -> Void in
-                            //TODO check if already signed up. if so, sign in and go to inbox
+        // Open a session showing the user the login UI
+        // You must ALWAYS ask for public_profile permissions when opening a session
+        var scope = ["public_profile", "email", "user_birthday", "user_friends"]
+        FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
+            completionHandler: { (session, state, error) -> Void in
+                if error != nil {
+                    if state == FBSessionState.ClosedLoginFailed {
+                        println("Error opening facebook session, user denied")
+                    } else {
+                        println("Error opening facebook session, state: \(state)")
+                    }
+                    return
+                }
+                
+                self.authenticateWithFacebook() {
+                    (flipError) -> Void in
+                    self.hideActivityIndicator()
+                    if flipError != nil {
+                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                        var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                        alertView.show()
+                    } else {
+                        //no error message, assuming User Not Found
+                        self.showActivityIndicator()
+                        UserService.sharedInstance.getFacebookUserInfo({ (userObject) -> Void in
+                            self.hideActivityIndicator()
+                            println("User not found, going to Sign Up View")
                             let signUpController = SignUpViewController()
+                            signUpController.facebookInput = userObject
                             self.navigationController?.pushViewController(signUpController, animated: true)
-                            signUpController.facebookInput = success
-                        }, failure: { (error) -> Void in
-                            println("Error getting facebook user info: \(error?.error) details: \(error?.details)")
-                        }
-                    )
-            })
-        }
+                        }, failure: { (flipError) -> Void in
+                            self.hideActivityIndicator()
+                            println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                            var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                            alertView.show()
+                        })
+                    }
+                }
+        })
     }
     
-
     // MARK: - Private methods
     
-    private func authenticateWithFacebook(token: String) {
+    private func authenticateWithFacebook(failureHandler: (FlipError?) -> Void) {
         showActivityIndicator()
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
@@ -155,11 +180,8 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                         }
                     })
                 })
-            }, failure: { (flipError) -> Void in
-                println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                self.hideActivityIndicator()
-                var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
-                alertView.show()
-        })
+            },
+            failure: failureHandler)
     }
+    
 }

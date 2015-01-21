@@ -144,6 +144,11 @@ public class UserService: FlipsService {
                 success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if operation.response.statusCode == 404 {
+                    failure(nil)
+                    return
+                }
+                
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     var errorText: String = ""
