@@ -31,8 +31,8 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     
     private var flipsView: FlipsView!
     
-    var delegate: ComposeBottomViewContainerDelegate?
-    var dataSource: ComposeBottomViewContainerDataSource?
+    weak var delegate: ComposeBottomViewContainerDelegate?
+    weak var dataSource: ComposeBottomViewContainerDataSource?
     
     
     override init() {
@@ -404,7 +404,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     }
 }
 
-protocol ComposeBottomViewContainerDelegate {
+protocol ComposeBottomViewContainerDelegate: class {
     
     func composeBottomViewContainerDidTapCaptureAudioButton(composeBottomViewContainer: ComposeBottomViewContainer)
     
@@ -423,7 +423,7 @@ protocol ComposeBottomViewContainerDelegate {
     func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlipWithId flipId: String)
 }
 
-protocol ComposeBottomViewContainerDataSource {
+protocol ComposeBottomViewContainerDataSource: class {
     
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String]
 

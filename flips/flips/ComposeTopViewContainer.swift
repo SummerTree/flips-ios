@@ -22,7 +22,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     
     private var flipViewer: FlipViewer!
     
-    var delegate: ComposeTopViewContainerDelegate?
+    weak var delegate: ComposeTopViewContainerDelegate?
     
     
     // MARK: - Initialization Methods
@@ -108,6 +108,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     
     func viewWillDisappear() {
         self.flipViewer.removeOberservers()
+        self.cameraPreview.removeObservers()
     }
     
     
@@ -245,7 +246,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
 }
 
 
-protocol ComposeTopViewContainerDelegate {
+protocol ComposeTopViewContainerDelegate: class {
     
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, withSuccess success: Bool)
     

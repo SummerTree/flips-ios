@@ -31,7 +31,7 @@ class FlipViewer: UIView {
     
     private var isShowingVideo: Bool = false
     
-    var delegate: FlipViewerDelegate?
+    weak var delegate: FlipViewerDelegate?
     
     // MARK: - Initialization Methods
     
@@ -207,7 +207,7 @@ class FlipViewer: UIView {
     }
 }
 
-protocol FlipViewerDelegate {
+protocol FlipViewerDelegate: class {
     
     func flipViewerStartedPlayingContent()
     

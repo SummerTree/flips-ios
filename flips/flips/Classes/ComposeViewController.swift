@@ -41,14 +41,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private var myFlipsDictionary: Dictionary<String, [String]>!
     private var stockFlipsDictionary: Dictionary<String, [String]>!
     
-    private var highlightedWordCurrentAssociatedImage: UIImage?
+    weak private var highlightedWordCurrentAssociatedImage: UIImage?
     
     private var contactIDs: [String]?
     private var roomID: String?
     
     internal var words: [String]!
     
-    var delegate: ComposeViewControllerDelegate?
+    weak var delegate: ComposeViewControllerDelegate?
     
     
     // MARK: - Init Methods
