@@ -120,7 +120,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 let stockFlipsAsJSON = responseAsJSON?.array
                 println("Were found: \(countElements(stockFlipsAsJSON!)) stock flips.")
                 for stockFlip in stockFlipsAsJSON! {
-                    println("Stock mug: (stockFlips)")
+                    println("Stock mug: \(stockFlip)")
                     flipDataSource.createOrUpdateFlipWithJson(stockFlip)
                 }
                 }, failure: { (flipError) -> Void in

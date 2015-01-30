@@ -65,11 +65,17 @@ class FlipDataSource : BaseDataSource {
         } else if (flip.backgroundURL.isVideoPath()) {
             flip.setBackgroundContentType(BackgroundContentType.Video)
         }
-        
-        let flipOwnerID = json[FlipJsonParams.OWNER].stringValue
+        let ownerJson = json[FlipJsonParams.OWNER]
+		// if response JSON contains owner data (owner is populated)
+		var flipOwnerID = ownerJson[FlipJsonParams.ID].stringValue
+		if (flipOwnerID.isEmpty) {
+			// owner is not populated, it contains only owner ID
+			flipOwnerID = ownerJson.stringValue
+		}
         if (!flipOwnerID.isEmpty) {
             let userDataSource = UserDataSource()
-            flip.owner = userDataSource.retrieveUserWithId(flipOwnerID)
+            //flip.owner = userDataSource.retrieveUserWithId(flipOwnerID)
+			flip.owner = userDataSource.createOrUpdateUserWithJson(ownerJson)
         }
     }
     
