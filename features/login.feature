@@ -3,8 +3,8 @@ Feature: Login screen
   I want to enter on Flips
   So, I can do login
 
-@7224 @7171
 # For iPhone 6 / 6+ the animation is different
+@7224 @7171
 Scenario Outline: Showing keyboard
   Given I am on the "Login" screen
   When I touch the field: "<field>"
@@ -17,8 +17,8 @@ Scenario Outline: Showing keyboard
   | Email    |
   | Password |
 
-@7224 @7171
 # For iPhone 6 / 6+ the animation is different
+@7224 @7171
 Scenario: Dismissing keyboard when the fields are empty
   Given I am on the "Login" screen
   And The cursor are on some field
@@ -69,6 +69,7 @@ Scenario Outline: Invalid values
   And I touch "Done" button
   Then I should see "Forgot Password" button
   And I should see icon "!" in both fields
+  Examples:
   | field    | value     |
   | Email    | flip@mail |
   | Email    | flip.com  |

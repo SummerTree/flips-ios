@@ -40,7 +40,8 @@ Scenario: I received a new code and I put an old code
   | Phone Number    |
   | Type Number     |
 
-@7172 @7173 #I couldn't test because is crashing
+#I couldn't test because is crashing
+@7172 @7173
 Scenario: Touching Resend Code without code typed
   Given I am on the "Verification Code" screen
   When Don't type the code
@@ -54,7 +55,8 @@ Scenario: Entring with a wrong verification code
   Then I should see a blue background on the code
   And I should see "!" icon
 
-@7172 @7173 #I couldn't test because is crashing
+#I couldn't test because is crashing
+@7172 @7173
 Scenario: Resend Code when my code is wrong
   Given I am on the "Verification Code" screen
   And I type a wrong code
@@ -75,7 +77,8 @@ Scenario: Update the wrong code to a right one
   | Phone Number    | Inbox        |
   | Type Number     | Settings     |
 
-@7172 @7173 #I couldn't test because is crashing
+#I couldn't test because is crashing
+@7172 @7173
 Scenario: Touching Resend Code button when the code is right on Forgot Password screen
   Given I am on the "<screen1>" screen
   And I go to "Verification Code" screen

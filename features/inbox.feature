@@ -3,11 +3,11 @@ Feature: Inbox screen
   I want to have a organizated list
   So I can see all of my messages
 
-@7171 @ok
+@7171 @ok @automated
 Scenario: Access Inbox screen by login screen
   Given I am on the "Login" screen
-  When I fill "Email" with the value: "flip@mail.com"
-  And I fill "Password" with the value: "Password1"
+  When I fill Email field with the value "maiana.momm@arctouch.com"
+  And I fill "Password" field with the value "Password1"
   And I touch "Done" button
   Then I should see "Inbox" screen
 

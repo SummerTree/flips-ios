@@ -1,8 +1,14 @@
+Feature: Onboarding screen
+  As a user
+  I want to know how to use this app
+  So, I can see the onboarding information
+
 #onboarding
 Scenario: Showing a message on FlipBoys conversation
   Given I am on the "Microphone" screen
   When The selected message is FlipBoys
   Then I should see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
+  
 #onboarding
 Scenario: Showing a message on any conversation
   Given I am on the "Microphone" screen

@@ -18,10 +18,11 @@ Scenario: Touching Back on About screen
   When I touch "Back" button
   Then I should see "Settings" screen
 
+@automated
 Scenario: Touching Log Out option
-  Given I am on the "Settings" scren
+  Given I am on the "Settings" screen
   When I touch "Log Out" option
-  Then I should see "Splash" screen
+  Then I should see "Login" screen
 
 Scenario: Touching X button
   Given I am on the "Settings" screen

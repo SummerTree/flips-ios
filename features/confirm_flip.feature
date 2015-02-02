@@ -91,7 +91,7 @@ Scenario: Open Confirm Flips screen when there is no record
   When I go to "Confirm Flips" screen
   Then I should see the picture
   And I shouldn't see the picture reload
-.
+
 @7174 @verben
 Scenario: Verifying title screen
   Given I am on the "Confirm Flips" screen

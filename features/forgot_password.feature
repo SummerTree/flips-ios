@@ -41,21 +41,21 @@ Scenario: Informing a right number
   Then I should see "Verification Code" screen
   And I should receive the message
 
-@7172 # not tested yet
+@7172 @nottestedyet
 Scenario: Forgot password by iPod
   Given I am access Flips on my iPod
   And I am on the "Forgot Password" screen
   When I type my cellphone number
   Then I should receive the code on my cellphone
 
-@7172 # not tested yet
+@7172 @nottestedyet
 Scenario: Forgot password by another cellphone
   Given I am access Flips on my cellphone
   And I am on the "Forgot Password" screen
   When I type  my friend's cellphone number
   Then I should receive the code on my friend's cellphone
 
-@7172 # not tested yet
+@7172 @nottestedyet
 Scenario: Informing a code received on my friend's cellphone
   Given I am on my cellphone
   And I receive a code on my friend's cellphone

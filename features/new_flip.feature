@@ -3,10 +3,10 @@ Feature: New Flips
   I want to send news Flips to my friends
   So I can create a new Flips
 
-@ok
+@ok @automated
 Scenario: Creating a new Flips
   Given I am on the "Inbox" screen
-  When I touch "Pencil" icon
+  When I touch "Compose" option
   Then I should see "New Flips" screen
 
 @ok
@@ -59,12 +59,25 @@ Scenario: Next button when I have a text typed
   Then The "Next" button should be enable
 
 @ok
-Scenario: Creating a new Flips
+Scenario: Enabling Next button
   Given I am on the "New Flips" screen
-  When I type a text on the text field
-  And I touch "Next" button
+  When I select a contact
+  And I type a text on the text field
+  Then I should see "Next" button enable
+
+@ok @automated
+Scenario: Creating a new flip
+  Given I am on the "New Flips" screen
+  And I have contact selected
+  And a message is typped
+  When I touch "Next" button
   Then I should see "Compose" screen
-  And The first word should be selected
+
+@ok
+Scenario: Checking the word selected
+  Given I am on the "New Flips" screen
+  When I go to "Compose" screen
+  Then I should see the first word wrote selected
 
 @ok
 Scenario: Picking up more than one person
