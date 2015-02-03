@@ -114,9 +114,6 @@ Scenario: Birthday value when there is no value
   And The cursor is not in the "Birthday" field
   Then I should see the text: "Birthday"
 
-For Birthday Field, show barrel picker for Month ("January" through "December"), Day (01 - 31),
-and Year (1900 - current). See screen shot of native Contacts app for desired behavior.
-
 @Flips-2
 Scenario: Touching Birthday field
   Given I am on the "Sign Up" screen
@@ -176,7 +173,7 @@ Scenario: Changing the taken photo
   When I touch the picture
   Then I should be able to change the picture
 
-@9974
+@Flips-2 @9974
 Scenario: It's the first time that I am accessing the app
   Given I never download flips app before
   And I downloaded it now
@@ -184,14 +181,14 @@ Scenario: It's the first time that I am accessing the app
   And I touch "Avatar" icon
   Then I should see a message: "Flips Would Like to Access the Camera", "Don't Allow" button, "Ok" button
 
-@9974
+@Flips-2 @9974
 Scenario: Touching Don't Allow option from permission message
   Given I am seeing camera's permission messagem on "Sign Up" screen
   When I touch "Don't Allow" option
   And I touch some option on photo's permission message
   Then I should see a message: "Flips doesn't have permission to use Camera, please change privacy settings", "Ok" button
 
-@9974
+@Flips-2 @9974
 Scenario: Touching Ok on the camera's permission message
   Given I'm seeing the message to change privacy on the "Sign Up" screen
   When I touch "Ok" option
@@ -199,7 +196,7 @@ Scenario: Touching Ok on the camera's permission message
   And I should see "Rotate" and "Flash" options disabled
   And I should see "Yellow" button disabled
 
-@9974
+@Flips-2 @9974
 Scenario: Touching Allow option from Camera's permission message
   Given I am seeing camera's permission message on "Sign Up" screen
   When I touch "Allow" option
@@ -245,7 +242,7 @@ Scenario: Touching Allow option from Photo's permission message
   When I touch "Allow" option
   Then I should see the last picture took on the albums device
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Killing the app before fill Phone Number and try login
   Given I filled all fields with valid values on "Sign Up" screen
   And I go to "Phone Number" screen
@@ -253,7 +250,7 @@ Scenario: Killing the app before fill Phone Number and try login
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Killing the app after fill Phone Number and try login
   Given I filled all fields with valid values on "Sign Up" and "Phone Number" screens
   And I go to "Verification Code" screen
@@ -261,7 +258,7 @@ Scenario: Killing the app after fill Phone Number and try login
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Touching back button before fill Phone Number and try login
   Given I filled all fields with valid values on "Sign Up" screen
   And I go to "Phone Number" screen
@@ -269,7 +266,7 @@ Scenario: Touching back button before fill Phone Number and try login
   And I try to do login with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Touching back button before fill Phone Number and try login
   Given I filled all fields with valid values on "Sign Up" and "Phone Number" screens
   And I go to "Verification Code" screen
@@ -277,7 +274,7 @@ Scenario: Touching back button before fill Phone Number and try login
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Changing phone number to a number not registered on the data base
   Given I filled all fields with valid values on "Sign Up" and "Phone Number" screens
   And I go to "Verification Code" screen
@@ -287,7 +284,7 @@ Scenario: Changing phone number to a number not registered on the data base
   Then I shouldn't see warning message saying that the phone numer or email address is already registered
   And I should can finish my register
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Changing phone number to a number already registered on the data base
   Given I filled all fields with valid values on "Sign Up" and "Phone Number" screens
   And I go to "Verification Code" screen
@@ -296,7 +293,7 @@ Scenario: Changing phone number to a number already registered on the data base
   And I go to "Verification Code" screen
   Then I should see a warning message: "This phone number is already used by an existing Flips user"
 
-@9531 @9754 @9774
+@9531 @9754 @9774 @Flips-2
 Scenario: Killing the app when I type a number already registered and try to login again
   Given I am seeing the warning message about the phone number already being used
   When I kill the app

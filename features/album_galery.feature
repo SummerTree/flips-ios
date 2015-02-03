@@ -3,25 +3,25 @@ Feature: Album Galery
   I don't want to take a photo
   So I can select a photo on my device
 
-@7174 @7454
+@7174 @7454 @Flips-5
 Scenario: Access Album Galery screen
   Given I am on the "Album" screen
   When I touch an iten
   Then I should see "Album Galery" screen
 
-@7174 @7454
+@7174 @7454 @Flips-5
 Scenario: Selecting a picture
   Given I am on the "Album Galery" screen
   When I touch a photo
   Then I should see "Confirm Flip" screen
 
-@7174 @7454
+@7174 @7454 @Flips-5
 Scenario: Touching Back button on Album Galery screen
   Given I am on the "Album Galery" screen
   When I touch "Back" button
   Then I should see "Album" screen
 
-@7174 @7454
+@7174 @7454 @Flips-5
 Scenario: Touching Cancel button on Album Galery screen
   Given I am on the "<screen>" screen
   And I go to "Album Galery" screen
@@ -29,14 +29,14 @@ Scenario: Touching Cancel button on Album Galery screen
   Then I should see "<screen>" screen
   | screen      |
   | Camera View |
-  | Compose     |
+#  | Compose     |
 
-@7174 @7454
+@7174 @7454 @Flips-5
 Scenario: Verifying title screen
   Given I am on the "Album Galery" screen
   Then I should see "<file's name>" as a title
 
-@7174 @7454
+@7174 @7454 @Flips-5
 Scenario: Verifying design screen
   Given I am on the "Album Galery" screen
   Then The desing screen should be the same on the prototype design
