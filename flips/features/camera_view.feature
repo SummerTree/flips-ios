@@ -13,7 +13,7 @@ Scenario: Accessing Camera View screen by Avatar icon
 #  | User Information |
 
 @Flips-5
-Scenario: Cheking itens on Camera View screen
+Scenario: Cheking items on Camera View screen
   Given I am on the "<screen>" screen
   When I go to "Camera View" screen
   Then I should see a front facing camera
@@ -38,14 +38,14 @@ Scenario: Touching Back button
 
 @7174 @7617 @7455 @Flips-5
 Scenario: Rotate from front-facing to back camera
- Given I am on the "<screen>" screen
- And the camera is in front-facing
- When I touch "Rotate" option
- Then I should see an animation
- And After that I should see back camera
- And I should see "Flash" button enable and with tha last option selected
- | screen      |
- | Camera View |
+  Given I am on the "<screen>" screen
+  And the camera is in front-facing
+  When I touch "Rotate" option
+  Then I should see an animation
+  And After that I should see back camera
+  And I should see "Flash" button enable and with the last option selected
+  | screen      |
+  | Camera View |
 # | Compose     |
 
 @7174 @7455 @Flips-5

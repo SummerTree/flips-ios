@@ -31,8 +31,9 @@ Scenario: Rejecting a picture
 
 @7174 @ok @Flips-5
 Scenario: Accepting a picture through Camera View screen
-  Given I am on the "Camera View" screen
-  And I go to "Confirm Flips" screen
+  Given I am on the "Sign Up" screen
+  And I go to the "Camera View" screen
+  And I go to "Confirm Photo" screen
   When I touch "√" icon
   Then I should see "Sign Up" screen
   And I should see the photo on the avatar
@@ -40,7 +41,7 @@ Scenario: Accepting a picture through Camera View screen
 @Flips-5
 Scenario: Touching the picture on the Confirm screen
   Given I am on the "<screen>" screen
-  And I go to "Confirm Flips" screen
+  And I go to "Confirm Photo" screen
   When I touch the picture area(picture or white place)
   Then Nothing should happen
   | screen      |
@@ -49,17 +50,19 @@ Scenario: Touching the picture on the Confirm screen
 
 @7174 @Flips-5
 Scenario: Verifying title screen
-  Given I am on the "<screen>" screen
-  And I go to "Confirm Flips" screen
-  Then I should see "<title>" as a title
-  | screen  | title            |
-  | Sign Up | Confirm Picture  |
-#  | Compose | <contact's name> |
+  Given I am on the "Sign Up" screen
+  And I go to "Confirm Photo" screen
+  Then I should see "Confirm Picture" as a title
 
 @7174 @ok @Flips-5
 Scenario: Verifying design screen
   Given I am on the "Confirm Flips" screen
   Then The desing screen should be the same on the prototype design
+
+#Scenario: Verifying title screen
+#  Given I am on the "Compose" screen
+#  And I go to "Confirm Flips" screen
+#  Then I should see "<contact's name>" as a title
 
 #@7456 @ok
 #Scenario: Accepting a picture/video through Compose screen and when this word is not the last one on the phrase

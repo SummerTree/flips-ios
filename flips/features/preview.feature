@@ -86,7 +86,7 @@ Scenario: Touching Back button
   | Confirm Flip | Microphone |
   | Microphone   | Microphone |
 
-@7457 @Nok @test
+@7457 @Nok
 Scenario: Sending the message
   Given I am on the "Preview" screen
   When I touch "Send" button

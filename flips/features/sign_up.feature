@@ -12,7 +12,7 @@ Scenario: Access Register screen
   And I should see "Next" button disabled
   And I should see "Back" button enabled
 
-@7170 @Flips-2
+@7170 @Flips-2 @test
 Scenario Outline: Fill only one field
   Given I am on the "Sign Up" screen
   When I fill the field "<field>" with "<value>"
@@ -125,7 +125,7 @@ Scenario: Touching Birthday field
 Scenario: Touching Done button without select a date
   Given I am on the "Sign Up" screen
   When I touch "Birthday" field
-  And I touch "Done" button
+  And I touch "Done" button on the barrel picker
   Then I should see today as a "Birthday" value
 
 @Flips-2
@@ -140,7 +140,7 @@ Scenario: Selecting a date birthday
   Given I am on the "Sign Up" screen
   And I'm seeing barrer picker from Birthday field
   When I select a date
-  And I touch "Done" button
+  And I touch "Done" button on the barrel picker
   Then I should see the selected date on the "Birthday" field
 
 @7170 @Flips-2
@@ -218,7 +218,7 @@ Scenario: Allowing Photo's access from Sign Up
 Scenario: Touching Do Not allow option from Photo's permission message
   Given I am seeing photo's permission message on "Sign Up" screen
   When I touch "Don't Allow" option
-  Then I should see "Defaul" icon on photos icon
+  Then I should see "Default" icon on photos icon
 
 @Flips-2
 Scenario: Touching Photos icon when I did not allow access to photo's device
@@ -228,13 +228,14 @@ Scenario: Touching Photos icon when I did not allow access to photo's device
   When I touch "Photo" icon
   Then I should see a message: "This app does not have access to your photos or videos. You can enable access in Privacy Settings."
 
-@Flips-2
-Scenario: Touching Cancel button on Albuns screen
+@Flips-2 @XXX
+#Talk to Ben before fix it
+Scenario: Touching Cancel button on Albums screen
   Given I am on the "Sign Up" screen
   And I go to Albums screen
   When I touch "Cancel" button
   Then I should see "Take Picture" screen
-  And I shouldn't see the camera flashing
+  And I shouldn't see the previous camera view before the camera refreshes
 
 @Flips-2
 Scenario: Touching Allow option from Photo's permission message
@@ -244,11 +245,12 @@ Scenario: Touching Allow option from Photo's permission message
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Killing the app before fill Phone Number and try login
-  Given I filled all fields with valid values on "Sign Up" screen
+  Given I am on the "Sign Up" screen and I filled all fields with valid values
   And I go to "Phone Number" screen
   When I kill the app
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
+  And I should see an alert: "Username or Password does not exist."
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Killing the app after fill Phone Number and try login
@@ -257,6 +259,7 @@ Scenario: Killing the app after fill Phone Number and try login
   When I kill the app
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
+  And I should see an alert: "Username or Password does not exist."
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Touching back button before fill Phone Number and try login
@@ -265,14 +268,16 @@ Scenario: Touching back button before fill Phone Number and try login
   When I touch "Back" button
   And I try to do login with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
+  And I should see an alert: "Username or Password does not exist."
 
 @9531 @9754 @9774 @Flips-2
-Scenario: Touching back button before fill Phone Number and try login
+Scenario: Touching back button before fill Verification Code and try login
   Given I filled all fields with valid values on "Sign Up" and "Phone Number" screens
   And I go to "Verification Code" screen
   When I touch "Back" button
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
+  And I should see an alert: "Username or Password does not exist."
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Changing phone number to a number not registered on the data base
@@ -299,6 +304,7 @@ Scenario: Killing the app when I type a number already registered and try to log
   When I kill the app
   And I try to login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
+  And I should see an alert: "Username or Password does not exist."
 
 @Flips-2
 Scenario: Touching Ok on the warning message about the phone number already being used

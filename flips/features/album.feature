@@ -18,24 +18,24 @@ Scenario Outline: Choosing a picture when I have at least one picture to be sele
   And I have one or more pictures to be selected
   When I touch "Photo" icon
   Then I should see "<screen2>" screen
-  And I should see all folders of pictures existents on my galery
+  And I should see all folders of pictures existents on my gallery
   | screen        | screen2 |
   | Camera View   | Album   |
 #  | Compose       | Albums  |
 
 @7174 @7454 @Flips-5
-Scenario Outline: Choosing a picture when you don't have pictures on the galery
+Scenario Outline: Choosing a picture when you don't have pictures on the gallery
   Given I am on the "<screen>" screen
-  When I don't have photos on my galery
+  When I don't have photos on my gallery
   Then I should see "Photo" icon with default image
   | screen      |
   | Camera View |
 #  | Compose     |
 
 @7174 @7454 @Flips-5
-Scenario: Touching Photo icon when I don't have pictures on the galery
+Scenario: Touching Photo icon when I don't have pictures on the gallery
   Given I am seeing "Photo" icon
-  And I don't have pictures on my galery
+  And I don't have pictures on my gallery
   When I touch "Photo" icon
   Then I should see a message informing me that I don't have pictures to choose
 

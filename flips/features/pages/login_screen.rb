@@ -15,6 +15,10 @@ class LoginScreen < Calabash::IBase
     keyboard_enter_char "Return"
   end
 
+  def login_signup
+    signup = "label marked:'Sign Up'"
+  end
+
   def navigate
     await
   end
