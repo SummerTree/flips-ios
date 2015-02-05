@@ -153,16 +153,6 @@ class LoginView : UIView, UITextFieldDelegate {
             })
         }
         
-        UIView.animateWithDuration(1.0, animations: {
-            var shakeAnimation = CABasicAnimation(keyPath: "position")
-            shakeAnimation.duration = 0.075
-            shakeAnimation.repeatCount = 3
-            shakeAnimation.autoreverses = true
-            shakeAnimation.fromValue = NSValue(CGPoint: CGPointMake(self.credentialsView.center.x - 30.0, self.credentialsView.center.y))
-            shakeAnimation.toValue = NSValue(CGPoint: CGPointMake(self.credentialsView.center.x + 30.0, self.credentialsView.center.y))
-            
-            self.credentialsView.layer.addAnimation(shakeAnimation, forKey: "position")
-        })
     }
     
     func setFieldsHidden(hidden: Bool) {
