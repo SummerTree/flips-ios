@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public typealias CacheSuccessCallback = (AnyObject?) -> Void
+public typealias CacheSuccessCallback = (AnyObject!) -> Void
 public typealias CacheFailureCallback = (FlipError?) -> Void
 
 public class StorageCache {
