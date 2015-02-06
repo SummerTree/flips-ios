@@ -17,7 +17,7 @@ public enum CacheGetResponse {
 
 public class StorageCache<T> {
 
-    public typealias CacheSuccessCallback = (T!) -> Void
+    public typealias CacheSuccessCallback = (String!) -> Void
     public typealias CacheFailureCallback = (FlipError) -> Void
     
     init() {
