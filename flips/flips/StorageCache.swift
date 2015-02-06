@@ -10,11 +10,16 @@
 // the license agreement.
 //
 
-public typealias CacheSuccessCallback = (AnyObject!) -> Void
-public typealias CacheFailureCallback = (FlipError?) -> Void
+public enum CacheGetResponse {
+    case DATA_IS_READY
+    case DOWNLOAD_WILL_START
+}
 
-public class StorageCache {
+public class StorageCache<T> {
 
+    public typealias CacheSuccessCallback = (T!) -> Void
+    public typealias CacheFailureCallback = (FlipError) -> Void
+    
     init() {
         
     }
@@ -26,14 +31,14 @@ public class StorageCache {
     (e.g. not in cache and no internet connection), the failure function is called with some
     error description.
     
-    :param: path    The path from which the asset will be downloaded if a cache miss has occurred.
+    :param: path    The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: success A function that is called when the asset is successfully available.
     :param: failure A function that is called when the asset could not be retrieved.
     */
-    func get(path: String, success: CacheSuccessCallback, failure: CacheFailureCallback) -> Void {
+    func get(path: String, success: CacheSuccessCallback, failure: CacheFailureCallback) -> CacheGetResponse {
         //if cache hit {
         //success(asset)
-        //return
+        //return CacheGetResponse.DATA_IS_READY
         
         //if cache miss {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
@@ -42,6 +47,17 @@ public class StorageCache {
                 //success(asset)
             }
         }
+        return CacheGetResponse.DOWNLOAD_WILL_START
+    }
+    
+    /**
+    Inserts the data into the cache, identified by its path. This operation is synchronous.
+    
+    :param: path The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    :param: data The asset that is to be inserted into the cache.
+    */
+    func put(path: String, data: T) -> Void {
+        //map the path to the data
     }
     
 }
