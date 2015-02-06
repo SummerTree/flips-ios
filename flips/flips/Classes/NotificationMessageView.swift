@@ -12,7 +12,7 @@
 
 class NotificationMessageView : UIView {
     
-    private let LABEL_AREA_HEIGHT: CGFloat = 75
+    private let LABEL_AREA_HEIGHT: CGFloat = 165
     
     private var messageContainerView: UIView!
     private var messageLabel: UILabel!
@@ -35,12 +35,12 @@ class NotificationMessageView : UIView {
     private func initSubviews() {
         
         messageContainerView = UIView()
-        messageContainerView.backgroundColor = UIColor.whiteColor()
+        messageContainerView.backgroundColor = UIColor.flipOrange()
         self.addSubview(messageContainerView)
         
         messageLabel = UILabel()
         messageLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        messageLabel.textColor = UIColor.flipOrange()
+        messageLabel.textColor = UIColor.whiteColor()
         messageLabel.textAlignment = NSTextAlignment.Center
         messageLabel.text = self.message
         messageLabel.sizeToFit()
