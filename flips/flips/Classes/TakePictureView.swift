@@ -170,6 +170,8 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool)  {
         // Take a picture button should be disabled
-        takePictureButton.enabled = available
+		dispatch_async(dispatch_get_main_queue(), { () -> Void in
+			self.takePictureButton.enabled = available
+		})
     }
 }

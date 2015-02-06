@@ -28,7 +28,7 @@ struct RoomAttributes {
 
 class RoomDataSource : BaseDataSource {
     
-    private let FLIPBOYS_USERNAME: String = "flipboys@flips.com"
+    private let FLIPBOYS_USERNAME: String = "flipboys@flipsapp.com"
     
     // MARK: - Creators
     
