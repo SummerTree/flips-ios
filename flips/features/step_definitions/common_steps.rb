@@ -19,6 +19,15 @@ When /^I fill "(.*?)" field with the value "(.*?)"$/ do |field, value|
   keyboard_enter_text value
 end
 
+And /^I fill "(.*?)" field with the value -13 years old$/ do |field|
+  touch "label text:'#{field}'"
+  puts field
+  date_now = Time.new
+  date_13 = date_now - (284880 * 60 * 24)
+  birthday = date_13.strftime("%m%d%Y")
+  keyboard_enter_text birthday
+end
+
 And /^I touch Done button$/ do
   keyboard_enter_char "Return"
 end
@@ -36,8 +45,8 @@ When /^I touch "(.*?)" option$/ do |option|
 end
 
 When /^I touch "(.*?)" button$/ do |button|
-  button = query "button marked: '#{button}'"
-  touch button
+  button_name = query "button marked:'#{button}'"
+  touch button_name
 end
 
 And /^I have contact selected$/ do
@@ -61,7 +70,30 @@ end
 And /^I choose a photo$/ do
   avatar = query("button marked: 'AddProfilePhoto'")
   touch avatar
-  button_ok = query("button marked: 'OK'")
-  touch touch avatar
+  sleep(STEP_PAUSE)
+  button_ok = query("label marked: 'OK'")
+  touch button_ok
+  photo_button = query("* index:31")
+  touch photo_button
+  wait_for_none_animating
+  sleep(STEP_PAUSE)
+  camera_roll = query "label marked: 'Camera Roll'"
+  touch camera_roll
+  wait_for_none_animating
+  sleep(STEP_PAUSE)
+  photo = query "* index:10"
+  touch photo
+  wait_for_none_animating
+  sleep(STEP_PAUSE)
+  confirm = query "* id:'Approve'"
+  touch confirm
+  wait_for_none_animating
+  sleep(STEP_PAUSE)
+end
 
+And /^I do not choose a photo$/ do
+end
+
+Then /^I should see a message: "Looks like your photo is missing!"$/ do
+  message = query "label marked: 'Camera Roll'"
 end

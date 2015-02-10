@@ -9,43 +9,44 @@ Scenario: Access Register screen
   When I touch "Sign Up" button
   Then I should see "Sign Up" screen
   And The screen should animate right to left
-  And I should see "Next" button disabled
+  And I should see "Forward" button disabled
   And I should see "Back" button enabled
 
-@7170 @Flips-2 @test
+@7170 @Flips-2 @automated
 Scenario Outline: Fill only one field
   Given I am on the "Sign Up" screen
-  When I fill the field "<field>" with "<value>"
-  Then The button "Next" should be disable
+  When I fill "<field>" field with the value "<value>"
+  Then The button "Forward" should be disable
+  Examples:
   | field      | value          |
   | First Name | First          |
   | Last Name  | Last           |
   | Email      | flip@gmail.com |
   | Password   | Passwor8       |
-  | Birthday   | 12/01/1987     |
+  | Birthday   | 01121987       |
 
-@7170 @Flips-2
+@7170 @Flips-2 @automated
 Scenario: Fill all fields with valid values and select a photo
   Given I am on the "Sign Up" screen
-  When I fill the field "First Name" with "First"
-  And I fill the field "Last Name" with "Last"
-  And I fill the field "Email" with "flip@gmail.com"
-  And I fill the field "Password" with "Passwor8"
-  And I fill the field "Birthday" with "<today-13years>"
+  When I fill "First Name" field with the value "First"
+  And I fill "Last Name" field with the value "Last"
+  And I fill "Email" field with the value "flip@gmail.com"
+  And I fill "Password" field with the value "Passwor8"
+  And I fill "Birthday" field with the value -13 years old
   And I choose a photo
-  And I touch "Next" button
+  And I touch "Forward" button
   Then I should see "Phone Number" screen
 
 @7170 @Flips-2 @9990
 Scenario: Fill all fields and don't select a photo
   Given I am on the "Sign Up" screen
-  When I fill the field "First Name" with "First"
-  And I fill the field "Last Name" with "Last"
-  And I fill the field "Email" with "flip@gmail.com"
-  And I fill the field "Password" with "Passwor8"
-  And I fill the field "Birthday" with "<birthday>"
-  And I don't choose a photo
-  And I touch "Next" button
+  When I fill field "First Name" with the value "First"
+  And I fill field "Last Name" with the value "Last"
+  And I fill field "Email" with the value "flip@gmail.com"
+  And I fill field "Password" with the value "Passwor8"
+  And I fill field "Birthday" with the value "<birthday>"
+  And I do not choose a photo
+  And I touch "Forward" button
   Then I should see a message: "Looks like your photo is missing!"
 
 @7170 @Flips-2
@@ -59,7 +60,7 @@ Scenario Outline: Fill with invalid values
   And I exit the field
   Then I should see an exclamation mark to the right of the field with the invalid value
   And I should see a red error panel sliding down from top of screen with a message: "<message>"
-  And The "Next" button should keep disable
+  And The "Forward" button should keep disable
   | email           | password | birthday         | message                                                     |
   | flips.com       | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com               |
   | flips@gmail     | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com               |
@@ -89,7 +90,7 @@ Scenario: Swiping up warning messages panel
   And I filled invalid values on the fields
   When I swipe up the warning messages panel
   Then I shouldn't see the panel
-  And I should see "Next" button disabled
+  And I should see "Forward" button disabled
 
 @7170 @Flips-2
 Scenario: Showing Alpha keyboard
@@ -228,8 +229,7 @@ Scenario: Touching Photos icon when I did not allow access to photo's device
   When I touch "Photo" icon
   Then I should see a message: "This app does not have access to your photos or videos. You can enable access in Privacy Settings."
 
-@Flips-2 @XXX
-#Talk to Ben before fix it
+@Flips-2
 Scenario: Touching Cancel button on Albums screen
   Given I am on the "Sign Up" screen
   And I go to Albums screen
@@ -250,7 +250,7 @@ Scenario: Killing the app before fill Phone Number and try login
   When I kill the app
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
-  And I should see an alert: "Username or Password does not exist."
+  And I should see an alert: "Username or Password incorrect, or account does not exist." button "Ok"
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Killing the app after fill Phone Number and try login
@@ -259,7 +259,7 @@ Scenario: Killing the app after fill Phone Number and try login
   When I kill the app
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
-  And I should see an alert: "Username or Password does not exist."
+  And I should see an alert: "Username or Password incorrect, or account does not exist." button "Ok"
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Touching back button before fill Phone Number and try login
@@ -268,7 +268,7 @@ Scenario: Touching back button before fill Phone Number and try login
   When I touch "Back" button
   And I try to do login with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
-  And I should see an alert: "Username or Password does not exist."
+  And I should see an alert: "Username or Password incorrect, or account does not exist." button "Ok"
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Touching back button before fill Verification Code and try login
@@ -277,7 +277,7 @@ Scenario: Touching back button before fill Verification Code and try login
   When I touch "Back" button
   And I Login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
-  And I should see an alert: "Username or Password does not exist."
+  And I should see an alert: "Username or Password incorrect, or account does not exist." button "Ok"
 
 @9531 @9754 @9774 @Flips-2
 Scenario: Changing phone number to a number not registered on the data base
@@ -304,7 +304,7 @@ Scenario: Killing the app when I type a number already registered and try to log
   When I kill the app
   And I try to login again with this incomplete user
   Then I should see "!" icon on the right side of "Email" and "Password" fields
-  And I should see an alert: "Username or Password does not exist."
+  And I should see an alert: "Username or Password incorrect, or account does not exist." button "Ok"
 
 @Flips-2
 Scenario: Touching Ok on the warning message about the phone number already being used
