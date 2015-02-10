@@ -10,23 +10,29 @@
 // the license agreement.
 //
 
-public enum CacheGetResponse {
-    case DATA_IS_READY
-    case DOWNLOAD_WILL_START
-}
-
 public class StorageCache {
 
     public typealias CacheSuccessCallback = (String!) -> Void
     public typealias CacheFailureCallback = (FlipError) -> Void
     
-    private var cacheDirectoryPath: String
+    public enum CacheGetResponse {
+        case DATA_IS_READY
+        case DOWNLOAD_WILL_START
+    }
     
-    init(cacheDirectoryName: String) {
+    private let cacheDirectoryPath: String
+    private let sizeLimitInBytes: UInt64
+    private let cacheJournal: CacheJournal
+    
+    init(cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
+        self.sizeLimitInBytes = sizeLimitInBytes
         let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
-        cacheDirectoryPath = "\(NSHomeDirectory())\(applicationSupportDirPath)/\(cacheDirectoryName)"
+        self.cacheDirectoryPath = "\(NSHomeDirectory())\(applicationSupportDirPath)/\(cacheDirectoryName)"
+        let journalName = "\(self.cacheDirectoryPath)/\(cacheDirectoryName).cache"
+        self.cacheJournal = CacheJournal(absolutePath: journalName)
         self.initCacheDirectory()
+        self.cacheJournal.open()
     }
     
     private func initCacheDirectory() {
@@ -36,7 +42,7 @@ public class StorageCache {
         if (fileManager.fileExistsAtPath(cacheDirectoryPath, isDirectory: &isDirectory)) {
             println("Directory exists: \(cacheDirectoryPath)")
         } else {
-            var error: NSError?
+            var error: NSError? = nil
             fileManager.createDirectoryAtPath(cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil, error: &error)
             if (error != nil) {
                 println("Error creating cache dir: \(error)")
@@ -63,6 +69,9 @@ public class StorageCache {
             dispatch_async(dispatch_get_main_queue()) {
                 success(localPath)
             }
+            if !self.cacheJournal.updateEntry(localPath) {
+                println("Failed to update entry in the cache journal")
+            }
             return CacheGetResponse.DATA_IS_READY
         }
         
@@ -70,16 +79,19 @@ public class StorageCache {
             Downloader.sharedInstance.downloadTask(NSURL(fileURLWithPath: path)!,
                 localURL: NSURL(fileURLWithPath: localPath)!,
                 completion: { (result) -> Void in
-                    if (result) {
-                        success(localPath)
-                    } else {
-                        failure(FlipError(error: "Error downloading media file", details: nil))
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if !self.cacheJournal.insertNewEntry(localPath) {
+                            println("Failed to insert entry into the cache journal")
+                        }
+                        self.scheduleCleanup()
+                        if result {
+                            success(localPath)
+                        } else {
+                            failure(FlipError(error: "Error downloading media file", details: nil))
+                        }
                     }
                 }
             )
-            dispatch_async(dispatch_get_main_queue()) {
-                success(localPath)
-            }
         }
         return CacheGetResponse.DOWNLOAD_WILL_START
     }
@@ -95,9 +107,13 @@ public class StorageCache {
         
         let fileManager = NSFileManager.defaultManager()
 
-        //not overwriting
+        //should overwrite?
         if !self.cacheHit(localPath) {
             fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
+            if !self.cacheJournal.insertNewEntry(localPath) {
+                println("Failed to insert entry into the cache journal")
+            }
+            self.scheduleCleanup()
         }
     }
     
@@ -109,6 +125,28 @@ public class StorageCache {
     
     private func cacheHit(localPath: String) -> Bool {
         return NSFileManager.defaultManager().fileExistsAtPath(localPath)
+    }
+    
+    func scheduleCleanup() -> Void {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            let cacheOverflow = self.cacheJournal.cacheSize - self.sizeLimitInBytes
+            if cacheOverflow <= 0 {
+                return
+            }
+            
+            let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheOverflow)
+            let fileManager = NSFileManager.defaultManager()
+            for path in leastRecentlyUsed {
+                var error: NSError? = nil
+                if !fileManager.removeItemAtPath(path, error: &error) {
+                    println("Could not remove file \(path). Error: \(error)")
+                }
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.cacheJournal.removeFirstEntries(leastRecentlyUsed.count)
+                return
+            }
+        }
     }
     
 }
