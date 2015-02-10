@@ -1,6 +1,6 @@
 require 'calabash-cucumber/ibase'
 
-class SignUpScreen < Calabash::IBase
+class PhoneNumberScreen < Calabash::IBase
 
   def trait
     title
@@ -8,19 +8,19 @@ class SignUpScreen < Calabash::IBase
 
   def title
     wait_for_none_animating
-    "label marked:'First Name'"
+    "* text:'Phone Number'"
   end
 
-  def signup_phone
-    "label marked:'Mobile Number'"
+  def verification_code
+    "* text:'Verification Code'"
   end
 
   def navigate
     unless current_page?
-      login_screen = go_to(LoginScreen)
+      signup_screen = go_to(SignUpScreen)
       sleep(STEP_PAUSE)
       wait_for_none_animating
-      touch login_screen.login_signup
+      touch signup_screen.signup_phone
     end
 
     await
