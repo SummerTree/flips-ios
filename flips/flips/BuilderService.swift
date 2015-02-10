@@ -28,15 +28,18 @@ public class BuilderService: FlipsService {
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let getSuggestedWordsUrl = HOST + SUGGESTED_WORDS_URL
         
+        println("   getSuggestedWords: \(getSuggestedWordsUrl)")
         request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
+            println("   getSuggestedWords success: \(responseObject)")
             successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
-            }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
-                } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
-                }
+        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            println("   getSuggestedWords error: \(error)")
+            if (operation.responseObject != nil) {
+                let response = operation.responseObject as NSDictionary
+                failCompletion(FlipError(error: response["error"] as String!, details: nil))
+            } else {
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
+            }
         }
     }
     

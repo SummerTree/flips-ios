@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-private struct RoomJsonParams {
+struct RoomJsonParams {
     static let NAME = "name"
     static let PUBNUB_ID = "pubnubId"
     static let ROOM_ID = "id"
@@ -33,47 +33,72 @@ class RoomDataSource : BaseDataSource {
     // MARK: - Creators
     
     private func createEntityWithJson(json: JSON) -> Room {
-        var entity: Room! = Room.createEntity() as Room
+        var entity: Room! = Room.createInContext(currentContext) as Room
         self.fillRoom(entity, withJson: json)
         
         return entity
     }
     
     private func fillRoom(room: Room, withJson json: JSON) {
-        let userDataSource = UserDataSource()
+        if (room.roomID != json[RoomJsonParams.ROOM_ID].stringValue) {
+            println("Possible error. Will change romom id from (\(room.roomID)) to (\(json[RoomJsonParams.ROOM_ID].stringValue))")
+        }
+        
+//        let userDataSource = UserDataSource(context: currentContext)
 
         room.name = json[RoomJsonParams.NAME].stringValue
         room.pubnubID = json[RoomJsonParams.PUBNUB_ID].stringValue
         room.roomID = json[RoomJsonParams.ROOM_ID].stringValue
 
-        var content = json[RoomJsonParams.PARTICIPANTS]
-        for (index: String, json: JSON) in content {
-            // ONLY USERS CAN PARTICIPATE IN A ROOM
-            var user = userDataSource.createOrUpdateUserWithJson(json)
-            room.addParticipantsObject(user)
-        }
-        
-        room.admin = userDataSource.retrieveUserWithId(json[RoomJsonParams.ADMIN_ID].stringValue)
+//        var content = json[RoomJsonParams.PARTICIPANTS]
+//        for (index: String, json: JSON) in content {
+//            // ONLY USERS CAN PARTICIPATE IN A ROOM
+//            var user = userDataSource.createOrUpdateUserWithJson(json)
+//            room.addParticipantsObject(user as User)
+//        }
+//        
+//        room.admin = userDataSource.retrieveUserWithId(json[RoomJsonParams.ADMIN_ID].stringValue) as User
     }
     
-    func createOrUpdateWithJson(json: JSON) -> Room {
-        let roomID = json[RoomJsonParams.ROOM_ID].stringValue
-        var room = self.getRoomById(roomID)
-        
-        if (room == nil) {
-            room = self.createEntityWithJson(json)
-        } else {
-            self.fillRoom(room!, withJson: json)
+//    func createOrUpdateWithJson(json: JSON) -> Room {
+//        let roomID = json[RoomJsonParams.ROOM_ID].stringValue
+//
+//        var room = self.getRoomById(roomID)
+//            
+//        if (room == nil) {
+//            room = self.createEntityWithJson(json)
+//        } else {
+//            self.fillRoom(room!, withJson: json)
+//        }
+////        self.save()
+//        
+//        return room!
+//    }
+    
+    func createRoomWithJson(json: JSON) -> Room {
+        return self.createEntityWithJson(json)
+    }
+    
+    func updateRoom(room: Room, withJson json: JSON) -> Room {
+        var roomInContext = room.inContext(currentContext) as Room
+        fillRoom(roomInContext, withJson: json)
+        return roomInContext
+    }
+    
+    func associateRoom(room: Room, withAdmin admin: User, andParticipants participants: [User]) {
+        var roomInContext = room.inContext(currentContext) as Room
+
+        for user in participants {
+            roomInContext.addParticipantsObject(user.inContext(currentContext) as User)
         }
-        
-        self.save()
-        
-        return room!
+
+        roomInContext.admin = admin.inContext(currentContext) as User
     }
     
     
     // MARK: - Getters
     
+    // TODO: remove it
     func retrieveRoomWithId(roomId: String) -> Room {
         var room = self.getRoomById(roomId)
         
@@ -84,8 +109,12 @@ class RoomDataSource : BaseDataSource {
         return room!
     }
     
+    func getRoomById(roomId: String) -> Room? {
+        return Room.findFirstByAttribute(RoomAttributes.ROOM_ID, withValue: roomId, inContext: currentContext) as? Room
+    }
+    
     func getAllRooms() -> [Room] {
-        return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true) as [Room]
+        return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true, inContext: currentContext) as [Room]
     }
     
     func getFlipboysRoom() -> Room? {
@@ -103,7 +132,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getMyRooms() -> [Room] {
-        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false) as [Room]
+        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
             if (room.flipMessagesNotRemoved().count > 0) {
@@ -136,9 +165,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getRoomWithPubnubID(pubnubID: String) -> Room? {
-        var room = Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID) as? Room
-        
-        return room
+        return Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID, inContext: currentContext) as? Room
     }
     
     func hasRoomWithUserId(userId: String) -> (hasRoom: Bool, room: Room?) {
@@ -162,10 +189,4 @@ class RoomDataSource : BaseDataSource {
         }
     }
     
-    
-    // MARK: - Private Getters
-    
-    private func getRoomById(roomId: String) -> Room? {
-        return Room.findFirstByAttribute(RoomAttributes.ROOM_ID, withValue: roomId) as? Room
-    }
 }

@@ -31,12 +31,12 @@ extension FlipMessage {
         }
     }
 
-    func addFlip(flip: Flip) {
+    func addFlip(flip: Flip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
-        var entry: FlipEntry! = FlipEntry.createEntity() as FlipEntry
+        var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
         entry.order = nextEntryOrder
-        entry.flip = flip
+        entry.flip = flip.inContext(context) as Flip
         entry.message = self
 
         self.addEntriesObject(entry)

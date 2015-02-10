@@ -67,8 +67,9 @@ extension Room {
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
-        let flipMessageDataSource = FlipMessageDataSource()
-        flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
+//        let flipMessageDataSource = FlipMessageDataSource()
+//        flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
+        DataFacade.sharedInstance.removeAllFlipMessagesFromRoomID(self.roomID, completion: completion)
     }
     
     func roomName() -> String {

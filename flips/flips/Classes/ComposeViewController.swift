@@ -115,15 +115,16 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private func findAndSaveStockFlips(words: [String]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let flipService = FlipService()
-            let flipDataSource = FlipDataSource()
+//            let flipDataSource = FlipDataSource()
             flipService.stockFlipsForWords(words, success: { (responseAsJSON) -> Void in
                 let stockFlipsAsJSON = responseAsJSON?.array
                 println("Were found: \(countElements(stockFlipsAsJSON!)) stock flips.")
-                for stockFlip in stockFlipsAsJSON! {
-                    println("Stock mug: \(stockFlip)")
-                    flipDataSource.createOrUpdateFlipWithJson(stockFlip)
+                for stockFlipJson in stockFlipsAsJSON! {
+                    println("Stock mug: \(stockFlipJson)")
+//                    flipDataSource.createOrUpdateFlipWithJson(stockFlip)
+                    DataFacade.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
                 }
-                }, failure: { (flipError) -> Void in
+            }, failure: { (flipError) -> Void in
                     if (flipError != nil) {
                         println("Error \(flipError)")
                     }

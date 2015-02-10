@@ -35,13 +35,12 @@ public class CoreDataHandler: NSObject {
         var storeURL = NSPersistentStore.MR_urlForStoreName(databaseStoreName)
         
 //        MagicalRecord.cleanUp()
-        
         var user: User? = User.loggedUser()
         
         if let user = user {
-            let userDataSource = UserDataSource()
+            
             user.me = false
-            userDataSource.save()
+//            userDataSource.save()
         }
         
         Room.truncateAll()

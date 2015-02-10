@@ -57,10 +57,10 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let downloader = Downloader.sharedInstance
         let flips = flipMessage.flips
 
-        println("New Message Received")
-        println("   From: \(flipMessage.from.firstName)")
-        println("   Sent at: \(flipMessage.createdAt)")
-        println("   #flips: \(flips.count)")
+//        println("New Message Received")
+//        println("   From: \(flipMessage.from.firstName)")
+//        println("   Sent at: \(flipMessage.createdAt)")
+//        println("   #flips: \(flips.count)")
         
         var isTemporary = true
         if let loggedUser = AuthenticationHelper.sharedInstance.userInSession {
@@ -118,25 +118,23 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
         println("\nMessage received:\n\(messageJson)\n")
+        println("Received date: \(date)")
+        if (messageJson[MESSAGE_TYPE] == nil) {
+            println("MESSAGE IN OLD FORMAT. SHOULD BE IGNORED")
+            return
+        }
         
-        if (messageJson[MESSAGE_TYPE] != nil) {
-            if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
-                self.onRoomReceived(messageJson)
-            } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
-                // Message Received
-                let flipMessageDataSource = FlipMessageDataSource()
-                let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
-
-                if (flipMessage != nil) {
-                    self.onMessageReceived(flipMessage!)
-                }
-            }
-        } else {
-            // TODO: Old format - Should be remove later.
-            let flipMessageDataSource = FlipMessageDataSource()
-            let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+        if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
+            self.onRoomReceived(messageJson)
+        } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
+            // Message Received
+            let flipMessage = DataFacade.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            
+//                let flipMessageDataSource = FlipMessageDataSource()
+//                let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            
             if (flipMessage != nil) {
-                self.onMessageReceived(flipMessage!)
+                self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
             }
         }
     }
@@ -150,8 +148,9 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     func onRoomReceived(messageJson: JSON) {
-        let roomDataSource = RoomDataSource()
-        let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
+//        let roomDataSource = RoomDataSource()
+//        let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
+        let room = DataFacade.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT])
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }

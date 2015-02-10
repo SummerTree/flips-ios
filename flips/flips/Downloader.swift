@@ -124,7 +124,8 @@ public class Downloader : NSObject {
                         
                         let flipDataSource = FlipDataSource()
                         if let localFlip = flipDataSource.retrieveFlipWithId(flipId) {
-                            flipDataSource.setFlipBackgroundContentType(backgroundContentType, forFlip: localFlip)
+//                            flipDataSource.setFlipBackgroundContentType(backgroundContentType, forFlip: localFlip)
+                            DataFacade.sharedInstance.setFlipBackgroundContentType(backgroundContentType, forFlip: localFlip)
                         } else {
                             downloadError = NSError.flipsError(code: .BadFlipID, userInfo: nil)
                         }

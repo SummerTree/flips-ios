@@ -25,10 +25,9 @@ class ContactDataSource : BaseDataSource {
     // MARK: - CoreData Creator Methods
     
     private func createEntityWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
-        var entity: Contact! = Contact.MR_createEntity() as Contact
+        var entity: Contact! = Contact.createInContext(currentContext) as Contact
 
         entity.createdAt = NSDate()
-        entity.contactID = String(self.nextContactID())
         self.fillContact(entity, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         
         return entity
@@ -45,19 +44,49 @@ class ContactDataSource : BaseDataSource {
     
     // MARK: - Public Methods
     
-    func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
+//    func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
+//        var contact = self.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+//        
+//        if (contact == nil) {
+//            contact = self.createEntityWith(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+//        } else {
+//            self.fillContact(contact!, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+//        }
+//
+////        self.save()
+//        
+//        return contact!
+//    }
+    
+//    func createContactWithUser(user: User, contactID: String, andPhoneType phoneType: String) -> Contact {
+//        let userInContext = user.inContext(currentContext) as User
+//        
+//        let contact = self.createEntityWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phoneType)
+//        contact.contactID = contactID
+//        contact.contactUser = user
+//
+//        return contact
+//    }
 
-        var contact = self.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+    func createContactWith(contactID: String, firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
+        let contact = self.createEntityWith(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+        contact.contactID = contactID
         
-        if (contact == nil) {
-            contact = self.createEntityWith(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-        } else {
-            self.fillContact(contact!, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+        if (contactUser != nil) {
+            let contactUserInContext = contactUser?.inContext(currentContext) as User
+            contact.contactUser = contactUserInContext
+            contactUserInContext.addContactsObject(contact)
         }
-        self.save()
         
-        return contact!
+        return contact
     }
+    
+    func updateContact(contact: Contact, withFirstName firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
+        let contactInContext = contact.inContext(currentContext) as Contact
+        self.fillContact(contactInContext, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+        return contactInContext
+    }
+    
     
     func sortedByUserFirstNameLastName() -> [NSSortDescriptor] {
         let sortedBy = [
@@ -70,7 +99,6 @@ class ContactDataSource : BaseDataSource {
 	
 	func fetchedResultsController(contains: String, delegate: NSFetchedResultsControllerDelegate?) -> NSFetchedResultsController {
 		let predicate = NSPredicate(format: "(%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@) and (\(ContactAttributes.CONTACT_USER).me == false)", ContactAttributes.FIRST_NAME, contains, ContactAttributes.LAST_NAME, contains)
-				
 		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
 	}
     
@@ -138,16 +166,20 @@ class ContactDataSource : BaseDataSource {
     
     func setContactUserAndUpdateContact(user: User!, contact: Contact!) {
         contact.contactUser = user
-        self.save()
+//        self.save()
     }
     
     
     // MARK: - Private Methods
     
-    private func nextContactID() -> Int {
+    func nextContactID() -> Int {
         let contacts = Contact.MR_findAllSortedBy("contactID.intValue", ascending: false)
+        if (contacts == nil || contacts.count == 0) {
+            return 0
+        }
+        
         let contact: Contact = contacts.first as Contact
-        if (contacts == nil || contact.contactID == nil) {
+        if (contact.contactID == nil) {
             return 0
         }
         
@@ -160,34 +192,38 @@ class ContactDataSource : BaseDataSource {
         return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id) as? Contact
     }
     
-    private func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
+    func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
         var firstnamePredicate: NSPredicate!
         var lastnamePredicate: NSPredicate!
         var phonenumberPredicate: NSPredicate!
         var phonetypePredicate: NSPredicate!
         var predicates = [NSPredicate]()
         
-        if (firstName != nil) {
+        if (firstName != nil && !phoneType!.isEmpty) {
             firstnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.FIRST_NAME, firstName!)
             predicates.append(firstnamePredicate)
         }
         
-        if (lastName != nil) {
+        if (lastName != nil && !phoneType!.isEmpty) {
             lastnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.LAST_NAME, lastName!)
             predicates.append(lastnamePredicate)
         }
         
-        if (phoneNumber != nil) {
+        if (phoneNumber != nil && !phoneType!.isEmpty) {
             phonenumberPredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_NUMBER, phoneNumber!)
             predicates.append(phonenumberPredicate)
         }
         
-        if (phoneType != nil) {
+        if ((phoneType != nil) && !phoneType!.isEmpty ) {
             phonetypePredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_TYPE, phoneType!)
             predicates.append(phonetypePredicate)
         }
         
         let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
+        
+        
+        var contacts = Contact.findAllWithPredicate(compound) as [Contact]
+        println("contacts: \(contacts)")
 
         return Contact.findFirstWithPredicate(compound) as? Contact
     }

@@ -39,9 +39,10 @@ class FlipDataSource : BaseDataSource {
     private let EMPTY_FLIP_ID = "-1"
     
     private func createEntityWithJson(json: JSON) -> Flip {
-        var entity: Flip! = Flip.createEntity() as Flip
+        var entity: Flip!
+        entity = Flip.createInContext(currentContext) as Flip
         self.fillFlip(entity, withJsonData: json)
-        self.save()
+//        self.save()
         
         return entity
     }
@@ -65,34 +66,50 @@ class FlipDataSource : BaseDataSource {
         } else if (flip.backgroundURL.isVideoPath()) {
             flip.setBackgroundContentType(BackgroundContentType.Video)
         }
-        let ownerJson = json[FlipJsonParams.OWNER]
-		// if response JSON contains owner data (owner is populated)
-		var flipOwnerID = ownerJson[FlipJsonParams.ID].stringValue
-		if (flipOwnerID.isEmpty) {
-			// owner is not populated, it contains only owner ID
-			flipOwnerID = ownerJson.stringValue
-		}
-        if (!flipOwnerID.isEmpty) {
-            let userDataSource = UserDataSource()
-            //flip.owner = userDataSource.retrieveUserWithId(flipOwnerID)
-			flip.owner = userDataSource.createOrUpdateUserWithJson(ownerJson)
-        }
+        
+//        let ownerJson = json[FlipJsonParams.OWNER]
+//		// if response JSON contains owner data (owner is populated)
+//		var flipOwnerID = ownerJson[FlipJsonParams.ID].stringValue
+//		if (flipOwnerID.isEmpty) {
+//			// owner is not populated, it contains only owner ID
+//			flipOwnerID = ownerJson.stringValue
+//		}
+//        if (!flipOwnerID.isEmpty) {
+//            let userDataSource = UserDataSource(context: currentContext)
+////            flip.owner = userDataSource.retrieveUserWithId(flipOwnerID)
+//            flip.owner = userDataSource.createOrUpdateUserWithJson(ownerJson)
+//        }
     }
     
     // MARK: - Public Methods
     
-    func createOrUpdateFlipWithJson(json: JSON) -> Flip {
-        var flipID = json[FlipJsonParams.ID].stringValue
-        var flip = self.getFlipById(flipID)
-        
-        if (flip == nil) {
-            flip = self.createEntityWithJson(json)
-        } else {
-            self.fillFlip(flip, withJsonData: json)
-            self.save()
-        }
-        
-        return flip
+//    func createOrUpdateFlipWithJson(json: JSON) -> Flip {
+//        var flipID = json[FlipJsonParams.ID].stringValue
+//        var flip = self.getFlipById(flipID)
+//        
+//        if (flip == nil) {
+//            flip = self.createEntityWithJson(json)
+//        } else {
+//            self.fillFlip(flip, withJsonData: json)
+////            self.save()
+//        }
+//        
+//        return flip
+//    }
+    func createFlipWithJson(json: JSON) -> Flip {
+        return self.createEntityWithJson(json)
+    }
+    
+    func updateFlip(flip: Flip, withJson json: JSON) -> Flip {
+        var flipInContext = flip.inContext(currentContext) as Flip
+        self.fillFlip(flipInContext, withJsonData: json)
+        return flipInContext
+    }
+    
+    func associateFlip(flip: Flip, withOwner owner: User) {
+        var flipInContext = flip.inContext(currentContext) as Flip
+        var ownerInContext = owner.inContext(currentContext) as User
+        flipInContext.owner = ownerInContext
     }
     
     func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
@@ -100,7 +117,7 @@ class FlipDataSource : BaseDataSource {
         let flipService = FlipService()
         
         flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundURL, createFlipSuccessCallback: { (flip) -> Void in
-            var userDataSource = UserDataSource()
+            var userDataSource = UserDataSource(context: self.currentContext)
             flip.owner = User.loggedUser()
             flip.setBackgroundContentType(BackgroundContentType.Image)
             
@@ -113,9 +130,9 @@ class FlipDataSource : BaseDataSource {
             }
             
             createFlipSuccess(flip)
-        }) { (flipError) -> Void in
+        }, createFlipFailCallBack: { (flipError) -> Void in
             createFlipFail(flipError!)
-        }
+        }, inContext: currentContext)
     }
     
     func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
@@ -123,7 +140,7 @@ class FlipDataSource : BaseDataSource {
         let flipService = FlipService()
         
         flipService.createFlip(word, videoPath: videoURL, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
-            var userDataSource = UserDataSource()
+            var userDataSource = UserDataSource(context: self.currentContext)
             flip.owner = User.loggedUser()
             flip.setBackgroundContentType(BackgroundContentType.Video)
             
@@ -133,11 +150,13 @@ class FlipDataSource : BaseDataSource {
             
             cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
             createFlipSuccess(flip)
-        }) { (flipError) -> Void in
+        }, createFlipFailCallBack: { (flipError) -> Void in
             createFlipFail(flipError!)
-        }
+        }, inContext: currentContext)
     }
     
+    
+    // TODO: Bruno - I need to check if it is working properly
     // This flip is never uploaded to the server. It is used only via Pubnub
     func createEmptyFlipWithWord(word: String) -> Flip {
         var flip: Flip! = Flip.MR_createEntity() as Flip
@@ -148,24 +167,33 @@ class FlipDataSource : BaseDataSource {
         return flip
     }
 
-    
+    // TODO: remove it
     func retrieveFlipWithId(id: String) -> Flip! {
         return self.getFlipById(id)
     }
     
+    func getFlipById(id: String) -> Flip? {
+        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as Flip?
+    }
+    
     func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
+//        self.saveDataInBackground { (context: NSManagedObjectContext!) -> Void in
         flip.setBackgroundContentType(contentType)
-        self.save()
+//        }
+//        self.save()
     }
     
     func getMyFlips() -> [Flip] {
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: true, withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))")) as [Flip]
+        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
+            ascending: true,
+            withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))"),
+            inContext: currentContext) as [Flip]
     }
     
     func getMyFlipsForWord(word: String) -> [Flip] {
         let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
         
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate) as [Flip]
+        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
     }
     
     func getMyFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {
@@ -193,7 +221,7 @@ class FlipDataSource : BaseDataSource {
     
     func getStockFlipsForWord(word: String) -> [Flip] {
         let predicate = NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate) as [Flip]
+        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
     }
     
     func getStockFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {
@@ -213,10 +241,4 @@ class FlipDataSource : BaseDataSource {
         return resultDictionary
     }
 
-    
-    // MARK: - Private Getters Methods
-    
-    private func getFlipById(id: String) -> Flip! {
-        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as Flip!
-    }
 }

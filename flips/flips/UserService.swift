@@ -87,9 +87,9 @@ public class UserService: FlipsService {
     }
     
     private func parseUserResponse(response: AnyObject) -> User? {
-        let userDataSource = UserDataSource()
-        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
-        return user
+//        let userDataSource = UserDataSource()
+//        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
+        return DataFacade.sharedInstance.createOrUpdateUserWithJson(JSON(response))
     }
     
     
@@ -105,6 +105,9 @@ public class UserService: FlipsService {
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let url = HOST + SIGNIN_URL
         let params = [RequestParams.USERNAME : username, RequestParams.PASSWORD : password]
+        println("url: \(url)")
+        println("params: \(params)")
+        
         
         request.POST(url,
             parameters: params,
@@ -165,12 +168,9 @@ public class UserService: FlipsService {
     }
     
     func parseSigninResponse(response: AnyObject) -> User? {
-        let userDataSource = UserDataSource()
-        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
-        user.me = true
-        userDataSource.save()
-        
-        return user
+//        let userDataSource = UserDataSource()
+//        let user = userDataSource.createOrUpdateUserWithJson(JSON(response), isLoggedUser: true)
+        return DataFacade.sharedInstance.createOrUpdateUserWithJson(JSON(response), isLoggedUser: true)
     }
     
     
@@ -370,10 +370,11 @@ public class UserService: FlipsService {
                         for (index, user) in response {
                             SwiftTryCatch.try({ () -> Void in
                                 println("Trying to import: \(user)")
-                                var user = userDatasource.createOrUpdateUserWithJson(user)
-                                }, catch: { (error) -> Void in
+//                                var user = userDatasource.createOrUpdateUserWithJson(user)
+                                var user = DataFacade.sharedInstance.createOrUpdateUserWithJson(user)
+                            }, catch: { (error) -> Void in
                                     println("Error: [\(error))")
-                                }, finally: nil)
+                            }, finally: nil)
                         }
                         
                         success(nil)
@@ -432,7 +433,8 @@ public class UserService: FlipsService {
                     for (index, user) in response {
                         SwiftTryCatch.try({ () -> Void in
                             println("Trying to import: \(user)")
-                            var user = userDatasource.createOrUpdateUserWithJson(user)
+//                            var user = userDatasource.createOrUpdateUserWithJson(user)
+                            var user = DataFacade.sharedInstance.createOrUpdateUserWithJson(user)
                         }, catch: { (error) -> Void in
                             println("Error: [\(error))")
                         }, finally: nil)
@@ -447,7 +449,6 @@ public class UserService: FlipsService {
                     } else {
                         failure(FlipError(error: error.localizedDescription, details:nil))
                     }
-               
             })
         }, failure: { (error) -> Void in
             failure(FlipError(error: "Error retrieving contacts.", details:nil))
@@ -467,12 +468,14 @@ public class UserService: FlipsService {
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         var userInSession = AuthenticationHelper.sharedInstance.userInSession
         let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        
+        println("   getMyFlips: \(url)")
         request.GET(url, parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                println("   getMyFlips response: \(responseObject)")
                 successCompletion(JSON(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                println("   getMyFlips fail: \(error)")
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     failCompletion(FlipError(error: response["error"] as String!, details: nil))

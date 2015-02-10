@@ -118,7 +118,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
-        let flipDataSource = FlipDataSource()
+//        let flipDataSource = FlipDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
         
@@ -137,16 +137,25 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         }
         
         if (flipVideoURL == nil) {
-            flipDataSource.createFlipWithWord(flipView.getWord(),
+            DataFacade.sharedInstance.createFlipWithWord(flipView.getWord(),
                 backgroundImage: self.flipImage,
                 soundURL: self.flipAudioURL,
                 createFlipSuccess: createFlipSuccessBlock,
                 createFlipFail: createFlipFailBlock)
+//            flipDataSource.createFlipWithWord(flipView.getWord(),
+//                backgroundImage: self.flipImage,
+//                soundURL: self.flipAudioURL,
+//                createFlipSuccess: createFlipSuccessBlock,
+//                createFlipFail: createFlipFailBlock)
         } else {
-            flipDataSource.createFlipWithWord(self.flipWord,
+            DataFacade.sharedInstance.createFlipWithWord(self.flipWord,
                 videoURL: self.flipVideoURL!,
                 createFlipSuccess: createFlipSuccessBlock,
                 createFlipFail: createFlipFailBlock)
+//            flipDataSource.createFlipWithWord(self.flipWord,
+//                videoURL: self.flipVideoURL!,
+//                createFlipSuccess: createFlipSuccessBlock,
+//                createFlipFail: createFlipFailBlock)
         }
     }
     

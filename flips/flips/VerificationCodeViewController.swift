@@ -115,14 +115,18 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                     return ()
                 }
                 var deviceEntity = device as Device
-                var user = deviceEntity.user
-                user.me = true
-                UserDataSource().save()
+
+                // TODO: changed it! It should be executed by a DataSource
+                DataFacade.sharedInstance.defineAsLoggedUser(deviceEntity.user)
+//                UserDataSource().saveDataInBackground({ (context: NSManagedObjectContext!) -> Void in
+//                    var user = deviceEntity.user.inContext(context) as User
+//                    user.me = true
+//                    AuthenticationHelper.sharedInstance.userInSession = user
+//                })
                 
-                AuthenticationHelper.sharedInstance.userInSession = user
+//                UserDataSource().save()
                 
-                var userDataSource = UserDataSource()
-                userDataSource.syncUserData({ (success, error) -> Void in
+                DataFacade.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()
@@ -131,6 +135,17 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         self.navigateAfterValidateDevice(userDataSource)
                     })
                 })
+                
+//                var userDataSource = UserDataSource()
+//                userDataSource.syncUserData({ (success, error) -> Void in
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        let verificationCodeView = self.view as VerificationCodeView
+//                        verificationCodeView.resetVerificationCodeField()
+//                        
+//                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+//                        self.navigateAfterValidateDevice(userDataSource)
+//                    })
+//                })
             },
             failure: { (flipError) in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in

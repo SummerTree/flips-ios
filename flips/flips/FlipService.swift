@@ -38,10 +38,10 @@ public class FlipService: FlipsService {
         static let IS_PRIVATE = "is_private"
     }
     
-    func createFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
+    func createFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse, inContext context: NSManagedObjectContext) {
         
         var uploadFlipBlock: ((String, String) -> Void) = { (backgroundImageUrl, soundUrl) -> () in
-            self.uploadNewFlip(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack)
+            self.uploadNewFlip(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack, inContext: context)
         }
         
         var uploadSoundBlock: ((String) -> Void)? = nil
@@ -75,9 +75,9 @@ public class FlipService: FlipsService {
         }
     }
     
-    func createFlip(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
+    func createFlip(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse, inContext context: NSManagedObjectContext) {
         var uploadFlipBlock: ((String) -> Void) = { (videoURL) -> () in
-            self.uploadNewFlip(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack)
+            self.uploadNewFlip(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack, inContext: context)
         }
         
         self.uploadVideo(videoPath, successCallback: { (videoUrl) -> Void in
@@ -215,7 +215,7 @@ public class FlipService: FlipsService {
         )
     }
     
-    private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
+    private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse, inContext context: NSManagedObjectContext) {
         
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             createFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
@@ -236,7 +236,7 @@ public class FlipService: FlipsService {
         request.POST(createFlipUrl,
             parameters: createFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                createFlipSuccessCallback(self.parseCreateFlipResponse(responseObject)!)
+                createFlipSuccessCallback(self.parseCreateFlipResponse(responseObject, inContext: context)!)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
@@ -266,10 +266,11 @@ public class FlipService: FlipsService {
         return nil
     }
     
-    private func parseCreateFlipResponse(response: AnyObject) -> Flip? {
+    private func parseCreateFlipResponse(response: AnyObject, inContext context: NSManagedObjectContext) -> Flip? {
         let json = JSON(response)
-        let flipDataSource = FlipDataSource()
-        return flipDataSource.createOrUpdateFlipWithJson(json)
+        let flipDataSource = FlipDataSource(context: context)
+        return flipDataSource.createFlipWithJson(json)
+//        return flipDataSource.createOrUpdateFlipWithJson(json)
     }
     
 }

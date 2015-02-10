@@ -63,7 +63,6 @@ public class MessageService {
     }
     
     func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
-        let flipMessageDataSource = FlipMessageDataSource()
         let flipDataSource = FlipDataSource()
         let roomDataSource = RoomDataSource()
         
@@ -75,9 +74,12 @@ public class MessageService {
         }
         
         let room = roomDataSource.retrieveRoomWithId(roomID)
-        let flipMessage = flipMessageDataSource.createFlipMessageWithFlips(flips, toRoom: room)
+//        let flipMessage = flipMessageDataSource.createFlipMessageWithFlips(flips, toRoom: room)
+        let flipMessage = DataFacade.sharedInstance.createFlipMessageWithFlips(flips, toRoom: room)
         let messageJson = flipMessage.toJSON()
         
+        println("RoomPubnub id: \(room.pubnubID)")
+        println("\(messageJson)")
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
             completion(success, roomID, nil)
         }

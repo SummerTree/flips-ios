@@ -67,8 +67,20 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                 success: { (user) -> Void in
                     AuthenticationHelper.sharedInstance.userInSession = user as User
                     
-                    var userDataSource = UserDataSource()
-                    userDataSource.syncUserData({ (success, error) -> Void in
+//                    var userDataSource = UserDataSource()
+//                    userDataSource.syncUserData({ (success, error) -> Void in
+//                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                            activityIndicator.stopAnimating()
+//                            
+//                            let authenticatedUser = User.loggedUser()!
+//                            if (self.userHasDevice(authenticatedUser)) {
+//                                self.openInboxViewController(userDataSource)
+//                            } else {
+//                                self.openPhoneNumberController(authenticatedUser.userID)
+//                            }
+//                        })
+//                    })
+                    DataFacade.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             activityIndicator.stopAnimating()
                             
@@ -104,8 +116,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         var loggedUser = User.loggedUser()
         if (loggedUser != nil) {
             AuthenticationHelper.sharedInstance.userInSession = loggedUser
-            var userDataSource = UserDataSource()
-            userDataSource.syncUserData({ (success, error) -> Void in
+//            var userDataSource = UserDataSource()
+//            userDataSource.syncUserData({ (success, error) -> Void in
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self.openInboxViewController(userDataSource)
+//                })
+//            })
+            DataFacade.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.openInboxViewController(userDataSource)
                 })
