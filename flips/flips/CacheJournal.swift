@@ -17,6 +17,7 @@ public class CacheJournal {
     
     let path: String
     var entries: [JournalEntry]
+    let fileManagerQueue: dispatch_queue_t
     var cacheSize: UInt64 {
         get {
             var size: UInt64 = 0
@@ -30,33 +31,34 @@ public class CacheJournal {
     init(absolutePath: String) {
         self.path = absolutePath
         self.entries = [JournalEntry]()
+        self.fileManagerQueue = dispatch_queue_create(self.path, nil)
     }
     
     func open() {
         if NSFileManager.defaultManager().fileExistsAtPath(self.path) {
-            self.readEntries()
+            dispatch_async(self.fileManagerQueue, { () -> Void in
+                self.readEntries()
+            })
         }
     }
     
-    func insertNewEntry(key: String) -> Bool {
-        //should always run on the same thread, which is currently the main thread
+    func insertNewEntry(key: String) -> Void {
         let attributes = NSFileManager.defaultManager().attributesOfItemAtPath(key, error: nil)
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
         var newEntry = JournalEntry(key: key, size: entrySize, timestamp: entryTimestamp)
         entries.append(newEntry)
-        return self.persistJournal()
+        self.persistJournal()
     }
     
-    func updateEntry(key: String) -> Bool {
-        //should always run on the same thread, which is currently the main thread
+    func updateEntry(key: String) -> Void {
         for entry in entries {
             if key == entry.key {
                 entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-                return self.persistJournal()
+                self.persistJournal()
+                return
             }
         }
-        return false
     }
     
     func getLRUEntriesForSize(sizeInBytes: UInt64) -> Slice<String> {
@@ -80,7 +82,6 @@ public class CacheJournal {
     }
     
     func removeFirstEntries(count: Int) -> Void {
-        //should always run on the same thread, which is currently the main thread
         self.entries.removeRange(0..<count)
         self.persistJournal()
     }
@@ -113,21 +114,17 @@ public class CacheJournal {
         }
     }
     
-    private func persistJournal() -> Bool {
-        //should always run on the same thread, which is currently the main thread
-        if NSThread.currentThread() != NSThread.mainThread() {
-            println("Handling file \(self.path) on thread \(NSThread.currentThread())")
-        }
-        let newContent = "".join(self.entries.map { $0.toString(self.SEP, eol: self.EOL) })
-        if let outputStream = NSOutputStream(toFileAtPath: self.path, append: false) {
-            outputStream.open()
-            outputStream.write(newContent, maxLength: countElements(newContent))
-            outputStream.close()
-            return true
-        } else {
-            println("Unable to open file \(self.path)")
-            return false
-        }
+    private func persistJournal() -> Void {
+        dispatch_async(self.fileManagerQueue, { () -> Void in
+            let newContent = "".join(self.entries.map { $0.toString(self.SEP, eol: self.EOL) })
+            if let outputStream = NSOutputStream(toFileAtPath: self.path, append: false) {
+                outputStream.open()
+                outputStream.write(newContent, maxLength: countElements(newContent))
+                outputStream.close()
+            } else {
+                println("Failed to persist cache journal to file \(self.path)")
+            }
+        })
     }
     
 }

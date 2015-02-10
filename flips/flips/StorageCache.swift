@@ -69,9 +69,7 @@ public class StorageCache {
             dispatch_async(dispatch_get_main_queue()) {
                 success(localPath)
             }
-            if !self.cacheJournal.updateEntry(localPath) {
-                println("Failed to update entry in the cache journal")
-            }
+            self.cacheJournal.updateEntry(localPath)
             return CacheGetResponse.DATA_IS_READY
         }
         
@@ -80,9 +78,7 @@ public class StorageCache {
                 localURL: NSURL(fileURLWithPath: localPath)!,
                 completion: { (result) -> Void in
                     dispatch_async(dispatch_get_main_queue()) {
-                        if !self.cacheJournal.insertNewEntry(localPath) {
-                            println("Failed to insert entry into the cache journal")
-                        }
+                        self.cacheJournal.insertNewEntry(localPath)
                         self.scheduleCleanup()
                         if result {
                             success(localPath)
@@ -110,9 +106,7 @@ public class StorageCache {
         //should overwrite?
         if !self.cacheHit(localPath) {
             fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
-            if !self.cacheJournal.insertNewEntry(localPath) {
-                println("Failed to insert entry into the cache journal")
-            }
+            self.cacheJournal.insertNewEntry(localPath)
             self.scheduleCleanup()
         }
     }
@@ -142,10 +136,7 @@ public class StorageCache {
                     println("Could not remove file \(path). Error: \(error)")
                 }
             }
-            dispatch_async(dispatch_get_main_queue()) {
-                self.cacheJournal.removeFirstEntries(leastRecentlyUsed.count)
-                return
-            }
+            self.cacheJournal.removeFirstEntries(leastRecentlyUsed.count)
         }
     }
     
