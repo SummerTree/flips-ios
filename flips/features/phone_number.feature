@@ -7,7 +7,7 @@ Feature: Phone Number
 Scenario: Access Phone Number screen by Register screen
   Given I am on the "Sign Up" screen
   When I fill all fields with valid values
-  And I touch "Next" button
+  And I touch "Forward" button
   Then I should see "Phone Number" screen
 
 @7173
@@ -29,7 +29,7 @@ Scenario: Informing a wrong number
   Then I should see "Verification Code" screen
   And I shouldn't receive the message
 
-@7173
+@7173 @test
 Scenario: Informing a right number
   Given I am on the "Phone Number" screen
   When I type a valid phone number

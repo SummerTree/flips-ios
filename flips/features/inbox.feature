@@ -6,9 +6,9 @@ Feature: Inbox screen
 @7171 @ok @automated
 Scenario: Access Inbox screen by login screen
   Given I am on the "Login" screen
-  When I fill Email field with the value "maiana.momm@arctouch.com"
+  When I fill Email field with the value "maiana.momm3@arctouch.com"
   And I fill "Password" field with the value "Password1"
-  And I touch "Done" button
+  And I touch Done button
   Then I should see "Inbox" screen
 
 @7172
