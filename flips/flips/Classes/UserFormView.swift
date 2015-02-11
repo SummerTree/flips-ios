@@ -77,6 +77,7 @@ class UserFormView : UIView, UITextFieldDelegate {
 		birthdayDatePicker.datePickerMode = UIDatePickerMode.Date
 		birthdayDatePicker.maximumDate = NSDate()
 		birthdayDatePicker.addTarget(self, action: "birthdaySelected:", forControlEvents: UIControlEvents.ValueChanged)
+		
 		birthdayTextField.inputView = birthdayDatePicker
 		
         self.addSubview(birthdayTextField)
@@ -84,9 +85,9 @@ class UserFormView : UIView, UITextFieldDelegate {
 	
 	func birthdaySelected(sender : AnyObject?) {
 		let picker = birthdayTextField.inputView as UIDatePicker
-		var dateFormat = NSDateFormatter()
-		dateFormat.setLocalizedDateFormatFromTemplate("MM/dd/yyyy")
-		birthdayTextField.text = dateFormat.stringFromDate(picker.date)
+		var dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = NSDateFormatter.dateFormatFromTemplate("MM/dd/yyyy", options: 0, locale: NSLocale.currentLocale())
+		birthdayTextField.text = dateFormatter.stringFromDate(picker.date)
 	}
     
     private func setupCell(placeHolder: String, leftImage: UIImage? = nil) -> UITextField {
