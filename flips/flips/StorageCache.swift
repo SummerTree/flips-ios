@@ -63,11 +63,12 @@ public class StorageCache {
     :param: success A function that is called when the asset is successfully available.
     :param: failure A function that is called when the asset could not be retrieved.
     */
-    func get(path: String, success: CacheSuccessCallback, failure: CacheFailureCallback) -> CacheGetResponse {
+    func get(path: String, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
         let localPath = self.createLocalPath(path)
         if (self.cacheHit(localPath)) {
             dispatch_async(dispatch_get_main_queue()) {
-                success(localPath)
+                success?(localPath)
+                return
             }
             self.cacheJournal.updateEntry(localPath)
             return CacheGetResponse.DATA_IS_READY
@@ -81,9 +82,9 @@ public class StorageCache {
                         self.cacheJournal.insertNewEntry(localPath)
                         self.scheduleCleanup()
                         if (result) {
-                            success(localPath)
+                            success?(localPath)
                         } else {
-                            failure(FlipError(error: "Error downloading media file", details: nil))
+                            failure?(FlipError(error: "Error downloading media file", details: nil))
                         }
                     }
                 }
@@ -124,7 +125,7 @@ public class StorageCache {
         return NSFileManager.defaultManager().fileExistsAtPath(localPath)
     }
     
-    func scheduleCleanup() -> Void {
+    private func scheduleCleanup() -> Void {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let cacheOverflow = self.cacheJournal.cacheSize - self.sizeLimitInBytes
             if (cacheOverflow <= 0) {
