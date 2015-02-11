@@ -65,7 +65,7 @@ public class StorageCache {
     */
     func get(path: String, success: CacheSuccessCallback, failure: CacheFailureCallback) -> CacheGetResponse {
         let localPath = self.createLocalPath(path)
-        if self.cacheHit(localPath) {
+        if (self.cacheHit(localPath)) {
             dispatch_async(dispatch_get_main_queue()) {
                 success(localPath)
             }
@@ -80,7 +80,7 @@ public class StorageCache {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.cacheJournal.insertNewEntry(localPath)
                         self.scheduleCleanup()
-                        if result {
+                        if (result) {
                             success(localPath)
                         } else {
                             failure(FlipError(error: "Error downloading media file", details: nil))
@@ -103,7 +103,7 @@ public class StorageCache {
         
         let fileManager = NSFileManager.defaultManager()
 
-        if !self.cacheHit(toPath) {
+        if (!self.cacheHit(toPath)) {
             var error: NSError? = nil
             fileManager.moveItemAtPath(srcPath, toPath: toPath, error: &error)
             if (error != nil) {
@@ -127,7 +127,7 @@ public class StorageCache {
     func scheduleCleanup() -> Void {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let cacheOverflow = self.cacheJournal.cacheSize - self.sizeLimitInBytes
-            if cacheOverflow <= 0 {
+            if (cacheOverflow <= 0) {
                 return
             }
             
@@ -135,7 +135,7 @@ public class StorageCache {
             let fileManager = NSFileManager.defaultManager()
             for path in leastRecentlyUsed {
                 var error: NSError? = nil
-                if !fileManager.removeItemAtPath(path, error: &error) {
+                if (!fileManager.removeItemAtPath(path, error: &error)) {
                     println("Could not remove file \(path). Error: \(error)")
                 }
             }
