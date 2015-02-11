@@ -117,7 +117,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 if (flipWord.associatedFlipId != nil) {
                     var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                     flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
-                    flipMessageIds[flipWord.text] = flip.flipID
+                    flipMessageIds[flipWord.text] = flipWord.associatedFlipId!
                     dispatch_group_leave(group)
                 } else {
                     PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCompletion: { (flip) -> Void in

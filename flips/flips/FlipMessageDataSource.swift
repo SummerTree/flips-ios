@@ -34,12 +34,12 @@ class FlipMessageDataSource : BaseDataSource {
         let fromUserID = json[FlipMessageJsonParams.FROM_USER_ID].stringValue
         let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         
-        var entity: FlipMessage! = self.getFlipMessageById(flipMessageID)
-        if (entity != nil) {
-            return entity // if the user already has his message do not recreate
-        }
+//        var entity: FlipMessage! = self.getFlipMessageById(flipMessageID)
+//        if (entity != nil) {
+//            return entity // if the user already has his message do not recreate
+//        }
 
-        entity = FlipMessage.createInContext(currentContext) as FlipMessage
+        var entity = FlipMessage.createInContext(currentContext) as FlipMessage
         entity.flipMessageID = flipMessageID
         
 //        entity.from = userDataSource.retrieveUserWithId(fromUserID)
@@ -187,7 +187,7 @@ class FlipMessageDataSource : BaseDataSource {
         return FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
     }
     
-    private func getFlipMessageById(flipMessageID: String) -> FlipMessage? {
+    func getFlipMessageById(flipMessageID: String) -> FlipMessage? {
         return FlipMessage.findFirstByAttribute(FlipMessageAttributes.FLIP_MESSAGE_ID, withValue: flipMessageID, inContext: currentContext) as? FlipMessage
     }
     

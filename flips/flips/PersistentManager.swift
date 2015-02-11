@@ -260,11 +260,19 @@ public class PersistentManager: NSObject {
 //            entity.addFlip(flip, inContext: currentContext)
         }
         
+        let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
+        let flipMessageDataSource = FlipMessageDataSource()
+        var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
+        if (entity != nil) {
+            return entity // if the user already has his message do not recreate
+        }
+
+        
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            let flipMessageDataSource = FlipMessageDataSource(context: context)
-            flipMessage = flipMessageDataSource.createFlipMessageWithJson(json, receivedDate: receivedDate)
+            let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
+            flipMessage = flipMessageDataSourceInContext.createFlipMessageWithJson(json, receivedDate: receivedDate)
             
-            flipMessageDataSource.associateFlipMessage(flipMessage!, withUser: user!, flips: flips, andRoom: room)
+            flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, flips: flips, andRoom: room)
         }
         return flipMessage
     }
@@ -278,7 +286,7 @@ public class PersistentManager: NSObject {
             let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
             flipMessage = flipMessageDataSourceInContext.createFlipMessageWithId(messageId, andFlips: flips, toRoom: room)
         }
-        return flipMessage
+        return flipMessage.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage
     }
     
     func removeAllFlipMessagesFromRoomID(roomID: String, completion: CompletionBlock) {
