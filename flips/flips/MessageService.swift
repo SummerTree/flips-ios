@@ -75,7 +75,7 @@ public class MessageService {
         
         let room = roomDataSource.retrieveRoomWithId(roomID)
 //        let flipMessage = flipMessageDataSource.createFlipMessageWithFlips(flips, toRoom: room)
-        let flipMessage = DataFacade.sharedInstance.createFlipMessageWithFlips(flips, toRoom: room)
+        let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(flips, toRoom: room)
         let messageJson = flipMessage.toJSON()
         
         println("RoomPubnub id: \(room.pubnubID)")

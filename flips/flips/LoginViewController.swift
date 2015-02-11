@@ -64,11 +64,12 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
 
             if (user == nil) {
                 self.loginView.showValidationErrorInCredentialFields()
+                return
             }
             
             var authenticatedUser: User = user as User!
-            AuthenticationHelper.sharedInstance.userInSession = authenticatedUser.inContext(NSManagedObjectContext.contextForCurrentThread()) as User
-            
+//            AuthenticationHelper.sharedInstance.userInSession = authenticatedUser.inContext(NSManagedObjectContext.contextForCurrentThread()) as User
+            AuthenticationHelper.sharedInstance.onLogin(authenticatedUser)
 //            var userDataSource = UserDataSource()
 //            userDataSource.syncUserData({ (success, error) -> Void in
 //                self.hideActivityIndicator()
@@ -81,7 +82,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
 //                })
 //            })
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                DataFacade.sharedInstance.syncUserData({ (success, FlipError, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, FlipError, userDataSource) -> Void in
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (success) {
@@ -143,9 +144,10 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         showActivityIndicator()
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
-                AuthenticationHelper.sharedInstance.userInSession = user as User
+//                AuthenticationHelper.sharedInstance.userInSession = user as User
+                AuthenticationHelper.sharedInstance.onLogin(user as User)
                 
-                DataFacade.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         let authenticatedUser = User.loggedUser()!

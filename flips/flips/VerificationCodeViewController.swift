@@ -117,7 +117,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                 var deviceEntity = device as Device
 
                 // TODO: changed it! It should be executed by a DataSource
-                DataFacade.sharedInstance.defineAsLoggedUser(deviceEntity.user)
+                PersistentManager.sharedInstance.defineAsLoggedUserSync(deviceEntity.user)
 //                UserDataSource().saveDataInBackground({ (context: NSManagedObjectContext!) -> Void in
 //                    var user = deviceEntity.user.inContext(context) as User
 //                    user.me = true
@@ -126,7 +126,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                 
 //                UserDataSource().save()
                 
-                DataFacade.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()

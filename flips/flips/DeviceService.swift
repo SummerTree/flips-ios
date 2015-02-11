@@ -66,7 +66,7 @@ public class DeviceService: FlipsService {
     private func parseDeviceResponse(response: AnyObject) -> Device? {
 //        let deviceDataSource = DeviceDataSource()
 //        return deviceDataSource.createEntityWithObject(response)
-        return DataFacade.sharedInstance.createDeviceWithJson(JSON(response))
+        return PersistentManager.sharedInstance.createDeviceWithJson(JSON(response))
     }
     
     

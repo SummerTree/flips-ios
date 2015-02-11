@@ -12,8 +12,8 @@
 
 public typealias StockFlipsSuccessResponse = (JSON?) -> Void
 public typealias StockFlipsFailureResponse = (FlipError?) -> Void
-public typealias CreateFlipSuccessResponse = (Flip) -> Void
-public typealias CreateFlipFailureResponse = (FlipError?) -> Void
+public typealias UploadFlipSuccessResponse = (JSON) -> Void
+public typealias UploadFlipFailureResponse = (FlipError?) -> Void
 private typealias UploadSuccessResponse = (String?) -> Void
 private typealias UploadFailureResponse = (FlipError?) -> Void
 
@@ -38,10 +38,10 @@ public class FlipService: FlipsService {
         static let IS_PRIVATE = "is_private"
     }
     
-    func createFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse, inContext context: NSManagedObjectContext) {
+    func createFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
         
         var uploadFlipBlock: ((String, String) -> Void) = { (backgroundImageUrl, soundUrl) -> () in
-            self.uploadNewFlip(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack, inContext: context)
+            self.uploadNewFlip(word, backgroundUrl: backgroundImageUrl, soundUrl: soundUrl, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: uploadFlipSuccessCallback, uploadFlipFailCallBack: uploadFlipFailCallBack)
         }
         
         var uploadSoundBlock: ((String) -> Void)? = nil
@@ -49,8 +49,8 @@ public class FlipService: FlipsService {
             uploadSoundBlock = { (backgroundImageUrl) -> () in
                 self.uploadSound(soundPath!, successCallback: { (soundUrl) -> Void in
                     uploadFlipBlock(backgroundImageUrl, soundUrl!)
-                    }, failCallback: { (flipError) -> Void in
-                        createFlipFailCallBack(flipError)
+                }, failCallback: { (flipError) -> Void in
+                    uploadFlipFailCallBack(flipError)
                 })
             }
         }
@@ -66,7 +66,7 @@ public class FlipService: FlipsService {
                     uploadFlipBlock(backgroundImageUrl!, "")
                 }
                 }) { (flipError) -> Void in
-                    createFlipFailCallBack(flipError)
+                    uploadFlipFailCallBack(flipError)
             }
         } else if (uploadSoundBlock != nil) {
             uploadSoundBlock!("")
@@ -75,15 +75,15 @@ public class FlipService: FlipsService {
         }
     }
     
-    func createFlip(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse, inContext context: NSManagedObjectContext) {
+    func createFlip(word: String, videoPath: NSURL, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
         var uploadFlipBlock: ((String) -> Void) = { (videoURL) -> () in
-            self.uploadNewFlip(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack, inContext: context)
+            self.uploadNewFlip(word, backgroundUrl: videoURL, soundUrl: "", category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: uploadFlipSuccessCallback, uploadFlipFailCallBack: uploadFlipFailCallBack)
         }
         
         self.uploadVideo(videoPath, successCallback: { (videoUrl) -> Void in
             uploadFlipBlock(videoUrl!)
         }) { (flipError) -> Void in
-            createFlipFailCallBack(flipError)
+            uploadFlipFailCallBack(flipError)
         }
     }
     
@@ -215,16 +215,15 @@ public class FlipService: FlipsService {
         )
     }
     
-    private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse, inContext context: NSManagedObjectContext) {
-        
+    private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {        
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            createFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            uploadFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let createFlipUrl = HOST + createURL
         let createFlipParams = [
             RequestParams.WORD : word,
@@ -236,14 +235,14 @@ public class FlipService: FlipsService {
         request.POST(createFlipUrl,
             parameters: createFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                createFlipSuccessCallback(self.parseCreateFlipResponse(responseObject, inContext: context)!)
+                uploadFlipSuccessCallback(JSON(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    createFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil))
+                    uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    createFlipFailCallBack(FlipError(error: error.localizedDescription, details:nil))
+                    uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details:nil))
                 }
             }
         )
@@ -266,11 +265,11 @@ public class FlipService: FlipsService {
         return nil
     }
     
-    private func parseCreateFlipResponse(response: AnyObject, inContext context: NSManagedObjectContext) -> Flip? {
-        let json = JSON(response)
-        let flipDataSource = FlipDataSource(context: context)
-        return flipDataSource.createFlipWithJson(json)
-//        return flipDataSource.createOrUpdateFlipWithJson(json)
-    }
+//    private func parseCreateFlipResponse(response: AnyObject, inContext context: NSManagedObjectContext) -> Flip? {
+//        let json = JSON(response)
+//        let flipDataSource = FlipDataSource(context: context)
+//        return flipDataSource.createFlipWithJson(json)
+////        return flipDataSource.createOrUpdateFlipWithJson(json)
+//    }
     
 }

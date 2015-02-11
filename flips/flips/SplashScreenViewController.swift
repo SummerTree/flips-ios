@@ -65,8 +65,6 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         if (success) {
             UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
                 success: { (user) -> Void in
-                    AuthenticationHelper.sharedInstance.userInSession = user as User
-                    
 //                    var userDataSource = UserDataSource()
 //                    userDataSource.syncUserData({ (success, error) -> Void in
 //                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -80,7 +78,9 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
 //                            }
 //                        })
 //                    })
-                    DataFacade.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+                    AuthenticationHelper.sharedInstance.onLogin(user as User)
+                    
+                    PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             activityIndicator.stopAnimating()
                             
@@ -113,16 +113,15 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     
     func splashScreenViewAttemptLogin() {
         // TODO: we need to validate the cookies to se if the it is expired or not. And in the logout, it will be good to delete it.
-        var loggedUser = User.loggedUser()
-        if (loggedUser != nil) {
-            AuthenticationHelper.sharedInstance.userInSession = loggedUser
+        if let loggedUser = User.loggedUser() {
 //            var userDataSource = UserDataSource()
 //            userDataSource.syncUserData({ (success, error) -> Void in
 //                dispatch_async(dispatch_get_main_queue(), { () -> Void in
 //                    self.openInboxViewController(userDataSource)
 //                })
 //            })
-            DataFacade.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+            AuthenticationHelper.sharedInstance.onLogin(loggedUser)
+            PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.openInboxViewController(userDataSource)
                 })

@@ -63,7 +63,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 //        println("   #flips: \(flips.count)")
         
         var isTemporary = true
-        if let loggedUser = AuthenticationHelper.sharedInstance.userInSession {
+        if let loggedUser = User.loggedUser() {
             if (loggedUser.userID == flipMessage.from.userID) {
                 isTemporary = false
             }
@@ -128,7 +128,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             self.onRoomReceived(messageJson)
         } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
             // Message Received
-            let flipMessage = DataFacade.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
             
 //                let flipMessageDataSource = FlipMessageDataSource()
 //                let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
@@ -150,7 +150,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func onRoomReceived(messageJson: JSON) {
 //        let roomDataSource = RoomDataSource()
 //        let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
-        let room = DataFacade.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT])
+        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT])
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }

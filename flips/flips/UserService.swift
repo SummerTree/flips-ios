@@ -89,7 +89,7 @@ public class UserService: FlipsService {
     private func parseUserResponse(response: AnyObject) -> User? {
 //        let userDataSource = UserDataSource()
 //        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
-        return DataFacade.sharedInstance.createOrUpdateUserWithJson(JSON(response))
+        return PersistentManager.sharedInstance.createOrUpdateUserWithJson(JSON(response))
     }
     
     
@@ -170,7 +170,7 @@ public class UserService: FlipsService {
     func parseSigninResponse(response: AnyObject) -> User? {
 //        let userDataSource = UserDataSource()
 //        let user = userDataSource.createOrUpdateUserWithJson(JSON(response), isLoggedUser: true)
-        return DataFacade.sharedInstance.createOrUpdateUserWithJson(JSON(response), isLoggedUser: true)
+        return PersistentManager.sharedInstance.createOrUpdateUserWithJson(JSON(response), isLoggedUser: true)
     }
     
     
@@ -371,7 +371,7 @@ public class UserService: FlipsService {
                             SwiftTryCatch.try({ () -> Void in
                                 println("Trying to import: \(user)")
 //                                var user = userDatasource.createOrUpdateUserWithJson(user)
-                                var user = DataFacade.sharedInstance.createOrUpdateUserWithJson(user)
+                                var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
                             }, catch: { (error) -> Void in
                                     println("Error: [\(error))")
                             }, finally: nil)
@@ -434,7 +434,7 @@ public class UserService: FlipsService {
                         SwiftTryCatch.try({ () -> Void in
                             println("Trying to import: \(user)")
 //                            var user = userDatasource.createOrUpdateUserWithJson(user)
-                            var user = DataFacade.sharedInstance.createOrUpdateUserWithJson(user)
+                            var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
                         }, catch: { (error) -> Void in
                             println("Error: [\(error))")
                         }, finally: nil)
@@ -466,8 +466,8 @@ public class UserService: FlipsService {
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        var userInSession = AuthenticationHelper.sharedInstance.userInSession
-        let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        var userInSession = User.loggedUser()
+        let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userInSession!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         println("   getMyFlips: \(url)")
         request.GET(url, parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in

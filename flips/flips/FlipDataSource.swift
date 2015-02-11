@@ -112,48 +112,48 @@ class FlipDataSource : BaseDataSource {
         flipInContext.owner = ownerInContext
     }
     
-    func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
-        let cacheHandler = CacheHandler.sharedInstance
-        let flipService = FlipService()
-        
-        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundURL, createFlipSuccessCallback: { (flip) -> Void in
-            var userDataSource = UserDataSource(context: self.currentContext)
-            flip.owner = User.loggedUser()
-            flip.setBackgroundContentType(BackgroundContentType.Image)
-            
-            if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
-            }
-            
-            if (soundURL != nil) {
-                cacheHandler.saveDataAtPath(soundURL!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
-            }
-            
-            createFlipSuccess(flip)
-        }, createFlipFailCallBack: { (flipError) -> Void in
-            createFlipFail(flipError!)
-        }, inContext: currentContext)
-    }
+//    func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
+//        let cacheHandler = CacheHandler.sharedInstance
+//        let flipService = FlipService()
+//        
+//        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundURL, uploadFlipSuccessCallback: { (flip) -> Void in
+//
+//            flip.owner = User.loggedUser()!.inContext(self.currentContext) as User
+//            flip.setBackgroundContentType(BackgroundContentType.Image)
+//            
+//            if (backgroundImage != nil) {
+//                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
+//            }
+//            
+//            if (soundURL != nil) {
+//                cacheHandler.saveDataAtPath(soundURL!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
+//            }
+//            
+//            createFlipSuccess(flip)
+//        }, uploadFlipFailCallBack: { (flipError) -> Void in
+//            createFlipFail(flipError!)
+//        })
+//    }
     
-    func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
-        let cacheHandler = CacheHandler.sharedInstance
-        let flipService = FlipService()
-        
-        flipService.createFlip(word, videoPath: videoURL, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
-            var userDataSource = UserDataSource(context: self.currentContext)
-            flip.owner = User.loggedUser()
-            flip.setBackgroundContentType(BackgroundContentType.Video)
-            
-            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
-                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
-            }
-            
-            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
-            createFlipSuccess(flip)
-        }, createFlipFailCallBack: { (flipError) -> Void in
-            createFlipFail(flipError!)
-        }, inContext: currentContext)
-    }
+//    func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
+//        let cacheHandler = CacheHandler.sharedInstance
+//        let flipService = FlipService()
+//        
+//        flipService.createFlip(word, videoPath: videoURL, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
+//            var userDataSource = UserDataSource(context: self.currentContext)
+//            flip.owner = User.loggedUser()
+//            flip.setBackgroundContentType(BackgroundContentType.Video)
+//            
+//            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
+//                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
+//            }
+//            
+//            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
+//            createFlipSuccess(flip)
+//        }, createFlipFailCallBack: { (flipError) -> Void in
+//            createFlipFail(flipError!)
+//        })
+//    }
     
     
     // TODO: Bruno - I need to check if it is working properly
@@ -186,12 +186,12 @@ class FlipDataSource : BaseDataSource {
     func getMyFlips() -> [Flip] {
         return Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
             ascending: true,
-            withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID))"),
+            withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID))"),
             inContext: currentContext) as [Flip]
     }
     
     func getMyFlipsForWord(word: String) -> [Flip] {
-        let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(AuthenticationHelper.sharedInstance.userInSession.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
+        let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
         
         return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
     }

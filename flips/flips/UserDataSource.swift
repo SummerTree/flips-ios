@@ -273,7 +273,7 @@ class UserDataSource : BaseDataSource {
 //        builderService.getSuggestedWords({ (words) -> Void in
 ////            let builderWordDataSource = BuilderWordDataSource(context: currentContext)
 ////            builderWordDataSource.addWords(words, fromServer: true)
-//            DataFacade.sharedInstance.addBuilderWords(words, fromServer: true)
+//            PersistentManager.sharedInstance.addBuilderWords(words, fromServer: true)
 //            dispatch_group_leave(group)
 //            }, failCompletion: { (flipError) -> Void in
 //                error = flipError

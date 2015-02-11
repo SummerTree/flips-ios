@@ -122,7 +122,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 for stockFlipJson in stockFlipsAsJSON! {
                     println("Stock mug: \(stockFlipJson)")
 //                    flipDataSource.createOrUpdateFlipWithJson(stockFlip)
-                    DataFacade.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
+                    PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
                 }
             }, failure: { (flipError) -> Void in
                     if (flipError != nil) {
@@ -764,10 +764,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - ConfirmFlipViewController Delegate
     
-    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, flip: Flip?) {
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, flipID: String?) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
         if (success) {
-            flipWord.associatedFlipId = flip?.flipID
+            flipWord.associatedFlipId = flipID
             self.onFlipAssociated()
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)

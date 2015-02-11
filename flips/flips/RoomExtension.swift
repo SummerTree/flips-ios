@@ -69,7 +69,7 @@ extension Room {
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
 //        let flipMessageDataSource = FlipMessageDataSource()
 //        flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
-        DataFacade.sharedInstance.removeAllFlipMessagesFromRoomID(self.roomID, completion: completion)
+        PersistentManager.sharedInstance.removeAllFlipMessagesFromRoomID(self.roomID, completion: completion)
     }
     
     func roomName() -> String {
@@ -82,7 +82,7 @@ extension Room {
         var sortedParticipants = self.participants.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
         for participant in sortedParticipants {
-            if (participant.userID != AuthenticationHelper.sharedInstance.userInSession.userID) {
+            if (participant.userID != User.loggedUser()!.userID) {
                 var userFirstName = participant.firstName
                 if (participant.isTemporary!.boolValue) {
                     if let phoneNumber = participant.phoneNumber {

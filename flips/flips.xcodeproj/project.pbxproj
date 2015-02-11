@@ -236,7 +236,7 @@
 		7AE044FE1A0CE49C00C68313 /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FD1A0CE49C00C68313 /* VideoHelper.swift */; };
 		7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
 		7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */; };
-		7AE3C6661A824C0700910CBC /* DataFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE3C6651A824C0700910CBC /* DataFacade.swift */; };
+		7AE3C6661A824C0700910CBC /* PersistentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE3C6651A824C0700910CBC /* PersistentManager.swift */; };
 		7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
 		7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
@@ -565,7 +565,7 @@
 		7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheHandler.swift; sourceTree = "<group>"; };
 		7AE3C6641A824BEC00910CBC /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7AE3C6651A824C0700910CBC /* DataFacade.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataFacade.swift; sourceTree = "<group>"; };
+		7AE3C6651A824C0700910CBC /* PersistentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentManager.swift; sourceTree = "<group>"; };
 		7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingHelper.swift; sourceTree = "<group>"; };
 		7AF82DE519EFEC3300D0393F /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
 		7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageDataSource.swift; sourceTree = "<group>"; };
@@ -1249,7 +1249,7 @@
 		7A2A7E4219EEF2AD00033164 /* Data Sources */ = {
 			isa = PBXGroup;
 			children = (
-				7AE3C6651A824C0700910CBC /* DataFacade.swift */,
+				7AE3C6651A824C0700910CBC /* PersistentManager.swift */,
 				7AF82E0419EFED2100D0393F /* BaseDataSource.swift */,
 				7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */,
 				7AF82E0019EFECC900D0393F /* DeviceDataSource.swift */,
@@ -1920,7 +1920,7 @@
 				7A2A7E2419EDBFB800033164 /* CoreDataHandler.swift in Sources */,
 				70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */,
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
-				7AE3C6661A824C0700910CBC /* DataFacade.swift in Sources */,
+				7AE3C6661A824C0700910CBC /* PersistentManager.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
 				1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */,
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,

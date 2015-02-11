@@ -32,7 +32,7 @@ public class RoomService: FlipsService {
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let createRoomUrl = HOST + createURL
         let createRoomParams = [
             RequestParams.NAME : "Name",
@@ -66,7 +66,7 @@ public class RoomService: FlipsService {
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let getRoomsUrl = HOST + getURL
 
         println("   getMyRooms: \(getRoomsUrl)")
@@ -90,7 +90,7 @@ public class RoomService: FlipsService {
 //        println("created room json: \(json)")
 //        let roomDataSource = RoomDataSource()
 //        return roomDataSource.createOrUpdateWithJson(json)
-        return DataFacade.sharedInstance.createOrUpdateRoomWithJson(json)
+        return PersistentManager.sharedInstance.createOrUpdateRoomWithJson(json)
     }
     
     private func parseGetRoomsResponse(response: AnyObject) -> [Room] {
@@ -103,7 +103,7 @@ public class RoomService: FlipsService {
         if let jsonArray = json.array {
             for roomJson in jsonArray {
 //                var room = roomDataSource.createOrUpdateWithJson(roomJson)
-                var room = DataFacade.sharedInstance.createOrUpdateRoomWithJson(roomJson)
+                var room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(roomJson)
                 rooms.append(room)
             }
         }

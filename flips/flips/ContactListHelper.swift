@@ -54,7 +54,7 @@ public class ContactListHelper {
     
     private func retrieveContacts() -> Array<ContactListHelper.Contact> {
 //        let contactDataSource = ContactDataSource()
-        let dataSourceManager = DataFacade.sharedInstance
+        let dataSourceManager = PersistentManager.sharedInstance
         let people = self.addressBook.people() as Array<RHPerson>
         var contacts = Array<ContactListHelper.Contact>()
         for person in people {

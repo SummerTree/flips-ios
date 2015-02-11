@@ -1,21 +1,26 @@
 //
-//  DataFacade.swift
-//  flips
+// Copyright 2014 ArcTouch, Inc.
+// All rights reserved.
 //
-//  Created by Bruno Bruggemann on 2/3/15.
-//
+// This file, its contents, concepts, methods, behavior, and operation
+// (collectively the "Software") are protected by trade secret, patent,
+// and copyright laws. The use of the Software is governed by a license
+// agreement. Disclosure of the Software to third parties, in any form,
+// in whole or in part, is expressly prohibited except as authorized by
+// the license agreement.
 //
 
-import Foundation
+public typealias CreateFlipSuccessCompletion = (Flip) -> Void
+public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
-public class DataFacade: NSObject {
+public class PersistentManager: NSObject {
 
     
     // MARK: - Singleton Implementation
     
-    public class var sharedInstance : DataFacade {
+    public class var sharedInstance : PersistentManager {
         struct Static {
-            static let instance : DataFacade = DataFacade()
+            static let instance : PersistentManager = PersistentManager()
         }
         return Static.instance
     }
@@ -150,24 +155,75 @@ public class DataFacade: NSObject {
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
     }
     
-    func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
-        MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            let flipDataSource = FlipDataSource(context: context)
-            flipDataSource.createFlipWithWord(word, backgroundImage: backgroundImage, soundURL: soundURL, createFlipSuccess: createFlipSuccess, createFlipFail: createFlipFail)
+//    func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
+//        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+//            let flipDataSource = FlipDataSource(context: context)
+//            flipDataSource.createFlipWithWord(word, backgroundImage: backgroundImage, soundURL: soundURL, createFlipSuccess: createFlipSuccess, createFlipFail: createFlipFail)
+//        }
+//    }
+//    
+//    func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
+//        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+//            let flipDataSource = FlipDataSource(context: context)
+//            flipDataSource.createFlipWithWord(word, videoURL: videoURL, createFlipSuccess: createFlipSuccess, createFlipFail: createFlipFail)
+//        }
+//    }
+    
+    func createAndUploadFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
+        let cacheHandler = CacheHandler.sharedInstance
+        let loggedUser = User.loggedUser() as User!
+        
+        let flipService = FlipService()
+        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
+            
+            var flip: Flip!
+            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+                let flipDataSource = FlipDataSource(context: context)
+                flip = flipDataSource.createFlipWithJson(json)
+                
+                flipDataSource.associateFlip(flip, withOwner: loggedUser)
+                flip.setBackgroundContentType(BackgroundContentType.Image)
+            })
+            
+            if (backgroundImage != nil) {
+                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
+            }
+            
+            if (soundPath != nil) {
+                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
+            }
+            
+            createFlipSuccessCompletion(flip)
+        }) { (flipError: FlipError?) -> Void in
+            createFlipFailCompletion(flipError)
         }
+        //            flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack, inContext: context)
     }
     
-    func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
-        MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            let flipDataSource = FlipDataSource(context: context)
-            flipDataSource.createFlipWithWord(word, videoURL: videoURL, createFlipSuccess: createFlipSuccess, createFlipFail: createFlipFail)
-        }
-    }
-    
-    func createAndUploadFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCallback: CreateFlipSuccessResponse, createFlipFailCallBack: CreateFlipFailureResponse) {
-        MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            let flipService = FlipService()
-            flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, createFlipSuccessCallback: createFlipSuccessCallback, createFlipFailCallBack: createFlipFailCallBack, inContext: context)
+    func createAndUploadFlip(word: String, videoURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
+        let cacheHandler = CacheHandler.sharedInstance
+        let loggedUser = User.loggedUser() as User!
+        
+        let flipService = FlipService()
+        flipService.createFlip(word, videoPath: videoURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
+            var flip: Flip!
+            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+                let flipDataSource = FlipDataSource(context: context)
+                flip = flipDataSource.createFlipWithJson(json)
+                
+                flipDataSource.associateFlip(flip, withOwner: loggedUser)
+                flip.setBackgroundContentType(BackgroundContentType.Video)
+            })
+            
+            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
+                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
+            }
+            
+            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
+
+            createFlipSuccessCompletion(flip)
+        }) { (flipError: FlipError?) -> Void in
+            createFlipFailCompletion(flipError)
         }
     }
     
@@ -269,7 +325,7 @@ public class DataFacade: NSObject {
             let contactDataSource = ContactDataSource()
             
             let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
-            let authenticatedId = AuthenticationHelper.sharedInstance.userInSession?.userID
+            let authenticatedId = User.loggedUser()?.userID
             
             var userContact: Contact?
             var userInContext = user!.inThreadContext() as User
@@ -296,7 +352,16 @@ public class DataFacade: NSObject {
         MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
             var userInContext = user.inContext(context) as User
             userInContext.me = true
-            AuthenticationHelper.sharedInstance.userInSession = userInContext
+            AuthenticationHelper.sharedInstance.onLogin(userInContext)
+//            AuthenticationHelper.sharedInstance.userInSession = userInContext
+        }
+    }
+    
+    func defineAsLoggedUserSync(user: User) {
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+            var userInContext = user.inContext(context) as User
+            userInContext.me = true
+            AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
     }
     
@@ -412,11 +477,17 @@ public class DataFacade: NSObject {
     
     func createDeviceWithJson(json: JSON) -> Device {
         var device: Device!
+        
+        let userDataSource = UserDataSource()
+        let user = userDataSource.getUserById(json[DeviceJsonParams.USER].stringValue)
+        
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let deviceDataSource = DeviceDataSource(context: context)
             device = deviceDataSource.createEntityWithJson(json)
+            
+            deviceDataSource.associateDevice(device, withUser: user!)
         }
-        return device
+        return device.inContext(NSManagedObjectContext.MR_defaultContext()) as Device
     }
     
     

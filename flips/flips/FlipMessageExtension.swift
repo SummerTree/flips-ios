@@ -133,7 +133,7 @@ extension FlipMessage {
         dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
         dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
-        let loggedUserFirstName = AuthenticationHelper.sharedInstance.userInSession.firstName
+        let loggedUserFirstName = User.loggedUser()!.firstName
         let notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
         
         var notificationDictionary = Dictionary<String, AnyObject>()

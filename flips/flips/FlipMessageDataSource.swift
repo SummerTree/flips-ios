@@ -112,7 +112,7 @@ class FlipMessageDataSource : BaseDataSource {
         
         flipMessageInContext.from = userInContext
         
-        if let loggedUser = AuthenticationHelper.sharedInstance.userInSession {
+        if let loggedUser = User.loggedUser() {
             if (flipMessageInContext.from.userID == loggedUser.userID) {
                 flipMessageInContext.notRead = false
             }
@@ -134,7 +134,7 @@ class FlipMessageDataSource : BaseDataSource {
     func createFlipMessageWithId(flipMessageID: String, andFlips flips: [Flip], toRoom room: Room) -> FlipMessage {
         var entity = FlipMessage.createInContext(currentContext) as FlipMessage
         entity.flipMessageID = flipMessageID
-        entity.room = room
+        entity.room = room.inContext(currentContext) as Room
         entity.from = User.loggedUser()!.inContext(currentContext) as User
         entity.createdAt = NSDate()
         entity.notRead = false

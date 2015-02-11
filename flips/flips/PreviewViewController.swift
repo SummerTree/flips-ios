@@ -120,10 +120,10 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                     flipMessageIds[flipWord.text] = flip.flipID
                     dispatch_group_leave(group)
                 } else {
-                    DataFacade.sharedInstance.createAndUploadFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
+                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCompletion: { (flip) -> Void in
                         flipMessageIds[flipWord.text] = flip.flipID
                         dispatch_group_leave(group)
-                    }, createFlipFailCallBack: { (flipError) -> Void in
+                    }, createFlipFailCompletion: { (flipError) -> Void in
                         error = flipError
                         flipMessageIds[flipWord.text] = "-1"
                         dispatch_group_leave(group)

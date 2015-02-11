@@ -11,7 +11,7 @@
 //
 
 
-private struct DeviceJsonParams {
+struct DeviceJsonParams {
     static let ID = "id"
     static let USER = "user"
     static let PLATFORM = "platform"
@@ -24,7 +24,7 @@ private struct DeviceJsonParams {
 class DeviceDataSource : BaseDataSource {
     
     func createEntityWithJson(json : JSON) -> Device {
-        let userDataSource = UserDataSource(context: currentContext)
+//        let userDataSource = UserDataSource(context: currentContext)
         
         var entity = Device.createInContext(currentContext) as Device
         
