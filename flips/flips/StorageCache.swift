@@ -20,7 +20,7 @@ public class StorageCache {
         case DOWNLOAD_WILL_START
     }
     
-    private let cacheDirectoryPath: String
+    private let cacheDirectoryPath: NSURL
     private let sizeLimitInBytes: UInt64
     private let cacheJournal: CacheJournal
     
@@ -28,8 +28,10 @@ public class StorageCache {
         self.sizeLimitInBytes = sizeLimitInBytes
         let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
-        self.cacheDirectoryPath = "\(NSHomeDirectory())\(applicationSupportDirPath)/\(cacheDirectoryName)"
-        let journalName = "\(self.cacheDirectoryPath)/\(cacheDirectoryName).cache"
+        let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
+        let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
+        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)!
+        let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheDirectoryName).cache")
         self.cacheJournal = CacheJournal(absolutePath: journalName)
         self.initCacheDirectory()
         self.cacheJournal.open()
@@ -39,16 +41,22 @@ public class StorageCache {
         let fileManager = NSFileManager.defaultManager()
         var isDirectory: ObjCBool = true
         
-        if (fileManager.fileExistsAtPath(cacheDirectoryPath, isDirectory: &isDirectory)) {
+        var error: NSError? = nil
+        
+        if (fileManager.fileExistsAtPath(cacheDirectoryPath.path!, isDirectory: &isDirectory)) {
             println("Directory exists: \(cacheDirectoryPath)")
         } else {
-            var error: NSError? = nil
-            fileManager.createDirectoryAtPath(cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil, error: &error)
+            fileManager.createDirectoryAtPath(cacheDirectoryPath.path!, withIntermediateDirectories: true, attributes: nil, error: &error)
             if (error != nil) {
                 println("Error creating cache dir: \(error)")
             } else {
                 println("Directory '\(cacheDirectoryPath)' created!")
             }
+        }
+        
+        cacheDirectoryPath.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey, error: &error)
+        if (error != nil) {
+            println("Error excluding cache dir from backup: \(error)")
         }
     }
     
@@ -59,14 +67,14 @@ public class StorageCache {
     (e.g. not in cache and no internet connection), the failure function is called with some
     error description.
     
-    :param: path    The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: success A function that is called when the asset is successfully available.
-    :param: failure A function that is called when the asset could not be retrieved.
+    :param: remoteURL The URL from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    :param: success   A function that is called when the asset is successfully available.
+    :param: failure   A function that is called when the asset could not be retrieved.
     */
-    func get(path: String, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
-        let localPath = self.createLocalPath(path)
+    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
+        let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
-            dispatch_async(dispatch_get_main_queue()) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 success?(localPath)
                 return
             }
@@ -75,17 +83,15 @@ public class StorageCache {
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            Downloader.sharedInstance.downloadTask(NSURL(fileURLWithPath: path)!,
+            Downloader.sharedInstance.downloadTask(remoteURL,
                 localURL: NSURL(fileURLWithPath: localPath)!,
                 completion: { (result) -> Void in
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.cacheJournal.insertNewEntry(localPath)
-                        self.scheduleCleanup()
-                        if (result) {
-                            success?(localPath)
-                        } else {
-                            failure?(FlipError(error: "Error downloading media file", details: nil))
-                        }
+                    self.cacheJournal.insertNewEntry(localPath)
+                    self.scheduleCleanup()
+                    if (result) {
+                        success?(localPath)
+                    } else {
+                        failure?(FlipError(error: "Error downloading media file", details: nil))
                     }
                 }
             )
@@ -96,11 +102,11 @@ public class StorageCache {
     /**
     Inserts the data into the cache, identified by its path. This operation is synchronous.
     
-    :param: path    The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: srcPath The path where the asset is locally saved. The asset will be moved to the cache.
+    :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    :param: srcPath   The path where the asset is locally saved. The asset will be moved to the cache.
     */
-    func put(path: String, localPath srcPath: String) -> Void {
-        let toPath = self.createLocalPath(path)
+    func put(remoteURL: NSURL, localPath srcPath: String) -> Void {
+        let toPath = self.createLocalPath(remoteURL)
         
         let fileManager = NSFileManager.defaultManager()
 
@@ -115,10 +121,10 @@ public class StorageCache {
         }
     }
     
-    private func createLocalPath(path: String) -> String {
+    private func createLocalPath(remoteURL: NSURL) -> String {
         //I think the best approach here would be to generate a Hash based on the actual data,
         //but for now we're just using the last path component.
-        return "\(cacheDirectoryPath)/\(path.lastPathComponent)"
+        return cacheDirectoryPath.path!.stringByAppendingPathComponent(remoteURL.path!.lastPathComponent)
     }
     
     private func cacheHit(localPath: String) -> Bool {
@@ -140,7 +146,7 @@ public class StorageCache {
                     println("Could not remove file \(path). Error: \(error)")
                 }
             }
-            self.cacheJournal.removeFirstEntries(leastRecentlyUsed.count)
+            self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
         }
     }
     

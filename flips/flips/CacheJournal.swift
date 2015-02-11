@@ -81,7 +81,7 @@ public class CacheJournal {
         return entries[0..<upperLimit].map { $0.key }
     }
     
-    func removeFirstEntries(count: Int) -> Void {
+    func removeLRUEntries(count: Int) -> Void {
         self.entries.removeRange(0..<count)
         self.persistJournal()
     }
