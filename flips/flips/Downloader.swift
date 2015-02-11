@@ -185,17 +185,13 @@ public class Downloader : NSObject {
     }
     
     private func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
-        if (error != nil) {
-            println("Error download flip content: \(error)")
-        }
-        
         var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID]
         
-        var downloadFailed: Bool = (error != nil)
-        if (downloadFailed) {
-            userInfo.updateValue(downloadFailed, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
+        if (error != nil) {
+            println("Error download flip content: \(error)")
+            userInfo.updateValue(true, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
         }
-    
+        
         NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
     }
     
