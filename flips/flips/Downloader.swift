@@ -96,8 +96,6 @@ public class Downloader : NSObject {
         }) { (response, filePath, error) -> Void in
             self.downloadInProgressURLs.removeObject(url.absoluteString!)
 
-            let httpResponse = response as? NSHTTPURLResponse
-
             if (error != nil) {
                 println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
                 completion(success: false);
@@ -128,8 +126,6 @@ public class Downloader : NSObject {
             return localURL
             }) { (response, filePath, error) -> Void in
                 self.downloadInProgressURLs.removeObject(absoluteString)
-                
-                let httpResponse = response as? NSHTTPURLResponse
                 
                 if (error != nil) {
                     println("Could not download data from URL: \(absoluteString) ERROR: \(error)")

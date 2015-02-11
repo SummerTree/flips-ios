@@ -95,18 +95,21 @@ public class StorageCache {
     /**
     Inserts the data into the cache, identified by its path. This operation is synchronous.
     
-    :param: path The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: data The asset that is to be inserted into the cache.
+    :param: path    The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    :param: srcPath The path where the asset is locally saved. The asset will be moved to the cache.
     */
-    func put(path: String, data: NSData) -> Void {
-        let localPath = self.createLocalPath(path)
+    func put(path: String, localPath srcPath: String) -> Void {
+        let toPath = self.createLocalPath(path)
         
         let fileManager = NSFileManager.defaultManager()
 
-        //should overwrite?
-        if !self.cacheHit(localPath) {
-            fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
-            self.cacheJournal.insertNewEntry(localPath)
+        if !self.cacheHit(toPath) {
+            var error: NSError? = nil
+            fileManager.moveItemAtPath(srcPath, toPath: toPath, error: &error)
+            if (error != nil) {
+                println("Error move asset to the cache dir: \(error)")
+            }
+            self.cacheJournal.insertNewEntry(toPath)
             self.scheduleCleanup()
         }
     }
