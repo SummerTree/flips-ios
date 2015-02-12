@@ -44,17 +44,35 @@ class FlipsViewCell : UICollectionViewCell {
             var flip = flipDataSource.retrieveFlipWithId(self.flipID)
             
             if (flip.isPrivate.boolValue) {
-                let flipContentPath = flip.backgroundContentLocalPath()
-                var image: UIImage!
-                if (flip.isBackgroundContentTypeVideo()) {
-                    image = VideoHelper.generateThumbImageForFile(flipContentPath)
-                } else {
-                    image = UIImage(contentsOfFile: flipContentPath)
+                let useLocalPathFunction: (path: String) -> Void = {
+                    (path) in
+                    var image: UIImage!
+                    if (flip.isBackgroundContentTypeVideo()) {
+                        image = VideoHelper.generateThumbImageForFile(path)
+                    } else {
+                        image = UIImage(contentsOfFile: path)
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.cellImageView.image = image
+                    })
                 }
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.cellImageView.image = image
-                })
+                if (flip.owner.userID == User.loggedUser()?.userID) {
+                    let userFlipsCache = UserFlipsCache.sharedInstance
+                    userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
+                        success: {
+                            (localPath: String!) in
+                            useLocalPathFunction(localPath)
+                        },
+                        failure: {
+                            (error: FlipError) in
+                            println("Failed to get resource from cache, error: \(error)")
+                            //TODO enhance error handling
+                    })
+                } else {
+                    useLocalPathFunction(flip.backgroundContentLocalPath())
+                }
             } else {
                 let url = NSURL(string: flip.thumbnailURL)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
