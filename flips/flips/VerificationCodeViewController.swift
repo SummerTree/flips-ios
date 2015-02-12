@@ -56,6 +56,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     
+    
     // MARK: - VerificationCodeViewDelegate Methods
     
     func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
@@ -116,15 +117,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                 }
                 var deviceEntity = device as Device
 
-                // TODO: changed it! It should be executed by a DataSource
                 PersistentManager.sharedInstance.defineAsLoggedUserSync(deviceEntity.user)
-//                UserDataSource().saveDataInBackground({ (context: NSManagedObjectContext!) -> Void in
-//                    var user = deviceEntity.user.inContext(context) as User
-//                    user.me = true
-//                    AuthenticationHelper.sharedInstance.userInSession = user
-//                })
-                
-//                UserDataSource().save()
                 
                 PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -135,17 +128,6 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         self.navigateAfterValidateDevice(userDataSource)
                     })
                 })
-                
-//                var userDataSource = UserDataSource()
-//                userDataSource.syncUserData({ (success, error) -> Void in
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        let verificationCodeView = self.view as VerificationCodeView
-//                        verificationCodeView.resetVerificationCodeField()
-//                        
-//                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-//                        self.navigateAfterValidateDevice(userDataSource)
-//                    })
-//                })
             },
             failure: { (flipError) in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in

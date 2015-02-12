@@ -67,8 +67,6 @@ extension Room {
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
-//        let flipMessageDataSource = FlipMessageDataSource()
-//        flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
         PersistentManager.sharedInstance.removeAllFlipMessagesFromRoomID(self.roomID, completion: completion)
     }
     

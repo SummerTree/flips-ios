@@ -75,12 +75,9 @@ public class MessageService {
         }
         
         let room = roomDataSource.retrieveRoomWithId(roomID)
-//        let flipMessage = flipMessageDataSource.createFlipMessageWithFlips(flips, toRoom: room)
         let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(flips, toRoom: room)
         let messageJson = flipMessage.toJSON()
         
-        println("RoomPubnub id: \(room.pubnubID)")
-        println("\(messageJson)")
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
             completion(success, roomID, nil)
         }

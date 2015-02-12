@@ -69,12 +69,9 @@ public class RoomService: FlipsService {
         let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let getRoomsUrl = HOST + getURL
 
-        println("   getMyRooms: \(getRoomsUrl)")
         request.GET(getRoomsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
-            println("   getMyRooms response: \(responseObject)")
             successCompletion(self.parseGetRoomsResponse(responseObject))
         }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-            println("   getMyRooms error: \(error)")
             if (operation.responseObject != nil) {
                 let response = operation.responseObject as NSDictionary
                 failCompletion(FlipError(error: response["error"] as String!, details: nil))
@@ -87,27 +84,19 @@ public class RoomService: FlipsService {
 
     private func parseCreateRoomResponse(response: AnyObject) -> Room {
         let json = JSON(response)
-//        println("created room json: \(json)")
-//        let roomDataSource = RoomDataSource()
-//        return roomDataSource.createOrUpdateWithJson(json)
         return PersistentManager.sharedInstance.createOrUpdateRoomWithJson(json)
     }
     
     private func parseGetRoomsResponse(response: AnyObject) -> [Room] {
         let json = JSON(response)
-        println("created room json: \(json)")
-//        let roomDataSource = RoomDataSource()
-        
         var rooms = Array<Room>()
         
         if let jsonArray = json.array {
             for roomJson in jsonArray {
-//                var room = roomDataSource.createOrUpdateWithJson(roomJson)
                 var room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(roomJson)
                 rooms.append(room)
             }
         }
-        
         
         return rooms
     }

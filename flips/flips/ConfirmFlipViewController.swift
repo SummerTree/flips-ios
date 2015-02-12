@@ -118,7 +118,6 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
-//        let flipDataSource = FlipDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
         
@@ -145,29 +144,11 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
                 soundPath: self.flipAudioURL,
                 createFlipSuccessCompletion: createFlipSuccessBlock,
                 createFlipFailCompletion: createFlipFailBlock)
-//            PersistentManager.sharedInstance.createFlipWithWord(flipView.getWord(),
-//                backgroundImage: self.flipImage,
-//                soundURL: self.flipAudioURL,
-//                createFlipSuccess: createFlipSuccessBlock,
-//                createFlipFail: createFlipFailBlock)
-//            flipDataSource.createFlipWithWord(flipView.getWord(),
-//                backgroundImage: self.flipImage,
-//                soundURL: self.flipAudioURL,
-//                createFlipSuccess: createFlipSuccessBlock,
-//                createFlipFail: createFlipFailBlock)
         } else {
             PersistentManager.sharedInstance.createAndUploadFlip(self.flipWord,
                 videoURL: self.flipVideoURL!,
                 createFlipSuccessCompletion: createFlipSuccessBlock,
                 createFlipFailCompletion: createFlipFailBlock)
-//            PersistentManager.sharedInstance.createFlipWithWord(self.flipWord,
-//                videoURL: self.flipVideoURL!,
-//                createFlipSuccess: createFlipSuccessBlock,
-//                createFlipFail: createFlipFailBlock)
-//            flipDataSource.createFlipWithWord(self.flipWord,
-//                videoURL: self.flipVideoURL!,
-//                createFlipSuccess: createFlipSuccessBlock,
-//                createFlipFail: createFlipFailBlock)
         }
     }
     

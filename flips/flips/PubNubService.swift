@@ -185,8 +185,8 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
-//        println("Did receive message. Forwading it to delegate.")
-//        println("pnMessage.channel.name: \(pnMessage.channel.name)")
+        println("Did receive message. Forwading it to delegate.")
+        println("pnMessage.channel.name: \(pnMessage.channel.name)")
 
         let messageJSON: JSON = JSON(pnMessage.message)
         self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
@@ -199,7 +199,7 @@ public class PubNubService: FlipsService, PNDelegate {
         let channel = PNChannel.channelWithName(pubnubID) as PNChannel
 
         PubNub.sendMessage(message, toChannel: channel, storeInHistory: true) { (state, data) -> Void in
-//            println("message sent: \(data)")
+            println("message sent: \(data)")
             switch (state) {
             case PNMessageState.Sending:
                 // PubNub client is sending message at this moment. 'data' stores reference on PNMessage instance which is processing at this moment.

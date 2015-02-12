@@ -264,12 +264,4 @@ public class FlipService: FlipsService {
         
         return nil
     }
-    
-//    private func parseCreateFlipResponse(response: AnyObject, inContext context: NSManagedObjectContext) -> Flip? {
-//        let json = JSON(response)
-//        let flipDataSource = FlipDataSource(context: context)
-//        return flipDataSource.createFlipWithJson(json)
-////        return flipDataSource.createOrUpdateFlipWithJson(json)
-//    }
-    
 }

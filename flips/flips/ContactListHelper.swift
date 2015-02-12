@@ -53,8 +53,6 @@ public class ContactListHelper {
     }
     
     private func retrieveContacts() -> Array<ContactListHelper.Contact> {
-//        let contactDataSource = ContactDataSource()
-        let dataSourceManager = PersistentManager.sharedInstance
         let people = self.addressBook.people() as Array<RHPerson>
         var contacts = Array<ContactListHelper.Contact>()
         for person in people {
@@ -65,8 +63,7 @@ public class ContactListHelper {
                     var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
                     let phoneNumber: String! = phones.valueAtIndex(i) as String
                     let phoneType = ABAddressBookCopyLocalizedLabel(phones.labelAtIndex(i)).takeRetainedValue() as NSString
-                    dataSourceManager.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-//                    contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+                    PersistentManager.sharedInstance.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
                     contacts.append(contact)
                 }
             }

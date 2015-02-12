@@ -57,10 +57,10 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let downloader = Downloader.sharedInstance
         let flips = flipMessage.flips
 
-//        println("New Message Received")
-//        println("   From: \(flipMessage.from.firstName)")
-//        println("   Sent at: \(flipMessage.createdAt)")
-//        println("   #flips: \(flips.count)")
+        println("New Message Received")
+        println("   From: \(flipMessage.from.firstName)")
+        println("   Sent at: \(flipMessage.createdAt)")
+        println("   #flips: \(flips.count)")
         
         var isTemporary = true
         if let loggedUser = User.loggedUser() {
@@ -130,9 +130,6 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             // Message Received
             let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
             
-//                let flipMessageDataSource = FlipMessageDataSource()
-//                let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
-            
             if (flipMessage != nil) {
                 self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
             }
@@ -148,8 +145,6 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     func onRoomReceived(messageJson: JSON) {
-//        let roomDataSource = RoomDataSource()
-//        let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
         let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT])
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
