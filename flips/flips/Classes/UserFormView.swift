@@ -88,6 +88,7 @@ class UserFormView : UIView, UITextFieldDelegate {
 		var dateFormatter = NSDateFormatter()
 		dateFormatter.dateFormat = NSDateFormatter.dateFormatFromTemplate("MM/dd/yyyy", options: 0, locale: NSLocale.currentLocale())
 		birthdayTextField.text = dateFormatter.stringFromDate(picker.date)
+		self.validateFields()
 	}
     
     private func setupCell(placeHolder: String, leftImage: UIImage? = nil) -> UITextField {
