@@ -42,7 +42,6 @@ class FlipDataSource : BaseDataSource {
         var entity: Flip!
         entity = Flip.createInContext(currentContext) as Flip
         self.fillFlip(entity, withJsonData: json)
-//        self.save()
         
         return entity
     }
@@ -66,36 +65,11 @@ class FlipDataSource : BaseDataSource {
         } else if (flip.backgroundURL.isVideoPath()) {
             flip.setBackgroundContentType(BackgroundContentType.Video)
         }
-        
-//        let ownerJson = json[FlipJsonParams.OWNER]
-//		// if response JSON contains owner data (owner is populated)
-//		var flipOwnerID = ownerJson[FlipJsonParams.ID].stringValue
-//		if (flipOwnerID.isEmpty) {
-//			// owner is not populated, it contains only owner ID
-//			flipOwnerID = ownerJson.stringValue
-//		}
-//        if (!flipOwnerID.isEmpty) {
-//            let userDataSource = UserDataSource(context: currentContext)
-////            flip.owner = userDataSource.retrieveUserWithId(flipOwnerID)
-//            flip.owner = userDataSource.createOrUpdateUserWithJson(ownerJson)
-//        }
     }
     
+
     // MARK: - Public Methods
     
-//    func createOrUpdateFlipWithJson(json: JSON) -> Flip {
-//        var flipID = json[FlipJsonParams.ID].stringValue
-//        var flip = self.getFlipById(flipID)
-//        
-//        if (flip == nil) {
-//            flip = self.createEntityWithJson(json)
-//        } else {
-//            self.fillFlip(flip, withJsonData: json)
-////            self.save()
-//        }
-//        
-//        return flip
-//    }
     func createFlipWithJson(json: JSON) -> Flip {
         return self.createEntityWithJson(json)
     }
@@ -112,51 +86,6 @@ class FlipDataSource : BaseDataSource {
         flipInContext.owner = ownerInContext
     }
     
-//    func createFlipWithWord(word: String, backgroundImage: UIImage?, soundURL: NSURL?, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
-//        let cacheHandler = CacheHandler.sharedInstance
-//        let flipService = FlipService()
-//        
-//        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundURL, uploadFlipSuccessCallback: { (flip) -> Void in
-//
-//            flip.owner = User.loggedUser()!.inContext(self.currentContext) as User
-//            flip.setBackgroundContentType(BackgroundContentType.Image)
-//            
-//            if (backgroundImage != nil) {
-//                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
-//            }
-//            
-//            if (soundURL != nil) {
-//                cacheHandler.saveDataAtPath(soundURL!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
-//            }
-//            
-//            createFlipSuccess(flip)
-//        }, uploadFlipFailCallBack: { (flipError) -> Void in
-//            createFlipFail(flipError!)
-//        })
-//    }
-    
-//    func createFlipWithWord(word: String, videoURL: NSURL, createFlipSuccess: CreateFlipSuccess, createFlipFail: CreateFlipFail) {
-//        let cacheHandler = CacheHandler.sharedInstance
-//        let flipService = FlipService()
-//        
-//        flipService.createFlip(word, videoPath: videoURL, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
-//            var userDataSource = UserDataSource(context: self.currentContext)
-//            flip.owner = User.loggedUser()
-//            flip.setBackgroundContentType(BackgroundContentType.Video)
-//            
-//            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
-//                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
-//            }
-//            
-//            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
-//            createFlipSuccess(flip)
-//        }, createFlipFailCallBack: { (flipError) -> Void in
-//            createFlipFail(flipError!)
-//        })
-//    }
-    
-    
-    // TODO: Bruno - I need to check if it is working properly
     // This flip is never uploaded to the server. It is used only via Pubnub
     func createEmptyFlipWithWord(word: String) -> Flip {
         var flip: Flip! = Flip.MR_createEntity() as Flip
@@ -167,7 +96,6 @@ class FlipDataSource : BaseDataSource {
         return flip
     }
 
-    // TODO: remove it
     func retrieveFlipWithId(id: String) -> Flip! {
         return self.getFlipById(id)
     }
@@ -177,10 +105,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
-//        self.saveDataInBackground { (context: NSManagedObjectContext!) -> Void in
         flip.setBackgroundContentType(contentType)
-//        }
-//        self.save()
     }
     
     func getMyFlips() -> [Flip] {
@@ -240,5 +165,4 @@ class FlipDataSource : BaseDataSource {
         
         return resultDictionary
     }
-
 }

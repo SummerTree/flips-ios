@@ -44,30 +44,6 @@ class ContactDataSource : BaseDataSource {
     
     // MARK: - Public Methods
     
-//    func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
-//        var contact = self.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-//        
-//        if (contact == nil) {
-//            contact = self.createEntityWith(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-//        } else {
-//            self.fillContact(contact!, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-//        }
-//
-////        self.save()
-//        
-//        return contact!
-//    }
-    
-//    func createContactWithUser(user: User, contactID: String, andPhoneType phoneType: String) -> Contact {
-//        let userInContext = user.inContext(currentContext) as User
-//        
-//        let contact = self.createEntityWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phoneType)
-//        contact.contactID = contactID
-//        contact.contactUser = user
-//
-//        return contact
-//    }
-
     func createContactWith(contactID: String, firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
         let contact = self.createEntityWith(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         contact.contactID = contactID
@@ -86,7 +62,6 @@ class ContactDataSource : BaseDataSource {
         self.fillContact(contactInContext, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         return contactInContext
     }
-    
     
     func sortedByUserFirstNameLastName() -> [NSSortDescriptor] {
         let sortedBy = [
@@ -166,7 +141,6 @@ class ContactDataSource : BaseDataSource {
     
     func setContactUserAndUpdateContact(user: User!, contact: Contact!) {
         contact.contactUser = user
-//        self.save()
     }
     
     
@@ -220,11 +194,6 @@ class ContactDataSource : BaseDataSource {
         }
         
         let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
-        
-        
-        var contacts = Contact.findAllWithPredicate(compound) as [Contact]
-        println("contacts: \(contacts)")
-
         return Contact.findFirstWithPredicate(compound) as? Contact
     }
 }

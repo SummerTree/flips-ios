@@ -24,14 +24,8 @@ struct DeviceJsonParams {
 class DeviceDataSource : BaseDataSource {
     
     func createEntityWithJson(json : JSON) -> Device {
-//        let userDataSource = UserDataSource(context: currentContext)
-        
         var entity = Device.createInContext(currentContext) as Device
-        
         self.fillDevice(entity, withJson: json)
-        
-//        entity.user = userDataSource.retrieveUserWithId(json[DeviceJsonParams.USER].stringValue) as User
-        
         return entity as Device
     }
     

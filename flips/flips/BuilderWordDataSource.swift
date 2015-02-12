@@ -21,7 +21,6 @@ class BuilderWordDataSource: BaseDataSource {
     func cleanWordsFromServer() {
         var predicate = NSPredicate(format: "\(BuilderWordAttributes.FROM_SERVER) == true")
         BuilderWord.deleteAllMatchingPredicate(predicate, inContext: currentContext)
-//        self.save()
     }
     
     func addWords(words: [String], fromServer: Bool) {
@@ -35,7 +34,6 @@ class BuilderWordDataSource: BaseDataSource {
                 builderWord.addedAt = NSDate()
             }
         }
-//        self.save()
     }
     
     func addWord(word: String, fromServer: Bool) -> Bool {
@@ -51,7 +49,6 @@ class BuilderWordDataSource: BaseDataSource {
             builderWord.addedAt = NSDate()
             result = true
         }
-//        self.save()
         
         return result
     }
@@ -64,7 +61,5 @@ class BuilderWordDataSource: BaseDataSource {
         println("\nRemoving builder word: \(word)")
         var predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
         BuilderWord.deleteAllMatchingPredicate(predicate, inContext: currentContext)
-
-//        self.save()
     }
 }

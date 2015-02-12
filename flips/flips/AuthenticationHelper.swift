@@ -15,30 +15,7 @@ import Foundation
 public class AuthenticationHelper: NSObject {
 
     private let LOGIN_USERNAME_KEY = "username"
-    
-//    var userInSession: User! {
-//        get {
-//            if let user = self.userInSession {
-//                return user.inContext(NSManagedObjectContext.MR_defaultContext()) as User
-//            }
-//           return nil
-//        }
-//        set(newUser) {
-//            if (newUser != nil) {
-//                self.userInSession = newUser
-//                println("User pubnubId: '\(newUser.pubnubID)'")
-//                PubNubService.sharedInstance.connect()
-//                
-//                // Used to auto-fill the field in the login screen
-//                saveAuthenticatedUsername(newUser.username)
-//            }
-//        }
-//    }
-    
-//    func userInSession() -> User! {
-//        return self.userInSession.inContext(NSManagedObjectContext.MR_defaultContext()) as User
-//    }
-    
+
     func onLogin(user: User) {
         PubNubService.sharedInstance.connect()
         saveAuthenticatedUsername(user.username)

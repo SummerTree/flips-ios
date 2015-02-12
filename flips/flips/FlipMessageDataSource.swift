@@ -34,26 +34,11 @@ class FlipMessageDataSource : BaseDataSource {
         let fromUserID = json[FlipMessageJsonParams.FROM_USER_ID].stringValue
         let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         
-//        var entity: FlipMessage! = self.getFlipMessageById(flipMessageID)
-//        if (entity != nil) {
-//            return entity // if the user already has his message do not recreate
-//        }
-
         var entity = FlipMessage.createInContext(currentContext) as FlipMessage
         entity.flipMessageID = flipMessageID
-        
-//        entity.from = userDataSource.retrieveUserWithId(fromUserID)
         entity.createdAt = NSDate(dateTimeString: json[FlipMessageJsonParams.SENT_AT].stringValue)
         entity.receivedAt = receivedDate
         entity.notRead = true
-        
-//        let flipDataSource = FlipDataSource(context: currentContext)
-//        let content = json[FlipMessageJsonParams.CONTENT]
-//        
-//        for (index: String, flipJson: JSON) in content {
-//            var flip = flipDataSource.createOrUpdateFlipWithJson(flipJson)
-//            entity.addFlip(flip, inContext: currentContext)
-//        }
         
         return entity
     }
@@ -90,20 +75,7 @@ class FlipMessageDataSource : BaseDataSource {
             return nil
         }
 
-//        let roomDataSource = RoomDataSource(context: currentContext)
-//        let room = roomDataSource.getRoomWithPubnubID(pubnubID) as Room!
-        
-        let flipMessage = self.createEntityWithJson(json, andReceivedDate: receivedDate)
-//        flipMessage.room = room
-        
-        // Only update room's lastMessageReceivedAt if earlier than this message's createdAt
-//        if (room.lastMessageReceivedAt == nil || (room.lastMessageReceivedAt.compare(receivedDate) == NSComparisonResult.OrderedAscending)) {
-//            flipMessage.room.lastMessageReceivedAt = receivedDate
-//        }
-        
-//        self.save()
-        
-        return flipMessage
+        return self.createEntityWithJson(json, andReceivedDate: receivedDate)
     }
     
     func associateFlipMessage(flipMessage: FlipMessage, withUser user: User, flips: [Flip], andRoom room: Room) {
@@ -143,7 +115,6 @@ class FlipMessageDataSource : BaseDataSource {
             entity.addFlip(flip.inContext(currentContext) as Flip, inContext: currentContext)
         }
         
-//        self.save()
         return entity
     }
     
@@ -174,12 +145,6 @@ class FlipMessageDataSource : BaseDataSource {
             let flipMessage = room.flipMessages.objectAtIndex(i) as FlipMessage
             flipMessage.removed = true
         }
-//        }, completionBlock: completion)
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-//            self.save()
-
-//            completion(true)
-//        })
     }
     
     func flipMessagesForRoomID(roomID: String) -> [FlipMessage] {

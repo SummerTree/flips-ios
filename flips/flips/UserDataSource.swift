@@ -59,18 +59,6 @@ class UserDataSource : BaseDataSource {
         
         user.userID = json[UserJsonParams.ID].stringValue
         user.username = json[UserJsonParams.USERNAME].stringValue
-        
-//        // local user doesn't have device
-//        if (user.device == nil) {
-//            
-//            // remote user has device
-//            if (json[UserJsonParams.DEVICES] != nil && json[UserJsonParams.DEVICES].array?.count > 0) {
-//                let device = json[UserJsonParams.DEVICES].array?[0]
-//                var deviceDataSource = DeviceDataSource(context: currentContext)
-//                user.device = deviceDataSource.createEntityWithJson(JSON(device!.object))
-//            }
-//        }
-        
         user.firstName = json[UserJsonParams.FIRST_NAME].stringValue
         user.lastName = json[UserJsonParams.LAST_NAME].stringValue
         user.nickname = json[UserJsonParams.NICKNAME].stringValue
@@ -95,51 +83,14 @@ class UserDataSource : BaseDataSource {
     // MARK - Public Methods
     
     func createUserWithJson(json: JSON, isLoggedUser: Bool = false) -> User {
-//        let userID = json[UserJsonParams.ID].stringValue
-        
-//        var user = self.getUserById(userID)
-        
-//        if (user == nil) {
         var user = self.createEntityWithJson(json)
-//        } else {
-//            self.fillUser(user!, withJsonData: json)
-//        }
-        
         user.me = isLoggedUser
-        
-//        let contactDataSource = ContactDataSource(context: currentContext)
-//        var contacts = contactDataSource.retrieveContactsWithPhoneNumber(user!.phoneNumber)
-        
-//        let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
-//        let authenticatedId = AuthenticationHelper.sharedInstance.userInSession?.userID
-        
-//        if (contacts.isEmpty && isAuthenticated && authenticatedId != user?.userID) {
-//            var facebookID = user?.facebookID
-//            var phonetype = (facebookID != nil) ? facebookID : ""
-//            
-//            var contact = contactDataSource.createOrUpdateContactWith(user!.firstName, lastName: user!.lastName, phoneNumber: user!.phoneNumber, phoneType: phonetype!)
-//            contactDataSource.setContactUserAndUpdateContact(user, contact: contact)
-//        }
-//        
-//        for contact in contacts {
-//            var contactInContext = contact.inContext(currentContext) as Contact
-//            contactDataSource.setContactUserAndUpdateContact(user, contact: contactInContext)
-//            user?.addContactsObject(contactInContext)
-//        }
-        
         return user
     }
     
     func updateUser(user: User, withJson json: JSON, isLoggedUser: Bool = false) -> User {
         var userInContext = user.inContext(currentContext) as User
-        
-        if (userInContext.userID == "1275") {
-            println("log")
-        }
-
         self.fillUser(userInContext, withJsonData: json)
-//        userInContext.me = isLoggedUser
-        
         return userInContext
     }
     
@@ -161,28 +112,12 @@ class UserDataSource : BaseDataSource {
         let contactDataSource = ContactDataSource(context: currentContext)
         var userInContext = user.inContext(currentContext) as User
         
-//        if (userContact != nil) {
-//            var userContactInContext = currentContext.existingObjectWithID(userContact.objectID, error: nil) as Contact
-//            var userContactInContext = userContact?.inContext(currentContext) as Contact
-//            contactDataSource.setContactUserAndUpdateContact(userInContext, contact: userContact)
-//        }
-        
         for contact in contacts {
             var contactInContext = contact.inContext(currentContext) as Contact
             contactDataSource.setContactUserAndUpdateContact(userInContext, contact: contactInContext)
             userInContext.addContactsObject(contactInContext)
         }
     }
-    
-//    func retrieveUserWithId(id: String) -> User? {
-//        var user = self.getUserById(id)
-//        
-//        if (user == nil) {
-//            println("User (\(id)) not found in the database and it mustn't happen. Check why he wasn't added to database yet.")
-//        }
-//        
-//        return user
-//    }
     
     func getUserById(id: String) -> User? {
         return User.findFirstByAttribute(UserAttributes.USER_ID, withValue: id) as? User
@@ -213,83 +148,6 @@ class UserDataSource : BaseDataSource {
             })
         }
     }
-    
-//    func syncUserData(callback: UserSyncFinished) {
-//        println("\nsyncUserData")
-//        let roomService = RoomService()
-//        let builderService = BuilderService()
-//        
-//        
-//        var error: FlipError?
-//        
-//        let group = dispatch_group_create()
-//        
-//        dispatch_group_enter(group)
-//        let flipDataSource = FlipDataSource(context: currentContext)
-//        userService.getMyFlips({ (jsonResponse) -> Void in
-//            let myFlipsAsJSON = jsonResponse.array
-//            
-//            self.flipsDownloadCount.value = countElements(myFlipsAsJSON!)
-//            self.flipsDownloadCounter.value = 1
-//            
-//            for myFlipJson in myFlipsAsJSON! {
-//                let flip = flipDataSource.createOrUpdateFlipWithJson(myFlipJson)
-//                Downloader.sharedInstance.downloadDataForFlip(flip, isTemporary: false, completion: { (error) -> Void in
-//                    if (error != nil) {
-//                        println("Error downloading data for my flip (\(flip.flipID))")
-//                    }
-//                    
-//                    if (self.isDownloadingFlips) {
-//                        NSLog("Downloaded flips: \(self.flipsDownloadCounter.value) of \(self.flipsDownloadCount.value)")
-//                        self.delegate?.userDataSource?(self, didDownloadFlip: flip)
-//                        
-//                        self.flipsDownloadCounter.value++
-//                    } else {
-//                        NSLog("Downloads complete!")
-//                        self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
-//                    }
-//                })
-//            }
-//            dispatch_group_leave(group)
-//            }, failCompletion: { (flipError) -> Void in
-//                error = flipError
-//                dispatch_group_leave(group)
-//        })
-//        
-//        dispatch_group_enter(group)
-//        roomService.getMyRooms({ (rooms) -> Void in
-//            for room in rooms {
-//                var roomInContext = room.inContext(NSManagedObjectContext.contextForCurrentThread()) as Room
-//                println("   - subscribing to room: \(roomInContext.roomID)")
-//                PubNubService.sharedInstance.subscribeToChannelID(roomInContext.pubnubID)
-//            }
-//            dispatch_group_leave(group)
-//            }, failCompletion: { (flipError) -> Void in
-//                error = flipError
-//                dispatch_group_leave(group)
-//        })
-//        
-//        dispatch_group_enter(group)
-//        builderService.getSuggestedWords({ (words) -> Void in
-////            let builderWordDataSource = BuilderWordDataSource(context: currentContext)
-////            builderWordDataSource.addWords(words, fromServer: true)
-//            PersistentManager.sharedInstance.addBuilderWords(words, fromServer: true)
-//            dispatch_group_leave(group)
-//            }, failCompletion: { (flipError) -> Void in
-//                error = flipError
-//                dispatch_group_leave(group)
-//        })
-//        
-//        dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
-//        
-//        if (error != nil) {
-//            println("sync fail\n")
-//            callback(false, error)
-//            return
-//        }
-//        
-//        callback(true, nil)
-//    }
     
     // Users from the App that are my contacts
     func getMyUserContacts() -> [User] {

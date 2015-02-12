@@ -30,6 +30,7 @@ class RoomDataSource : BaseDataSource {
     
     private let FLIPBOYS_USERNAME: String = "flipboys@flipsapp.com"
     
+    
     // MARK: - Creators
     
     private func createEntityWithJson(json: JSON) -> Room {
@@ -44,36 +45,10 @@ class RoomDataSource : BaseDataSource {
             println("Possible error. Will change romom id from (\(room.roomID)) to (\(json[RoomJsonParams.ROOM_ID].stringValue))")
         }
         
-//        let userDataSource = UserDataSource(context: currentContext)
-
         room.name = json[RoomJsonParams.NAME].stringValue
         room.pubnubID = json[RoomJsonParams.PUBNUB_ID].stringValue
         room.roomID = json[RoomJsonParams.ROOM_ID].stringValue
-
-//        var content = json[RoomJsonParams.PARTICIPANTS]
-//        for (index: String, json: JSON) in content {
-//            // ONLY USERS CAN PARTICIPATE IN A ROOM
-//            var user = userDataSource.createOrUpdateUserWithJson(json)
-//            room.addParticipantsObject(user as User)
-//        }
-//        
-//        room.admin = userDataSource.retrieveUserWithId(json[RoomJsonParams.ADMIN_ID].stringValue) as User
     }
-    
-//    func createOrUpdateWithJson(json: JSON) -> Room {
-//        let roomID = json[RoomJsonParams.ROOM_ID].stringValue
-//
-//        var room = self.getRoomById(roomID)
-//            
-//        if (room == nil) {
-//            room = self.createEntityWithJson(json)
-//        } else {
-//            self.fillRoom(room!, withJson: json)
-//        }
-////        self.save()
-//        
-//        return room!
-//    }
     
     func createRoomWithJson(json: JSON) -> Room {
         return self.createEntityWithJson(json)
@@ -98,7 +73,6 @@ class RoomDataSource : BaseDataSource {
     
     // MARK: - Getters
     
-    // TODO: remove it
     func retrieveRoomWithId(roomId: String) -> Room {
         var room = self.getRoomById(roomId)
         
@@ -188,5 +162,4 @@ class RoomDataSource : BaseDataSource {
             return (false, nil)
         }
     }
-    
 }
