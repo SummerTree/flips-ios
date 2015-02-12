@@ -134,29 +134,39 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     func showFlip(flipId: String, withWord word: String) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-            let filePath = flip.backgroundContentLocalPath()
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                UIView.animateWithDuration(1.0, animations: { () -> Void in
-                    if (flip.isBackgroundContentTypeVideo()) {
-                        self.flipViewer.setWord(word)
-                        self.flipViewer.setVideoURL(NSURL.fileURLWithPath(filePath)!)
-                        self.cameraPreview.removeObservers()
-                        self.cameraPreview.alpha = 0.0
-                        self.flipViewer.alpha = 1.0
-                    } else if (flip.isBackgroundContentTypeImage()) {
-                        var image = UIImage(contentsOfFile: filePath)
-                        if (flip.hasAudio()) {
-                            self.flipViewer.setAudioURL(NSURL.fileURLWithPath(flip.soundContentLocalPath()!)!)
-                        }
-                        self.showImage(image!, andText: word)
-                    } else {
-                        println("### Error ###")
-                        println("### Flip id [\(flipId)) contains a wrong content type.")
-                    }
-                    self.bringSubviewToFront(self.flipViewer)
-                })
+            let userFlipsCache = UserFlipsCache.sharedInstance
+            let getResponse = userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
+                success: { (localPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        UIView.animateWithDuration(1.0, animations: { () -> Void in
+                            if (flip.isBackgroundContentTypeVideo()) {
+                                self.flipViewer.setWord(word)
+                                self.flipViewer.setVideoURL(NSURL.fileURLWithPath(localPath)!)
+                                self.cameraPreview.removeObservers()
+                                self.cameraPreview.alpha = 0.0
+                                self.flipViewer.alpha = 1.0
+                            } else if (flip.isBackgroundContentTypeImage()) {
+                                var image = UIImage(contentsOfFile: localPath)
+                                if (flip.hasAudio()) {
+                                    self.flipViewer.setAudioURL(NSURL.fileURLWithPath(flip.soundContentLocalPath()!)!)
+                                }
+                                self.showImage(image!, andText: word)
+                            } else {
+                                println("### Error ###")
+                                println("### Flip id [\(flipId)) contains a wrong content type.")
+                            }
+                            self.bringSubviewToFront(self.flipViewer)
+                        })
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                    //TODO enhance error handling
             })
+            if (getResponse == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                //TODO show loading spinner
+            }
         } else {
             UIAlertView.showUnableToLoadFlip()
         }
