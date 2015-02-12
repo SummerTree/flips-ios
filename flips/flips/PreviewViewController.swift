@@ -152,6 +152,14 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                         } else {
                             var message = self.SEND_MESSAGE_ERROR_MESSAGE
                             if (flipError != nil) {
+								if let errorDetails = flipError?.details {
+									if (errorDetails == "Forbidden") {
+										AuthenticationHelper.sharedInstance.logout()
+										let navigationController: UINavigationController = self.presentingViewController as UINavigationController
+										navigationController.popToRootViewControllerAnimated(true)
+										self.dismissViewControllerAnimated(true, completion:nil)
+									}
+								}
                                 message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
                             }
                             

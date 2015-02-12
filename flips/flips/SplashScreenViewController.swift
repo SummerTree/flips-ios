@@ -106,10 +106,19 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
             AuthenticationHelper.sharedInstance.userInSession = loggedUser
             var userDataSource = UserDataSource()
             userDataSource.syncUserData({ (success, error) -> Void in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.openInboxViewController(userDataSource)
-                })
-            })
+				if let errorDetails = error?.details {
+					if (errorDetails == "Forbidden") {
+						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+							AuthenticationHelper.sharedInstance.logout()
+							self.openLoginViewController()
+						})
+					} else {
+						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+							self.openInboxViewController(userDataSource)
+						})
+					}
+				}
+			})
         } else {
             openLoginViewController()
         }

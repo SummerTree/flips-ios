@@ -124,6 +124,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     flipDataSource.createOrUpdateFlipWithJson(stockFlip)
                 }
                 }, failure: { (flipError) -> Void in
+					if let errorDetails = flipError!.details {
+						if (errorDetails == "Forbidden") {
+							AuthenticationHelper.sharedInstance.logout()
+							let navigationController: UINavigationController = self.presentingViewController as UINavigationController
+							navigationController.popToRootViewControllerAnimated(true)
+							self.dismissViewControllerAnimated(true, completion:nil)
+						}
+					}
                     if (flipError != nil) {
                         println("Error \(flipError)")
                     }

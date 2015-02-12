@@ -208,13 +208,18 @@ public class UserService: FlipsService {
                 success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("UserService.update() - Forbidden: 403")
+					details = "Forbidden"
+				}
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     // TODO: we need to identify what was the problem to show the appropriate message
                     //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(FlipError(error: response["error"] as String!, details: nil))
+                    failure(FlipError(error: response["error"] as String!, details: details))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details : details))
                 }
             }
         )
@@ -309,11 +314,16 @@ public class UserService: FlipsService {
                 success()
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("UserService.updatePassword() - Forbidden: 403")
+					details = "Forbidden"
+				}
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil))
+                    failure(FlipError(error: response["error"] as String!, details : details))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details : details))
                 }
             }
         )
@@ -375,15 +385,18 @@ public class UserService: FlipsService {
                                     println("Error: [\(error))")
                                 }, finally: nil)
                         }
-                        
                         success(nil)
-                        
                     }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+						var details : String = ""
+						if (FlipsService.isForbiddenRequest(error)) {
+							println("UserService.importFacebookFriends() - Forbidden: 403")
+							details = "Forbidden"
+						}
                         if (operation.responseObject != nil) {
                             var response = operation.responseObject as NSDictionary
-                            failure(FlipError(error: response["error"] as String!, details:nil))
+                            failure(FlipError(error: response["error"] as String!, details : details))
                         } else {
-                            failure(FlipError(error: error.localizedDescription, details:nil))
+                            failure(FlipError(error: error.localizedDescription, details : details))
                         }
                         
                 })
@@ -441,11 +454,16 @@ public class UserService: FlipsService {
                     success(nil)
                     
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+					var details : String = ""
+					if (FlipsService.isForbiddenRequest(error)) {
+						println("UserService.uploadContacts() - Forbidden: 403")
+						details = "Forbidden"
+					}
                     if (operation.responseObject != nil) {
                         var response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details:nil))
+                        failure(FlipError(error: response["error"] as String!, details : details))
                     } else {
-                        failure(FlipError(error: error.localizedDescription, details:nil))
+                        failure(FlipError(error: error.localizedDescription, details : details))
                     }
                
             })
@@ -473,11 +491,16 @@ public class UserService: FlipsService {
                 successCompletion(JSON(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("UserService.getMyFlips() - Forbidden: 403")
+					details = "Forbidden"
+				}
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
+                    failCompletion(FlipError(error: response["error"] as String!, details: details))
                 } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
+                    failCompletion(FlipError(error: error.localizedDescription, details : details))
                 }
             }
         )

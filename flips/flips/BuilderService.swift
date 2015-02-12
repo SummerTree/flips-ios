@@ -31,11 +31,16 @@ public class BuilderService: FlipsService {
         request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
             }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("BuilderService.getSuggestedWords() - Forbidden: 403")
+					details = "Forbidden"
+				}
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
+                    failCompletion(FlipError(error: response["error"] as String!, details: details))
                 } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
+                    failCompletion(FlipError(error: error.localizedDescription, details : details))
                 }
         }
     }

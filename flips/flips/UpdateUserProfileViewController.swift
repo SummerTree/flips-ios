@@ -97,6 +97,14 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
                 self.navigationController?.popViewControllerAnimated(true)
                 self.hideActivityIndicator()
             }) { (flipError) -> Void in
+				if let errorDetails = flipError?.details {
+					if (errorDetails == "Forbidden") {
+						AuthenticationHelper.sharedInstance.logout()
+						let navigationController: UINavigationController = self.presentingViewController as UINavigationController
+						navigationController.popToRootViewControllerAnimated(true)
+						self.dismissViewControllerAnimated(true, completion:nil)
+					}
+				}
                 self.hideActivityIndicator()
                 let alertView = UIAlertView(title: "Error updating user", message: flipError?.error!, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()

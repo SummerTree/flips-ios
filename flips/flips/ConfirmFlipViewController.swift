@@ -128,6 +128,13 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
             self.confirmFlipView.hideActivityIndicator()
         }
         var createFlipFailBlock : CreateFlipFail = { (flipError) -> Void in
+			if let errorDetails = flipError.details {
+				if (errorDetails == "Forbidden") {
+					AuthenticationHelper.sharedInstance.logout()
+					self.navigationController!.popToRootViewControllerAnimated(true)
+					self.dismissViewControllerAnimated(true, completion:nil)
+				}
+			}
             let errorTitle = flipError.error?
             let errorMessage = flipError.details?
             self.confirmFlipView.hideActivityIndicator()

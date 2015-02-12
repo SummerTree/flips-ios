@@ -53,11 +53,19 @@ public class DeviceService: FlipsService {
                 success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("DeviceService.createDevice() - Forbidden: 403")
+					details = "Forbidden"
+				}
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
+					if (response["details"] != nil) {
+						details = response["details"] as String
+					}
+                    failure(FlipError(error: response["error"] as String!, details: details))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details : details))
                 }
             }
         )
@@ -98,19 +106,27 @@ public class DeviceService: FlipsService {
                 success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
-                }
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("DeviceService.verifyDevice() - Forbidden: 403")
+					details = "Forbidden"
+				}
+				if (operation.responseObject != nil) {
+					let response = operation.responseObject as NSDictionary
+					if (response["details"] != nil) {
+						details = response["details"] as String
+					}
+					failure(FlipError(error: response["error"] as String!, details: details))
+				} else {
+					failure(FlipError(error: error.localizedDescription, details : details))
+				}
             }
         )
     }
-    
-    
+	
+	
     // MARK: - Data Structures
-    
+	
     struct RequestParams {
         static let PHONE_NUMBER = "phoneNumber"
         static let PLATFORM = "platform"
