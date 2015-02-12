@@ -110,11 +110,11 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getRoomById(roomId: String) -> Room? {
-        return Room.findFirstByAttribute(RoomAttributes.ROOM_ID, withValue: roomId, inContext: currentContext) as? Room
+        return Room.findFirstByAttribute(RoomAttributes.ROOM_ID, withValue: roomId) as? Room
     }
     
     func getAllRooms() -> [Room] {
-        return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true, inContext: currentContext) as [Room]
+        return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true) as [Room]
     }
     
     func getFlipboysRoom() -> Room? {
@@ -132,7 +132,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getMyRooms() -> [Room] {
-        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as [Room]
+        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false) as [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
             if (room.flipMessagesNotRemoved().count > 0) {
@@ -165,7 +165,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getRoomWithPubnubID(pubnubID: String) -> Room? {
-        return Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID, inContext: currentContext) as? Room
+        return Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID) as? Room
     }
     
     func hasRoomWithUserId(userId: String) -> (hasRoom: Bool, room: Room?) {

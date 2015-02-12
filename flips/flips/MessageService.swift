@@ -57,9 +57,10 @@ public class MessageService {
             return
         }
         
-        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+        let roomInContext = room.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        PubNubService.sharedInstance.subscribeToChannelID(roomInContext.pubnubID)
         
-        self.sendMessage(flipIds, roomID: room.roomID, completion: completion)
+        self.sendMessage(flipIds, roomID: roomInContext.roomID, completion: completion)
     }
     
     func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
