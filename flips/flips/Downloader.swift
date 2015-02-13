@@ -19,7 +19,7 @@ let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY: String = "download_finished_n
 
 public class Downloader : NSObject {
     
-    let TIME_OUT_INTERVAL: NSTimeInterval = 60 //secconds
+    let TIME_OUT_INTERVAL: NSTimeInterval = 60 //seconds
     let downloadQueue =  dispatch_queue_create("download flip queue", nil)
     private var downloadInProgressURLs: NSHashTable!
     
@@ -96,14 +96,43 @@ public class Downloader : NSObject {
         }) { (response, filePath, error) -> Void in
             self.downloadInProgressURLs.removeObject(url.absoluteString!)
 
-            let httpResponse = response as? NSHTTPURLResponse
-
             if (error != nil) {
                 println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
                 completion(success: false);
             } else {
                 completion(success: true);
             }
+        }
+        
+        downloadTask.resume()
+    }
+    
+    // MARK: - New Download Method, used by StorageCache
+    
+    func downloadTask(url: NSURL, localURL:NSURL, completion:((success: Bool) -> Void)) {
+        let absoluteString = url.absoluteString!
+        if self.downloadInProgressURLs.containsObject(absoluteString) {
+            return
+        }
+        
+        downloadInProgressURLs.addObject(absoluteString)
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.timeoutInterval = TIME_OUT_INTERVAL
+        
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let manager = AFURLSessionManager(sessionConfiguration: configuration)
+        var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
+            return localURL
+            }) { (response, filePath, error) -> Void in
+                self.downloadInProgressURLs.removeObject(absoluteString)
+                
+                if (error != nil) {
+                    println("Could not download data from URL: \(absoluteString) ERROR: \(error)")
+                    completion(success: false);
+                } else {
+                    completion(success: true);
+                }
         }
         
         downloadTask.resume()
@@ -156,17 +185,13 @@ public class Downloader : NSObject {
     }
     
     private func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
-        if (error != nil) {
-            println("Error download flip content: \(error)")
-        }
-        
         var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID]
         
-        var downloadFailed: Bool = (error != nil)
-        if (downloadFailed) {
-            userInfo.updateValue(downloadFailed, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
+        if (error != nil) {
+            println("Error download flip content: \(error)")
+            userInfo.updateValue(true, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
         }
-    
+        
         NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
     }
     
