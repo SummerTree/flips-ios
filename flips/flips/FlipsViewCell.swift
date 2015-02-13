@@ -63,7 +63,7 @@ class FlipsViewCell : UICollectionViewCell {
                     userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
                         success: {
                             (localPath: String!) in
-                            useLocalPathFunction(localPath)
+                            useLocalPathFunction(path: localPath)
                         },
                         failure: {
                             (error: FlipError) in
@@ -71,7 +71,7 @@ class FlipsViewCell : UICollectionViewCell {
                             //TODO enhance error handling
                     })
                 } else {
-                    useLocalPathFunction(flip.backgroundContentLocalPath())
+                    useLocalPathFunction(path: flip.backgroundContentLocalPath())
                 }
             } else {
                 let url = NSURL(string: flip.thumbnailURL)
