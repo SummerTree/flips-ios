@@ -184,7 +184,7 @@ public class Downloader : NSObject {
         })
     }
     
-    private func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
+    func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
         var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID]
         
         if (error != nil) {
