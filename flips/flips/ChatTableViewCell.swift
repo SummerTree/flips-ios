@@ -98,7 +98,8 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         
         avatarView.setImageWithURL(NSURL(string: flipMessage.from.photoURL))
         
-        if (flipMessage.from.userID == AuthenticationHelper.sharedInstance.userInSession.userID) {
+        let loggedUser = User.loggedUser()
+        if (flipMessage.from.userID == loggedUser?.userID) {
             // Sent by the user
             avatarView.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
@@ -154,7 +155,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     func playerViewDidFinishPlayback(playerView: PlayerView) {
         if (self.messageTextLabel.alpha == 0) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                self.flipMessageDataSource.markFlipMessageAsRead(self.flipMessageId)
+                PersistentManager.sharedInstance.markFlipMessageAsRead(self.flipMessageId)
             })
             
             UIView.animateWithDuration(0.3, animations: { () -> Void in

@@ -3,7 +3,7 @@ Feature: Register a user
   I want to register access Flips
   So I have to register a user
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Access Register screen
   Given I am on the "Login" screen
   When I touch "Sign Up" button
@@ -12,7 +12,7 @@ Scenario: Access Register screen
   And I should see "Forward" button disabled
   And I should see "Back" button enabled
 
-@7170 @Flips-2 @automated
+@7170 @Flips-2 @automated @ok-583
 Scenario Outline: Fill only one field
   Given I am on the "Sign Up" screen
   When I fill "<field>" field with the value "<value>"
@@ -25,7 +25,7 @@ Scenario Outline: Fill only one field
   | Password   | Passwor8       |
   | Birthday   | 01121987       |
 
-@7170 @Flips-2 @automated
+@7170 @Flips-2 @automated @ok-583
 Scenario: Fill all fields with valid values and select a photo
   Given I am on the "Sign Up" screen
   When I fill "First Name" field with the value "First"
@@ -37,7 +37,7 @@ Scenario: Fill all fields with valid values and select a photo
   And I touch "Forward" button
   Then I should see "Phone Number" screen
 
-@7170 @Flips-2 @9990
+@7170 @Flips-2 @9990 @ok-583
 Scenario: Fill all fields and don't select a photo
   Given I am on the "Sign Up" screen
   When I fill field "First Name" with the value "First"
@@ -49,7 +49,7 @@ Scenario: Fill all fields and don't select a photo
   And I touch "Forward" button
   Then I should see a message: "Looks like your photo is missing!"
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario Outline: Fill with invalid values
   Given I am on the "Sign Up" screen
   When I fill the field "First Name" with "First"
@@ -62,17 +62,17 @@ Scenario Outline: Fill with invalid values
   And I should see a red error panel sliding down from top of screen with a message: "<message>"
   And The "Forward" button should keep disable
   | email           | password | birthday         | message                                                     |
-  | flips.com       | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com               |
-  | flips@gmail     | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com               |
+  | flips.com       | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com              |
+  | flips@gmail     | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com              |
   | flips@gmail.com | passwor8 | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |
   | flips@gmail.com | Password | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |
   | flips@gmail.com | 12345678 | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |
-  | flips@gmail.com | Passwo8  | 12/01/1987       | You must be at least 13 years old                           |
+  | flips@gmail.com | Passwo8  | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |                           |
   | flips@gmail.com | Passwor8 | today + 1d       | You must be at least 13 years old                           |
   | flips@gmail.com | Passwor8 | today-13years+1d | You must be at least 13 years old                           |
   | flips@gmail.com | Passwor8 | today            | You must be at least 13 years old                           |
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Fixing wrong values
   Given I am on the "Sign Up" screen
   And I typed a wrong value on "<field>"
@@ -84,7 +84,7 @@ Scenario: Fixing wrong values
   | Password |
   | Birthday |
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Swiping up warning messages panel
   Given I am on the "Sign Up" screen
   And I filled invalid values on the fields
@@ -92,7 +92,7 @@ Scenario: Swiping up warning messages panel
   Then I shouldn't see the panel
   And I should see "Forward" button disabled
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Showing Alpha keyboard
   Given I am on the "Sign Up" screen
   When I touch "<field>" field
@@ -102,13 +102,13 @@ Scenario: Showing Alpha keyboard
   | Last Name  |
   | Password   |
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Showing Email keyboard
   Given I am on the "Sign Up" screen
   When I touch "Email" field
   Then I should see "Email" keyboard
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Birthday value when there is no value
   Given I am on the "Sign Up" screen
   When There is no value on the "Birthday" field
@@ -122,29 +122,29 @@ Scenario: Touching Birthday field
   Then I should see a barrel picker with Month("January" through "December"), Day (01 - 31), and Year (1900 - current)
   And I should see today as the default selected date(month, day and year)
 
-@Flips-2
+@Flips-2 @ok-583
 Scenario: Touching Done button without select a date
   Given I am on the "Sign Up" screen
   When I touch "Birthday" field
-  And I touch "Done" button on the barrel picker
+  And I select today as a data on the barrel picker
   Then I should see today as a "Birthday" value
 
-@Flips-2
+@Flips-2 @ok-583
 Scenario: Touching another field while I see barrel picker from Birthday field
   Given I am on the "Sign Up" screen
   When I touch "Birthday" field
   And I touch another field
   Then Barrel picker from Birthday field should dismiss
 
-@Flips-2
+@Flips-2 @ok-583
 Scenario: Selecting a date birthday
   Given I am on the "Sign Up" screen
   And I'm seeing barrer picker from Birthday field
   When I select a date
-  And I touch "Done" button on the barrel picker
+  And I touch another place on the screen
   Then I should see the selected date on the "Birthday" field
 
-@7170 @Flips-2
+@7170 @Flips-2 @ok-583
 Scenario: Touching back button
   Given I am on the "Sign Up" screen
   When I touch "Back" button

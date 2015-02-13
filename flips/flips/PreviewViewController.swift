@@ -101,7 +101,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         var flipMessageIds = Dictionary<String, String>()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let flipService = FlipService()
             var error: FlipError?
             var flipIds = Array<String>()
             
@@ -117,14 +116,13 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 if (flipWord.associatedFlipId != nil) {
                     var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                     flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
-                    flipMessageIds[flipWord.text] = flip.flipID
+                    flipMessageIds[flipWord.text] = flipWord.associatedFlipId!
                     dispatch_group_leave(group)
                 } else {
-                    // Create a Flip in the server for each empty Flip
-                    flipService.createFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCallback: { (flip) -> Void in
+                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCompletion: { (flip) -> Void in
                         flipMessageIds[flipWord.text] = flip.flipID
                         dispatch_group_leave(group)
-                    }, createFlipFailCallBack: { (flipError) -> Void in
+                    }, createFlipFailCompletion: { (flipError) -> Void in
                         error = flipError
                         flipMessageIds[flipWord.text] = "-1"
                         dispatch_group_leave(group)

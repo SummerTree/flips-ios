@@ -118,47 +118,47 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
-        let flipDataSource = FlipDataSource()
         self.confirmFlipView.showActivityIndicator()
         self.previewFlipTimer.invalidate()
         
-        var createFlipSuccessBlock : CreateFlipSuccess = { (flip) -> Void in
+        var createFlipSuccessBlock : CreateFlipSuccessCompletion = { (flip) -> Void in
+            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
             self.navigationController?.popViewControllerAnimated(false)
-            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flip: flip)
+            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flipID: flipInContext.flipID)
             self.confirmFlipView.hideActivityIndicator()
         }
-        var createFlipFailBlock : CreateFlipFail = { (flipError) -> Void in
-			if let errorDetails = flipError.details {
-				if (errorDetails == "Forbidden") {
+        var createFlipFailBlock : CreateFlipFailureCompletion = { (error) -> Void in
+            if let flipError = error {
+                let errorTitle = flipError.error?
+                let errorMessage = flipError.details?
+                self.confirmFlipView.hideActivityIndicator()
+				if (errorMessage == "Forbidden") {
 					AuthenticationHelper.sharedInstance.logout()
 					self.navigationController!.popToRootViewControllerAnimated(true)
 					self.dismissViewControllerAnimated(true, completion:nil)
 				}
-			}
-            let errorTitle = flipError.error?
-            let errorMessage = flipError.details?
-            self.confirmFlipView.hideActivityIndicator()
-            self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flip: nil)
-            var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-            alertView.show()
+                self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
+                var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
         }
         
         if (flipVideoURL == nil) {
-            flipDataSource.createFlipWithWord(flipView.getWord(),
+            PersistentManager.sharedInstance.createAndUploadFlip(flipView.getWord(),
                 backgroundImage: self.flipImage,
-                soundURL: self.flipAudioURL,
-                createFlipSuccess: createFlipSuccessBlock,
-                createFlipFail: createFlipFailBlock)
+                soundPath: self.flipAudioURL,
+                createFlipSuccessCompletion: createFlipSuccessBlock,
+                createFlipFailCompletion: createFlipFailBlock)
         } else {
-            flipDataSource.createFlipWithWord(self.flipWord,
+            PersistentManager.sharedInstance.createAndUploadFlip(self.flipWord,
                 videoURL: self.flipVideoURL!,
-                createFlipSuccess: createFlipSuccessBlock,
-                createFlipFail: createFlipFailBlock)
+                createFlipSuccessCompletion: createFlipSuccessBlock,
+                createFlipFailCompletion: createFlipFailBlock)
         }
     }
     
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!) {
-        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flip: nil)
+        self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
         self.navigationController?.popViewControllerAnimated(false)
     }
     
@@ -175,5 +175,5 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
 }
 
 protocol ConfirmFlipViewControllerDelegate {
-    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, flip: Flip?)
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, flipID: String?)
 }

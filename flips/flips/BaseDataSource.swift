@@ -12,16 +12,19 @@
 
 public typealias CompletionBlock = (Bool) -> Void
 
+public typealias SaveBlock = (NSManagedObjectContext!) -> Void
+
 class BaseDataSource: NSObject {
     
-    func save() {
-        if (NSThread.currentThread() == NSThread.mainThread()) {
-            println("   ")
-            println("   SAVING IN MAIN THREAD!! FIX IT!")
-            println("   INCLUDING DISPATCH BACKGROUND!")
-            println("   ")
-        }
-        
-        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
+    let currentContext: NSManagedObjectContext!
+    
+    override init() {
+        super.init()
+        currentContext = NSManagedObjectContext.MR_defaultContext()
+    }
+    
+    init(context: NSManagedObjectContext) {
+        super.init()
+        currentContext = context
     }
 }

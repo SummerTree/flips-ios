@@ -124,8 +124,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.Delete) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                let builderWordDataSource = BuilderWordDataSource()
-                builderWordDataSource.removeBuilderWordWithWord(self.words[indexPath.row])
+                PersistentManager.sharedInstance.removeBuilderWordWithWord(self.words[indexPath.row])
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.didUpdateWordList = true
@@ -139,8 +138,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     func addWord() -> Bool {
         if (countElements(self.newWordTextField.text!) > 0) {
             let word = self.newWordTextField.text!
-            let builderWordDataSource = BuilderWordDataSource()
-            builderWordDataSource.addWord(word, fromServer: false)
+            PersistentManager.sharedInstance.addBuilderWord(word, fromServer: false)
             self.didUpdateWordList = true
             words.insert(word, atIndex: 0)
             tableView.reloadData()
