@@ -115,18 +115,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private func findAndSaveStockFlips(words: [String]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let flipService = FlipService()
-            let flipDataSource = FlipDataSource()
             flipService.stockFlipsForWords(words, success: { (responseAsJSON) -> Void in
                 let stockFlipsAsJSON = responseAsJSON?.array
-                println("Were found: \(countElements(stockFlipsAsJSON!)) stock flips.")
-                for stockFlip in stockFlipsAsJSON! {
-                    println("Stock mug: \(stockFlip)")
-                    flipDataSource.createOrUpdateFlipWithJson(stockFlip)
+                for stockFlipJson in stockFlipsAsJSON! {
+                    PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
                 }
-                }, failure: { (flipError) -> Void in
-                    if (flipError != nil) {
-                        println("Error \(flipError)")
-                    }
+            }, failure: { (flipError) -> Void in
+                if (flipError != nil) {
+                    println("Error \(flipError)")
+                }
             })
         })
     }
@@ -763,10 +760,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - ConfirmFlipViewController Delegate
     
-    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, flip: Flip?) {
+    func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success: Bool, flipID: String?) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
         if (success) {
-            flipWord.associatedFlipId = flip?.flipID
+            flipWord.associatedFlipId = flipID
             self.onFlipAssociated()
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)

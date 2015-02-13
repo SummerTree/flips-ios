@@ -71,7 +71,7 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     private func subscribeOnMyChannels() {
-        var ownChannel: PNChannel = PNChannel.channelWithName(AuthenticationHelper.sharedInstance.userInSession.pubnubID) as PNChannel
+        var ownChannel: PNChannel = PNChannel.channelWithName(User.loggedUser()!.pubnubID) as PNChannel
         
         var channels = [AnyObject]()
         channels.append(ownChannel)

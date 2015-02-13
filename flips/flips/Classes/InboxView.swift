@@ -44,7 +44,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     private func initSubviews() {
-        let loggedUser = AuthenticationHelper.sharedInstance.userInSession
+        let loggedUser = User.loggedUser()!
         navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User")!, showSettingsButton: true, showBuilderButton: true)
         
         if let url = NSURL(string: loggedUser.photoURL) {
