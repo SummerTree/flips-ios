@@ -101,22 +101,34 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         if let loggedUser = User.loggedUser() {
             AuthenticationHelper.sharedInstance.onLogin(loggedUser)
             PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
-				if let errorDetails = error?.details {
-					if (errorDetails == "Forbidden") {
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
-							AuthenticationHelper.sharedInstance.logout()
-							self.openLoginViewController()
-						})
-					} else {
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
-							self.openInboxViewController(userDataSource)
-						})
-					}
+				let errorDetails = error?.details
+				if (errorDetails == "Forbidden") {
+					dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						AuthenticationHelper.sharedInstance.logout()
+						self.openLoginViewController()
+					})
+				} else {
+					dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						self.openInboxViewController(userDataSource)
+					})
 				}
             })
         } else {
             openLoginViewController()
         }
+
+
+//        if let loggedUser = User.loggedUser() {
+//            AuthenticationHelper.sharedInstance.onLogin(loggedUser)
+//            PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self.openInboxViewController(userDataSource)
+//                })
+//            })
+//        } else {
+//            openLoginViewController()
+//        }
+
     }
     
     
