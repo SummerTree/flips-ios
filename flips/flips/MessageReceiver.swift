@@ -83,7 +83,6 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             for flipMessage: FlipMessage in flipMessagesWaitingDownload.allObjects as [FlipMessage] {
                 if (flipMessage.hasAllContentDownloaded()) {
                     flipMessagesToRemove.append(flipMessage)
-                    flipMessage.createThumbnail()
                 }
             }
             

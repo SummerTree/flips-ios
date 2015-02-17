@@ -20,9 +20,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     private let SEND_BUTTON_SUBVIEWS_CENTER_MARGIN: CGFloat = 10.0
 
     var delegate: PreviewViewDelegate?
-    
-    private var flipContainerView: UIView!
-    
+
     private var videoPlayerView: PlayerView!
     private var sendContainerView: UIView!
     private var sendContainerButtonView: UIView!
@@ -42,7 +40,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
 
     func viewWillDisappear() {
         if (self.videoPlayerView.hasPlayer()) {
-            self.videoPlayerView.player().removeObserver(self, forKeyPath: "status")
             self.stopMovie()
         }
 
@@ -50,30 +47,15 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         videoComposer.clearTempCache()
     }
 
-    func showVideoCreationError() {
-        var alertView = UIAlertView(title: "",
-            message: NSLocalizedString("Preview couldn't be created. Please try again later.", comment: "Preview couldn't be created. Please try again later."),
-            delegate: nil,
-            cancelButtonTitle: LocalizedString.OK)
-        alertView.show()
-    }
-
     func setupVideoPlayerWithFlips(flips: Array<Flip>) {
-        self.videoPlayerView.setupPlayerWithFlips(flips, completion: { (player) -> Void in
-            if (player!.status == AVPlayerStatus.ReadyToPlay) {
-                self.playMovie()
-            }
-
-            player!.addObserver(self, forKeyPath: "status", options:NSKeyValueObservingOptions.New, context:nil);
-        })
+        self.videoPlayerView.setupPlayerWithFlips(flips)
     }
 
     func addSubviews() {
-        flipContainerView = UIView()
-        flipContainerView.backgroundColor = UIColor.deepSea()
-        self.addSubview(flipContainerView)
-        
-        self.addVideoPlayerView()
+        self.videoPlayerView = PlayerView()
+        self.videoPlayerView.loadPlayerOnInit = true
+        self.videoPlayerView.backgroundColor = UIColor.deepSea()
+        self.addSubview(self.videoPlayerView)
         
         self.sendContainerView = UIView()
         self.sendContainerView.backgroundColor = UIColor.avacado()
@@ -95,15 +77,8 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         self.sendContainerView.addSubview(sendImageButton)
     }
 
-    func addVideoPlayerView() {
-        self.videoPlayerView = PlayerView()
-        self.videoPlayerView.useCache = false
-        self.videoPlayerView.loadPlayerOnInit = true
-        self.flipContainerView.addSubview(self.videoPlayerView)
-    }
-
     func makeConstraints() {
-        self.flipContainerView.mas_makeConstraints { (make) -> Void in
+        self.videoPlayerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
 
@@ -115,24 +90,10 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         }
 
         // asking help to delegate to align the container with navigation bar
-        self.delegate?.previewViewMakeConstraintToNavigationBarBottom(self.flipContainerView)
-        
-        self.videoPlayerView.mas_makeConstraints({ (make) -> Void in
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.centerX.equalTo()(self.flipContainerView)
-                make.centerY.equalTo()(self.flipContainerView)
-                make.width.equalTo()(self.LOW_RES_VIDEO_WIDTH)
-            } else {
-                make.top.equalTo()(self.flipContainerView)
-                make.left.equalTo()(self.flipContainerView)
-                make.right.equalTo()(self.flipContainerView)
-            }
-            
-            make.height.equalTo()(self.videoPlayerView.mas_width)
-        })
+        self.delegate?.previewViewMakeConstraintToNavigationBarBottom(self.videoPlayerView)
         
         self.sendContainerView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.flipContainerView.mas_bottom)
+            make.top.equalTo()(self.videoPlayerView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.bottom.equalTo()(self)
@@ -180,22 +141,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     func stopMovie() {
         self.pauseMovie()
     }
-
-
-    // MARK: - KVO
-
-    override public func observeValueForKeyPath(keyPath: String, ofObject: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if (keyPath == "status" && ofObject is AVQueuePlayer) {
-            let player: AVQueuePlayer = ofObject as AVQueuePlayer
-
-            if (player.status == AVPlayerStatus.ReadyToPlay && !self.videoPlayerView.isPlaying) {
-                self.playMovie()
-            } else {
-                self.showVideoCreationError()
-            }
-        }
-    }
-
 
     // MARK: - Nav Bar Delegate
     

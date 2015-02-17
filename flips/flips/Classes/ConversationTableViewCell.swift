@@ -187,14 +187,10 @@ class ConversationTableViewCell : UITableViewCell {
         }
 
         if (flipMessage != nil) {
-            var messageThumbnailImage = flipMessage!.messageThumbnail()?
-            if (messageThumbnailImage == nil) {
-                messageThumbnailImage = flipMessage?.createThumbnail()
-            }
-            
             let photoURL = NSURL(string: flipMessage!.from.photoURL)
             let isMessageNotRead = flipMessage!.notRead.boolValue
             let messagePhrase = flipMessage!.messagePhrase()
+            var messageThumbnailImage = flipMessage!.messageThumbnail()?
             // The time stamp should reflect the time sent of the oldest unread message in the conversation
             let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage!.createdAt)
 

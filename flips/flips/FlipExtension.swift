@@ -10,66 +10,12 @@
 // the license agreement.
 //
 
-
-enum BackgroundContentType {
-    case Undefined
-    case Image
-    case Video
-}
-
-private struct BackgroundContentTypeValue {
-    static let Undefined: Int = 0
-    static let Image: Int = 1
-    static let Video: Int = 2
-}
-
 private let NO_BACKGROUND_IMAGE_NAME = "no_background_image.jpg"
 
 extension Flip {
- 
-    func setBackgroundContentType(type: BackgroundContentType) {
-        if (type == BackgroundContentType.Undefined) {
-            println("Error: trying to set background content type to undefined for flip \(self.flipID).")
-        }
-        
-        var typeValue: Int!
-        switch(type) {
-        case BackgroundContentType.Undefined:
-            typeValue = BackgroundContentTypeValue.Undefined
-        case BackgroundContentType.Image:
-            typeValue = BackgroundContentTypeValue.Image
-        case BackgroundContentType.Video:
-            typeValue = BackgroundContentTypeValue.Video
-        }
-        
-        self.backgroundContentType = typeValue
-    }
-    
-    func isBackgroundContentTypeDefined() -> Bool {
-        return (self.backgroundContentType != BackgroundContentTypeValue.Undefined)
-    }
-    
-    func isBackgroundContentTypeImage() -> Bool {
-        return (self.backgroundContentType == BackgroundContentTypeValue.Image) || (self.backgroundURL != nil && self.backgroundURL.isImagePath())
-    }
-    
-    func isBackgroundContentTypeVideo() -> Bool {
-        return (self.backgroundContentType == BackgroundContentTypeValue.Video) || (self.backgroundURL != nil && self.backgroundURL.isVideoPath())
-    }
-
-    func hasBackground() -> Bool {
-        return (self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)
-    }
-
-    func hasAudio() -> Bool {
-        return (self.soundURL != nil) && (countElements(self.soundURL) > 0)
-    }
 
     func isBlankFlip() -> Bool {
-        let hasBackgroundUrlDefined = self.hasBackground()
-        let hasSoundUrlDefined = self.hasAudio()
-        
-        return (!hasBackgroundUrlDefined) && (!hasSoundUrlDefined)
+        return (self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)
     }
     
     func hasAllContentDownloaded() -> Bool {
@@ -83,8 +29,8 @@ extension Flip {
             }
         }
         
-        if ((self.soundURL != nil) && (!self.soundURL.isEmpty)) {
-            var result = cacheHandler.hasCachedFileForUrl(self.soundURL)
+        if ((self.thumbnailURL != nil) && (!self.thumbnailURL.isEmpty)) {
+            var result = cacheHandler.hasCachedFileForUrl(self.thumbnailURL)
             if (!result.hasCache) {
                 allContentReceived = false
             }

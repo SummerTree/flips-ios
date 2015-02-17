@@ -131,68 +131,27 @@ public class PersistentManager: NSObject {
         
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
     }
-    
-    func createAndUploadFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
+
+    func createAndUploadFlip(word: String, videoURL: NSURL, thumbnailURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
         let cacheHandler = CacheHandler.sharedInstance
         let loggedUser = User.loggedUser() as User!
         
         let flipService = FlipService()
-        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            
+        flipService.createFlip(word, videoURL: videoURL, thumbnailURL: thumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
             var flip: Flip!
+            
             MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
                 let flipDataSource = FlipDataSource(context: context)
                 flip = flipDataSource.createFlipWithJson(json)
-                
                 flipDataSource.associateFlip(flip, withOwner: loggedUser)
-                flip.setBackgroundContentType(BackgroundContentType.Image)
             })
-            
-            if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
-            }
-            
-            if (soundPath != nil) {
-                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
-            }
+
+            //cacheHandler.saveDataAtPath(thumbnailURL.absoluteString!, withUrl: flip.thumbnailURL, isTemporary: false)
+            cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: flip.backgroundURL, isTemporary: false)
             
             createFlipSuccessCompletion(flip)
         }) { (flipError: FlipError?) -> Void in
             createFlipFailCompletion(flipError)
-        }
-    }
-    
-    func createAndUploadFlip(word: String, videoURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
-        let cacheHandler = CacheHandler.sharedInstance
-        let loggedUser = User.loggedUser() as User!
-        
-        let flipService = FlipService()
-        flipService.createFlip(word, videoPath: videoURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            var flip: Flip!
-            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-                let flipDataSource = FlipDataSource(context: context)
-                flip = flipDataSource.createFlipWithJson(json)
-                
-                flipDataSource.associateFlip(flip, withOwner: loggedUser)
-                flip.setBackgroundContentType(BackgroundContentType.Video)
-            })
-            
-            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
-                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
-            }
-            
-            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
-            
-            createFlipSuccessCompletion(flip)
-        }) { (flipError: FlipError?) -> Void in
-            createFlipFailCompletion(flipError)
-        }
-    }
-    
-    func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
-        MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            let flipDataSource = FlipDataSource(context: context)
-            flipDataSource.setFlipBackgroundContentType(contentType, forFlip: flip.inContext(context) as Flip)
         }
     }
     

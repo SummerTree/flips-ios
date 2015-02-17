@@ -54,59 +54,12 @@ extension FlipMessage {
     
     func messageThumbnail() -> UIImage? {
         let firstFlip = self.flips.first
-        var thumbnail: UIImage?
         
-        if let backgroundURL = firstFlip?.backgroundURL {
-            thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(backgroundURL)
+        if (firstFlip == nil || firstFlip!.thumbnailURL == nil) {
+            return UIImage.emptyFlipImage()
+        } else {
+            return CacheHandler.sharedInstance.thumbnailForUrl(firstFlip!.thumbnailURL);
         }
-
-        if (thumbnail == nil) {
-            thumbnail = self.createThumbnail()
-        }
-
-        return thumbnail
-    }
-    
-    func createThumbnail() -> UIImage? {
-        let firstFlip = self.flips.first
-
-        if (firstFlip == nil) {
-            return nil
-        }
-
-        let cacheHandler = CacheHandler.sharedInstance
-        
-        if (firstFlip!.isBackgroundContentTypeImage()) {
-            var backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
-            
-            var thumbnailImage: UIImage
-            
-            if (backgroundImageData == nil) {
-                thumbnailImage = UIImage.emptyFlipImage()
-            } else {
-                thumbnailImage = UIImage(data: backgroundImageData!)!
-            }
-            
-            var url = firstFlip!.backgroundURL
-            if (url == nil || countElements(url) == 0) {
-                url = "greenBackground"
-            }
-            
-            cacheHandler.saveThumbnail(thumbnailImage, forUrl: url)
-
-            return thumbnailImage
-            
-        } else if (firstFlip!.isBackgroundContentTypeVideo()) {
-            let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
-            if (videoPath != nil) {
-                if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!) {
-                    cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
-                    return videoThumbnailImage
-                }
-            }
-        }
-
-        return nil
     }
     
     func hasAllContentDownloaded() -> Bool {
@@ -153,9 +106,8 @@ extension FlipMessage {
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
             dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
-            dic.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
-            dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
             dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
+            dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
 
             flipsDictionary.append(dic)
         }

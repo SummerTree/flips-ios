@@ -15,23 +15,19 @@
 #import "FlipMessage.h"
 #import "Flip.h"
 
+typedef void (^VideoComposerSuccessHandler)(NSURL *videoURL, NSURL *thumbnailURL);
+typedef void (^VideoComposerErrorHandler)(NSError *error);
 
 @interface VideoComposer : NSObject
 
-@property (nonatomic) BOOL renderOverlays;
 @property (nonatomic, strong) NSString *cacheKey;
 
-- (NSURL *)videoFromFlips:(NSArray *)flips;
-- (NSURL *)videoFromFlipMessage:(FlipMessage *)flipMessage;
-- (AVAsset *)videoFromFlip:(Flip *)flip;
-- (NSURL *)videoFromOriginalVideo:(NSURL *)videoURL;
+- (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audio successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler;
+- (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler;
 
-- (NSArray *)videoPartsFromFlips:(NSArray *)flips;
-
-- (void)clearTempCache;
-
+- (NSArray *)videoAssetsForFlips:(NSArray *)flips;
 - (UIImage *)thumbnailForVideo:(NSURL *)videoURL;
 
-- (BOOL)areFlipsCached:(NSArray *)flips;
+- (void)clearTempCache;
 
 @end

@@ -119,14 +119,17 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                     flipMessageIds[flipWord.text] = flipWord.associatedFlipId!
                     dispatch_group_leave(group)
                 } else {
-                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCompletion: { (flip) -> Void in
-                        flipMessageIds[flipWord.text] = flip.flipID
-                        dispatch_group_leave(group)
-                    }, createFlipFailCompletion: { (flipError) -> Void in
-                        error = flipError
-                        flipMessageIds[flipWord.text] = "-1"
-                        dispatch_group_leave(group)
-                    })
+                    dispatch_group_leave(group)
+
+                    // TODO
+//                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
+//                        flipMessageIds[flipWord.text] = flip.flipID
+//                        dispatch_group_leave(group)
+//                    }, createFlipFailCompletion: { (flipError) -> Void in
+//                        error = flipError
+//                        flipMessageIds[flipWord.text] = "-1"
+//                        dispatch_group_leave(group)
+//                    })
                 }
             }
             

@@ -44,16 +44,9 @@ class FlipsViewCell : UICollectionViewCell {
             var flip = flipDataSource.retrieveFlipWithId(self.flipID)
             
             if (flip.isPrivate.boolValue) {
-                let flipContentPath = flip.backgroundContentLocalPath()
-                var image: UIImage!
-                if (flip.isBackgroundContentTypeVideo()) {
-                    image = VideoHelper.generateThumbImageForFile(flipContentPath)
-                } else {
-                    image = UIImage(contentsOfFile: flipContentPath)
-                }
-                
+                let thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(flip.thumbnailURL)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.cellImageView.image = image
+                    self.cellImageView.image = thumbnail
                 })
             } else {
                 let url = NSURL(string: flip.thumbnailURL)
