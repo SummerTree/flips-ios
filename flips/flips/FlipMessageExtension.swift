@@ -31,12 +31,12 @@ extension FlipMessage {
         }
     }
 
-    func addFlip(flip: Flip) {
+    func addFlip(flip: Flip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
-        var entry: FlipEntry! = FlipEntry.createEntity() as FlipEntry
+        var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
         entry.order = nextEntryOrder
-        entry.flip = flip
+        entry.flip = flip.inContext(context) as Flip
         entry.message = self
 
         self.addEntriesObject(entry)
@@ -133,7 +133,7 @@ extension FlipMessage {
         dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
         dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
-        let loggedUserFirstName = AuthenticationHelper.sharedInstance.userInSession.firstName
+        let loggedUserFirstName = User.loggedUser()!.firstName
         let notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
         
         var notificationDictionary = Dictionary<String, AnyObject>()

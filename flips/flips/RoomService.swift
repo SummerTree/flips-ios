@@ -32,7 +32,7 @@ public class RoomService: FlipsService {
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let createRoomUrl = HOST + createURL
         let createRoomParams = [
             RequestParams.NAME : "Name",
@@ -48,11 +48,16 @@ public class RoomService: FlipsService {
                 successCompletion(self.parseCreateRoomResponse(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+				var details : String = ""
+				if (FlipsService.isForbiddenRequest(error)) {
+					println("RoomService.createRoom() - Forbidden: 403")
+					details = "Forbidden"
+				}
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
+                    failCompletion(FlipError(error: response["error"] as String!, details : details))
                 } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
+                    failCompletion(FlipError(error: error.localizedDescription, details : details))
                 }
             }
         )
@@ -66,17 +71,22 @@ public class RoomService: FlipsService {
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: AuthenticationHelper.sharedInstance.userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let getRoomsUrl = HOST + getURL
 
         request.GET(getRoomsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetRoomsResponse(responseObject))
         }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+			var details : String = ""
+			if (FlipsService.isForbiddenRequest(error)) {
+				println("RoomService.getMyRooms() - Forbidden: 403")
+				details = "Forbidden"
+			}
             if (operation.responseObject != nil) {
                 let response = operation.responseObject as NSDictionary
-                failCompletion(FlipError(error: response["error"] as String!, details: nil))
+                failCompletion(FlipError(error: response["error"] as String!, details : details))
             } else {
-                failCompletion(FlipError(error: error.localizedDescription, details:nil))
+                failCompletion(FlipError(error: error.localizedDescription, details : details))
             }
         }
     }
@@ -84,25 +94,19 @@ public class RoomService: FlipsService {
 
     private func parseCreateRoomResponse(response: AnyObject) -> Room {
         let json = JSON(response)
-        println("created room json: \(json)")
-        let roomDataSource = RoomDataSource()
-        return roomDataSource.createOrUpdateWithJson(json)
+        return PersistentManager.sharedInstance.createOrUpdateRoomWithJson(json)
     }
     
     private func parseGetRoomsResponse(response: AnyObject) -> [Room] {
         let json = JSON(response)
-        println("created room json: \(json)")
-        let roomDataSource = RoomDataSource()
-        
         var rooms = Array<Room>()
         
         if let jsonArray = json.array {
             for roomJson in jsonArray {
-                var room = roomDataSource.createOrUpdateWithJson(roomJson)
+                var room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(roomJson)
                 rooms.append(room)
             }
         }
-        
         
         return rooms
     }

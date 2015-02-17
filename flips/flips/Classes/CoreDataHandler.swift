@@ -31,19 +31,15 @@ public class CoreDataHandler: NSObject {
     }
 
     func resetDatabase() {
-        var error: NSError?
-        var storeURL = NSPersistentStore.MR_urlForStoreName(databaseStoreName)
-        
-//        MagicalRecord.cleanUp()
-        
-        var user: User? = User.loggedUser()
-        
-        if let user = user {
-            let userDataSource = UserDataSource()
-            user.me = false
-            userDataSource.save()
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+            Contact.truncateAllInContext(context)
+            Flip.truncateAllInContext(context)
+            FlipMessage.truncateAllInContext(context)
+            FlipEntry.truncateAllInContext(context)
+            BuilderWord.truncateAllInContext(context)
+            Device.truncateAllInContext(context)
+            User.truncateAllInContext(context)
+            Room.truncateAllInContext(context)
         }
-        
-        Room.truncateAll()
     }
 }

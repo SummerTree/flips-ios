@@ -13,5 +13,9 @@
 public class FlipsService : NSObject {
     
     let HOST: String = "http://flips-dev95.arctouch.com"
+	
+	class func isForbiddenRequest(error: NSError!) -> Bool {
+		return (error.localizedDescription.rangeOfString("403") != nil)
+	}
 
 }

@@ -63,57 +63,74 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         var success = FBSession.openActiveSessionWithAllowLoginUI(false)
         println("User is already authenticated with Facebook? \(success)")
         if (success) {
-            UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
-                success: { (user) -> Void in
-                    AuthenticationHelper.sharedInstance.userInSession = user as User
-                    
-                    var userDataSource = UserDataSource()
-                    userDataSource.syncUserData({ (success, error) -> Void in
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            activityIndicator.stopAnimating()
-                            
-                            let authenticatedUser = User.loggedUser()!
-                            if (self.userHasDevice(authenticatedUser)) {
-                                self.openInboxViewController(userDataSource)
-                            } else {
-                                self.openPhoneNumberController(authenticatedUser.userID)
-                            }
-                        })
+            UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken, success: { (user) -> Void in
+                AuthenticationHelper.sharedInstance.onLogin(user as User)
+                
+                PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        activityIndicator.stopAnimating()
+                        
+                        let authenticatedUser = User.loggedUser()!
+                        if (self.userHasDevice(authenticatedUser)) {
+                            self.openInboxViewController(userDataSource)
+                        } else {
+                            self.openPhoneNumberController(authenticatedUser.userID)
+                        }
                     })
-                }, failure: { (flipError) -> Void in
-                    
-                    FBSession.activeSession().closeAndClearTokenInformation()
-                    FBSession.activeSession().close()
-                    FBSession.setActiveSession(nil)
-                    
-                    if (flipError != nil) {
-                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
-                            alertView.show()
-                        })
-                    }
-                    
-                    activityIndicator.stopAnimating()
+                })
+            }, failure: { (flipError) -> Void in
+                FBSession.activeSession().closeAndClearTokenInformation()
+                FBSession.activeSession().close()
+                FBSession.setActiveSession(nil)
+                
+                if (flipError != nil) {
+                    println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
+                        alertView.show()
+                    })
+                }
+                
+                activityIndicator.stopAnimating()
             })
         }
     }
     
     func splashScreenViewAttemptLogin() {
         // TODO: we need to validate the cookies to se if the it is expired or not. And in the logout, it will be good to delete it.
-        var loggedUser = User.loggedUser()
-        if (loggedUser != nil) {
-            AuthenticationHelper.sharedInstance.userInSession = loggedUser
-            var userDataSource = UserDataSource()
-            userDataSource.syncUserData({ (success, error) -> Void in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.openInboxViewController(userDataSource)
-                })
+        if let loggedUser = User.loggedUser() {
+            AuthenticationHelper.sharedInstance.onLogin(loggedUser)
+            PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+				let errorDetails = error?.details
+				if (errorDetails == "Forbidden") {
+					dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						AuthenticationHelper.sharedInstance.logout()
+						self.openLoginViewController()
+					})
+				} else {
+					dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						self.openInboxViewController(userDataSource)
+					})
+				}
             })
         } else {
             openLoginViewController()
         }
+
+
+//        if let loggedUser = User.loggedUser() {
+//            AuthenticationHelper.sharedInstance.onLogin(loggedUser)
+//            PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    self.openInboxViewController(userDataSource)
+//                })
+//            })
+//        } else {
+//            openLoginViewController()
+//        }
+
     }
+    
     
     // MARK: - UIAlertViewDelegate
     
