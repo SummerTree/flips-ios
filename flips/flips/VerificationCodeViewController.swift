@@ -56,6 +56,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     
+    
     // MARK: - VerificationCodeViewDelegate Methods
     
     func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
@@ -115,14 +116,10 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                     return ()
                 }
                 var deviceEntity = device as Device
-                var user = deviceEntity.user
-                user.me = true
-                UserDataSource().save()
+
+                PersistentManager.sharedInstance.defineAsLoggedUserSync(deviceEntity.user)
                 
-                AuthenticationHelper.sharedInstance.userInSession = user
-                
-                var userDataSource = UserDataSource()
-                userDataSource.syncUserData({ (success, error) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()

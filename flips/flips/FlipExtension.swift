@@ -43,7 +43,6 @@ extension Flip {
         }
         
         self.backgroundContentType = typeValue
-        NSManagedObjectContext.MR_contextForCurrentThread().MR_saveToPersistentStoreAndWait()
     }
     
     func isBackgroundContentTypeDefined() -> Bool {

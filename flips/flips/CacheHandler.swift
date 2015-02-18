@@ -52,6 +52,7 @@ public class CacheHandler : NSObject {
         var cachePaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         var cacheDirPath = cachePaths.first! as String
         applicationCacheDirectory = "\(NSHomeDirectory())\(cacheDirPath)/\(FLIPS_CACHE_FOLDER)"
+        println("applicationCacheDirectory: \(applicationCacheDirectory)")
         self.initDirectory(applicationCacheDirectory)
     }
     
