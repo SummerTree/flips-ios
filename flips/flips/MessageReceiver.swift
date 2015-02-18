@@ -78,18 +78,20 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             } else {
                 //WARNING: currently not downloading sounds because it will soon become useless, since all flips will be videos
                 let userFlipsCache = UserFlipsCache.sharedInstance
-                userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
-                    success: {
-                        (localPath: String!) in
-                        downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
-                    },
-                    failure: {
-                        (error: FlipError) in
-                        println("Failed to get resource from cache, error: \(error)")
-                        //TODO create NSError from FlipError
-                        downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
-                        //TODO enhance error handling
-                })
+                if (flip.backgroundURL != nil && flip.backgroundURL != "") {
+                    userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
+                        success: {
+                            (localPath: String!) in
+                            downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
+                        },
+                        failure: {
+                            (error: FlipError) in
+                            println("Failed to get resource from cache, error: \(error)")
+                            //TODO create NSError from FlipError
+                            downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
+                            //TODO enhance error handling
+                    })
+                }
             }
         }
     }
