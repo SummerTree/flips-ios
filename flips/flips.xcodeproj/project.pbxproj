@@ -166,6 +166,7 @@
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		70FD4E8019D064450024EBDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
 		7310092198ad95d4fc6d60c6 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
+		7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */; };
 		73192A891A8B9B660010C949 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
 		7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8071A89624F00446CD8 /* CacheJournal.swift */; };
 		7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
@@ -493,6 +494,7 @@
 		70FD4E7819D064450024EBDB /* flips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = flips.xcdatamodel; sourceTree = "<group>"; };
 		70FD4E7A19D064450024EBDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		70FD4E7F19D064450024EBDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailsCache.swift; sourceTree = "<group>"; };
 		73192A881A8B9B660010C949 /* FlipsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCache.swift; sourceTree = "<group>"; };
 		7330F8071A89624F00446CD8 /* CacheJournal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheJournal.swift; sourceTree = "<group>"; };
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
@@ -1185,6 +1187,7 @@
 				7330F8071A89624F00446CD8 /* CacheJournal.swift */,
 				7330F8091A89670300446CD8 /* JournalEntry.swift */,
 				73192A881A8B9B660010C949 /* FlipsCache.swift */,
+				7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */,
 			);
 			name = Caching;
 			sourceTree = "<group>";
@@ -1864,6 +1867,7 @@
 				7049A7A51A11238A001D8121 /* ChangeNumberInfoViewController.swift in Sources */,
 				7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
+				7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7AA711811A28D8B10082165A /* Device.m in Sources */,
 				7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */,

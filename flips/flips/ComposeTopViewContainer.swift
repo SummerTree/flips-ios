@@ -135,7 +135,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
             let flipsCache = FlipsCache.sharedInstance
-            let getResponse = flipsCache.get(flip: flip,
+            let getResponse = flipsCache.videoForFlip(flip,
                 success: { (localPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
@@ -166,6 +166,10 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
             })
             if (getResponse == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
                 //TODO show loading spinner
+            }
+            if (getResponse == StorageCache.CacheGetResponse.INVALID_URL) {
+                UIAlertView.showUnableToLoadFlip()
+                //TODO enhance error handling
             }
         } else {
             UIAlertView.showUnableToLoadFlip()

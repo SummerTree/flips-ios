@@ -73,26 +73,20 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             println("       flip #\(flips[i].flipID)")
             let flip = flips[i]
             
-            if (isTemporary) {
-                downloader.downloadDataForFlip(flip, isTemporary: true)
-            } else {
-                //WARNING: currently not downloading sounds because it will soon become useless, since all flips will be videos
-                let flipsCache = FlipsCache.sharedInstance
-                if (flip.backgroundURL != nil && flip.backgroundURL != "") {
-                    flipsCache.get(flip: flip,
-                        success: {
-                            (localPath: String!) in
-                            downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
-                        },
-                        failure: {
-                            (error: FlipError) in
-                            println("Failed to get resource from cache, error: \(error)")
-                            //TODO create NSError from FlipError
-                            downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
-                            //TODO enhance error handling
-                    })
-                }
-            }
+            //WARNING: currently not downloading sounds because it will soon become useless, since all flips will be videos
+            let flipsCache = FlipsCache.sharedInstance
+            flipsCache.videoForFlip(flip,
+                success: {
+                    (localPath: String!) in
+                    downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
+                },
+                failure: {
+                    (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                    //TODO create NSError from FlipError
+                    downloader.sendDownloadFinishedBroadcastForFlip(flip, error: nil)
+                    //TODO enhance error handling
+            })
         }
     }
     

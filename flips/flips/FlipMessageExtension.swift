@@ -52,26 +52,27 @@ extension FlipMessage {
         return " ".join(words)
     }
     
-    func messageThumbnail() -> UIImage? {
+    func messageThumbnail(success: ((UIImage?) -> Void)?) -> Void {
         let firstFlip = self.flips.first
         var thumbnail: UIImage?
         
         if let backgroundURL = firstFlip?.backgroundURL {
             thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(backgroundURL)
         }
-
-        if (thumbnail == nil) {
-            thumbnail = self.createThumbnail()
+        
+        if (thumbnail != nil) {
+            success?(thumbnail)
+            return
         }
 
-        return thumbnail
+        self.createThumbnail(success)
     }
     
-    func createThumbnail() -> UIImage? {
+    func createThumbnail(success: ((UIImage) -> Void)? = nil) -> Void {
         let firstFlip = self.flips.first
 
         if (firstFlip == nil) {
-            return nil
+            return
         }
 
         let cacheHandler = CacheHandler.sharedInstance
@@ -94,19 +95,22 @@ extension FlipMessage {
             
             cacheHandler.saveThumbnail(thumbnailImage, forUrl: url)
 
-            return thumbnailImage
-            
+            success?(thumbnailImage)
         } else if (firstFlip!.isBackgroundContentTypeVideo()) {
-            let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
-            if (videoPath != nil) {
-                if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!) {
-                    cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
-                    return videoThumbnailImage
-                }
-            }
+            let flipsCache = FlipsCache.sharedInstance
+            flipsCache.videoForFlip(firstFlip!,
+                success: {
+                    (localPath: String!) in
+                    if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(localPath) {
+                        cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
+                        success?(videoThumbnailImage)
+                    }
+                }, failure: {
+                    (error: FlipError) in
+                    println("Failed to get flip \(firstFlip!) from cache.")
+                    //TODO Enhance error handling
+            })
         }
-
-        return nil
     }
     
     func hasAllContentDownloaded() -> Bool {
