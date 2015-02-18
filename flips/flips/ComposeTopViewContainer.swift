@@ -134,8 +134,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     func showFlip(flipId: String, withWord word: String) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-            let userFlipsCache = UserFlipsCache.sharedInstance
-            let getResponse = userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
+            let flipsCache = FlipsCache.sharedInstance
+            let getResponse = flipsCache.get(flip: flip,
                 success: { (localPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         

@@ -59,8 +59,8 @@ class FlipsViewCell : UICollectionViewCell {
                 }
                 
                 if (flip.owner.userID == User.loggedUser()?.userID) {
-                    let userFlipsCache = UserFlipsCache.sharedInstance
-                    userFlipsCache.get(NSURL(fileURLWithPath: flip.backgroundURL)!,
+                    let flipsCache = FlipsCache.sharedInstance
+                    flipsCache.get(flip: flip,
                         success: {
                             (localPath: String!) in
                             useLocalPathFunction(path: localPath)

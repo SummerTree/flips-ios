@@ -18,6 +18,7 @@ public class StorageCache {
     public enum CacheGetResponse {
         case DATA_IS_READY
         case DOWNLOAD_WILL_START
+        case INVALID_URL
     }
     
     private let cacheDirectoryPath: NSURL
