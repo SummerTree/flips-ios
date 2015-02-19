@@ -27,6 +27,10 @@ public class ThumbnailsCache {
     }
     
     func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?) -> StorageCache.CacheGetResponse {
+        if (remoteURL.path == nil || remoteURL.path! == "") {
+            return StorageCache.CacheGetResponse.INVALID_URL
+        }
+        
         return self.cache.get(remoteURL, success: success, failure: failure)
     }
     

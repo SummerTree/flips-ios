@@ -90,21 +90,22 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         }
     }
     
+    //TODO Is this function necessary?
     private func onFlipContentDownloadFinished(flip: Flip) {
-        if (flip.hasAllContentDownloaded()) {
+        //if (flip.hasAllContentDownloaded()) {
             var flipMessagesToRemove = Array<FlipMessage>()
             
             for flipMessage: FlipMessage in flipMessagesWaitingDownload.allObjects as [FlipMessage] {
-                if (flipMessage.hasAllContentDownloaded()) {
+                //if (flipMessage.hasAllContentDownloaded()) {
                     flipMessagesToRemove.append(flipMessage)
                     flipMessage.messageThumbnail()
-                }
+                //}
             }
             
             for flipMessage in flipMessagesToRemove {
                 flipMessagesWaitingDownload.removeObject(flipMessage)
             }
-        }
+        //}
     }
     
     

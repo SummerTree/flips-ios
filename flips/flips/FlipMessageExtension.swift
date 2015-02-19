@@ -116,19 +116,6 @@ extension FlipMessage {
         }
     }
     
-    func hasAllContentDownloaded() -> Bool {
-        let flips = self.flips
-
-        for var i = 0; i < flips.count; i++ {
-            var flip = flips[i] as Flip
-            if (!flip.hasAllContentDownloaded()) {
-                return false
-            }
-        }
-
-        return true
-    }
-    
     
     // MARK: - Message Handler
     

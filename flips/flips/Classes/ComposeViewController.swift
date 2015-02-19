@@ -592,7 +592,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 } else {
                     let flipWord = self.flipWords[self.highlightedWordIndex]
-                    if ((flipWord.associatedFlipId == nil) && (!selectedFlip.hasAllContentDownloaded())) {
+                    if (flipWord.associatedFlipId == nil) {
                         let flipsCache = FlipsCache.sharedInstance
                         flipsCache.videoForFlip(selectedFlip,
                             success: {

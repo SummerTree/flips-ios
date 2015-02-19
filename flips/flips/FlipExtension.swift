@@ -72,27 +72,6 @@ extension Flip {
         return (!hasBackgroundUrlDefined) && (!hasSoundUrlDefined)
     }
     
-    func hasAllContentDownloaded() -> Bool {
-        let cacheHandler = CacheHandler.sharedInstance
-        var allContentReceived = true
-        
-        if ((self.backgroundURL != nil) && (!self.backgroundURL.isEmpty)) {
-            var result = cacheHandler.hasCachedFileForUrl(self.backgroundURL)
-            if (!result.hasCache) {
-                allContentReceived = false
-            }
-        }
-        
-        if ((self.soundURL != nil) && (!self.soundURL.isEmpty)) {
-            var result = cacheHandler.hasCachedFileForUrl(self.soundURL)
-            if (!result.hasCache) {
-                allContentReceived = false
-            }
-        }
-        
-        return allContentReceived
-    }
-    
     func backgroundContentLocalPath() -> String {
         let cacheHandler = CacheHandler.sharedInstance
         

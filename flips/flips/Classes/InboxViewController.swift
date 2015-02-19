@@ -178,9 +178,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 println("Download failed for flip: \(flip.flipID)")
                 // TODO: show download fail state
             } else {
-                if (flip.hasAllContentDownloaded()) {
-                    self.refreshRooms()
-                }
+                self.refreshRooms()
             }
         } else {
             UIAlertView.showUnableToLoadFlip()
