@@ -131,20 +131,22 @@ class UserDataSource : BaseDataSource {
         
         for myFlip in myFlips {
             let flip = myFlip.inContext(currentContext) as Flip
-            Downloader.sharedInstance.downloadDataForFlip(flip, isTemporary: false, completion: { (error) -> Void in
-                if (error != nil) {
+            let flipsCache = FlipsCache.sharedInstance
+            flipsCache.videoForFlip(flip,
+                success: {
+                    (localPath: String!) in
+                    if (self.isDownloadingFlips) {
+                        NSLog("Downloaded flips: \(self.flipsDownloadCounter.value) of \(self.flipsDownloadCount.value)")
+                        self.delegate?.userDataSource?(self, didDownloadFlip: flip)
+                        
+                        self.flipsDownloadCounter.value++
+                    } else {
+                        NSLog("Downloads complete!")
+                        self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
+                    }
+                }, failure: {
+                    (error: FlipError) in
                     println("Error downloading data for my flip (\(flip.flipID))")
-                }
-                
-                if (self.isDownloadingFlips) {
-                    NSLog("Downloaded flips: \(self.flipsDownloadCounter.value) of \(self.flipsDownloadCount.value)")
-                    self.delegate?.userDataSource?(self, didDownloadFlip: flip)
-                    
-                    self.flipsDownloadCounter.value++
-                } else {
-                    NSLog("Downloads complete!")
-                    self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
-                }
             })
         }
     }

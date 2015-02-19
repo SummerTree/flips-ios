@@ -593,17 +593,20 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 } else {
                     let flipWord = self.flipWords[self.highlightedWordIndex]
                     if ((flipWord.associatedFlipId == nil) && (!selectedFlip.hasAllContentDownloaded())) {
-                        Downloader.sharedInstance.downloadDataForFlip(selectedFlip, isTemporary: true, completion: { (error) -> Void in
-                            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                            if (error == nil) {
+                        let flipsCache = FlipsCache.sharedInstance
+                        flipsCache.videoForFlip(selectedFlip,
+                            success: {
+                                (localPath: String!) in
+                                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 self.onFlipSelected(flipId)
-                            } else {
+                            }, failure: {
+                                (error: FlipError) in
+                                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     println("Downloading stock flip(id: \(flipId)) error: \(error)")
                                     let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                                     alertView.show()
                                 })
-                            }
                         })
                     } else {
                         self.onFlipSelected(flipId)
