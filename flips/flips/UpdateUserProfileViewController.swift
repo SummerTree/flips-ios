@@ -97,8 +97,8 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
                 self.navigationController?.popViewControllerAnimated(true)
                 self.hideActivityIndicator()
             }) { (flipError) -> Void in
-				if let errorDetails = flipError?.details {
-					if (errorDetails == "Forbidden") {
+				if let code = flipError?.code {
+					if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
 						AuthenticationHelper.sharedInstance.logout()
 						let navigationController: UINavigationController = self.presentingViewController as UINavigationController
 						navigationController.popToRootViewControllerAnimated(true)

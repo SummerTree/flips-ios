@@ -26,7 +26,7 @@ public class RoomService: FlipsService {
 
     func createRoom(userIds: [String], contactNumbers: [String], successCompletion: CreateRoomSuccessResponse, failCompletion: RoomFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
             return
         }
         
@@ -48,16 +48,12 @@ public class RoomService: FlipsService {
                 successCompletion(self.parseCreateRoomResponse(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("RoomService.createRoom() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details : details))
+					failCompletion(FlipError(error: response["error"] as String!, details : nil, code: code))
                 } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details : details))
+					failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
                 }
             }
         )
@@ -65,7 +61,7 @@ public class RoomService: FlipsService {
     
     func getMyRooms(successCompletion: GetRoomsSuccessResponse, failCompletion: RoomFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
             return
         }
         
@@ -77,16 +73,12 @@ public class RoomService: FlipsService {
         request.GET(getRoomsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetRoomsResponse(responseObject))
         }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-			var details : String = ""
-			if (FlipsService.isForbiddenRequest(error)) {
-				println("RoomService.getMyRooms() - Forbidden: 403")
-				details = "Forbidden"
-			}
+			let code = self.parseResponseError(error)
             if (operation.responseObject != nil) {
                 let response = operation.responseObject as NSDictionary
-                failCompletion(FlipError(error: response["error"] as String!, details : details))
+				failCompletion(FlipError(error: response["error"] as String!, details : nil, code: code))
             } else {
-                failCompletion(FlipError(error: error.localizedDescription, details : details))
+				failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
             }
         }
     }

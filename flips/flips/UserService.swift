@@ -46,7 +46,7 @@ public class UserService: FlipsService {
 	func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -78,9 +78,9 @@ public class UserService: FlipsService {
 					// TODO: we need to identify what was the problem to show the appropriate message
 					let errorMessage: String? = response["error"] as String?
 					let errorDetail: String? = response["details"] as String?
-					failure(FlipError(error: errorMessage, details: errorDetail))
+					failure(FlipError(error: errorMessage, details: errorDetail, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details:nil))
+					failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				}
 			}
 		)
@@ -95,7 +95,7 @@ public class UserService: FlipsService {
 	
 	func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -113,9 +113,9 @@ public class UserService: FlipsService {
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details:nil))
+					failure(FlipError(error: response["error"] as String!, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details:nil))
+					failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				}
 			}
 		)
@@ -123,7 +123,7 @@ public class UserService: FlipsService {
 	
 	func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -154,9 +154,9 @@ public class UserService: FlipsService {
 						detailsText = detailsMessage
 					}
 					
-					failure(FlipError(error: errorText, details: detailsText))
+					failure(FlipError(error: errorText, details: detailsText, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details:nil))
+					failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				}
 			}
 		)
@@ -171,7 +171,7 @@ public class UserService: FlipsService {
 	
 	func update(username: String, password: String?, firstName: String, lastName: String, avatar: UIImage?, birthday: NSDate, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -201,18 +201,14 @@ public class UserService: FlipsService {
 				success(user)
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("UserService.update() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
 					// TODO: we need to identify what was the problem to show the appropriate message
 					//failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
-					failure(FlipError(error: response["error"] as String!, details: details))
+					failure(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details : details))
+					failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 			}
 		)
@@ -223,7 +219,7 @@ public class UserService: FlipsService {
 	
 	func forgotPassword(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -240,9 +236,9 @@ public class UserService: FlipsService {
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details:nil))
+					failure(FlipError(error: response["error"] as String!, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details:nil))
+					failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				}
 			}
 		)
@@ -253,7 +249,7 @@ public class UserService: FlipsService {
 	
 	func verify(phoneNumber: String, verificationCode: String, success: UserServiceVerifySuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -272,15 +268,15 @@ public class UserService: FlipsService {
 				if !username.isEmpty {
 					success(username: username)
 				} else {
-					failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number.")))
+					failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number."), code: FlipsServiceCode.NO_RESPONSE_CODE))
 				}
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
+					failure(FlipError(error: response["error"] as String!, details: response["details"] as String?, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details:nil))
+					failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 				}
 			}
 		)
@@ -291,7 +287,7 @@ public class UserService: FlipsService {
 	
 	func updatePassword(username: String, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServicePasswordSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -307,16 +303,12 @@ public class UserService: FlipsService {
 				success()
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("UserService.updatePassword() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code =  self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details : details))
+					failure(FlipError(error: response["error"] as String!, details : nil, code: code))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details : details))
+					failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 			}
 		)
@@ -328,7 +320,7 @@ public class UserService: FlipsService {
 	
 	func importFacebookFriends(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -336,14 +328,14 @@ public class UserService: FlipsService {
 		println("[DEBUG: Facebook Permissions: \(permissions)]")
 		
 		if (!contains(permissions, "user_friends")) {
-			failure(FlipError(error: "user_friends permission not allowed.", details:nil))
+			failure(FlipError(error: "user_friends permission not allowed.", details:nil, code: FlipError.NO_CODE))
 			return
 		}
 		
 		var usersFacebookIDS = [String]()
 		FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
 			if (error != nil) {
-				failure(FlipError(error: error.localizedDescription, details:nil))
+				failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
 				return
 			}
 			
@@ -378,16 +370,12 @@ public class UserService: FlipsService {
 					
 					success(nil)
 					}, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-						var details : String = ""
-						if (FlipsService.isForbiddenRequest(error)) {
-							println("UserService.importFacebookFriends() - Forbidden: 403")
-							details = "Forbidden"
-						}
+						let code =  self.parseResponseError(error)
 						if (operation.responseObject != nil) {
 							var response = operation.responseObject as NSDictionary
-							failure(FlipError(error: response["error"] as String!, details : details))
+							failure(FlipError(error: response["error"] as String!, details : nil, code: code))
 						} else {
-							failure(FlipError(error: error.localizedDescription, details : details))
+							failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 						}
 				})
 			}
@@ -399,7 +387,7 @@ public class UserService: FlipsService {
 	
 	func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -441,20 +429,16 @@ public class UserService: FlipsService {
 				
 				success(nil)
 				}, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-					var details : String = ""
-					if (FlipsService.isForbiddenRequest(error)) {
-						println("UserService.uploadContacts() - Forbidden: 403")
-						details = "Forbidden"
-					}
+					let code = self.parseResponseError(error)
 					if (operation.responseObject != nil) {
 						var response = operation.responseObject as NSDictionary
-						failure(FlipError(error: response["error"] as String!, details : details))
+						failure(FlipError(error: response["error"] as String!, details : nil, code: code))
 					} else {
-						failure(FlipError(error: error.localizedDescription, details : details))
+						failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 					}
 			})
 			}, failure: { (error) -> Void in
-				failure(FlipError(error: "Error retrieving contacts.", details:nil))
+				failure(FlipError(error: "Error retrieving contacts.", details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
 		})
 	}
 	
@@ -463,7 +447,7 @@ public class UserService: FlipsService {
 	
 	func getMyFlips(successCompletion: UserServiceMyFlipsSuccessResponse, failCompletion: UserServiceMyFlipsFailResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -476,16 +460,12 @@ public class UserService: FlipsService {
 				successCompletion(JSON(responseObject))
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("UserService.getMyFlips() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failCompletion(FlipError(error: response["error"] as String!, details: details))
+					failCompletion(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failCompletion(FlipError(error: error.localizedDescription, details : details))
+					failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 			}
 		)

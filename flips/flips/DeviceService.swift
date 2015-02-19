@@ -32,7 +32,7 @@ public class DeviceService: FlipsService {
     
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipsServiceCode.NO_RESPONSE_CODE))
             return
         }
 
@@ -53,19 +53,12 @@ public class DeviceService: FlipsService {
                 success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("DeviceService.createDevice() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-					if (response["details"] != nil) {
-						details = response["details"] as String
-					}
-                    failure(FlipError(error: response["error"] as String!, details: details))
+					failure(FlipError(error: response["error"] as String!, details: nil, code: code))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details : details))
+					failure(FlipError(error: error.localizedDescription, details : nil, code: code))
                 }
             }
         )
@@ -80,7 +73,7 @@ public class DeviceService: FlipsService {
     
     func verifyDevice(userId: String, deviceId: String, verificationCode: String, phoneNumber: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipsServiceCode.NO_RESPONSE_CODE))
             return
         }
 
@@ -105,19 +98,12 @@ public class DeviceService: FlipsService {
                 success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("DeviceService.verifyDevice() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					if (response["details"] != nil) {
-						details = response["details"] as String
-					}
-					failure(FlipError(error: response["error"] as String!, details: details))
+					failure(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details : details))
+					failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
             }
         )

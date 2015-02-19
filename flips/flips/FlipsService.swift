@@ -12,10 +12,23 @@
 
 public class FlipsService : NSObject {
     
-    let HOST: String = "http://flips-dev95.arctouch.com"
+    let HOST: String = "http://10.0.0.181:1337"
 	
-	class func isForbiddenRequest(error: NSError!) -> Bool {
-		return (error.localizedDescription.rangeOfString("403") != nil)
+	func isForbiddenRequest(error: NSError!) -> Bool {
+		return (error.localizedDescription.rangeOfString(String(FlipsServiceCode.FORBIDDEN_REQUEST_CODE)) != nil)
+	}
+	
+	func parseResponseError(error: NSError!) -> Int {
+		if (isForbiddenRequest(error)) {
+			return FlipsServiceCode.FORBIDDEN_REQUEST_CODE
+		} else {
+			return FlipsServiceCode.NO_RESPONSE_CODE
+		}
 	}
 
+}
+
+public struct FlipsServiceCode {
+	static let FORBIDDEN_REQUEST_CODE: Int = 403
+	static let NO_RESPONSE_CODE: Int = 0
 }
