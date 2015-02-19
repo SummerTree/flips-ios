@@ -142,7 +142,7 @@ class FlipMessageDataSource : BaseDataSource {
         let roomDataSource = RoomDataSource(context: currentContext)
         let room = roomDataSource.retrieveRoomWithId(roomID)
         for (var i = 0; i < room.flipMessages.count; i++) {
-            let flipMessage = room.flipMessages.objectAtIndex(i) as FlipMessage
+            let flipMessage = room.flipMessages.objectAtIndex(i).inContext(currentContext) as FlipMessage
             flipMessage.removed = true
         }
     }
