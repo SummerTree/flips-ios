@@ -24,16 +24,18 @@ public class StorageCache {
     private let cacheDirectoryPath: NSURL
     private let sizeLimitInBytes: UInt64
     private let cacheJournal: CacheJournal
+    private let cacheQueue: dispatch_queue_t
     
-    init(cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
+    init(cacheID: String, cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
         self.sizeLimitInBytes = sizeLimitInBytes
         let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
         let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
         self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)!
-        let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheDirectoryName).cache")
+        let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheID).cache")
         self.cacheJournal = CacheJournal(absolutePath: journalName)
+        self.cacheQueue = dispatch_queue_create(cacheID, nil)
         self.initCacheDirectory()
         self.cacheJournal.open()
     }
@@ -75,7 +77,7 @@ public class StorageCache {
     func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            dispatch_async(self.cacheQueue) {
                 success?(localPath)
                 return
             }
@@ -83,7 +85,7 @@ public class StorageCache {
             return CacheGetResponse.DATA_IS_READY
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        dispatch_async(self.cacheQueue) {
             Downloader.sharedInstance.downloadTask(remoteURL,
                 localURL: NSURL(fileURLWithPath: localPath)!,
                 completion: { (result) -> Void in
@@ -133,21 +135,19 @@ public class StorageCache {
     }
     
     private func scheduleCleanup() -> Void {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            let cacheOverflow = self.cacheJournal.cacheSize - self.sizeLimitInBytes
-            if (cacheOverflow <= 0) {
-                return
-            }
-            
-            let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheOverflow)
-            let fileManager = NSFileManager.defaultManager()
-            for path in leastRecentlyUsed {
-                var error: NSError? = nil
-                if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(path). Error: \(error)")
+        dispatch_async(self.cacheQueue) {
+            let cacheOverflow = self.cacheJournal.cacheSize-self.sizeLimitInBytes
+            if (cacheOverflow > 0) {
+                let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheOverflow)
+                let fileManager = NSFileManager.defaultManager()
+                for path in leastRecentlyUsed {
+                    var error: NSError? = nil
+                    if (!fileManager.removeItemAtPath(path, error: &error)) {
+                        println("Could not remove file \(path). Error: \(error)")
+                    }
                 }
+                self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
             }
-            self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
         }
     }
     
