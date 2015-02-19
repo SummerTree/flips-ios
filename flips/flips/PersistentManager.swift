@@ -334,6 +334,8 @@ public class PersistentManager: NSObject {
             
             let group = dispatch_group_create()
             
+            let userDataSource = UserDataSource()
+            
             dispatch_group_enter(group)
             println("getMyFlips")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
@@ -345,6 +347,7 @@ public class PersistentManager: NSObject {
                         let flip = self.createOrUpdateFlipWithJson(myFlipJson)
                         myFlips.append(flip)
                     }
+                    userDataSource.downloadMyFlips(myFlips)
                     
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
@@ -353,10 +356,6 @@ public class PersistentManager: NSObject {
                     dispatch_group_leave(group)
                 })
             })
-            
-            let userDataSource = UserDataSource()
-            userDataSource.downloadMyFlips(myFlips)
-            
             
             let roomService = RoomService()
             println("getMyRooms")
