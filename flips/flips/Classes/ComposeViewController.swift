@@ -121,12 +121,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
 					PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
 				}
 			}, failure: { (flipError) -> Void in
-				if let errorDetails = flipError!.details {
-					if (errorDetails == "Forbidden") {
+				if let code = flipError?.code {
+					if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
 						AuthenticationHelper.sharedInstance.logout()
-						let navigationController: UINavigationController = self.presentingViewController as UINavigationController
-						navigationController.popToRootViewControllerAnimated(true)
-						self.dismissViewControllerAnimated(true, completion:nil)
+						self.navigationController?.pushViewController(LoginViewController(), animated: false)
 					}
 				}
 				if (flipError != nil) {

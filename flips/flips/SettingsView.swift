@@ -300,14 +300,16 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     // MARK: - Setters
     private func updateUserProfileInfo() {
-        let loggedUser = User.loggedUser()!
-        let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
-        let fullname = User.loggedUser()!.fullName()
-        
-        self.userProfileCell.setAvatarURL(User.loggedUser()!.photoURL)
-        self.userProfileCell.setActionLabelText(fullname)
-        self.userProfileCell.setActionDetailLabelText(detailedLabel)
-    }
+		if let loggedUser = User.loggedUser() {
+			let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
+			let fullname = User.loggedUser()!.fullName()
+			
+			self.userProfileCell.setAvatarURL(User.loggedUser()!.photoURL)
+			self.userProfileCell.setActionLabelText(fullname)
+			self.userProfileCell.setActionDetailLabelText(detailedLabel)
+
+		}
+	}
 }
 
 protocol SettingsViewDelegate {

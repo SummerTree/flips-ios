@@ -20,7 +20,7 @@ public class BuilderService: FlipsService {
 	
 	func getSuggestedWords(successCompletion: GetSuggestedWordsSuccessResponse, failCompletion: SuggestedWordsFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -31,16 +31,12 @@ public class BuilderService: FlipsService {
 		request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
 			successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
 			}) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("BuilderService.getSuggestedWords() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failCompletion(FlipError(error: response["error"] as String!, details: details))
+					failCompletion(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failCompletion(FlipError(error: error.localizedDescription, details : details))
+					failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 		}
 	}

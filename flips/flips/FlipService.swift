@@ -89,7 +89,7 @@ public class FlipService: FlipsService {
 	
 	func stockFlipsForWord(word: String, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -106,16 +106,12 @@ public class FlipService: FlipsService {
 				success(JSON(responseObject))
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("FlipService.stockFlipsForWord() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details: details))
+					failure(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details : details))
+					failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 			}
 		)
@@ -123,7 +119,7 @@ public class FlipService: FlipsService {
 	
 	func stockFlipsForWords(words: [String], success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -140,16 +136,12 @@ public class FlipService: FlipsService {
 				success(JSON(responseObject))
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("FlipService.stockFlipsForWords() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details: details))
+					failure(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failure(FlipError(error: error.localizedDescription, details : details))
+					failure(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 			}
 		)
@@ -172,7 +164,7 @@ public class FlipService: FlipsService {
 			self.uploadData(soundData!, toUrl: url, withFileName: fileName, partName: "sound", mimeType: "audio/mp4a-latm", successCallback: successCallback, failCallback: failCallback)
 		}
 		else {
-			failCallback(FlipError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil))
+			failCallback(FlipError(error: NSLocalizedString("Audio file not found. Please try again.", comment: "Audio file not found. Please try again."), details:nil, code: FlipError.NO_CODE))
 		}
 	}
 	
@@ -192,13 +184,13 @@ public class FlipService: FlipsService {
 			self.uploadData(videoData!, toUrl: url, withFileName: fileName, partName: "background", mimeType: "video/quicktime", successCallback: successCallback, failCallback: failCallback)
 		}
 		else {
-			failCallback(FlipError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil))
+			failCallback(FlipError(error: NSLocalizedString("Video file not found. Please try again.", comment: "Video file not found. Please try again."), details:nil, code: FlipError.NO_CODE))
 		}
 	}
 	
 	private func uploadData(data: NSData, toUrl url: String, withFileName fileName: String, partName: String, mimeType: String, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failCallback(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			failCallback(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -215,16 +207,12 @@ public class FlipService: FlipsService {
 				successCallback(url)
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("FlipsService.uploadData() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					failCallback(FlipError(error: response["error"] as String!, details: details))
+					failCallback(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					failCallback(FlipError(error: error.localizedDescription, details : details))
+					failCallback(FlipError(error: error.localizedDescription, details : nil, code: code))
 				}
 			}
 		)
@@ -232,7 +220,7 @@ public class FlipService: FlipsService {
 	
 	private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
 		if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			uploadFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+			uploadFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
 			return
 		}
 		
@@ -253,16 +241,12 @@ public class FlipService: FlipsService {
 				uploadFlipSuccessCallback(JSON(responseObject))
 			},
 			failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				var details : String = ""
-				if (FlipsService.isForbiddenRequest(error)) {
-					println("FlipsService.uploadNewFlip() - Forbidden: 403")
-					details = "Forbidden"
-				}
+				let code = self.parseResponseError(error)
 				if (operation.responseObject != nil) {
 					let response = operation.responseObject as NSDictionary
-					uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: details))
+					uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil, code: code))
 				} else {
-					uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details: details))
+					uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details: nil, code: code))
 				}
 			}
 		)
