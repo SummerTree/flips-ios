@@ -281,12 +281,10 @@ class PlayerView: UIView {
         
         let thumbnailsCache = ThumbnailsCache.sharedInstance
         thumbnailsCache.get(NSURL(string: thumbnailFlip!.thumbnailURL)!,
-            success: {
-                (localPath: String!) in
+            success: { (localPath: String!) in
                 success?(UIImage(contentsOfFile: localPath)!)
                 return
-            }, failure: {
-                (error: FlipError) in
+            }, failure: { (error: FlipError) in
                 println("Could not get thumbnail from cache, using empty thumbnail.")
                 success?(UIImage.emptyFlipImage())
         })

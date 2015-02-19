@@ -45,9 +45,8 @@ class FlipsViewCell : UICollectionViewCell {
             
             if (flip.isPrivate.boolValue) {                
                 let flipsCache = FlipsCache.sharedInstance
-                flipsCache.videoForFlip(flip,
-                    success: {
-                        (localPath: String!) in
+                let response = flipsCache.videoForFlip(flip,
+                    success: { (localPath: String!) in
                         var image: UIImage!
                         if (flip.isBackgroundContentTypeVideo()) {
                             image = VideoHelper.generateThumbImageForFile(localPath)
@@ -59,11 +58,12 @@ class FlipsViewCell : UICollectionViewCell {
                             self.cellImageView.image = image
                         })
                     },
-                    failure: {
-                        (error: FlipError) in
+                    failure: { (error: FlipError) in
                         println("Failed to get resource from cache, error: \(error)")
-                        //TODO enhance error handling
                 })
+                if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                    //Waiting for FLIPS-183
+                }
             } else {
                 let url = NSURL(string: flip.thumbnailURL)
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in

@@ -61,12 +61,10 @@ extension FlipMessage {
         
         let thumbnailsCache = ThumbnailsCache.sharedInstance
         thumbnailsCache.get(NSURL(string: firstFlip!.thumbnailURL!)!,
-            success: {
-                (localPath: String!) in
+            success: { (localPath: String!) in
                 var image = UIImage(contentsOfFile: localPath)
                 success?(image)
-            }, failure: {
-                (error: FlipError) in
+            }, failure: { (error: FlipError) in
                 println("Could not get thumbnail for flip \(firstFlip), trying to create it.")
                 self.createThumbnail(success)
         })
@@ -101,17 +99,14 @@ extension FlipMessage {
         } else if (firstFlip!.isBackgroundContentTypeVideo()) {
             let flipsCache = FlipsCache.sharedInstance
             flipsCache.videoForFlip(firstFlip!,
-                success: {
-                    (localPath: String!) in
+                success: { (localPath: String!) in
                     if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(localPath) {
                         let thumbnailsCache = ThumbnailsCache.sharedInstance
                         thumbnailsCache.put(NSURL(string: firstFlip!.thumbnailURL)!, data: UIImagePNGRepresentation(videoThumbnailImage))
                         success?(videoThumbnailImage)
                     }
-                }, failure: {
-                    (error: FlipError) in
+                }, failure: { (error: FlipError) in
                     println("Failed to get flip \(firstFlip!) from cache.")
-                    //TODO Enhance error handling
             })
         }
     }

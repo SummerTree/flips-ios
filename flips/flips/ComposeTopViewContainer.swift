@@ -162,14 +162,12 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
                 },
                 failure: { (error: FlipError) in
                     println("Failed to get resource from cache, error: \(error)")
-                    //TODO enhance error handling
             })
             if (getResponse == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                //TODO show loading spinner
+                //Waiting for FLIPS-183
             }
             if (getResponse == StorageCache.CacheGetResponse.INVALID_URL) {
                 UIAlertView.showUnableToLoadFlip()
-                //TODO enhance error handling
             }
         } else {
             UIAlertView.showUnableToLoadFlip()
