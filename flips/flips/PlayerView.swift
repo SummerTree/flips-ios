@@ -264,7 +264,7 @@ class PlayerView: UIView {
         super.layoutSubviews()
     }
 
-    private func firstThumbnail() -> UIImage {
+    private func firstThumbnail(success: ((UIImage) -> Void)?) -> Void {
         // Get the first non-blank flip
         var thumbnailFlip: Flip?
         for flip in self.flips {
@@ -273,20 +273,31 @@ class PlayerView: UIView {
                 break;
             }
         }
-
-        var thumbnailImage: UIImage?
         
-        if (thumbnailFlip != nil) {
-            thumbnailImage = CacheHandler.sharedInstance.thumbnailForUrl(thumbnailFlip!.backgroundURL)
+        if (thumbnailFlip == nil || thumbnailFlip!.thumbnailURL == nil) {
+            success?(UIImage.emptyFlipImage())
+            return
         }
-
-        return thumbnailImage ?? UIImage.emptyFlipImage()
+        
+        let thumbnailsCache = ThumbnailsCache.sharedInstance
+        thumbnailsCache.get(NSURL(string: thumbnailFlip!.thumbnailURL)!,
+            success: {
+                (localPath: String!) in
+                success?(UIImage(contentsOfFile: localPath)!)
+                return
+            }, failure: {
+                (error: FlipError) in
+                println("Could not get thumbnail from cache, using empty thumbnail.")
+                success?(UIImage.emptyFlipImage())
+        })
     }
 
     private func showThumbnail() {
         if (self.thumbnailView != nil) {
-            let thumbnailImage = self.firstThumbnail()
-            self.thumbnailView.image = thumbnailImage
+            self.firstThumbnail {
+                (image: UIImage) in
+                self.thumbnailView.image = image
+            }
             self.thumbnailView.hidden = false
             self.setWord(self.words.first!)
         }

@@ -103,7 +103,7 @@ public class StorageCache {
     }
     
     /**
-    Inserts the data into the cache, identified by its path. This operation is synchronous.
+    Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
     
     :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: srcPath   The path where the asset is locally saved. The asset will be moved to the cache.
@@ -120,6 +120,24 @@ public class StorageCache {
                 println("Error move asset to the cache dir: \(error)")
             }
             self.cacheJournal.insertNewEntry(toPath)
+            self.scheduleCleanup()
+        }
+    }
+    
+    /**
+    Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
+    
+    :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    :param: data      The actual asset that is going to be inserted into the cache.
+    */
+    func put(remoteURL: NSURL, data: NSData) -> Void {
+        let localPath = self.createLocalPath(remoteURL)
+        
+        let fileManager = NSFileManager.defaultManager()
+        
+        if (!self.cacheHit(localPath)) {
+            fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
+            self.cacheJournal.insertNewEntry(localPath)
             self.scheduleCleanup()
         }
     }

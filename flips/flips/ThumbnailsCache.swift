@@ -34,4 +34,8 @@ public class ThumbnailsCache {
         self.cache.put(remoteURL, localPath: localPath)
     }
     
+    func put(remoteURL: NSURL, data: NSData) -> Void {
+        self.cache.put(remoteURL, data: data)
+    }
+    
 }

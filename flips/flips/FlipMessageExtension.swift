@@ -52,32 +52,34 @@ extension FlipMessage {
         return " ".join(words)
     }
     
-    func messageThumbnail(success: ((UIImage?) -> Void)?) -> Void {
+    func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
         let firstFlip = self.flips.first
-        var thumbnail: UIImage?
-        
-        if let backgroundURL = firstFlip?.backgroundURL {
-            thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(backgroundURL)
-        }
-        
-        if (thumbnail != nil) {
-            success?(thumbnail)
+        if (firstFlip == nil || firstFlip!.thumbnailURL == nil) {
+            self.createThumbnail(success)
             return
         }
-
-        self.createThumbnail(success)
+        
+        let thumbnailsCache = ThumbnailsCache.sharedInstance
+        thumbnailsCache.get(NSURL(string: firstFlip!.thumbnailURL!)!,
+            success: {
+                (localPath: String!) in
+                var image = UIImage(contentsOfFile: localPath)
+                success?(image)
+            }, failure: {
+                (error: FlipError) in
+                println("Could not get thumbnail for flip \(firstFlip), trying to create it.")
+                self.createThumbnail(success)
+        })
     }
     
-    func createThumbnail(success: ((UIImage) -> Void)? = nil) -> Void {
+    private func createThumbnail(success: ((UIImage) -> Void)? = nil) -> Void {
         let firstFlip = self.flips.first
-
         if (firstFlip == nil) {
             return
         }
-
-        let cacheHandler = CacheHandler.sharedInstance
         
         if (firstFlip!.isBackgroundContentTypeImage()) {
+            let cacheHandler = CacheHandler.sharedInstance
             var backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
             
             var thumbnailImage: UIImage
@@ -102,7 +104,8 @@ extension FlipMessage {
                 success: {
                     (localPath: String!) in
                     if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(localPath) {
-                        cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
+                        let thumbnailsCache = ThumbnailsCache.sharedInstance
+                        thumbnailsCache.put(NSURL(string: firstFlip!.thumbnailURL)!, data: UIImagePNGRepresentation(videoThumbnailImage))
                         success?(videoThumbnailImage)
                     }
                 }, failure: {

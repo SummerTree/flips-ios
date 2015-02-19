@@ -40,45 +40,6 @@ public class Downloader : NSObject {
         super.init()
         downloadInProgressURLs = NSHashTable()
     }
-
-    
-    // MARK: - Download Private Method
-    
-    private func downloadDataAndCacheForUrl(urlString: String, withCompletion completion: DownloadFinished, isTemporary: Bool = true) {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let manager = AFURLSessionManager(sessionConfiguration: configuration)
-        
-        self.downloadInProgressURLs.addObject(urlString)
-        
-        let url = NSURL(string: urlString)
-        let request = NSMutableURLRequest(URL: url!)
-        request.timeoutInterval = self.TIME_OUT_INTERVAL
-        
-        var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
-            let path = CacheHandler.sharedInstance.getFilePathForUrl(urlString, isTemporary: isTemporary)
-            return NSURL(fileURLWithPath: path)
-            }) { (response, filePath, error) -> Void in
-                self.downloadInProgressURLs.removeObject(urlString)
-                
-                if let httpResponse = response as? NSHTTPURLResponse {
-                    var responseContentType = httpResponse.allHeaderFields["Content-Type"] as String?
-                    if let contentType = responseContentType {
-                        println("### content-type = \(contentType) ###")
-                        completion(self.backgroundTypeForContentType(contentType), error)
-                    } else {
-                        println("### Error ###")
-                        println("### Content type is not included in response object. ###")
-                    }
-                } else {
-                    println("### Error ###")
-                    println("### Response is invalid. ###")
-                    completion(self.backgroundTypeForContentType(""), error)
-                }
-        }
-        
-        downloadTask.resume()
-    }
-    
     
     // MARK: - Download Public Methods
 
@@ -136,52 +97,6 @@ public class Downloader : NSObject {
         }
         
         downloadTask.resume()
-    }
-
-    func downloadDataForFlip(flip: Flip, isTemporary: Bool = true, completion: DownloadFinishedCompletion? = nil) {
-        dispatch_async(downloadQueue, { () -> Void in
-            var group = dispatch_group_create()
-            
-            var downloadError: NSError?
-            if (self.isValidURL(flip.backgroundURL) && (!self.downloadInProgressURLs.containsObject(flip.backgroundURL))) {
-                let result = CacheHandler.sharedInstance.hasCachedFileForUrl(flip.backgroundURL)
-                if (!result.hasCache || isTemporary != result.isTemporary) {
-                    dispatch_group_enter(group)
-                    let flipId = flip.flipID
-                    self.downloadDataAndCacheForUrl(flip.backgroundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                        downloadError = error
-                        
-                        let flipDataSource = FlipDataSource()
-                        if let localFlip = flipDataSource.retrieveFlipWithId(flipId) {
-                            PersistentManager.sharedInstance.setFlipBackgroundContentType(backgroundContentType, forFlip: localFlip)
-                        } else {
-                            downloadError = NSError.flipsError(code: .BadFlipID, userInfo: nil)
-                        }
-                        
-                        dispatch_group_leave(group);
-                    }, isTemporary: isTemporary)
-                }
-            }
-            
-            if (self.isValidURL(flip.soundURL) && (!self.downloadInProgressURLs.containsObject(flip.soundURL))) {
-                let result = CacheHandler.sharedInstance.hasCachedFileForUrl(flip.soundURL)
-                if (!result.hasCache || isTemporary != result.isTemporary) {
-                    dispatch_group_enter(group)
-                    self.downloadDataAndCacheForUrl(flip.soundURL, withCompletion: { (backgroundContentType, error) -> Void in
-                        downloadError = error
-                        dispatch_group_leave(group);
-                    }, isTemporary: isTemporary)
-                }
-            }
-            
-            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
-            
-            if (completion == nil) {
-                self.sendDownloadFinishedBroadcastForFlip(flip, error: downloadError)
-            } else {
-                completion!(error: downloadError)
-            }
-        })
     }
     
     func sendDownloadFinishedBroadcastForFlip(flip: Flip, error: NSError?) {
