@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public class StorageCache {
+@objc public class StorageCache {
 
     public typealias CacheSuccessCallback = (String!) -> Void
     public typealias CacheFailureCallback = (FlipError) -> Void
@@ -132,6 +132,8 @@ public class StorageCache {
     }
     
     private func scheduleCleanup() -> Void {
+        return;
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let cacheOverflow = self.cacheJournal.cacheSize - self.sizeLimitInBytes
             if (cacheOverflow <= 0) {

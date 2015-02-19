@@ -17,8 +17,6 @@
 @implementation VideoComposer
 
 - (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audioURL successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler {
-    // TODO define video URL and how it'll be added to the cache
-    
     NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.mov"];
     
     NSString *videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"video.mov"];
@@ -42,29 +40,11 @@
 - (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler {
     NSURL *croppedVideo = [self videoFromOriginalVideo:originalVideo];
     
-    // TODO define thumbnail URL and how it'll be added to the cache
     UIImage *thumbnail = [self thumbnailForVideo:croppedVideo];
     NSString *thumbnailPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"thumbnail.png"];
     [UIImagePNGRepresentation(thumbnail) writeToFile:thumbnailPath atomically:YES];
     
     successHandler(croppedVideo, [NSURL fileURLWithPath:thumbnailPath]);
-}
-
-- (NSArray *)videoAssetsForFlips:(NSArray *)flips {
-    CacheHandler *cacheHandler = [CacheHandler sharedInstance];
-    NSMutableArray *messageParts = [NSMutableArray array];
-    
-    for (Flip *flip in flips) {
-        NSString *filePath = [cacheHandler getFilePathForUrlFromAnyFolder:flip.backgroundURL];
-        NSURL *videoURL = [NSURL fileURLWithPath:filePath];
-        AVURLAsset *videoTrack = [AVURLAsset URLAssetWithURL:videoURL options:nil];
-        
-        if (videoTrack) {
-            [messageParts addObject:videoTrack];
-        }
-    }
-    
-    return [NSArray arrayWithArray:messageParts];
 }
 
 - (UIImage *)thumbnailForVideo:(NSURL *)videoURL {

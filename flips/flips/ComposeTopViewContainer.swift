@@ -134,18 +134,23 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     func showFlip(flipId: String, withWord word: String) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-            let filePath = flip.backgroundContentLocalPath()
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                UIView.animateWithDuration(1.0, animations: { () -> Void in
-                    self.flipViewer.setWord(word)
-                    self.flipViewer.setVideoURL(NSURL.fileURLWithPath(filePath)!)
-                    self.cameraPreview.removeObservers()
-                    self.cameraPreview.alpha = 0.0
-                    self.flipViewer.alpha = 1.0
-                    self.bringSubviewToFront(self.flipViewer)
+            FlipsCache.sharedInstance.get(NSURL(string: flip.backgroundURL)!,
+                success: { (localPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        UIView.animateWithDuration(1.0, animations: { () -> Void in
+                            self.flipViewer.setWord(word)
+                            self.flipViewer.setVideoURL(NSURL.fileURLWithPath(localPath)!)
+                            self.cameraPreview.removeObservers()
+                            self.cameraPreview.alpha = 0.0
+                            self.flipViewer.alpha = 1.0
+                            self.bringSubviewToFront(self.flipViewer)
+                        })
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                    //TODO enhance error handling
                 })
-            })
         } else {
             UIAlertView.showUnableToLoadFlip()
         }

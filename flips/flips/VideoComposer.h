@@ -25,7 +25,6 @@ typedef void (^VideoComposerErrorHandler)(NSError *error);
 - (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audio successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler;
 - (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler;
 
-- (NSArray *)videoAssetsForFlips:(NSArray *)flips;
 - (UIImage *)thumbnailForVideo:(NSURL *)videoURL;
 
 - (void)clearTempCache;

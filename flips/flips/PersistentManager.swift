@@ -147,7 +147,7 @@ public class PersistentManager: NSObject {
             })
 
             //cacheHandler.saveDataAtPath(thumbnailURL.absoluteString!, withUrl: flip.thumbnailURL, isTemporary: false)
-            cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: flip.backgroundURL, isTemporary: false)
+            //cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: flip.backgroundURL, isTemporary: false)
             
             createFlipSuccessCompletion(flip)
         }) { (flipError: FlipError?) -> Void in

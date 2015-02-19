@@ -43,18 +43,16 @@ class FlipsViewCell : UICollectionViewCell {
             let flipDataSource = FlipDataSource()
             var flip = flipDataSource.retrieveFlipWithId(self.flipID)
             
-            if (flip.isPrivate.boolValue) {
-                let thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(flip.thumbnailURL)
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.cellImageView.image = thumbnail
-                })
-            } else {
-                let url = NSURL(string: flip.thumbnailURL)
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White)
-                    self.cellImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                    })
+            if (flip.thumbnailURL != nil && !flip.thumbnailURL.isEmpty) {
+                let thumbnail = FlipsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
+                    success: { (localPath: String!) in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.cellImageView.image = UIImage(contentsOfFile: localPath)
+                        })
+                    },
+                    failure: { (error: FlipError) in
+                        println("Failed to get resource from cache, error: \(error)")
+                        //TODO enhance error handling
                 })
             }
         })

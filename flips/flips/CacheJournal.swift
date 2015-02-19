@@ -44,6 +44,10 @@ public class CacheJournal {
     
     func insertNewEntry(key: String) -> Void {
         let attributes = NSFileManager.defaultManager().attributesOfItemAtPath(key, error: nil)
+        if (attributes == nil) {
+            println("Can't get file (\(key)) attributes, not inserting into cache.")
+            return
+        }
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
         var newEntry = JournalEntry(key: key, size: entrySize, timestamp: entryTimestamp)

@@ -16,6 +16,7 @@ class PlayerView: UIView {
 
     var isPlaying = false
     var loadPlayerOnInit = false
+    var playInLoop = false
 
     private var words: Array<String>!
     private var playerItems: Array<FlipPlayerItem>!
@@ -138,20 +139,17 @@ class PlayerView: UIView {
     func setupPlayerWithFlips(flips: Array<Flip>) {
         self.playerItems = [FlipPlayerItem]()
         self.words = []
-        
-        var videoComposer = VideoComposer()
-        var videoAssets: Array<AVAsset> = videoComposer.videoAssetsForFlips(flips as Array<AnyObject>) as Array<AVAsset>
-  
-        for (index, videoAsset) in enumerate(videoAssets) {
+
+        for (index, flip) in enumerate(flips) {
+            var videoURL = NSURL(string: flip.backgroundURL)
+            var videoAsset = AVURLAsset(URL: videoURL, options: nil)
             let playerItem = playerItemWithVideoAsset(videoAsset)
             playerItem.order = index
             self.playerItems.append(playerItem)
-        }
-
-        for flip in flips {
+            
             self.words.append(flip.word)
         }
-        
+
         let thumbnailURL = flips.first!.thumbnailURL
         if (thumbnailURL != nil || !thumbnailURL.isEmpty) {
             self.thumbnailView.image = CacheHandler.sharedInstance.thumbnailForUrl(thumbnailURL)
@@ -199,9 +197,13 @@ class PlayerView: UIView {
     func videoPlayerItemEnded(notification: NSNotification) {
         let player = self.player()
         let currentItem = player.currentItem as FlipPlayerItem
-
+ 
         if (self.playerItems.count == 1) {
             player.seekToTime(kCMTimeZero)
+            
+            if (!self.playInLoop) {
+                self.pause()
+            }
         } else {
             player.advanceToNextItem()
             
@@ -214,9 +216,14 @@ class PlayerView: UIView {
             self.setWord(self.words[nextWordIndex])
             
             if (currentItem.order == self.playerItems.count - 1) {
-                player.pause()
                 delegate?.playerViewDidFinishPlayback(self)
-                self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("play"), userInfo:nil, repeats:false)
+            
+                if (self.playInLoop) {
+                    player.pause()
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("play"), userInfo:nil, repeats:false)
+                } else {
+                    self.pause()
+                }
             }
         }
     }
