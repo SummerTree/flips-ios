@@ -107,12 +107,16 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
 							AuthenticationHelper.sharedInstance.logout()
 							self.openLoginViewController()
 						})
-					} else {
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
-							self.openInboxViewController(userDataSource)
-						})
-					}
-				}
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.openInboxViewController(userDataSource)
+                        })
+                    }
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.openInboxViewController(userDataSource)
+                    })
+                }
             })
         } else {
             openLoginViewController()
