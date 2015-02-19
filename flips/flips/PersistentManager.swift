@@ -148,15 +148,16 @@ public class PersistentManager: NSObject {
                 flip.setBackgroundContentType(BackgroundContentType.Image)
             })
             
+            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
             if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
+                cacheHandler.saveImage(backgroundImage!, withUrl: flipInContext.backgroundURL, isTemporary: false)
             }
             
             if (soundPath != nil) {
-                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
+                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flipInContext.soundURL, isTemporary: false)
             }
             
-            createFlipSuccessCompletion(flip)
+            createFlipSuccessCompletion(flipInContext)
         }) { (flipError: FlipError?) -> Void in
             createFlipFailCompletion(flipError)
         }
