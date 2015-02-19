@@ -177,13 +177,13 @@ public class PersistentManager: NSObject {
                 flip.setBackgroundContentType(BackgroundContentType.Video)
             })
             
+            var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
             if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
-                cacheHandler.saveThumbnail(thumbnail, forUrl: flip.backgroundURL)
+                cacheHandler.saveThumbnail(thumbnail, forUrl: flipInContext.backgroundURL)
             }
             
-            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flip.backgroundURL, isTemporary: false)
-            
-            createFlipSuccessCompletion(flip)
+            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flipInContext.backgroundURL, isTemporary: false)
+            createFlipSuccessCompletion(flipInContext)
         }) { (flipError: FlipError?) -> Void in
             createFlipFailCompletion(flipError)
         }
