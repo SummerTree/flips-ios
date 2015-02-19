@@ -135,8 +135,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
 				if let code = flipError.code? {
 					if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
 						AuthenticationHelper.sharedInstance.logout()
-						self.navigationController!.popToRootViewControllerAnimated(true)
-						self.dismissViewControllerAnimated(true, completion:nil)
+						self.navigationController?.pushViewController(LoginViewController(), animated: false)
 					}
 				}
                 self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)

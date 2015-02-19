@@ -155,8 +155,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
 										println("403 - preview view controller")
 										AuthenticationHelper.sharedInstance.logout()
 										let navigationController: UINavigationController = self.presentingViewController as UINavigationController
-										navigationController.popToRootViewControllerAnimated(true)
-										self.dismissViewControllerAnimated(true, completion:nil)
+										navigationController.pushViewController(LoginViewController(), animated: false)
 									}
 								}
                                 message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"

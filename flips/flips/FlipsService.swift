@@ -12,18 +12,19 @@
 
 public class FlipsService : NSObject {
     
-    let HOST: String = "http://10.0.0.181:1337"
+    let HOST: String = "http://192.168.50.202:1337"
 	
 	func isForbiddenRequest(error: NSError!) -> Bool {
 		return (error.localizedDescription.rangeOfString(String(FlipsServiceCode.FORBIDDEN_REQUEST_CODE)) != nil)
 	}
 	
-	func parseResponseError(error: NSError!) -> Int {
-		if (isForbiddenRequest(error)) {
-			return FlipsServiceCode.FORBIDDEN_REQUEST_CODE
-		} else {
-			return FlipsServiceCode.NO_RESPONSE_CODE
+	func parseResponseError(error: NSError?) -> Int {
+		if let errorToParse = error {
+			if (isForbiddenRequest(errorToParse)) {
+				return FlipsServiceCode.FORBIDDEN_REQUEST_CODE
+			}
 		}
+		return FlipsServiceCode.NO_RESPONSE_CODE
 	}
 
 }

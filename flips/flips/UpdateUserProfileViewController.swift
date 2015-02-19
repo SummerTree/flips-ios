@@ -101,8 +101,8 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
 					if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
 						AuthenticationHelper.sharedInstance.logout()
 						let navigationController: UINavigationController = self.presentingViewController as UINavigationController
-						navigationController.popToRootViewControllerAnimated(true)
-						self.dismissViewControllerAnimated(true, completion:nil)
+						navigationController.pushViewController(LoginViewController(), animated: false)
+						self.dismissViewControllerAnimated(true, completion: nil)
 					}
 				}
                 self.hideActivityIndicator()
