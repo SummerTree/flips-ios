@@ -136,18 +136,21 @@ public class StorageCache {
     
     private func scheduleCleanup() -> Void {
         dispatch_async(self.cacheQueue) {
-            let cacheOverflow = self.cacheJournal.cacheSize-self.sizeLimitInBytes
-            if (cacheOverflow > 0) {
-                let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheOverflow)
-                let fileManager = NSFileManager.defaultManager()
-                for path in leastRecentlyUsed {
-                    var error: NSError? = nil
-                    if (!fileManager.removeItemAtPath(path, error: &error)) {
-                        println("Could not remove file \(path). Error: \(error)")
-                    }
-                }
-                self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
+            let cacheSize = self.cacheJournal.cacheSize
+            if (cacheSize < self.sizeLimitInBytes) {
+                return
             }
+            
+            let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheSize-self.sizeLimitInBytes)
+            let fileManager = NSFileManager.defaultManager()
+            for path in leastRecentlyUsed {
+                var error: NSError? = nil
+                if (!fileManager.removeItemAtPath(path, error: &error)) {
+                    println("Could not remove file \(path). Error: \(error)")
+                }
+            }
+            
+            self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
         }
     }
     
