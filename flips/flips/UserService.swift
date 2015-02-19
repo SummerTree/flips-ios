@@ -438,7 +438,7 @@ public class UserService: FlipsService {
 					}
 			})
 			}, failure: { (error) -> Void in
-				failure(FlipError(error: "Error retrieving contacts.", details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+				failure(FlipError(error: "Error retrieving contacts.", details:nil, code: FlipError.NO_CODE))
 		})
 	}
 	

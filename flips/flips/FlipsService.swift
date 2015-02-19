@@ -12,7 +12,7 @@
 
 public class FlipsService : NSObject {
     
-    let HOST: String = "http://192.168.50.202:1337"
+    let HOST: String = "http://flips-dev95.arctouch.com"
 	
 	func isForbiddenRequest(error: NSError!) -> Bool {
 		return (error.localizedDescription.rangeOfString(String(FlipsServiceCode.FORBIDDEN_REQUEST_CODE)) != nil)
