@@ -30,7 +30,7 @@ public class BuilderService: FlipsService {
         
         request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
-            }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 let code = self.parseResponseError(error)
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
