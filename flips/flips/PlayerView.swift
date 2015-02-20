@@ -141,18 +141,34 @@ class PlayerView: UIView {
         self.words = []
 
         for (index, flip) in enumerate(flips) {
-            var videoURL = NSURL(string: flip.backgroundURL)
-            var videoAsset = AVURLAsset(URL: videoURL, options: nil)
-            let playerItem = playerItemWithVideoAsset(videoAsset)
-            playerItem.order = index
-            self.playerItems.append(playerItem)
+            FlipsCache.sharedInstance.videoForFlip(flip,
+                success: { (localPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        var videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
+                        let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                        playerItem.order = index
+                        self.playerItems.append(playerItem)
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                })
+            
             
             self.words.append(flip.word)
         }
 
         let thumbnailURL = flips.first!.thumbnailURL
         if (thumbnailURL != nil || !thumbnailURL.isEmpty) {
-            self.thumbnailView.image = CacheHandler.sharedInstance.thumbnailForUrl(thumbnailURL)
+            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: thumbnailURL)!,
+                success: { (localThumbnailPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+            })
         }
 
         if (self.loadPlayerOnInit) {
@@ -173,7 +189,15 @@ class PlayerView: UIView {
         self.playerItems = [flipPlayerItem]
         
         if (thumbnailURL != nil) {
-            self.thumbnailView.image = CacheHandler.sharedInstance.thumbnailForUrl(thumbnailURL!.absoluteString!)
+            let response = ThumbnailsCache.sharedInstance.get(thumbnailURL!,
+                success: { (localThumbnailPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                })
         }
         
         if (self.loadPlayerOnInit) {

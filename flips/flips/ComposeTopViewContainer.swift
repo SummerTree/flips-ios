@@ -134,9 +134,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     func showFlip(flipId: String, withWord word: String) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-            FlipsCache.sharedInstance.get(NSURL(string: flip.backgroundURL)!,
+            let flipsCache = FlipsCache.sharedInstance
+            let getResponse = flipsCache.videoForFlip(flip,
                 success: { (localPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
                         UIView.animateWithDuration(1.0, animations: { () -> Void in
                             self.flipViewer.setWord(word)
                             self.flipViewer.setVideoURL(NSURL.fileURLWithPath(localPath)!)
@@ -149,8 +151,13 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
                 },
                 failure: { (error: FlipError) in
                     println("Failed to get resource from cache, error: \(error)")
-                    //TODO enhance error handling
-                })
+            })
+            if (getResponse == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                //Waiting for FLIPS-183
+            }
+            if (getResponse == StorageCache.CacheGetResponse.INVALID_URL) {
+                UIAlertView.showUnableToLoadFlip()
+            }
         } else {
             UIAlertView.showUnableToLoadFlip()
         }

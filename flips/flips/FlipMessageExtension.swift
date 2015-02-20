@@ -52,27 +52,20 @@ extension FlipMessage {
         return " ".join(words)
     }
     
-    func messageThumbnail() -> UIImage? {
+    func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
         let firstFlip = self.flips.first
-        
         if (firstFlip == nil || firstFlip!.thumbnailURL == nil) {
-            return UIImage.emptyFlipImage()
-        } else {
-            return CacheHandler.sharedInstance.thumbnailForUrl(firstFlip!.thumbnailURL);
+            return
         }
-    }
-    
-    func hasAllContentDownloaded() -> Bool {
-        let flips = self.flips
-
-        for var i = 0; i < flips.count; i++ {
-            var flip = flips[i] as Flip
-            if (!flip.hasAllContentDownloaded()) {
-                return false
-            }
-        }
-
-        return true
+        
+        let thumbnailsCache = ThumbnailsCache.sharedInstance
+        thumbnailsCache.get(NSURL(string: firstFlip!.thumbnailURL!)!,
+            success: { (localPath: String!) in
+                var image = UIImage(contentsOfFile: localPath)
+                success?(image)
+            }, failure: { (error: FlipError) in
+                println("Could not get thumbnail for flip \(firstFlip), trying to create it.")
+            })
     }
     
     
@@ -106,8 +99,8 @@ extension FlipMessage {
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
             dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
-            dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
+            dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
 
             flipsDictionary.append(dic)
         }

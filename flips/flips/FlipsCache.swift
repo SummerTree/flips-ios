@@ -1,5 +1,5 @@
 //
-// Copyright 2015 ArcTouch, Inc.
+// Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
 // This file, its contents, concepts, methods, behavior, and operation
@@ -10,11 +10,11 @@
 // the license agreement.
 //
 
-import Foundation
 
 public class FlipsCache {
     
-    let storageCache: StorageCache
+    let loggedUserStorageCache: StorageCache
+    let otherUsersStorageCache: StorageCache
     
     public class var sharedInstance : FlipsCache {
         struct Static {
@@ -24,15 +24,26 @@ public class FlipsCache {
     }
     
     init() {
-        self.storageCache = StorageCache(cacheDirectoryName: "user_flips", sizeLimitInBytes: 500000000) //500MB
+        self.loggedUserStorageCache = StorageCache(cacheID: "loggedUserStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 5000000) //5MB
+        self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 5000000) //5MB
     }
     
-    func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback, failure: StorageCache.CacheFailureCallback) -> StorageCache.CacheGetResponse {
-        return self.storageCache.get(remoteURL, success: success, failure: failure)
+    func videoForFlip(flip: Flip, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?) -> StorageCache.CacheGetResponse {
+        if (flip.backgroundURL == nil || flip.backgroundURL == "") {
+            return StorageCache.CacheGetResponse.INVALID_URL
+        }
+        
+        if let loggedUser = User.loggedUser() {
+            if (flip.owner != nil && flip.owner.userID == loggedUser.userID) {
+                return self.loggedUserStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure)
+            }
+        }
+        
+        return self.otherUsersStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure)
     }
     
     func put(remoteURL: NSURL, localPath: String) -> Void {
-        self.storageCache.put(remoteURL, localPath: localPath)
+        self.loggedUserStorageCache.put(remoteURL, localPath: localPath)
     }
     
 }

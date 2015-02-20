@@ -16,7 +16,6 @@ struct FlipJsonParams {
     static let ID = "id"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
-    static let SOUND_URL = "soundURL"
     static let OWNER = "owner"
     static let IS_PRIVATE = "isPrivate"
     static let THUMBNAIL_URL = "thumbnailURL"
@@ -27,7 +26,6 @@ struct FlipAttributes {
     static let FLIP_OWNER = "owner"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
-    static let SOUND_URL = "soundURL"
     static let IS_PRIVATE = "isPrivate"
 }
 
@@ -100,7 +98,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getMyFlipsForWord(word: String) -> [Flip] {
-        let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
+        let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
         
         return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
     }
@@ -129,7 +127,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getStockFlipsForWord(word: String) -> [Flip] {
-        let predicate = NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
+        let predicate = NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
         return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
     }
     

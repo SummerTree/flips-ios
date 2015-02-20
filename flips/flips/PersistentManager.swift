@@ -133,7 +133,6 @@ public class PersistentManager: NSObject {
     }
 
     func createAndUploadFlip(word: String, videoURL: NSURL, thumbnailURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
-        let cacheHandler = CacheHandler.sharedInstance
         let loggedUser = User.loggedUser() as User!
         
         let flipService = FlipService()
@@ -146,10 +145,11 @@ public class PersistentManager: NSObject {
                 flipDataSource.associateFlip(flip, withOwner: loggedUser)
             })
 
-            //cacheHandler.saveDataAtPath(thumbnailURL.absoluteString!, withUrl: flip.thumbnailURL, isTemporary: false)
-            //cacheHandler.saveDataAtPath(videoURL.absoluteString!, withUrl: flip.backgroundURL, isTemporary: false)
+            var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+            FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL.absoluteString!)
+            ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL.absoluteString!)
             
-            createFlipSuccessCompletion(flip)
+            createFlipSuccessCompletion(flipInContext)
         }) { (flipError: FlipError?) -> Void in
             createFlipFailCompletion(flipError)
         }
