@@ -148,15 +148,16 @@ public class PersistentManager: NSObject {
                 flip.setBackgroundContentType(BackgroundContentType.Image)
             })
             
+            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
             if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
+                cacheHandler.saveImage(backgroundImage!, withUrl: flipInContext.backgroundURL, isTemporary: false)
             }
             
             if (soundPath != nil) {
-                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
+                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flipInContext.soundURL, isTemporary: false)
             }
             
-            createFlipSuccessCompletion(flip)
+            createFlipSuccessCompletion(flipInContext)
         }) { (flipError: FlipError?) -> Void in
             createFlipFailCompletion(flipError)
         }
@@ -334,6 +335,8 @@ public class PersistentManager: NSObject {
             
             let group = dispatch_group_create()
             
+            let userDataSource = UserDataSource()
+            
             dispatch_group_enter(group)
             println("getMyFlips")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
@@ -345,6 +348,7 @@ public class PersistentManager: NSObject {
                         let flip = self.createOrUpdateFlipWithJson(myFlipJson)
                         myFlips.append(flip)
                     }
+                    userDataSource.downloadMyFlips(myFlips)
                     
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
@@ -353,10 +357,6 @@ public class PersistentManager: NSObject {
                     dispatch_group_leave(group)
                 })
             })
-            
-            let userDataSource = UserDataSource()
-            userDataSource.downloadMyFlips(myFlips)
-            
             
             let roomService = RoomService()
             println("getMyRooms")
