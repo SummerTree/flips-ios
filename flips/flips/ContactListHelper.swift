@@ -39,16 +39,13 @@ public class ContactListHelper {
         if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusAuthorized.value) {
             let contacts = retrieveContacts()
             success(contacts)
-            
         } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusNotDetermined.value) {
             addressBook.requestAuthorizationWithCompletion({ (granted, error) -> Void in
                 let contacts = self.retrieveContacts()
                 success(contacts)
             })
-        } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusDenied.value
-            || RHAddressBook.authorizationStatus().value == RHAuthorizationStatusRestricted.value) {
-
-                failure(NSLocalizedString("Denied", comment: "Denied"))
+        } else if ((RHAddressBook.authorizationStatus().value == RHAuthorizationStatusDenied.value) || (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusRestricted.value)) {
+            failure(NSLocalizedString("Denied", comment: "Denied"))
         }
     }
     
@@ -57,7 +54,6 @@ public class ContactListHelper {
         var contacts = Array<ContactListHelper.Contact>()
         for person in people {
             let phones: RHMultiStringValue = person.phoneNumbers
-
             for (var i:UInt = 0; i < phones.count(); i++) {
                 if (person.firstName != nil && countElements(person.firstName) > 0) {
                     var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)

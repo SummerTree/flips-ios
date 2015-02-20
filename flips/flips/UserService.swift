@@ -390,16 +390,14 @@ public class UserService: FlipsService {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
             return
         }
-        
-        var numbers = Array<String>()
-        
+
         ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
-            
             if(countElements(contacts!) == 0) {
                 success(nil)
                 return
             }
-            
+        
+            var numbers = Array<String>()
             for contact in contacts! {
                 if (countElements(contact.phoneNumber) > 0) {
                     let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
@@ -422,9 +420,9 @@ public class UserService: FlipsService {
                     SwiftTryCatch.try({ () -> Void in
                         println("Trying to import: \(user)")
                         PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                        }, catch: { (error) -> Void in
-                            println("Error: [\(error))")
-                        }, finally: nil)
+                    }, catch: { (error) -> Void in
+                        println("Error: [\(error))")
+                    }, finally: nil)
                 }
                 
                 success(nil)
