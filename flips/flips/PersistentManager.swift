@@ -63,7 +63,7 @@ public class PersistentManager: NSObject {
             roomDataSourceInContext.associateRoom(room!, withAdmin: admin!, andParticipants: participants)
         }
         
-        return room!
+        return room?.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
     }
     
     
@@ -148,15 +148,16 @@ public class PersistentManager: NSObject {
                 flip.setBackgroundContentType(BackgroundContentType.Image)
             })
             
+            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
             if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flip.backgroundURL, isTemporary: false)
+                cacheHandler.saveImage(backgroundImage!, withUrl: flipInContext.backgroundURL, isTemporary: false)
             }
             
             if (soundPath != nil) {
-                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flip.soundURL, isTemporary: false)
+                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flipInContext.soundURL, isTemporary: false)
             }
             
-            createFlipSuccessCompletion(flip)
+            createFlipSuccessCompletion(flipInContext)
         }) { (flipError: FlipError?) -> Void in
             createFlipFailCompletion(flipError)
         }
@@ -283,19 +284,26 @@ public class PersistentManager: NSObject {
             user = userInContext
         }
         
-        if (!isLoggedUser) {
-            let contactDataSource = ContactDataSource()
-            
+        var userInContext = user!.inContext(NSManagedObjectContext.MR_defaultContext()) as User
+
+        let contactDataSource = ContactDataSource()
+        let contacts = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
+        
+        if (contacts.isEmpty && !isLoggedUser) {
             let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
             let authenticatedId = User.loggedUser()?.userID
             
             var userContact: Contact?
-            var userInContext = user!.inThreadContext() as User
             if (authenticatedId != userInContext.userID) {
                 var facebookID = user!.facebookID
                 var phonetype = (facebookID != nil) ? facebookID : ""
                 userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
             }
+        }
+        
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+            let userDataSourceInContext = UserDataSource(context: context)
+            userDataSourceInContext.associateUser(userInContext, withContacts: contacts)
         }
         
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID, error: nil) as User
@@ -327,6 +335,8 @@ public class PersistentManager: NSObject {
             
             let group = dispatch_group_create()
             
+            let userDataSource = UserDataSource()
+            
             dispatch_group_enter(group)
             println("getMyFlips")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
@@ -338,6 +348,7 @@ public class PersistentManager: NSObject {
                         let flip = self.createOrUpdateFlipWithJson(myFlipJson)
                         myFlips.append(flip)
                     }
+                    userDataSource.downloadMyFlips(myFlips)
                     
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
@@ -346,10 +357,6 @@ public class PersistentManager: NSObject {
                     dispatch_group_leave(group)
                 })
             })
-            
-            let userDataSource = UserDataSource()
-            userDataSource.downloadMyFlips(myFlips)
-            
             
             let roomService = RoomService()
             println("getMyRooms")
@@ -404,17 +411,16 @@ public class PersistentManager: NSObject {
     func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
         let contactDataSource = ContactDataSource()
         var contact = contactDataSource.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-        let contactID = String(contactDataSource.nextContactID())
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let contactDataSourceInContext = ContactDataSource(context: context)
+            let contactID = String(contactDataSourceInContext.nextContactID())
             var contactInContext: Contact!
             if (contact == nil) {
                 contactInContext = contactDataSourceInContext.createContactWith(contactID, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType, andContactUser: contactUser)
             } else {
-                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneNumber)
+                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
             }
-            
             contact = contactInContext
         }
         

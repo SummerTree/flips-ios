@@ -128,13 +128,13 @@ class FlipMessageDataSource : BaseDataSource {
     
     func oldestNotReadFlipMessageForRoomId(roomID: String) -> FlipMessage? {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.NOT_READ) == true) AND (\(FlipMessageAttributes.REMOVED) == false))")
-        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
+        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [FlipMessage]
         return result.first
     }
     
     func newestNotReadFlipMessageForRoomId(roomID: String) -> FlipMessage? {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.NOT_READ) == true) AND (\(FlipMessageAttributes.REMOVED) == false))")
-        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
+        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [FlipMessage]
         return result.last
     }
     
@@ -142,14 +142,14 @@ class FlipMessageDataSource : BaseDataSource {
         let roomDataSource = RoomDataSource(context: currentContext)
         let room = roomDataSource.retrieveRoomWithId(roomID)
         for (var i = 0; i < room.flipMessages.count; i++) {
-            let flipMessage = room.flipMessages.objectAtIndex(i) as FlipMessage
+            let flipMessage = room.flipMessages.objectAtIndex(i).inContext(currentContext) as FlipMessage
             flipMessage.removed = true
         }
     }
     
     func flipMessagesForRoomID(roomID: String) -> [FlipMessage] {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.REMOVED) == false))")
-        return FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
+        return FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate) as [FlipMessage]
     }
     
     func getFlipMessageById(flipMessageID: String) -> FlipMessage? {
