@@ -16,4 +16,7 @@ public struct FlipError {
 	var code: Int?
 	
 	static let NO_CODE = 0
+    
+    static let BACKEND_FORBIDDEN_REQUEST = 403
+    
 }

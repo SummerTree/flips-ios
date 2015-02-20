@@ -102,7 +102,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
             AuthenticationHelper.sharedInstance.onLogin(loggedUser)
             PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
 				if let code = error?.code {
-					if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
+					if (code == FlipError.BACKEND_FORBIDDEN_REQUEST) {
 						dispatch_async(dispatch_get_main_queue(), { () -> Void in
 							AuthenticationHelper.sharedInstance.logout()
 							self.openLoginViewController()

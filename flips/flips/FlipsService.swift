@@ -15,21 +15,16 @@ public class FlipsService : NSObject {
     let HOST: String = "http://flips-dev95.arctouch.com"
 	
 	func isForbiddenRequest(error: NSError!) -> Bool {
-		return (error.localizedDescription.rangeOfString(String(FlipsServiceCode.FORBIDDEN_REQUEST_CODE)) != nil)
+		return (error.localizedDescription.rangeOfString(String(FlipError.BACKEND_FORBIDDEN_REQUEST)) != nil)
 	}
 	
 	func parseResponseError(error: NSError?) -> Int {
 		if let errorToParse = error {
 			if (isForbiddenRequest(errorToParse)) {
-				return FlipsServiceCode.FORBIDDEN_REQUEST_CODE
+				return FlipError.BACKEND_FORBIDDEN_REQUEST
 			}
 		}
-		return FlipsServiceCode.NO_RESPONSE_CODE
+		return FlipError.NO_CODE
 	}
 
-}
-
-public struct FlipsServiceCode {
-	static let FORBIDDEN_REQUEST_CODE: Int = 403
-	static let NO_RESPONSE_CODE: Int = 0
 }

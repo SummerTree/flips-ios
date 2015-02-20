@@ -78,9 +78,9 @@ public class UserService: FlipsService {
                     // TODO: we need to identify what was the problem to show the appropriate message
                     let errorMessage: String? = response["error"] as String?
                     let errorDetail: String? = response["details"] as String?
-                    failure(FlipError(error: errorMessage, details: errorDetail, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: errorMessage, details: errorDetail, code: FlipError.NO_CODE))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
                 }
             }
         )
@@ -113,9 +113,9 @@ public class UserService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: response["error"] as String!, details:nil, code: FlipError.NO_CODE))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
                 }
             }
         )
@@ -154,9 +154,9 @@ public class UserService: FlipsService {
                         detailsText = detailsMessage
                     }
                     
-                    failure(FlipError(error: errorText, details: detailsText, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: errorText, details: detailsText, code: FlipError.NO_CODE))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
                 }
             }
         )
@@ -236,9 +236,9 @@ public class UserService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: response["error"] as String!, details:nil, code: FlipError.NO_CODE))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
                 }
             }
         )
@@ -268,15 +268,15 @@ public class UserService: FlipsService {
                 if !username.isEmpty {
                     success(username: username)
                 } else {
-                    failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number."), code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number."), code: FlipError.NO_CODE))
                 }
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?, code: FlipError.NO_CODE))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipsServiceCode.NO_RESPONSE_CODE))
+                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
                 }
             }
         )
