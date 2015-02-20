@@ -375,6 +375,11 @@
             NSLog(@"failed to append buffer");
         }
         
+        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(1, 1)];
+        if (result == NO) {
+            NSLog(@"failed to append buffer");
+        }
+        
         if (buffer) {
             CVBufferRelease(buffer);
         }
