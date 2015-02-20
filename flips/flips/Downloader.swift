@@ -15,7 +15,7 @@ typealias DownloadFinishedCompletion = (error: NSError?) -> Void
 
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: String = "download_finished_notification_param_flip_key"
-let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE: String = "download_finished_notification_param_message"
+let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY: String = "download_finished_notification_param_message_key"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY: String = "download_finished_notification_param_fail_key"
 
 public class Downloader : NSObject {
