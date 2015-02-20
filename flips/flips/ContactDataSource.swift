@@ -147,19 +147,16 @@ class ContactDataSource : BaseDataSource {
     // MARK: - Private Methods
     
     func nextContactID() -> Int {
-        let contacts = Contact.MR_findAllSortedBy("contactID.intValue", ascending: false)
-        if (contacts == nil || contacts.count == 0) {
-            return 0
-        }
+        let contacts = Contact.findAll()
         
-        let contact: Contact = contacts.first as Contact
-        if (contact.contactID == nil) {
-            return 0
+        var currentID: Int = 0
+        for contact in contacts {
+            var contactID: String = contact.contactID
+            if (contactID.toInt() > currentID) {
+                currentID = contactID.toInt()!
+            }
         }
-        
-        var contactID: String = contact.contactID
-        var nextID: Int = contactID.toInt()!
-        return ++nextID
+        return ++currentID
     }
     
     private func getContactById(id: String) -> Contact? {
@@ -173,17 +170,17 @@ class ContactDataSource : BaseDataSource {
         var phonetypePredicate: NSPredicate!
         var predicates = [NSPredicate]()
         
-        if (firstName != nil && !phoneType!.isEmpty) {
+        if (firstName != nil && !firstName!.isEmpty) {
             firstnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.FIRST_NAME, firstName!)
             predicates.append(firstnamePredicate)
         }
         
-        if (lastName != nil && !phoneType!.isEmpty) {
+        if (lastName != nil && !lastName!.isEmpty) {
             lastnamePredicate = NSPredicate(format: "%K like %@", ContactAttributes.LAST_NAME, lastName!)
             predicates.append(lastnamePredicate)
         }
         
-        if (phoneNumber != nil && !phoneType!.isEmpty) {
+        if (phoneNumber != nil && !phoneNumber!.isEmpty) {
             phonenumberPredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_NUMBER, phoneNumber!)
             predicates.append(phonenumberPredicate)
         }

@@ -63,7 +63,7 @@ public class PersistentManager: NSObject {
             roomDataSourceInContext.associateRoom(room!, withAdmin: admin!, andParticipants: participants)
         }
         
-        return room!
+        return room?.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
     }
     
     
@@ -283,19 +283,26 @@ public class PersistentManager: NSObject {
             user = userInContext
         }
         
-        if (!isLoggedUser) {
-            let contactDataSource = ContactDataSource()
-            
+        var userInContext = user!.inContext(NSManagedObjectContext.MR_defaultContext()) as User
+
+        let contactDataSource = ContactDataSource()
+        let contacts = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
+        
+        if (contacts.isEmpty && !isLoggedUser) {
             let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
             let authenticatedId = User.loggedUser()?.userID
             
             var userContact: Contact?
-            var userInContext = user!.inThreadContext() as User
             if (authenticatedId != userInContext.userID) {
                 var facebookID = user!.facebookID
                 var phonetype = (facebookID != nil) ? facebookID : ""
                 userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
             }
+        }
+        
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+            let userDataSourceInContext = UserDataSource(context: context)
+            userDataSourceInContext.associateUser(userInContext, withContacts: contacts)
         }
         
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID, error: nil) as User
@@ -404,17 +411,16 @@ public class PersistentManager: NSObject {
     func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
         let contactDataSource = ContactDataSource()
         var contact = contactDataSource.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-        let contactID = String(contactDataSource.nextContactID())
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let contactDataSourceInContext = ContactDataSource(context: context)
+            let contactID = String(contactDataSourceInContext.nextContactID())
             var contactInContext: Contact!
             if (contact == nil) {
                 contactInContext = contactDataSourceInContext.createContactWith(contactID, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType, andContactUser: contactUser)
             } else {
-                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneNumber)
+                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
             }
-            
             contact = contactInContext
         }
         
