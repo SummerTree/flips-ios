@@ -22,8 +22,8 @@ typedef void (^VideoComposerErrorHandler)(NSError *error);
 
 @property (nonatomic, strong) NSString *cacheKey;
 
-- (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audio successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler;
-- (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler;
+- (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audio successHandler:(VideoComposerSuccessHandler)successHandler;
+- (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler;
 
 - (UIImage *)thumbnailForVideo:(NSURL *)videoURL;
 

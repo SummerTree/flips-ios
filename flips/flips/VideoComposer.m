@@ -16,7 +16,7 @@
 
 @implementation VideoComposer
 
-- (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audioURL successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler {
+- (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audioURL successHandler:(VideoComposerSuccessHandler)successHandler {
     NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.mov"];
     
     NSString *videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"video.mov"];
@@ -37,7 +37,7 @@
     }];
 }
 
-- (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler errorHandler:(VideoComposerErrorHandler)errorHandler {
+- (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler {
     NSURL *croppedVideo = [self videoFromOriginalVideo:originalVideo];
     
     UIImage *thumbnail = [self thumbnailForVideo:croppedVideo];

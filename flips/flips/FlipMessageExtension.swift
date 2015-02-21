@@ -55,6 +55,7 @@ extension FlipMessage {
     func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
         let firstFlip = self.flips.first
         if (firstFlip == nil || firstFlip!.thumbnailURL == nil) {
+            success?(UIImage.emptyFlipImage())
             return
         }
         
@@ -64,7 +65,7 @@ extension FlipMessage {
                 var image = UIImage(contentsOfFile: localPath)
                 success?(image)
             }, failure: { (error: FlipError) in
-                println("Could not get thumbnail for flip \(firstFlip), trying to create it.")
+                println("Could not get thumbnail for flip \(firstFlip).")
             })
     }
     

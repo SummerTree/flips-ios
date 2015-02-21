@@ -36,11 +36,6 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
                 self.flipThumbnailURL = thumbnailURL
                 self.confirmFlipView.setupPlayerWithWord(flipWord, videoURL: flipVideoURL)
             })
-        }, errorHandler: { (error) -> Void in
-            let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.COULD_NOT_CREATE_FLIP, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-            alertView.show()
-            
-            self.navigationController?.popViewControllerAnimated(false)
         })
         
     }
@@ -57,11 +52,6 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
                 self.flipThumbnailURL = thumbnailURL
                 self.confirmFlipView.setupPlayerWithWord(flipWord, videoURL: flipVideoURL)
             })
-        }, errorHandler: { (error) -> Void in
-            let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.COULD_NOT_CREATE_FLIP, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-            alertView.show()
-            
-            self.navigationController?.popViewControllerAnimated(false)
         })
     }
     
