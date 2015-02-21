@@ -68,6 +68,10 @@ class PlayerView: UIView {
     func play() {
         self.timer?.invalidate()
         
+        if (self.playerItems.count == 0) {
+            return
+        }
+        
         self.preparePlayer { (player) -> Void in
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
             self.thumbnailView.hidden = true
@@ -141,26 +145,33 @@ class PlayerView: UIView {
         self.words = []
 
         for (index, flip) in enumerate(flips) {
-            FlipsCache.sharedInstance.videoForFlip(flip,
-                success: { (localPath: String!) in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        var videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
-                        let playerItem = self.playerItemWithVideoAsset(videoAsset)
-                        playerItem.order = index
-                        self.playerItems.append(playerItem)
+            if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
+                let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
+                let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
+                let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                playerItem.order = index
+                self.playerItems.append(playerItem)
+            } else {
+                FlipsCache.sharedInstance.videoForFlip(flip,
+                    success: { (localPath: String!) in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
+                            let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                            playerItem.order = index
+                            self.playerItems.append(playerItem)
+                        })
+                    },
+                    failure: { (error: FlipError) in
+                        println("Failed to get resource from cache, error: \(error)")
                     })
-                },
-                failure: { (error: FlipError) in
-                    println("Failed to get resource from cache, error: \(error)")
-                })
-            
-            
+            }
+        
             self.words.append(flip.word)
         }
-
-        let thumbnailURL = flips.first!.thumbnailURL
-        if (thumbnailURL != nil || !thumbnailURL.isEmpty) {
-            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: thumbnailURL)!,
+        
+        let firstFlip = flips.first
+        if (firstFlip != nil && firstFlip!.thumbnailURL != nil && !firstFlip!.thumbnailURL.isEmpty) {
+            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: firstFlip!.thumbnailURL)!,
                 success: { (localThumbnailPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)

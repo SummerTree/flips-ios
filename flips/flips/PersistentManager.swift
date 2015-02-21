@@ -132,9 +132,9 @@ public class PersistentManager: NSObject {
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
     }
 
-    func createAndUploadFlip(word: String, videoURL: NSURL, thumbnailURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
+    func createAndUploadFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
         let loggedUser = User.loggedUser() as User!
-        
+
         let flipService = FlipService()
         flipService.createFlip(word, videoURL: videoURL, thumbnailURL: thumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
             var flip: Flip!
@@ -144,14 +144,20 @@ public class PersistentManager: NSObject {
                 flip = flipDataSource.createFlipWithJson(json)
                 flipDataSource.associateFlip(flip, withOwner: loggedUser)
             })
-
+            
             var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
-            FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL.absoluteString!)
-            ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL.absoluteString!)
+            
+            if (videoURL != nil) {
+                FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.absoluteString!)
+            }
+            
+            if (thumbnailURL != nil) {
+                ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.absoluteString!)
+            }
             
             createFlipSuccessCompletion(flipInContext)
-        }) { (flipError: FlipError?) -> Void in
-            createFlipFailCompletion(flipError)
+            }) { (flipError: FlipError?) -> Void in
+                createFlipFailCompletion(flipError)
         }
     }
     

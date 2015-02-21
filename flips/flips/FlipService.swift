@@ -39,14 +39,19 @@ public class FlipService: FlipsService {
         static let IS_PRIVATE = "is_private"
     }
     
-    func createFlip(word: String, videoURL: NSURL, thumbnailURL: NSURL, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
-
-        var uploadFlipBlock: ((NSURL, NSURL) -> Void) = { (remoteVideoURL, remoteThumbnailURL) -> () in
+    func createFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
+        
+        var uploadFlipBlock: ((NSURL?, NSURL?) -> Void) = { (remoteVideoURL, remoteThumbnailURL) -> () in
             self.uploadNewFlip(word, videoURL: remoteVideoURL, thumbnailURL: remoteThumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: uploadFlipSuccessCallback, uploadFlipFailCallBack: uploadFlipFailCallBack)
         }
         
-        self.uploadVideo(videoURL, successCallback: { (remoteVideoURL) -> Void in
-            self.uploadThumbnail(thumbnailURL, successCallback: { (remoteThumbnailURL) -> Void in
+        if (videoURL == nil && thumbnailURL == nil) {
+            uploadFlipBlock(nil, nil)
+            return
+        }
+        
+        self.uploadVideo(videoURL!, successCallback: { (remoteVideoURL) -> Void in
+            self.uploadThumbnail(thumbnailURL!, successCallback: { (remoteThumbnailURL) -> Void in
                 uploadFlipBlock(remoteVideoURL, remoteThumbnailURL)
             }, failCallback: { (flipError) -> Void in
                 uploadFlipFailCallBack(flipError)
@@ -172,7 +177,7 @@ public class FlipService: FlipsService {
         )
     }
     
-    private func uploadNewFlip(word: String, videoURL: NSURL, thumbnailURL: NSURL, category: String, isPrivate: Bool, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
+    private func uploadNewFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String, isPrivate: Bool, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             uploadFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -184,8 +189,8 @@ public class FlipService: FlipsService {
         let createFlipUrl = HOST + createURL
         let createFlipParams = [
             RequestParams.WORD: word,
-            RequestParams.BACKGROUND_URL: videoURL.absoluteString!,
-            RequestParams.THUMBNAIL_URL: thumbnailURL.absoluteString!,
+            RequestParams.BACKGROUND_URL: (videoURL == nil ? "" : videoURL!.absoluteString!),
+            RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString!),
             RequestParams.CATEGORY: category,
             RequestParams.IS_PRIVATE: isPrivate]
 

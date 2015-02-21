@@ -375,7 +375,7 @@
             NSLog(@"failed to append buffer");
         }
         
-        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(1, 1)];
+        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(1, 2)];
         if (result == NO) {
             NSLog(@"failed to append buffer");
         }

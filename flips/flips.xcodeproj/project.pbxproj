@@ -287,6 +287,8 @@
 		A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
 		A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
+		BE2E72081A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
+		BE2E72091A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F285B26C1A102190002DEEC2 /* CachingService.swift */; };
 		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
@@ -589,6 +591,7 @@
 		A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewController.swift; sourceTree = "<group>"; };
 		A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
 		A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
+		BE2E72071A98119400F237BE /* empty_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = empty_video.mov; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F285B26C1A102190002DEEC2 /* CachingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
@@ -1150,6 +1153,7 @@
 				70FD4E7F19D064450024EBDB /* Images.xcassets */,
 				07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */,
 				5707185619D19D180069064F /* Services */,
+				BE2E72061A98119400F237BE /* Resources */,
 				70FD4E7319D064450024EBDB /* Supporting Files */,
 				075A0C071A43A1C100E92760 /* Untilities */,
 				704E110B19D08E4700D2BB88 /* View */,
@@ -1431,6 +1435,14 @@
 			name = TextView;
 			sourceTree = "<group>";
 		};
+		BE2E72061A98119400F237BE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BE2E72071A98119400F237BE /* empty_video.mov */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		EC5A81A5795A49A3B7523B70 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1543,6 +1555,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
 				07E47BA21A3B60B3001B3809 /* ChatTableViewCell.xib in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
@@ -1555,6 +1568,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE2E72091A98119400F237BE /* empty_video.mov in Resources */,
 				0fef66f1ad9d7af8e38c54ff /* NewFlip.storyboard in Resources */,
 				c8530b42b921072e2c3c5379 /* ChatTableViewCell.xib in Resources */,
 				a715422097ca6a65830ec19b /* ContactTableViewCell.xib in Resources */,
