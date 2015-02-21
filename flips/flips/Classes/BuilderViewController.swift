@@ -112,7 +112,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         var addWordWords = Array<String>()
         for flipWord in self.flipWords {
             println(" flipWord: \(flipWord.text) - \(flipWord.state)")
-            if (flipWord.state == FlipState.NewWord) {
+            if (flipWord.state == FlipState.NotAssociatedAndNoResourcesAvailable) {
                 addWordWords.append(flipWord.text)
             }
         }
