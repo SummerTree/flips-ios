@@ -117,6 +117,7 @@ class PlayerView: UIView {
 
     func pause(fadeOutVolume: Bool = false) {
         self.timer?.invalidate()
+        self.loadPlayerOnInit = false
         
         if (!self.isPlaying) {
             return
@@ -159,22 +160,20 @@ class PlayerView: UIView {
         self.loadingFlips = true
         self.playerItems = [FlipPlayerItem]()
         self.words = []
-    
-        for (var i = 0; i < flips.count; i++) {
-            self.playerItems.append(FlipPlayerItem())
-        }
-        
-        var remainingFlips = flips.count;
+
+        var pendingFlips = flips.count;
         
         for (index, flip) in enumerate(flips) {
+            self.words.append(flip.word)
+
             if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
                 let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
                 let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
                 let playerItem = self.playerItemWithVideoAsset(videoAsset)
                 playerItem.order = index
-                self.playerItems[index] = playerItem
+                self.playerItems.append(playerItem)
                 
-                if (--remainingFlips == 0) {
+                if (--pendingFlips == 0) {
                     self.loadingFlips = false
                     self.flipsLoaded()
                 }
@@ -185,9 +184,9 @@ class PlayerView: UIView {
                             let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
                             let playerItem = self.playerItemWithVideoAsset(videoAsset)
                             playerItem.order = index
-                            self.playerItems[index] = playerItem
+                            self.playerItems.append(playerItem)
                             
-                            if (--remainingFlips == 0) {
+                            if (--pendingFlips == 0) {
                                 self.loadingFlips = false
                                 self.flipsLoaded()
                             }
@@ -197,8 +196,6 @@ class PlayerView: UIView {
                         println("Failed to get resource from cache, error: \(error)")
                     })
             }
-        
-            self.words.append(flip.word)
         }
         
         let firstFlip = flips.first
