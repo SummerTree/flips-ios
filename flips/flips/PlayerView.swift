@@ -17,6 +17,7 @@ class PlayerView: UIView {
     var isPlaying = false
     var loadPlayerOnInit = false
     var playInLoop = false
+    var loadingFlips = false
 
     private var words: Array<String>!
     private var playerItems: Array<FlipPlayerItem>!
@@ -67,6 +68,10 @@ class PlayerView: UIView {
 
     func play() {
         self.timer?.invalidate()
+        
+        if (self.loadingFlips) {
+            return
+        }
         
         if (self.playerItems.count == 0) {
             return
@@ -139,18 +144,40 @@ class PlayerView: UIView {
             self.play()
         }
     }
+    
+    func flipsLoaded() {
+        if (self.loadPlayerOnInit) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.preparePlayer { (player) -> Void in
+                    self.play()
+                }
+            })
+        }
+    }
 
     func setupPlayerWithFlips(flips: Array<Flip>) {
+        self.loadingFlips = true
         self.playerItems = [FlipPlayerItem]()
         self.words = []
-
+    
+        for (var i = 0; i < flips.count; i++) {
+            self.playerItems.append(FlipPlayerItem())
+        }
+        
+        var remainingFlips = flips.count;
+        
         for (index, flip) in enumerate(flips) {
             if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
                 let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
                 let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
                 let playerItem = self.playerItemWithVideoAsset(videoAsset)
                 playerItem.order = index
-                self.playerItems.append(playerItem)
+                self.playerItems[index] = playerItem
+                
+                if (--remainingFlips == 0) {
+                    self.loadingFlips = false
+                    self.flipsLoaded()
+                }
             } else {
                 FlipsCache.sharedInstance.videoForFlip(flip,
                     success: { (localPath: String!) in
@@ -158,7 +185,12 @@ class PlayerView: UIView {
                             let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
                             let playerItem = self.playerItemWithVideoAsset(videoAsset)
                             playerItem.order = index
-                            self.playerItems.append(playerItem)
+                            self.playerItems[index] = playerItem
+                            
+                            if (--remainingFlips == 0) {
+                                self.loadingFlips = false
+                                self.flipsLoaded()
+                            }
                         })
                     },
                     failure: { (error: FlipError) in
@@ -179,14 +211,6 @@ class PlayerView: UIView {
                 },
                 failure: { (error: FlipError) in
                     println("Failed to get resource from cache, error: \(error)")
-            })
-        }
-
-        if (self.loadPlayerOnInit) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.preparePlayer { (player) -> Void in
-                    self.play()
-                }
             })
         }
     }
@@ -232,7 +256,7 @@ class PlayerView: UIView {
     func videoPlayerItemEnded(notification: NSNotification) {
         let player = self.player()
         let currentItem = player.currentItem as FlipPlayerItem
- 
+
         if (self.playerItems.count == 1) {
             player.seekToTime(kCMTimeZero)
             
