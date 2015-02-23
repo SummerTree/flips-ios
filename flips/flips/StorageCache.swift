@@ -85,20 +85,18 @@ public class StorageCache {
             return CacheGetResponse.DATA_IS_READY
         }
         
-        dispatch_async(self.cacheQueue) {
-            Downloader.sharedInstance.downloadTask(remoteURL,
-                localURL: NSURL(fileURLWithPath: localPath)!,
-                completion: { (result) -> Void in
-                    self.cacheJournal.insertNewEntry(localPath)
-                    self.scheduleCleanup()
-                    if (result) {
-                        success?(localPath)
-                    } else {
-                        failure?(FlipError(error: "Error downloading media file", details: nil))
-                    }
+        Downloader.sharedInstance.downloadTask(remoteURL,
+            localURL: NSURL(fileURLWithPath: localPath)!,
+            completion: { (result) -> Void in
+                self.cacheJournal.insertNewEntry(localPath)
+                self.scheduleCleanup()
+                if (result) {
+                    success?(localPath)
+                } else {
+                    failure?(FlipError(error: "Error downloading media file", details: nil))
                 }
-            )
-        }
+            }
+        )
         return CacheGetResponse.DOWNLOAD_WILL_START
     }
     
