@@ -107,7 +107,7 @@ class FlipMessageDataSource : BaseDataSource {
         var entity = FlipMessage.createInContext(currentContext) as FlipMessage
         entity.flipMessageID = flipMessageID
         entity.room = room.inContext(currentContext) as Room
-        entity.from = User.loggedUser()!.inContext(currentContext) as User
+        entity.from = User.loggedUser()?.inContext(currentContext) as User
         entity.createdAt = NSDate()
         entity.notRead = false
         entity.receivedAt = NSDate()

@@ -175,43 +175,45 @@ public class UserService: FlipsService {
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let url = HOST + UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        
-        var params: Dictionary<String, AnyObject> = [
-            RequestParams.USERNAME : username,
-            RequestParams.FIRSTNAME : firstName,
-            RequestParams.LASTNAME : lastName,
-            RequestParams.BIRTHDAY : birthday
-        ]
-        
-        if let newPassword = password {
-            params[RequestParams.PASSWORD] = newPassword
-        }
-        
-        request.POST(url,
-            parameters: params,
-            constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
-                formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
-            },
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                var user = self.parseUserResponse(responseObject)
-                success(user)
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                let code = self.parseResponseError(error)
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    // TODO: we need to identify what was the problem to show the appropriate message
-                    //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
-                    failure(FlipError(error: response["error"] as String!, details: nil, code: code))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details : nil, code: code))
-                }
+        if let loggedUser = User.loggedUser() {
+            let request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            let url = HOST + UPDATE_USER_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            
+            var params: Dictionary<String, AnyObject> = [
+                RequestParams.USERNAME : username,
+                RequestParams.FIRSTNAME : firstName,
+                RequestParams.LASTNAME : lastName,
+                RequestParams.BIRTHDAY : birthday
+            ]
+            
+            if let newPassword = password {
+                params[RequestParams.PASSWORD] = newPassword
             }
-        )
+            
+            request.POST(url,
+                parameters: params,
+                constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
+                    let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                    formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                },
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    var user = self.parseUserResponse(responseObject)
+                    success(user)
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    let code = self.parseResponseError(error)
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        // TODO: we need to identify what was the problem to show the appropriate message
+                        //failure(FlipError(error: response["error"] as String!, details:response["details"] as String!))
+                        failure(FlipError(error: response["error"] as String!, details: nil, code: code))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details : nil, code: code))
+                    }
+                }
+            )
+        }
     }
     
     
@@ -324,60 +326,62 @@ public class UserService: FlipsService {
             return
         }
         
-        let permissions: [String] = FBSession.activeSession().permissions as [String]
-        println("[DEBUG: Facebook Permissions: \(permissions)]")
-        
-        if (!contains(permissions, "user_friends")) {
-            failure(FlipError(error: "user_friends permission not allowed.", details:nil, code: FlipError.NO_CODE))
-            return
-        }
-        
-        var usersFacebookIDS = [String]()
-        FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
-            if (error != nil) {
-                failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
+        if let loggedUser = User.loggedUser() {
+            let permissions: [String] = FBSession.activeSession().permissions as [String]
+            println("[DEBUG: Facebook Permissions: \(permissions)]")
+            
+            if (!contains(permissions, "user_friends")) {
+                failure(FlipError(error: "user_friends permission not allowed.", details:nil, code: FlipError.NO_CODE))
                 return
             }
             
-            let resultDictionary: NSDictionary = result as NSDictionary
-            let usersJSON = JSON(resultDictionary.objectForKey("data")!)
-            
-            if let users = usersJSON.array {
-                for user in users {
-                    var userId = user["id"]
-                    usersFacebookIDS.append(userId.stringValue)
+            var usersFacebookIDS = [String]()
+            FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
+                if (error != nil) {
+                    failure(FlipError(error: error.localizedDescription, details:nil, code: FlipError.NO_CODE))
+                    return
                 }
                 
-                var request = AFHTTPRequestOperationManager()
-                request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-                var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                let resultDictionary: NSDictionary = result as NSDictionary
+                let usersJSON = JSON(resultDictionary.objectForKey("data")!)
                 
-                var params: Dictionary<String, AnyObject> = [
-                    RequestParams.FACEBOOK_IDS : usersFacebookIDS
-                ]
-                
-                request.POST(url, parameters: params, success: { (operation, responseObject) -> Void in
-                    var response:JSON = JSON(responseObject)
-                    
-                    for (index, user) in response {
-                        SwiftTryCatch.try({ () -> Void in
-                            println("Trying to import: \(user)")
-                            var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                            }, catch: { (error) -> Void in
-                                println("Error: [\(error))")
-                            }, finally: nil)
+                if let users = usersJSON.array {
+                    for user in users {
+                        var userId = user["id"]
+                        usersFacebookIDS.append(userId.stringValue)
                     }
                     
-                    success(nil)
-                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                        let code =  self.parseResponseError(error)
-                        if (operation.responseObject != nil) {
-                            var response = operation.responseObject as NSDictionary
-                            failure(FlipError(error: response["error"] as String!, details : nil, code: code))
-                        } else {
-                            failure(FlipError(error: error.localizedDescription, details : nil, code: code))
+                    var request = AFHTTPRequestOperationManager()
+                    request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+                    var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                    
+                    var params: Dictionary<String, AnyObject> = [
+                        RequestParams.FACEBOOK_IDS : usersFacebookIDS
+                    ]
+                    
+                    request.POST(url, parameters: params, success: { (operation, responseObject) -> Void in
+                        var response:JSON = JSON(responseObject)
+                        
+                        for (index, user) in response {
+                            SwiftTryCatch.try({ () -> Void in
+                                println("Trying to import: \(user)")
+                                var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
+                                }, catch: { (error) -> Void in
+                                    println("Error: [\(error))")
+                                }, finally: nil)
                         }
-                })
+                        
+                        success(nil)
+                        }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                            let code =  self.parseResponseError(error)
+                            if (operation.responseObject != nil) {
+                                var response = operation.responseObject as NSDictionary
+                                failure(FlipError(error: response["error"] as String!, details : nil, code: code))
+                            } else {
+                                failure(FlipError(error: error.localizedDescription, details : nil, code: code))
+                            }
+                    })
+                }
             }
         }
     }
@@ -391,53 +395,55 @@ public class UserService: FlipsService {
             return
         }
 
-        ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
-            if(countElements(contacts!) == 0) {
-                success(nil)
-                return
-            }
-        
-            var numbers = Array<String>()
-            for contact in contacts! {
-                if (countElements(contact.phoneNumber) > 0) {
-                    let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
-                    numbers.append(cleanPhone)
-                }
-            }
-            
-            var request = AFHTTPRequestOperationManager()
-            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-            var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-            
-            var params: Dictionary<String, AnyObject> = [
-                RequestParams.PHONENUMBERS : numbers
-            ]
-            
-            request.POST(url, parameters: params, success: { (operation, responseObject) -> Void in
-                var response:JSON = JSON(responseObject)
-                
-                for (index, user) in response {
-                    SwiftTryCatch.try({ () -> Void in
-                        println("Trying to import: \(user)")
-                        PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                    }, catch: { (error) -> Void in
-                        println("Error: [\(error))")
-                    }, finally: nil)
+        if let loggedUser = User.loggedUser() {
+            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
+                if(countElements(contacts!) == 0) {
+                    success(nil)
+                    return
                 }
                 
-                success(nil)
-                }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                    let code = self.parseResponseError(error)
-                    if (operation.responseObject != nil) {
-                        var response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details : nil, code: code))
-                    } else {
-                        failure(FlipError(error: error.localizedDescription, details : nil, code: code))
+                var numbers = Array<String>()
+                for contact in contacts! {
+                    if (countElements(contact.phoneNumber) > 0) {
+                        let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
+                        numbers.append(cleanPhone)
                     }
+                }
+                
+                var request = AFHTTPRequestOperationManager()
+                request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+                var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                
+                var params: Dictionary<String, AnyObject> = [
+                    RequestParams.PHONENUMBERS : numbers
+                ]
+                
+                request.POST(url, parameters: params, success: { (operation, responseObject) -> Void in
+                    var response:JSON = JSON(responseObject)
+                    
+                    for (index, user) in response {
+                        SwiftTryCatch.try({ () -> Void in
+                            println("Trying to import: \(user)")
+                            PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
+                            }, catch: { (error) -> Void in
+                                println("Error: [\(error))")
+                            }, finally: nil)
+                    }
+                    
+                    success(nil)
+                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                        let code = self.parseResponseError(error)
+                        if (operation.responseObject != nil) {
+                            var response = operation.responseObject as NSDictionary
+                            failure(FlipError(error: response["error"] as String!, details : nil, code: code))
+                        } else {
+                            failure(FlipError(error: error.localizedDescription, details : nil, code: code))
+                        }
+                })
+                }, failure: { (error) -> Void in
+                    failure(FlipError(error: "Error retrieving contacts.", details:nil, code: FlipError.NO_CODE))
             })
-            }, failure: { (error) -> Void in
-                failure(FlipError(error: "Error retrieving contacts.", details:nil, code: FlipError.NO_CODE))
-        })
+        }
     }
     
     
@@ -449,24 +455,25 @@ public class UserService: FlipsService {
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        var userInSession = User.loggedUser()
-        let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userInSession!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        request.GET(url, parameters: nil,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                successCompletion(JSON(responseObject))
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                let code = self.parseResponseError(error)
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil, code: code))
-                } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
+        if let loggedUser = User.loggedUser() {
+            let request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            request.GET(url, parameters: nil,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    successCompletion(JSON(responseObject))
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    let code = self.parseResponseError(error)
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failCompletion(FlipError(error: response["error"] as String!, details: nil, code: code))
+                    } else {
+                        failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
+                    }
                 }
-            }
-        )
+            )
+        }
     }
     
     

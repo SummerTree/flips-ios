@@ -34,16 +34,19 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let urlString = User.loggedUser()?.photoURL {
-            if let url = NSURL(string: urlString) {
-                self.updateUserProfileView.setUserPictureURL(url)
+        if let loggedUser = User.loggedUser() {
+            if let urlString = loggedUser.photoURL {
+                if let url = NSURL(string: urlString) {
+                    self.updateUserProfileView.setUserPictureURL(url)
+                }
             }
+            
+            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
+            self.setNeedsStatusBarAppearanceUpdate()
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            updateUserProfileView.setUser(loggedUser)
+
         }
-        
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
-        self.setNeedsStatusBarAppearanceUpdate()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        updateUserProfileView.setUser(User.loggedUser()!)
     }
     
     override func viewDidAppear(animated: Bool) {

@@ -29,34 +29,36 @@ public class RoomService: FlipsService {
 			failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
             return
         }
-        
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let createRoomUrl = HOST + createURL
-        let createRoomParams = [
-            RequestParams.NAME : "Name",
-            RequestParams.USERS : userIds,
-            RequestParams.PHONE_NUMBERS : contactNumbers]
-
-        println("params: \(createRoomParams)")
-        println("params descriptions: \(createRoomParams.description)")
-        
-        request.POST(createRoomUrl,
-            parameters: createRoomParams,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                successCompletion(self.parseCreateRoomResponse(responseObject))
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				let code = self.parseResponseError(error)
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-					failCompletion(FlipError(error: response["error"] as String!, details : nil, code: code))
-                } else {
-					failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
+        if let loggedUser = User.loggedUser() {
+            let request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            let createURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let createRoomUrl = HOST + createURL
+            let createRoomParams = [
+                RequestParams.NAME : "Name",
+                RequestParams.USERS : userIds,
+                RequestParams.PHONE_NUMBERS : contactNumbers]
+            
+            println("params: \(createRoomParams)")
+            println("params descriptions: \(createRoomParams.description)")
+            
+            request.POST(createRoomUrl,
+                parameters: createRoomParams,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    successCompletion(self.parseCreateRoomResponse(responseObject))
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    let code = self.parseResponseError(error)
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failCompletion(FlipError(error: response["error"] as String!, details : nil, code: code))
+                    } else {
+                        failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
+                    }
                 }
-            }
-        )
+            )
+            
+        }
     }
     
     func getMyRooms(successCompletion: GetRoomsSuccessResponse, failCompletion: RoomFailureResponse) {
@@ -65,21 +67,23 @@ public class RoomService: FlipsService {
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let getRoomsUrl = HOST + getURL
-
-        request.GET(getRoomsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
-            successCompletion(self.parseGetRoomsResponse(responseObject))
-        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-			let code = self.parseResponseError(error)
-            if (operation.responseObject != nil) {
-                let response = operation.responseObject as NSDictionary
-				failCompletion(FlipError(error: response["error"] as String!, details : nil, code: code))
-            } else {
-				failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
-            }
+        if let loggedUser = User.loggedUser() {
+            let request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            let getURL = ROOM_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let getRoomsUrl = HOST + getURL
+            
+            request.GET(getRoomsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
+                successCompletion(self.parseGetRoomsResponse(responseObject))
+                }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                    let code = self.parseResponseError(error)
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failCompletion(FlipError(error: response["error"] as String!, details : nil, code: code))
+                    } else {
+                        failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
+                    }
+            }            
         }
     }
     

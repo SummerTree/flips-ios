@@ -70,11 +70,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         activityIndicator.stopAnimating()
                         
-                        let authenticatedUser = User.loggedUser()!
-                        if (self.userHasDevice(authenticatedUser)) {
-                            self.openInboxViewController(userDataSource)
-                        } else {
-                            self.openPhoneNumberController(authenticatedUser.userID)
+                        if let authenticatedUser = User.loggedUser() {
+                            if (self.userHasDevice(authenticatedUser)) {
+                                self.openInboxViewController(userDataSource)
+                            } else {
+                                self.openPhoneNumberController(authenticatedUser.userID)
+                            }
                         }
                     })
                 })

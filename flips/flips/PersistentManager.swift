@@ -134,59 +134,59 @@ public class PersistentManager: NSObject {
     
     func createAndUploadFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
         let cacheHandler = CacheHandler.sharedInstance
-        let loggedUser = User.loggedUser() as User!
-        
-        let flipService = FlipService()
-        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            
-            var flip: Flip!
-            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-                let flipDataSource = FlipDataSource(context: context)
-                flip = flipDataSource.createFlipWithJson(json)
+        if let loggedUser = User.loggedUser() {
+            let flipService = FlipService()
+            flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
                 
-                flipDataSource.associateFlip(flip, withOwner: loggedUser)
-                flip.setBackgroundContentType(BackgroundContentType.Image)
-            })
-            
-            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
-            if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flipInContext.backgroundURL, isTemporary: false)
+                var flip: Flip!
+                MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+                    let flipDataSource = FlipDataSource(context: context)
+                    flip = flipDataSource.createFlipWithJson(json)
+                    
+                    flipDataSource.associateFlip(flip, withOwner: loggedUser)
+                    flip.setBackgroundContentType(BackgroundContentType.Image)
+                })
+                
+                let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+                if (backgroundImage != nil) {
+                    cacheHandler.saveImage(backgroundImage!, withUrl: flipInContext.backgroundURL, isTemporary: false)
+                }
+                
+                if (soundPath != nil) {
+                    cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flipInContext.soundURL, isTemporary: false)
+                }
+                
+                createFlipSuccessCompletion(flipInContext)
+                }) { (flipError: FlipError?) -> Void in
+                    createFlipFailCompletion(flipError)
             }
-            
-            if (soundPath != nil) {
-                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flipInContext.soundURL, isTemporary: false)
-            }
-            
-            createFlipSuccessCompletion(flipInContext)
-        }) { (flipError: FlipError?) -> Void in
-            createFlipFailCompletion(flipError)
         }
     }
     
     func createAndUploadFlip(word: String, videoURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
         let cacheHandler = CacheHandler.sharedInstance
-        let loggedUser = User.loggedUser() as User!
-        
-        let flipService = FlipService()
-        flipService.createFlip(word, videoPath: videoURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            var flip: Flip!
-            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-                let flipDataSource = FlipDataSource(context: context)
-                flip = flipDataSource.createFlipWithJson(json)
+        if let loggedUser = User.loggedUser() {
+            let flipService = FlipService()
+            flipService.createFlip(word, videoPath: videoURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
+                var flip: Flip!
+                MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+                    let flipDataSource = FlipDataSource(context: context)
+                    flip = flipDataSource.createFlipWithJson(json)
+                    
+                    flipDataSource.associateFlip(flip, withOwner: loggedUser)
+                    flip.setBackgroundContentType(BackgroundContentType.Video)
+                })
                 
-                flipDataSource.associateFlip(flip, withOwner: loggedUser)
-                flip.setBackgroundContentType(BackgroundContentType.Video)
-            })
-            
-            var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
-            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
-                cacheHandler.saveThumbnail(thumbnail, forUrl: flipInContext.backgroundURL)
+                var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+                if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
+                    cacheHandler.saveThumbnail(thumbnail, forUrl: flipInContext.backgroundURL)
+                }
+                
+                cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flipInContext.backgroundURL, isTemporary: false)
+                createFlipSuccessCompletion(flipInContext)
+                }) { (flipError: FlipError?) -> Void in
+                    createFlipFailCompletion(flipError)
             }
-            
-            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flipInContext.backgroundURL, isTemporary: false)
-            createFlipSuccessCompletion(flipInContext)
-        }) { (flipError: FlipError?) -> Void in
-            createFlipFailCompletion(flipError)
         }
     }
     

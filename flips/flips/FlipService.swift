@@ -219,37 +219,42 @@ public class FlipService: FlipsService {
     }
     
     private func uploadNewFlip(word: String, backgroundUrl: String, soundUrl: String, category: String, isPrivate: Bool, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
-        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            uploadFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
-            return
+        if let loggedUser = User.loggedUser() {
+            if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                uploadFlipFailCallBack(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
+                return
+            }
+            
+            let request = AFHTTPRequestOperationManager()
+            request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+            let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let createFlipUrl = HOST + createURL
+            let createFlipParams = [
+                RequestParams.WORD : word,
+                RequestParams.BACKGROUND_URL : backgroundUrl,
+                RequestParams.SOUND_URL : soundUrl,
+                RequestParams.CATEGORY : category,
+                RequestParams.IS_PRIVATE : isPrivate]
+            
+            request.POST(createFlipUrl,
+                parameters: createFlipParams,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    uploadFlipSuccessCallback(JSON(responseObject))
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    let code = self.parseResponseError(error)
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil, code: code))
+                    } else {
+                        uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details: nil, code: code))
+                    }
+                }
+            )
+        } else {
+            uploadFlipFailCallBack(FlipError(error: NSLocalizedString("No user in session", comment: "Please try again or contact support"), details: nil, code: FlipError.NO_CODE))
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let createFlipUrl = HOST + createURL
-        let createFlipParams = [
-            RequestParams.WORD : word,
-            RequestParams.BACKGROUND_URL : backgroundUrl,
-            RequestParams.SOUND_URL : soundUrl,
-            RequestParams.CATEGORY : category,
-            RequestParams.IS_PRIVATE : isPrivate]
-        
-        request.POST(createFlipUrl,
-            parameters: createFlipParams,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                uploadFlipSuccessCallback(JSON(responseObject))
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                let code = self.parseResponseError(error)
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil, code: code))
-                } else {
-                    uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details: nil, code: code))
-                }
-            }
-        )
     }
     
     
