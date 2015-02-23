@@ -88,9 +88,7 @@ public class UserService: FlipsService {
     }
     
     private func parseUserResponse(response: AnyObject) -> User? {
-        let userDataSource = UserDataSource()
-        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
-        return user
+        return PersistentManager.sharedInstance.createOrUpdateUserWithJson(JSON(response))
     }
     
     
@@ -171,12 +169,7 @@ public class UserService: FlipsService {
     }
     
     func parseSigninResponse(response: AnyObject) -> User? {
-        let userDataSource = UserDataSource()
-        let user = userDataSource.createOrUpdateUserWithJson(JSON(response))
-        user.me = true
-        userDataSource.save()
-        
-        return user
+        return PersistentManager.sharedInstance.createOrUpdateUserWithJson(JSON(response), isLoggedUser: true)
     }
     
     
@@ -354,8 +347,6 @@ public class UserService: FlipsService {
             let usersJSON = JSON(resultDictionary.objectForKey("data")!)
             
             if let users = usersJSON.array {
-                let userDatasource = UserDataSource()
-                
                 for user in users {
                     var userId = user["id"]
                     usersFacebookIDS.append(userId.stringValue)
@@ -369,29 +360,26 @@ public class UserService: FlipsService {
                     RequestParams.FACEBOOK_IDS : usersFacebookIDS
                 ]
                 
-                request.POST(url, parameters: params,
-                    success: { (operation, responseObject) -> Void in
-                        var response:JSON = JSON(responseObject)
-                        
-                        for (index, user) in response {
-                            SwiftTryCatch.try({ () -> Void in
-                                println("Trying to import: \(user)")
-                                var user = userDatasource.createOrUpdateUserWithJson(user)
-                                }, catch: { (error) -> Void in
-                                    println("Error: [\(error))")
-                                }, finally: nil)
-                        }
-                        
-                        success(nil)
-                        
-                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                        if (operation.responseObject != nil) {
-                            var response = operation.responseObject as NSDictionary
-                            failure(FlipError(error: response["error"] as String!, details:nil))
-                        } else {
-                            failure(FlipError(error: error.localizedDescription, details:nil))
-                        }
-                        
+                request.POST(url, parameters: params, success: { (operation, responseObject) -> Void in
+                    var response:JSON = JSON(responseObject)
+                    
+                    for (index, user) in response {
+                        SwiftTryCatch.try({ () -> Void in
+                            println("Trying to import: \(user)")
+                            var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
+                            }, catch: { (error) -> Void in
+                                println("Error: [\(error))")
+                            }, finally: nil)
+                    }
+                    
+                    success(nil)
+                }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        var response = operation.responseObject as NSDictionary
+                        failure(FlipError(error: response["error"] as String!, details:nil))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details:nil))
+                    }
                 })
             }
         }
@@ -431,16 +419,13 @@ public class UserService: FlipsService {
             return
         }
 
-        var numbers = Array<String>()
-        let userDatasource = UserDataSource()
-        
         ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
-            
             if(countElements(contacts!) == 0) {
                 success(nil)
                 return
             }
-            
+        
+            var numbers = Array<String>()
             for contact in contacts! {
                 if (countElements(contact.phoneNumber) > 0) {
                     let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
@@ -456,29 +441,26 @@ public class UserService: FlipsService {
                 RequestParams.PHONENUMBERS : numbers
             ]
             
-            request.POST(url, parameters: params,
-                success: { (operation, responseObject) -> Void in
-                    var response:JSON = JSON(responseObject)
-
-                    for (index, user) in response {
-                        SwiftTryCatch.try({ () -> Void in
-                            println("Trying to import: \(user)")
-                            var user = userDatasource.createOrUpdateUserWithJson(user)
-                        }, catch: { (error) -> Void in
-                            println("Error: [\(error))")
-                        }, finally: nil)
-                    }
-                    
-                    success(nil)
-                    
-                }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                    if (operation.responseObject != nil) {
-                        var response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details:nil))
-                    } else {
-                        failure(FlipError(error: error.localizedDescription, details:nil))
-                    }
-               
+            request.POST(url, parameters: params, success: { (operation, responseObject) -> Void in
+                var response:JSON = JSON(responseObject)
+                
+                for (index, user) in response {
+                    SwiftTryCatch.try({ () -> Void in
+                        println("Trying to import: \(user)")
+                        PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
+                    }, catch: { (error) -> Void in
+                        println("Error: [\(error))")
+                    }, finally: nil)
+                }
+                
+                success(nil)
+            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.responseObject != nil) {
+                    var response = operation.responseObject as NSDictionary
+                    failure(FlipError(error: response["error"] as String!, details:nil))
+                } else {
+                    failure(FlipError(error: error.localizedDescription, details:nil))
+                }
             })
         }, failure: { (error) -> Void in
             failure(FlipError(error: "Error retrieving contacts.", details:nil))
@@ -496,9 +478,8 @@ public class UserService: FlipsService {
         
         let request = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        var userInSession = AuthenticationHelper.sharedInstance.userInSession
-        let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userInSession.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        
+        var userInSession = User.loggedUser()
+        let url = self.HOST + self.MY_FLIPS.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userInSession!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
         request.GET(url, parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 successCompletion(JSON(responseObject))

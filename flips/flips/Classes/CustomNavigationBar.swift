@@ -29,7 +29,7 @@ class CustomNavigationBar : UIView {
     
     private var avatarButton : UIButton!
     private var avatarImageView : RoundImageView!
-    private var titleTextView : UITextView!
+	private var titleLabel : UILabel!
     
     private var leftButton : UIButton!
     private var rightButton : UIButton!
@@ -168,14 +168,13 @@ class CustomNavigationBar : UIView {
     
     private func setup(titleObject: AnyObject?, leftButtonImage: UIImage? = nil, leftButtonInactiveImage: UIImage? = nil, rightButtonObject: AnyObject? = nil, rightButtonInactiveObject: AnyObject? = nil) {
         if let title = titleObject as? String {
-            titleTextView = UITextView()
-            titleTextView.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
-            titleTextView.textColor = UIColor.whiteColor()
-            titleTextView.text = title
-            titleTextView.userInteractionEnabled = false
-            titleTextView.backgroundColor = UIColor.clearColor()
-            titleTextView.sizeToFit()
-            self.addSubview(titleTextView)
+			titleLabel = UILabel()
+			titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
+			titleLabel.textColor = UIColor.whiteColor()
+			titleLabel.text = title
+			titleLabel.backgroundColor = UIColor.clearColor()
+			titleLabel.sizeToFit()
+			self.addSubview(titleLabel)
         } else if let imageView = titleObject as? RoundImageView {
             avatarImageView = imageView
             self.addSubview(avatarImageView)
@@ -241,15 +240,15 @@ class CustomNavigationBar : UIView {
             }
         }
         
-        if (titleTextView != nil) {
-            titleTextView.mas_updateConstraints({ (update) -> Void in
-                update.centerX.equalTo()(self)
-                update.centerY.equalTo()(self).with().offset()(STATUS_BAR_HEIGHT / 2)
-                update.width.equalTo()(self.titleTextView.frame.size.width)
-                update.height.equalTo()(self.titleTextView.frame.size.height)
-            })
-        }
-        
+		if (titleLabel != nil) {
+			titleLabel.mas_updateConstraints({ (update) -> Void in
+				update.centerX.equalTo()(self)
+				update.centerY.equalTo()(self).with().offset()(STATUS_BAR_HEIGHT / 2)
+				update.width.equalTo()(self.titleLabel.frame.size.width)
+				update.height.equalTo()(self.titleLabel.frame.size.height)
+			})
+		}
+		
         if (leftButton != nil) {
             leftButton.mas_updateConstraints { (update) -> Void in
                 update.leading.equalTo()(self).with().offset()(self.buttonsMargin)

@@ -39,32 +39,27 @@ public class ContactListHelper {
         if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusAuthorized.value) {
             let contacts = retrieveContacts()
             success(contacts)
-            
         } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusNotDetermined.value) {
             addressBook.requestAuthorizationWithCompletion({ (granted, error) -> Void in
                 let contacts = self.retrieveContacts()
                 success(contacts)
             })
-        } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusDenied.value
-            || RHAddressBook.authorizationStatus().value == RHAuthorizationStatusRestricted.value) {
-
-                failure(NSLocalizedString("Denied", comment: "Denied"))
+        } else if ((RHAddressBook.authorizationStatus().value == RHAuthorizationStatusDenied.value) || (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusRestricted.value)) {
+            failure(NSLocalizedString("Denied", comment: "Denied"))
         }
     }
     
     private func retrieveContacts() -> Array<ContactListHelper.Contact> {
-        let contactDataSource = ContactDataSource()
         let people = self.addressBook.people() as Array<RHPerson>
         var contacts = Array<ContactListHelper.Contact>()
         for person in people {
             let phones: RHMultiStringValue = person.phoneNumbers
-
             for (var i:UInt = 0; i < phones.count(); i++) {
                 if (person.firstName != nil && countElements(person.firstName) > 0) {
                     var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
                     let phoneNumber: String! = phones.valueAtIndex(i) as String
                     let phoneType = ABAddressBookCopyLocalizedLabel(phones.labelAtIndex(i)).takeRetainedValue() as NSString
-                    contactDataSource.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+                    PersistentManager.sharedInstance.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
                     contacts.append(contact)
                 }
             }

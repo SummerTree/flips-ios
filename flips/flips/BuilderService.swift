@@ -30,20 +30,19 @@ public class BuilderService: FlipsService {
         
         request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
-            }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
-                } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
-                }
+        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            if (operation.responseObject != nil) {
+                let response = operation.responseObject as NSDictionary
+                failCompletion(FlipError(error: response["error"] as String!, details: nil))
+            } else {
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
+            }
         }
     }
     
     // TODO: change from String to entity Word
     private func parseGetSuggestedWordsResponse(response: AnyObject) -> [String] {
         let json = JSON(response)
-        println("suggested words json: \(json)")
         
         // TODO: change from String to entity Word
         var suggestedWords = Array<String>()

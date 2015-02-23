@@ -29,7 +29,7 @@ let MESSAGE_FLIPS_INFO_TYPE = "2"
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
-    var flipMessagesWaitingDownload: NSHashTable!
+    var flipMessagesWaiting: [String: Array<String>]
     
     public class var sharedInstance : MessageReceiver {
     struct Static {
@@ -42,9 +42,9 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     // MARK: - Initialization
     
     override init() {
+        self.flipMessagesWaiting = [String: Array<String>]()
         super.init()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
-        flipMessagesWaitingDownload = NSHashTable()
     }
     
     
@@ -52,9 +52,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     private func onMessageReceived(flipMessage: FlipMessage) {
         // Notify any screen that there is a new message
-        flipMessagesWaitingDownload.addObject(flipMessage)
         
-        let downloader = Downloader.sharedInstance
         let flips = flipMessage.flips
 
         println("New Message Received")
@@ -63,42 +61,49 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         println("   #flips: \(flips.count)")
         
         var isTemporary = true
-        if let loggedUser = AuthenticationHelper.sharedInstance.userInSession {
+        if let loggedUser = User.loggedUser() {
             if (loggedUser.userID == flipMessage.from.userID) {
                 isTemporary = false
             }
         }
 
+        flipMessagesWaiting[flipMessage.flipMessageID] = Array<String>()
+
         for var i = 0; i < flips.count; i++ {
             println("       flip #\(flips[i].flipID)")
             let flip = flips[i]
-            downloader.downloadDataForFlip(flip, isTemporary: isTemporary)
+            flipMessagesWaiting[flipMessage.flipMessageID]?.append(flip.flipID)
+            
+            let flipsCache = FlipsCache.sharedInstance
+            flipsCache.videoForFlip(flip,
+                success: { (localPath: String!) in
+                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: nil)
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: error)
+            })
         }
     }
     
-    private func onFlipContentDownloadFinished(flip: Flip) {
-        if (flip.hasAllContentDownloaded()) {
-            var flipMessagesToRemove = Array<FlipMessage>()
-            
-            for flipMessage: FlipMessage in flipMessagesWaitingDownload.allObjects as [FlipMessage] {
-                if (flipMessage.hasAllContentDownloaded()) {
-                    flipMessagesToRemove.append(flipMessage)
-                    flipMessage.createThumbnail()
-                }
-            }
-            
-            for flipMessage in flipMessagesToRemove {
-                flipMessagesWaitingDownload.removeObject(flipMessage)
-            }
+    private func sendDownloadFinishedBroadcastForFlip(flip: Flip, flipMessageID: String, error: FlipError?) {
+        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID, DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY: flipMessageID]
+        
+        if (error != nil) {
+            println("Error download flip content: \(error!)")
+            userInfo.updateValue(true, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
         }
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
     }
     
     
     // MARK: - Notification Handler
     
     func notificationReceived(notification: NSNotification) {
-        var userInfo: Dictionary = notification.userInfo!
-        var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        let userInfo: Dictionary = notification.userInfo!
+        let flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        let flipMessageID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as String
         
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipID) {
@@ -106,37 +111,58 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 println("Download failed for flip: \(flip.flipID)")
             } else {
                 println("Download finished for flip: \(flip.flipID)")
-                self.onFlipContentDownloadFinished(flip)
+                self.onFlipContentDownloadFinished(flip, flipMessageID: flipMessageID)
             }
         } else {
             UIAlertView.showUnableToLoadFlip()
         }
     }
     
+    private func onFlipContentDownloadFinished(flip: Flip, flipMessageID: String) {
+        if (self.flipMessagesWaiting[flipMessageID] == nil) {
+            return
+        }
+        
+        var flipMessagesToRemove = Array<FlipMessage>()
+
+        let arrayOfFlips: Array<String> = self.flipMessagesWaiting[flipMessageID]!
+        for i in 0..<arrayOfFlips.count {
+            if (flip.flipID == arrayOfFlips[i]) {
+                self.flipMessagesWaiting[flipMessageID]!.removeAtIndex(i)
+                break
+            }
+        }
+        
+        if (self.flipMessagesWaiting[flipMessageID]!.isEmpty) {
+            let flipMessageDataSource = FlipMessageDataSource()
+            let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageID)
+            flipMessagesToRemove.append(flipMessage)
+            flipMessage.messageThumbnail()
+        }
+        
+        for flipMessage in flipMessagesToRemove {
+            self.flipMessagesWaiting[flipMessageID] = nil
+        }
+    }
     
     // MARK: - PubnubServiceDelegate
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
         println("\nMessage received:\n\(messageJson)\n")
+        println("Received date: \(date)")
+        if (messageJson[MESSAGE_TYPE] == nil) {
+            println("MESSAGE IN OLD FORMAT. SHOULD BE IGNORED")
+            return
+        }
         
-        if (messageJson[MESSAGE_TYPE] != nil) {
-            if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
-                self.onRoomReceived(messageJson)
-            } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
-                // Message Received
-                let flipMessageDataSource = FlipMessageDataSource()
-                let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
-
-                if (flipMessage != nil) {
-                    self.onMessageReceived(flipMessage!)
-                }
-            }
-        } else {
-            // TODO: Old format - Should be remove later.
-            let flipMessageDataSource = FlipMessageDataSource()
-            let flipMessage = flipMessageDataSource.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+        if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
+            self.onRoomReceived(messageJson)
+        } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
+            // Message Received
+            let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            
             if (flipMessage != nil) {
-                self.onMessageReceived(flipMessage!)
+                self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
             }
         }
     }
@@ -150,8 +176,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     func onRoomReceived(messageJson: JSON) {
-        let roomDataSource = RoomDataSource()
-        let room = roomDataSource.createOrUpdateWithJson(messageJson[ChatMessageJsonParams.CONTENT])
+        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT])
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }

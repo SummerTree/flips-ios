@@ -44,7 +44,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         super.init()
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
-        self.makeConstraints()
+        self.updateConstraints()
         
         let center = NSNotificationCenter.defaultCenter()
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
@@ -107,9 +107,10 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         self.addSubview(keyboardFillerView)
     }
     
-    func makeConstraints() {
+    override func updateConstraints() {
         
         navigationBar.mas_makeConstraints { (make) -> Void in
+			make.removeExisting = true
             make.top.equalTo()(self)
             make.leading.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -117,19 +118,20 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         }
         
         hintView.mas_updateConstraints { (make) in
+			make.removeExisting = true
             make.top.equalTo()(self.navigationBar.mas_bottom)
-            make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
         }
         
         hintText.mas_updateConstraints { (make) in
+			make.removeExisting = true
             make.centerX.equalTo()(self.hintView)
             make.centerY.equalTo()(self.hintView)
-            //make.top.equalTo()(self.hintView)
         }
         
         passwordView.mas_updateConstraints { (make) in
+			make.removeExisting = true
             make.top.equalTo()(self.hintView.mas_bottom)
             make.height.equalTo()(self.MOBILE_NUMBER_VIEW_HEIGHT)
             make.left.equalTo()(self)
@@ -137,32 +139,35 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         }
         
         phoneImageView.mas_updateConstraints { (make) in
+			make.removeExisting = true
             make.left.equalTo()(self.passwordView).with().offset()(self.MOBILE_NUMBER_MARGIN_LEFT)
             make.centerY.equalTo()(self.passwordView)
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
         passwordField.mas_updateConstraints { (make) in
+			make.removeExisting = true
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
             make.right.equalTo()(self).with().offset()(-self.MOBILE_TEXT_FIELD_LEADING)
             make.centerY.equalTo()(self.passwordView)
         }
         
         bottomView.mas_updateConstraints({ (make) in
+			make.removeExisting = true
             make.top.equalTo()(self.passwordView.mas_bottom)
-            make.left.equalTo()(self).with().offset()(self.HINT_VIEW_MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.HINT_VIEW_MARGIN_RIGHT)
-            make.height.equalTo()(self.HINT_VIEW_HEIGHT)
-            //make.height.equalTo()(self.hintView)
+            make.left.equalTo()(self)
+			make.right.equalTo()(self)
+			make.height.equalTo()(self.hintView)
         })
         
         doneButton.mas_updateConstraints { (make) in
+			make.removeExisting = true
             make.centerX.equalTo()(self.bottomView)
-            //make.centerY.equalTo()(self.bottomView)
-            make.top.equalTo()(self.DONE_BUTTON_MARGIN_TOP)
+            make.centerY.equalTo()(self.bottomView)
         }
         
         keyboardFillerView.mas_updateConstraints( { (make) in
+			make.removeExisting = true
             make.top.equalTo()(self.bottomView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -178,8 +183,8 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
             let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-            keyboardHeight = keyboardFrame.height
-            updateConstraints()
+            self.keyboardHeight = keyboardFrame.height
+            self.updateConstraints()
         }
     }
     

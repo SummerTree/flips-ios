@@ -57,13 +57,13 @@ public class MessageService {
             return
         }
         
-        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+        let roomInContext = room.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        PubNubService.sharedInstance.subscribeToChannelID(roomInContext.pubnubID)
         
-        self.sendMessage(flipIds, roomID: room.roomID, completion: completion)
+        self.sendMessage(flipIds, roomID: roomInContext.roomID, completion: completion)
     }
     
     func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
-        let flipMessageDataSource = FlipMessageDataSource()
         let flipDataSource = FlipDataSource()
         let roomDataSource = RoomDataSource()
         
@@ -75,7 +75,7 @@ public class MessageService {
         }
         
         let room = roomDataSource.retrieveRoomWithId(roomID)
-        let flipMessage = flipMessageDataSource.createFlipMessageWithFlips(flips, toRoom: room)
+        let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(flips, toRoom: room)
         let messageJson = flipMessage.toJSON()
         
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in

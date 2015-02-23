@@ -12,6 +12,6 @@
 
 public class FlipsService : NSObject {
     
-    let HOST: String = "http://flips-dev.arctouch.com"
+    let HOST: String = "http://flips-dev95.arctouch.com"
 
 }
