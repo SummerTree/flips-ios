@@ -59,7 +59,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.highlightedWordIndex = 0
     }
     
-    init(composeTitle: String, words : [String]) {
+    init(composeTitle: String, words: [String]) {
         super.init(nibName: nil, bundle: nil)
         self.composeTitle = composeTitle
         self.words = words
@@ -105,7 +105,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
             var word = words[i]
-            var flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NewWord)
+            var flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NotAssociatedAndNoResourcesAvailable)
             self.flipWords.append(flipText)
             myFlipsDictionary[word] = Array<String>()
             stockFlipsDictionary[word] = Array<String>()
@@ -128,67 +128,71 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         })
     }
     
+    private func checkForPermissionToCaptureMedia() -> Bool {
+        switch AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) {
+        case .NotDetermined:
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: nil)
+            navigationController?.popViewControllerAnimated(true)
+            return false
+        case .Authorized:
+            return true
+        default:
+            var title = NSLocalizedString("Flips")
+            var message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings")
+            UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
+            
+            navigationController?.popViewControllerAnimated(true)
+            
+            return false
+        }
+    }
+    
     
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let mediaType = AVMediaTypeVideo
-        
-        switch AVCaptureDevice.authorizationStatusForMediaType(mediaType) {
-        case .NotDetermined:
-            AVCaptureDevice.requestAccessForMediaType(mediaType, completionHandler: nil)
-            
-            navigationController?.popViewControllerAnimated(true)
-        case .Authorized:
-            self.view.backgroundColor = UIColor.whiteColor()
-            
-            self.setupWhiteNavBarWithBackButton(self.composeTitle)
-            
-            if (self.shouldShowPreviewButton()) {
-                var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
-                previewBarButton.tintColor = UIColor.orangeColor()
-                self.navigationItem.rightBarButtonItem = previewBarButton
-            }
-            
-            self.setNeedsStatusBarAppearanceUpdate()
-            
-            self.addSubviews()
-            self.addConstraints()
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                self.reloadMyFlips()
-                
-                for flipWord in self.flipWords {
-                    if let firstFlipId: String = self.myFlipsDictionary[flipWord.text]?.first {
-                        flipWord.associatedFlipId = firstFlipId
-                    }
-                }
-                
-                self.updateFlipWordsState()
-                self.showContentForHighlightedWord()
-            })
-        default:
-            var message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings", comment: "Flips doesn't have permission to use Camera, please change privacy settings")
-
-            let alertView = UIAlertView(title: NSLocalizedString("Flips"), message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-            alertView.show()
-            
-            navigationController?.popViewControllerAnimated(true)
+        if (!self.checkForPermissionToCaptureMedia()) {
+            return
         }
+        
+        self.view.backgroundColor = UIColor.whiteColor()
+        
+        self.setupWhiteNavBarWithBackButton(self.composeTitle)
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        if (self.shouldShowPreviewButton()) {
+            var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+            previewBarButton.tintColor = UIColor.orangeColor()
+            self.navigationItem.rightBarButtonItem = previewBarButton
+        }
+        
+        self.addSubviews()
+        self.addConstraints()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            self.reloadMyFlips()
+            self.updateFlipWordsState()
+            self.showContentForHighlightedWord()
+        })
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
         composeBottomViewContainer?.updateGalleryButtonImage()
+        
         composeTopViewContainer?.viewWillAppear()
-        AudioRecorderService.sharedInstance.delegate = self
-        self.shouldEnableUserInteraction(true)
         composeTopViewContainer?.delegate = self
+        
+        AudioRecorderService.sharedInstance.delegate = self
+        
+        self.shouldEnableUserInteraction(true)
     }
-
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         composeTopViewContainer?.viewWillDisappear()
@@ -349,6 +353,12 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
         self.stockFlipsDictionary = flipDataSource.getStockFlipsIdsForWords(words)
+        
+        for flipWord in self.flipWords {
+            if let firstFlipId:String = self.myFlipsDictionary[flipWord.text]?.first {
+                flipWord.associatedFlipId = firstFlipId
+            }
+        }
     }
     
     
@@ -370,15 +380,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             
             if (flipWord.associatedFlipId == nil) {
                 if (numberOfFlipsForWord == 0) {
-                    flipWord.state = .NewWord
+                    flipWord.state = .NotAssociatedAndNoResourcesAvailable
                 } else {
-                    flipWord.state = .NotAssociatedWithResources
+                    flipWord.state = .NotAssociatedButResourcesAvailable
                 }
             } else {
                 if (numberOfFlipsForWord == 1) {
-                    flipWord.state = .AssociatedWithoutOtherResources
+                    flipWord.state = .AssociatedAndNoResourcesAvailable
                 } else {
-                    flipWord.state = .AssociatedWithOtherResources
+                    flipWord.state = .AssociatedAndResourcesAvailable
                 }
             }
         }
@@ -438,10 +448,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         var status : FlipState = flipWord.state
         switch status {
-        case FlipState.NewWord:
+        case FlipState.NotAssociatedAndNoResourcesAvailable:
             composeTopViewContainer.showCameraWithWord(flipWord.text)
             composeBottomViewContainer.showCameraButtons()
-        case FlipState.NotAssociatedWithResources:
+        case FlipState.NotAssociatedButResourcesAvailable:
             if (self.canShowMyFlips()) {
                 composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
                 composeBottomViewContainer.showMyFlips()
@@ -449,7 +459,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 composeTopViewContainer.showCameraWithWord(flipWord.text)
                 composeBottomViewContainer.showCameraButtons()
             }
-        case FlipState.AssociatedWithoutOtherResources, FlipState.AssociatedWithOtherResources:
+        case FlipState.AssociatedAndNoResourcesAvailable, FlipState.AssociatedAndResourcesAvailable:
             composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
             if (self.canShowMyFlips()) {
                 composeBottomViewContainer.showMyFlips()
@@ -465,11 +475,12 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         var newFlipWords = Array<FlipText>()
         var flipWordsToAdd = Array<FlipText>()
         var position = 0
+        
         if (splittedTextWords.count > 1) {
             for oldFlipWord in flipWords {
                 if (flipWord.position == oldFlipWord.position) {
                     for newWord in splittedTextWords {
-                        var newFlipWord = FlipText(position: position, text: newWord, state: FlipState.NewWord)
+                        var newFlipWord = FlipText(position: position, text: newWord, state: FlipState.NotAssociatedAndNoResourcesAvailable)
                         newFlipWords.append(newFlipWord)
                         flipWordsToAdd.append(newFlipWord)
                         position++
@@ -655,7 +666,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if (flipWords.count == 0) {
             return Array<String>()
         }
-
+        
         let flipWord = flipWords[highlightedWordIndex]
         return stockFlipsDictionary[flipWord.text]!
     }
@@ -739,10 +750,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL fileURL: NSURL?, success: Bool!) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text,
-            flipPicture: self.highlightedWordCurrentAssociatedImage,
-            flipAudio: fileURL)
+        var flipImage = self.highlightedWordCurrentAssociatedImage
         
+        let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
         confirmFlipViewController.delegate = self
         confirmFlipViewController.title = self.composeTitle
         self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
@@ -788,7 +798,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     
     // MARK: - PreviewViewControllerDelegate
-
+    
     func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String) {
         delegate?.composeViewController(self, didSendMessageToRoom: roomID)
     }
@@ -799,5 +809,5 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String)
     
     optional func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String])
-
+    
 }

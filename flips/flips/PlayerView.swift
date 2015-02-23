@@ -12,44 +12,52 @@
 
 import UIKit
 
-private let _operationQueue = NSOperationQueue()
-
 class PlayerView: UIView {
 
     var isPlaying = false
     var loadPlayerOnInit = false
-    var useCache = true
+    var playInLoop = false
+    var loadingFlips = false
 
     private var words: Array<String>!
-    private var flips: Array<Flip>!
+    private var playerItems: Array<FlipPlayerItem>!
+    private var thumbnail: UIImage?
+    private var timer: NSTimer?
 
+    private var gradientLayer: CALayer!
     private var wordLabel: UILabel!
     private var thumbnailView: UIImageView!
     private var playButtonView: UIImageView!
+    private var activityIndicator: UIActivityIndicatorView!
 
     var delegate: PlayerViewDelegate?
-    
-    private var videoComposeOperation: VideoComposeOperation?
 
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+    override init() {
+        super.init(frame: CGRect.zeroRect)
+        self.addSubviews()
+        self.makeConstraints()
     }
-
-    class var videoSerialOperationQueue: NSOperationQueue {
-        _operationQueue.maxConcurrentOperationCount = 1
-        return _operationQueue
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.addSubviews()
+        self.makeConstraints()
+    }
+    
+    deinit {
+        self.releaseResources()
     }
 
     override class func layerClass() -> AnyClass {
         return AVPlayerLayer.self
     }
 
-    func player() -> AVPlayer {
+    func player() -> AVQueuePlayer {
         let layer = self.layer as AVPlayerLayer
-        return layer.player
+        return layer.player as AVQueuePlayer
     }
 
-    private func setPlayer(player: AVPlayer) {
+    private func setPlayer(player: AVPlayer?) {
         let layer = self.layer as AVPlayerLayer
         layer.player = player
     }
@@ -59,24 +67,26 @@ class PlayerView: UIView {
     }
 
     func play() {
+        self.timer?.invalidate()
+        
+        if (self.loadingFlips) {
+            return
+        }
+        
+        if (self.playerItems.count == 0) {
+            return
+        }
+        
         self.preparePlayer { (player) -> Void in
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
             self.thumbnailView.hidden = true
             self.playButtonView.hidden = true
-            
-            var currentItem = player!.currentItem
 
-            if (currentItem == nil) {
-                dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    let alertView = UIAlertView(title: LocalizedString.VIDEO_IS_NOT_READY, message: LocalizedString.VIDEO_IS_BEING_CREATED, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                    alertView.show()
-                }
-            } else {
-                let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
-                self.setWord(self.words[playerItem.order])
-                self.isPlaying = true
-                player!.volume = 1.0
-                player!.play()
-            }
+            let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
+            self.setWord(self.words[playerItem.order])
+            self.isPlaying = true
+            player!.volume = 1.0
+            player!.play()
         }
     }
     
@@ -105,83 +115,171 @@ class PlayerView: UIView {
         }
     }
 
-    func pause() {
-        if (self.isPlaying) {
-            self.isPlaying = false
-            self.playButtonView.hidden = false
-
+    func pause(fadeOutVolume: Bool = false) {
+        self.timer?.invalidate()
+        self.loadPlayerOnInit = false
+        
+        if (!self.isPlaying) {
+            return
+        }
+        
+        if (fadeOutVolume) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.isPlaying = false
+                self.playButtonView.hidden = false
                 self.fadeOutVolume()
             })
+        } else {
+            self.isPlaying = false
+            self.playButtonView.hidden = false
+            self.player().pause()
         }
     }
 
     func pauseResume() {
+        self.timer?.invalidate()
+        
         if (self.isPlaying) {
             self.pause()
         } else {
             self.play()
         }
     }
-
-    func setupPlayerWithFlips(flips: Array<Flip>, completion: ((player: AVQueuePlayer?)  -> Void)) {
-        self.flips = flips
-        self.words = []
-        let layer = self.layer as AVPlayerLayer
-        layer.player = nil
-        self.isPlaying = false
-
-        for flip in flips {
-            self.words.append(flip.word)
-        }
-
-        self.showThumbnail()
-
+    
+    func flipsLoaded() {
         if (self.loadPlayerOnInit) {
-            self.preparePlayer(completion)
-        } else {
-            completion(player: nil)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.preparePlayer { (player) -> Void in
+                    self.play()
+                }
+            })
+        }
+    }
+
+    func setupPlayerWithFlips(flips: Array<Flip>) {
+        self.loadingFlips = true
+        self.playerItems = [FlipPlayerItem]()
+        self.words = []
+
+        var pendingFlips = flips.count;
+        
+        for (index, flip) in enumerate(flips) {
+            self.words.append(flip.word)
+
+            if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
+                let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
+                let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
+                let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                playerItem.order = index
+                self.playerItems.append(playerItem)
+                
+                if (--pendingFlips == 0) {
+                    self.loadingFlips = false
+                    self.flipsLoaded()
+                }
+            } else {
+                FlipsCache.sharedInstance.videoForFlip(flip,
+                    success: { (localPath: String!) in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
+                            let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                            playerItem.order = index
+                            self.playerItems.append(playerItem)
+                            
+                            if (--pendingFlips == 0) {
+                                self.loadingFlips = false
+                                self.flipsLoaded()
+                            }
+                        })
+                    },
+                    failure: { (error: FlipError) in
+                        println("Failed to get resource from cache, error: \(error)")
+                    })
+            }
+        }
+        
+        let firstFlip = flips.first
+        if (firstFlip != nil && firstFlip!.thumbnailURL != nil && !firstFlip!.thumbnailURL.isEmpty) {
+            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: firstFlip!.thumbnailURL)!,
+                success: { (localThumbnailPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+            })
+        }
+    }
+    
+    func setupPlayerWithWord(word: String, videoURL: NSURL, thumbnailURL: NSURL?) {
+        self.words = [word]
+        
+        var videoAsset: AVURLAsset = AVURLAsset(URL: videoURL, options: nil)
+        var flipPlayerItem = playerItemWithVideoAsset(videoAsset)
+        flipPlayerItem.order = 0
+        self.playerItems = [flipPlayerItem]
+        
+        if (thumbnailURL != nil) {
+            let response = ThumbnailsCache.sharedInstance.get(thumbnailURL!,
+                success: { (localThumbnailPath: String!) in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)
+                    })
+                },
+                failure: { (error: FlipError) in
+                    println("Failed to get resource from cache, error: \(error)")
+                })
+        }
+        
+        if (self.loadPlayerOnInit) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.preparePlayer { (player) -> Void in
+                    self.play()
+                }
+            })
         }
     }
 
     func playerItemWithVideoAsset(videoAsset: AVAsset) -> FlipPlayerItem {
         let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"videoQueueEnded:",
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"videoPlayerItemEnded:",
             name:AVPlayerItemDidPlayToEndTimeNotification, object:playerItem)
 
         return playerItem
     }
 
-    func videoQueueEnded(notification: NSNotification) {
-        delegate?.playerViewDidFinishPlayback(self)
-        
-        let player: AVQueuePlayer = self.player() as AVQueuePlayer
-        let playerItem: FlipPlayerItem = notification.object as FlipPlayerItem
-        let clonePlayerItem: FlipPlayerItem = self.playerItemWithVideoAsset(playerItem.asset)
-        clonePlayerItem.order = playerItem.order
+    func videoPlayerItemEnded(notification: NSNotification) {
+        let player = self.player()
+        let currentItem = player.currentItem as FlipPlayerItem
 
-        // Set next item's word
-        let wordIndex = (playerItem.order + 1) % self.words.count
-        var pauseGap: UInt64 = 0
-        if (wordIndex == 0) {
-            pauseGap = NSEC_PER_SEC
-        }
+        if (self.playerItems.count == 1) {
+            player.seekToTime(kCMTimeZero)
+            
+            if (!self.playInLoop) {
+                self.pause()
+            }
+        } else {
+            player.advanceToNextItem()
+            
+            let clonedPlayerItem = self.playerItemWithVideoAsset(currentItem.asset)
+            clonedPlayerItem.order = currentItem.order
+            player.insertItem(clonedPlayerItem, afterItem: nil)
 
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(pauseGap)), dispatch_get_main_queue()) { () -> Void in
-			if self.isPlaying {
-            	self.setWord(self.words[wordIndex])
-
-                if (self.words.count > 1) {
-                    player.removeItem(playerItem)
-                    NSNotificationCenter.defaultCenter().removeObserver(self, name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
-
-                    player.insertItem(clonePlayerItem, afterItem: nil)
+            // Set next item's word
+            let nextWordIndex = (currentItem.order + 1) % self.words.count
+            self.setWord(self.words[nextWordIndex])
+            
+            if (currentItem.order == self.playerItems.count - 1) {
+                delegate?.playerViewDidFinishPlayback(self)
+            
+                if (self.playInLoop) {
+                    player.pause()
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("play"), userInfo:nil, repeats:false)
                 } else {
-                    player.seekToTime(kCMTimeZero)
+                    self.pause()
                 }
-                
-                player.play()
             }
         }
     }
@@ -193,112 +291,45 @@ class PlayerView: UIView {
 
     private func preparePlayer(completion: ((player: AVQueuePlayer?)  -> Void)) {
         if (self.hasPlayer()) {
-            completion(player: self.player() as? AVQueuePlayer)
-            return;
-        }
-
-        weak var weakSelf : PlayerView? = self
-
-        if (videoComposeOperation != nil) {
-            videoComposeOperation?.cancel()
-        }
-
-        // Reduce others operations' priority
-        for (var i = 0; i < PlayerView.videoSerialOperationQueue.operationCount; i++) {
-            if let operation = PlayerView.videoSerialOperationQueue.operations[i] as? NSOperation {
-                operation.queuePriority = NSOperationQueuePriority.Low
-            }
-        }
-
-        videoComposeOperation = VideoComposeOperation(flips: flips, useCache: self.useCache, queueObserver: self)
-        if (!videoComposeOperation!.areFlipsCached(flips)) {
-            ActivityIndicatorHelper.showActivityIndicatorAtView(self)
-        }
-        videoComposeOperation?.queuePriority = NSOperationQueuePriority.High
-        videoComposeOperation?.completion = ( { player -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                weakSelf?.setPlayer(player)
-
-                if (weakSelf != nil) {
-                    weakSelf!.setWord(weakSelf!.words.first!)
-                }
-
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-                completion(player: player)
-            })
-        })
-
-        PlayerView.videoSerialOperationQueue.addOperation(videoComposeOperation!)
-    }
-
-
-    // MARK - View lifetime
-
-    override func layoutSubviews() {
-        if (self.wordLabel == nil) {
-            self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
-
-            self.thumbnailView = UIImageView()
-            self.addSubview(self.thumbnailView)
-
-            var gradientLayer = CALayer()
-            gradientLayer.contents = UIImage(named: "Filter_Photo")?.CGImage
-            gradientLayer.frame = self.layer.bounds
-            self.layer.addSublayer(gradientLayer)
-
-            self.wordLabel = UILabel.flipWordLabel()
-            self.wordLabel.textAlignment = NSTextAlignment.Center
-            self.addSubview(self.wordLabel)
-
-            self.playButtonView = UIImageView()
-            self.playButtonView.alpha = 0.6
-            self.playButtonView.contentMode = UIViewContentMode.Center
-            self.playButtonView.image = UIImage(named: "PlayButton")
-            self.addSubview(self.playButtonView)
-
-            self.makeConstraints()
-
-            self.showThumbnail()
-        }
-        
-        super.layoutSubviews()
-    }
-
-    private func firstThumbnail(success: ((UIImage) -> Void)?) -> Void {
-        // Get the first non-blank flip
-        var thumbnailFlip: Flip?
-        for flip in self.flips {
-            if (!flip.isBlankFlip()) {
-                thumbnailFlip = flip
-                break;
-            }
-        }
-        
-        if (thumbnailFlip == nil || thumbnailFlip!.thumbnailURL == nil) {
-            success?(UIImage.emptyFlipImage())
+            completion(player: self.player())
             return
         }
+
+        let videoPlayer = AVQueuePlayer(items: self.playerItems)
+        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.None
+        self.setPlayer(videoPlayer)
         
-        let thumbnailsCache = ThumbnailsCache.sharedInstance
-        thumbnailsCache.get(NSURL(string: thumbnailFlip!.thumbnailURL)!,
-            success: { (localPath: String!) in
-                success?(UIImage(contentsOfFile: localPath)!)
-                return
-            }, failure: { (error: FlipError) in
-                println("Could not get thumbnail from cache, using empty thumbnail.")
-                success?(UIImage.emptyFlipImage())
-        })
+        completion(player: videoPlayer)
     }
 
-    private func showThumbnail() {
-        if (self.thumbnailView != nil) {
-            self.firstThumbnail {
-                (image: UIImage) in
-                self.thumbnailView.image = image
-            }
-            self.thumbnailView.hidden = false
-            self.setWord(self.words.first!)
-        }
+
+    // MARK - View lifecycle
+
+    private func addSubviews() {
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
+        
+        self.thumbnailView = UIImageView()
+        self.addSubview(self.thumbnailView)
+        
+        self.gradientLayer = CALayer()
+        self.gradientLayer.contents = UIImage(named: "Filter_Photo")?.CGImage
+        self.gradientLayer.frame = self.layer.bounds
+        self.layer.addSublayer(self.gradientLayer)
+        
+        self.wordLabel = UILabel.flipWordLabel()
+        self.wordLabel.textAlignment = NSTextAlignment.Center
+        self.addSubview(self.wordLabel)
+        
+        self.playButtonView = UIImageView()
+        self.playButtonView.alpha = 0.6
+        self.playButtonView.contentMode = UIViewContentMode.Center
+        self.playButtonView.image = UIImage(named: "PlayButton")
+        self.addSubview(self.playButtonView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = self.layer.bounds
     }
 
     private func makeConstraints() {
@@ -323,9 +354,12 @@ class PlayerView: UIView {
     func releaseResources() {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         
-        if (videoComposeOperation != nil) {
-            videoComposeOperation?.cancel()
+        if (self.hasPlayer()) {
+            self.player().removeAllItems()
         }
+        
+        let layer = self.layer as AVPlayerLayer
+        layer.player = nil
     }
 
 }

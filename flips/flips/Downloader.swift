@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-private typealias DownloadFinished = (BackgroundContentType, NSError?) -> Void
+private typealias DownloadFinished = (NSError?) -> Void
 typealias DownloadFinishedCompletion = (error: NSError?) -> Void
 
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
@@ -100,21 +100,6 @@ public class Downloader : NSObject {
         downloadTask.resume()
     }
     
-    
-    // MARK: - Helper Methods
-    
-    private func backgroundTypeForContentType(contentType: String) -> BackgroundContentType {
-        if (contentType.hasPrefix("image")) {
-            return BackgroundContentType.Image
-        } else if (contentType.hasPrefix("video")) {
-            return BackgroundContentType.Video
-        }
-        
-        println("### Error ###")
-        println("### Content-type undefined with value = \(contentType)")
-
-        return BackgroundContentType.Undefined
-    }
     
     // MARK: - Validation Methods
     

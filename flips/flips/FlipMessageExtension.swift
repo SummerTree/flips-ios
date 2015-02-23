@@ -55,7 +55,7 @@ extension FlipMessage {
     func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
         let firstFlip = self.flips.first
         if (firstFlip == nil || firstFlip!.thumbnailURL == nil) {
-            self.createThumbnail(success)
+            success?(UIImage.emptyFlipImage())
             return
         }
         
@@ -65,50 +65,8 @@ extension FlipMessage {
                 var image = UIImage(contentsOfFile: localPath)
                 success?(image)
             }, failure: { (error: FlipError) in
-                println("Could not get thumbnail for flip \(firstFlip), trying to create it.")
-                self.createThumbnail(success)
-        })
-    }
-    
-    private func createThumbnail(success: ((UIImage) -> Void)? = nil) -> Void {
-        let firstFlip = self.flips.first
-        if (firstFlip == nil) {
-            return
-        }
-        
-        if (firstFlip!.isBackgroundContentTypeImage()) {
-            let cacheHandler = CacheHandler.sharedInstance
-            var backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
-            
-            var thumbnailImage: UIImage
-            
-            if (backgroundImageData == nil) {
-                thumbnailImage = UIImage.emptyFlipImage()
-            } else {
-                thumbnailImage = UIImage(data: backgroundImageData!)!
-            }
-            
-            var url = firstFlip!.backgroundURL
-            if (url == nil || countElements(url) == 0) {
-                url = "greenBackground"
-            }
-            
-            cacheHandler.saveThumbnail(thumbnailImage, forUrl: url)
-
-            success?(thumbnailImage)
-        } else if (firstFlip!.isBackgroundContentTypeVideo()) {
-            let flipsCache = FlipsCache.sharedInstance
-            flipsCache.videoForFlip(firstFlip!,
-                success: { (localPath: String!) in
-                    if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(localPath) {
-                        let thumbnailsCache = ThumbnailsCache.sharedInstance
-                        thumbnailsCache.put(NSURL(string: firstFlip!.thumbnailURL)!, data: UIImagePNGRepresentation(videoThumbnailImage))
-                        success?(videoThumbnailImage)
-                    }
-                }, failure: { (error: FlipError) in
-                    println("Failed to get flip \(firstFlip!) from cache.")
+                println("Could not get thumbnail for flip \(firstFlip).")
             })
-        }
     }
     
     
@@ -142,7 +100,6 @@ extension FlipMessage {
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
             dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
-            dic.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
             dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
 

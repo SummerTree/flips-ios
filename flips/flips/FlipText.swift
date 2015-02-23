@@ -25,8 +25,8 @@ class FlipText {
 }
 
 enum FlipState {
-    case NewWord
-    case AssociatedWithoutOtherResources
-    case NotAssociatedWithResources
-    case AssociatedWithOtherResources
+    case NotAssociatedAndNoResourcesAvailable
+    case NotAssociatedButResourcesAvailable
+    case AssociatedAndNoResourcesAvailable
+    case AssociatedAndResourcesAvailable
 }

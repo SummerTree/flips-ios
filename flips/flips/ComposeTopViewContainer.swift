@@ -140,22 +140,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
                         UIView.animateWithDuration(1.0, animations: { () -> Void in
-                            if (flip.isBackgroundContentTypeVideo()) {
-                                self.flipViewer.setWord(word)
-                                self.flipViewer.setVideoURL(NSURL.fileURLWithPath(localPath)!)
-                                self.cameraPreview.removeObservers()
-                                self.cameraPreview.alpha = 0.0
-                                self.flipViewer.alpha = 1.0
-                            } else if (flip.isBackgroundContentTypeImage()) {
-                                var image = UIImage(contentsOfFile: localPath)
-                                if (flip.hasAudio()) {
-                                    self.flipViewer.setAudioURL(NSURL.fileURLWithPath(flip.soundContentLocalPath()!)!)
-                                }
-                                self.showImage(image!, andText: word)
-                            } else {
-                                println("### Error ###")
-                                println("### Flip id [\(flipId)) contains a wrong content type.")
-                            }
+                            self.flipViewer.setWord(word)
+                            self.flipViewer.setVideoURL(NSURL.fileURLWithPath(localPath)!)
+                            self.cameraPreview.removeObservers()
+                            self.cameraPreview.alpha = 0.0
+                            self.flipViewer.alpha = 1.0
                             self.bringSubviewToFront(self.flipViewer)
                         })
                     })
