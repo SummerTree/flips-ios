@@ -97,31 +97,16 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     }
     
     func splashScreenViewAttemptLogin() {
-        // TODO: we need to validate the cookies to se if the it is expired or not. And in the logout, it will be good to delete it.
         if let loggedUser = User.loggedUser() {
             AuthenticationHelper.sharedInstance.onLogin(loggedUser)
             PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
-				if let code = error?.code {
-					if (code == FlipError.BACKEND_FORBIDDEN_REQUEST) {
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
-							AuthenticationHelper.sharedInstance.logout()
-							self.openLoginViewController()
-						})
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.openInboxViewController(userDataSource)
-                        })
-                    }
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.openInboxViewController(userDataSource)
-                    })
-                }
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.openInboxViewController(userDataSource)
+                })
             })
         } else {
             openLoginViewController()
         }
-
     }
     
     

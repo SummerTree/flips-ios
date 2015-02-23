@@ -91,7 +91,7 @@ public class StorageCache {
                     if (result) {
                         success?(localPath)
                     } else {
-						failure?(FlipError(error: "Error downloading media file", details: nil, code: FlipError.NO_CODE))
+						failure?(FlipError(error: "Error downloading media file", details: nil))
                     }
                 }
             )

@@ -150,14 +150,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                         } else {
                             var message = self.SEND_MESSAGE_ERROR_MESSAGE
                             if (flipError != nil) {
-								if let code = flipError?.code {
-									if (code == FlipError.BACKEND_FORBIDDEN_REQUEST) {
-										println("403 - preview view controller")
-										AuthenticationHelper.sharedInstance.logout()
-										let navigationController: UINavigationController = self.presentingViewController as UINavigationController
-										navigationController.pushViewController(LoginViewController(), animated: false)
-									}
-								}
                                 message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
                             }
                             

@@ -120,16 +120,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 for stockFlipJson in stockFlipsAsJSON! {
                     PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
                 }
-                }, failure: { (flipError) -> Void in
-                    if let code = flipError?.code {
-                        if (code == FlipError.BACKEND_FORBIDDEN_REQUEST) {
-                            AuthenticationHelper.sharedInstance.logout()
-                            self.navigationController?.pushViewController(LoginViewController(), animated: false)
-                        }
-                    }
-                    if (flipError != nil) {
-                        println("Error \(flipError)")
-                    }
+            }, failure: { (flipError) -> Void in
+                if (flipError != nil) {
+                    println("Error \(flipError)")
+                }
             })
         })
     }

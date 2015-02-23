@@ -132,12 +132,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
                 let errorTitle = flipError.error?
                 let errorMessage = flipError.details?
                 self.confirmFlipView.hideActivityIndicator()
-				if let code = flipError.code? {
-					if (code == FlipError.BACKEND_FORBIDDEN_REQUEST) {
-						AuthenticationHelper.sharedInstance.logout()
-						self.navigationController?.pushViewController(LoginViewController(), animated: false)
-					}
-				}
+
                 self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
                 var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
