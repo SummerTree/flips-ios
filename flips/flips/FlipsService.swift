@@ -11,7 +11,11 @@
 //
 
 public class FlipsService : NSObject {
-    
-    let HOST: String = "http://flips-dev95.arctouch.com"
+
+    var HOST: String {
+        let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!
+
+        return infoPlist["FlipsServiceHostBaseURL"] as String
+    }
 
 }

@@ -50,5 +50,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>FlipsServiceHostBaseURL</key>
+	<string>http://flips-dev95.arctouch.com</string>
 </dict>
 </plist>
