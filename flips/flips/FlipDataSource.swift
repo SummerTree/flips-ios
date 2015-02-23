@@ -91,16 +91,28 @@ class FlipDataSource : BaseDataSource {
     }
 
     func getMyFlips() -> [Flip] {
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
-            ascending: true,
-            withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID))"),
-            inContext: currentContext) as [Flip]
+        var myFlips : [Flip]
+        if let loggedUser = User.loggedUser() {
+            let predicate = NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(loggedUser.userID))")
+            myFlips = Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
+                ascending: true,
+                withPredicate: predicate,
+                inContext: currentContext) as [Flip]
+        } else {
+            myFlips = []
+        }
+        return myFlips
     }
     
     func getMyFlipsForWord(word: String) -> [Flip] {
-        let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
-        
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+        var myFlips : [Flip]
+        if let loggedUser = User.loggedUser() {
+            let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(loggedUser.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
+            myFlips =  Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+        } else {
+            myFlips = []
+        }
+        return myFlips
     }
     
     func getMyFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {

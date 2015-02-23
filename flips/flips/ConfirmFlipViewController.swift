@@ -118,6 +118,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
                 let errorTitle = flipError.error?
                 let errorMessage = flipError.details?
                 self.confirmFlipView.hideActivityIndicator()
+
                 self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
                 var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
