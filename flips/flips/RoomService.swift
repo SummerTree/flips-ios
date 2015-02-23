@@ -48,9 +48,9 @@ public class RoomService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-					failCompletion(FlipError(error: response["error"] as String!, details : nil))
+					failCompletion(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-					failCompletion(FlipError(error: error.localizedDescription, details : nil))
+					failCompletion(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -70,9 +70,9 @@ public class RoomService: FlipsService {
         }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
             if (operation.responseObject != nil) {
                 let response = operation.responseObject as NSDictionary
-				failCompletion(FlipError(error: response["error"] as String!, details : nil))
+				failCompletion(FlipError(error: response["error"] as String!, details: nil))
             } else {
-				failCompletion(FlipError(error: error.localizedDescription, details : nil))
+				failCompletion(FlipError(error: error.localizedDescription, details: nil))
             }
         }
     }

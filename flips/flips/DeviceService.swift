@@ -32,10 +32,10 @@ public class DeviceService: FlipsService {
     
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-
+        
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + createURL
         
@@ -56,9 +56,9 @@ public class DeviceService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details: nil))
+                    failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-					failure(FlipError(error: error.localizedDescription, details : nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -73,10 +73,10 @@ public class DeviceService: FlipsService {
     
     func verifyDevice(userId: String, deviceId: String, verificationCode: String, phoneNumber: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-			failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-
+        
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         verifyURL = verifyURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + verifyURL
@@ -96,19 +96,19 @@ public class DeviceService: FlipsService {
                 success(device)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-				if (operation.responseObject != nil) {
-					let response = operation.responseObject as NSDictionary
-					failure(FlipError(error: response["error"] as String!, details: nil))
-				} else {
-					failure(FlipError(error: error.localizedDescription, details : nil))
-				}
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(FlipError(error: response["error"] as String!, details: nil))
+                } else {
+                    failure(FlipError(error: error.localizedDescription, details: nil))
+                }
             }
         )
     }
-	
-	
+    
+    
     // MARK: - Data Structures
-	
+    
     struct RequestParams {
         static let PHONE_NUMBER = "phoneNumber"
         static let PLATFORM = "platform"

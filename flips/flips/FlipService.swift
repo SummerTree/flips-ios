@@ -107,7 +107,7 @@ public class FlipService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details : nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -134,7 +134,7 @@ public class FlipService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details : nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -201,7 +201,7 @@ public class FlipService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failCallback(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCallback(FlipError(error: error.localizedDescription, details : nil))
+                    failCallback(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )

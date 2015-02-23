@@ -33,7 +33,7 @@ public class BuilderService: FlipsService {
                 let response = operation.responseObject as NSDictionary
                 failCompletion(FlipError(error: response["error"] as String!, details: nil))
             } else {
-                failCompletion(FlipError(error: error.localizedDescription, details : nil))
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
             }
         }
     }
