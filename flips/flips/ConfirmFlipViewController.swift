@@ -17,38 +17,42 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     var delegate: ConfirmFlipViewControllerDelegate?
     
     private var confirmFlipView: ConfirmFlipView!
-    private var previewFlipTimer: NSTimer!
-    private var isPlaying = true
-    
+
     var showPreviewButton = true
     
     private var flipWord: String!
-    private var flipImage: UIImage?
-    private var flipAudioURL: NSURL?
     private var flipVideoURL: NSURL?
-    
+    private var flipThumbnailURL: NSURL?
+
     convenience init(flipWord: String!, flipPicture: UIImage?, flipAudio: NSURL?) {
         self.init()
-
         self.flipWord = flipWord
-        self.flipImage = flipPicture
-        self.flipAudioURL = flipAudio
+        self.confirmFlipView = ConfirmFlipView()
+
+        var videoComposer = VideoComposer()
+        videoComposer.flipVideoFromImage(flipPicture, andAudioURL:flipAudio, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.flipVideoURL = flipVideoURL
+                self.flipThumbnailURL = thumbnailURL
+                self.confirmFlipView.setupPlayerWithWord(flipWord, videoURL: flipVideoURL)
+            })
+        })
         
-        var image = flipPicture
-        if (image == nil) {
-            image = UIImage.imageWithColor(UIColor.avacado())
-        }
-        
-        self.confirmFlipView = ConfirmFlipView(word: flipWord, background: image, audio: flipAudio)
     }
     
     convenience init(flipWord: String!, flipVideo: NSURL?) {
         self.init()
-
         self.flipWord = flipWord
-        self.flipVideoURL = flipVideo
-        
-        self.confirmFlipView = ConfirmFlipView(word: flipWord, video: flipVideo)
+        self.confirmFlipView = ConfirmFlipView()
+
+        var videoComposer = VideoComposer()
+        videoComposer.flipVideoFromVideo(flipVideo, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.flipVideoURL = flipVideoURL
+                self.flipThumbnailURL = thumbnailURL
+                self.confirmFlipView.setupPlayerWithWord(flipWord, videoURL: flipVideoURL)
+            })
+        })
     }
     
     override func loadView() {
@@ -77,28 +81,10 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
-        self.startPreview()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        self.previewFlipTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "startPreview", userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(animated: Bool) {
-        self.previewFlipTimer.invalidate()
         self.confirmFlipView.viewWillDisappear()
-    }
-    
-    func startPreview() {
-        self.isPlaying = true
-        if (self.flipAudioURL != nil) {
-            self.confirmFlipView.playAudio()
-        }
-        
-        if (self.flipVideoURL != nil) {
-            self.confirmFlipView.playVideo()
-        }
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -119,60 +105,38 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
         self.confirmFlipView.showActivityIndicator()
-        self.previewFlipTimer.invalidate()
-        
+
         var createFlipSuccessBlock : CreateFlipSuccessCompletion = { (flip) -> Void in
             let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
             self.navigationController?.popViewControllerAnimated(false)
             self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flipID: flipInContext.flipID)
             self.confirmFlipView.hideActivityIndicator()
         }
+        
         var createFlipFailBlock : CreateFlipFailureCompletion = { (error) -> Void in
             if let flipError = error {
                 let errorTitle = flipError.error?
                 let errorMessage = flipError.details?
                 self.confirmFlipView.hideActivityIndicator()
-				if let code = flipError.code? {
-					if (code == FlipError.BACKEND_FORBIDDEN_REQUEST) {
-						AuthenticationHelper.sharedInstance.logout()
-						self.navigationController?.pushViewController(LoginViewController(), animated: false)
-					}
-				}
+
                 self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
                 var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
             }
         }
-        
-        if (flipVideoURL == nil) {
-            PersistentManager.sharedInstance.createAndUploadFlip(flipView.getWord(),
-                backgroundImage: self.flipImage,
-                soundPath: self.flipAudioURL,
-                createFlipSuccessCompletion: createFlipSuccessBlock,
-                createFlipFailCompletion: createFlipFailBlock)
-        } else {
-            PersistentManager.sharedInstance.createAndUploadFlip(self.flipWord,
-                videoURL: self.flipVideoURL!,
-                createFlipSuccessCompletion: createFlipSuccessBlock,
-                createFlipFailCompletion: createFlipFailBlock)
-        }
+
+        PersistentManager.sharedInstance.createAndUploadFlip(self.flipWord,
+            videoURL: flipVideoURL!,
+            thumbnailURL: flipThumbnailURL!,
+            createFlipSuccessCompletion: createFlipSuccessBlock,
+            createFlipFailCompletion: createFlipFailBlock)
     }
     
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!) {
         self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
         self.navigationController?.popViewControllerAnimated(false)
     }
-    
-    func confirmFlipViewDidTapPlayOrPausePreviewButton(flipView: ConfirmFlipView!) {
-        if (isPlaying) {
-            self.previewFlipTimer.invalidate()
-        } else {
-            self.startPreview()
-            self.previewFlipTimer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "startPreview", userInfo: nil, repeats: true)
-        }
 
-        self.isPlaying = !self.isPlaying
-    }
 }
 
 protocol ConfirmFlipViewControllerDelegate {

@@ -20,24 +20,21 @@ public class BuilderService: FlipsService {
     
     func getSuggestedWords(successCompletion: GetSuggestedWordsSuccessResponse, failCompletion: SuggestedWordsFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION, code: FlipError.NO_CODE))
+            failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let getSuggestedWordsUrl = HOST + SUGGESTED_WORDS_URL
         
-        request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
+        self.get(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
         }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                let code = self.parseResponseError(error)
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil, code: code))
-                } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details : nil, code: code))
-                }
+            if (operation.responseObject != nil) {
+                let response = operation.responseObject as NSDictionary
+                failCompletion(FlipError(error: response["error"] as String!, details: nil))
+            } else {
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
+            }
         }
     }
     

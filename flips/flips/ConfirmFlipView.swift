@@ -17,52 +17,31 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     var delegate: ConfirmFlipViewDelegate?
     
-    private let FLIP_IMAGE_WIDTH: CGFloat = 240.0
-    private let FLIP_VIDEO_WIDTH: CGFloat = 240.0
-    private let FLIP_WORD_LABEL_MARGIN_BOTTOM: CGFloat = 40.0
+    private let LOW_RES_VIDEO_WIDTH: CGFloat = 240.0
+    private let LOW_RES_VIDEO_MARGIN: CGFloat = 15.0
     private let ACTIVITY_INDICATOR_SIZE: CGFloat = 100
     private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
     
-    private var flipContainerView: UIView!
-    private var flipImageView: UIImageView!
-    private var moviePlayer: MPMoviePlayerController!
-    private var flipWordLabel: UILabel!
-    private var flipVideoURL: NSURL!
-    private var flipAudioURL: NSURL?
+    private var videoPlayerView: PlayerView!
     private var rejectButton: UIButton!
     private var acceptButton: UIButton!
-    
     private var activityIndicator: UIActivityIndicatorView!
-    
-    convenience init(word: String!, background: UIImage!, audio: NSURL?) {
-        self.init()
-        
-        self.flipWordLabel = UILabel()
-        self.flipWordLabel.text = word
-        
-        self.flipImageView = UIImageView(image: background)
-        
-        if (audio != nil) {
-            self.flipAudioURL = audio
-        }
-        
+
+    override init() {
+        super.init(frame: CGRect.zeroRect)
         self.addSubviews()
     }
     
-    convenience init(word: String!, video: NSURL!) {
-        self.init()
-        
-        self.flipWordLabel = UILabel()
-        self.flipWordLabel.text = word
-        
-        self.flipImageView = UIImageView.imageViewWithColor(UIColor.avacado())
-        
-        if (video != nil) {
-            self.flipVideoURL = video!
-            self.moviePlayer = MPMoviePlayerController(contentURL: self.flipVideoURL)
-        }
-        
-        self.addSubviews()
+    public required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupPlayerWithWord(word: String, videoURL: NSURL) {
+        self.videoPlayerView.setupPlayerWithWord(word, videoURL: videoURL, thumbnailURL: nil)
+    }
+    
+    func play() {
+        self.videoPlayerView.play()
     }
     
     
@@ -74,37 +53,13 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     }
     
     func viewWillDisappear() {
-        if (self.moviePlayer != nil) {
-            self.moviePlayer.stop()
-        }
+        self.videoPlayerView.releaseResources()
     }
     
     func addSubviews() {
-        flipContainerView = UIView()
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "playOrPausePreview")
-        tapGestureRecognizer.delegate = self
-        flipContainerView.addGestureRecognizer(tapGestureRecognizer)
-        
-        self.addSubview(flipContainerView)
-        
-        if (self.flipImageView != nil) {
-            flipImageView.contentMode = UIViewContentMode.ScaleAspectFit
-            flipContainerView.addSubview(self.flipImageView)
-        }
-        
-        if (self.moviePlayer != nil) {
-            self.moviePlayer.controlStyle = MPMovieControlStyle.None
-            self.moviePlayer.scalingMode = MPMovieScalingMode.AspectFill
-            self.moviePlayer.shouldAutoplay = false
-            
-            flipContainerView.addSubview(moviePlayer.view)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
-        }
-        
-        flipWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
-        flipWordLabel.textColor = UIColor.whiteColor()
-        
-        flipContainerView.addSubview(self.flipWordLabel)
+        self.videoPlayerView = PlayerView()
+        self.videoPlayerView.loadPlayerOnInit = true
+        self.addSubview(self.videoPlayerView)
         
         rejectButton = UIButton()
         rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
@@ -118,20 +73,6 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(acceptButton)
         
-        self.setupActivityIndicator()
-    }
-    
-    func moviePlayerDidFinish(notification: NSNotification) {
-        let player = notification.object as MPMoviePlayerController
-        
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: player)
-    }
-    
-    func playOrPausePreview() {
-        self.delegate?.confirmFlipViewDidTapPlayOrPausePreviewButton(self)
-    }
-    
-    private func setupActivityIndicator() {
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
         activityIndicator.backgroundColor = UIColor.blackColor()
         activityIndicator.alpha = 0
@@ -145,54 +86,24 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
             make.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
         }
     }
-    
+
     func makeConstraints() {
-        flipContainerView.mas_makeConstraints { (make) -> Void in
+        self.videoPlayerView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.bottom.equalTo()(self.flipImageView)
+            
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                make.height.equalTo()(self.LOW_RES_VIDEO_WIDTH + (2 * self.LOW_RES_VIDEO_MARGIN))
+            } else {
+                make.height.equalTo()(self.mas_width)
+            }
         }
         
         // asking help to delegate to align the container with navigation bar
-        self.delegate?.confirmFlipViewMakeConstraintToNavigationBarBottom(flipContainerView)
-        
-        flipImageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.flipContainerView)
-            
-            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                make.centerX.equalTo()(self.flipContainerView)
-                make.width.equalTo()(self.FLIP_IMAGE_WIDTH)
-            } else {
-                make.left.equalTo()(self.flipContainerView)
-                make.right.equalTo()(self.flipContainerView)
-            }
-
-            make.height.equalTo()(self.flipImageView.mas_width)
-        }
-        
-        if (self.moviePlayer != nil) {
-            self.moviePlayer.view.mas_makeConstraints({ (make) -> Void in
-                make.top.equalTo()(self.flipContainerView)
-                
-                if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-                    make.centerX.equalTo()(self.flipContainerView)
-                    make.width.equalTo()(self.FLIP_VIDEO_WIDTH)
-                } else {
-                    make.left.equalTo()(self.flipContainerView)
-                    make.right.equalTo()(self.flipContainerView)
-                }
-                
-                make.height.equalTo()(self.moviePlayer.view.mas_width)
-            })
-        }
-        
-        flipWordLabel.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self.flipContainerView).with().offset()(-self.FLIP_WORD_LABEL_MARGIN_BOTTOM)
-            make.centerX.equalTo()(self.flipContainerView)
-        }
+        self.delegate?.confirmFlipViewMakeConstraintToNavigationBarBottom(videoPlayerView)
         
         rejectButton.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.flipContainerView.mas_bottom)
+            make.top.equalTo()(self.videoPlayerView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self.mas_centerX)
             make.bottom.equalTo()(self)
@@ -217,27 +128,6 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         self.delegate?.confirmFlipViewDidTapAcceptButton(self)
     }
     
-    func playVideo() {
-        self.moviePlayer.play()
-    }
-    
-    func playAudio() {
-        if (flipAudioURL != nil) {
-            AudioRecorderService.sharedInstance.playAudio(flipAudioURL)
-        }
-    }
-    
-    
-    // MARK: - Gesture Recognizer Delegate
-    
-    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        return true
-    }
-    
-    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
     
     // MARK: - Activity Indicator
     
@@ -258,22 +148,11 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
                 self.activityIndicator.stopAnimating()
         })
     }
-    
-    
-    // MARK: - Getters
-    
-    func getWord() -> String! {
-        return self.flipWordLabel.text
-    }
-    
-    func getImage() -> UIImage! {
-        return self.flipImageView.image
-    }
+
 }
 
 protocol ConfirmFlipViewDelegate {
     func confirmFlipViewMakeConstraintToNavigationBarBottom(pictureContainerView: UIView!)
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!)
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!)
-    func confirmFlipViewDidTapPlayOrPausePreviewButton(flipView: ConfirmFlipView!)
 }

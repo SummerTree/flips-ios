@@ -26,20 +26,6 @@ extension Room {
         return notReadMessagesCount
     }
     
-    func lastMessageReceivedWithContent() -> FlipMessage? {
-        var currentLastMessageWithContent = self.flipMessagesNotRemoved().lastObject as FlipMessage!
-        
-        while (!currentLastMessageWithContent.hasAllContentDownloaded()) {
-            var currentIndex = self.flipMessages.indexOfObject(currentLastMessageWithContent)
-            if (currentIndex == 0) {
-                return nil
-            }
-            currentLastMessageWithContent = self.flipMessages[--currentIndex] as FlipMessage
-        }
-
-        return currentLastMessageWithContent
-    }
-    
     func oldestNotReadMessage() -> FlipMessage? {
         let flipMessageDataSource = FlipMessageDataSource()
         

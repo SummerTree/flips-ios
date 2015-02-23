@@ -72,19 +72,19 @@ class FlipTextView : UIView {
     func updateLayout() {
         var status : FlipState = self.flipText.state
         switch status {
-        case FlipState.NewWord:
-            textLabel.textColor = UIColor.blackColor()
+        case FlipState.NotAssociatedAndNoResourcesAvailable:
+            textLabel.textColor =   UIColor.blackColor()
             textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
             hasExtrasImageView.alpha = 0.0
-        case FlipState.NotAssociatedWithResources:
+        case FlipState.NotAssociatedButResourcesAvailable:
             textLabel.textColor = UIColor.blackColor()
             textLabel.layer.backgroundColor = UIColor.whiteColor().CGColor
             hasExtrasImageView.alpha = 1.0
-        case FlipState.AssociatedWithoutOtherResources:
+        case FlipState.AssociatedAndNoResourcesAvailable:
             textLabel.textColor = UIColor.whiteColor()
             textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             hasExtrasImageView.alpha = 0.0
-        case FlipState.AssociatedWithOtherResources:
+        case FlipState.AssociatedAndResourcesAvailable:
             textLabel.textColor = UIColor.whiteColor()
             textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             hasExtrasImageView.alpha = 1.0
