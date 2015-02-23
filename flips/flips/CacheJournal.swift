@@ -1,5 +1,5 @@
 //
-// Copyright 2015 ArcTouch, Inc.
+// Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
 // This file, its contents, concepts, methods, behavior, and operation
@@ -15,9 +15,9 @@ public class CacheJournal {
     let SEP: Character = "\t"
     let EOL: Character = "\n"
     
-    let path: String
-    var entries: [JournalEntry]
-    let fileManagerQueue: dispatch_queue_t
+    private let path: String
+    private var entries: [JournalEntry]
+    private let fileManagerQueue: dispatch_queue_t
     var cacheSize: UInt64 {
         get {
             var size: UInt64 = 0
@@ -44,6 +44,10 @@ public class CacheJournal {
     
     func insertNewEntry(key: String) -> Void {
         let attributes = NSFileManager.defaultManager().attributesOfItemAtPath(key, error: nil)
+        if (attributes == nil) {
+            println("Can't get file (\(key)) attributes, not inserting into cache.")
+            return
+        }
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
         var newEntry = JournalEntry(key: key, size: entrySize, timestamp: entryTimestamp)
