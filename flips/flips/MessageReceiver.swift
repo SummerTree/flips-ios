@@ -29,7 +29,7 @@ let MESSAGE_FLIPS_INFO_TYPE = "2"
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
-    var flipMessagesWaiting: [FlipMessage: Array<Flip>]
+    var flipMessagesWaiting: [String: Array<String>]
     
     public class var sharedInstance : MessageReceiver {
     struct Static {
@@ -42,7 +42,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     // MARK: - Initialization
     
     override init() {
-        self.flipMessagesWaiting = [FlipMessage: Array<Flip>]()
+        self.flipMessagesWaiting = [String: Array<String>]()
         super.init()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
     }
@@ -67,27 +67,27 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             }
         }
 
-        flipMessagesWaiting[flipMessage] = Array<Flip>()
+        flipMessagesWaiting[flipMessage.flipMessageID] = Array<String>()
 
         for var i = 0; i < flips.count; i++ {
             println("       flip #\(flips[i].flipID)")
             let flip = flips[i]
-            flipMessagesWaiting[flipMessage]?.append(flip)
+            flipMessagesWaiting[flipMessage.flipMessageID]?.append(flip.flipID)
             
             let flipsCache = FlipsCache.sharedInstance
             flipsCache.videoForFlip(flip,
                 success: { (localPath: String!) in
-                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessage: flipMessage, error: nil)
+                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: nil)
                 },
                 failure: { (error: FlipError) in
                     println("Failed to get resource from cache, error: \(error)")
-                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessage: flipMessage, error: error)
+                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: error)
             })
         }
     }
     
-    private func sendDownloadFinishedBroadcastForFlip(flip: Flip, flipMessage: FlipMessage, error: FlipError?) {
-        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID, DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE: flipMessage]
+    private func sendDownloadFinishedBroadcastForFlip(flip: Flip, flipMessageID: String, error: FlipError?) {
+        var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID, DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY: flipMessageID]
         
         if (error != nil) {
             println("Error download flip content: \(error!)")
@@ -103,7 +103,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func notificationReceived(notification: NSNotification) {
         let userInfo: Dictionary = notification.userInfo!
         let flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
-        let flipMessage = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE] as FlipMessage
+        let flipMessageID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as String
         
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipID) {
@@ -111,35 +111,37 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 println("Download failed for flip: \(flip.flipID)")
             } else {
                 println("Download finished for flip: \(flip.flipID)")
-                self.onFlipContentDownloadFinished(flip, flipMessage: flipMessage)
+                self.onFlipContentDownloadFinished(flip, flipMessageID: flipMessageID)
             }
         } else {
             UIAlertView.showUnableToLoadFlip()
         }
     }
     
-    private func onFlipContentDownloadFinished(flip: Flip, flipMessage: FlipMessage) {
-        if (self.flipMessagesWaiting[flipMessage] == nil) {
+    private func onFlipContentDownloadFinished(flip: Flip, flipMessageID: String) {
+        if (self.flipMessagesWaiting[flipMessageID] == nil) {
             return
         }
         
         var flipMessagesToRemove = Array<FlipMessage>()
 
-        let arrayOfFlips: Array<Flip> = self.flipMessagesWaiting[flipMessage]!
+        let arrayOfFlips: Array<String> = self.flipMessagesWaiting[flipMessageID]!
         for i in 0..<arrayOfFlips.count {
-            if (flip.flipID == arrayOfFlips[i].flipID) {
-                self.flipMessagesWaiting[flipMessage]!.removeAtIndex(i)
+            if (flip.flipID == arrayOfFlips[i]) {
+                self.flipMessagesWaiting[flipMessageID]!.removeAtIndex(i)
                 break
             }
         }
         
-        if (self.flipMessagesWaiting[flipMessage]!.isEmpty) {
+        if (self.flipMessagesWaiting[flipMessageID]!.isEmpty) {
+            let flipMessageDataSource = FlipMessageDataSource()
+            let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageID)
             flipMessagesToRemove.append(flipMessage)
             flipMessage.messageThumbnail()
         }
         
         for flipMessage in flipMessagesToRemove {
-            self.flipMessagesWaiting[flipMessage] = nil
+            self.flipMessagesWaiting[flipMessageID] = nil
         }
     }
     
