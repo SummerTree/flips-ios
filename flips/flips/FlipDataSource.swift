@@ -16,7 +16,6 @@ struct FlipJsonParams {
     static let ID = "id"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
-    static let SOUND_URL = "soundURL"
     static let OWNER = "owner"
     static let IS_PRIVATE = "isPrivate"
     static let THUMBNAIL_URL = "thumbnailURL"
@@ -27,7 +26,6 @@ struct FlipAttributes {
     static let FLIP_OWNER = "owner"
     static let WORD = "word"
     static let BACKGROUND_URL = "backgroundURL"
-    static let SOUND_URL = "soundURL"
     static let IS_PRIVATE = "isPrivate"
 }
 
@@ -50,21 +48,12 @@ class FlipDataSource : BaseDataSource {
         if (flip.flipID != json[FlipJsonParams.ID].stringValue) {
             println("Possible error. Will update flip id from (\(flip.flipID)) to (\(json[FlipJsonParams.ID].stringValue))")
         }
-        
+
         flip.flipID = json[FlipJsonParams.ID].stringValue
         flip.word = json[FlipJsonParams.WORD].stringValue
         flip.backgroundURL = json[FlipJsonParams.BACKGROUND_URL].stringValue
-        flip.soundURL = json[FlipJsonParams.SOUND_URL].stringValue
-        flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
         flip.thumbnailURL = json[FlipJsonParams.THUMBNAIL_URL].stringValue
-
-        if ((flip.backgroundURL == nil) || (flip.backgroundURL.isEmpty)) {
-            flip.setBackgroundContentType(BackgroundContentType.Image)
-        } else if (flip.backgroundURL.isImagePath()) {
-            flip.setBackgroundContentType(BackgroundContentType.Image)
-        } else if (flip.backgroundURL.isVideoPath()) {
-            flip.setBackgroundContentType(BackgroundContentType.Video)
-        }
+        flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
     }
     
 
@@ -89,10 +78,7 @@ class FlipDataSource : BaseDataSource {
     // This flip is never uploaded to the server. It is used only via Pubnub
     func createEmptyFlipWithWord(word: String) -> Flip {
         var flip: Flip! = Flip.MR_createEntity() as Flip
-
         flip.word = word
-        flip.setBackgroundContentType(BackgroundContentType.Image)
-        
         return flip
     }
 
@@ -103,22 +89,30 @@ class FlipDataSource : BaseDataSource {
     func getFlipById(id: String) -> Flip? {
         return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as Flip?
     }
-    
-    func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
-        flip.setBackgroundContentType(contentType)
-    }
-    
+
     func getMyFlips() -> [Flip] {
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
-            ascending: true,
-            withPredicate: NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID))"),
-            inContext: currentContext) as [Flip]
+        var myFlips : [Flip]
+        if let loggedUser = User.loggedUser() {
+            let predicate = NSPredicate(format: "(\(FlipAttributes.FLIP_OWNER).userID == \(loggedUser.userID))")
+            myFlips = Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
+                ascending: true,
+                withPredicate: predicate,
+                inContext: currentContext) as [Flip]
+        } else {
+            myFlips = []
+        }
+        return myFlips
     }
     
     func getMyFlipsForWord(word: String) -> [Flip] {
-        let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
-        
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+        var myFlips : [Flip]
+        if let loggedUser = User.loggedUser() {
+            let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(loggedUser.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
+            myFlips =  Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+        } else {
+            myFlips = []
+        }
+        return myFlips
     }
     
     func getMyFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {
@@ -145,7 +139,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getStockFlipsForWord(word: String) -> [Flip] {
-        let predicate = NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and ( (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}') or (\(FlipAttributes.SOUND_URL) MATCHES '.{1,}') ))", word)
+        let predicate = NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
         return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
     }
     

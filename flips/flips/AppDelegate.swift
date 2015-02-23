@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
         
+        NavigationHandler.sharedInstance.registerForNotifications()
+        
         // register for push notifications
         
         if (DeviceHelper.sharedInstance.systemVersion() >= 8.0) {
@@ -96,5 +98,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
     }
-	
 }

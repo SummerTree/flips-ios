@@ -119,7 +119,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                     flipMessageIds[flipWord.text] = flipWord.associatedFlipId!
                     dispatch_group_leave(group)
                 } else {
-                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, backgroundImage: nil, soundPath: nil, isPrivate: true, createFlipSuccessCompletion: { (flip) -> Void in
+                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
                         flipMessageIds[flipWord.text] = flip.flipID
                         dispatch_group_leave(group)
                     }, createFlipFailCompletion: { (flipError) -> Void in
@@ -150,14 +150,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                         } else {
                             var message = self.SEND_MESSAGE_ERROR_MESSAGE
                             if (flipError != nil) {
-								if let code = flipError?.code {
-									if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
-										println("403 - preview view controller")
-										AuthenticationHelper.sharedInstance.logout()
-										let navigationController: UINavigationController = self.presentingViewController as UINavigationController
-										navigationController.pushViewController(LoginViewController(), animated: false)
-									}
-								}
                                 message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
                             }
                             

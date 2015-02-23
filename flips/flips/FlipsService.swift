@@ -10,26 +10,85 @@
 // the license agreement.
 //
 
+public typealias OperationSuccessCallback = (AFHTTPRequestOperation!, AnyObject!) -> Void
+public typealias OperationFailureCallback = (AFHTTPRequestOperation, NSError) -> Void
+
 public class FlipsService : NSObject {
     
-    let HOST: String = "http://192.168.50.202:1337"
+    let HOST: String = "http://flips-dev95.arctouch.com"
 	
-	func isForbiddenRequest(error: NSError!) -> Bool {
-		return (error.localizedDescription.rangeOfString(String(FlipsServiceCode.FORBIDDEN_REQUEST_CODE)) != nil)
-	}
-	
-	func parseResponseError(error: NSError?) -> Int {
-		if let errorToParse = error {
-			if (isForbiddenRequest(errorToParse)) {
-				return FlipsServiceCode.FORBIDDEN_REQUEST_CODE
-			}
-		}
-		return FlipsServiceCode.NO_RESPONSE_CODE
-	}
+    private let BACKEND_FORBIDDEN_REQUEST = 403
+    
+    
+    // MARK: - Service Methods
+    
+	func post(urlString: String, parameters: AnyObject?, success: OperationSuccessCallback, failure: OperationFailureCallback) -> AFHTTPRequestOperation {
 
-}
+        let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        
+        return request.POST(urlString,
+            parameters: parameters,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(operation, responseObject)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (self.isForbiddenRequest(error)) {
+                    self.sendBlockedUserNotification()
+                } else {
+                    failure(operation, error)
+                }
+            }
+        )
+    }
 
-public struct FlipsServiceCode {
-	static let FORBIDDEN_REQUEST_CODE: Int = 403
-	static let NO_RESPONSE_CODE: Int = 0
+    func post(urlString: String, parameters: AnyObject?, constructingBodyWithBlock: (AFMultipartFormData!) -> Void, success: OperationSuccessCallback, failure: OperationFailureCallback) -> AFHTTPRequestOperation {
+        let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        
+        return request.POST(urlString,
+            parameters: parameters,
+            constructingBodyWithBlock: constructingBodyWithBlock,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(operation, responseObject)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (self.isForbiddenRequest(error)) {
+                    self.sendBlockedUserNotification()
+                } else {
+                    failure(operation, error)
+                }
+            }
+        )
+    }
+    
+    func get(urlString: String, parameters: AnyObject?, success: OperationSuccessCallback, failure: OperationFailureCallback) -> AFHTTPRequestOperation {
+        let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
+        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        
+        return request.GET(urlString,
+            parameters: parameters,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(operation, responseObject)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (self.isForbiddenRequest(error)) {
+                    self.sendBlockedUserNotification()
+                } else {
+                    failure(operation, error)
+                }
+            }
+        )
+    }
+    
+    
+    // MARK: - Auxiliary Methods
+    
+    private func isForbiddenRequest(error: NSError!) -> Bool {
+        return (error.localizedDescription.rangeOfString(String(BACKEND_FORBIDDEN_REQUEST)) != nil)
+    }
+    
+    private func sendBlockedUserNotification() {
+        NSNotificationCenter.defaultCenter().postNotificationName(POP_TO_ROOT_NOTIFICATION_NAME, object: nil, userInfo: nil)
+    }
 }

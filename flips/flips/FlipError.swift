@@ -13,7 +13,4 @@
 public struct FlipError {
     var error: String?
     var details: String?
-	var code: Int?
-	
-	static let NO_CODE = 0
 }

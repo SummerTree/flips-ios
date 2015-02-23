@@ -34,16 +34,19 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let urlString = User.loggedUser()?.photoURL {
-            if let url = NSURL(string: urlString) {
-                self.updateUserProfileView.setUserPictureURL(url)
+        if let loggedUser = User.loggedUser() {
+            if let urlString = loggedUser.photoURL {
+                if let url = NSURL(string: urlString) {
+                    self.updateUserProfileView.setUserPictureURL(url)
+                }
             }
+            
+            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
+            self.setNeedsStatusBarAppearanceUpdate()
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            updateUserProfileView.setUser(loggedUser)
+
         }
-        
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
-        self.setNeedsStatusBarAppearanceUpdate()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        updateUserProfileView.setUser(User.loggedUser()!)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -97,14 +100,6 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
                 self.navigationController?.popViewControllerAnimated(true)
                 self.hideActivityIndicator()
             }) { (flipError) -> Void in
-				if let code = flipError?.code {
-					if (code == FlipsServiceCode.FORBIDDEN_REQUEST_CODE) {
-						AuthenticationHelper.sharedInstance.logout()
-						let navigationController: UINavigationController = self.presentingViewController as UINavigationController
-						navigationController.pushViewController(LoginViewController(), animated: false)
-						self.dismissViewControllerAnimated(true, completion: nil)
-					}
-				}
                 self.hideActivityIndicator()
                 let alertView = UIAlertView(title: "Error updating user", message: flipError?.error!, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()

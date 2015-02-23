@@ -63,7 +63,7 @@ public class PersistentManager: NSObject {
             roomDataSourceInContext.associateRoom(room!, withAdmin: admin!, andParticipants: participants)
         }
         
-        return room?.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        return room!
     }
     
     
@@ -131,69 +131,33 @@ public class PersistentManager: NSObject {
         
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
     }
-    
-    func createAndUploadFlip(word: String, backgroundImage: UIImage?, soundPath: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
-        let cacheHandler = CacheHandler.sharedInstance
-        let loggedUser = User.loggedUser() as User!
-        
-        let flipService = FlipService()
-        flipService.createFlip(word, backgroundImage: backgroundImage, soundPath: soundPath, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            
-            var flip: Flip!
-            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-                let flipDataSource = FlipDataSource(context: context)
-                flip = flipDataSource.createFlipWithJson(json)
+
+    func createAndUploadFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
+        if let loggedUser = User.loggedUser() {
+            let flipService = FlipService()
+            flipService.createFlip(word, videoURL: videoURL, thumbnailURL: thumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
+                var flip: Flip!
                 
-                flipDataSource.associateFlip(flip, withOwner: loggedUser)
-                flip.setBackgroundContentType(BackgroundContentType.Image)
-            })
-            
-            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
-            if (backgroundImage != nil) {
-                cacheHandler.saveImage(backgroundImage!, withUrl: flipInContext.backgroundURL, isTemporary: false)
-            }
-            
-            if (soundPath != nil) {
-                cacheHandler.saveDataAtPath(soundPath!.relativePath!, withUrl: flipInContext.soundURL, isTemporary: false)
-            }
-            
-            createFlipSuccessCompletion(flipInContext)
-        }) { (flipError: FlipError?) -> Void in
-            createFlipFailCompletion(flipError)
-        }
-    }
-    
-    func createAndUploadFlip(word: String, videoURL: NSURL, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
-        let cacheHandler = CacheHandler.sharedInstance
-        let loggedUser = User.loggedUser() as User!
-        
-        let flipService = FlipService()
-        flipService.createFlip(word, videoPath: videoURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            var flip: Flip!
-            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-                let flipDataSource = FlipDataSource(context: context)
-                flip = flipDataSource.createFlipWithJson(json)
+                MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+                    let flipDataSource = FlipDataSource(context: context)
+                    flip = flipDataSource.createFlipWithJson(json)
+                    flipDataSource.associateFlip(flip, withOwner: loggedUser)
+                })
                 
-                flipDataSource.associateFlip(flip, withOwner: loggedUser)
-                flip.setBackgroundContentType(BackgroundContentType.Video)
-            })
-            
-            var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
-            if let thumbnail = VideoHelper.generateThumbImageForFile(videoURL.relativePath!) {
-                cacheHandler.saveThumbnail(thumbnail, forUrl: flipInContext.backgroundURL)
+                var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+                
+                if (videoURL != nil) {
+                    FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.absoluteString!)
+                }
+                
+                if (thumbnailURL != nil) {
+                    ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.absoluteString!)
+                }
+                
+                createFlipSuccessCompletion(flipInContext)
+                }) { (flipError: FlipError?) -> Void in
+                    createFlipFailCompletion(flipError)
             }
-            
-            cacheHandler.saveDataAtPath(videoURL.relativePath!, withUrl: flipInContext.backgroundURL, isTemporary: false)
-            createFlipSuccessCompletion(flipInContext)
-        }) { (flipError: FlipError?) -> Void in
-            createFlipFailCompletion(flipError)
-        }
-    }
-    
-    func setFlipBackgroundContentType(contentType: BackgroundContentType, forFlip flip: Flip) {
-        MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            let flipDataSource = FlipDataSource(context: context)
-            flipDataSource.setFlipBackgroundContentType(contentType, forFlip: flip.inContext(context) as Flip)
         }
     }
     
@@ -284,26 +248,19 @@ public class PersistentManager: NSObject {
             user = userInContext
         }
         
-        var userInContext = user!.inContext(NSManagedObjectContext.MR_defaultContext()) as User
-
-        let contactDataSource = ContactDataSource()
-        let contacts = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
-        
-        if (contacts.isEmpty && !isLoggedUser) {
+        if (!isLoggedUser) {
+            let contactDataSource = ContactDataSource()
+            
             let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
             let authenticatedId = User.loggedUser()?.userID
             
             var userContact: Contact?
+            var userInContext = user!.inThreadContext() as User
             if (authenticatedId != userInContext.userID) {
                 var facebookID = user!.facebookID
                 var phonetype = (facebookID != nil) ? facebookID : ""
                 userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
             }
-        }
-        
-        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            let userDataSourceInContext = UserDataSource(context: context)
-            userDataSourceInContext.associateUser(userInContext, withContacts: contacts)
         }
         
         return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID, error: nil) as User
@@ -335,8 +292,6 @@ public class PersistentManager: NSObject {
             
             let group = dispatch_group_create()
             
-            let userDataSource = UserDataSource()
-            
             dispatch_group_enter(group)
             println("getMyFlips")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
@@ -348,7 +303,6 @@ public class PersistentManager: NSObject {
                         let flip = self.createOrUpdateFlipWithJson(myFlipJson)
                         myFlips.append(flip)
                     }
-                    userDataSource.downloadMyFlips(myFlips)
                     
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
@@ -357,6 +311,10 @@ public class PersistentManager: NSObject {
                     dispatch_group_leave(group)
                 })
             })
+            
+            let userDataSource = UserDataSource()
+            userDataSource.downloadMyFlips(myFlips)
+            
             
             let roomService = RoomService()
             println("getMyRooms")
@@ -411,16 +369,17 @@ public class PersistentManager: NSObject {
     func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
         let contactDataSource = ContactDataSource()
         var contact = contactDataSource.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+        let contactID = String(contactDataSource.nextContactID())
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let contactDataSourceInContext = ContactDataSource(context: context)
-            let contactID = String(contactDataSourceInContext.nextContactID())
             var contactInContext: Contact!
             if (contact == nil) {
                 contactInContext = contactDataSourceInContext.createContactWith(contactID, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType, andContactUser: contactUser)
             } else {
                 contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
             }
+            
             contact = contactInContext
         }
         
