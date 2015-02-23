@@ -134,7 +134,7 @@ public class UserService: FlipsService {
         ]
         
         self.post(url,
-            parameters: nil,
+            parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSigninResponse(responseObject)
                 success(user)
@@ -317,66 +317,60 @@ public class UserService: FlipsService {
             
             if (!contains(permissions, "user_friends")) {
                 failure(FlipError(error: "user_friends permission not allowed.", details:nil))
-                let permissions: [String] = FBSession.activeSession().permissions as [String]
-                println("[DEBUG: Facebook Permissions: \(permissions)]")
-                
-                if (!contains(permissions, "user_friends")) {
-                    failure(FlipError(error: "user_friends permission not allowed.", details:nil))
+                return
+            }
+            
+            var usersFacebookIDS = [String]()
+            FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
+                if (error != nil) {
+                    failure(FlipError(error: error.localizedDescription, details:nil))
                     return
                 }
                 
-                var usersFacebookIDS = [String]()
-                FBRequestConnection.startForMyFriendsWithCompletionHandler { (connection, result, error) -> Void in
-                    if (error != nil) {
-                        failure(FlipError(error: error.localizedDescription, details:nil))
-                        return
+                let resultDictionary: NSDictionary = result as NSDictionary
+                let usersJSON = JSON(resultDictionary.objectForKey("data")!)
+                
+                if let users = usersJSON.array {
+                    for user in users {
+                        var userId = user["id"]
+                        usersFacebookIDS.append(userId.stringValue)
                     }
                     
-                    let resultDictionary: NSDictionary = result as NSDictionary
-                    let usersJSON = JSON(resultDictionary.objectForKey("data")!)
+                    var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                     
-                    if let users = usersJSON.array {
-                        for user in users {
-                            var userId = user["id"]
-                            usersFacebookIDS.append(userId.stringValue)
+                    var params: Dictionary<String, AnyObject> = [
+                        RequestParams.FACEBOOK_IDS : usersFacebookIDS
+                    ]
+                    
+                    self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
+                        var response:JSON = JSON(responseObject)
+                        
+                        for (index, user) in response {
+                            SwiftTryCatch.try({ () -> Void in
+                                println("Trying to import: \(user)")
+                                var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
+                                }, catch: { (error) -> Void in
+                                    println("Error: [\(error))")
+                                }, finally: nil)
                         }
                         
-                        var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-                        
-                        var params: Dictionary<String, AnyObject> = [
-                            RequestParams.FACEBOOK_IDS : usersFacebookIDS
-                        ]
-                        
-                        self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
-                            var response:JSON = JSON(responseObject)
-                            
-                            for (index, user) in response {
-                                SwiftTryCatch.try({ () -> Void in
-                                    println("Trying to import: \(user)")
-                                    var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                                    }, catch: { (error) -> Void in
-                                        println("Error: [\(error))")
-                                    }, finally: nil)
+                        success(nil)
+                        }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                            if (operation.responseObject != nil) {
+                                var response = operation.responseObject as NSDictionary
+                                failure(FlipError(error: response["error"] as String!, details : nil))
+                            } else {
+                                failure(FlipError(error: error.localizedDescription, details : nil))
                             }
-                            
-                            success(nil)
-                            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                                if (operation.responseObject != nil) {
-                                    var response = operation.responseObject as NSDictionary
-                                    failure(FlipError(error: response["error"] as String!, details : nil))
-                                } else {
-                                    failure(FlipError(error: error.localizedDescription, details : nil))
-                                }
-                        })
-                    }
+                    })
                 }
             }
         }
     }
-    
-    
+
+
     // MARK: - Upload contacts
-    
+
     func uploadContacts(success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
@@ -398,7 +392,7 @@ public class UserService: FlipsService {
                     }
                 }
                 
-                var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 
                 var params: Dictionary<String, AnyObject> = [
                     RequestParams.PHONENUMBERS : numbers
@@ -411,22 +405,22 @@ public class UserService: FlipsService {
                         SwiftTryCatch.try({ () -> Void in
                             println("Trying to import: \(user)")
                             PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                            }, catch: { (error) -> Void in
-                                println("Error: [\(error))")
-                            }, finally: nil)
+                        }, catch: { (error) -> Void in
+                            println("Error: [\(error))")
+                        }, finally: nil)
                     }
                     
                     success(nil)
-                    }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                        if (operation.responseObject != nil) {
-                            var response = operation.responseObject as NSDictionary
-                            failure(FlipError(error: response["error"] as String!, details: nil))
-                        } else {
-                            failure(FlipError(error: error.localizedDescription, details: nil))
-                        }
+                }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        var response = operation.responseObject as NSDictionary
+                        failure(FlipError(error: response["error"] as String!, details: nil))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details: nil))
+                    }
                 })
-                }, failure: { (error) -> Void in
-                    failure(FlipError(error: "Error retrieving contacts.", details:nil))
+            }, failure: { (error) -> Void in
+                failure(FlipError(error: "Error retrieving contacts.", details:nil))
             })
         }
     }

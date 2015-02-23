@@ -107,7 +107,7 @@ class FlipDataSource : BaseDataSource {
     func getMyFlipsForWord(word: String) -> [Flip] {
         var myFlips : [Flip]
         if let loggedUser = User.loggedUser() {
-            let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(User.loggedUser()!.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
+            let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(loggedUser.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
             myFlips =  Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
         } else {
             myFlips = []

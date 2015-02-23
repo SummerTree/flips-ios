@@ -49,13 +49,11 @@ public class AuthenticationHelper: NSObject {
     
     func logout() {
         if let userInSession = User.loggedUser() {
-            
             if let facebookID = userInSession.facebookID {
                 if !facebookID.isEmpty {
                     self.removeAuthenticatedUsername()
                 }
             }
-            
         }
 
         FBSession.activeSession().closeAndClearTokenInformation()

@@ -38,7 +38,6 @@ public class BuilderService: FlipsService {
         }
     }
     
-    // TODO: change from String to entity Word
     private func parseGetSuggestedWordsResponse(response: AnyObject) -> [String] {
         let json = JSON(response)
         
