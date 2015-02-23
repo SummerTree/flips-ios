@@ -1,5 +1,5 @@
 //
-// Copyright 2015 ArcTouch, Inc.
+// Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
 // This file, its contents, concepts, methods, behavior, and operation
@@ -18,21 +18,24 @@ public class StorageCache {
     public enum CacheGetResponse {
         case DATA_IS_READY
         case DOWNLOAD_WILL_START
+        case INVALID_URL
     }
     
     private let cacheDirectoryPath: NSURL
     private let sizeLimitInBytes: UInt64
     private let cacheJournal: CacheJournal
+    private let cacheQueue: dispatch_queue_t
     
-    init(cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
+    init(cacheID: String, cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
         self.sizeLimitInBytes = sizeLimitInBytes
         let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
         let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
         self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)!
-        let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheDirectoryName).cache")
+        let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheID).cache")
         self.cacheJournal = CacheJournal(absolutePath: journalName)
+        self.cacheQueue = dispatch_queue_create(cacheID, nil)
         self.initCacheDirectory()
         self.cacheJournal.open()
     }
@@ -74,7 +77,7 @@ public class StorageCache {
     func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            dispatch_async(self.cacheQueue) {
                 success?(localPath)
                 return
             }
@@ -82,25 +85,23 @@ public class StorageCache {
             return CacheGetResponse.DATA_IS_READY
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            Downloader.sharedInstance.downloadTask(remoteURL,
-                localURL: NSURL(fileURLWithPath: localPath)!,
-                completion: { (result) -> Void in
-                    self.cacheJournal.insertNewEntry(localPath)
-                    self.scheduleCleanup()
-                    if (result) {
-                        success?(localPath)
-                    } else {
-                        failure?(FlipError(error: "Error downloading media file", details: nil))
-                    }
+        Downloader.sharedInstance.downloadTask(remoteURL,
+            localURL: NSURL(fileURLWithPath: localPath)!,
+            completion: { (result) -> Void in
+                self.cacheJournal.insertNewEntry(localPath)
+                self.scheduleCleanup()
+                if (result) {
+                    success?(localPath)
+                } else {
+                    failure?(FlipError(error: "Error downloading media file", details: nil))
                 }
-            )
-        }
+            }
+        )
         return CacheGetResponse.DOWNLOAD_WILL_START
     }
     
     /**
-    Inserts the data into the cache, identified by its path. This operation is synchronous.
+    Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
     
     :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: srcPath   The path where the asset is locally saved. The asset will be moved to the cache.
@@ -121,6 +122,24 @@ public class StorageCache {
         }
     }
     
+    /**
+    Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
+    
+    :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    :param: data      The actual asset that is going to be inserted into the cache.
+    */
+    func put(remoteURL: NSURL, data: NSData) -> Void {
+        let localPath = self.createLocalPath(remoteURL)
+        
+        let fileManager = NSFileManager.defaultManager()
+        
+        if (!self.cacheHit(localPath)) {
+            fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
+            self.cacheJournal.insertNewEntry(localPath)
+            self.scheduleCleanup()
+        }
+    }
+    
     private func createLocalPath(remoteURL: NSURL) -> String {
         //I think the best approach here would be to generate a Hash based on the actual data,
         //but for now we're just using the last path component.
@@ -132,13 +151,13 @@ public class StorageCache {
     }
     
     private func scheduleCleanup() -> Void {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            let cacheOverflow = self.cacheJournal.cacheSize - self.sizeLimitInBytes
-            if (cacheOverflow <= 0) {
+        dispatch_async(self.cacheQueue) {
+            let cacheSize = self.cacheJournal.cacheSize
+            if (cacheSize < self.sizeLimitInBytes) {
                 return
             }
             
-            let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheOverflow)
+            let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheSize-self.sizeLimitInBytes)
             let fileManager = NSFileManager.defaultManager()
             for path in leastRecentlyUsed {
                 var error: NSError? = nil
@@ -146,6 +165,7 @@ public class StorageCache {
                     println("Could not remove file \(path). Error: \(error)")
                 }
             }
+            
             self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
         }
     }
