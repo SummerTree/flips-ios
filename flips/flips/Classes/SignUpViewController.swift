@@ -14,9 +14,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!
-    private var avatar: UIImage!
-    private var messagesTopView: MessagesTopView!
-    
+    private var avatar: UIImage!    
     
     // MARK: - Overriden Methods
     
