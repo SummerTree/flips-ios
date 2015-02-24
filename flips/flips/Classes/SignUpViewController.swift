@@ -10,12 +10,12 @@
 // the license agreement.
 //
 
-class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictureViewControllerDelegate, NotificationMessageViewDelegate {
+class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictureViewControllerDelegate {
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!
     private var avatar: UIImage!
-    private var notificationMessageView: NotificationMessageView!
+    private var messagesTopView: MessagesTopView!
     
     
     // MARK: - Overriden Methods
@@ -55,8 +55,10 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         
         if (self.avatar == nil) {
-            self.showNoPictureMessage()
+            self.signUpView.messagesTopView.showMissingPictureMessage()
+            self.signUpView.showTopMessagesView()
         } else {
+            self.signUpView.messagesTopView.hideMissingPictureMessage()
             var phoneNumberViewController = PhoneNumberViewController(username: email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
             
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
@@ -81,67 +83,5 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         signUpView.setUserPicture(picture)
         self.avatar = picture
     }
-    
-    
-    // MARK: - NotificationMessageView Methods
-    
-    func setupNotificationMessage() {
-        notificationMessageView = NotificationMessageView(message: NSLocalizedString("Looks like your photo is missing!", comment: "Looks like your photo is missing!"))
-        notificationMessageView.backgroundColor = UIColor.clearColor()
-        notificationMessageView.delegate = self
-        self.view.addSubview(notificationMessageView)
-        
-        notificationMessageView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.view).with().offset()(-self.notificationMessageView.getMessageAreaHeight())
-            make.leading.equalTo()(self.view)
-            make.trailing.equalTo()(self.view)
-            make.height.equalTo()(self.view)
-        }
-    }
-    
-    func showNoPictureMessage() {
-        if (notificationMessageView == nil) {
-            self.setupNotificationMessage()
-        }
-        self.notificationMessageView.hidden = false
-        
-        self.view.layoutIfNeeded()
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
-            self.notificationMessageView.mas_updateConstraints { (update) -> Void in
-                update.removeExisting = true
-                update.top.equalTo()(self.view)
-                update.leading.equalTo()(self.view)
-                update.trailing.equalTo()(self.view)
-                update.height.equalTo()(self.view)
-            }
-            self.statusBarHidden = true
-            self.setNeedsStatusBarAppearanceUpdate()
-            self.view.layoutIfNeeded()
-        })
-    }
-    
-    func hideNoPictureMessage() {
-        self.view.layoutIfNeeded()
-        UIView.animateWithDuration(0.25, animations: { () -> Void in
-            self.notificationMessageView.mas_updateConstraints { (update) -> Void in
-                update.removeExisting = true
-                update.top.equalTo()(self.view).with().offset()(-self.notificationMessageView.getMessageAreaHeight())
-                update.leading.equalTo()(self.view)
-                update.trailing.equalTo()(self.view)
-                update.height.equalTo()(self.view)
-            }
-            self.statusBarHidden = false
-            self.setNeedsStatusBarAppearanceUpdate()
-            self.view.layoutIfNeeded()
-        }) { (finished) -> Void in
-            self.notificationMessageView.hidden = true
-        }
-    }
-    
-    
-    // MARK: - NotificationMessageViewDelegate
-    
-    func notificationMessageViewShouldBeDismissed(view: NotificationMessageView) {
-        self.hideNoPictureMessage()
-    }
+
 }

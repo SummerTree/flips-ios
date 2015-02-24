@@ -13,7 +13,7 @@
 class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, MessagesTopViewDelegate {
     
     private let MESSAGES_TOP_VIEW_ANIMATION_DURATION = 0.3
-    private var messagesTopView : MessagesTopView!
+    var messagesTopView : MessagesTopView!
     internal var navigationBar : CustomNavigationBar!
     internal var userFormView : UserFormView!
     

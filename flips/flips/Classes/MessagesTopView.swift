@@ -15,6 +15,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     private let PASSWORD_MESSAGE_KEY = "password"
     private let BIRTHDAY_MESSAGE_KEY = "birthday"
     private let EMAIL_MESSAGE_KEY = "email"
+    private let PICTURE_MESSAGE_KEY = "picture"
     
     private let CELL_IDENTIFIER = "conversationCell"
     private let FIELDS_MARGIN : CGFloat = 12.5
@@ -136,6 +137,14 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     func hideInvalidBirthdayMessage() {
         self.hideMessageForKey(BIRTHDAY_MESSAGE_KEY)
+    }
+    
+    func showMissingPictureMessage() {
+        self.showMessage("Looks like your photo is missing!", secondLineKey: "", dictionaryKey: PICTURE_MESSAGE_KEY)
+    }
+    
+    func hideMissingPictureMessage() {
+        self.hideMessageForKey(PICTURE_MESSAGE_KEY)
     }
     
     private func showMessage(firstLineKey: String, secondLineKey: String, dictionaryKey: String) {
