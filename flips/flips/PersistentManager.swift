@@ -147,11 +147,11 @@ public class PersistentManager: NSObject {
                 var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
                 
                 if (videoURL != nil) {
-                    FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.absoluteString!)
+                    FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.path!)
                 }
                 
                 if (thumbnailURL != nil) {
-                    ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.absoluteString!)
+                    ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.path!)
                 }
                 
                 createFlipSuccessCompletion(flipInContext)
@@ -290,6 +290,8 @@ public class PersistentManager: NSObject {
             var error: FlipError?
             var myFlips = Array<Flip>()
             
+            let userDataSource = UserDataSource()
+            
             let group = dispatch_group_create()
             
             dispatch_group_enter(group)
@@ -304,6 +306,8 @@ public class PersistentManager: NSObject {
                         myFlips.append(flip)
                     }
                     
+                    userDataSource.downloadMyFlips(myFlips)
+                    
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
                     println("   getMyFlips - fail")
@@ -311,10 +315,6 @@ public class PersistentManager: NSObject {
                     dispatch_group_leave(group)
                 })
             })
-            
-            let userDataSource = UserDataSource()
-            userDataSource.downloadMyFlips(myFlips)
-            
             
             let roomService = RoomService()
             println("getMyRooms")
@@ -359,7 +359,6 @@ public class PersistentManager: NSObject {
             }
             
             callback(true, nil, userDataSource)
-            
         })
     }
     
