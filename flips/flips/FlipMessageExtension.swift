@@ -53,20 +53,23 @@ extension FlipMessage {
     }
     
     func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
-        let firstFlip = self.flips.first
-        if (firstFlip == nil || firstFlip!.thumbnailURL == nil) {
-            success?(UIImage.emptyFlipImage())
-            return
-        }
-        
-        let thumbnailsCache = ThumbnailsCache.sharedInstance
-        thumbnailsCache.get(NSURL(string: firstFlip!.thumbnailURL!)!,
-            success: { (localPath: String!) in
-                var image = UIImage(contentsOfFile: localPath)
-                success?(image)
-            }, failure: { (error: FlipError) in
-                println("Could not get thumbnail for flip \(firstFlip).")
+        if let firstFlip = self.flips.first {
+            if (firstFlip.thumbnailURL == nil || firstFlip.thumbnailURL == "") {
+                success?(UIImage.emptyFlipImage())
+                return
+            }
+            
+            let thumbnailsCache = ThumbnailsCache.sharedInstance
+            thumbnailsCache.get(NSURL(string: firstFlip.thumbnailURL!)!,
+                success: { (localPath: String!) in
+                    var image = UIImage(contentsOfFile: localPath)
+                    success?(image)
+                }, failure: { (error: FlipError) in
+                    println("Could not get thumbnail for flip \(firstFlip).")
             })
+        } else {
+            success?(UIImage.emptyFlipImage())
+        }
     }
     
     
@@ -80,8 +83,11 @@ extension FlipMessage {
         dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
         dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
-        let loggedUserFirstName = User.loggedUser()!.firstName
-        let notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
+        var notificationMessage = ""
+        if let loggedUser = User.loggedUser() {
+            let loggedUserFirstName = loggedUser.firstName
+            notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
+        }
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)

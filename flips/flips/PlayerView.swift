@@ -52,9 +52,12 @@ class PlayerView: UIView {
         return AVPlayerLayer.self
     }
 
-    func player() -> AVQueuePlayer {
+    func player() -> AVQueuePlayer? {
         let layer = self.layer as AVPlayerLayer
-        return layer.player as AVQueuePlayer
+        if let player = layer.player {
+            return player as? AVQueuePlayer
+        }
+        return nil
     }
 
     private func setPlayer(player: AVPlayer?) {
@@ -91,27 +94,25 @@ class PlayerView: UIView {
     }
     
     private func fadeOutVolume() {
-        if (!self.hasPlayer()) {
-            return
-        }
-
-        if (self.player().volume > 0) {
-            if (self.player().volume <= 0.2) {
-                self.player().volume = 0.0
+        if let player = self.player() {
+            if (player.volume > 0) {
+                if (player.volume <= 0.2) {
+                    player.volume = 0.0
+                } else {
+                    player.volume -= 0.2
+                }
+                
+                weak var weakSelf = self
+                
+                let seconds = 0.1 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds))
+                dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
+                    weakSelf?.fadeOutVolume()
+                    return ()
+                })
             } else {
-                self.player().volume -= 0.2
+                player.pause()
             }
-
-            weak var weakSelf = self
-            
-            let seconds = 0.1 * Double(NSEC_PER_SEC)
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds))
-            dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
-                weakSelf?.fadeOutVolume()
-                return ()
-            })
-        } else {
-            self.player().pause()
         }
     }
 
@@ -132,7 +133,9 @@ class PlayerView: UIView {
         } else {
             self.isPlaying = false
             self.playButtonView.hidden = false
-            self.player().pause()
+            if let player = self.player() {
+                player.pause()
+            }
         }
     }
 
@@ -251,34 +254,35 @@ class PlayerView: UIView {
     }
 
     func videoPlayerItemEnded(notification: NSNotification) {
-        let player = self.player()
-        let currentItem = player.currentItem as FlipPlayerItem
-
-        if (self.playerItems.count == 1) {
-            player.seekToTime(kCMTimeZero)
+        if let player = self.player() {
+            let currentItem = player.currentItem as FlipPlayerItem
             
-            if (!self.playInLoop) {
-                self.pause()
-            }
-        } else {
-            player.advanceToNextItem()
-            
-            let clonedPlayerItem = self.playerItemWithVideoAsset(currentItem.asset)
-            clonedPlayerItem.order = currentItem.order
-            player.insertItem(clonedPlayerItem, afterItem: nil)
-
-            // Set next item's word
-            let nextWordIndex = (currentItem.order + 1) % self.words.count
-            self.setWord(self.words[nextWordIndex])
-            
-            if (currentItem.order == self.playerItems.count - 1) {
-                delegate?.playerViewDidFinishPlayback(self)
-            
-                if (self.playInLoop) {
-                    player.pause()
-                    self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("play"), userInfo:nil, repeats:false)
-                } else {
+            if (self.playerItems.count == 1) {
+                player.seekToTime(kCMTimeZero)
+                
+                if (!self.playInLoop) {
                     self.pause()
+                }
+            } else {
+                player.advanceToNextItem()
+                
+                let clonedPlayerItem = self.playerItemWithVideoAsset(currentItem.asset)
+                clonedPlayerItem.order = currentItem.order
+                player.insertItem(clonedPlayerItem, afterItem: nil)
+                
+                // Set next item's word
+                let nextWordIndex = (currentItem.order + 1) % self.words.count
+                self.setWord(self.words[nextWordIndex])
+                
+                if (currentItem.order == self.playerItems.count - 1) {
+                    delegate?.playerViewDidFinishPlayback(self)
+                    
+                    if (self.playInLoop) {
+                        player.pause()
+                        self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("play"), userInfo:nil, repeats:false)
+                    } else {
+                        self.pause()
+                    }
                 }
             }
         }
@@ -290,8 +294,8 @@ class PlayerView: UIView {
     }
 
     private func preparePlayer(completion: ((player: AVQueuePlayer?)  -> Void)) {
-        if (self.hasPlayer()) {
-            completion(player: self.player())
+        if let player = self.player() {
+            completion(player: player)
             return
         }
 
@@ -353,9 +357,9 @@ class PlayerView: UIView {
 
     func releaseResources() {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-        
-        if (self.hasPlayer()) {
-            self.player().removeAllItems()
+
+        if let player = self.player() {
+            player.removeAllItems()
         }
         
         let layer = self.layer as AVPlayerLayer
