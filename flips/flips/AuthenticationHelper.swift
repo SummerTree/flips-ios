@@ -48,11 +48,11 @@ public class AuthenticationHelper: NSObject {
     }
     
     func logout() {
-        let userInSession = User.loggedUser()
-        
-        if let facebookID = userInSession?.facebookID {
-            if !facebookID.isEmpty {
-                self.removeAuthenticatedUsername()
+        if let userInSession = User.loggedUser() {
+            if let facebookID = userInSession.facebookID {
+                if !facebookID.isEmpty {
+                    self.removeAuthenticatedUsername()
+                }
             }
         }
 

@@ -17,7 +17,6 @@ public typealias UploadFlipFailureResponse = (FlipError?) -> Void
 private typealias UploadSuccessResponse = (NSURL!) -> Void
 private typealias UploadFailureResponse = (FlipError?) -> Void
 
-
 public class FlipService: FlipsService {
     
     private let UPLOAD_BACKGROUND_RESPONSE_URL = "background_url"
@@ -67,14 +66,12 @@ public class FlipService: FlipsService {
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
         let stockFlipUrl = HOST + STOCK_FLIPS
         let stockFlipParams = [
             RequestParams.WORD : word,
         ]
         
-        request.GET(stockFlipUrl,
+        self.get(stockFlipUrl,
             parameters: stockFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 success(JSON(responseObject))
@@ -84,7 +81,7 @@ public class FlipService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -95,15 +92,13 @@ public class FlipService: FlipsService {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-        
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+
         let stockFlipUrl = HOST + STOCK_FLIPS
         let stockFlipParams = [
             RequestParams.WORD : words,
         ]
         
-        request.GET(stockFlipUrl,
+        self.get(stockFlipUrl,
             parameters: stockFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 success(JSON(responseObject))
@@ -113,7 +108,7 @@ public class FlipService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -121,8 +116,8 @@ public class FlipService: FlipsService {
 
     private func uploadVideo(videoPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         var error: NSError?
-        let videoData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
 
+        let videoData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
         if (videoData != nil) {
             println("Uploading a video with size = \(videoData?.length)")
             
@@ -150,10 +145,7 @@ public class FlipService: FlipsService {
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        
-        request.POST(url,
+        self.post(url,
             parameters: nil,
             constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
                 formData.appendPartWithFileData(data, name: partName, fileName: fileName, mimeType: mimeType)
@@ -171,7 +163,7 @@ public class FlipService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failCallback(FlipError(error: response["error"] as String!, details: nil))
                 } else {
-                    failCallback(FlipError(error: error.localizedDescription, details:nil))
+                    failCallback(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
@@ -183,31 +175,31 @@ public class FlipService: FlipsService {
             return
         }
         
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: User.loggedUser()!.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
-        let createFlipUrl = HOST + createURL
-        let createFlipParams = [
-            RequestParams.WORD: word,
-            RequestParams.BACKGROUND_URL: (videoURL == nil ? "" : videoURL!.absoluteString!),
-            RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString!),
-            RequestParams.CATEGORY: category,
-            RequestParams.IS_PRIVATE: isPrivate]
-
-        request.POST(createFlipUrl,
-            parameters: createFlipParams,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                uploadFlipSuccessCallback(JSON(responseObject))
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil))
-                } else {
-                    uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details:nil))
+        if let loggedUser = User.loggedUser() {
+            let createURL = CREATE_FLIP.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let createFlipUrl = HOST + createURL
+            let createFlipParams = [
+                RequestParams.WORD: word,
+                RequestParams.BACKGROUND_URL: (videoURL == nil ? "" : videoURL!.absoluteString!),
+                RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString!),
+                RequestParams.CATEGORY: category,
+                RequestParams.IS_PRIVATE: isPrivate]
+            
+            self.post(createFlipUrl,
+                parameters: createFlipParams,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    uploadFlipSuccessCallback(JSON(responseObject))
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        uploadFlipFailCallBack(FlipError(error: response["error"] as String!, details: nil))
+                    } else {
+                        uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details:nil))
+                    }
                 }
-            }
-        )
+            )
+        }
     }
     
     

@@ -193,6 +193,7 @@
 		7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* FlipService.swift */; };
 		7A3733DD19FE619300D1E87B /* FlipMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */; };
 		7A44759C1A24B1020077A6F6 /* GalleryAssetsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */; };
+		7A54599C1A9A84FC00EAC679 /* NavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A54599B1A9A84FC00EAC679 /* NavigationHandler.swift */; };
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A7202EC1A36196F00FF5784 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7202EB1A36196F00FF5784 /* BubbleView.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
@@ -514,6 +515,7 @@
 		7A3733C819FADDE800D1E87B /* FlipService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipService.swift; sourceTree = "<group>"; };
 		7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageExtension.swift; sourceTree = "<group>"; };
 		7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryAssetsHelper.swift; sourceTree = "<group>"; };
+		7A54599B1A9A84FC00EAC679 /* NavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationHandler.swift; sourceTree = "<group>"; };
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A7202EB1A36196F00FF5784 /* BubbleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
@@ -669,6 +671,7 @@
 		075A0C071A43A1C100E92760 /* Untilities */ = {
 			isa = PBXGroup;
 			children = (
+				7A54599B1A9A84FC00EAC679 /* NavigationHandler.swift */,
 				075A0C081A43A1F800E92760 /* ThreadSafe.swift */,
 			);
 			name = Untilities;
@@ -1964,6 +1967,7 @@
 				709088251A1E163B009915FE /* ImportContactTableViewController.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* FlipsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
+				7A54599C1A9A84FC00EAC679 /* NavigationHandler.swift in Sources */,
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* FlipsService.swift in Sources */,

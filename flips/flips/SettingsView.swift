@@ -245,13 +245,14 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private func createUserProfileCell() {
         
         if (self.userProfileCell == nil) {
-            let loggedUser = User.loggedUser()!
-            let detailedLabel = loggedUser.username + "\n" + loggedUser.formattedPhoneNumber()
-            let fullname = User.loggedUser()!.fullName()
-            
-            self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)
-            if let photoURL = User.loggedUser()?.photoURL {
-                userProfileCell.setAvatarURL(photoURL)
+            if let loggedUser = User.loggedUser() {
+                let detailedLabel = loggedUser.username + "\n" + loggedUser.formattedPhoneNumber()
+                let fullname = loggedUser.fullName()
+                
+                self.userProfileCell = SettingsTableViewCell(image: UIImage(named: "Placeholder"), labelText: fullname, detailLabel: detailedLabel)
+                if let photoURL = loggedUser.photoURL {
+                    userProfileCell.setAvatarURL(photoURL)
+                }
             }
         }
     }
@@ -300,14 +301,16 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     // MARK: - Setters
     private func updateUserProfileInfo() {
-        let loggedUser = User.loggedUser()!
-        let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
-        let fullname = User.loggedUser()!.fullName()
-        
-        self.userProfileCell.setAvatarURL(User.loggedUser()!.photoURL)
-        self.userProfileCell.setActionLabelText(fullname)
-        self.userProfileCell.setActionDetailLabelText(detailedLabel)
-    }
+		if let loggedUser = User.loggedUser() {
+			let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
+			let fullname = loggedUser.fullName()
+			
+			self.userProfileCell.setAvatarURL(loggedUser.photoURL)
+			self.userProfileCell.setActionLabelText(fullname)
+			self.userProfileCell.setActionDetailLabelText(detailedLabel)
+
+		}
+	}
 }
 
 protocol SettingsViewDelegate {
