@@ -13,7 +13,7 @@
 class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, MessagesTopViewDelegate {
     
     private let MESSAGES_TOP_VIEW_ANIMATION_DURATION = 0.3
-    var messagesTopView : MessagesTopView!
+    private var messagesTopView : MessagesTopView!
     internal var navigationBar : CustomNavigationBar!
     internal var userFormView : UserFormView!
     
@@ -184,6 +184,15 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
             })
             self.messagesTopView.layoutIfNeeded()
         })
+    }
+    
+    func showMissingPictureMessage() {
+        self.messagesTopView.showMissingPictureMessage()
+        self.showTopMessagesView()
+    }
+    
+    func hideMissingPictureMessage() {
+        self.messagesTopView.hideMissingPictureMessage()
     }
     
     

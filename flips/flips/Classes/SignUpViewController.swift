@@ -55,10 +55,9 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         
         if (self.avatar == nil) {
-            self.signUpView.messagesTopView.showMissingPictureMessage()
-            self.signUpView.showTopMessagesView()
+            self.signUpView.showMissingPictureMessage()
         } else {
-            self.signUpView.messagesTopView.hideMissingPictureMessage()
+            self.signUpView.hideMissingPictureMessage()
             var phoneNumberViewController = PhoneNumberViewController(username: email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
             
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
