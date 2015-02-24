@@ -14,9 +14,13 @@ public typealias OperationSuccessCallback = (AFHTTPRequestOperation!, AnyObject!
 public typealias OperationFailureCallback = (AFHTTPRequestOperation, NSError) -> Void
 
 public class FlipsService : NSObject {
-    
-    let HOST: String = "http://flips-dev95.arctouch.com"
-	
+
+    var HOST: String {
+        let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!
+
+        return infoPlist["FlipsServiceHostBaseURL"] as String
+    }
+
     private let BACKEND_FORBIDDEN_REQUEST = 403
     
     
