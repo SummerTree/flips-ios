@@ -186,6 +186,15 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         })
     }
     
+    func showMissingPictureMessage() {
+        self.messagesTopView.showMissingPictureMessage()
+        self.showTopMessagesView()
+    }
+    
+    func hideMissingPictureMessage() {
+        self.messagesTopView.hideMissingPictureMessage()
+    }
+    
     
     // MARK: - Actions Handlers
     
