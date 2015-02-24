@@ -37,6 +37,10 @@ public class NavigationHandler : NSObject {
                 } else {
                     rootNavigationViewController.popToRootViewControllerAnimated(true)
                 }
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    let alertView = UIAlertView(title: NSLocalizedString("Session Expired"), message: NSLocalizedString("Please try to log in again. If the issue persists, please contact support."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
             }
         }
     }
