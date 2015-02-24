@@ -44,11 +44,11 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     private func initSubviews() {
-        let loggedUser = User.loggedUser()!
         navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User")!, showSettingsButton: true, showBuilderButton: true)
-        
-        if let url = NSURL(string: loggedUser.photoURL) {
-            navigationBar.setAvatarImageURL(url)
+        if let loggedUser = User.loggedUser() {
+            if let url = NSURL(string: loggedUser.photoURL) {
+                navigationBar.setAvatarImageURL(url)
+            }
         }
         
         navigationBar.alpha = 0.99 // FOR iOS7.

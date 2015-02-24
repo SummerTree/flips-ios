@@ -133,31 +133,31 @@ public class PersistentManager: NSObject {
     }
 
     func createAndUploadFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
-        let loggedUser = User.loggedUser() as User!
-
-        let flipService = FlipService()
-        flipService.createFlip(word, videoURL: videoURL, thumbnailURL: thumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
-            var flip: Flip!
-            
-            MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-                let flipDataSource = FlipDataSource(context: context)
-                flip = flipDataSource.createFlipWithJson(json)
-                flipDataSource.associateFlip(flip, withOwner: loggedUser)
-            })
-            
-            var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
-            
-            if (videoURL != nil) {
-                FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.absoluteString!)
+        if let loggedUser = User.loggedUser() {
+            let flipService = FlipService()
+            flipService.createFlip(word, videoURL: videoURL, thumbnailURL: thumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: { (json: JSON) -> Void in
+                var flip: Flip!
+                
+                MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+                    let flipDataSource = FlipDataSource(context: context)
+                    flip = flipDataSource.createFlipWithJson(json)
+                    flipDataSource.associateFlip(flip, withOwner: loggedUser)
+                })
+                
+                var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+                
+                if (videoURL != nil) {
+                    FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.path!)
+                }
+                
+                if (thumbnailURL != nil) {
+                    ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.path!)
+                }
+                
+                createFlipSuccessCompletion(flipInContext)
+                }) { (flipError: FlipError?) -> Void in
+                    createFlipFailCompletion(flipError)
             }
-            
-            if (thumbnailURL != nil) {
-                ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.absoluteString!)
-            }
-            
-            createFlipSuccessCompletion(flipInContext)
-            }) { (flipError: FlipError?) -> Void in
-                createFlipFailCompletion(flipError)
         }
     }
     
@@ -377,7 +377,7 @@ public class PersistentManager: NSObject {
             if (contact == nil) {
                 contactInContext = contactDataSourceInContext.createContactWith(contactID, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType, andContactUser: contactUser)
             } else {
-                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneNumber)
+                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
             }
             
             contact = contactInContext
