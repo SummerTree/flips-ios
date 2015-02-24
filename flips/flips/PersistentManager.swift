@@ -147,11 +147,11 @@ public class PersistentManager: NSObject {
                 var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
                 
                 if (videoURL != nil) {
-                    FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.absoluteString!)
+                    FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.path!)
                 }
                 
                 if (thumbnailURL != nil) {
-                    ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.absoluteString!)
+                    ThumbnailsCache.sharedInstance.put(NSURL(string: flipInContext.thumbnailURL)!, localPath: thumbnailURL!.path!)
                 }
                 
                 createFlipSuccessCompletion(flipInContext)
