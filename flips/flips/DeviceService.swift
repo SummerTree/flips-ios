@@ -35,18 +35,19 @@ public class DeviceService: FlipsService {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        
         let createURL = CREATE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + createURL
+        
         var params = [
             RequestParams.PHONE_NUMBER : phoneNumber,
             RequestParams.PLATFORM : platform]
+        
         if (uuid != nil) {
             params[RequestParams.UUID] = uuid?
         }
-        request.POST(url,
+        
+        self.post(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let device = self.parseDeviceResponse(responseObject)
@@ -57,15 +58,14 @@ public class DeviceService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )
     }
     
     private func parseDeviceResponse(response: AnyObject) -> Device? {
-        let deviceDataSource = DeviceDataSource()
-        return deviceDataSource.createEntityWithObject(response)
+        return PersistentManager.sharedInstance.createDeviceWithJson(JSON(response))
     }
     
     
@@ -76,9 +76,7 @@ public class DeviceService: FlipsService {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        
         var verifyURL = VERIFY_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         verifyURL = verifyURL.stringByReplacingOccurrencesOfString("{{device_id}}", withString: deviceId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + verifyURL
@@ -91,7 +89,7 @@ public class DeviceService: FlipsService {
             params[RequestParams.PHONE_NUMBER] = PhoneNumberHelper.formatUsingUSInternational(phone)
         }
         
-        request.POST(url,
+        self.post(url,
             parameters: params,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let device = self.parseDeviceResponse(responseObject)
@@ -102,7 +100,7 @@ public class DeviceService: FlipsService {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
                 } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+                    failure(FlipError(error: error.localizedDescription, details: nil))
                 }
             }
         )

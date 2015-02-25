@@ -13,7 +13,8 @@
 import UIKit
 
 private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
-
+private let NO_USER_IN_SESSION_ERROR = NSLocalizedString("No user in session", comment: "No user in session.")
+private let NO_USER_IN_SESSION_MESSAGE = NSLocalizedString("Please try again or contact support.", comment: "Please try again or contact support.")
 
 class LoginViewController: FlipsViewController, LoginViewDelegate {
     
@@ -61,23 +62,23 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String) {
         showActivityIndicator()
         UserService.sharedInstance.signIn(username, password: password, success: { (user) -> Void in
-
             if (user == nil) {
                 self.loginView.showValidationErrorInCredentialFields()
+                return
             }
             
             var authenticatedUser: User = user as User!
-            AuthenticationHelper.sharedInstance.userInSession = user as User
-            
-            var userDataSource = UserDataSource()
-            userDataSource.syncUserData({ (success, error) -> Void in
-                self.hideActivityIndicator()
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    if (success) {
-                        var inboxViewController = InboxViewController()
-                        inboxViewController.userDataSource = userDataSource
-                        self.navigationController?.pushViewController(inboxViewController, animated: true)
-                    }
+            AuthenticationHelper.sharedInstance.onLogin(authenticatedUser)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, FlipError, userDataSource) -> Void in
+                    self.hideActivityIndicator()
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if (success) {
+                            var inboxViewController = InboxViewController()
+                            inboxViewController.userDataSource = userDataSource
+                            self.navigationController?.pushViewController(inboxViewController, animated: true)
+                        }
+                    })
                 })
             })
         }) { (flipError) -> Void in
@@ -131,20 +132,24 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         showActivityIndicator()
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
-                AuthenticationHelper.sharedInstance.userInSession = user as User
+                AuthenticationHelper.sharedInstance.onLogin(user as User)
                 
-                var userDataSource = UserDataSource()
-                userDataSource.syncUserData({ (success, error) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        let authenticatedUser = User.loggedUser()!
-                        if (authenticatedUser.device == nil) {
-                            var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
-                            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+                        if let authenticatedUser = User.loggedUser() {
+                            if (authenticatedUser.device == nil) {
+                                var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
+                                self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+                            } else {
+                                var inboxViewController = InboxViewController()
+                                inboxViewController.userDataSource = userDataSource
+                                self.navigationController?.pushViewController(inboxViewController, animated: true)
+                            }
                         } else {
-                            var inboxViewController = InboxViewController()
-                            inboxViewController.userDataSource = userDataSource
-                            self.navigationController?.pushViewController(inboxViewController, animated: true)
+                            self.hideActivityIndicator()
+                            var alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                            alertView.show()
                         }
                     })
                 })

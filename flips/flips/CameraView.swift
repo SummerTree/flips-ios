@@ -735,8 +735,10 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             })
         case .Authorized:
             self.deviceAuthorized = true
+            self.delegate?.cameraView(self, cameraAvailable: true)
         default:
             self.deviceAuthorized = false
+            self.delegate?.cameraView(self, cameraAvailable: false)
             showAlert(title, message: message)
         }
     }

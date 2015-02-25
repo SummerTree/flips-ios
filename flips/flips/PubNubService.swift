@@ -71,27 +71,29 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     private func subscribeOnMyChannels() {
-        var ownChannel: PNChannel = PNChannel.channelWithName(AuthenticationHelper.sharedInstance.userInSession.pubnubID) as PNChannel
-        
-        var channels = [AnyObject]()
-        channels.append(ownChannel)
-        
-        let roomDataSource = RoomDataSource()
-        var rooms = roomDataSource.getAllRooms() // We need to subscribe even in rooms without messages
-        println("\nSubscribeOnMyChannels")
-        for room in rooms {
-            println("   Will subscribe to room: \(room.roomID)")
-            channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
-        }
-        println("\n")
-
-        let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
-        
-        PubNub.subscribeOn(channels, withCompletionHandlingBlock: { (state, channels, error) -> Void in
-            self.loadMessagesHistory()
-        })
-        PubNub.enablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
-            println("Result of enablePushNotificationOnChannels: channels=[\(channels), with error: \(pnError)")
+        if let loggedUser = User.loggedUser() {
+            var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
+            
+            var channels = [AnyObject]()
+            channels.append(ownChannel)
+            
+            let roomDataSource = RoomDataSource()
+            var rooms = roomDataSource.getAllRooms() // We need to subscribe even in rooms without messages
+            println("\nSubscribeOnMyChannels")
+            for room in rooms {
+                println("   Will subscribe to room: \(room.roomID)")
+                channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
+            }
+            println("\n")
+            
+            let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
+            
+            PubNub.subscribeOn(channels, withCompletionHandlingBlock: { (state, channels, error) -> Void in
+                self.loadMessagesHistory()
+            })
+            PubNub.enablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
+                println("Result of enablePushNotificationOnChannels: channels=[\(channels), with error: \(pnError)")
+            }
         }
     }
     

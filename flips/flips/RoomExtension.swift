@@ -26,20 +26,6 @@ extension Room {
         return notReadMessagesCount
     }
     
-    func lastMessageReceivedWithContent() -> FlipMessage? {
-        var currentLastMessageWithContent = self.flipMessagesNotRemoved().lastObject as FlipMessage!
-        
-        while (!currentLastMessageWithContent.hasAllContentDownloaded()) {
-            var currentIndex = self.flipMessages.indexOfObject(currentLastMessageWithContent)
-            if (currentIndex == 0) {
-                return nil
-            }
-            currentLastMessageWithContent = self.flipMessages[--currentIndex] as FlipMessage
-        }
-
-        return currentLastMessageWithContent
-    }
-    
     func oldestNotReadMessage() -> FlipMessage? {
         let flipMessageDataSource = FlipMessageDataSource()
         
@@ -67,8 +53,7 @@ extension Room {
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
-        let flipMessageDataSource = FlipMessageDataSource()
-        flipMessageDataSource.removeAllFlipMessagesFromRoomID(self.roomID, completion)
+        PersistentManager.sharedInstance.removeAllFlipMessagesFromRoomID(self.roomID, completion: completion)
     }
     
     func roomName() -> String {
@@ -81,37 +66,39 @@ extension Room {
         var sortedParticipants = self.participants.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
         for participant in sortedParticipants {
-            if (participant.userID != AuthenticationHelper.sharedInstance.userInSession.userID) {
-                var userFirstName = participant.firstName
-                if (participant.isTemporary!.boolValue) {
-                    if let phoneNumber = participant.phoneNumber {
-                        userFirstName = phoneNumber!
-                    }
-                    
-                    if let contacts = participant.contacts {
-                        if (contacts.count > 0) {
-                            var contact: Contact = contacts.allObjects[0] as Contact
-                            
-                            for userContact in contacts.allObjects {
-                                if (!hasTemporaryName(userContact.firstName)) {
-                                    contact = userContact as Contact
+            if let loggedUser = User.loggedUser() {
+                if (participant.userID != loggedUser.userID) {
+                    var userFirstName = participant.firstName
+                    if (participant.isTemporary!.boolValue) {
+                        if let phoneNumber = participant.phoneNumber {
+                            userFirstName = phoneNumber!
+                        }
+                        
+                        if let contacts = participant.contacts {
+                            if (contacts.count > 0) {
+                                var contact: Contact = contacts.allObjects[0] as Contact
+                                
+                                for userContact in contacts.allObjects {
+                                    if (!hasTemporaryName(userContact.firstName)) {
+                                        contact = userContact as Contact
+                                    }
                                 }
-                            }
-                            
-                            if (hasTemporaryName(contact.firstName)) {
-                                userFirstName = contact.phoneNumber
-                            } else if (contact.firstName != "") {
-                                userFirstName = contact.firstName
-                            } else if (contact.lastName != "") {
-                                userFirstName = contact.lastName
-                            } else if (contact.phoneNumber != "") {
-                                userFirstName = contact.phoneNumber
+                                
+                                if (hasTemporaryName(contact.firstName)) {
+                                    userFirstName = contact.phoneNumber
+                                } else if (contact.firstName != "") {
+                                    userFirstName = contact.firstName
+                                } else if (contact.lastName != "") {
+                                    userFirstName = contact.lastName
+                                } else if (contact.phoneNumber != "") {
+                                    userFirstName = contact.phoneNumber
+                                }
                             }
                         }
                     }
-                }
-                roomName = "\(roomName)\(comma)\(userFirstName)"
-                comma = ", "
+                    roomName = "\(roomName)\(comma)\(userFirstName)"
+                    comma = ", "
+                }                
             }
         }
         return roomName

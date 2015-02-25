@@ -31,12 +31,12 @@ extension FlipMessage {
         }
     }
 
-    func addFlip(flip: Flip) {
+    func addFlip(flip: Flip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
-        var entry: FlipEntry! = FlipEntry.createEntity() as FlipEntry
+        var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
         entry.order = nextEntryOrder
-        entry.flip = flip
+        entry.flip = flip.inContext(context) as Flip
         entry.message = self
 
         self.addEntriesObject(entry)
@@ -52,74 +52,24 @@ extension FlipMessage {
         return " ".join(words)
     }
     
-    func messageThumbnail() -> UIImage? {
-        let firstFlip = self.flips.first
-        var thumbnail: UIImage?
-        
-        if let backgroundURL = firstFlip?.backgroundURL {
-            thumbnail = CacheHandler.sharedInstance.thumbnailForUrl(backgroundURL)
-        }
-
-        if (thumbnail == nil) {
-            thumbnail = self.createThumbnail()
-        }
-
-        return thumbnail
-    }
-    
-    func createThumbnail() -> UIImage? {
-        let firstFlip = self.flips.first
-
-        if (firstFlip == nil) {
-            return nil
-        }
-
-        let cacheHandler = CacheHandler.sharedInstance
-        
-        if (firstFlip!.isBackgroundContentTypeImage()) {
-            var backgroundImageData = cacheHandler.dataForUrl(firstFlip!.backgroundURL)
-            
-            var thumbnailImage: UIImage
-            
-            if (backgroundImageData == nil) {
-                thumbnailImage = UIImage.emptyFlipImage()
-            } else {
-                thumbnailImage = UIImage(data: backgroundImageData!)!
+    func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
+        if let firstFlip = self.flips.first {
+            if (firstFlip.thumbnailURL == nil || firstFlip.thumbnailURL == "") {
+                success?(UIImage.emptyFlipImage())
+                return
             }
             
-            var url = firstFlip!.backgroundURL
-            if (url == nil || countElements(url) == 0) {
-                url = "greenBackground"
-            }
-            
-            cacheHandler.saveThumbnail(thumbnailImage, forUrl: url)
-
-            return thumbnailImage
-            
-        } else if (firstFlip!.isBackgroundContentTypeVideo()) {
-            let videoPath = cacheHandler.getFilePathForUrlFromAnyFolder(firstFlip!.backgroundURL)
-            if (videoPath != nil) {
-                if let videoThumbnailImage = VideoHelper.generateThumbImageForFile(videoPath!) {
-                    cacheHandler.saveThumbnail(videoThumbnailImage, forUrl: firstFlip!.backgroundURL)
-                    return videoThumbnailImage
-                }
-            }
+            let thumbnailsCache = ThumbnailsCache.sharedInstance
+            thumbnailsCache.get(NSURL(string: firstFlip.thumbnailURL!)!,
+                success: { (localPath: String!) in
+                    var image = UIImage(contentsOfFile: localPath)
+                    success?(image)
+                }, failure: { (error: FlipError) in
+                    println("Could not get thumbnail for flip \(firstFlip).")
+            })
+        } else {
+            success?(UIImage.emptyFlipImage())
         }
-
-        return nil
-    }
-    
-    func hasAllContentDownloaded() -> Bool {
-        let flips = self.flips
-
-        for var i = 0; i < flips.count; i++ {
-            var flip = flips[i] as Flip
-            if (!flip.hasAllContentDownloaded()) {
-                return false
-            }
-        }
-
-        return true
     }
     
     
@@ -133,8 +83,11 @@ extension FlipMessage {
         dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
         dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
-        let loggedUserFirstName = AuthenticationHelper.sharedInstance.userInSession.firstName
-        let notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
+        var notificationMessage = ""
+        if let loggedUser = User.loggedUser() {
+            let loggedUserFirstName = loggedUser.firstName
+            notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
+        }
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
@@ -153,7 +106,6 @@ extension FlipMessage {
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
             dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
-            dic.updateValue(flip.soundURL, forKey: FlipJsonParams.SOUND_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
             dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
 

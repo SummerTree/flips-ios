@@ -15,22 +15,14 @@ import Foundation
 public class AuthenticationHelper: NSObject {
 
     private let LOGIN_USERNAME_KEY = "username"
-    
-    var userInSession: User! {
-        willSet(newUser) {
-            if (newUser != nil) {
-                self.userInSession = newUser
-                println("User pubnubId: '\(newUser.pubnubID)'")
-                PubNubService.sharedInstance.connect()
-                
-                // Used to auto-fill the field in the login screen
-                saveAuthenticatedUsername(newUser.username)
-            }
-        }
+
+    func onLogin(user: User) {
+        PubNubService.sharedInstance.connect()
+        saveAuthenticatedUsername(user.username)
     }
     
     func isAuthenticated() -> Bool {
-        if let user = userInSession {
+        if let user = User.loggedUser() {
             return true
         }
         
@@ -56,14 +48,14 @@ public class AuthenticationHelper: NSObject {
     }
     
     func logout() {
-        
-        if let facebookID = self.userInSession.facebookID {
-            if !self.userInSession.facebookID.isEmpty {
-                self.removeAuthenticatedUsername()
+        if let userInSession = User.loggedUser() {
+            if let facebookID = userInSession.facebookID {
+                if !facebookID.isEmpty {
+                    self.removeAuthenticatedUsername()
+                }
             }
         }
-        
-        self.userInSession = nil
+
         FBSession.activeSession().closeAndClearTokenInformation()
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)

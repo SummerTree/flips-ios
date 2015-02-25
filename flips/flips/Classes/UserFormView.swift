@@ -30,6 +30,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     var delegate: UserFormViewDelegate?
     
     private var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
+	private var birthdayDatePicker : UIDatePicker!
     private var isPaddingAdjusted: Bool = false
     
     //MARK: - Initialization Methods
@@ -68,11 +69,25 @@ class UserFormView : UIView, UITextFieldDelegate {
         self.addSubview(passwordTextField)
         
         birthdayTextField = self.setupCell(NSLocalizedString("Birthday", comment: "Birthday"), leftImage: UIImage(named: "Birthday"))
-        birthdayTextField.keyboardType = UIKeyboardType.NumberPad
-        birthdayTextField.returnKeyType = UIReturnKeyType.Done
         birthdayTextField.tintColor = UIColor.clearColor()
+		
+		birthdayDatePicker = UIDatePicker()
+		birthdayDatePicker.datePickerMode = UIDatePickerMode.Date
+		birthdayDatePicker.maximumDate = NSDate()
+		birthdayDatePicker.addTarget(self, action: "birthdaySelected:", forControlEvents: UIControlEvents.ValueChanged)
+		
+		birthdayTextField.inputView = birthdayDatePicker
+		
         self.addSubview(birthdayTextField)
     }
+	
+	func birthdaySelected(sender : AnyObject?) {
+		let picker = birthdayTextField.inputView as UIDatePicker
+		var dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = NSDateFormatter.dateFormatFromTemplate("MM/dd/yyyy", options: 0, locale: NSLocale.currentLocale())
+		birthdayTextField.text = dateFormatter.stringFromDate(picker.date)
+		self.validateFields()
+	}
     
     private func setupCell(placeHolder: String, leftImage: UIImage? = nil) -> UITextField {
         var textField = UITextField()
@@ -433,6 +448,9 @@ class UserFormView : UIView, UITextFieldDelegate {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
         birthdayTextField.text = formatter.stringFromDate(user.birthday)
+		
+		birthdayDatePicker.date = user.birthday
+		
     }
     
     // MARK: - Getters

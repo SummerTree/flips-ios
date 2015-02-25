@@ -23,27 +23,23 @@ public class BuilderService: FlipsService {
             failCompletion(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-
-        let request = AFHTTPRequestOperationManager()
-        request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
+        
         let getSuggestedWordsUrl = HOST + SUGGESTED_WORDS_URL
         
-        request.GET(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
+        self.get(getSuggestedWordsUrl, parameters: nil, success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) -> Void in
             successCompletion(self.parseGetSuggestedWordsResponse(responseObject))
-            }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failCompletion(FlipError(error: response["error"] as String!, details: nil))
-                } else {
-                    failCompletion(FlipError(error: error.localizedDescription, details:nil))
-                }
+        }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            if (operation.responseObject != nil) {
+                let response = operation.responseObject as NSDictionary
+                failCompletion(FlipError(error: response["error"] as String!, details: nil))
+            } else {
+                failCompletion(FlipError(error: error.localizedDescription, details:nil))
+            }
         }
     }
     
-    // TODO: change from String to entity Word
     private func parseGetSuggestedWordsResponse(response: AnyObject) -> [String] {
         let json = JSON(response)
-        println("suggested words json: \(json)")
         
         // TODO: change from String to entity Word
         var suggestedWords = Array<String>()

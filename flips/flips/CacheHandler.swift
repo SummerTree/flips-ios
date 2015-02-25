@@ -52,6 +52,7 @@ public class CacheHandler : NSObject {
         var cachePaths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
         var cacheDirPath = cachePaths.first! as String
         applicationCacheDirectory = "\(NSHomeDirectory())\(cacheDirPath)/\(FLIPS_CACHE_FOLDER)"
+        println("applicationCacheDirectory: \(applicationCacheDirectory)")
         self.initDirectory(applicationCacheDirectory)
     }
     
@@ -157,15 +158,6 @@ public class CacheHandler : NSObject {
         if (fileManager.fileExistsAtPath(path)) {
             fileManager.fileExistsAtPath(path)
         }
-    }
-    
-    func deleteFileWithUrl(url: String) {
-        var filePath = self.getFilePathForUrl(url, isTemporary: true)
-        self.deleteFileAtPath(filePath)
-
-    
-        filePath = self.getFilePathForUrl(url, isTemporary: false)
-        self.deleteFileAtPath(filePath)
     }
     
     func save(data: NSData, withUrl url: String, isTemporary: Bool = true) -> String {

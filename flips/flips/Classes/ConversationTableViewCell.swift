@@ -187,34 +187,32 @@ class ConversationTableViewCell : UITableViewCell {
         }
 
         if (flipMessage != nil) {
-            var messageThumbnailImage = flipMessage!.messageThumbnail()?
-            if (messageThumbnailImage == nil) {
-                messageThumbnailImage = flipMessage?.createThumbnail()
+            flipMessage!.messageThumbnail {
+                (thumbnail: UIImage?) in
+                
+                let photoURL = NSURL(string: flipMessage!.from.photoURL)
+                let isMessageNotRead = flipMessage!.notRead.boolValue
+                let messagePhrase = flipMessage!.messagePhrase()
+                // The time stamp should reflect the time sent of the oldest unread message in the conversation
+                let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage!.createdAt)
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.flipImageView.image = thumbnail
+                    
+                    // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
+                    self.userImageView.setImageWithURL(photoURL)
+                    
+                    if (isMessageNotRead) {
+                        // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
+                        self.flipMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
+                    } else {
+                        self.flipMessageLabel.text = messagePhrase
+                    }
+                    
+                    self.flipTimeLabel.text = formatedDate
+                    self.flipTimeLabel.sizeToFit()
+                })
             }
-            
-            let photoURL = NSURL(string: flipMessage!.from.photoURL)
-            let isMessageNotRead = flipMessage!.notRead.boolValue
-            let messagePhrase = flipMessage!.messagePhrase()
-            // The time stamp should reflect the time sent of the oldest unread message in the conversation
-            let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage!.createdAt)
-
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.flipImageView.image = messageThumbnailImage
-                
-                // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
-                self.userImageView.setImageWithURL(photoURL)
-                
-                if (isMessageNotRead) {
-                    // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
-                    self.flipMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
-                } else {
-                    self.flipMessageLabel.text = messagePhrase
-                }
-                
-                self.flipTimeLabel.text = formatedDate
-                self.flipTimeLabel.sizeToFit()
-                
-            })
         }
     }
     
