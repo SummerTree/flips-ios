@@ -125,10 +125,7 @@ public class UserService: FlipsService {
         }
         
         let url = HOST + FACEBOOK_SIGNIN_URL
-        
-        // Since Facebook is disabled at this moment, I'm not sure if it will work. So, I left the original code commented.
-        //        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
-        //        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.TOKEN)
+    
         let params = [
             RequestHeaders.FACEBOOK_ACCESS_TOKEN : accessToken,
             RequestHeaders.TOKEN : accessToken
@@ -141,9 +138,13 @@ public class UserService: FlipsService {
                 success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if operation.response.statusCode == 404 {
-                    failure(nil)
-                    return
+                if (operation.response != nil && operation.response.statusCode == 404) {
+                    if let response = operation.responseObject as? NSDictionary {
+                        if (response["error"] as? String == "User not found") {
+                            failure(nil)
+                            return
+                        }
+                    }
                 }
                 
                 if (operation.responseObject != nil) {

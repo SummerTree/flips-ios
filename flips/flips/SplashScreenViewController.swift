@@ -60,41 +60,30 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         activityIndicator.startAnimating()
         self.view.addSubview(activityIndicator)
         
-        var success = FBSession.openActiveSessionWithAllowLoginUI(false)
-        println("User is already authenticated with Facebook? \(success)")
-        if (success) {
-            UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken, success: { (user) -> Void in
+        UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
+            success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.onLogin(user as User)
                 
-                PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         activityIndicator.stopAnimating()
-                        
                         if let authenticatedUser = User.loggedUser() {
-                            if (self.userHasDevice(authenticatedUser)) {
-                                self.openInboxViewController(userDataSource)
-                            } else {
+                            if (!self.userHasDevice(authenticatedUser)) {
                                 self.openPhoneNumberController(authenticatedUser.userID)
+                            } else {
+                                self.openInboxViewController(userDataSource)
                             }
+                        } else {
+                            var alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                            alertView.show()
                         }
                     })
                 })
-                }, failure: { (flipError) -> Void in
-                    FBSession.activeSession().closeAndClearTokenInformation()
-                    FBSession.activeSession().close()
-                    FBSession.setActiveSession(nil)
-                    
-                    if (flipError != nil) {
-                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
-                            alertView.show()
-                        })
-                    }
-                    
-                    activityIndicator.stopAnimating()
-            })
-        }
+            },
+            failure: { (flipError) -> Void in
+                println("Error signing in with Facebook: \(flipError)")
+                self.openLoginViewController()
+        })
     }
     
     func splashScreenViewAttemptLogin() {

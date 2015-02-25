@@ -13,8 +13,8 @@
 import UIKit
 
 private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
-private let NO_USER_IN_SESSION_ERROR = NSLocalizedString("No user in session", comment: "No user in session.")
-private let NO_USER_IN_SESSION_MESSAGE = NSLocalizedString("Please try again or contact support.", comment: "Please try again or contact support.")
+let NO_USER_IN_SESSION_ERROR = NSLocalizedString("No user in session", comment: "No user in session.")
+let NO_USER_IN_SESSION_MESSAGE = NSLocalizedString("Please try again or contact support.", comment: "Please try again or contact support.")
 
 class LoginViewController: FlipsViewController, LoginViewDelegate {
     
@@ -99,7 +99,13 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapFacebookSignInButton(loginView: LoginView!) {
-
+        
+        let cantLoginFunction: (FlipError) -> Void = { (flipError) in
+            println("Error on authenticating with Facebook [error=\(flipError.error), details=\(flipError.details)]")
+            var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+        }
+        
         // If the session state is any of the two "open" states when the button is clicked
         if (FBSession.activeSession().state == FBSessionState.Open
          || FBSession.activeSession().state == FBSessionState.OpenTokenExtended) {
@@ -108,10 +114,10 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             
             authenticateWithFacebook() {
                 (flipError) -> Void in
-                println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
                 self.hideActivityIndicator()
-                var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
-                alertView.show()
+                if (flipError != nil) {
+                    cantLoginFunction(flipError!)
+                }
             }
             return
         }
@@ -124,9 +130,9 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             completionHandler: { (session, state, error) -> Void in
                 if error != nil {
                     if state == FBSessionState.ClosedLoginFailed {
-                        println("Error opening facebook session, user denied")
+                        println("Error opening facebook session: \(error)")
                     } else {
-                        println("Error opening facebook session, state: \(state)")
+                        println("Error opening facebook session, state: \(state), error: \(error)")
                     }
                     return
                 }
@@ -135,9 +141,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                     (flipError) -> Void in
                     self.hideActivityIndicator()
                     if flipError != nil {
-                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                        var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
-                        alertView.show()
+                        cantLoginFunction(flipError!)
                     } else {
                         //no error message, assuming User Not Found
                         self.showActivityIndicator()

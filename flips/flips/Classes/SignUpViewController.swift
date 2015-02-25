@@ -16,21 +16,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     private var signUpView: SignUpView!
     private var avatar: UIImage!
     
-    var facebookInput: JSON? = nil {
-        didSet {
-            if facebookInput != nil {
-                signUpView.setUserData(facebookInput!)
-                let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
-                signUpView.setUserPictureURL(NSURL(string: profilePicture)!) {
-                    (image) -> Void in
-                    self.avatar = image
-                }
-                signUpView.setPasswordFieldVisible(false)
-            }else{
-                signUpView.setPasswordFieldVisible(true)
-            }
-        }
-    }
+    var facebookInput: JSON? = nil
     
     // MARK: - Overriden Methods
     
@@ -42,6 +28,18 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         self.view = signUpView
         
         signUpView.loadView()
+        
+        if facebookInput != nil {
+            signUpView.setUserData(facebookInput!)
+            let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
+            signUpView.setUserPictureURL(NSURL(string: profilePicture)!) {
+                (image) -> Void in
+                self.avatar = image
+            }
+            signUpView.setPasswordFieldVisible(false)
+        }else{
+            signUpView.setPasswordFieldVisible(true)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
