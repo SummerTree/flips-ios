@@ -60,7 +60,7 @@ public class UserService: FlipsService {
             RequestParams.BIRTHDAY : birthday,
             RequestParams.PHONENUMBER: phoneNumber,
             RequestParams.NICKNAME : nickname!,
-            RequestParams.FACEBOOK_IDS : facebookId != nil ? facebookId! : ""
+            RequestParams.FACEBOOK_ID : facebookId != nil ? facebookId! : ""
         ]
         
         // first create user
@@ -500,6 +500,7 @@ public class UserService: FlipsService {
         static let LASTNAME = "lastName"
         static let BIRTHDAY = "birthday"
         static let NICKNAME = "nickname"
+        static let FACEBOOK_ID = "facebookID"
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
         static let PHONENUMBER = "phoneNumber"
