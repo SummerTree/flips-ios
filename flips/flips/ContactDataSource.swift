@@ -83,7 +83,7 @@ class ContactDataSource : BaseDataSource {
             NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
         ]
         
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)")) as NSArray
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)"), inContext: currentContext) as NSArray
         var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
@@ -100,7 +100,7 @@ class ContactDataSource : BaseDataSource {
             NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
         ]
 
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false)")) as NSArray
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false)"), inContext: currentContext) as NSArray
         var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
@@ -160,7 +160,7 @@ class ContactDataSource : BaseDataSource {
     }
     
     private func getContactById(id: String) -> Contact? {
-        return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id) as? Contact
+        return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id, inContext: currentContext) as? Contact
     }
     
     func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
@@ -191,6 +191,6 @@ class ContactDataSource : BaseDataSource {
         }
         
         let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
-        return Contact.findFirstWithPredicate(compound) as? Contact
+        return Contact.findFirstWithPredicate(compound, inContext: currentContext) as? Contact
     }
 }

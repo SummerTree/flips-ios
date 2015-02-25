@@ -120,7 +120,7 @@ class UserDataSource : BaseDataSource {
     }
     
     func getUserById(id: String) -> User? {
-        return User.findFirstByAttribute(UserAttributes.USER_ID, withValue: id) as? User
+        return User.findFirstByAttribute(UserAttributes.USER_ID, withValue: id, inContext: currentContext) as? User
     }
     
     func downloadMyFlips(myFlips: [Flip]) {

@@ -75,9 +75,9 @@ class FlipDataSource : BaseDataSource {
         flipInContext.owner = ownerInContext
     }
     
-    // This flip is never uploaded to the server. It is used only via Pubnub
+    // This flip is never uploaded to the server and never saved in database. It is used only via Pubnub
     func createEmptyFlipWithWord(word: String) -> Flip {
-        var flip: Flip! = Flip.MR_createEntity() as Flip
+        var flip: Flip! = Flip.createInContext(currentContext) as Flip
         flip.word = word
         return flip
     }
@@ -87,7 +87,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getFlipById(id: String) -> Flip? {
-        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id) as Flip?
+        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id, inContext: currentContext) as Flip?
     }
 
     func getMyFlips() -> [Flip] {
@@ -107,8 +107,8 @@ class FlipDataSource : BaseDataSource {
     func getMyFlipsForWord(word: String) -> [Flip] {
         var myFlips : [Flip]
         if let loggedUser = User.loggedUser() {
-            let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == \(loggedUser.userID)) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
-            myFlips =  Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+            let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == %@) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", loggedUser.userID, word)
+            myFlips = Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
         } else {
             myFlips = []
         }
