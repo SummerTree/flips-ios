@@ -29,7 +29,7 @@
 }
 
 + (NSFetchedResultsController *)fetchAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm delegate:(id<NSFetchedResultsControllerDelegate>)delegate {
-	NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
+	NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
 	NSFetchRequest *request = [self requestAllSortedBy:sortDescriptors
 										 withPredicate:searchTerm
 											 inContext:context];
@@ -46,7 +46,7 @@
 }
 
 + (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors {
-    NSManagedObjectContext *context = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     NSFetchRequest *request = [self requestAllSortedBy:sortDescriptors
                                          withPredicate:nil
                                              inContext:context];
