@@ -44,7 +44,7 @@ public class UserService: FlipsService {
     
     // MARK: - Sign-up
     
-    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, facebookId: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
@@ -59,7 +59,9 @@ public class UserService: FlipsService {
             RequestParams.LASTNAME : lastName,
             RequestParams.BIRTHDAY : birthday,
             RequestParams.PHONENUMBER: phoneNumber,
-            RequestParams.NICKNAME : nickname!]
+            RequestParams.NICKNAME : nickname!,
+            RequestParams.FACEBOOK_IDS : facebookId != nil ? facebookId! : ""
+        ]
         
         // first create user
         self.post(url,

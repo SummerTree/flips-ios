@@ -72,17 +72,18 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         } else {
             var actualEmail = email
             var actualPassword = password
+            var facebookId: String? = nil
             if self.facebookInput != nil {
+                facebookId = self.facebookInput!["id"].stringValue
                 if actualEmail.isEmpty {
-                    let facebookId = self.facebookInput!["id"].stringValue
-                    actualEmail = "\(facebookId)@facebook.com"
+                    actualEmail = "\(facebookId!)@facebook.com"
                 }
                 actualPassword = "f\(NSUUID().UUIDString)"
             }
             
             self.signUpView.hideMissingPictureMessage()
             
-            var phoneNumberViewController = PhoneNumberViewController(username: actualEmail, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
+            var phoneNumberViewController = PhoneNumberViewController(username: actualEmail, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName, facebookId: facebookId)
             
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }

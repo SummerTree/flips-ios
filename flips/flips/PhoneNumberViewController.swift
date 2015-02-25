@@ -24,13 +24,14 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     private var nickname: String?
     private var avatar: UIImage!
     private var birthday: NSDate!
+    private var facebookId: String?
     
     init(userId: String) {
         super.init(nibName: nil, bundle: nil)
         self.userId = userId
     }
     
-    convenience init(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: String!, nickname: String?) {
+    convenience init(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: String!, nickname: String?, facebookId: String?) {
         
         self.init(nibName: nil, bundle: nil)
         self.username = username
@@ -40,6 +41,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
         self.avatar = avatar
         self.birthday = birthday.dateValue()
         self.nickname = nickname
+        self.facebookId = facebookId
     }
     
     override func loadView() {
@@ -74,6 +76,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
                 birthday: self.birthday,
                 nickname: self.nickname,
                 phoneNumber: mobileNumber.intlPhoneNumber,
+                facebookId: self.facebookId,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
                     var userEntity = user as User
