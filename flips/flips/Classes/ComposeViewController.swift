@@ -197,6 +197,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         super.viewWillDisappear(animated)
         composeTopViewContainer?.viewWillDisappear()
         composeTopViewContainer?.delegate = nil
+        AudioRecorderService.sharedInstance.delegate = nil
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
