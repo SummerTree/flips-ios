@@ -39,6 +39,7 @@ class UpdateUserProfileView: SignUpView {
     
     func setUser(user: User!) {
         userFormView.setUserData(user)
+        userFormView.setPasswordFieldVisible(user.facebookID == nil)
         navigationBar.setRightButtonEnabled(false)
     }
     
