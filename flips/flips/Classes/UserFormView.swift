@@ -306,7 +306,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         
         if (firstNameTextField.text.isEmpty ||
             lastNameTextField.text.isEmpty ||
-            (!passwordTextField.hidden && emailTextField.text.isEmpty) ||
+            emailTextField.text.isEmpty ||
             (!passwordTextField.hidden && passwordTextField.text.isEmpty) ||
             birthdayTextField.text.isEmpty) {
                 allFieldsAreValid = false
