@@ -152,9 +152,12 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
             for (index, room) in enumerate(rooms) {
                 if (self.roomIds.containsObject(room.roomID)) {
-                    let indexSet = NSMutableIndexSet()
-                    indexSet.addIndex(self.roomIds.indexOfObject(room.roomID))
-                    self.roomIds.moveObjectsAtIndexes(indexSet, toIndex: index)
+                    let currentIndex = self.roomIds.indexOfObject(room.roomID)
+                    if (currentIndex != index) {
+                        let indexSet = NSMutableIndexSet()
+                        indexSet.addIndex(currentIndex)
+                        self.roomIds.moveObjectsAtIndexes(indexSet, toIndex: index)
+                    }
                 } else {
                     self.roomIds.addObject(room.roomID)
                 }
