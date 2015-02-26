@@ -31,11 +31,21 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         
         if facebookInput != nil {
             signUpView.setUserData(facebookInput!)
-            let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
-            signUpView.setUserPictureURL(NSURL(string: profilePicture)!) {
-                (image) -> Void in
-                self.avatar = image
+            
+            let isSilhouette = facebookInput!["picture"]["data"]["is_silhouette"]
+            var userHasPicture = true
+            if (isSilhouette != nil) {
+                userHasPicture = !isSilhouette.boolValue
             }
+            
+            if (userHasPicture) {
+                let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
+                signUpView.setUserPictureURL(NSURL(string: profilePicture)!) {
+                    (image) -> Void in
+                    self.avatar = image
+                }
+            }
+            
             signUpView.setPasswordFieldVisible(false)
         }else{
             signUpView.setPasswordFieldVisible(true)
