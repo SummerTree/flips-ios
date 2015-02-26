@@ -11,9 +11,19 @@ class SignUpScreen < Calabash::IBase
     "label marked:'First Name'"
   end
 
+  def birthday= date
+    touch "label text:'Birthday'"
+    keyboard_enter_text date
+  end
+
   def signup_phone
     "label marked:'Mobile Number'"
   end
+
+  def avatar_button
+    "button marked: 'AddProfilePhoto'"
+  end
+
 
   def navigate
     unless current_page?

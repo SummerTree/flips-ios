@@ -42,3 +42,17 @@ end
 def font_from selector
   first_from query selector, :font, :fontName
 end
+
+def miss_keyboard
+  query "view", :resignFirstResponder
+end
+
+def date_now
+   now=Time.new
+   now.strftime("%m%d%Y")
+end
+
+def fill(field, value)
+  touch "label text:'#{field}'"
+  keyboard_enter_text value
+end

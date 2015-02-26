@@ -12,7 +12,7 @@ Scenario: Access Inbox screen by login screen
   Then I should see "Inbox" screen
 
 @7223 @ok @Flips-148
-Scenario: Badge Counting
+Scenario: Badge Counting#break this scenario
   Given I am on the "Inbox" screen
   And I have a conversation with messages
   When I have messages: read, unread(sent by different people and the same people) and messages sent by me on this conversation
@@ -23,7 +23,7 @@ Scenario: Seeing avatar when I have just read messages and the last one is not m
   Given I am on the "Inbox" screen
   When I have a conversation with only read messages
   And The last message wasn't sent by me
-  Then I should see the user's photo of the last message of my conversation as an avatar
+  Then I should see the user's photo of the last received message of my conversation as an avatar
 
 @7223 @Flips-148
 Scenario: Seeing avatar when I have just read messages and the last one is mine
@@ -160,7 +160,7 @@ Scenario: Deleting all my conversations
   Then I shouldn't see my conversations
   And I can't delete FlipBoys conversation
 
-@7225 @Flips-148 @Flips-132 @Flips-8
+@7225 @Flips-148 @Flips-132 @Flips-8 @review
 Scenario: Logout and Login after delete some conversations
   Given I am on the "Inbox" screen
   And I deleted some conversations
@@ -196,7 +196,7 @@ Scenario: Receiving 2 new messages from the same user
 Scenario: Receiving group's message
   Given I am on the "Inbox" screen
   When I have a group message
-  Then the behaviour should be the same of the scenarios below
+  Then the behaviour should be the same of the scenarios above
 
 @7225 @Flips-148
 Scenario: Checking the behavior of a big conversation
@@ -220,6 +220,8 @@ Scenario: Receiving a message from someone that I don't have on my contacts
   Then I should see this conversation on the top of the screen
   And The other conversations should be sorted by time stamp descending order
 
+#When I receive a message fromsomeone that is not on my contacts then I should see them flips name
+
 @7223 @Flips-148 @Flips-134 @Flips-23
 Scenario: Receiving a message sent by import screen
   Given I am on the "Inbox" screen
@@ -237,16 +239,16 @@ Scenario: Receiving a message sent by new flips screen
 @7223 @Flips-148 @Flips-16
 Scenario: Sending a message to someone that does not have flip's account and does not have me as a phone contact
   Given I am on the "Inbox" screen
-  When I sent a message to someone that doesn't have flips
+  When I send a message to someone that doesn't have flips
   And This person does not have my number on her phone's contact
-  Then He/she should receive an SMS saying:
+  Then He/she should receive an SMS saying:"You've been Flipped by <first name> <last name>!  Download Flips within 30 days to view your message.  appstore.com/flips"
 
 @7223 @Flips-148 @Flips-16
 Scenario: Sending a message to someone that does not have flip's account but have me as a phone contact
   Given I am on the "Inbox" screen
   When I sent a message to someone that doesn't have flips
   And This person have my number on her phone's contact
-  Then He/she should receive an SMS saying:
+  Then He/she should receive an SMS saying: "You've been Flipped by <first name> <last name>!  Download Flips within 30 days to view your message.  appstore.com/flips"
 
 @7223 @Flips-148
 Scenario: Seeing first frame when it is a picture
@@ -258,14 +260,14 @@ Scenario: Seeing first frame when it is a picture
 Scenario: Seeing first frame when it is a video
   Given I am on the "Inbox" screen
   When I receive a messsage with a video on the first frame
-  Then I should see this video as previews photo
+  Then I should see the thumbnail of the first video as previews photo
   But The video shouldn't starts on the Inbox screen
 
 @7223 @Flips-148 @Flips-43 @Flips-20
 Scenario: Seeing first frame when it is just an audio
   Given I am on the "Inbox" screen
   When I receive a messsage with an audio on the first frame and with no picture
-  Then I should see this a green collor as previews photo
+  Then I should see this a green color as previews photo
   And The audio shouldn't starts on the Inbox screen
 
 @7223 @ok @Flips-148
