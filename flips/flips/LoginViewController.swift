@@ -128,7 +128,11 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         var scope = ["public_profile", "email", "user_birthday", "user_friends"]
         FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
             completionHandler: { (session, state, error) -> Void in
-                if error != nil {
+                if (error == nil && state == FBSessionState.Closed) {
+                    return
+                }
+                
+                if (error != nil) {
                     if state == FBSessionState.ClosedLoginFailed {
                         println("Error opening facebook session: \(error)")
                     } else {
