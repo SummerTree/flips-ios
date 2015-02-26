@@ -26,6 +26,14 @@ Scenario: Changing Flip Boys message when I already have a user registered
   Then I shouldn't receive this new message
   And I should keep seeing the old "Flip Boys" message on the "Inbox" screen
 
+@Flips-199
+Scenario: Changing Flip Boys message and do Logout/Login
+  Given I am logged in on the app
+  When the welcome message is changed on the server
+  And I do logout and login again
+  Then I shouldn't receive this new message
+  And I should keep seeing the old "Flip Boys" message on the "Inbox" screen
+
 #onboarding
 Scenario: Showing a message on FlipBoys conversation
   Given I am on the "Microphone" screen
