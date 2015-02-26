@@ -323,8 +323,6 @@ public class UserService: FlipsService {
         
         if let loggedUser = User.loggedUser() {
             let permissions: [String] = FBSession.activeSession().permissions as [String]
-            println("[DEBUG: Facebook Permissions: \(permissions)]")
-            
             if (!contains(permissions, "user_friends")) {
                 failure(FlipError(error: "user_friends permission not allowed.", details:nil))
                 return
@@ -346,6 +344,10 @@ public class UserService: FlipsService {
                         usersFacebookIDS.append(userId.stringValue)
                     }
                     
+                    if (usersFacebookIDS.count == 0) {
+                        return
+                    }
+
                     var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                     
                     var params: Dictionary<String, AnyObject> = [
