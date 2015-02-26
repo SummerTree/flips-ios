@@ -592,7 +592,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         format.dateFormat="yyyy-MM-dd"
         
         // TODO - which name should we use?
-        var currentFileName = "recording-\(format.stringFromDate(NSDate())).mov"
+        var currentFileName = "recording-\(NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.FullStyle, timeStyle: NSDateFormatterStyle.FullStyle)).mov"
         println("Recording video at: \(currentFileName)")
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
