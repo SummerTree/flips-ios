@@ -176,7 +176,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
     
     func onRoomReceived(messageJson: JSON) {
-        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT])
+        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as Room
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 }
