@@ -50,9 +50,6 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     }
     
     func setupRecorder() {
-        var format = NSDateFormatter()
-        format.dateFormat="yyyy-MM-dd"
-        
         // TODO - which name should we use?
         var currentFileName = "recording-\(NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.FullStyle, timeStyle: NSDateFormatterStyle.FullStyle)).m4a"
         println(currentFileName)

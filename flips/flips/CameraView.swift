@@ -588,9 +588,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         
         CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
         
-        var format = NSDateFormatter()
-        format.dateFormat="yyyy-MM-dd"
-        
         // TODO - which name should we use?
         var currentFileName = "recording-\(NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.FullStyle, timeStyle: NSDateFormatterStyle.FullStyle)).mov"
         println("Recording video at: \(currentFileName)")
