@@ -50,17 +50,26 @@ public class ContactListHelper {
     }
     
     private func retrieveContacts() -> Array<ContactListHelper.Contact> {
-        let people = self.addressBook.people() as Array<RHPerson>
         var contacts = Array<ContactListHelper.Contact>()
-        for person in people {
-            let phones: RHMultiStringValue = person.phoneNumbers
-            for (var i:UInt = 0; i < phones.count(); i++) {
-                if (person.firstName != nil && countElements(person.firstName) > 0) {
-                    var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
-                    let phoneNumber: String! = phones.valueAtIndex(i) as String
-                    let phoneType = ABAddressBookCopyLocalizedLabel(phones.labelAtIndex(i)).takeRetainedValue() as NSString
-                    PersistentManager.sharedInstance.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
-                    contacts.append(contact)
+        
+        if let loggedUser = User.loggedUser() {
+            let people = self.addressBook.people() as Array<RHPerson>
+            for person in people {
+                let phones: RHMultiStringValue = person.phoneNumbers
+                for (var i:UInt = 0; i < phones.count(); i++) {
+                    if (person.firstName != nil && countElements(person.firstName) > 0) {
+                        var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
+                        let phoneNumber: String! = phones.valueAtIndex(i) as String
+                        
+                        let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
+                        let cleanedLoggedUserPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber)
+
+                        if (cleanedPhoneNumber != cleanedLoggedUserPhoneNumber) {
+                            let phoneType = ABAddressBookCopyLocalizedLabel(phones.labelAtIndex(i)).takeRetainedValue() as NSString
+                            PersistentManager.sharedInstance.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+                            contacts.append(contact)
+                        }
+                    }
                 }
             }
         }

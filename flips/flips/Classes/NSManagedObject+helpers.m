@@ -45,10 +45,10 @@
 	return controller;
 }
 
-+ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors {
++ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm {
     NSManagedObjectContext *context = [NSManagedObjectContext MR_defaultContext];
     NSFetchRequest *request = [self requestAllSortedBy:sortDescriptors
-                                         withPredicate:nil
+                                         withPredicate:searchTerm
                                              inContext:context];
     
     return [self MR_executeFetchRequest:request inContext:context];
