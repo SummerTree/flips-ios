@@ -29,7 +29,7 @@ Scenario: Informing a wrong number
   Then I should see "Verification Code" screen
   And I shouldn't receive the message
 
-@7173 @test
+@7173
 Scenario: Informing a right number
   Given I am on the "Phone Number" screen
   When I type a valid phone number

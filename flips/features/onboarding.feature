@@ -3,12 +3,43 @@ Feature: Onboarding screen
   I want to know how to use this app
   So, I can see the onboarding information
 
+@Flips-199
+Scenario: Creating a new user
+  Given I don't have a Flips account
+  And I'm registering my user on "Sign Up" screen
+  And I fill all fields with valid values
+  And I go to "Verification Code" screen
+  When I fill with a valid verification code
+  Then I should see "Inbox" screen
+  And I should see "Flip Boys" message
+
+@Flips-199
+Scenario: Changing Flip Boys message and registering a new user
+  Given I changed the pictures and text of "Flip Boys" message
+  When I register a new user
+  Then I should see this new message on my "Inbox" screen
+
+@Flips-199
+Scenario: Changing Flip Boys message when I already have a user registered
+  Given I have a user already registered
+  When I change the flip boys message
+  Then I shouldn't receive this new message
+  And I should keep seeing the old "Flip Boys" message on the "Inbox" screen
+
+@Flips-199
+Scenario: Changing Flip Boys message and do Logout/Login
+  Given I am logged in on the app
+  When the welcome message is changed on the server
+  And I do logout and login again
+  Then I shouldn't receive this new message
+  And I should keep seeing the old "Flip Boys" message on the "Inbox" screen
+
 #onboarding
 Scenario: Showing a message on FlipBoys conversation
   Given I am on the "Microphone" screen
   When The selected message is FlipBoys
   Then I should see a message: "You can add audio to any photo. Give it a try. Tap & Hold to record audio"
-  
+
 #onboarding
 Scenario: Showing a message on any conversation
   Given I am on the "Microphone" screen
