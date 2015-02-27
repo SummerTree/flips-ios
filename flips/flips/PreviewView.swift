@@ -19,7 +19,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     private let LOW_RES_VIDEO_MARGIN: CGFloat = 15.0
     private let SEND_BUTTON_SUBVIEWS_CENTER_MARGIN: CGFloat = 10.0
 
-    var delegate: PreviewViewDelegate?
+    weak var delegate: PreviewViewDelegate?
 
     private var videoPlayerView: PlayerView!
     private var sendContainerView: UIView!
@@ -160,7 +160,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
 }
 
-protocol PreviewViewDelegate {
+protocol PreviewViewDelegate: class {
     func previewViewDidTapBackButton(previewView: PreviewView!)
     func previewButtonDidTapSendButton(previewView: PreviewView!)
     func previewViewMakeConstraintToNavigationBarBottom(container: UIView!)
