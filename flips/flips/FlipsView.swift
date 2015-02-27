@@ -34,8 +34,8 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     var flipText : FlipText!
     
-    var delegate: FlipsViewDelegate?
-    var dataSource: FlipsViewDataSource?
+    weak var delegate: FlipsViewDelegate?
+    weak var dataSource: FlipsViewDataSource?
     
     override init() {
         super.init(frame: CGRect.zeroRect)
@@ -228,14 +228,14 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
 
 // MARK: - View Delegate
 
-protocol FlipsViewDelegate {
+protocol FlipsViewDelegate: class {
     
     func flipsViewDidTapAddFlip(flipsView: FlipsView!)
     func flipsView(flipsView: FlipsView!, didTapAtIndex index: Int, fromStockFlips isStockFlip: Bool)
     
 }
 
-protocol FlipsViewDataSource {
+protocol FlipsViewDataSource: class {
     
     func flipsViewNumberOfFlips() -> Int
     func flipsView(flipsView: FlipsView, flipIdAtIndex index: Int) -> String
