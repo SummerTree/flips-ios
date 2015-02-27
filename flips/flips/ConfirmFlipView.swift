@@ -133,6 +133,7 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
     func showActivityIndicator() {
         self.userInteractionEnabled = false
+        self.acceptButton.userInteractionEnabled = false
         self.activityIndicator.startAnimating()
         UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
             self.activityIndicator.alpha = 0.8
@@ -146,9 +147,9 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
             self.activityIndicator.alpha = 0
             }, completion: { (finished) -> Void in
                 self.activityIndicator.stopAnimating()
+                self.acceptButton.userInteractionEnabled = true
         })
     }
-
 }
 
 protocol ConfirmFlipViewDelegate {
