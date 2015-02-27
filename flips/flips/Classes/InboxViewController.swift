@@ -35,8 +35,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             showOnboarding = true
         }
 
-//        inboxView = InboxView(showOnboarding: showOnboarding) // TODO: remove line below and uncoment this. I don't wanna block anyone when I merge it to master.
-        inboxView = InboxView(showOnboarding: false)
+        inboxView = InboxView(showOnboarding: false) // Onboarding is disabled for now.
         inboxView.delegate = self
         inboxView.dataSource = self
         self.view = inboxView
@@ -178,8 +177,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipID) {
             if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-                println("Download failed for flip: \(flip.flipID)")
-                // TODO: show download fail state
+                println("Thumbnail download failed for flip: \(flip.flipID)")
             } else {
                 self.refreshRooms()
             }

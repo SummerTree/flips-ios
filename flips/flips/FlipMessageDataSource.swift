@@ -43,11 +43,6 @@ class FlipMessageDataSource : BaseDataSource {
         return entity
     }
 
-
-    // TODO: Handle this message format that means: "You is invited to this new awesome room! Yay!"
-    // {type : 1, content: {room_id : <ROOM_ID>, room_pubnubid : <PUBNUB_ID>}}
-
-
     private func isValidFlipMessage(json: JSON) -> Bool {
         if (json[FlipMessageJsonParams.FROM_USER_ID] == nil) {
             return false

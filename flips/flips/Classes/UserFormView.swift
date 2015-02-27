@@ -228,9 +228,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             passwordTextField.becomeFirstResponder()
         } else if (textField == self.passwordTextField) {
             birthdayTextField.becomeFirstResponder()
-        } else if (textField == self.birthdayTextField) {
-            // TODO:
-        }
+        } 
         
         return true
     }

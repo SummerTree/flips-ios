@@ -588,9 +588,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         
         CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
         
-        // TODO - which name should we use?
-        var currentFileName = "recording-\(NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.FullStyle, timeStyle: NSDateFormatterStyle.FullStyle)).mov"
-        println("Recording video at: \(currentFileName)")
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
+        let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).mov"
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         var docsDir: AnyObject = dirPaths[0]
