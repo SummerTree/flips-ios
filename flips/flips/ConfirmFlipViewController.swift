@@ -28,16 +28,11 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.init()
         self.flipWord = flipWord
         self.confirmFlipView = ConfirmFlipView()
-
+        
         var videoComposer = VideoComposer()
         videoComposer.flipVideoFromImage(flipPicture, andAudioURL:flipAudio, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.flipVideoURL = flipVideoURL
-                self.flipThumbnailURL = thumbnailURL
-                self.confirmFlipView.setupPlayerWithWord(flipWord, videoURL: flipVideoURL)
-            })
+            self.onVideoCreated(flipVideoURL, thumbnailURL: thumbnailURL)
         })
-        
     }
     
     convenience init(flipWord: String!, flipVideo: NSURL?) {
@@ -47,11 +42,16 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
 
         var videoComposer = VideoComposer()
         videoComposer.flipVideoFromVideo(flipVideo, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.flipVideoURL = flipVideoURL
-                self.flipThumbnailURL = thumbnailURL
-                self.confirmFlipView.setupPlayerWithWord(flipWord, videoURL: flipVideoURL)
-            })
+            self.onVideoCreated(flipVideoURL, thumbnailURL: thumbnailURL)
+        })
+    }
+    
+    private func onVideoCreated(flipVideoURL: NSURL, thumbnailURL: NSURL) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.confirmFlipView.hideActivityIndicator()
+            self.flipVideoURL = flipVideoURL
+            self.flipThumbnailURL = thumbnailURL
+            self.confirmFlipView.setupPlayerWithWord(self.flipWord, videoURL: flipVideoURL)
         })
     }
     
@@ -81,6 +81,10 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        if (self.flipVideoURL == nil) {
+            self.confirmFlipView.showActivityIndicator()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -104,6 +108,12 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!) {
+        if (flipVideoURL == nil || flipThumbnailURL == nil) {
+            let alertView = UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+            return
+        }
+        
         self.confirmFlipView.showActivityIndicator()
 
         var createFlipSuccessBlock : CreateFlipSuccessCompletion = { (flip) -> Void in

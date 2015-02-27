@@ -120,18 +120,31 @@ class UserDataSource : BaseDataSource {
     }
     
     func getUserById(id: String) -> User? {
-        return User.findFirstByAttribute(UserAttributes.USER_ID, withValue: id) as? User
+        return User.findFirstByAttribute(UserAttributes.USER_ID, withValue: id, inContext: currentContext) as? User
     }
     
     func downloadMyFlips(myFlips: [Flip]) {
         let userService = UserService()
         
-        self.flipsDownloadCount.value = countElements(myFlips)
         self.flipsDownloadCounter.value = 1
-        
+        self.flipsDownloadCount.value = 0
+
         for myFlip in myFlips {
             let flip = myFlip.inContext(currentContext) as Flip
-            
+            if (flip.thumbnailURL != nil && flip.thumbnailURL != "") {
+                self.flipsDownloadCount.value++
+            }
+        }
+
+        // Nothing to download
+        if (self.flipsDownloadCount.value == 0) {
+            self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
+            return
+        }
+
+        for myFlip in myFlips {
+            let flip = myFlip.inContext(currentContext) as Flip
+
             let callback: () -> Void = {
                 if (self.isDownloadingFlips) {
                     NSLog("Downloaded flips: \(self.flipsDownloadCounter.value) of \(self.flipsDownloadCount.value)")

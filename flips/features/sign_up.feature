@@ -3,7 +3,7 @@ Feature: Register a user
   I want to register access Flips
   So I have to register a user
 
-@7170 @Flips-2 @ok-583
+@7170 @Flips-2 @ok-583 @manual
 Scenario: Access Register screen
   Given I am on the "Login" screen
   When I touch "Sign Up" button
@@ -16,7 +16,7 @@ Scenario: Access Register screen
 Scenario Outline: Fill only one field
   Given I am on the "Sign Up" screen
   When I fill "<field>" field with the value "<value>"
-  Then The button "Forward" should be disable
+  Then I should see "Forward" button disabled
   Examples:
   | field      | value          |
   | First Name | First          |
@@ -37,42 +37,59 @@ Scenario: Fill all fields with valid values and select a photo
   And I touch "Forward" button
   Then I should see "Phone Number" screen
 
-@7170 @Flips-2 @9990 @ok-583
+@7170 @Flips-2 @9990 @ok-583 @automated
 Scenario: Fill all fields and don't select a photo
   Given I am on the "Sign Up" screen
-  When I fill field "First Name" with the value "First"
-  And I fill field "Last Name" with the value "Last"
-  And I fill field "Email" with the value "flip@gmail.com"
-  And I fill field "Password" with the value "Passwor8"
-  And I fill field "Birthday" with the value "<birthday>"
+  When I fill "First Name" field with the value "First"
+  And I fill "Last Name" field with the value "Last"
+  And I fill "Email" field with the value "flip@gmail.com"
+  And I fill "Password" field with the value "Passwor8"
+  And I fill "Birthday" field with the value "02021980"
   And I do not choose a photo
   And I touch "Forward" button
-  Then I should see a message: "Looks like your photo is missing!"
+  Then I should see a message "Looks like your photo is missing!"
 
-@7170 @Flips-2 @ok-583
+@7170 @Flips-2 @9990 @ok-583 @automated
 Scenario Outline: Fill with invalid values
   Given I am on the "Sign Up" screen
-  When I fill the field "First Name" with "First"
-  And I fill the field "Last Name" with "Last"
-  And I fill the field "Email" with "<email>"
-  And I fill the field "Password" with "<password>"
-  And I fill the field "Birthday" with "<birthday>"
+  When I fill "First Name" field with the value "First"
+  And I fill "Last Name" field with the value "Last"
+  And I fill "Email" field with the value "<email>"
+  And I fill "Password" field with the value "<password>"
+  And I fill "Birthday" field with the value "<birthday>"
   And I exit the field
-  Then I should see an exclamation mark to the right of the field with the invalid value
-  And I should see a red error panel sliding down from top of screen with a message: "<message>"
-  And The "Forward" button should keep disable
-  | email           | password | birthday         | message                                                     |
-  | flips.com       | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com              |
-  | flips@gmail     | Passwor8 | 12/01/1987       | Your email should look like this flip@mail.com              |
-  | flips@gmail.com | passwor8 | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |
-  | flips@gmail.com | Password | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |
-  | flips@gmail.com | 12345678 | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |
-  | flips@gmail.com | Passwo8  | 12/01/1987       | Your password should be 8+ Characters, Mixed Case, 1 Number |                           |
-  | flips@gmail.com | Passwor8 | today + 1d       | You must be at least 13 years old                           |
-  | flips@gmail.com | Passwor8 | today-13years+1d | You must be at least 13 years old                           |
-  | flips@gmail.com | Passwor8 | today            | You must be at least 13 years old                           |
+  Then I should see a message "<message>"
+  Examples:
+  | email           | password | birthday            | message                                                     |
+  | flips.com       | Passwor8 | 12011987            | Your email should look like this flip@mail.com              |
+  | flips@gmail     | Passwor8 | 12011987            | Your email should look like this flip@mail.com              |
+  | flips@gmail.com | passwor8 | 12011987            | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | flips@gmail.com | Password | 12011987            | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | flips@gmail.com | 12345678 | 12011987            | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | flips@gmail.com | Passwo8  | 12011987            | Your password should be 8+ Characters, Mixed Case, 1 Number |
+  | flips@gmail.com | Passwor8 | birthday tomorrow   | You must be at least 13 years old                           |
+  | flips@gmail.com | Passwor8 | today               | You must be at least 13 years old                           |
 
-@7170 @Flips-2 @ok-583
+@7170 @Flips-2 @manual
+Scenario Outline: Checking layout of the error and warning messages
+  Given I am on the "Sign Up" screen
+  When I am seeing message "<message>"
+  Then I should see an exclamation mark to the right of the "<field>" with the invalid value
+  And These messages should be in a red error panel that should slide down from top of screen
+  Examples:
+  | message                                                     | field    |
+  | Your email should look like this flip@mail.com              | Email    |
+  | Your password should be 8+ Characters, Mixed Case, 1 Number | Password |
+  | You must be at least 13 years old                           | Birthday |
+
+@7170 @Flips-2 @manual
+Scenario: Checking layout message when the user doesn't pick a photo
+  Given I am on the "Sign Up" screen
+  When I am seeing message "Looks like your photo is missing!"
+  Then I shouldn't see an exclamation mark to the right of the avatar field
+  And This message should be in a red error panel that should slide down from top of screen
+
+@7170 @Flips-2 @ok-583 @manual
 Scenario: Fixing wrong values
   Given I am on the "Sign Up" screen
   And I typed a wrong value on "<field>"
@@ -84,7 +101,7 @@ Scenario: Fixing wrong values
   | Password |
   | Birthday |
 
-@7170 @Flips-2 @ok-583
+@7170 @Flips-2 @ok-583 @manual
 Scenario: Swiping up warning messages panel
   Given I am on the "Sign Up" screen
   And I filled invalid values on the fields
@@ -92,11 +109,12 @@ Scenario: Swiping up warning messages panel
   Then I shouldn't see the panel
   And I should see "Forward" button disabled
 
-@7170 @Flips-2 @ok-583
-Scenario: Showing Alpha keyboard
+@7170 @Flips-2 @ok-583 @test
+Scenario Outline: Showing Alpha keyboard
   Given I am on the "Sign Up" screen
   When I touch "<field>" field
   Then I should see "Alpha" keyboard
+  Examples:
   | field      |
   | First Name |
   | Last Name  |
@@ -108,12 +126,19 @@ Scenario: Showing Email keyboard
   When I touch "Email" field
   Then I should see "Email" keyboard
 
-@7170 @Flips-2 @ok-583
-Scenario: Birthday value when there is no value
+@7170 @Flips-2 @ok-583 @automated
+Scenario Outline: Birthday value when there is no value
   Given I am on the "Sign Up" screen
-  When There is no value on the "Birthday" field
-  And The cursor is not in the "Birthday" field
-  Then I should see the text: "Birthday"
+  When There is no value in any field
+  And The cursor is in any field too
+  Then I should see "<field>" field with the value "<value>"
+  Examples:
+  | field      | value      |
+  | First Name | First Name |
+  | Last Name  | Last Name  |
+  | Email      | Email      |
+  | Password   | Password   |
+  | Birthday   | Birthday   |
 
 @Flips-2
 Scenario: Touching Birthday field
@@ -312,7 +337,7 @@ Scenario: Touching Ok on the warning message about the phone number already bein
   When I touch "Ok" on the message
   Then I should remain on the "Phone Number" screen
 
-@7170 @Flips-2 @9580 @9990
+@7170 @Flips-2 @9580 @9990 @manual
 Scenario: Verifying design
   Given I am on the "Sign Up" screen
   Then I should see the icons and messages exactly like the prototype
