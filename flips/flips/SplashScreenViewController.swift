@@ -15,11 +15,15 @@ import Foundation
 private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
 private let RETRY = NSLocalizedString("Retry", comment: "Retry")
 
+let LOGOUT_NOTIFICATION_NAME: String = "logout_notification"
+let LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY: String = "logout_notification_facebook_user"
+let LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY: String = "logout_notification_first_name"
 
 class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
     
     let splashScreenView = SplashScreenView()
-    
+    var loginMode: LoginViewController.LoginMode = LoginViewController.LoginMode.ORDINARY_LOGIN
+    var userFirstName: String? = nil
     
     // MARK: - View Lifecycle
     
@@ -47,8 +51,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         splashScreenView.delegate = self
         
         self.view = splashScreenView
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "logoutNotificationReceived:", name: LOGOUT_NOTIFICATION_NAME, object: nil)
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: LOGOUT_NOTIFICATION_NAME, object: nil)
+    }
     
     // MARK: SplashScreenViewDelegate methods
     
@@ -99,6 +108,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         }
     }
     
+    func logoutNotificationReceived(notification: NSNotification) {
+        let userInfo: Dictionary = notification.userInfo!
+        let facebookUserLoggedOut = userInfo[LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY] as Bool
+        loginMode = facebookUserLoggedOut ? .LOGIN_AGAIN_WITH_FACEBOOK : .ORDINARY_LOGIN
+        userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as String) : nil
+    }
+    
     
     // MARK: - UIAlertViewDelegate
     
@@ -113,7 +129,8 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     }
     
     private func openLoginViewController() {
-        var loginViewController = LoginViewController()
+        let loginViewController = LoginViewController()
+        loginViewController.setLoginViewMode(loginMode, userFirstName: userFirstName)
         self.navigationController?.pushViewController(loginViewController, animated: false)
     }
     

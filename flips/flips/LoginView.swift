@@ -43,6 +43,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private let SEPARATOR_HEIGHT: CGFloat = 0.5
     private let SIGNUP_MARGIN_BOTTOM: CGFloat = 15.0
     private let TERMS_OF_USE_HEIGHT: CGFloat = 20.0
+    private let DEFAULT_IF_FACEBOOK_USER_LABEL_TEXT = "If you're <first name>:"
     
     private var logoView: UIView!
     private var bubbleChatImageView: UIImageView!
@@ -73,7 +74,14 @@ class LoginView : UIView, UITextFieldDelegate {
     private var spaceBetweenSignUpAndAcceptance: UIView!
     private var spaceBetweenEmailFieldAndSeparator: UIView!
     private var spaceBetweenPasswordFieldAndSeparator: UIView!
- 
+    
+    private var facebookLoggedOutView: UIView!
+    private var ifYoureLabel: UILabel!
+    private var facebookLoginAgainButton: UIButton!
+    private var notYouButton: UIButton!
+    private var spaceBetweenIfYoureAndFacebook: UIView!
+    private var spaceBetweenFacebookAndNotYou: UIView!
+
     private var isInformedWrongPassword: Bool = false
     
     private var animator: UIDynamicAnimator!
@@ -308,6 +316,40 @@ class LoginView : UIView, UITextFieldDelegate {
         forgotPasswordButton.setImage(forgotPasswordImage, forState: UIControlState.Highlighted)
         forgotPasswordButton.setTitle(LocalizedString.FORGOT_PASSWORD, forState: UIControlState.Normal)
         self.addSubview(forgotPasswordButton)
+        
+        facebookLoggedOutView = UIView()
+        self.addSubview(facebookLoggedOutView)
+        facebookLoggedOutView.hidden = true
+        
+        ifYoureLabel = UILabel()
+        ifYoureLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        ifYoureLabel.text = DEFAULT_IF_FACEBOOK_USER_LABEL_TEXT
+        ifYoureLabel.textColor = UIColor.whiteColor()
+        facebookLoggedOutView.addSubview(ifYoureLabel)
+        
+        spaceBetweenIfYoureAndFacebook = UIView()
+        facebookLoggedOutView.addSubview(spaceBetweenIfYoureAndFacebook)
+        
+        facebookLoginAgainButton = UIButton()
+        facebookLoginAgainButton.addTarget(self, action: "facebookSignInTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        facebookLoginAgainButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
+        facebookLoginAgainButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        facebookLoginAgainButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
+        facebookLoginAgainButton.setBackgroundImage(UIImage(named: "FacebookButtonBackground"), forState: UIControlState.Normal)
+        facebookLoginAgainButton.setBackgroundImage(UIImage(named: "FacebookButtonBackgroundTap"), forState: UIControlState.Highlighted)
+        facebookLoginAgainButton.setImage(facebookLogoImage, forState: UIControlState.Normal)
+        facebookLoginAgainButton.setImage(facebookLogoImage, forState: UIControlState.Highlighted)
+        facebookLoginAgainButton.setTitle(NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), forState: UIControlState.Normal)
+        facebookLoggedOutView.addSubview(facebookLoginAgainButton)
+        
+        spaceBetweenFacebookAndNotYou = UIView()
+        facebookLoggedOutView.addSubview(spaceBetweenFacebookAndNotYou)
+        
+        notYouButton = UIButton()
+        notYouButton.addTarget(self, action: "notYouButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        notYouButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        notYouButton.setTitle(NSLocalizedString("Not you?", comment: "Not you?"), forState: UIControlState.Normal)
+        facebookLoggedOutView.addSubview(notYouButton)
     }
     
     func updateBubbleChatConstraints() {
@@ -489,9 +531,55 @@ class LoginView : UIView, UITextFieldDelegate {
             make.centerX.equalTo()(self.signupButton)
         }
         
+        facebookLoggedOutView.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.bubbleChatImageView)
+            make.right.equalTo()(self.bubbleChatImageView)
+            make.top.equalTo()(self.spaceBetweenFlipsAndCredentials.mas_bottom)
+        }
+        
+        ifYoureLabel.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.facebookLoggedOutView)
+            make.left.equalTo()(self.facebookLoggedOutView.mas_left)
+            make.bottom.equalTo()(self.spaceBetweenIfYoureAndFacebook.mas_top)
+        }
+        
+        spaceBetweenIfYoureAndFacebook.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.ifYoureLabel.mas_bottom)
+            make.height.greaterThanOrEqualTo()(self.MARGIN_BOTTOM)
+        }
+        
+        facebookLoginAgainButton.mas_makeConstraints { (make) -> Void in
+            make.centerX.equalTo()(self)
+            make.top.equalTo()(self.spaceBetweenIfYoureAndFacebook.mas_bottom)
+        }
+        
+        spaceBetweenFacebookAndNotYou.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.facebookLoginAgainButton.mas_bottom)
+            make.height.greaterThanOrEqualTo()(self.MARGIN_BOTTOM)
+        }
+        
+        notYouButton.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.spaceBetweenFacebookAndNotYou.mas_bottom)
+            make.centerX.equalTo()(self)
+            make.bottom.equalTo()(self.facebookLoggedOutView)
+        }
+        
         super.updateConstraints()
     }
     
+    func setLoginMode(loginMode: LoginViewController.LoginMode, firstName: String? = nil) {
+        if (loginMode == LoginViewController.LoginMode.ORDINARY_LOGIN) {
+            facebookLoggedOutView.hidden = true
+            credentialsView.hidden = false
+            facebookButton.hidden = false
+        } else if (loginMode == LoginViewController.LoginMode.LOGIN_AGAIN_WITH_FACEBOOK) {
+            ifYoureLabel.text = DEFAULT_IF_FACEBOOK_USER_LABEL_TEXT.stringByReplacingOccurrencesOfString("<first name>", withString: firstName!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            facebookLoggedOutView.hidden = false
+            credentialsView.hidden = true
+            facebookButton.hidden = true
+        }
+    }
+
     
     // MARK: - Buttons delegate
     
@@ -526,6 +614,9 @@ class LoginView : UIView, UITextFieldDelegate {
         self.delegate?.loginViewDidTapSignUpButton(self)
     }
     
+    func notYouButtonTapped(sender: AnyObject?) {
+        self.setLoginMode(LoginViewController.LoginMode.ORDINARY_LOGIN)
+    }
     
     // MARK: - Keyboard control
     

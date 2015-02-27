@@ -18,11 +18,19 @@ let NO_USER_IN_SESSION_MESSAGE = NSLocalizedString("Please try again or contact 
 
 class LoginViewController: FlipsViewController, LoginViewDelegate {
     
+    internal enum LoginMode {
+        case ORDINARY_LOGIN
+        case LOGIN_AGAIN_WITH_FACEBOOK
+    }
+    
     var loginView: LoginView!
+    var loginMode: LoginMode = .ORDINARY_LOGIN
+    var userFirstName: String? = nil
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         loginView.viewWillAppear()
+        loginView.setLoginMode(loginMode, firstName: userFirstName)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -142,6 +150,11 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                     }
                 }
         })
+    }
+    
+    func setLoginViewMode(loginMode: LoginMode, userFirstName: String?) {
+        self.loginMode = loginMode
+        self.userFirstName = userFirstName
     }
     
     // MARK: - Private methods
