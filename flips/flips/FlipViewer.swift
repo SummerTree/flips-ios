@@ -125,7 +125,7 @@ class FlipViewer: UIView {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerLoadStateChanged:", name: MPMoviePlayerLoadStateDidChangeNotification, object: flipMoviePlayer)
     }
     
-    func removeOberservers() {
+    func removeObservers() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: flipMoviePlayer)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerLoadStateDidChangeNotification, object: flipMoviePlayer)
     }

@@ -107,7 +107,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     }
     
     func viewWillDisappear() {
-        self.flipViewer.removeOberservers()
+        self.flipViewer.removeObservers()
         self.cameraPreview.removeObservers()
     }
     
