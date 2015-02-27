@@ -31,7 +31,7 @@ class FlipViewer: UIView {
     
     private var isShowingVideo: Bool = false
     
-    var delegate: FlipViewerDelegate?
+    weak var delegate: FlipViewerDelegate?
     
     // MARK: - Initialization Methods
     
@@ -125,7 +125,7 @@ class FlipViewer: UIView {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "moviePlayerLoadStateChanged:", name: MPMoviePlayerLoadStateDidChangeNotification, object: flipMoviePlayer)
     }
     
-    func removeOberservers() {
+    func removeObservers() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: flipMoviePlayer)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerLoadStateDidChangeNotification, object: flipMoviePlayer)
     }
@@ -207,7 +207,7 @@ class FlipViewer: UIView {
     }
 }
 
-protocol FlipViewerDelegate {
+protocol FlipViewerDelegate: class {
     
     func flipViewerStartedPlayingContent()
     

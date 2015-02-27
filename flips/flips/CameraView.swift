@@ -52,7 +52,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     private var isMicrophoneAvailable: Bool
     private var showingFrontCamera: Bool
     
-    var delegate: CameraViewDelegate?
+    weak var delegate: CameraViewDelegate?
     
     // Session Management
     var sessionQueue: dispatch_queue_t!
