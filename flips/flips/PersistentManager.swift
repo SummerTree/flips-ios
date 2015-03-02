@@ -250,16 +250,24 @@ public class PersistentManager: NSObject {
         
         if (!isLoggedUser) {
             let contactDataSource = ContactDataSource()
-            
-            let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
-            let authenticatedId = User.loggedUser()?.userID
-            
-            var userContact: Contact?
             var userInContext = user!.inThreadContext() as User
-            if (authenticatedId != userInContext.userID) {
-                var facebookID = user!.facebookID
-                var phonetype = (facebookID != nil) ? facebookID : ""
-                userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
+            
+            let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
+            
+            if (contactsWithSamePhoneNumber.count > 0) {
+                self.associateUser(userInContext, withContacts: contactsWithSamePhoneNumber)
+            } else {
+                if (!userInContext.isTemporary.boolValue) { // Do not create a contact for temporary users.
+                    if let authenticatedId = User.loggedUser()?.userID {
+                        var userContact: Contact?
+                        
+                        if (authenticatedId != userInContext.userID) {
+                            var facebookID = user!.facebookID
+                            var phonetype = (facebookID != nil) ? facebookID : ""
+                            userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
+                        }
+                    }
+                }
             }
         }
         
@@ -280,6 +288,17 @@ public class PersistentManager: NSObject {
             userInContext.me = true
             AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
+    }
+    
+    private func associateUser(user: User, withContacts contacts:[Contact]) {
+        MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+            let userInContext: User = user.inContext(context) as User
+            for contact in contacts {
+                let contactInContext = contact.inContext(context) as Contact
+                userInContext.addContactsObject(contactInContext)
+                contactInContext.contactUser = userInContext
+            }
+        })
     }
     
     func syncUserData(callback:(Bool, FlipError?, UserDataSource) -> Void) {
