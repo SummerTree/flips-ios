@@ -14,17 +14,50 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     
     private var statusBarHidden = false
     private var signUpView: SignUpView!
-    private var avatar: UIImage!    
+    private var avatar: UIImage!
+    private var facebookInput: JSON? = nil
+    
+    init(facebookInput: JSON? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        self.facebookInput = facebookInput
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Overriden Methods
     
     override func loadView() {
         super.loadView()
+        
         signUpView = SignUpView()
         signUpView.delegate = self
         self.view = signUpView
         
         signUpView.loadView()
+        
+        if (facebookInput != nil) {
+            signUpView.setUserData(facebookInput!)
+            
+            let isSilhouette = facebookInput!["picture"]["data"]["is_silhouette"]
+            var userHasPicture = true
+            if (isSilhouette != nil) {
+                userHasPicture = !isSilhouette.boolValue
+            }
+            
+            if (userHasPicture) {
+                let profilePicture = facebookInput!["picture"]["data"]["url"].stringValue
+                signUpView.setUserPictureURL(NSURL(string: profilePicture)!) {
+                    (image) -> Void in
+                    self.avatar = image
+                }
+            }
+            
+            signUpView.setPasswordFieldVisible(false)
+        } else {
+            signUpView.setPasswordFieldVisible(true)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -55,8 +88,16 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         if (self.avatar == nil) {
             self.signUpView.showMissingPictureMessage()
         } else {
+            var actualPassword = password
+            var facebookId: String? = nil
+            if (self.facebookInput != nil) {
+                facebookId = self.facebookInput!["id"].stringValue
+                actualPassword = "f\(NSUUID().UUIDString)"
+            }
+            
             self.signUpView.hideMissingPictureMessage()
-            var phoneNumberViewController = PhoneNumberViewController(username: email, password: password, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName)
+            
+            var phoneNumberViewController = PhoneNumberViewController(username: email, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName, facebookId: facebookId)
             
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }

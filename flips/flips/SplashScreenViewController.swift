@@ -15,11 +15,15 @@ import Foundation
 private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error")
 private let RETRY = NSLocalizedString("Retry", comment: "Retry")
 
+let LOGOUT_NOTIFICATION_NAME: String = "logout_notification"
+let LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY: String = "logout_notification_facebook_user"
+let LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY: String = "logout_notification_first_name"
 
 class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
     
     let splashScreenView = SplashScreenView()
-    
+    var loginMode: LoginViewController.LoginMode = LoginViewController.LoginMode.ORDINARY_LOGIN
+    var userFirstName: String? = nil
     
     // MARK: - View Lifecycle
     
@@ -47,8 +51,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         splashScreenView.delegate = self
         
         self.view = splashScreenView
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "logoutNotificationReceived:", name: LOGOUT_NOTIFICATION_NAME, object: nil)
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: LOGOUT_NOTIFICATION_NAME, object: nil)
+    }
     
     // MARK: SplashScreenViewDelegate methods
     
@@ -60,41 +69,30 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         activityIndicator.startAnimating()
         self.view.addSubview(activityIndicator)
         
-        var success = FBSession.openActiveSessionWithAllowLoginUI(false)
-        println("User is already authenticated with Facebook? \(success)")
-        if (success) {
-            UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken, success: { (user) -> Void in
+        UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
+            success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.onLogin(user as User)
                 
-                PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         activityIndicator.stopAnimating()
-                        
                         if let authenticatedUser = User.loggedUser() {
-                            if (self.userHasDevice(authenticatedUser)) {
-                                self.openInboxViewController(userDataSource)
-                            } else {
+                            if (!self.userHasDevice(authenticatedUser)) {
                                 self.openPhoneNumberController(authenticatedUser.userID)
+                            } else {
+                                self.openInboxViewController(userDataSource)
                             }
+                        } else {
+                            var alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                            alertView.show()
                         }
                     })
                 })
-            }, failure: { (flipError) -> Void in
-                FBSession.activeSession().closeAndClearTokenInformation()
-                FBSession.activeSession().close()
-                FBSession.setActiveSession(nil)
-                
-                if (flipError != nil) {
-                    println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        var alertView = UIAlertView(title: LOGIN_ERROR, message: "Error: \(flipError!.error!)\nDetail: \(flipError!.details!)", delegate: self, cancelButtonTitle: "Retry")
-                        alertView.show()
-                    })
-                }
-                
-                activityIndicator.stopAnimating()
-            })
-        }
+            },
+            failure: { (flipError) -> Void in
+                println("Error signing in with Facebook: \(flipError)")
+                self.openLoginViewController()
+        })
     }
     
     func splashScreenViewAttemptLogin() {
@@ -108,6 +106,13 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         } else {
             openLoginViewController()
         }
+    }
+    
+    func logoutNotificationReceived(notification: NSNotification) {
+        let userInfo: Dictionary = notification.userInfo!
+        let facebookUserLoggedOut = userInfo[LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY] as Bool
+        loginMode = facebookUserLoggedOut ? .LOGIN_AGAIN_WITH_FACEBOOK : .ORDINARY_LOGIN
+        userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as String) : nil
     }
     
     
@@ -124,7 +129,8 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     }
     
     private func openLoginViewController() {
-        var loginViewController = LoginViewController()
+        let loginViewController = LoginViewController()
+        loginViewController.setLoginViewMode(loginMode, userFirstName: userFirstName)
         self.navigationController?.pushViewController(loginViewController, animated: false)
     }
     

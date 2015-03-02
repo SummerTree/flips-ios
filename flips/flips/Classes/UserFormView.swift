@@ -146,7 +146,11 @@ class UserFormView : UIView, UITextFieldDelegate {
         }
         
         birthdayTextField.mas_updateConstraints { (update) -> Void in
-            update.top.equalTo()(self.passwordTextField.mas_bottom).with().offset()(self.SEPARATOR_SIZE)
+            if (!self.passwordTextField.hidden) {
+                update.top.equalTo()(self.passwordTextField.mas_bottom).with().offset()(self.SEPARATOR_SIZE)
+            } else {
+                update.top.equalTo()(self.emailTextField.mas_bottom).with().offset()(self.SEPARATOR_SIZE)
+            }
             update.trailing.equalTo()(self)
             update.leading.equalTo()(self)
             update.height.equalTo()(self.CELL_HEIGHT)
@@ -225,7 +229,11 @@ class UserFormView : UIView, UITextFieldDelegate {
         } else if (textField == lastNameTextField) {
             emailTextField.becomeFirstResponder()
         } else if (textField == self.emailTextField) {
-            passwordTextField.becomeFirstResponder()
+            if (!passwordTextField.hidden) {
+                passwordTextField.becomeFirstResponder()
+            } else {
+                birthdayTextField.becomeFirstResponder()
+            }
         } else if (textField == self.passwordTextField) {
             birthdayTextField.becomeFirstResponder()
         } 
@@ -297,7 +305,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         if (firstNameTextField.text.isEmpty ||
             lastNameTextField.text.isEmpty ||
             emailTextField.text.isEmpty ||
-            passwordTextField.text.isEmpty ||
+            (!passwordTextField.hidden && passwordTextField.text.isEmpty) ||
             birthdayTextField.text.isEmpty) {
                 allFieldsAreValid = false
         }
@@ -449,6 +457,18 @@ class UserFormView : UIView, UITextFieldDelegate {
 		
 		birthdayDatePicker.date = user.birthday
 		
+    }
+    
+    func setUserData(userData: JSON!) {
+        firstNameTextField.text = userData["first_name"].string
+        lastNameTextField.text = userData["last_name"].string
+        emailTextField.text = userData["email"].string
+        birthdayTextField.text = userData["birthday"].string
+    }
+    
+    func setPasswordFieldVisible(visible: Bool) {
+        passwordTextField.hidden = !visible
+        self.updateConstraints()
     }
     
     // MARK: - Getters
