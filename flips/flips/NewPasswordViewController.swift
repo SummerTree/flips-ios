@@ -42,15 +42,15 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         newPasswordView.viewDidAppear()
-}
+    }
     
     // MARK: - NewPasswordViewDelegate Methods
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
         UserService.sharedInstance.updatePassword(self.username, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
             success: { () -> Void in
                 println("updatePassword success")
-                var loginViewController = LoginViewController()
-                self.navigationController?.pushViewController(loginViewController, animated: true)
+                self.navigationController?.popToRootViewControllerAnimated(true)
+                self.dismissViewControllerAnimated(true, completion:nil)
             }) { (flipError) -> Void in
                 println(flipError!.error)
                 let alertView = UIAlertView(title: NSLocalizedString("Update Error"), message: flipError!.error, delegate: nil, cancelButtonTitle: LocalizedString.OK)

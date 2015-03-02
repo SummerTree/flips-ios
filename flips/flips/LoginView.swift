@@ -78,7 +78,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     private var animator: UIDynamicAnimator!
     
-    var delegate: LoginViewDelegate?
+    weak var delegate: LoginViewDelegate?
     
     override init() {
         super.init()
@@ -628,8 +628,7 @@ class LoginView : UIView, UITextFieldDelegate {
 
 // MARK: View Delegate
 
-protocol LoginViewDelegate {
-    
+protocol LoginViewDelegate: class {
     func loginViewDidTapTermsOfUse(loginView: LoginView!)
     func loginViewDidTapPrivacyPolicy(loginView: LoginView!)
     func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String)

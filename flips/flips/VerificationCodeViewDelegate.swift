@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-protocol VerificationCodeViewDelegate {
+protocol VerificationCodeViewDelegate: class {
     
     func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!)
     

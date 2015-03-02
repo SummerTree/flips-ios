@@ -38,8 +38,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var shouldPlayUnreadMessage: Bool = true
     private var keyboardHeight: CGFloat = 0.0
     
-    var delegate: ChatViewDelegate?
-    var dataSource : ChatViewDataSource?
+    weak var delegate: ChatViewDelegate?
+    weak var dataSource : ChatViewDataSource?
     
     private var showOnboarding = false
     private var bubbleView: BubbleView!
@@ -505,7 +505,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
 }
 
-protocol ChatViewDataSource {
+protocol ChatViewDataSource: class {
     
     func numberOfFlipMessages(chatView: ChatView) -> Int
     

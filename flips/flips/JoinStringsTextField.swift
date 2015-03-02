@@ -14,7 +14,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     var joinedTextRanges : [NSRange] = [NSRange]()
     
-    var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
+    weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
     override init() {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
