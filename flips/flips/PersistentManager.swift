@@ -255,7 +255,7 @@ public class PersistentManager: NSObject {
             let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
             
             if (contactsWithSamePhoneNumber.count > 0) {
-                self.asssociateUser(userInContext, withContacts: contactsWithSamePhoneNumber)
+                self.associateUser(userInContext, withContacts: contactsWithSamePhoneNumber)
             } else {
                 if (!userInContext.isTemporary.boolValue) { // Do not create a contact for temporary users.
                     if let authenticatedId = User.loggedUser()?.userID {
@@ -290,7 +290,7 @@ public class PersistentManager: NSObject {
         }
     }
     
-    private func asssociateUser(user: User, withContacts contacts:[Contact]) {
+    private func associateUser(user: User, withContacts contacts:[Contact]) {
         MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
             let userInContext: User = user.inContext(context) as User
             for contact in contacts {
