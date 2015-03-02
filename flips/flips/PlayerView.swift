@@ -80,16 +80,17 @@ class PlayerView: UIView {
             return
         }
 
-        // Video resources are not loaded for playback yet
-        if (self.progressBarView.progress < 1) {
-            self.loadFlipsResourcesForPlayback({ () -> Void in
-                self.play()
-            })
-        } else {
-            if (self.playerItems.count == 0) {
-                return
-            }
+        var isPlayerReady = false
 
+        // Single word
+        if ((self.flips == nil) && (self.playerItems.count > 0)) {
+            isPlayerReady = true
+
+        } else {
+            isPlayerReady = self.progressBarView.progress == 1
+        }
+
+        if (isPlayerReady) {
             self.preparePlayer { (player) -> Void in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
                 self.thumbnailView.hidden = true
@@ -103,6 +104,11 @@ class PlayerView: UIView {
                 player!.volume = 1.0
                 player!.play()
             }
+
+        } else {
+            self.loadFlipsResourcesForPlayback({ () -> Void in
+                self.play()
+            })
         }
     }
     
