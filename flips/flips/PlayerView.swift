@@ -18,7 +18,9 @@ class PlayerView: UIView {
     var loadPlayerOnInit = false
     var playInLoop = false
     var loadingFlips = false
+    var hasDownloadError = false
 
+    private var flips: Array<Flip>!
     private var words: Array<String>!
     private var playerItems: Array<FlipPlayerItem>!
     private var thumbnail: UIImage?
@@ -28,7 +30,9 @@ class PlayerView: UIView {
     private var wordLabel: UILabel!
     private var thumbnailView: UIImageView!
     private var playButtonView: UIImageView!
+    private var retryButtonView: UIImageView!
     private var activityIndicator: UIActivityIndicatorView!
+    private var progressBarView: UIProgressView!
 
     var delegate: PlayerViewDelegate?
 
@@ -75,21 +79,30 @@ class PlayerView: UIView {
         if (self.loadingFlips) {
             return
         }
-        
-        if (self.playerItems.count == 0) {
-            return
-        }
-        
-        self.preparePlayer { (player) -> Void in
-            ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-            self.thumbnailView.hidden = true
-            self.playButtonView.hidden = true
 
-            let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
-            self.setWord(self.words[playerItem.order])
-            self.isPlaying = true
-            player!.volume = 1.0
-            player!.play()
+        // Video resources are not loaded for playback yet
+        if (self.progressBarView.progress < 1) {
+            self.loadFlipsResourcesForPlayback({ () -> Void in
+                self.play()
+            })
+        } else {
+            if (self.playerItems.count == 0) {
+                return
+            }
+
+            self.preparePlayer { (player) -> Void in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
+                self.thumbnailView.hidden = true
+                self.playButtonView.hidden = true
+                self.retryButtonView.hidden = true
+                self.progressBarView.hidden = true
+
+                let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
+                self.setWord(self.words[playerItem.order])
+                self.isPlaying = true
+                player!.volume = 1.0
+                player!.play()
+            }
         }
     }
     
@@ -148,25 +161,21 @@ class PlayerView: UIView {
             self.play()
         }
     }
-    
-    func flipsLoaded() {
-        if (self.loadPlayerOnInit) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.preparePlayer { (player) -> Void in
-                    self.play()
-                }
-            })
-        }
-    }
 
-    func setupPlayerWithFlips(flips: Array<Flip>) {
+    private func loadFlipsResourcesForPlayback(completion: () -> Void) {
         self.loadingFlips = true
+        self.hasDownloadError = false
+
         self.playerItems = [FlipPlayerItem]()
         self.words = []
 
-        var pendingFlips = flips.count;
-        
-        for (index, flip) in enumerate(flips) {
+        var pendingFlips = self.flips.count
+
+        self.progressBarView.hidden = false
+        self.playButtonView.hidden = true
+        self.retryButtonView.hidden = true
+
+        for (index, flip) in enumerate(self.flips) {
             self.words.append(flip.word)
 
             if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
@@ -175,32 +184,76 @@ class PlayerView: UIView {
                 let playerItem = self.playerItemWithVideoAsset(videoAsset)
                 playerItem.order = index
                 self.playerItems.append(playerItem)
-                
-                if (--pendingFlips == 0) {
+
+                pendingFlips--
+
+                self.updateDownloadProgress(self.flips.count - pendingFlips, of:self.flips.count);
+
+                if (pendingFlips <= 0) {
                     self.loadingFlips = false
-                    self.flipsLoaded()
+                    self.sortPlayerItems()
+                    completion()
                 }
+
             } else {
                 FlipsCache.sharedInstance.videoForFlip(flip,
                     success: { (localPath: String!) in
+                        if (self.hasDownloadError) {
+                            return
+                        }
+
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
                             let playerItem = self.playerItemWithVideoAsset(videoAsset)
                             playerItem.order = index
                             self.playerItems.append(playerItem)
-                            
-                            if (--pendingFlips == 0) {
+
+                            pendingFlips--
+
+                            self.updateDownloadProgress(self.flips.count - pendingFlips, of:self.flips.count);
+
+                            if (pendingFlips <= 0) {
                                 self.loadingFlips = false
-                                self.flipsLoaded()
+                                self.sortPlayerItems()
+                                completion()
                             }
                         })
                     },
                     failure: { (error: FlipError) in
                         println("Failed to get resource from cache, error: \(error)")
-                    })
+                        self.showErrorState()
+                    }
+                )
             }
         }
-        
+    }
+
+    private func showErrorState() {
+        self.loadingFlips = false
+        self.hasDownloadError = true
+
+        self.playerItems.removeAll(keepCapacity: true)
+
+        self.progressBarView.hidden = true
+        self.progressBarView.progress = 0;
+
+        self.retryButtonView.hidden = false
+    }
+
+    private func sortPlayerItems() {
+        self.playerItems.sort { (itemOne: FlipPlayerItem, itemTwo: FlipPlayerItem) -> Bool in
+            return itemOne.order < itemTwo.order
+        }
+    }
+
+    private func updateDownloadProgress(progress: Int, of: Int) {
+        self.progressBarView.progress = Float(progress) / Float(of);
+    }
+
+    func setupPlayerWithFlips(flips: Array<Flip>) {
+        self.flips = flips
+        self.updateDownloadProgress(0, of:flips.count);
+
         let firstFlip = flips.first
         if (firstFlip != nil && firstFlip!.thumbnailURL != nil && !firstFlip!.thumbnailURL.isEmpty) {
             let response = ThumbnailsCache.sharedInstance.get(NSURL(string: firstFlip!.thumbnailURL)!,
@@ -211,6 +264,11 @@ class PlayerView: UIView {
                 },
                 failure: { (error: FlipError) in
                     println("Failed to get resource from cache, error: \(error)")
+            })
+        }
+
+        if (self.loadPlayerOnInit) {
+            self.loadFlipsResourcesForPlayback({ () -> Void in
             })
         }
     }
@@ -293,7 +351,7 @@ class PlayerView: UIView {
         return layer.player != nil
     }
 
-    private func preparePlayer(completion: ((player: AVQueuePlayer?)  -> Void)) {
+    private func preparePlayer(completion: ((player: AVQueuePlayer?) -> Void)) {
         if let player = self.player() {
             completion(player: player)
             return
@@ -329,6 +387,17 @@ class PlayerView: UIView {
         self.playButtonView.contentMode = UIViewContentMode.Center
         self.playButtonView.image = UIImage(named: "PlayButton")
         self.addSubview(self.playButtonView)
+
+        self.retryButtonView = UIImageView()
+        self.retryButtonView.alpha = 0.6
+        self.retryButtonView.contentMode = UIViewContentMode.Center
+        self.retryButtonView.image = UIImage(named: "RetryButton")
+        self.retryButtonView.hidden = true
+        self.addSubview(self.retryButtonView)
+
+        self.progressBarView = UIProgressView()
+        self.progressBarView.hidden = true
+        self.addSubview(self.progressBarView)
     }
     
     override func layoutSubviews() {
@@ -352,6 +421,18 @@ class PlayerView: UIView {
             make.width.equalTo()(self.thumbnailView)
             make.height.equalTo()(self.thumbnailView)
             make.center.equalTo()(self.thumbnailView)
+        })
+        self.retryButtonView.mas_makeConstraints({ (make) -> Void in
+            make.width.equalTo()(self.thumbnailView)
+            make.height.equalTo()(self.thumbnailView)
+            make.center.equalTo()(self.thumbnailView)
+        })
+
+        self.progressBarView.mas_makeConstraints({ (make) -> Void in
+            make.left.equalTo()(self.thumbnailView)
+            make.right.equalTo()(self.thumbnailView)
+            make.bottom.equalTo()(self.thumbnailView)
+            make.height.equalTo()(10)
         })
     }
 
