@@ -12,11 +12,23 @@ Scenario: Access Inbox screen by login screen
   Then I should see "Inbox" screen
 
 @7223 @ok @Flips-148
-Scenario: Badge Counting#break this scenario
+Scenario: Checking Badge Counting when I have unready messages
   Given I am on the "Inbox" screen
   And I have a conversation with messages
-  When I have messages: read, unread(sent by different people and the same people) and messages sent by me on this conversation
+  When I have messages unread on this conversation
   Then I should see a badge over avatar with the total unread messages
+
+@7223 @ok @Flips-148
+Scenario: Checking Badge Counting when I have ready messages
+  Given I am on the "Inbox" screen
+  When I have a conversation with read messages
+  Then These ready messages shouldn't count on the badge over the avatar
+
+@7223 @ok @Flips-148
+Scenario: Checking Badge Counting when I have messages sent by myself
+  Given I am on the "Inbox" screen
+  When I have a conversation with messages sent by myself
+  Then These ready messages shouldn't count on the badge over the avatar
 
 @7223 @Flips-148
 Scenario: Seeing avatar when I have just read messages and the last one is not mine
@@ -220,7 +232,17 @@ Scenario: Receiving a message from someone that I don't have on my contacts
   Then I should see this conversation on the top of the screen
   And The other conversations should be sorted by time stamp descending order
 
-#When I receive a message fromsomeone that is not on my contacts then I should see them flips name
+@7223 @Flips-148 @Flips-23
+Scenario: Checking contact's name when I receive a message from someone that I do not have on my contacts
+  Given I am on the "Inbox" screen
+  When I receive a message from someone that is not on my flip's contacts or phone contacts
+  Then I should see this user's flips name
+
+@7223 @Flips-148 @Flips-23
+Scenario: Checking contact's name when I receive a message from someone that has different name on my phone's contacts and flips account
+  Given I am on the "Inbox" screen
+  When I receive a message from someone that has different name on my phone's contacts and flips account
+  Then I should see this user's flips name
 
 @7223 @Flips-148 @Flips-134 @Flips-23
 Scenario: Receiving a message sent by import screen

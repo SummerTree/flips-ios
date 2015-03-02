@@ -27,9 +27,9 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     private var addWordButton: UIButton!
     
-    var delegate: FlipMessageWordListViewDelegate?
+    weak var delegate: FlipMessageWordListViewDelegate?
     
-    var dataSource: FlipMessageWordListViewDataSource?
+    weak var dataSource: FlipMessageWordListViewDataSource?
     
     
     // MARK: - Initializers
@@ -411,7 +411,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
 
 // MARK: - Protocols
 
-protocol FlipMessageWordListViewDelegate {
+protocol FlipMessageWordListViewDelegate: class {
     
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSelectFlipWord flipWord: FlipText!)
 
@@ -420,7 +420,7 @@ protocol FlipMessageWordListViewDelegate {
     func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView)
 }
 
-protocol FlipMessageWordListViewDataSource {
+protocol FlipMessageWordListViewDataSource: class {
     
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, flipWordAtIndex index: Int) -> FlipText
 
