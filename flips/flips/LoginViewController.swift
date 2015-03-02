@@ -125,8 +125,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                     return
                 }
                 
-                self.authenticateWithFacebook() {
-                    (flipError) -> Void in
+                self.authenticateWithFacebook() { (flipError) -> Void in
                     self.hideActivityIndicator()
                     if (flipError != nil) {
                         println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
@@ -138,8 +137,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                         UserService.sharedInstance.getFacebookUserInfo({ (userObject) -> Void in
                             self.hideActivityIndicator()
                             println("User not found, going to Sign Up View")
-                            let signUpController = SignUpViewController()
-                            signUpController.facebookInput = userObject
+                            let signUpController = SignUpViewController(facebookInput: userObject)
                             self.navigationController?.pushViewController(signUpController, animated: true)
                         }, failure: { (flipError) -> Void in
                             self.hideActivityIndicator()

@@ -43,7 +43,7 @@ class LoginView : UIView, UITextFieldDelegate {
     private let SEPARATOR_HEIGHT: CGFloat = 0.5
     private let SIGNUP_MARGIN_BOTTOM: CGFloat = 15.0
     private let TERMS_OF_USE_HEIGHT: CGFloat = 20.0
-    private let DEFAULT_IF_FACEBOOK_USER_LABEL_TEXT = "If you're <first name>:"
+    private let DEFAULT_IF_YOURE_USER_LABEL_TEXT = "If you're <first name>:"
     
     private var logoView: UIView!
     private var bubbleChatImageView: UIImageView!
@@ -323,7 +323,7 @@ class LoginView : UIView, UITextFieldDelegate {
         
         ifYoureLabel = UILabel()
         ifYoureLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
-        ifYoureLabel.text = DEFAULT_IF_FACEBOOK_USER_LABEL_TEXT
+        ifYoureLabel.text = NSLocalizedString(DEFAULT_IF_YOURE_USER_LABEL_TEXT, comment: DEFAULT_IF_YOURE_USER_LABEL_TEXT)
         ifYoureLabel.textColor = UIColor.whiteColor()
         facebookLoggedOutView.addSubview(ifYoureLabel)
         
@@ -573,7 +573,8 @@ class LoginView : UIView, UITextFieldDelegate {
             credentialsView.hidden = false
             facebookButton.hidden = false
         } else if (loginMode == LoginViewController.LoginMode.LOGIN_AGAIN_WITH_FACEBOOK) {
-            ifYoureLabel.text = DEFAULT_IF_FACEBOOK_USER_LABEL_TEXT.stringByReplacingOccurrencesOfString("<first name>", withString: firstName!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let labelText = NSLocalizedString(DEFAULT_IF_YOURE_USER_LABEL_TEXT, comment: DEFAULT_IF_YOURE_USER_LABEL_TEXT)
+            ifYoureLabel.text = labelText.stringByReplacingOccurrencesOfString("<first name>", withString: firstName!, options: NSStringCompareOptions.LiteralSearch, range: nil)
             facebookLoggedOutView.hidden = false
             credentialsView.hidden = true
             facebookButton.hidden = true

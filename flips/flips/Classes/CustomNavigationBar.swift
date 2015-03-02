@@ -343,9 +343,7 @@ class CustomNavigationBar : UIView {
                 
                 self.avatarButton.setAvatarImage(image, forState: .Normal)
                 self.avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
-                if success != nil {
-                    success!(image)
-                }
+                success?(image)
                 
                 }, failure: { (error) -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
@@ -356,9 +354,7 @@ class CustomNavigationBar : UIView {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
                 })
-                if success != nil {
-                    success!(image)
-                }
+                success?(image)
             })
         }
     }

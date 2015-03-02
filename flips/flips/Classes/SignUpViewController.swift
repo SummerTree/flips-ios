@@ -15,8 +15,16 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     private var statusBarHidden = false
     private var signUpView: SignUpView!
     private var avatar: UIImage!
+    private var facebookInput: JSON? = nil
     
-    var facebookInput: JSON? = nil
+    init(facebookInput: JSON? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        self.facebookInput = facebookInput
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Overriden Methods
     
@@ -29,7 +37,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         
         signUpView.loadView()
         
-        if facebookInput != nil {
+        if (facebookInput != nil) {
             signUpView.setUserData(facebookInput!)
             
             let isSilhouette = facebookInput!["picture"]["data"]["is_silhouette"]
@@ -47,7 +55,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
             }
             
             signUpView.setPasswordFieldVisible(false)
-        }else{
+        } else {
             signUpView.setPasswordFieldVisible(true)
         }
     }
@@ -82,7 +90,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         } else {
             var actualPassword = password
             var facebookId: String? = nil
-            if self.facebookInput != nil {
+            if (self.facebookInput != nil) {
                 facebookId = self.facebookInput!["id"].stringValue
                 actualPassword = "f\(NSUUID().UUIDString)"
             }

@@ -146,7 +146,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         }
         
         birthdayTextField.mas_updateConstraints { (update) -> Void in
-            if !self.passwordTextField.hidden {
+            if (!self.passwordTextField.hidden) {
                 update.top.equalTo()(self.passwordTextField.mas_bottom).with().offset()(self.SEPARATOR_SIZE)
             } else {
                 update.top.equalTo()(self.emailTextField.mas_bottom).with().offset()(self.SEPARATOR_SIZE)
@@ -229,7 +229,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         } else if (textField == lastNameTextField) {
             emailTextField.becomeFirstResponder()
         } else if (textField == self.emailTextField) {
-            if !passwordTextField.hidden {
+            if (!passwordTextField.hidden) {
                 passwordTextField.becomeFirstResponder()
             } else {
                 birthdayTextField.becomeFirstResponder()
