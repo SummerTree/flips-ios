@@ -44,8 +44,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             showOnboarding = true
         }
         
-//        self.chatView = ChatView(showOnboarding: showOnboarding) // TODO: uncoment it.
-        self.chatView = ChatView(showOnboarding: false) // TODO: remove it
+        self.chatView = ChatView(showOnboarding: false) // Onboarding is disabled for now.
         self.chatView.delegate = self
         self.view = self.chatView
         

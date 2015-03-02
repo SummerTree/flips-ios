@@ -21,7 +21,7 @@ class FlipStringsUtil {
         
         var arrayOfFlips : [String] = newString.componentsSeparatedByCharactersInSet(NSCharacterSet (charactersInString: " "))
         
-        //TODO: Strings of punctuation without whitespace in between are joined together and treated as one word (such as "!!!" or "?!?!").
+        // Strings of punctuation without whitespace in between are joined together and treated as one word (such as "!!!" or "?!?!").
         
         return arrayOfFlips
     }

@@ -10,7 +10,6 @@
 // the license agreement.
 //
 
-// TODO: change form String to entity Word
 public typealias GetSuggestedWordsSuccessResponse = ([String]) -> Void
 public typealias SuggestedWordsFailureResponse = (FlipError?) -> Void
 
@@ -41,12 +40,10 @@ public class BuilderService: FlipsService {
     private func parseGetSuggestedWordsResponse(response: AnyObject) -> [String] {
         let json = JSON(response)
         
-        // TODO: change from String to entity Word
         var suggestedWords = Array<String>()
         
         if let jsonArray = json.array {
             for suggestedWordJson in jsonArray {
-                // TODO: parse json info
                 var suggestedWord = suggestedWordJson["word"].stringValue
                 suggestedWords.append(suggestedWord)
             }

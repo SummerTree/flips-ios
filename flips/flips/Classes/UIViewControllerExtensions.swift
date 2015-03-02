@@ -47,7 +47,6 @@ extension UIViewController {
     func setupWhiteNavBarWithoutButtons(title: String) {
         self.setNavBarColor()
         
-        // TODO why the navigation item needs a custom label?
         var titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
