@@ -50,8 +50,9 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     }
     
     func setupRecorder() {
-        // TODO - which name should we use?
-        var currentFileName = "recording-\(NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.FullStyle, timeStyle: NSDateFormatterStyle.FullStyle)).m4a"
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
+        let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).m4a"
         println(currentFileName)
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)

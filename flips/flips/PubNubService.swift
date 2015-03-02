@@ -132,8 +132,7 @@ public class PubNubService: FlipsService, PNDelegate {
 
         var lastMessageReceivedDate: NSDate?
         if (room == nil) {
-            println("Local Room was found for channel. Skipping.")
-            // TODO: If subscribed to a channel without a local Room create it locally if no User's private PubNubID?
+            println("Local Room was not found for channel. Skipping.")
             return
         }
 
@@ -218,10 +217,6 @@ public class PubNubService: FlipsService, PNDelegate {
                 println("default")
             }
         }
-    
-        // TODO: For push notification we need to use this method
-        // + (PNMessage *)sendMessage:(id)message applePushNotification:(NSDictionary *)apnsPayload googleCloudNotification:(NSDictionary *)gcmPayload
-        // toChannel:(PNChannel *)channel storeInHistory:(BOOL)shouldStoreInHistory withCompletionBlock:(PNClientMessageProcessingBlock)success;
     }
 	
 	

@@ -51,8 +51,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             }
         }
         
-        navigationBar.alpha = 0.99 // FOR iOS7.
-        // TODO: apply blur for iOS8 using new methods.
+        navigationBar.alpha = 0.99
         
         conversationsTableView = UITableView(frame: self.frame, style: .Plain)
         conversationsTableView.registerClass(ConversationTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)

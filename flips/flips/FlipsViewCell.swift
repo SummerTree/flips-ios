@@ -15,7 +15,7 @@ private let FLIPS_CELL_HEIGHT: CGFloat = 83.5
 
 class FlipsViewCell : UICollectionViewCell {
     
-    private var flipID: String! // TODO: change it to keep flipID instead of the NSManagedObject
+    private var flipID: String!
     private var cellImageView: UIImageView!
     private var seletedOverlayView: SelectedFlipOverlayView!
     

@@ -18,6 +18,6 @@
                                    withPredicate:(NSPredicate *)searchTerm
                                         delegate:(id<NSFetchedResultsControllerDelegate>)delegate;
 
-+ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors;
++ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)searchTerm;
 
 @end

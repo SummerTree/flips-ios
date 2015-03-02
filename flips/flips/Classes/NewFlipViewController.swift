@@ -223,30 +223,7 @@ class NewFlipViewController: FlipsViewController,
     // MARK: - MBContactPickerDataSource
     
     func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
-        
-        let contacts: NSArray = Contact.findAllSortedBy(contactDataSource.sortedByUserFirstNameLastName()) as NSArray
-        
-        let usersFirst = contacts.sortedArrayUsingComparator { (contact1, contact2) -> NSComparisonResult in
-            
-            let contact1: Contact = contact1 as Contact
-            let contact2: Contact = contact2 as Contact
-
-            if (contact1.contactUser == nil && contact2.contactUser == nil) {
-                return NSComparisonResult.OrderedSame
-            }
-            
-            if (contact1.contactUser != nil && contact2.contactUser != nil) {
-                return NSComparisonResult.OrderedSame
-            }
-            
-            if (contact1.contactUser != nil && contact2.contactUser == nil) {
-                return NSComparisonResult.OrderedAscending
-            }
-            
-            return NSComparisonResult.OrderedDescending
-        }
-        
-        return usersFirst
+        return contactDataSource.getMyContactsSortedByUsersFirst()
     }
     
     func selectedContactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
