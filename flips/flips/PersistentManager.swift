@@ -234,6 +234,7 @@ public class PersistentManager: NSObject {
         
         let userDataSource = UserDataSource()
         var user = userDataSource.getUserById(userID)
+        var userPhoneNumber: String = ""
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let userDataSourceInContext = UserDataSource(context: context)
@@ -246,20 +247,27 @@ public class PersistentManager: NSObject {
             
             userDataSourceInContext.associateUser(userInContext, withDeviceInJson: json)
             user = userInContext
+            userPhoneNumber = userInContext.phoneNumber
         }
         
         if (!isLoggedUser) {
             let contactDataSource = ContactDataSource()
+            let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userPhoneNumber)
             
-            let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
-            let authenticatedId = User.loggedUser()?.userID
-            
-            var userContact: Contact?
             var userInContext = user!.inThreadContext() as User
-            if (authenticatedId != userInContext.userID) {
-                var facebookID = user!.facebookID
-                var phonetype = (facebookID != nil) ? facebookID : ""
-                userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
+            if (contactsWithSamePhoneNumber.count > 0) {
+                self.asssociateUser(userInContext, withContacts: contactsWithSamePhoneNumber)
+            } else {
+                let isAuthenticated = AuthenticationHelper.sharedInstance.isAuthenticated()
+                let authenticatedId = User.loggedUser()?.userID
+
+                var userContact: Contact?
+                
+                if (authenticatedId != userInContext.userID) {
+                    var facebookID = user!.facebookID
+                    var phonetype = (facebookID != nil) ? facebookID : ""
+                    userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
+                }
             }
         }
         
@@ -280,6 +288,17 @@ public class PersistentManager: NSObject {
             userInContext.me = true
             AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
+    }
+    
+    private func asssociateUser(user: User, withContacts contacts:[Contact]) {
+        MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
+            let userInContext: User = user.inContext(context) as User
+            for contact in contacts {
+                let contactInContext = contact.inContext(context) as Contact
+                userInContext.addContactsObject(contactInContext)
+                contactInContext.contactUser = userInContext
+            }
+        })
     }
     
     func syncUserData(callback:(Bool, FlipError?, UserDataSource) -> Void) {
