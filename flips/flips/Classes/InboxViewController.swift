@@ -12,6 +12,8 @@
 
 import Foundation
 
+let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
+
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UserDataSourceDelegate {
     var userDataSource: UserDataSource? {
         didSet {
@@ -26,6 +28,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     private var inboxView: InboxView!
     private var syncView: SyncView!
     private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
+    }
     
     // MARK: - UIViewController overridden methods
 
@@ -47,6 +53,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         super.viewDidLoad()
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -184,6 +192,12 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         } else {
             UIAlertView.showUnableToLoadFlip()
         }
+    }
+    
+    func resyncNotificationReceived(notification: NSNotification) {
+        PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
+            self.userDataSource = userDataSource
+        })
     }
     
     

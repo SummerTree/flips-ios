@@ -50,12 +50,6 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         verificationCodeView.viewWillDisappear()
     }
     
-    func navigateAfterValidateDevice(userDataSource: UserDataSource) {
-        var inboxViewController = InboxViewController()
-        inboxViewController.userDataSource = userDataSource
-        self.navigationController?.pushViewController(inboxViewController, animated: true)
-    }
-    
     
     // MARK: - VerificationCodeViewDelegate Methods
     
@@ -119,14 +113,16 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
 
                 PersistentManager.sharedInstance.defineAsLoggedUserSync(deviceEntity.user)
                 
-                PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        let verificationCodeView = self.view as VerificationCodeView
-                        verificationCodeView.resetVerificationCodeField()
-                        
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                        self.navigateAfterValidateDevice(userDataSource)
-                    })
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    let verificationCodeView = self.view as VerificationCodeView
+                    verificationCodeView.resetVerificationCodeField()
+                    
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                    
+                    self.navigationController?.popToRootViewControllerAnimated(true)
+                    self.dismissViewControllerAnimated(true, completion:nil)
+                    
+                    NSNotificationCenter.defaultCenter().postNotificationName(RESYNC_INBOX_NOTIFICATION_NAME, object: nil, userInfo: nil)
                 })
             },
             failure: { (flipError) in
