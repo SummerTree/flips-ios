@@ -58,13 +58,15 @@ class FlipsViewCell : UICollectionViewCell {
                     //Waiting for FLIPS-183
                 }
             } else {
-                let url = NSURL(string: flip.thumbnailURL)
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White)
-                    self.cellImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                if (!flip.thumbnailURL.isEmpty) {
+                    let url = NSURL(string: flip.thumbnailURL)
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White)
+                        self.cellImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
+                            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                            })
                     })
-                })
+                }
             }
         })
     }
