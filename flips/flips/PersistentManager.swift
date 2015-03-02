@@ -234,7 +234,6 @@ public class PersistentManager: NSObject {
         
         let userDataSource = UserDataSource()
         var user = userDataSource.getUserById(userID)
-        var userPhoneNumber: String = ""
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let userDataSourceInContext = UserDataSource(context: context)
@@ -247,14 +246,14 @@ public class PersistentManager: NSObject {
             
             userDataSourceInContext.associateUser(userInContext, withDeviceInJson: json)
             user = userInContext
-            userPhoneNumber = userInContext.phoneNumber
         }
         
         if (!isLoggedUser) {
             let contactDataSource = ContactDataSource()
-            let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userPhoneNumber)
-            
             var userInContext = user!.inThreadContext() as User
+            
+            let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
+            
             if (contactsWithSamePhoneNumber.count > 0) {
                 self.asssociateUser(userInContext, withContacts: contactsWithSamePhoneNumber)
             } else {
