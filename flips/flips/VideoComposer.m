@@ -19,22 +19,40 @@
 - (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audioURL successHandler:(VideoComposerSuccessHandler)successHandler {
     NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.mov"];
     
-    NSString *videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"video.mov"];
-    [self createVideoWithImage:image atPath:videoPath completionHandler:^{
-        NSURL *videoURL = [NSURL fileURLWithPath:videoPath];
+    if (image) {
+        NSString *videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"video.mov"];
+        [self createVideoWithImage:image atPath:videoPath completionHandler:^{
+            NSURL *videoURL = [NSURL fileURLWithPath:videoPath];
+            
+            NSString *thumbnailPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"thumbnail.png"];
+            NSURL *thumbnailURL = [NSURL fileURLWithPath:thumbnailPath];
+            [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
+            
+            if (audioURL) {
+                [self mergeVideo:videoURL withAudio:audioURL atPath:exportPath completionHandler:^{
+                    successHandler([NSURL fileURLWithPath:exportPath], thumbnailURL);
+                }];
+            } else {
+                successHandler(videoURL, thumbnailURL);
+            }
+        }];
+    } else {
+        NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"empty_video" withExtension:@"mov"];
         
+        UIImage *thumbnail = [self thumbnailForVideo:videoURL];
         NSString *thumbnailPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"thumbnail.png"];
-        NSURL *thumbnailURL = [NSURL fileURLWithPath:thumbnailPath];
-        [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
+        [UIImagePNGRepresentation(thumbnail) writeToFile:thumbnailPath atomically:YES];
         
         if (audioURL) {
             [self mergeVideo:videoURL withAudio:audioURL atPath:exportPath completionHandler:^{
-                successHandler([NSURL fileURLWithPath:exportPath], thumbnailURL);
+                successHandler([NSURL fileURLWithPath:exportPath], [NSURL fileURLWithPath:thumbnailPath]);
             }];
         } else {
-            successHandler(videoURL, thumbnailURL);
+            successHandler(videoURL, [NSURL fileURLWithPath:thumbnailPath]);
         }
-    }];
+    }
+    
+    
 }
 
 - (void)flipVideoFromVideo:(NSURL *)originalVideo successHandler:(VideoComposerSuccessHandler)successHandler {
