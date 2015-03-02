@@ -97,7 +97,7 @@ class ContactDataSource : BaseDataSource {
             let predicate = NSPredicate(format: "(\(ContactAttributes.PHONE_NUMBER) != %@) and (\(ContactAttributes.CONTACT_USER) == nil)", formatedPhoneNumber)
             var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: predicate, inContext: currentContext) as NSArray
             var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
-            var contactIds = [String]()
+            var contactIds = Array<String>()
             
             for contact in sortedContacts {
                 contactIds.append(contact.contactID)
