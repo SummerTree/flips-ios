@@ -59,8 +59,6 @@ class ImportContactViewController: UIViewController {
             }, failure: { (error) -> Void in
                 println("Error importing facebook friends: \(error?.error) details: \(error?.details)")
             })
-        } else {
-            println("No need to import Facebook contacts")
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in

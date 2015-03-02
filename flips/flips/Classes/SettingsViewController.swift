@@ -100,11 +100,27 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
+        var userFirstName: String? = nil
+        var facebookUser = false
+        if (User.loggedUser()?.facebookID != nil) {
+            let user: User = User.loggedUser()!
+            userFirstName = user.firstName
+            facebookUser = true
+        }
+        
         AuthenticationHelper.sharedInstance.logout()
         
         var navigationController: UINavigationController = self.presentingViewController as UINavigationController
         navigationController.popToRootViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion:nil)
+        
+        var userInfo: Dictionary<String, AnyObject> = [LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY: facebookUser]
+        
+        if (userFirstName != nil) {
+            userInfo.updateValue(userFirstName!, forKey: LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY)
+        }
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(LOGOUT_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

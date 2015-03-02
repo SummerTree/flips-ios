@@ -13,6 +13,7 @@
 public typealias UserServicePasswordSuccessResponse = () -> Void
 public typealias UserServiceVerifySuccessResponse = (username: String) -> Void
 public typealias UserServiceSuccessResponse = (AnyObject?) -> Void
+public typealias UserServiceSuccessJSONResponse = (JSON) -> Void
 public typealias UserServiceFailureResponse = (FlipError?) -> Void
 public typealias UserServiceMyFlipsSuccessResponse = (JSON) -> Void
 public typealias UserServiceMyFlipsFailResponse = (FlipError?) -> Void
@@ -43,7 +44,7 @@ public class UserService: FlipsService {
     
     // MARK: - Sign-up
     
-    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func signUp(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: NSDate, nickname: String?, phoneNumber: String!, facebookId: String?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
@@ -58,7 +59,9 @@ public class UserService: FlipsService {
             RequestParams.LASTNAME : lastName,
             RequestParams.BIRTHDAY : birthday,
             RequestParams.PHONENUMBER: phoneNumber,
-            RequestParams.NICKNAME : nickname!]
+            RequestParams.NICKNAME : nickname!,
+            RequestParams.FACEBOOK_ID : facebookId != nil ? facebookId! : ""
+        ]
         
         // first create user
         self.post(url,
@@ -123,10 +126,7 @@ public class UserService: FlipsService {
         }
         
         let url = HOST + FACEBOOK_SIGNIN_URL
-        
-        // Since Facebook is disabled at this moment, I'm not sure if it will work. So, I left the original code commented.
-        //        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.FACEBOOK_ACCESS_TOKEN)
-        //        request.requestSerializer.setValue(accessToken, forHTTPHeaderField: RequestHeaders.TOKEN)
+    
         let params = [
             RequestHeaders.FACEBOOK_ACCESS_TOKEN : accessToken,
             RequestHeaders.TOKEN : accessToken
@@ -139,6 +139,15 @@ public class UserService: FlipsService {
                 success(user)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                if (operation.response != nil && operation.response.statusCode == 404) {
+                    if let response = operation.responseObject as? NSDictionary {
+                        if (response["error"] as? String == "User not found") {
+                            failure(nil)
+                            return
+                        }
+                    }
+                }
+                
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     var errorText: String = ""
@@ -311,8 +320,6 @@ public class UserService: FlipsService {
         
         if let loggedUser = User.loggedUser() {
             let permissions: [String] = FBSession.activeSession().permissions as [String]
-            println("[DEBUG: Facebook Permissions: \(permissions)]")
-            
             if (!contains(permissions, "user_friends")) {
                 failure(FlipError(error: "user_friends permission not allowed.", details:nil))
                 return
@@ -334,6 +341,10 @@ public class UserService: FlipsService {
                         usersFacebookIDS.append(userId.stringValue)
                     }
                     
+                    if (usersFacebookIDS.count == 0) {
+                        return
+                    }
+
                     var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                     
                     var params: Dictionary<String, AnyObject> = [
@@ -366,6 +377,29 @@ public class UserService: FlipsService {
         }
     }
 
+    // MARK: - Get Facebook User Info
+    
+    func getFacebookUserInfo(success: UserServiceSuccessJSONResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        
+        let graphPath = "me?fields=id,first_name,last_name,email,picture.width(160)"
+        FBRequestConnection.startWithGraphPath(graphPath) { (connection, result, error) -> Void in
+            if (error != nil) {
+                failure(FlipError(error: error.localizedDescription, details:nil))
+                return
+            }
+            
+            if result == nil {
+                failure(FlipError(error: "User info json is nil.", details:nil))
+                return
+            }
+            
+            success(JSON(result! as NSDictionary))
+        }
+    }
 
     // MARK: - Upload contacts
 
@@ -465,6 +499,7 @@ public class UserService: FlipsService {
         static let LASTNAME = "lastName"
         static let BIRTHDAY = "birthday"
         static let NICKNAME = "nickname"
+        static let FACEBOOK_ID = "facebookID"
         static let EMAIL = "email"
         static let PHONE_NUMBER = "phone_number"
         static let PHONENUMBER = "phoneNumber"

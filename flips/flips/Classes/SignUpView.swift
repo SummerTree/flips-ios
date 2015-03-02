@@ -292,10 +292,17 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.navigationBar.setAvatarImage(picture)
     }
     
-    func setUserPictureURL(url: NSURL) {
-        self.navigationBar.setAvatarImageURL(url)
+    func setUserPictureURL(url: NSURL, success: ((UIImage) -> Void)? = nil) {
+        self.navigationBar.setAvatarImageURL(url, success)
     }
     
+    func setUserData(userData: JSON!) {
+        userFormView.setUserData(userData)
+    }
+    
+    func setPasswordFieldVisible(visible: Bool) {
+        userFormView.setPasswordFieldVisible(visible)
+    }
     
     // MARK: - Getters
     
