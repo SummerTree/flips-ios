@@ -257,13 +257,15 @@ public class PersistentManager: NSObject {
             if (contactsWithSamePhoneNumber.count > 0) {
                 self.asssociateUser(userInContext, withContacts: contactsWithSamePhoneNumber)
             } else {
-                if let authenticatedId = User.loggedUser()?.userID {
-                    var userContact: Contact?
-                    
-                    if (authenticatedId != userInContext.userID) {
-                        var facebookID = user!.facebookID
-                        var phonetype = (facebookID != nil) ? facebookID : ""
-                        userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
+                if (!userInContext.isTemporary.boolValue) { // Do not create a contact for temporary users.
+                    if let authenticatedId = User.loggedUser()?.userID {
+                        var userContact: Contact?
+                        
+                        if (authenticatedId != userInContext.userID) {
+                            var facebookID = user!.facebookID
+                            var phonetype = (facebookID != nil) ? facebookID : ""
+                            userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
+                        }
                     }
                 }
             }
