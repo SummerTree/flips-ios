@@ -73,13 +73,13 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             println("       flip #\(flips[i].flipID)")
             let flip = flips[i]
             flipMessagesWaiting[flipMessage.flipMessageID]?.append(flip.flipID)
-            
-            let flipsCache = FlipsCache.sharedInstance
-            flipsCache.videoForFlip(flip,
-                success: { (localPath: String!) in
+
+            let cache = ThumbnailsCache.sharedInstance
+            cache.get(NSURL(string: flip.thumbnailURL)!,
+                success: { (localPath: String!) -> Void in
                     self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: nil)
                 },
-                failure: { (error: FlipError) in
+                failure: { (error: FlipError) -> Void in
                     println("Failed to get resource from cache, error: \(error)")
                     self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: error)
             })

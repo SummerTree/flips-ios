@@ -156,12 +156,14 @@ class UserDataSource : BaseDataSource {
                     self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
                 }
             }
-            
-            let flipsCache = FlipsCache.sharedInstance
-            flipsCache.videoForFlip(flip,
+
+            let cache = ThumbnailsCache.sharedInstance
+
+            cache.get(NSURL(string: flip.thumbnailURL)!,
                 success: { (localPath: String!) in
                     callback()
-                }, failure: { (error: FlipError) in
+                },
+                failure: { (error: FlipError) in
                     println("Error downloading data for my flip (\(flip.flipID))")
                     callback()
             })
