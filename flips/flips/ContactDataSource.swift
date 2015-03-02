@@ -36,7 +36,7 @@ class ContactDataSource : BaseDataSource {
     private func fillContact(contact: Contact, firstName: String, lastName: String?, phoneNumber: String, phoneType: String) {
         contact.firstName = firstName
         contact.lastName = lastName
-        contact.phoneNumber = phoneNumber
+        contact.phoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
         contact.phoneType = phoneType
         contact.updatedAt = NSDate()
     }
@@ -73,25 +73,40 @@ class ContactDataSource : BaseDataSource {
     }
 	
 	func fetchedResultsController(contains: String, delegate: NSFetchedResultsControllerDelegate?) -> NSFetchedResultsController {
-		let predicate = NSPredicate(format: "(%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@) and (\(ContactAttributes.CONTACT_USER).me == false)", ContactAttributes.FIRST_NAME, contains, ContactAttributes.LAST_NAME, contains)
-		return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
+        if let loggedUser = User.loggedUser() {
+            let predicate = NSPredicate(format: "(%K BEGINSWITH[cd] %@ OR %K BEGINSWITH[cd] %@) and (\(ContactAttributes.PHONE_NUMBER) != %@)",
+                ContactAttributes.FIRST_NAME,
+                contains,
+                ContactAttributes.LAST_NAME,
+                contains,
+                PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber))
+            return Contact.fetchAllSortedBy(sortedByUserFirstNameLastName(), withPredicate: predicate, delegate: delegate)
+        } else {
+            return NSFetchedResultsController()
+        }
 	}
     
     func getMyContactsIdsWithoutFlipsAccount() -> [String] {
-        let sortedBy = [
-            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
-            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
-        ]
-        
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) == nil)"), inContext: currentContext) as NSArray
-        var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
-        var contactIds = [String]()
-        
-        for contact in sortedContacts {
-            contactIds.append(contact.contactID)
+        if let loggedUser = User.loggedUser() {
+            let sortedBy = [
+                NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
+                NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+            ]
+            
+            let formatedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber)
+            let predicate = NSPredicate(format: "(\(ContactAttributes.PHONE_NUMBER) != %@) and (\(ContactAttributes.CONTACT_USER) == nil)", formatedPhoneNumber)
+            var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: predicate, inContext: currentContext) as NSArray
+            var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
+            var contactIds = Array<String>()
+            
+            for contact in sortedContacts {
+                contactIds.append(contact.contactID)
+            }
+            
+            return contactIds
+        } else {
+            return Array<String>()
         }
-        
-        return contactIds
     }
     
     func getMyContactsIdsWithFlipsAccount() -> [String] {
@@ -139,6 +154,37 @@ class ContactDataSource : BaseDataSource {
         return contactsWithSamePhoneNumber
     }
     
+    func getMyContactsSortedByUsersFirst() -> [Contact] {
+        if let loggedUser = User.loggedUser() {
+            let predicate = NSPredicate(format: "(\(ContactAttributes.PHONE_NUMBER) != %@)", PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber))
+            let contacts: NSArray = Contact.findAllSortedBy(self.sortedByUserFirstNameLastName(), withPredicate: predicate) as NSArray
+            
+            let usersFirst = contacts.sortedArrayUsingComparator { (contact1, contact2) -> NSComparisonResult in
+                
+                let contact1: Contact = contact1 as Contact
+                let contact2: Contact = contact2 as Contact
+                
+                if (contact1.contactUser == nil && contact2.contactUser == nil) {
+                    return NSComparisonResult.OrderedSame
+                }
+                
+                if (contact1.contactUser != nil && contact2.contactUser != nil) {
+                    return NSComparisonResult.OrderedSame
+                }
+                
+                if (contact1.contactUser != nil && contact2.contactUser == nil) {
+                    return NSComparisonResult.OrderedAscending
+                }
+                
+                return NSComparisonResult.OrderedDescending
+            }
+            
+            return usersFirst as [Contact]
+        } else {
+            return Array<Contact>()
+        }
+    }
+    
     func setContactUserAndUpdateContact(user: User!, contact: Contact!) {
         contact.contactUser = user
     }
@@ -181,7 +227,8 @@ class ContactDataSource : BaseDataSource {
         }
         
         if (phoneNumber != nil && !phoneNumber!.isEmpty) {
-            phonenumberPredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_NUMBER, phoneNumber!)
+            let formatedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber!)
+            phonenumberPredicate = NSPredicate(format: "%K like %@", ContactAttributes.PHONE_NUMBER, formatedPhoneNumber)
             predicates.append(phonenumberPredicate)
         }
         
