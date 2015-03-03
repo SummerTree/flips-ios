@@ -274,8 +274,7 @@ class PlayerView: UIView {
         }
 
         if (self.loadPlayerOnInit) {
-            self.loadFlipsResourcesForPlayback({ () -> Void in
-            })
+            self.play()
         }
     }
     
@@ -300,11 +299,7 @@ class PlayerView: UIView {
         }
         
         if (self.loadPlayerOnInit) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.preparePlayer { (player) -> Void in
-                    self.play()
-                }
-            })
+            self.play()
         }
     }
 
