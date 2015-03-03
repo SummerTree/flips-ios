@@ -323,6 +323,7 @@ class PlayerView: UIView {
             
             if (self.playerItems.count == 1) {
                 player.seekToTime(kCMTimeZero)
+                delegate?.playerViewDidFinishPlayback(self)
                 
                 if (!self.playInLoop) {
                     self.pause()

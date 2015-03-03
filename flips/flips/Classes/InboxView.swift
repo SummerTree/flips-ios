@@ -166,6 +166,17 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let roomID: String = dataSource!.inboxView(self, roomAtIndex: indexPath.row)
+        let roomDataSource: RoomDataSource = RoomDataSource()
+        if let room: Room = roomDataSource.getRoomById(roomID) {
+            let participants: [User] = room.participants.allObjects as [User]
+            for participant in participants {
+                if (participant.userID == FLIP_BOYS_USER_ID) {
+                    return false
+                }
+            }
+        }
+        
         return true
     }
     
