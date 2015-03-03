@@ -29,7 +29,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private let CHANGE_NUMBER_CELL_POSITION         : Int = 5
     private let IMPORT_CONTACTS_CELL_POSITION       : Int = 6
     
-    var delegate: SettingsViewDelegate?
+    weak var delegate: SettingsViewDelegate?
     
     private var tableFooterView: UIView!
     private var logoutButton: UIButton!
@@ -313,7 +313,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
 	}
 }
 
-protocol SettingsViewDelegate {
+protocol SettingsViewDelegate: class {
     func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!)
     func settingsViewDidTapAbout(settingsView: SettingsView)
     func settingsViewDidTapChangeProfile(settingsView: SettingsView)

@@ -23,8 +23,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
     
-    var delegate : InboxViewDelegate?
-    var dataSource: InboxViewDataSource?
+    weak var delegate : InboxViewDelegate?
+    weak var dataSource: InboxViewDataSource?
     
     private var showOnboarding = false
     private var bubbleView: BubbleView!
@@ -232,7 +232,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
 }
 
-protocol InboxViewDataSource {
+protocol InboxViewDataSource: class {
     func numberOfRooms() -> Int
     func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int)

@@ -19,7 +19,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     private var roomID: String?
     private var contactIDs: [String]?
     
-    var delegate: PreviewViewControllerDelegate?
+    weak var delegate: PreviewViewControllerDelegate?
     
     convenience init(flipWords: [FlipText], roomID: String) {
         self.init()
@@ -187,7 +187,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     }
 }
 
-protocol PreviewViewControllerDelegate {
+protocol PreviewViewControllerDelegate: class {
     
     func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String)
     

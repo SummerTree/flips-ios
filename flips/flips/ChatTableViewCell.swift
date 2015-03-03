@@ -34,7 +34,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     private var isPlaying = false
     
-    var delegate: ChatTableViewCellDelegate?
+    weak var delegate: ChatTableViewCellDelegate?
 
 
     // MARK: - Required initializers
@@ -178,7 +178,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     }
 }
 
-protocol ChatTableViewCellDelegate {
+protocol ChatTableViewCellDelegate: class {
     
     func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool
 

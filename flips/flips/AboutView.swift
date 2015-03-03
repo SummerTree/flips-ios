@@ -14,7 +14,7 @@ import UIKit
 
 class AboutView: UIView, CustomNavigationBarDelegate {
     
-    var delegate: AboutViewDelegate?
+    weak var delegate: AboutViewDelegate?
     
     private let LOGO_CONTAINER_HEIGHT: CGFloat = 320.0
     private let MINIMAL_SPACE_BETWEEN_VIEWS: CGFloat = 10.0
@@ -159,7 +159,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     }
 }
 
-protocol AboutViewDelegate {
+protocol AboutViewDelegate: class {
     func aboutViewMakeConstraintToNavigationBarBottom(logoContainer: UIView!)
     func aboutViewDidTapBackButton(aboutView: AboutView!)
 }

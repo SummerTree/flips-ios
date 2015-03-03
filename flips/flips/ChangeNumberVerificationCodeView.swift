@@ -17,7 +17,7 @@ class ChangeNumberVerificationCodeView: VerificationCodeView {
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
     
-    var verificationCodeDelegate: ChangeNumberVerificationCodeViewDelegate?
+    weak var verificationCodeDelegate: ChangeNumberVerificationCodeViewDelegate?
     
     override func addNavigationBar() {
         // do nothing
@@ -49,6 +49,6 @@ class ChangeNumberVerificationCodeView: VerificationCodeView {
     }
 }
 
-protocol ChangeNumberVerificationCodeViewDelegate {
+protocol ChangeNumberVerificationCodeViewDelegate: class {
     func makeConstraintToNavigationBarBottom(view: UIView!)
 }

@@ -14,7 +14,7 @@ import UIKit
 
 class ChangeNumberInfoView: UIView {
     
-    var delegate: ChangeNumberInfoViewDelegate?
+    weak var delegate: ChangeNumberInfoViewDelegate?
     
     private let TRANSITION_CIRCLES_MARGIN: CGFloat = 25.0
     
@@ -129,6 +129,6 @@ class ChangeNumberInfoView: UIView {
     }
 }
 
-protocol ChangeNumberInfoViewDelegate {
+protocol ChangeNumberInfoViewDelegate: class {
     func changeNumberInfoViewDidTapNextButton(changeNumberInfoView: ChangeNumberInfoView!)
 }
