@@ -11,7 +11,6 @@
 //
 
 @objc protocol CustomNavigationBarDelegate {
-
     optional func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar)
     optional func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar)
     optional func customNavigationBarDidTapAvatarButton(navBar : CustomNavigationBar)

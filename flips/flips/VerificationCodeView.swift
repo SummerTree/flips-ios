@@ -14,7 +14,7 @@ import Foundation
 
 class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
     
-    var delegate: VerificationCodeViewDelegate?
+    weak var delegate: VerificationCodeViewDelegate?
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0

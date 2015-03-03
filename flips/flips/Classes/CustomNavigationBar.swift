@@ -36,7 +36,7 @@ class CustomNavigationBar : UIView {
     
     private var buttonsMargin : CGFloat = 0.0
     
-    var delegate : CustomNavigationBarDelegate?
+    weak var delegate : CustomNavigationBarDelegate?
     
     
     // MARK: - Static Creator Method

@@ -14,7 +14,7 @@ import UIKit
 
 class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     
-    var delegate: ChangeNumberInputPhoneViewDelegate?
+    weak var delegate: ChangeNumberInputPhoneViewDelegate?
     
     private let ENTER_NUMBER_BELOW_CONTAINER_HEIGHT:    CGFloat = 75.0
     private let NEW_NUMBER_CONTAINER_HEIGHT:            CGFloat = 50.0
@@ -237,7 +237,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     }
 }
 
-protocol ChangeNumberInputPhoneViewDelegate {
+protocol ChangeNumberInputPhoneViewDelegate: class {
     func makeConstraintToNavigationBarBottom(view: UIView!)
     func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber: String)
 }

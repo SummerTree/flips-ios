@@ -34,7 +34,7 @@ class PlayerView: UIView {
     private var activityIndicator: UIActivityIndicatorView!
     private var progressBarView: UIProgressView!
 
-    var delegate: PlayerViewDelegate?
+    weak var delegate: PlayerViewDelegate?
 
     override init() {
         super.init(frame: CGRect.zeroRect)
@@ -456,7 +456,7 @@ class PlayerView: UIView {
 
 }
 
-protocol PlayerViewDelegate {
+protocol PlayerViewDelegate: class {
     
     func playerViewDidFinishPlayback(playerView: PlayerView)
     func playerViewIsVisible(playerView: PlayerView) -> Bool

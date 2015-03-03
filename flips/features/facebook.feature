@@ -3,6 +3,7 @@ As a user
 I don't want to register a user
 So, I can login with Facebook account
 
+
 @9749
 Scenario: Login with facebook's account for the first time
   Given I didn't logged in with facebooks account yet
@@ -154,7 +155,7 @@ Scenario: Log in on Facebook again when I deleted my friends list
   Given I am on the facebook's message accept
   And I already logged in with my user but now I deleted my friends
   When I touch "OK" option on the message
-  Then I should see "Inbox" screen # Yes, it should go to Inbox.  However, check with one of the devs who has worked with FB on this... not sure if it will update the FB contacts list into Flips each time the user signs in, or if it's just a one-time import upon sign-up -Ben
+  Then I should see "Inbox" screen
 
 @7169 @9749
 Scenario: I tap on Facebook Login for the first time and I haven't an account set up on my cellphone but I have the app installed
