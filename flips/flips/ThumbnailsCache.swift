@@ -42,4 +42,7 @@ public class ThumbnailsCache {
         self.cache.put(remoteURL, data: data)
     }
     
+    func has(remoteURL: NSURL) -> Bool {
+        return self.cache.has(remoteURL)
+    }
 }

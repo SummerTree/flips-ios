@@ -100,6 +100,11 @@ public class StorageCache {
         return CacheGetResponse.DOWNLOAD_WILL_START
     }
     
+    func has(remoteURL: NSURL) -> Bool {
+        let localPath = self.createLocalPath(remoteURL)
+        return self.cacheHit(localPath)
+    }
+    
     /**
     Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
     

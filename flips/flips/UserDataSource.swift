@@ -132,7 +132,10 @@ class UserDataSource : BaseDataSource {
         for myFlip in myFlips {
             let flip = myFlip.inContext(currentContext) as Flip
             if (flip.thumbnailURL != nil && flip.thumbnailURL != "") {
-                self.flipsDownloadCount.value++
+                var hasThumbnailCached: Bool = ThumbnailsCache.sharedInstance.has(NSURL(string: flip.thumbnailURL)!)
+                if (!hasThumbnailCached) {
+                    self.flipsDownloadCount.value++
+                }
             }
         }
 

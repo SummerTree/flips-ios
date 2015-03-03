@@ -76,7 +76,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         super.viewDidAppear(animated)
         
         if let userDataSource = self.userDataSource {
-            if userDataSource.isDownloadingFlips == true {
+            if (userDataSource.isDownloadingFlips == true) {
                 syncView.image = imageForView()
                 syncView.setDownloadCount(1, ofTotal: userDataSource.flipsDownloadCount.value)
                 syncView.alpha = 0
@@ -87,7 +87,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 })
             }
         }
-        
         self.refreshRooms()
     }
     
