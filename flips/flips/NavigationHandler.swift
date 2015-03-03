@@ -29,14 +29,23 @@ public class NavigationHandler : NSObject {
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController = keyWindow.rootViewController {
                 println(">*>*>*>*>* TYPE: \(rootViewController.dynamicType.description())")
-                if (rootViewController.dynamicType.description() == "UINavigationController") {
+                if (rootViewController is LoginViewController) {
+                    println("I'm in the LoginViewController")
+                }
+                if (rootViewController is SplashScreenViewController) {
+                    println("I'm in the SplashScreenViewController")
+                }
+                if (rootViewController is UINavigationController) {
                     var rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
                     
                     AuthenticationHelper.sharedInstance.logout()
                     if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                        println("*1*1*1")
                         rootNavigationViewController.popToRootViewControllerAnimated(false)
                         rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(true, completion: nil)
                     } else {
+                        println("*2*2*2")
+                        println(rootNavigationViewController)
                         rootNavigationViewController.popToRootViewControllerAnimated(true)
                     }
                     dispatch_async(dispatch_get_main_queue()) { () -> Void in
