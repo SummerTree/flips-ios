@@ -4,7 +4,7 @@ I don't want to register a user
 So, I can login with Facebook account
 
 
-@9749 #test
+@9749
 Scenario: Login with facebook's account for the first time
   Given I didn't logged in with facebooks account yet
   When I touch "Login with Facebook" button
