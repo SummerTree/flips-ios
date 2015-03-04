@@ -84,7 +84,7 @@ class UserFormView : UIView, UITextFieldDelegate {
 	func birthdaySelected(sender : AnyObject?) {
 		let picker = birthdayTextField.inputView as UIDatePicker
 		var dateFormatter = NSDateFormatter()
-		dateFormatter.dateFormat = NSDateFormatter.dateFormatFromTemplate("MM/dd/yyyy", options: 0, locale: NSLocale.currentLocale())
+		dateFormatter.dateFormat = "MM/dd/yyyy"
 		birthdayTextField.text = dateFormatter.stringFromDate(picker.date)
 		self.validateFields()
 	}
