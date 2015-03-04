@@ -131,6 +131,12 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.cameraPreview.registerObservers()
             self.flipWordLabel.text = word
+            self.flipImageView.image = nil
+            
+            if (self.flipPlayerView != nil) {
+                self.flipPlayerView.removeFromSuperview()
+                self.flipPlayerView.releaseResources()
+            }
 
             self.cameraPreview.alpha = 1.0
             self.bringSubviewToFront(self.cameraPreview)
@@ -147,6 +153,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
 
                 self.cameraPreview.alpha = 0
                 self.flipWordLabel.text = nil
+                self.flipImageView.image = nil
                 
                 self.createFlipPlayerView()
                 self.flipPlayerView.setupPlayerWithFlips([flip])
@@ -159,6 +166,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     func showImage(image: UIImage, andText text: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.cameraPreview.removeObservers()
+            
+            if (self.flipPlayerView != nil) {
+                self.flipPlayerView.removeFromSuperview()
+                self.flipPlayerView.releaseResources()
+            }
             
             self.flipWordLabel.text = text
             self.flipImageView.image = image
