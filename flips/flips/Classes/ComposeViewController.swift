@@ -417,7 +417,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            let flipWord = self.flipWords[self.highlightedWordIndex]
             self.showContentForHighlightedWord(shouldReloadWords: false)
         }
     }
@@ -725,7 +724,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        self.highlightedWordCurrentAssociatedImage = image.squareCrop(UIImageSource.Unknown)
+        let croppedImage = image.squareCrop(UIImageSource.Unknown)
+        self.highlightedWordCurrentAssociatedImage = croppedImage
         
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)
         composeBottomViewContainer.showAudioRecordButton()
