@@ -97,6 +97,8 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     
     func splashScreenViewAttemptLogin() {
         if let loggedUser = User.loggedUser() {
+            println("loggedUser \(loggedUser)")
+            println("userID \(loggedUser.userID)");
             AuthenticationHelper.sharedInstance.onLogin(loggedUser)
             PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in

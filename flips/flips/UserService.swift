@@ -214,9 +214,6 @@ public class UserService: FlipsService {
                         failure(FlipError(error: error.localizedDescription, details: nil))
                     }
             })
-        } else {
-            failure(FlipError(error: "No logged user", details: nil))
-            return
         }
     }
 
@@ -377,9 +374,6 @@ public class UserService: FlipsService {
                     })
                 }
             }
-        } else {
-            failure(FlipError(error: "No logged user", details: nil))
-            return
         }
     }
 
@@ -460,9 +454,6 @@ public class UserService: FlipsService {
             }, failure: { (error) -> Void in
                 failure(FlipError(error: "Error retrieving contacts.", details:nil))
             })
-        } else {
-            failure(FlipError(error: "No logged user", details: nil))
-            return
         }
     }
     
@@ -490,9 +481,6 @@ public class UserService: FlipsService {
                         failCompletion(FlipError(error: error.localizedDescription, details: nil))
                     }
             })
-        } else {
-            failCompletion(FlipError(error: "No logged user", details: nil))
-            return
         }
     }
     

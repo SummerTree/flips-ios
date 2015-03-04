@@ -46,7 +46,8 @@ public class NavigationHandler : NSObject {
                     } else {
                         println("*2*2*2")
                         println(rootNavigationViewController)
-                        rootNavigationViewController.popToRootViewControllerAnimated(true)
+                        //rootNavigationViewController.popToRootViewControllerAnimated(true)
+                        rootNavigationViewController.navigationController?.pushViewController(LoginViewController(), animated: true)
                     }
                     dispatch_async(dispatch_get_main_queue()) { () -> Void in
                         let alertView = UIAlertView(title: NSLocalizedString("Session Expired"), message: NSLocalizedString("Please try to log in again. If the issue persists, please contact support."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
