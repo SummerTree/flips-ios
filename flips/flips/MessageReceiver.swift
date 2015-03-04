@@ -114,7 +114,9 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 self.onFlipContentDownloadFinished(flip, flipMessageID: flipMessageID)
             }
         } else {
-            UIAlertView.showUnableToLoadFlip()
+            if (AuthenticationHelper.sharedInstance.isAuthenticated()) {
+                UIAlertView.showUnableToLoadFlip()
+            }
         }
     }
     
@@ -148,12 +150,18 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     // MARK: - PubnubServiceDelegate
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
-        println("\nMessage received:\n\(messageJson)\n")
-        println("Received date: \(date)")
         if (messageJson[MESSAGE_TYPE] == nil) {
             println("MESSAGE IN OLD FORMAT. SHOULD BE IGNORED")
+            println("\nMessage received:\n\(messageJson)\n")
             return
         }
+        
+        if (!AuthenticationHelper.sharedInstance.isAuthenticated()) {
+            println("User is not logged. Ignoring message.")
+            return
+        }
+        
+        println("\nMessage received:\n\(messageJson)\n")
         
         if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
             self.onRoomReceived(messageJson)
