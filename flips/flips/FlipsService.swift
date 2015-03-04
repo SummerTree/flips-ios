@@ -30,7 +30,7 @@ public class FlipsService : NSObject {
 
         let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        
+
         return request.POST(urlString,
             parameters: parameters,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
@@ -49,7 +49,7 @@ public class FlipsService : NSObject {
     func post(urlString: String, parameters: AnyObject?, constructingBodyWithBlock: (AFMultipartFormData!) -> Void, success: OperationSuccessCallback, failure: OperationFailureCallback) -> AFHTTPRequestOperation {
         let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        
+
         return request.POST(urlString,
             parameters: parameters,
             constructingBodyWithBlock: constructingBodyWithBlock,
@@ -69,7 +69,7 @@ public class FlipsService : NSObject {
     func get(urlString: String, parameters: AnyObject?, success: OperationSuccessCallback, failure: OperationFailureCallback) -> AFHTTPRequestOperation {
         let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
-        
+
         return request.GET(urlString,
             parameters: parameters,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
@@ -89,6 +89,7 @@ public class FlipsService : NSObject {
     // MARK: - Auxiliary Methods
     
     private func isForbiddenRequest(error: NSError!) -> Bool {
+        println(error.localizedDescription)
         return (error.localizedDescription.rangeOfString(String(BACKEND_FORBIDDEN_REQUEST)) != nil)
     }
     
