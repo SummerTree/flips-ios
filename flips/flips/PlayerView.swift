@@ -92,6 +92,10 @@ class PlayerView: UIView {
 
         if (isPlayerReady) {
             self.preparePlayer { (player) -> Void in
+                if (self.words.count == 0) {
+                    return
+                }
+                
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
                 self.thumbnailView.hidden = true
                 self.playButtonView.hidden = true
