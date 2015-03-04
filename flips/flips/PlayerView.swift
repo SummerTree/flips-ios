@@ -176,6 +176,7 @@ class PlayerView: UIView {
         self.words = []
 
         var pendingFlips = self.flips.count
+        var numOfFlips = self.flips.count
 
         self.progressBarView.hidden = false
         self.playButtonView.hidden = true
@@ -193,7 +194,7 @@ class PlayerView: UIView {
 
                 pendingFlips--
 
-                self.updateDownloadProgress(self.flips.count - pendingFlips, of:self.flips.count);
+                self.updateDownloadProgress(numOfFlips - pendingFlips, of:numOfFlips);
 
                 if (pendingFlips <= 0) {
                     self.loadingFlips = false
@@ -209,6 +210,10 @@ class PlayerView: UIView {
                         }
 
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if (self.flips == nil) {
+                                return
+                            }
+                            
                             let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
                             let playerItem = self.playerItemWithVideoAsset(videoAsset)
                             playerItem.order = index
@@ -216,7 +221,7 @@ class PlayerView: UIView {
 
                             pendingFlips--
 
-                            self.updateDownloadProgress(self.flips.count - pendingFlips, of:self.flips.count);
+                            self.updateDownloadProgress(numOfFlips - pendingFlips, of:numOfFlips);
 
                             if (pendingFlips <= 0) {
                                 self.loadingFlips = false

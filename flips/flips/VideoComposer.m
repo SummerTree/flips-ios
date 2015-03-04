@@ -17,14 +17,13 @@
 @implementation VideoComposer
 
 - (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audioURL successHandler:(VideoComposerSuccessHandler)successHandler {
-    NSString *exportPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.mov"];
+    NSString *exportPath = [TempFiles tempVideoFilePath];
     
     if (image) {
-        NSString *videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"video.mov"];
-        [self createVideoWithImage:image atPath:videoPath completionHandler:^{
-            NSURL *videoURL = [NSURL fileURLWithPath:videoPath];
+        [self createVideoWithImage:image atPath:exportPath completionHandler:^{
+            NSURL *videoURL = [NSURL fileURLWithPath:exportPath];
             
-            NSString *thumbnailPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"thumbnail.png"];
+            NSString *thumbnailPath = [TempFiles tempVideoFilePath];
             NSURL *thumbnailURL = [NSURL fileURLWithPath:thumbnailPath];
             [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
             
@@ -40,7 +39,7 @@
         NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"empty_video" withExtension:@"mov"];
         
         UIImage *thumbnail = [self thumbnailForVideo:videoURL];
-        NSString *thumbnailPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"thumbnail.png"];
+        NSString *thumbnailPath = [TempFiles tempVideoFilePath];
         [UIImagePNGRepresentation(thumbnail) writeToFile:thumbnailPath atomically:YES];
         
         if (audioURL) {
@@ -59,7 +58,7 @@
     NSURL *croppedVideo = [self videoFromOriginalVideo:originalVideo];
     
     UIImage *thumbnail = [self thumbnailForVideo:croppedVideo];
-    NSString *thumbnailPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"thumbnail.png"];
+    NSString *thumbnailPath = [TempFiles tempVideoFilePath];
     [UIImagePNGRepresentation(thumbnail) writeToFile:thumbnailPath atomically:YES];
     
     successHandler(croppedVideo, [NSURL fileURLWithPath:thumbnailPath]);
@@ -112,7 +111,7 @@
     AVMutableVideoComposition *videoComposition = [self videoCompositionFromTrack:videoTrack];
     
     // exporting
-    __block NSURL *outputURL = [self videoPartOutputFileURLForFlip:nil];
+    __block NSURL *outputURL = [NSURL fileURLWithPath:[TempFiles tempVideoFilePath]];
     
     AVAssetExportSession *exportSession;
     exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
@@ -139,76 +138,6 @@
 }
 
 #pragma mark - Private
-
-- (void)clearTempCache {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSURL *tempOutputFolder = [self tempOutputFolder];
-    
-    if ([fileManager fileExistsAtPath:[tempOutputFolder relativePath] isDirectory:nil]) {
-        [fileManager removeItemAtURL:tempOutputFolder error:nil];
-    }
-}
-
-- (NSURL *)baseOutputFolder {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSURL *outputFolder = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject];
-    outputFolder = [outputFolder URLByAppendingPathComponent:@"VideoComposerOutput"];
-    
-    return outputFolder;
-}
-
-- (NSURL *)tempOutputFolder {
-    return [[self baseOutputFolder] URLByAppendingPathComponent:@"temp"];
-}
-
-- (NSURL *)cachedOutputFolder {
-    return [[self baseOutputFolder] URLByAppendingPathComponent:self.cacheKey];
-}
-
-- (NSURL *)outputFolderPath {
-    NSURL *outputFolder;
-    
-    if (self.cacheKey) {
-        outputFolder = [self cachedOutputFolder];
-    } else {
-        outputFolder = [self tempOutputFolder];
-    }
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    if (![fileManager fileExistsAtPath:[outputFolder relativePath] isDirectory:nil]) {
-        [fileManager createDirectoryAtPath:[outputFolder relativePath]
-               withIntermediateDirectories:YES
-                                attributes:nil
-                                     error:nil];
-    }
-    
-    return outputFolder;
-}
-
-- (NSURL *)videoPartOutputFileURLForFlip:(Flip *)flip {
-    NSURL *outputFolder = [self outputFolderPath];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSURL *outputPath;
-    
-    if (self.cacheKey && flip != nil) {
-        NSString *filename = [NSString stringWithFormat:@"flip-video-%@.mov", flip.flipID];
-        outputPath = [outputFolder URLByAppendingPathComponent:filename];
-    } else {
-        NSUInteger index = 0;
-        
-        do {
-            index++;
-            NSString *filename = [NSString stringWithFormat:@"flip-video-%lu.mov", (unsigned long)index];
-            outputPath = [outputFolder URLByAppendingPathComponent:filename];
-        } while ([fileManager fileExistsAtPath:[outputPath relativePath] isDirectory:nil]);
-    }
-    
-    return outputPath;
-}
 
 - (AVAssetTrack *)videoTrackFromAsset:(AVAsset *)asset {
     return [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
