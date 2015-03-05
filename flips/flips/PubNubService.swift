@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-import Foundation
+public let PUBNUB_DID_CONNECT_NOTIFICATION: String = "pubnub_did_connect_notification"
 
 public class PubNubService: FlipsService, PNDelegate {
     
@@ -193,6 +193,10 @@ public class PubNubService: FlipsService, PNDelegate {
         self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
     }
     
+    public func pubnubClient(client: PubNub!, didConnectToOrigin origin: String!) {
+        NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
+    }
+
 
     // MARK: - Send Messages Methods
     

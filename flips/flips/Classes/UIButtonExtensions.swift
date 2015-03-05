@@ -58,4 +58,18 @@ extension UIButton {
     func setLastCameraPhotoAsButtonImage() {
         GalleryAssetsHelper.sharedInstance.addThumbnailToButton(self)
     }
+    
+    func setImage(image: UIImage, verticallyAlignedWithTitle title: String) {
+        self.setTitle(title, forState: UIControlState.Normal)
+        self.setImage(image, forState: UIControlState.Normal)
+        
+        let size: CGSize = CGSizeMake(480, 480)
+        let attributes: Dictionary = [NSFontAttributeName : self.titleLabel!.font]
+        var textSize: CGRect = title.boundingRectWithSize(size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributes, context: NSStringDrawingContext())
+        
+        self.imageEdgeInsets.top = -(image.size.height)
+        self.imageEdgeInsets.left = textSize.size.width
+        self.titleEdgeInsets.top = image.size.height
+        self.titleEdgeInsets.left = -(image.size.width)
+    }
 }

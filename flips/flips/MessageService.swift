@@ -79,7 +79,14 @@ public class MessageService {
         let messageJson = flipMessage.toJSON()
         
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
-            completion(success, roomID, nil)
+            if (!success) {
+                // We need to mark as removed the FlipMessage that wasn't sent.
+                PersistentManager.sharedInstance.markFlipMessageAsRemoved(flipMessage, completion: { (result) -> Void in
+                    completion(success, roomID, nil)
+                })
+            } else {
+                completion(success, roomID, nil)
+            }
         }
     }
 }

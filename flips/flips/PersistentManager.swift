@@ -219,6 +219,15 @@ public class PersistentManager: NSObject {
         })
     }
     
+    func markFlipMessageAsRemoved(flipMessage: FlipMessage, completion: CompletionBlock) {
+        MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
+            let flipMessageDataSource = FlipMessageDataSource(context: context)
+            flipMessageDataSource.markFlipMessageAsRemoved(flipMessage)
+        }, completion: { (success, error) -> Void in
+            completion(success)
+        })
+    }
+    
     func markFlipMessageAsRead(flipMessageId: String) {
         MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
             let flipMessageDataSource = FlipMessageDataSource(context: context)
