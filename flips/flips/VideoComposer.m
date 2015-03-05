@@ -235,13 +235,19 @@
     AVURLAsset *audioAsset = [AVURLAsset assetWithURL:audioURL];
     AVURLAsset *videoAsset = [AVURLAsset assetWithURL:videoURL];
     
+    NSError *error;
+    
     AVMutableComposition *mixComposition = [AVMutableComposition composition];
     
     AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio
                                                                                    preferredTrackID:kCMPersistentTrackID_Invalid];
     [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration)
                                    ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
-                                    atTime:kCMTimeZero error:nil];
+                                    atTime:kCMTimeZero error:&error];
+    
+    if (error) {
+        NSLog(@"Could not insert audio track: %@", error.localizedDescription);
+    }
     
     NSArray *videoTracks = [videoAsset tracksWithMediaType:AVMediaTypeVideo];
     
@@ -250,7 +256,11 @@
                                                                                        preferredTrackID:kCMPersistentTrackID_Invalid];
         [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
                                        ofTrack:[videoTracks objectAtIndex:0]
-                                        atTime:kCMTimeZero error:nil];
+                                        atTime:kCMTimeZero error:&error];
+        
+        if (error) {
+            NSLog(@"Could not insert video track: %@", error.localizedDescription);
+        }
     }
     
     AVAssetExportSession *assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition
@@ -265,6 +275,9 @@
     assetExport.shouldOptimizeForNetworkUse = YES;
     
     [assetExport exportAsynchronouslyWithCompletionHandler:^(void) {
+        if (assetExport.status == AVAssetExportSessionStatusFailed) {
+            NSLog(@"Could not create video composition. Error: %@", assetExport.error.description);
+        }
         completionHandler();
     }];
 }
