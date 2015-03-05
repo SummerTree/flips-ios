@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-public let PUBNUB_DID_CONNECT_NOTIFICATION: String = "PubNubDidConnectNotification"
+public let PUBNUB_DID_CONNECT_NOTIFICATION: String = "pubnub_did_connect_notification"
 
 public class PubNubService: FlipsService, PNDelegate {
     
