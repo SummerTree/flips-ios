@@ -131,7 +131,11 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                     if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH || flipError!.error == self.RESENT_SMS_MESSAGE) {
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.didEnterWrongVerificationCode()
-                    } else {
+                    } else if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                        self.hideActivityIndicator()
+                        let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                        alertView.show()
+                    }else {
                         println("Device code verification error: " + flipError!.error!)
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()
