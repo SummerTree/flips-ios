@@ -101,7 +101,14 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
                     let importContactViewController = ImportContactViewController()
                     let navigationController = UINavigationController(rootViewController: importContactViewController)
                     self.presentViewController(navigationController, animated: true, completion: nil)
-                    }, failure: { (error) -> Void in
+                }, failure: { (error) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if let flipError: FlipError = error {
+                            let alertMessage = UIAlertView(title: flipError.error, message: flipError.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                            alertMessage.show()
+                        }
+                        self.settingsView.viewWillAppear()
+                    })
                 })
             }
         })
