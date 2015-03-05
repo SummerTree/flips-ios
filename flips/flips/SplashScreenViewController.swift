@@ -115,6 +115,12 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as String) : nil
     }
     
+    func openLoginViewController() {
+        let loginViewController = LoginViewController()
+        loginViewController.setLoginViewMode(loginMode, userFirstName: userFirstName)
+        self.navigationController?.pushViewController(loginViewController, animated: false)
+    }
+    
     
     // MARK: - UIAlertViewDelegate
     
@@ -126,12 +132,6 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
         var inboxViewController = InboxViewController()
         inboxViewController.userDataSource = userDataSource
         self.navigationController?.pushViewController(inboxViewController, animated: true)
-    }
-    
-    private func openLoginViewController() {
-        let loginViewController = LoginViewController()
-        loginViewController.setLoginViewMode(loginMode, userFirstName: userFirstName)
-        self.navigationController?.pushViewController(loginViewController, animated: false)
     }
     
     private func openPhoneNumberController(userID: String) {

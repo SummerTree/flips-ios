@@ -10,17 +10,18 @@
 // the license agreement.
 //
 
-class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
+class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     private let ANIMATION_TRANSITON_DURATION: NSTimeInterval = 0.3
     private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
     
+    private var filterImageView: UIImageView!
     private var cameraPreview: CameraView!
-    private var cameraFilterImageView: UIImageView!
-    private var cameraWordLabel: UILabel!
     private var captureProgressBar: UIView!
     
-    private var flipViewer: FlipViewer!
+    private var flipWordLabel: UILabel!
+    private var flipImageView: UIImageView!
+    private var flipPlayerView: PlayerView!
     
     weak var delegate: ComposeTopViewContainerDelegate?
     
@@ -40,7 +41,6 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     
     private func addSubviews() {
         cameraPreview = CameraView(interfaceOrientation: AVCaptureVideoOrientation.Portrait, showAvatarCropArea: false, showMicrophoneButton: true)
-        cameraPreview.alpha = 1.0
         cameraPreview.delegate = self
         self.addSubview(cameraPreview)
         
@@ -48,21 +48,16 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
         captureProgressBar.backgroundColor = UIColor.avacado()
         self.addSubview(captureProgressBar)
         
-        cameraFilterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
-        cameraFilterImageView.alpha = 1.0
-        cameraFilterImageView.contentMode = UIViewContentMode.ScaleAspectFit
-        self.addSubview(cameraFilterImageView)
+        filterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
+        filterImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        self.addSubview(filterImageView)
         
-        cameraWordLabel = UILabel.flipWordLabel()
-        cameraWordLabel.alpha = 1.0
-        cameraWordLabel.sizeToFit()
-        self.addSubview(cameraWordLabel)
+        flipWordLabel = UILabel.flipWordLabel()
+        flipWordLabel.sizeToFit()
+        self.addSubview(flipWordLabel)
         
-        flipViewer = FlipViewer()
-        flipViewer.addGestureRecognizer(UITapGestureRecognizer(target: flipViewer, action: "viewTapped"))
-        flipViewer.delegate = self
-        self.addSubview(flipViewer)
-        self.sendSubviewToBack(flipViewer)
+        flipImageView = UIImageView()
+        self.addSubview(flipImageView)
     }
     
     private func addConstraints() {
@@ -80,19 +75,39 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
             make.width.equalTo()(0)
         }
         
-        cameraFilterImageView.mas_makeConstraints { (make) -> Void in
+        filterImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.cameraPreview)
             make.left.equalTo()(self.cameraPreview)
             make.bottom.equalTo()(self.cameraPreview)
             make.right.equalTo()(self.cameraPreview)
         }
         
-        cameraWordLabel.mas_makeConstraints { (make) -> Void in
+        
+        flipWordLabel.mas_makeConstraints { (make) -> Void in
             make.bottom.equalTo()(self).with().offset()(FLIP_WORD_LABEL_MARGIN_BOTTOM)
             make.centerX.equalTo()(self)
         }
         
-        flipViewer.mas_makeConstraints { (make) -> Void in
+        flipImageView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.cameraPreview.mas_width)
+        }
+    }
+    
+    private func createFlipPlayerView() {
+        if (self.flipPlayerView != nil) {
+            self.flipPlayerView.removeFromSuperview()
+            self.flipPlayerView.releaseResources()
+        }
+
+        self.flipPlayerView = PlayerView()
+        self.flipPlayerView.loadPlayerOnInit = true
+        self.flipPlayerView.delegate = self
+        self.addSubview(flipPlayerView)
+        
+        flipPlayerView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -103,11 +118,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     // MARK: - Life Cycle
     
     func viewWillAppear() {
-        self.flipViewer.registerObservers()
     }
     
     func viewWillDisappear() {
-        self.flipViewer.removeObservers()
         self.cameraPreview.removeObservers()
     }
     
@@ -117,48 +130,34 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     func showCameraWithWord(word: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.cameraPreview.registerObservers()
+            self.flipWordLabel.text = word
+            self.flipImageView.image = nil
             
-            self.cameraWordLabel.text = word
-            self.cameraWordLabel.sizeToFit()
-            UIView.animateWithDuration(self.ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
-                self.cameraPreview.alpha = 1.0
-                self.cameraWordLabel.alpha = 1.0
-                
-                self.flipViewer.alpha = 0.0
-                self.updateConstraintsIfNeeded()
-                
-                self.sendSubviewToBack(self.flipViewer)
-            })
+            if (self.flipPlayerView != nil) {
+                self.flipPlayerView.removeFromSuperview()
+                self.flipPlayerView.releaseResources()
+            }
+
+            self.cameraPreview.alpha = 1.0
+            self.bringSubviewToFront(self.cameraPreview)
+            self.bringSubviewToFront(self.filterImageView)
+            self.bringSubviewToFront(self.flipWordLabel)
         })
     }
     
     func showFlip(flipId: String, withWord word: String) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-            let flipsCache = FlipsCache.sharedInstance
-            let getResponse = flipsCache.videoForFlip(flip,
-                success: { (localPath: String!) in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        UIView.animateWithDuration(1.0, animations: { () -> Void in
-                            self.flipViewer.setWord(word)
-                            self.flipViewer.setVideoURL(NSURL.fileURLWithPath(localPath)!)
-                            self.cameraPreview.removeObservers()
-                            self.cameraPreview.alpha = 0.0
-                            self.flipViewer.alpha = 1.0
-                            self.bringSubviewToFront(self.flipViewer)
-                        })
-                    })
-                },
-                failure: { (error: FlipError) in
-                    println("Failed to get resource from cache, error: \(error)")
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.cameraPreview.removeObservers()
+
+                self.cameraPreview.alpha = 0
+                self.flipWordLabel.text = nil
+                self.flipImageView.image = nil
+                
+                self.createFlipPlayerView()
+                self.flipPlayerView.setupPlayerWithFlips([flip])
             })
-            if (getResponse == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                //Waiting for FLIPS-183
-            }
-            if (getResponse == StorageCache.CacheGetResponse.INVALID_URL) {
-                UIAlertView.showUnableToLoadFlip()
-            }
         } else {
             UIAlertView.showUnableToLoadFlip()
         }
@@ -168,15 +167,16 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.cameraPreview.removeObservers()
             
-            UIView.animateWithDuration(self.ANIMATION_TRANSITON_DURATION, animations: { () -> Void in
-                self.cameraPreview.alpha = 0.0
-                
-                self.cameraWordLabel.alpha = 0.0
-                
-                self.flipViewer.alpha = 1.0
-                self.flipViewer.setWord(text)
-                self.flipViewer.setImage(image)
-            })
+            if (self.flipPlayerView != nil) {
+                self.flipPlayerView.removeFromSuperview()
+                self.flipPlayerView.releaseResources()
+            }
+            
+            self.flipWordLabel.text = text
+            self.flipImageView.image = image
+
+            self.bringSubviewToFront(self.flipImageView)
+            self.bringSubviewToFront(self.flipWordLabel)
         })
     }
     
@@ -237,13 +237,14 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, FlipViewerDelegate {
     
     // MARK: - FlipViewerDelegate
     
-    func flipViewerStartedPlayingContent() {
-        delegate?.enableUserInteractionWithComposeView(false)
-    }
-    
-    func flipViewerFinishedPlayingContent() {
+    func playerViewDidFinishPlayback(playerView: PlayerView) {
         delegate?.enableUserInteractionWithComposeView(true)
     }
+    
+    func playerViewIsVisible(playerView: PlayerView) -> Bool {
+        return true
+    }
+
 }
 
 

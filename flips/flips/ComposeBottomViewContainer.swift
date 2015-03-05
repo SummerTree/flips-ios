@@ -297,7 +297,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     // MARK: - Views Transitions
     
     private func slideToMyFlipsView(notifyDelegate: Bool = true) {
-        if (notifyDelegate) {
+        if (notifyDelegate && self.flipsView.alpha == 0.0) {
             delegate?.composeBottomViewContainerWillOpenMyFlipsView(self)
         }
         

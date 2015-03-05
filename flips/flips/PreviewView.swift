@@ -38,9 +38,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         if (self.videoPlayerView.hasPlayer()) {
             self.stopMovie()
         }
-
-        let videoComposer = VideoComposer()
-        videoComposer.clearTempCache()
     }
 
     func setupVideoPlayerWithFlips(flips: Array<Flip>) {

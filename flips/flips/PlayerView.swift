@@ -176,6 +176,7 @@ class PlayerView: UIView {
         self.words = []
 
         var pendingFlips = self.flips.count
+        var numOfFlips = self.flips.count
 
         self.progressBarView.hidden = false
         self.playButtonView.hidden = true
@@ -193,7 +194,7 @@ class PlayerView: UIView {
 
                 pendingFlips--
 
-                self.updateDownloadProgress(self.flips.count - pendingFlips, of:self.flips.count);
+                self.updateDownloadProgress(numOfFlips - pendingFlips, of:numOfFlips);
 
                 if (pendingFlips <= 0) {
                     self.loadingFlips = false
@@ -209,6 +210,10 @@ class PlayerView: UIView {
                         }
 
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if (self.flips == nil) {
+                                return
+                            }
+                            
                             let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
                             let playerItem = self.playerItemWithVideoAsset(videoAsset)
                             playerItem.order = index
@@ -216,7 +221,7 @@ class PlayerView: UIView {
 
                             pendingFlips--
 
-                            self.updateDownloadProgress(self.flips.count - pendingFlips, of:self.flips.count);
+                            self.updateDownloadProgress(numOfFlips - pendingFlips, of:numOfFlips);
 
                             if (pendingFlips <= 0) {
                                 self.loadingFlips = false
@@ -261,21 +266,28 @@ class PlayerView: UIView {
         self.updateDownloadProgress(0, of:flips.count);
 
         let firstFlip = flips.first
-        if (firstFlip != nil && firstFlip!.thumbnailURL != nil && !firstFlip!.thumbnailURL.isEmpty) {
-            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: firstFlip!.thumbnailURL)!,
-                success: { (localThumbnailPath: String!) in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)
-                    })
-                },
-                failure: { (error: FlipError) in
-                    println("Failed to get resource from cache, error: \(error)")
-            })
+        if (firstFlip != nil) {
+
+            self.wordLabel.text = firstFlip!.word
+
+            if (firstFlip!.thumbnailURL != nil && !firstFlip!.thumbnailURL.isEmpty) {
+                let response = ThumbnailsCache.sharedInstance.get(NSURL(string: firstFlip!.thumbnailURL)!,
+                    success: { (localThumbnailPath: String!) in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            let thumbnail = UIImage(contentsOfFile: localThumbnailPath)
+
+                            self.thumbnailView.image = thumbnail
+                            self.thumbnailView.hidden = self.isPlaying
+                        })
+                    },
+                    failure: { (error: FlipError) in
+                        println("Failed to get resource from cache, error: \(error)")
+                })
+            }
         }
 
         if (self.loadPlayerOnInit) {
-            self.loadFlipsResourcesForPlayback({ () -> Void in
-            })
+            self.play()
         }
     }
     
@@ -300,11 +312,7 @@ class PlayerView: UIView {
         }
         
         if (self.loadPlayerOnInit) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.preparePlayer { (player) -> Void in
-                    self.play()
-                }
-            })
+            self.play()
         }
     }
 
@@ -445,6 +453,12 @@ class PlayerView: UIView {
 
     func releaseResources() {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+
+        self.thumbnailView.image = nil
+        self.wordLabel.text = ""
+        self.flips = nil
+        self.playerItems = [FlipPlayerItem]()
+        self.words = []
 
         if let player = self.player() {
             player.removeAllItems()

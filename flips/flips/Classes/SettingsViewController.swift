@@ -94,9 +94,17 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapImportContacts(settingsView: SettingsView) {
-        let importContactViewController = ImportContactViewController()
-        let navigationController = UINavigationController(rootViewController: importContactViewController)
-        self.presentViewController(navigationController, animated: true, completion: nil)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            if let user = User.loggedUser()? {
+                let userId = user.userID
+                SessionService.sharedInstance.checkSession(userId, { (success) -> Void in
+                    let importContactViewController = ImportContactViewController()
+                    let navigationController = UINavigationController(rootViewController: importContactViewController)
+                    self.presentViewController(navigationController, animated: true, completion: nil)
+                    }, failure: { (error) -> Void in
+                })
+            }
+        })
     }
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {

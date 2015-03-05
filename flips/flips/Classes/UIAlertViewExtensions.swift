@@ -14,10 +14,12 @@ import Foundation
 
 extension UIAlertView {
     class func showUnableToLoadFlip() {
-        let alertView = UIAlertView(title: NSLocalizedString("Flip Error"),
-            message: NSLocalizedString("Unable to load Flip."),
-            delegate: nil,
-            cancelButtonTitle: LocalizedString.OK)
-        alertView.show()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let alertView = UIAlertView(title: NSLocalizedString("Flip Error"),
+                message: NSLocalizedString("Unable to load Flip."),
+                delegate: nil,
+                cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+        })
     }
 }
