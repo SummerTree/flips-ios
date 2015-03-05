@@ -23,7 +23,7 @@
         [self createVideoWithImage:image atPath:exportPath completionHandler:^{
             NSURL *videoURL = [NSURL fileURLWithPath:exportPath];
             
-            NSString *thumbnailPath = [TempFiles tempVideoFilePath];
+            NSString *thumbnailPath = [TempFiles tempThumbnailFilePath];
             NSURL *thumbnailURL = [NSURL fileURLWithPath:thumbnailPath];
             [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
             
