@@ -61,7 +61,13 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
     }
     
     func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber phone: String) {
-        let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phone, userId: User.loggedUser()?.userID)
-        self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            self.hideActivityIndicator()
+            let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+        } else {
+            let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phone, userId: User.loggedUser()?.userID)
+            self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
+        }
     }
 }
