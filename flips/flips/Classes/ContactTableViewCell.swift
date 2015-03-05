@@ -30,8 +30,12 @@ class ContactTableViewCell: UITableViewCell {
             self.numberLabel.text = contact.contactSubtitle
             
             if let flipUser = contact.contactUser {
-                self.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
-                hideNumberLabel()
+                if (!flipUser.isTemporary.boolValue) {
+                    self.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
+                    hideNumberLabel()
+                } else {
+                    self.photoView.initials = contact.contactInitials
+                }
             } else {
                 self.photoView.initials = contact.contactInitials
             }

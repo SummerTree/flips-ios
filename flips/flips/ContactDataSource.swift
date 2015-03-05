@@ -94,7 +94,7 @@ class ContactDataSource : BaseDataSource {
             ]
             
             let formatedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber)
-            let predicate = NSPredicate(format: "(\(ContactAttributes.PHONE_NUMBER) != %@) and (\(ContactAttributes.CONTACT_USER) == nil)", formatedPhoneNumber)
+            let predicate = NSPredicate(format: "(\(ContactAttributes.PHONE_NUMBER) != %@) and ((\(ContactAttributes.CONTACT_USER) == nil) or (\(ContactAttributes.CONTACT_USER).isTemporary == true))", formatedPhoneNumber)
             var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: predicate, inContext: currentContext) as NSArray
             var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
             var contactIds = Array<String>()
@@ -115,7 +115,7 @@ class ContactDataSource : BaseDataSource {
             NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
         ]
 
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false)"), inContext: currentContext) as NSArray
+        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false) and (\(ContactAttributes.CONTACT_USER).isTemporary != true)"), inContext: currentContext) as NSArray
         var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
