@@ -135,7 +135,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         self.hideActivityIndicator()
                         let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                         alertView.show()
-                    }else {
+                    } else {
                         println("Device code verification error: " + flipError!.error!)
                         let verificationCodeView = self.view as VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()
