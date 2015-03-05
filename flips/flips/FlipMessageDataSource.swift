@@ -142,6 +142,11 @@ class FlipMessageDataSource : BaseDataSource {
         }
     }
     
+    func markFlipMessageAsRemoved(flipMessage: FlipMessage) {
+        let flipMessageInContext: FlipMessage = flipMessage.inContext(currentContext) as FlipMessage
+        flipMessageInContext.removed = true
+    }
+    
     func flipMessagesForRoomID(roomID: String) -> [FlipMessage] {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.REMOVED) == false))")
         return FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]

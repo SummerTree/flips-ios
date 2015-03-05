@@ -22,11 +22,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     weak var delegate: PreviewViewDelegate?
 
     private var videoPlayerView: PlayerView!
-    private var sendContainerView: UIView!
-    private var sendContainerButtonView: UIView!
-    private var sendLabel: UILabel!
-    private var sendImage: UIImage!
-    private var sendImageButton: UIButton!
+    private var sendButton: UIButton!
     
     override init() {
         super.init()
@@ -57,24 +53,13 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         self.videoPlayerView.backgroundColor = UIColor.deepSea()
         self.addSubview(self.videoPlayerView)
         
-        self.sendContainerView = UIView()
-        self.sendContainerView.backgroundColor = UIColor.avacado()
-        self.sendContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "sendButtonTapped:"))
-        self.addSubview(sendContainerView)
-        
-        
-        self.sendLabel = UILabel()
-        self.sendLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h1)
-        self.sendLabel.text = "Send"
-        self.sendLabel.textColor = UIColor.whiteColor()
-        self.sendContainerView.addSubview(sendLabel)
-        
-        self.sendImage = UIImage(named: "Send")
-        self.sendImageButton = UIButton()
-        self.sendImageButton.userInteractionEnabled = false
-        self.sendImageButton.setImage(self.sendImage, forState: UIControlState.Normal)
-        
-        self.sendContainerView.addSubview(sendImageButton)
+        self.sendButton = UIButton()
+        self.sendButton.backgroundColor = UIColor.avacado()
+        self.sendButton.titleLabel?.textColor = UIColor.whiteColor()
+        self.sendButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h1)
+        self.sendButton.setImage(UIImage(named: "Send")!, verticallyAlignedWithTitle: NSLocalizedString("Send"))
+        self.sendButton.addTarget(self, action: "sendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(sendButton)
     }
 
     func makeConstraints() {
@@ -92,27 +77,15 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         // asking help to delegate to align the container with navigation bar
         self.delegate?.previewViewMakeConstraintToNavigationBarBottom(self.videoPlayerView)
         
-        self.sendContainerView.mas_makeConstraints { (make) -> Void in
+        self.sendButton.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.bottom.equalTo()(self)
         }
-        
-        self.sendLabel.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self.sendContainerView)
-            make.bottom.equalTo()(self.sendContainerView.mas_centerY).with().offset()(-self.SEND_BUTTON_SUBVIEWS_CENTER_MARGIN)
-        }
-        
-        self.sendImageButton.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self.sendContainerView)
-            make.top.equalTo()(self.sendLabel.mas_bottom).with().offset()(self.SEND_BUTTON_SUBVIEWS_CENTER_MARGIN)
-        }
-        
     }
     
     func sendButtonTapped(sendButton: UIButton!) {
-        self.sendImageButton.highlighted = true
         self.delegate?.previewButtonDidTapSendButton(self)
     }
     

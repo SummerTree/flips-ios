@@ -11,7 +11,7 @@
 
 class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     
-    private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Error", comment: "Error")
+    private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Fail", comment: "Fail")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
     
     private var previewView: PreviewView!
@@ -60,13 +60,23 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPubNubDidConnectNotificationReceived", name: PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.previewView.viewWillDisappear()
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    
+    // MARK: - Notification Handler
+
+    internal func onPubNubDidConnectNotificationReceived() {
+        self.hideActivityIndicator()
+    }
     
     // MARK: - Flips Methods
     
@@ -144,17 +154,26 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 // SEND MESSAGE
                 let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.hideActivityIndicator()
                         if (success) {
+                            self.hideActivityIndicator()
                             self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
                         } else {
-                            var message = self.SEND_MESSAGE_ERROR_MESSAGE
-                            if (flipError != nil) {
-                                message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
+                            if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                                self.hideActivityIndicator()
+                                let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                alertView.show()
+                            } else if (!PubNubService.sharedInstance.isConnected()) {
+                                self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Reconnecting\nPlease Wait"))
+                            } else {
+                                self.hideActivityIndicator()
+                                var message = self.SEND_MESSAGE_ERROR_MESSAGE
+                                if (flipError != nil) {
+                                    message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
+                                }
+                                
+                                let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                alertView.show()
                             }
-                            
-                            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                            alertView.show()
                         }
                     })
                 }

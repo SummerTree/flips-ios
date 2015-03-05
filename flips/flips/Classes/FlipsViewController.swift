@@ -16,7 +16,14 @@ class FlipsViewController : UIViewController {
     
     private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
     private let ACTIVITY_INDICATOR_SIZE: CGFloat = 100
+    
+    private let LOADING_CONTAINER_VERTICAL_MARGIN: CGFloat = 10
+    private let LOADING_CONTAINER_HORIZONTAL_MARGIN: CGFloat = 20
+    private let LOADING_MESSAGE_TOP_MARGIN: CGFloat = 15
+
+    private var loadingContainer: UIView!
     private var activityIndicator: UIActivityIndicatorView!
+    private var loadingMessageLabel: UILabel!
     
     
     // MARK: - Init methods
@@ -61,36 +68,86 @@ class FlipsViewController : UIViewController {
     // MARK: Activity Indicator Methods
     
     internal func setupActivityIndicator() {
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
-        activityIndicator.backgroundColor = UIColor.blackColor()
-        activityIndicator.alpha = 0
-        activityIndicator.layer.cornerRadius = 8
-        activityIndicator.layer.masksToBounds = true
-        self.view.addSubview(activityIndicator)
+        loadingContainer = UIView()
+        loadingContainer.clipsToBounds = true
+        loadingContainer.layer.cornerRadius = 8
+        loadingContainer.layer.masksToBounds = true
+        loadingContainer.backgroundColor = UIColor.blackColor()
+        loadingContainer.alpha = 0
+        self.view.addSubview(loadingContainer)
         
-        activityIndicator.mas_makeConstraints { (make) -> Void in
-            make.center.equalTo()(self.view)
-            make.width.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
-            make.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
-        }
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        loadingContainer.addSubview(activityIndicator)
+        
+        loadingMessageLabel = UILabel()
+        loadingMessageLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
+        loadingMessageLabel.textColor = UIColor.whiteColor()
+        loadingMessageLabel.textAlignment = NSTextAlignment.Center
+        loadingMessageLabel.numberOfLines = 2
+        loadingContainer.addSubview(loadingMessageLabel)
     }
     
-    func showActivityIndicator() {
+    func showActivityIndicator(userInteractionEnabled: Bool = false, message: String? = nil) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.view.userInteractionEnabled = false
+            self.view.bringSubviewToFront(self.loadingContainer)
+            
+            let isShowingMessage: Bool = (message != nil)
+            if (isShowingMessage) {
+                self.loadingMessageLabel.text = message!
+            } else {
+                self.loadingMessageLabel.text = ""
+            }
+            self.updateLoadingViewConstraints(isShowingMessage)
+            
+            self.view.userInteractionEnabled = userInteractionEnabled
             self.activityIndicator.startAnimating()
             UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                self.activityIndicator.alpha = 0.8
+                self.loadingContainer.alpha = 0.8
             })
         })
+    }
+    
+    private func updateLoadingViewConstraints(isShowingText: Bool) {
+        loadingMessageLabel.sizeToFit()
+        
+        var containerHeight = self.ACTIVITY_INDICATOR_SIZE
+        var containerWidth = self.ACTIVITY_INDICATOR_SIZE
+        if (isShowingText) {
+            containerHeight = self.ACTIVITY_INDICATOR_SIZE + loadingMessageLabel.frame.size.height + LOADING_CONTAINER_VERTICAL_MARGIN
+            containerWidth = loadingMessageLabel.frame.size.width + LOADING_CONTAINER_HORIZONTAL_MARGIN
+        }
+        
+        loadingContainer.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
+            update.center.equalTo()(self.view)
+            update.width.equalTo()(containerWidth)
+            update.height.equalTo()(containerHeight)
+        }
+        
+        activityIndicator.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
+            update.top.equalTo()(self.loadingContainer)
+            update.centerX.equalTo()(self.loadingContainer)
+            update.width.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+            update.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+        }
+        
+        loadingMessageLabel.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
+            update.centerX.equalTo()(self.loadingContainer)
+            update.top.equalTo()(self.loadingContainer.mas_centerY).offset()(self.LOADING_MESSAGE_TOP_MARGIN)
+            update.width.equalTo()(self.loadingMessageLabel.frame.size.width)
+            update.height.equalTo()(self.loadingMessageLabel.frame.size.height)
+        }
+        
+        self.view.updateConstraints()
     }
     
     func hideActivityIndicator() {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.view.userInteractionEnabled = true
-            self.activityIndicator.startAnimating()
             UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                self.activityIndicator.alpha = 0
+                self.loadingContainer.alpha = 0
             }, completion: { (finished) -> Void in
                 self.activityIndicator.stopAnimating()
             })
