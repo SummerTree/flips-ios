@@ -27,8 +27,9 @@
     }
     
     class func randomFileName(fileExtension: String) -> String {
+        let randomNumber = String(format:"%i", rand() % 100000)
         let timestamp = String(format:"%f", NSDate().timeIntervalSince1970 * 1000)
-        return timestamp + "." + fileExtension
+        return timestamp + randomNumber + "." + fileExtension
     }
     
     class func clearTempFiles() {

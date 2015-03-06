@@ -23,13 +23,14 @@
         [self createVideoWithImage:image atPath:exportPath completionHandler:^{
             NSURL *videoURL = [NSURL fileURLWithPath:exportPath];
             
-            NSString *thumbnailPath = [TempFiles tempVideoFilePath];
+            NSString *thumbnailPath = [TempFiles tempThumbnailFilePath];
             NSURL *thumbnailURL = [NSURL fileURLWithPath:thumbnailPath];
             [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
             
             if (audioURL) {
-                [self mergeVideo:videoURL withAudio:audioURL atPath:exportPath completionHandler:^{
-                    successHandler([NSURL fileURLWithPath:exportPath], thumbnailURL);
+                NSString *finalPath = [TempFiles tempVideoFilePath]; // We cannot reuse the same path(exportPath) here. It causes an error on iOS7.
+                [self mergeVideo:videoURL withAudio:audioURL atPath:finalPath completionHandler:^{
+                    successHandler([NSURL fileURLWithPath:finalPath], thumbnailURL);
                 }];
             } else {
                 successHandler(videoURL, thumbnailURL);
@@ -235,13 +236,19 @@
     AVURLAsset *audioAsset = [AVURLAsset assetWithURL:audioURL];
     AVURLAsset *videoAsset = [AVURLAsset assetWithURL:videoURL];
     
+    NSError *error;
+    
     AVMutableComposition *mixComposition = [AVMutableComposition composition];
     
     AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio
                                                                                    preferredTrackID:kCMPersistentTrackID_Invalid];
     [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration)
                                    ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
-                                    atTime:kCMTimeZero error:nil];
+                                    atTime:kCMTimeZero error:&error];
+    
+    if (error) {
+        NSLog(@"Could not insert audio track: %@", error.localizedDescription);
+    }
     
     NSArray *videoTracks = [videoAsset tracksWithMediaType:AVMediaTypeVideo];
     
@@ -250,7 +257,11 @@
                                                                                        preferredTrackID:kCMPersistentTrackID_Invalid];
         [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
                                        ofTrack:[videoTracks objectAtIndex:0]
-                                        atTime:kCMTimeZero error:nil];
+                                        atTime:kCMTimeZero error:&error];
+        
+        if (error) {
+            NSLog(@"Could not insert video track: %@", error.localizedDescription);
+        }
     }
     
     AVAssetExportSession *assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition
@@ -265,6 +276,9 @@
     assetExport.shouldOptimizeForNetworkUse = YES;
     
     [assetExport exportAsynchronouslyWithCompletionHandler:^(void) {
+        if (assetExport.status == AVAssetExportSessionStatusFailed) {
+            NSLog(@"Could not create video composition. Error: %@", assetExport.error.description);
+        }
         completionHandler();
     }];
 }
