@@ -10,8 +10,6 @@
 // the license agreement.
 //
 
-public typealias DownloadFinishedCallback = ((success: Bool) -> Void)
-
 let DOWNLOAD_FINISHED_NOTIFICATION_NAME: String = "download_finished_notification"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: String = "download_finished_notification_param_flip_key"
 let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY: String = "download_finished_notification_param_message_key"
@@ -20,7 +18,6 @@ let DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY: String = "download_finished_n
 public class Downloader : NSObject {
     
     let TIME_OUT_INTERVAL: NSTimeInterval = 60 //seconds
-    private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallback]>
     
     // MARK: - Singleton Implementation
     
@@ -31,24 +28,9 @@ public class Downloader : NSObject {
         return Static.instance
     }
     
-    // MARK: - Initalization
-    
-    override init() {
-        self.downloadInProgressURLs = Dictionary<String, [DownloadFinishedCallback]>()
-        super.init()
-    }
-    
     // MARK: - Download Public Methods
     
-    func downloadTask(url: NSURL, localURL: NSURL, completion: DownloadFinishedCallback) {
-        var absoluteString = url.absoluteString!
-    
-        if (self.downloadInProgressURLs[absoluteString] == nil) {
-            self.downloadInProgressURLs[absoluteString] = [DownloadFinishedCallback]()
-        }
-        
-        self.downloadInProgressURLs[absoluteString]!.append(completion)
-        
+    func downloadTask(url: NSURL, localURL: NSURL, completion: (Bool) -> Void) {
         let request = NSMutableURLRequest(URL: url)
         request.timeoutInterval = TIME_OUT_INTERVAL
         
@@ -57,19 +39,12 @@ public class Downloader : NSObject {
         var downloadTask = manager.downloadTaskWithRequest(request, progress: nil, destination: { (targetPath, response) -> NSURL! in
             return localURL
             }) { (response, filePath, error) -> Void in
-                var success: Bool
                 if (error != nil) {
-                    println("Could not download data from URL: \(absoluteString) ERROR: \(error)")
-                    success = false
+                    println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
+                    completion(false)
                 } else {
-                    success = true
+                    completion(true)
                 }
-                
-                for callback in self.downloadInProgressURLs[absoluteString]! {
-                    callback(success: success)
-                }
-                
-                self.downloadInProgressURLs[absoluteString] = nil
         }
         
         downloadTask.resume()
