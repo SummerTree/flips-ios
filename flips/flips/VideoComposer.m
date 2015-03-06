@@ -28,8 +28,9 @@
             [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
             
             if (audioURL) {
-                [self mergeVideo:videoURL withAudio:audioURL atPath:exportPath completionHandler:^{
-                    successHandler([NSURL fileURLWithPath:exportPath], thumbnailURL);
+                NSString *finalPath = [TempFiles tempVideoFilePath]; // We cannot reuse the same path(exportPath) here. It causes an error on iOS7.
+                [self mergeVideo:videoURL withAudio:audioURL atPath:finalPath completionHandler:^{
+                    successHandler([NSURL fileURLWithPath:finalPath], thumbnailURL);
                 }];
             } else {
                 successHandler(videoURL, thumbnailURL);
