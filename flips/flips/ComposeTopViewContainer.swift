@@ -82,7 +82,6 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
             make.right.equalTo()(self.cameraPreview)
         }
         
-        
         flipWordLabel.mas_makeConstraints { (make) -> Void in
             make.bottom.equalTo()(self).with().offset()(FLIP_WORD_LABEL_MARGIN_BOTTOM)
             make.centerX.equalTo()(self)
@@ -90,9 +89,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         
         flipImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
-            make.left.equalTo()(self)
-            make.right.equalTo()(self)
-            make.height.equalTo()(self.cameraPreview.mas_width)
+            make.height.equalTo()(self)
+            make.centerX.equalTo()(self)
+            make.width.equalTo()(self.mas_height)
         }
     }
     
