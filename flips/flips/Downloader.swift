@@ -30,7 +30,7 @@ public class Downloader : NSObject {
     
     // MARK: - Download Public Methods
     
-    func downloadTask(url: NSURL, localURL: NSURL, completion: (Bool) -> Void) {
+    func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void)) {
         let request = NSMutableURLRequest(URL: url)
         request.timeoutInterval = TIME_OUT_INTERVAL
         
@@ -41,9 +41,9 @@ public class Downloader : NSObject {
             }) { (response, filePath, error) -> Void in
                 if (error != nil) {
                     println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
-                    completion(false)
+                    completion(success: false)
                 } else {
-                    completion(true)
+                    completion(success: true)
                 }
         }
         
