@@ -236,7 +236,6 @@
 		7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */; };
 		7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */; };
 		7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
-		7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */; };
 		7AE3C6661A824C0700910CBC /* PersistentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE3C6651A824C0700910CBC /* PersistentManager.swift */; };
 		7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
@@ -251,7 +250,6 @@
 		7b00d7878709597258267b57 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
 		7b1ded2644fb2233cce4e86f /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D6CEE19D4963100E39A1B /* SettingsViewController.swift */; };
 		7bbd5b05e1362ba9a7d0e182 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
-		7ca2b7d896c17e056d654c23 /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F285B26C1A102190002DEEC2 /* CachingService.swift */; };
 		7df09d5e8fa2443d50777993 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
 		7fe4bec89091de49cf20c34e /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
 		80a88165c74c100f5f34ce13 /* UpdateUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70736C311A0D471F004E55E4 /* UpdateUserProfileViewController.swift */; };
@@ -292,7 +290,6 @@
 		BE2E72081A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		BE2E72091A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
-		F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F285B26C1A102190002DEEC2 /* CachingService.swift */; };
 		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
@@ -345,7 +342,6 @@
 		d3bea59b553b8096359da8ee /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71B1A168CAC0011B212 /* BorderedView.swift */; };
 		d3f89c8970c104f6a487501a /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
 		d788bb9f7412070a44b0891d /* ChatLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */; };
-		d7f83af602a6d55cf368cf9c /* CacheHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */; };
 		d80780f42bb85e010f6618de /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */; };
 		d859042b472d55da0712a59c /* AudioRecorderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7046C9B619F18EB100CBD72D /* AudioRecorderService.swift */; };
 		da44c185daec05d4e340d352 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792119DA07F30086A66B /* ComposeViewController.swift */; };
@@ -566,7 +562,6 @@
 		7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationMessageViewDelegate.swift; path = Classes/NotificationMessageViewDelegate.swift; sourceTree = "<group>"; };
 		7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CropOverlayView.swift; path = Classes/CropOverlayView.swift; sourceTree = "<group>"; };
 		7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
-		7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheHandler.swift; sourceTree = "<group>"; };
 		7AE3C6651A824C0700910CBC /* PersistentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentManager.swift; sourceTree = "<group>"; };
 		7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingHelper.swift; sourceTree = "<group>"; };
 		7AF82DE519EFEC3300D0393F /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
@@ -598,7 +593,6 @@
 		BE2E72071A98119400F237BE /* empty_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = empty_video.mov; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		F285B26C1A102190002DEEC2 /* CachingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingService.swift; sourceTree = "<group>"; };
 		F29324701A1583B700355A4D /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		F29324741A19A36700355A4D /* FlipPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipPlayerItem.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
@@ -693,7 +687,6 @@
 			children = (
 				73D727981A83E728006DCC92 /* Caching */,
 				5707185719D19D580069064F /* Backend */,
-				7AE2B47519FEC794002E4F66 /* Cache Handler */,
 				7AF82E2719F07CF700D0393F /* Chat Handler */,
 				7AFB719919FFBF08002695AC /* Downloader */,
 				70E59C6119F584B2008DE18E /* Media */,
@@ -1399,15 +1392,6 @@
 			name = "Notification Messages";
 			sourceTree = "<group>";
 		};
-		7AE2B47519FEC794002E4F66 /* Cache Handler */ = {
-			isa = PBXGroup;
-			children = (
-				F285B26C1A102190002DEEC2 /* CachingService.swift */,
-				7AE2B47619FEC7AE002E4F66 /* CacheHandler.swift */,
-			);
-			name = "Cache Handler";
-			sourceTree = "<group>";
-		};
 		7AF82E2719F07CF700D0393F /* Chat Handler */ = {
 			isa = PBXGroup;
 			children = (
@@ -1657,7 +1641,6 @@
 				e15b5d622a0f4ffe65c38e01 /* ConfirmPictureViewDelegate.swift in Sources */,
 				55da5edcef86e23ad11754f2 /* MBContactModel.m in Sources */,
 				0ffdec308ddb793617bd34ae /* ComposeTopViewContainer.swift in Sources */,
-				d7f83af602a6d55cf368cf9c /* CacheHandler.swift in Sources */,
 				b64ff3137cf820dd0fdcbcb0 /* TakePictureViewControllerDelegate.swift in Sources */,
 				d3bea59b553b8096359da8ee /* BorderedView.swift in Sources */,
 				eddc4082678156abade47583 /* FlipEntry.m in Sources */,
@@ -1767,7 +1750,6 @@
 				4fa2aab428d59d37b5cc3870 /* BuilderWordDataSource.swift in Sources */,
 				a0b0a1a06cee44d31bf7db00 /* ThreadSafe.swift in Sources */,
 				3ed55f6f1df3b959270013e8 /* PhoneNumberHelper.swift in Sources */,
-				7ca2b7d896c17e056d654c23 /* CachingService.swift in Sources */,
 				a39f7d83d9bcd515a2c3679a /* NextButton.swift in Sources */,
 				1146cb99c2c6abba23547446 /* NSManagedObject+helpers.m in Sources */,
 				12008bacdae45f5c3272e713 /* PhoneNumberViewDelegate.swift in Sources */,
@@ -1843,7 +1825,6 @@
 				07B66B311A147B5800407A28 /* MBContactModel.m in Sources */,
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
-				7AE2B47719FEC7AE002E4F66 /* CacheHandler.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
 				F2DA96581A38C90000BAA359 /* FlipEntry.m in Sources */,
@@ -1956,7 +1937,6 @@
 				7A997DBC1A274F7400346817 /* BuilderWordDataSource.swift in Sources */,
 				075A0C091A43A1F800E92760 /* ThreadSafe.swift in Sources */,
 				7A18BF4E1A1E496B00C40E16 /* PhoneNumberHelper.swift in Sources */,
-				F285B26D1A102190002DEEC2 /* CachingService.swift in Sources */,
 				072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */,
 				07C53DCA1A11C6B40011E6A2 /* NSManagedObject+helpers.m in Sources */,
 				57E3763C19DC57970060AAA8 /* PhoneNumberViewDelegate.swift in Sources */,

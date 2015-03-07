@@ -14,6 +14,7 @@ public class StorageCache {
 
     public typealias CacheSuccessCallback = (String!) -> Void
     public typealias CacheFailureCallback = (FlipError) -> Void
+    public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?)
     
     public enum CacheGetResponse {
         case DATA_IS_READY
@@ -25,6 +26,7 @@ public class StorageCache {
     private let sizeLimitInBytes: UInt64
     private let cacheJournal: CacheJournal
     private let cacheQueue: dispatch_queue_t
+    private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
     
     init(cacheID: String, cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
         self.sizeLimitInBytes = sizeLimitInBytes
@@ -36,6 +38,7 @@ public class StorageCache {
         let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheID).cache")
         self.cacheJournal = CacheJournal(absolutePath: journalName)
         self.cacheQueue = dispatch_queue_create(cacheID, nil)
+        self.downloadInProgressURLs = Dictionary<String, [DownloadFinishedCallbacks]>()
         self.initCacheDirectory()
         self.cacheJournal.open()
     }
@@ -85,18 +88,32 @@ public class StorageCache {
             return CacheGetResponse.DATA_IS_READY
         }
         
+        if (self.downloadInProgressURLs[localPath] != nil) {
+            self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure))
+            return CacheGetResponse.DOWNLOAD_WILL_START
+        }
+        
+        self.downloadInProgressURLs[localPath] = [DownloadFinishedCallbacks]()
+        self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure))
+        
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,
             completion: { (result) -> Void in
                 self.cacheJournal.insertNewEntry(localPath)
                 self.scheduleCleanup()
-                if (result) {
-                    success?(localPath)
-                } else {
-                    failure?(FlipError(error: "Error downloading media file", details: nil))
+                
+                for callbacks in self.downloadInProgressURLs[localPath]! {
+                    if (result) {
+                        callbacks.success?(localPath)
+                    } else {
+                        callbacks.failure?(FlipError(error: "Error downloading media file", details: nil))
+                    }
                 }
+                
+                self.downloadInProgressURLs[localPath] = nil
             }
         )
+        
         return CacheGetResponse.DOWNLOAD_WILL_START
     }
     
