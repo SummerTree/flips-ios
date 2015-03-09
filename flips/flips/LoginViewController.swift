@@ -112,7 +112,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         var scope = ["public_profile", "email", "user_birthday", "user_friends"]
         FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
             completionHandler: { (session, state, error) -> Void in
-                if (error == nil && state == FBSessionState.Closed) {
+                if (error == nil && (state == FBSessionState.Closed || state == FBSessionState.ClosedLoginFailed)) {
                     return
                 }
                 
