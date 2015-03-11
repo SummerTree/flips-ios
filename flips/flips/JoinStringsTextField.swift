@@ -175,7 +175,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
             
         else if action == "copy:" {
-            return false
+            return true
         }
             
         else if action == "paste:" {
