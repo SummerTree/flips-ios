@@ -737,6 +737,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.deviceAuthorized = false
             self.delegate?.cameraView(self, cameraAvailable: false)
             showAlert(title, message: message)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.toggleCameraButton.enabled = false
+            })
         }
     }
     
