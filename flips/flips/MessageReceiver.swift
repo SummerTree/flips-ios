@@ -52,13 +52,10 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     private func onMessageReceived(flipMessage: FlipMessage) {
         // Notify any screen that there is a new message
-        
-        let flips = flipMessage.flips
 
         println("New Message Received")
         println("   From: \(flipMessage.from.firstName)")
         println("   Sent at: \(flipMessage.createdAt)")
-        println("   #flips: \(flips.count)")
         
         var isTemporary = true
         if let loggedUser = User.loggedUser() {
@@ -69,21 +66,21 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 
         flipMessagesWaiting[flipMessage.flipMessageID] = Array<String>()
 
-        for var i = 0; i < flips.count; i++ {
-            println("       flip #\(flips[i].flipID)")
-            let flip = flips[i]
-            flipMessagesWaiting[flipMessage.flipMessageID]?.append(flip.flipID)
+        // Download the thumbnail only for the first flip of the message
+        let firstFlip = flipMessage.flips.first! as Flip
+        flipMessagesWaiting[flipMessage.flipMessageID]?.append(firstFlip.flipID)
 
-            let cache = ThumbnailsCache.sharedInstance
-            cache.get(NSURL(string: flip.thumbnailURL)!,
-                success: { (localPath: String!) -> Void in
-                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: nil)
-                },
-                failure: { (error: FlipError) -> Void in
-                    println("Failed to get resource from cache, error: \(error)")
-                    self.sendDownloadFinishedBroadcastForFlip(flip, flipMessageID: flipMessage.flipMessageID, error: error)
-            })
-        }
+        println("   downloading thumbnail for flip #\(firstFlip.flipID)")
+
+        let cache = ThumbnailsCache.sharedInstance
+        cache.get(NSURL(string: firstFlip.thumbnailURL)!,
+            success: { (localPath: String!) -> Void in
+                self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: nil)
+            },
+            failure: { (error: FlipError) -> Void in
+                println("Failed to get resource from cache, error: \(error)")
+                self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: error)
+        })
     }
     
     private func sendDownloadFinishedBroadcastForFlip(flip: Flip, flipMessageID: String, error: FlipError?) {
