@@ -120,19 +120,21 @@ Scenario: Seeing screen's title when I have a group conversation and I do not ha
 Scenario: Seeing screen's title when I have a conversation with just one person and this person has a flips account
   Given I am on the "Thread View" screen
   When The conversation has just one person
+  And This person has a flips account
   Then I should see "<flips name>" as the title of the screen
 
 @Flips-220
 Scenario: Seeing screen's title when I have a conversation with just one person and this person does not have a flips account
   Given I am on the "Thread View" screen
   When The conversation has just one person
+  And This person doesn't have a flips account
   Then I should see "<contact's name>" as the title of the screen
 
 @Flips-220
 Scenario: Seeing screen's title when I sent a message to a contact that was not on Flips but now he is
   Given I am on the "Thread View" screen
   When I am seeing a conversation that the contact wasn't on flips
-  But Now he it
+  But Now he is
   Then I should see "<flips name>" as the title of the screen
 
 @Flips-220
