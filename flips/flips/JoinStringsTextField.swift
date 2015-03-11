@@ -80,6 +80,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func getFlipTexts() -> [String] {
+        self.resignFirstResponder()
+        
         var flipTexts : [String] = [String]()
         
         var charIndex = 0
@@ -134,6 +136,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         if (lastWord != "") {
            flipTexts.append(lastWord)
         }
+        
+        self.becomeFirstResponder()
         
         return flipTexts
     }
