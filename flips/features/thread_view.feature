@@ -9,6 +9,7 @@ Scenario: Accessing Thread View screen
   When I touch a conversation on the list
   Then I should see "Thread View" screen
 
+#may change, waiting client's answer
 @Flips-220
 Scenario: Seeing Thread View screen when I have more than 1 unread message
   Given I am on the "Inbox" screen
@@ -64,7 +65,7 @@ Scenario: Seeing Thread View screen when I have only read messages and the last 
   When I touch a conversation with only read messages
   And the last message was sent by me
   Then I should see my message
-  And I should see beneath the video the text sent to me on the message
+  And I should see beneath the video the text sent by me on the message
 
 @Flips-220
 Scenario: Checking if the message is opening correctly
@@ -77,7 +78,7 @@ Scenario: Auto-Play when I am scrolling the list
   Given I am on the "Thread View" screen
   And I am seeing a conversation with more than one message
   When I scroll the list
-  And I am seeing a message all square of the message
+  And The entire thumbnail of the message is showing on the screen(top and bottom are visible)
   Then The message should start automatically
 
 @Flips-220
@@ -86,7 +87,7 @@ Scenario: Scrolling a conversation when the video is playing
   And I am seeing a conversation with more than one message
   When A message is playing
   And I scroll the list
-  Then The video should stop automatically as soon as I can't see all square of the message
+  Then The video should stop automatically as soon as I can't see the entire thumbnail of the message
 
 @Flips-220
 Scenario: Pausing a video
@@ -138,11 +139,11 @@ Scenario: Seeing screen's title when I sent a message to a contact that was not 
   Then I should see "<flips name>" as the title of the screen
 
 @Flips-220
-Scenario: Time for each word with video
+Scenario: Time for each word
   Given I am on the "Thread View" screen
-  When I am watching a message with <midia>
-  Then I should see this word and midia for 1 second
-  | midia   |
+  When I am watching a message with <media>
+  Then I should see this word and media for 1 second
+  | media   |
   | picture |
   | audio   |
   | video   |
@@ -151,7 +152,7 @@ Scenario: Time for each word with video
 Scenario: Watching a message with more than one word
   Given I am on the "Thread View" screen
   When I am seeing a message with more than 1 word
-  Then I should see each word and midia for 1 second
+  Then I should see each word and media for 1 second
 
 @Flips-220
 Scenario: Checking avatar on messages that I received
@@ -229,10 +230,10 @@ Scenario: Seeing Thread View screen when I have more than 15 messages
 @Flips-220
 Scenario: Checking first frame
   Given I am on the "Inbox" screen
-  And I have a message that the first word is <midia>
+  And I have a message that the first word is <media>
   When I touch this message
   Then I should see the <thumbnail> as thumbnail
-  | midia     | thumbnail                |
+  | media     | thumbnail                |
   | a picture | image                    |
   | nothing   | green image              |
   | video     | first frame of the video |
