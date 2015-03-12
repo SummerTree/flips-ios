@@ -66,8 +66,29 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
             let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         } else {
-            let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phone, userId: User.loggedUser()?.userID)
-            self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
+            checkIfPhoneNumberExists(phone)
         }
+    }
+    
+    // MARK: - Private functions
+    
+    private func checkIfPhoneNumberExists(phoneNumber: String) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        UserService.sharedInstance.phoneNumberExists(phoneNumber,
+            success: { (response) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                // if phone number belongs to an active user then display
+                // an alert an request user to type another phone number
+                let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.PHONE_NUMBER_ALREADY_EXISTS, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+                self.changeNumberInputPhoneView.clearPhoneNumberField()
+            },
+            failure: { (error) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                // if phone number does not belong to another active user
+                // then proceed to verification code screen
+                let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phoneNumber, userId: User.loggedUser()?.userID)
+                self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
+        })
     }
 }

@@ -34,6 +34,7 @@ public class UserService: FlipsService {
     let UPLOAD_CONTACTS_VERIFY: String = "/user/{{user_id}}/contacts/verify"
     let FACEBOOK_CONTACTS_VERIFY: String = "/user/{{user_id}}/facebook/verify"
     let MY_FLIPS: String = "/user/{{user_id}}/flips"
+    let PHONE_NUMBER_EXISTS_URL: String = "/phoneNumber/{{phone_number}}/exists"
     
     public class var sharedInstance : UserService {
         struct Static {
@@ -483,6 +484,24 @@ public class UserService: FlipsService {
                     }
             })
         }
+    }
+    
+    // MARK: - Phone Number
+    
+    func phoneNumberExists(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        let url = self.HOST + self.PHONE_NUMBER_EXISTS_URL.stringByReplacingOccurrencesOfString("{{phone_number}}", withString: phoneNumber.intlPhoneNumber, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        
+        self.get(url, parameters: nil,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                success(nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                failure(nil)
+        })
     }
     
 
