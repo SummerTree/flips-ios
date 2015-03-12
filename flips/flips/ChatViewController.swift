@@ -18,7 +18,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var chatTitle: String!
     
     private var roomID: String!
-    private var flipMessageIds = NSMutableOrderedSet()
+    private var flipMessages = NSMutableOrderedSet()
     
     private let flipMessageDataSource = FlipMessageDataSource()
     
@@ -53,19 +53,23 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.chatView.delegate = self
+        self.chatView.dataSource = self
+        
         self.reloadFlipMessages()
+        self.chatView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
         self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
-        self.chatView.reloadFlipMessages()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -88,14 +92,14 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     func reloadFlipMessages() {
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
         for flipMessage in flipMessages {
-            self.flipMessageIds.addObject(flipMessage.flipMessageID)
+            self.flipMessages.addObject(flipMessage)
         }
     }
     
     func reload() {
         self.reloadFlipMessages()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.chatView.reloadFlipMessages()
+            self.chatView.loadNewFlipMessages()
         })
     }
     
@@ -117,14 +121,12 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func numberOfFlipMessages(chatView: ChatView) -> Int {
         var numberOfFlipMessages: Int!
-        numberOfFlipMessages = self.flipMessageIds.count
+        numberOfFlipMessages = self.flipMessages.count
         return numberOfFlipMessages
     }
     
-    func chatView(chatView: ChatView, flipMessageIdAtIndex index: Int) -> String {
-        var flipMessageId: String!
-        flipMessageId = self.flipMessageIds.objectAtIndex(index) as String
-        return flipMessageId
+    func chatView(chatView: ChatView, flipMessageAtIndex index: Int) -> FlipMessage {
+        return self.flipMessages.objectAtIndex(index) as FlipMessage
     }
     
     func chatView(chatView: ChatView, shouldAutoPlayFlipMessageAtIndex index: Int) -> Bool {

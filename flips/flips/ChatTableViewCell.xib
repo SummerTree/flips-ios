@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
@@ -43,6 +43,9 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="XJG-BW-67j" userLabel="messageTextLabel" customClass="ChatLabel" customModule="Flips" customModuleProvider="target">
                                 <rect key="frame" x="8" y="21" width="304" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="304" id="qCY-Wi-EOn"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -54,8 +57,7 @@
                             <constraint firstItem="XJG-BW-67j" firstAttribute="top" secondItem="5Ez-pj-V1e" secondAttribute="bottom" id="3oj-A3-oi8"/>
                             <constraint firstAttribute="centerX" secondItem="5Ez-pj-V1e" secondAttribute="centerX" id="5SB-vl-yoF"/>
                             <constraint firstItem="5Ez-pj-V1e" firstAttribute="top" secondItem="DSe-jo-N9d" secondAttribute="top" id="DvW-Se-4BD"/>
-                            <constraint firstItem="XJG-BW-67j" firstAttribute="leading" secondItem="DSe-jo-N9d" secondAttribute="leading" constant="8" id="R7y-xZ-BBD"/>
-                            <constraint firstAttribute="trailing" secondItem="XJG-BW-67j" secondAttribute="trailing" constant="8" id="XSI-cA-2jJ"/>
+                            <constraint firstAttribute="centerX" secondItem="XJG-BW-67j" secondAttribute="centerX" id="OUe-Q9-0x7"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -80,4 +82,9 @@
             <point key="canvasLocation" x="241" y="363.5"/>
         </tableViewCell>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

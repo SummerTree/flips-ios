@@ -14,12 +14,15 @@ import UIKit
 
 class PlayerView: UIView {
 
+    let BUTTONS_FADE_IN_OUT_ANIMATION_DURATION = 0.25
+    let BUTTONS_ALPHA: CGFloat = 0.6
+    
     var isPlaying = false
     var loadPlayerOnInit = false
     var playInLoop = false
     var loadingFlips = false
     var hasDownloadError = false
-
+    
     private var flips: Array<Flip>!
     private var words: Array<String>!
     private var playerItems: Array<FlipPlayerItem>!
@@ -97,18 +100,33 @@ class PlayerView: UIView {
                 }
                 
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-                self.thumbnailView.hidden = true
-                self.playButtonView.hidden = true
-                self.retryButtonView.hidden = true
-                self.progressBarView.hidden = true
 
                 let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
                 self.setWord(self.words[playerItem.order])
-                self.isPlaying = true
-                player!.volume = 1.0
-                player!.play()
+                
+                UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
+                    self.thumbnailView.alpha = 0
+                    self.playButtonView.alpha = 0
+                    self.retryButtonView.alpha = 0
+                    self.progressBarView.alpha = 0
+                }, completion: { (finished) -> Void in
+                    self.thumbnailView.hidden = true
+                    self.playButtonView.hidden = true
+                    self.retryButtonView.hidden = true
+                    self.progressBarView.hidden = true
+                    self.thumbnailView.alpha = 1
+                    self.playButtonView.alpha = self.BUTTONS_ALPHA
+                    self.retryButtonView.alpha = self.BUTTONS_ALPHA
+                    self.progressBarView.alpha = 1
+                    
+                    // Since it needs to wait the animation, the user can press back button, so it won't exist.
+                    if (player != nil) {
+                        self.isPlaying = true
+                        player!.volume = 1.0
+                        player!.play()
+                    }
+                })
             }
-
         } else {
             self.loadFlipsResourcesForPlayback({ () -> Void in
                 self.play()
@@ -147,15 +165,23 @@ class PlayerView: UIView {
             return
         }
         
+        let buttonFadeInAnimation: () -> Void = {
+            self.playButtonView.alpha = 0
+            self.playButtonView.hidden = false
+            UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
+                self.playButtonView.alpha = self.BUTTONS_ALPHA
+            })
+        }
+        
         if (fadeOutVolume) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.isPlaying = false
-                self.playButtonView.hidden = false
+                buttonFadeInAnimation()
                 self.fadeOutVolume()
             })
         } else {
             self.isPlaying = false
-            self.playButtonView.hidden = false
+            buttonFadeInAnimation()
             if let player = self.player() {
                 player.pause()
             }
@@ -182,10 +208,19 @@ class PlayerView: UIView {
         var pendingFlips = self.flips.count
         var numOfFlips = self.flips.count
 
-        self.progressBarView.hidden = false
-        self.playButtonView.hidden = true
-        self.retryButtonView.hidden = true
-
+        self.progressBarView.alpha = 0
+        UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
+            self.progressBarView.alpha = 1
+            self.playButtonView.alpha = 0
+            self.retryButtonView.alpha = 0
+        }) { (success) -> Void in
+            self.progressBarView.hidden = false
+            self.playButtonView.hidden = true
+            self.retryButtonView.hidden = true
+            self.playButtonView.alpha = self.BUTTONS_ALPHA
+            self.retryButtonView.alpha = self.BUTTONS_ALPHA
+        }
+        
         for (index, flip) in enumerate(self.flips) {
             self.words.append(flip.word)
 
@@ -267,19 +302,24 @@ class PlayerView: UIView {
 
     func setupPlayerWithFlips(flips: Array<Flip>) {
         self.flips = flips
-        self.updateDownloadProgress(0, of:flips.count);
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.updateDownloadProgress(0, of:flips.count);
+        })
 
         let firstFlip = flips.first
         if (firstFlip != nil) {
 
-            self.wordLabel.text = firstFlip!.word
+            let word = firstFlip!.word
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.wordLabel.text = word
+            })
 
             if (firstFlip!.thumbnailURL != nil && !firstFlip!.thumbnailURL.isEmpty) {
                 let response = ThumbnailsCache.sharedInstance.get(NSURL(string: firstFlip!.thumbnailURL)!,
                     success: { (localThumbnailPath: String!) in
+                        let thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            let thumbnail = UIImage(contentsOfFile: localThumbnailPath)
-
                             self.thumbnailView.image = thumbnail
                             self.thumbnailView.hidden = self.isPlaying
                         })
@@ -402,13 +442,13 @@ class PlayerView: UIView {
         self.addSubview(self.wordLabel)
         
         self.playButtonView = UIImageView()
-        self.playButtonView.alpha = 0.6
+        self.playButtonView.alpha = self.BUTTONS_ALPHA
         self.playButtonView.contentMode = UIViewContentMode.Center
         self.playButtonView.image = UIImage(named: "PlayButton")
         self.addSubview(self.playButtonView)
 
         self.retryButtonView = UIImageView()
-        self.retryButtonView.alpha = 0.6
+        self.retryButtonView.alpha = self.BUTTONS_ALPHA
         self.retryButtonView.contentMode = UIViewContentMode.Center
         self.retryButtonView.image = UIImage(named: "RetryButton")
         self.retryButtonView.hidden = true

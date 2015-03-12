@@ -719,23 +719,23 @@
 			name = PubNub;
 			sourceTree = "<group>";
 		};
-		5786B2CA19EEADBC00021DD3 /* Chat */ = {
+		5786B2CA19EEADBC00021DD3 /* Thread Screen */ = {
 			isa = PBXGroup;
 			children = (
 				5786B2C819EEADB700021DD3 /* ChatViewController.swift */,
 			);
-			name = Chat;
+			name = "Thread Screen";
 			sourceTree = "<group>";
 		};
-		5786B2CF19EEADD900021DD3 /* Chat */ = {
+		5786B2CF19EEADD900021DD3 /* Thread Screen */ = {
 			isa = PBXGroup;
 			children = (
+				5786B2CC19EEADD400021DD3 /* ChatView.swift */,
 				07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */,
 				5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */,
 				07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */,
-				5786B2CC19EEADD400021DD3 /* ChatView.swift */,
 			);
-			name = Chat;
+			name = "Thread Screen";
 			sourceTree = "<group>";
 		};
 		57A3A6BC19D5E2E70043790E /* Verification */ = {
@@ -811,7 +811,6 @@
 			isa = PBXGroup;
 			children = (
 				7A0D6CED19D4961C00E39A1B /* Builder */,
-				5786B2CA19EEADBC00021DD3 /* Chat */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				705EF07B19F9767800D4CF74 /* Confirm Flip */,
 				709088231A1E1624009915FE /* Import Contact */,
@@ -826,6 +825,7 @@
 				70BD0E7019E30C5100FE8652 /* Splash Screen */,
 				7AB1683619E31951004E2162 /* Take a Picture */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
+				5786B2CA19EEADBC00021DD3 /* Thread Screen */,
 				57A3A6BF19D5E4C00043790E /* Verification */,
 			);
 			name = Controller;
@@ -835,7 +835,6 @@
 			isa = PBXGroup;
 			children = (
 				072AD71D1A16B0040011B212 /* Buttons */,
-				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
 				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
@@ -853,6 +852,7 @@
 				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
 				7AB1683919E319C7004E2162 /* Take a Picture */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
+				5786B2CF19EEADD900021DD3 /* Thread Screen */,
 				57A3A6BC19D5E2E70043790E /* Verification */,
 				70B560A319D996B900FE4C34 /* Web View */,
 			);
