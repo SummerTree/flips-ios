@@ -111,7 +111,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        super.setupWhiteNavBarWithCloseButton("Contacts")
+        super.setupWhiteNavBarWithoutBackButtonWithRightDoneButton("Contacts")
         self.navigationController?.navigationBar.alpha = 1.0
         self.navigationController?.navigationBar.translucent = false
         var textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
@@ -130,6 +130,10 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.tableView.reloadData()
         })
+    }
+
+    override func doneButtonTapped() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     
