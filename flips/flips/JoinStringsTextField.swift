@@ -80,6 +80,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func getFlipTexts() -> [String] {
+        self.resignFirstResponder()
+        
         var flipTexts : [String] = [String]()
         
         var charIndex = 0
@@ -135,6 +137,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
            flipTexts.append(lastWord)
         }
         
+        self.becomeFirstResponder()
+        
         return flipTexts
     }
     
@@ -171,7 +175,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
             
         else if action == "copy:" {
-            return false
+            return true
         }
             
         else if action == "paste:" {

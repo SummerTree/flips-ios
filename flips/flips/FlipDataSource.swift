@@ -46,7 +46,7 @@ class FlipDataSource : BaseDataSource {
     
     private func fillFlip(flip: Flip, withJsonData json: JSON) {
         if (flip.flipID != json[FlipJsonParams.ID].stringValue) {
-            println("Possible error. Will update flip id from (\(flip.flipID)) to (\(json[FlipJsonParams.ID].stringValue))")
+            println("Will update flip id from (\(flip.flipID)) to (\(json[FlipJsonParams.ID].stringValue))")
         }
 
         flip.flipID = json[FlipJsonParams.ID].stringValue
