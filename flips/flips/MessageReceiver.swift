@@ -93,8 +93,13 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         
         NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
     }
-    
-    
+
+    private func onRoomReceived(messageJson: JSON) {
+        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
+    }
+
+
     // MARK: - Notification Handler
     
     func notificationReceived(notification: NSNotification) {
@@ -143,35 +148,56 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             self.flipMessagesWaiting[flipMessageID] = nil
         }
     }
-    
-    // MARK: - PubnubServiceDelegate
-    
-    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
+
+
+    // MARK: - New message
+
+    private func processFlipMessageJson(messageJson: JSON, atDate date: NSDate, fromChannelName: String) -> FlipMessage? {
         if (messageJson[MESSAGE_TYPE] == nil) {
             println("MESSAGE IN OLD FORMAT. SHOULD BE IGNORED")
             println("\nMessage received:\n\(messageJson)\n")
-            return
+            return nil
         }
-        
+
         if (!AuthenticationHelper.sharedInstance.isAuthenticated()) {
             println("User is not logged. Ignoring message.")
-            return
+            return nil
         }
-        
-        println("\nMessage received:\n\(messageJson)\n")
-        
+
         if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
             self.onRoomReceived(messageJson)
         } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
             // Message Received
-            let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
-            
-            if (flipMessage != nil) {
-                self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
-            }
+            return PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+        }
+
+        return nil
+    }
+
+    
+    // MARK: - PubnubServiceDelegate
+    
+    func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
+        println("\nMessage received:\n\(messageJson)\n")
+
+        let flipMessage = self.processFlipMessageJson(messageJson, atDate: date, fromChannelName: fromChannelName)
+
+        if (flipMessage != nil) {
+            self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
         }
     }
-    
+
+    func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<PNMessage>, fromChannelName: String) {
+        for pnMessage in messages {
+            self.processFlipMessageJson(JSON(pnMessage.message),
+                atDate: pnMessage.receiveDate.date,
+                fromChannelName: fromChannelName)
+        }
+    }
+
+
+    // MARK: - Event Handlers
+
     func startListeningMessages() {
         PubNubService.sharedInstance.delegate = self
     }
@@ -179,9 +205,5 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func stopListeningMessages() {
         PubNubService.sharedInstance.delegate = nil
     }
-    
-    func onRoomReceived(messageJson: JSON) {
-        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as Room
-        PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
-    }
+
 }
