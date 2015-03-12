@@ -154,8 +154,8 @@ class ConversationTableViewCell : UITableViewCell {
     
     func setRoomId(roomId: String) {
         self.roomId = roomId
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             let roomDataSource = RoomDataSource()
             var room = roomDataSource.retrieveRoomWithId(roomId)
             
@@ -187,31 +187,42 @@ class ConversationTableViewCell : UITableViewCell {
         }
 
         if (flipMessage != nil) {
+            let isMessageNotRead = flipMessage!.notRead.boolValue
+            let messagePhrase = flipMessage!.messagePhrase()
+            let photoURL = NSURL(string: flipMessage!.from.photoURL)
+            let createdAtDate = flipMessage!.createdAt
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
+                self.userImageView.setImageWithURL(photoURL)
+
+                // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
+                if (isMessageNotRead) {
+                    self.flipMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
+                } else {
+                    self.flipMessageLabel.text = messagePhrase
+                }
+
+                // The time stamp should reflect the time sent of the oldest unread message in the conversation
+                let formatedDate = DateHelper.formatDateToApresentationFormat(createdAtDate)
+                self.flipTimeLabel.text = formatedDate
+                self.flipTimeLabel.sizeToFit()
+            })
+
+            // Thumbnail is retrieved asynchronously.
+            // We gotta check if the retrieved thumbnail is the correct one for the current room Id
+
+            let originalRoomId = self.roomId
             flipMessage!.messageThumbnail {
                 (thumbnail: UIImage?) in
-                
-                let photoURL = NSURL(string: flipMessage!.from.photoURL)
-                let isMessageNotRead = flipMessage!.notRead.boolValue
-                let messagePhrase = flipMessage!.messagePhrase()
-                // The time stamp should reflect the time sent of the oldest unread message in the conversation
-                let formatedDate = DateHelper.formatDateToApresentationFormat(flipMessage!.createdAt)
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.flipImageView.image = thumbnail
-                    
-                    // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
-                    self.userImageView.setImageWithURL(photoURL)
-                    
-                    if (isMessageNotRead) {
-                        // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
-                        self.flipMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
-                    } else {
-                        self.flipMessageLabel.text = messagePhrase
-                    }
-                    
-                    self.flipTimeLabel.text = formatedDate
-                    self.flipTimeLabel.sizeToFit()
-                })
+
+                if (originalRoomId == self.roomId) {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.flipImageView.image = thumbnail
+                    })
+                } else {
+                    NSLog("Retrieved thumbnail for outdated roomID: %@ now: %@", originalRoomId, self.roomId)
+                }
             }
         }
     }
@@ -227,5 +238,11 @@ class ConversationTableViewCell : UITableViewCell {
                 self.badgeView.setBagdeValue("\(numberOfNotReadMessages)")
             }
         })
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.flipImageView.image = UIImage(named: "Filter_Photo")
     }
 }

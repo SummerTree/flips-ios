@@ -350,11 +350,7 @@ public class PersistentManager: NSObject {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 roomService.getMyRooms({ (rooms) -> Void in
                     println("   getMyRooms - success")
-                    for room in rooms {
-                        var roomInContext = room.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
-                        println("   - subscribing to room: \(roomInContext.roomID)")
-                        PubNubService.sharedInstance.subscribeToChannelID(roomInContext.pubnubID)
-                    }
+                    PubNubService.sharedInstance.subscribeOnMyChannels()
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
                     println("   getMyRooms - fail")
