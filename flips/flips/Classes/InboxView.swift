@@ -58,6 +58,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         conversationsTableView.separatorStyle = .None
         conversationsTableView.contentInset = UIEdgeInsetsMake(navigationBar.getNavigationBarHeight(), 0, 0, 0)
         conversationsTableView.contentOffset = CGPointMake(0, -navigationBar.getNavigationBarHeight())
+        conversationsTableView.scrollIndicatorInsets = UIEdgeInsetsMake(navigationBar.getNavigationBarHeight(), 0, 0, 0)
         conversationsTableView.backgroundColor = UIColor.sand()
         self.addSubview(conversationsTableView)
         navigationBar.delegate = self

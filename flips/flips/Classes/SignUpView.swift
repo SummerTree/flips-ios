@@ -164,6 +164,11 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     // MARK: - Messages Top View methods
     
     func showTopMessagesView() {
+        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.dismissKeyboard()
+            })
+        }
         UIGraphicsBeginImageContextWithOptions(navigationBar.frame.size, false, 0.0)
         navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext())
         var image = UIGraphicsGetImageFromCurrentImageContext()

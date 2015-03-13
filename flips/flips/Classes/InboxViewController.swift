@@ -62,7 +62,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.inboxView.viewWillAppear()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "messageHistoryReceivedNotificationReceived:", name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+
         syncView.hidden = true
     }
     
@@ -70,6 +71,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         super.viewWillDisappear(animated)
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -177,7 +179,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     
     // MARK: - Messages Notification Handler
-    
+
+    func messageHistoryReceivedNotificationReceived(notification: NSNotification) {
+        self.refreshRooms()
+    }
+
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
         var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String

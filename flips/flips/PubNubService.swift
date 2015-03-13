@@ -11,6 +11,7 @@
 //
 
 public let PUBNUB_DID_CONNECT_NOTIFICATION: String = "pubnub_did_connect_notification"
+public let PUBNUB_DID_FETCH_MESSAGE_HISTORY: String = "pubnub_did_fetch_message_history"
 
 public class PubNubService: FlipsService, PNDelegate {
     
@@ -58,7 +59,7 @@ public class PubNubService: FlipsService, PNDelegate {
     func connect() {
         if (!self.isConnected()) {
             PubNub.connectWithSuccessBlock({ (origin: String!) -> Void in
-                self.subscribeOnMyChannels()
+                println("Successfully connected to PubNub");
             },
             errorBlock: { (error: PNError!) -> Void in
                 println("Could not connect to PubNub");
@@ -69,8 +70,11 @@ public class PubNubService: FlipsService, PNDelegate {
     func isConnected() -> Bool {
         return PubNub.sharedInstance().isConnected()
     }
-    
-    private func subscribeOnMyChannels() {
+
+
+    // MARK: - Channel Subscription
+
+    func subscribeOnMyChannels() {
         if let loggedUser = User.loggedUser() {
             var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
             
@@ -107,8 +111,6 @@ public class PubNubService: FlipsService, PNDelegate {
             PubNub.subscribeOn([channel], withCompletionHandlingBlock: { (state, channels, error) -> Void in
                 if (error != nil) {
                     println("\nsubcribe error: \(error)\n")
-                } else {
-                    self.loadMessagesHistoryForChannel(channel)
                 }
             })
             
@@ -119,12 +121,10 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
 
-    func loadMessagesHistoryForChannelID(pubnubID: String) {
-        var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
-        self.loadMessagesHistoryForChannel(channel)
-    }
-    
-    func loadMessagesHistoryForChannel(channel: PNChannel) {
+
+    // MARK: - Message history
+
+    private func loadMessagesHistoryForChannel(channel: PNChannel, completion:(() -> Void)?) {
         println("Requesting history for channel: \(channel.name)")
 
         let roomDataSource = RoomDataSource()
@@ -133,6 +133,7 @@ public class PubNubService: FlipsService, PNDelegate {
         var lastMessageReceivedDate: NSDate?
         if (room == nil) {
             println("Local Room was not found for channel. Skipping.")
+            completion?()
             return
         }
 
@@ -143,15 +144,14 @@ public class PubNubService: FlipsService, PNDelegate {
 
             if (messages != nil && messages!.count > 0) {
                 println("\(messages!.count) messages retrieved from channel \(channel.name)")
-                for pnMessage in messages! {
-                    self.delegate?.pubnubClient(PubNub.sharedInstance(),
-                        didReceiveMessage:JSON(pnMessage.message),
-                        atDate: pnMessage.receiveDate.date,
-                        fromChannelName: pnMessage.channel.name)
-                }
+                self.delegate?.pubnubClient(PubNub.sharedInstance(),
+                    didReceiveMessageHistory: messages!,
+                    fromChannelName: channel.name)
             } else if (error != nil) {
                 println("Could not retrieve message history for channel \(channel.name). \(error.localizedDescription)")
             }
+
+            completion?()
         }
 
         if (lastMessageReceivedDate == nil) {
@@ -171,12 +171,30 @@ public class PubNubService: FlipsService, PNDelegate {
     }
 
     func loadMessagesHistory() {
-        let subscribedChannels = PubNub.sharedInstance().subscribedObjectsList() as Array<PNChannelProtocol>
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            let subscribedChannels = PubNub.sharedInstance().subscribedObjectsList() as Array<PNChannelProtocol>
 
-        for channelProtocol in subscribedChannels {
-            var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
-            self.loadMessagesHistoryForChannel(channel)
-        }
+            let group = dispatch_group_create()
+
+            NSLog("FETCHING HISTORY FOR %d CHANNELS", subscribedChannels.count)
+
+            for channelProtocol in subscribedChannels {
+                dispatch_group_enter(group)
+
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
+                    self.loadMessagesHistoryForChannel(channel, completion: { () -> Void in
+                        dispatch_group_leave(group)
+                    })
+                })
+            }
+
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+
+            NSLog("HISTORY FETCH ENDED")
+
+            NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+        })
     }
 
     // MARK: - PNDelegate
@@ -234,5 +252,6 @@ public class PubNubService: FlipsService, PNDelegate {
 protocol PubNubServiceDelegate {
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date:NSDate, fromChannelName: String)
-    
+    func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<PNMessage>, fromChannelName: String)
+
 }

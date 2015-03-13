@@ -30,6 +30,8 @@ struct LocalizedString {
     static let COULD_NOT_UPLOAD_FLIP = NSLocalizedString("Unable to upload Flip to the server.  Please try again later.", comment: "")
     static let OK = NSLocalizedString("OK", comment: "OK")
     static let WRONG_VERIFICATION_CODE = NSLocalizedString("Wrong Verification Code", comment: "Wrong verification code title")
+    static let DOWNLOAD_FAILED_RETRY = NSLocalizedString("Download failed.  Tap to retry.", comment: "Download failed message on video player")
+    static let PHONE_NUMBER_ALREADY_EXISTS = NSLocalizedString("This phone number is already used by an existing Flips user.", comment: "This phone number is already used by an existing Flips user.")
 }
 
 func NSLocalizedString(key: String) -> String {

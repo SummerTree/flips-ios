@@ -66,8 +66,31 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
             let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         } else {
-            let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phone, userId: User.loggedUser()?.userID)
-            self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
+            checkIfPhoneNumberExists(phone)
         }
+    }
+    
+    // MARK: - Private functions
+    
+    private func checkIfPhoneNumberExists(phoneNumber: String) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        UserService.sharedInstance.phoneNumberExists(phoneNumber,
+            success: { (response) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                let exists = response as Bool
+                if (exists as Bool) {
+                    let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.PHONE_NUMBER_ALREADY_EXISTS, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                    self.changeNumberInputPhoneView.clearPhoneNumberField()
+                } else {
+                    let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phoneNumber, userId: User.loggedUser()?.userID)
+                    self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
+                }
+            },
+            failure: { (flipError) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                let alertView = UIAlertView(title: NSLocalizedString("Change Number Error"), message: flipError?.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+        })
     }
 }

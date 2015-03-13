@@ -225,6 +225,10 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text)
     }
     
+    func clearPhoneNumberField() {
+        self.newNumberTextField.text = ""
+    }
+    
     
     // MARK: - Required inits
     
