@@ -28,12 +28,12 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     private var flipMessageID: String!
     
-    private var videoPlayerView: PlayerView!
     private var videoPlayerContainerView : UIView!
+    private var videoPlayerView: PlayerView!
     private var avatarView : RoundImageView!
-    private var timestampLabel : ChatLabel! // TODO: rename to dateLabel
-    private var messageTextLabel : ChatLabel! // TODO: rename to messageLabel
-    private var messageView : UIView! // TODO: rename to messageContainerView
+    private var messageDateLabel : ChatLabel!
+    private var messageTextLabel : ChatLabel!
+    private var messageContainerView : UIView!
     
     private var isPlaying = false
     
@@ -72,15 +72,15 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         avatarView.hidden = true
         self.contentView.addSubview(avatarView)
 
-        messageView = UIView()
-        messageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.contentView.addSubview(messageView)
+        messageContainerView = UIView()
+        messageContainerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.contentView.addSubview(messageContainerView)
         
-        timestampLabel = ChatLabel()
-        timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
-        timestampLabel.textColor = UIColor.deepSea()
-        timestampLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        messageView.addSubview(timestampLabel)
+        messageDateLabel = ChatLabel()
+        messageDateLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+        messageDateLabel.textColor = UIColor.deepSea()
+        messageDateLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        messageContainerView.addSubview(messageDateLabel)
         
         messageTextLabel = ChatLabel()
         messageTextLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
@@ -91,7 +91,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageTextLabel.numberOfLines = 0
         messageTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         messageTextLabel.setContentCompressionResistancePriority(751, forAxis: UILayoutConstraintAxis.Vertical)
-        messageView.addSubview(messageTextLabel)
+        messageContainerView.addSubview(messageTextLabel)
     }
     
     func addConstraints() {
@@ -121,25 +121,22 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             make.height.equalTo()(self.avatarView.frame.size.height)
         }
         
-        let messageDateLineHeight: CGFloat = self.timestampLabel.font.lineHeight
-        let messageTextLineHeight: CGFloat = self.messageTextLabel.font.lineHeight
-        
-        messageView.mas_updateConstraints { (make) -> Void in
+        messageContainerView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.bottom.equalTo()(self.messageTextLabel.mas_bottom)
             make.leading.equalTo()(self.contentView.mas_leading)
             make.trailing.equalTo()(self.contentView.mas_trailing)
         }
         
-        timestampLabel.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self.messageView.mas_top).with().offset()(self.MESSAGE_DATE_LABEL_TOP_MARGIN)
-            make.centerX.equalTo()(self.messageView.mas_centerX)
-            make.height.equalTo()(self.timestampLabel.font.lineHeight)
+        messageDateLabel.mas_updateConstraints { (make) -> Void in
+            make.top.equalTo()(self.messageContainerView.mas_top).with().offset()(self.MESSAGE_DATE_LABEL_TOP_MARGIN)
+            make.centerX.equalTo()(self.messageContainerView.mas_centerX)
+            make.height.equalTo()(self.messageDateLabel.font.lineHeight)
         }
         
         messageTextLabel.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self.timestampLabel.mas_bottom)
-            make.centerX.equalTo()(self.messageView.mas_centerX)
+            make.top.equalTo()(self.messageDateLabel.mas_bottom)
+            make.centerX.equalTo()(self.messageContainerView.mas_centerX)
             make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
         }
         
@@ -147,7 +144,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             make.top.equalTo()(self.mas_top)
             make.leading.equalTo()(self.mas_leading)
             make.trailing.equalTo()(self.mas_trailing)
-            make.bottom.equalTo()(self.messageView.mas_bottom)
+            make.bottom.equalTo()(self.messageContainerView.mas_bottom)
         }
     }
     
@@ -174,37 +171,37 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips)
         })
         
-        self.timestampLabel.text = formattedDate
+        self.messageDateLabel.text = formattedDate
         
-            if (flipMessage.notRead.boolValue) {
-                self.messageTextLabel.alpha = 0
-            } else {
-                self.messageTextLabel.alpha = 1
-            }
-            self.messageTextLabel.text = messagePhrase
+        if (flipMessage.notRead.boolValue) {
+            self.messageTextLabel.alpha = 0
+        } else {
+            self.messageTextLabel.alpha = 1
+        }
+        self.messageTextLabel.text = messagePhrase
         
-            self.avatarView.setImageWithURL(avatarURL)
-            
-            if (flipMessageSenderID == loggedUserID) {
-                // Sent by the user
-                self.avatarView.mas_updateConstraints({ (update) -> Void in
-                    update.removeExisting = true
-                    update.trailing.equalTo()(self).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-                    update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
-                    update.width.equalTo()(self.avatarView.frame.size.width)
-                    update.height.equalTo()(self.avatarView.frame.size.height)
-                })
-            } else {
-                // Received by the user
-                self.avatarView.mas_updateConstraints({ (update) -> Void in
-                    update.removeExisting = true
-                    update.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
-                    update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
-                    update.width.equalTo()(self.avatarView.frame.size.width)
-                    update.height.equalTo()(self.avatarView.frame.size.height)
-                })
-            }
-            self.avatarView.hidden = false
+        self.avatarView.setImageWithURL(avatarURL)
+        
+        if (flipMessageSenderID == loggedUserID) {
+            // Sent by the user
+            self.avatarView.mas_updateConstraints({ (update) -> Void in
+                update.removeExisting = true
+                update.trailing.equalTo()(self).with().offset()(-self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+                update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
+                update.width.equalTo()(self.avatarView.frame.size.width)
+                update.height.equalTo()(self.avatarView.frame.size.height)
+            })
+        } else {
+            // Received by the user
+            self.avatarView.mas_updateConstraints({ (update) -> Void in
+                update.removeExisting = true
+                update.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+                update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
+                update.width.equalTo()(self.avatarView.frame.size.width)
+                update.height.equalTo()(self.avatarView.frame.size.height)
+            })
+        }
+        self.avatarView.hidden = false
     }
     
     func heightForFlipMessage(flipMessage: FlipMessage) -> CGFloat {
@@ -221,13 +218,14 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         self.messageTextLabel.sizeToFit()
         
         let formattedDate: String = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
-        self.timestampLabel.text = formattedDate
-        self.timestampLabel.sizeToFit()
+        self.messageDateLabel.text = formattedDate
+        self.messageDateLabel.sizeToFit()
         
         self.contentView.layoutIfNeeded()
         self.contentView.updateConstraintsIfNeeded()
         
-        return videoPlayerHeight + messageTextLabel.frame.size.height + timestampLabel.frame.size.height + MESSAGE_DATE_LABEL_TOP_MARGIN + MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN
+        let bottomPartHeight = messageTextLabel.frame.size.height + messageDateLabel.frame.size.height + MESSAGE_DATE_LABEL_TOP_MARGIN + MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN
+        return videoPlayerHeight + bottomPartHeight
     }
 
 

@@ -119,7 +119,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     
-    // MARK: - Layout
+    // MARK: - Layout View Methods
     
     func addSubviews() {
         tableView = UITableView(frame: self.frame, style: .Plain)
@@ -308,7 +308,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     
-    // MARK: - Cell Height Auxiliary Methods
+    // MARK: - Cell Auxiliary Methods
     
     private func getPrototypeCell() -> ChatTableViewCell {
         return (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
