@@ -13,7 +13,7 @@
 @objc class TempFiles {
     
     class func tempThumbnailFilePath() -> String {
-        return tempFilesPath().stringByAppendingPathComponent(randomFileName("png"))
+        return tempFilesPath().stringByAppendingPathComponent(randomFileName("jpg"))
     }
     
     class func tempVideoFilePath() -> String {
