@@ -72,13 +72,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - View Events
     
     func viewDidLoad() {
-        println("ChatView - viewDidLoad")
         self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         self.tableView.reloadData()
     }
     
     func viewWillAppear() {
-        println("ChatView - viewWillAppear")
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         
         replyView.mas_updateConstraints( { (make) in
@@ -113,7 +111,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        self.indexPathToShow = nil
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             cell.stopMovie()
@@ -126,7 +123,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func addSubviews() {
         tableView = UITableView(frame: self.frame, style: .Plain)
-        tableView.backgroundColor = UIColor.grayColor()
         tableView.registerClass(ChatTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
         tableView.separatorStyle = .None
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -241,76 +237,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return NSIndexPath(forRow: 0, inSection: 0)
     }
     
-    private func moveTableViewToCellAtIndexPath(indexPath: NSIndexPath) {
-        let completionBlock : (() -> Void) = {
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.tableView.alpha = 1.0
-            })
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(self.AUTOPLAY_ON_LOAD_DELAY * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-                self.playVideoForVisibleCell()
-            })
-        }
-        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            if (indexPath.row > 0) {
-                self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-//                let expectedContentOffset: CGFloat = CGFloat(380.5 * Float(indexPath.row))
-//                let contentOffset = CGPoint(x: CGFloat(0), y: expectedContentOffset)
-//                self.tableView.setContentOffset(contentOffset, animated: false)
-//                println("   new offset: \(self.tableView.contentOffset)")
-                completionBlock()
-            } else {
-                completionBlock()
-            }
-//        })
-    }
-    
-//    private func moveTableViewForLatestNotReadMessage() {
-//        self.tableView.alpha = 0.0
-//        
-//        println("moveTableViewForLatestNotReadMessage")
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-//            let flipMessagaDataSource = FlipMessageDataSource()
-//            if let numberOfMessages = self.dataSource?.numberOfFlipMessages(self) as Int? {
-//                println("   numberOfMessages: \(numberOfMessages)")
-//                var firstNotReadMessageIndex = numberOfMessages - 1
-//                println("   before firstNotReadMessageIndex: \(firstNotReadMessageIndex)")
-//                
-//                for (var i = 0; i < numberOfMessages; i++) {
-//                    let flipMessageId = self.dataSource?.chatView(self, flipMessageIdAtIndex: i)
-//                    if (flipMessageId != nil) {
-//                        var flipMessage = flipMessagaDataSource.retrieveFlipMessageById(flipMessageId!)
-//                        if (flipMessage.notRead.boolValue) {
-//                            firstNotReadMessageIndex = i
-//                            break
-//                        }
-//                    }
-//                }
-//                println("   after firstNotReadMessageIndex: \(firstNotReadMessageIndex)")
-//                
-//                let completionBlock : (() -> Void) = {
-//                    UIView.animateWithDuration(0.25, animations: { () -> Void in
-//                        self.tableView.alpha = 1.0
-//                    })
-//                    
-//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(self.AUTOPLAY_ON_LOAD_DELAY * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-//                        self.playVideoForVisibleCell()
-//                    })
-//                }
-//                
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    if (firstNotReadMessageIndex > 0) {
-//                        self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-//                        completionBlock()
-//                    } else {
-//                        completionBlock()
-//                    }
-//                })
-//            }
-//        })
-//    }
-    
     
     // MARK: - CustomNavigationBarDelegate
     
@@ -336,34 +262,16 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         })
     }
     
-    private func reloadFlipMessagesWithCompletion(completion: ((NSIndexPath) -> Void)?) {
-//        ActivityIndicatorHelper.showActivityIndicatorAtView(self)
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-//            let indexPathToBeVisible = self.indexPathForCellThatShouldBeVisible()
-//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.tableView.reloadData()
-                if (completion != nil) {
-//                    completion!(indexPathToBeVisible)
-//                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-                }
-//            })
-//        })
-        
-    }
-    
     
     // MARK: - Table view data source
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        println("cellForRowAtIndexPath \(indexPath.row)")
         var cell: ChatTableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell?
         if (cell == nil) {
             cell = ChatTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: CELL_IDENTIFIER)
         }
         
-        cell!.textLabel?.text = "Test \(indexPath.row)" // TODO: remove it
         configureCell(cell!, atIndexPath: indexPath)
-        
         return cell!
     }
     
@@ -386,41 +294,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             return UITableViewAutomaticDimension
         }
 
-//        // (7)
-//        //self.prototypeCell.bounds = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(self.prototypeCell.bounds));
-//        
-//        [self configureCell:self.prototypeCell forRowAtIndexPath:indexPath];
-//        
-//        // (8)
-//        [self.prototypeCell updateConstraintsIfNeeded];
-//        [self.prototypeCell layoutIfNeeded];
-//        
-//        // (9)
-//        return [self.prototypeCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-
         var cell = self.getPrototypeCell()
-        
-//        cell.setBounds(CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(cell.bounds)))
-        
-//        self.configureCell(cell, atIndexPath: indexPath)
+
         var size: CGFloat = 0
         if let flipMessage: FlipMessage? = dataSource?.chatView(self, flipMessageAtIndex: indexPath.row) {
-//        if (flipMessageId != nil) {
-//            cell.setFlipMessageToCalculateHeight(flipMessage!)
-//            cell.setFlipMessage(flipMessage!)
             size = cell.heightForFlipMessage(flipMessage!)
         }
-        
-//        cell.updateConstraints()
-//        cell.contentView.setNeedsLayout()
-//        cell.updateConstraintsIfNeeded()
-//        cell.layoutIfNeeded()
-//        cell.layoutSubviews()
-
-        println("cell.frame: \(cell.frame)")
-//        return cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-//        let size: CGFloat = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-        println("calculated height for cell \(indexPath.row): \(size)")
         return size
     }
     
@@ -432,62 +311,18 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Cell Height Auxiliary Methods
     
     private func getPrototypeCell() -> ChatTableViewCell {
-//        if (self.prototypeCell == nil) {
-//            self.prototypeCell = (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
-//        }
-        
-//        return self.prototypeCell!
         return (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
     }
     
     private func configureCell(cell: ChatTableViewCell, atIndexPath indexPath: NSIndexPath) {
-        println("configureCell at index \(indexPath.row)")
         if cell.isPlayingFlip() {
             cell.stopMovie()
         }
         
-//        let flipMessageId: String? = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
         if let flipMessage: FlipMessage? = dataSource?.chatView(self, flipMessageAtIndex: indexPath.row) {
-//        if (flipMessageId != nil) {
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                cell.setFlipMessage(flipMessage!)
-//            })
+            cell.setFlipMessage(flipMessage!)
         }
-        
-        //        cell.videoPlayerContainerViewWidthConstraint.constant = CGRectGetWidth(self.tableView.bounds)
-        //
-        //        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-        //            cell.videoPlayerContainerViewWidthConstraint.constant -= self.CELL_PADDING_FOR_IPHONE_4S * 2.0
-        //        }
     }
-
-    
-//    private func calculateHeightForConfiguredSizingCell(sizingCell: UITableViewCell) -> CGFloat {
-//        sizingCell.bounds = CGRectMake(0, 0, CGRectGetWidth(tableView.frame), CGRectGetHeight(sizingCell.bounds))
-//        
-//        sizingCell.setNeedsLayout()
-//        sizingCell.layoutIfNeeded()
-//        
-//        let size: CGSize = sizingCell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
-//        return size.height
-//    }
-//    
-//    private func heightForChatTableViewCellAtIndexPath(indexPath: NSIndexPath) -> CGFloat {
-//        struct Static {
-//            static var sizingCell: ChatTableViewCell!
-//        }
-//        
-//        if (Static.sizingCell == nil) {
-//            Static.sizingCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
-//        }
-//        
-//        let flipMessageId: String? = dataSource?.chatView(self, flipMessageIdAtIndex: indexPath.row)
-//        if (flipMessageId != nil) {
-//            Static.sizingCell.setFlipMessageIdToCalculateHeight(flipMessageId!)
-//        }
-//        
-//        return calculateHeightForConfiguredSizingCell(Static.sizingCell)
-//    }
     
     
     // MARK: - UITableViewDelegate
@@ -536,22 +371,22 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
 
     private func playVideoForVisibleCell() {
-//        let visibleCells = self.tableView.visibleCells()
-//        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
-//            if (self.isCell(cell, totallyVisibleOnView: self)) {
-//                var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
-//                if (indexPath == nil) {
-//                    return
-//                }
-//                var row = indexPath?.row
-//                var shouldAutoPlay: Bool? = dataSource?.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!)
-//                if (shouldAutoPlay != nil) {
-//                    cell.playMovie()
-//                }
-//            } else {
-//                cell.stopMovie()
-//            }
-//        }
+        let visibleCells = self.tableView.visibleCells()
+        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+            if (self.isCell(cell, totallyVisibleOnView: self)) {
+                var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
+                if (indexPath == nil) {
+                    return
+                }
+                var row = indexPath?.row
+                var shouldAutoPlay: Bool? = dataSource?.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!)
+                if (shouldAutoPlay != nil) {
+                    cell.playMovie()
+                }
+            } else {
+                cell.stopMovie()
+            }
+        }
     }
 
     

@@ -49,10 +49,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: reuseIdentifier)
         
-        println("cell style: \(style.hashValue)")
-        self.contentView.backgroundColor = UIColor.orangeColor()
-        
-//        self.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addSubviews()
@@ -64,39 +60,29 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     func addSubviews() {
         videoPlayerContainerView = UIView()
-        videoPlayerContainerView.backgroundColor = UIColor.redColor()
         videoPlayerContainerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.contentView.addSubview(videoPlayerContainerView)
-//        println("videoPlayerContainerView: \(videoPlayerContainerView)")
 
         videoPlayerView = PlayerView()
-        videoPlayerView.backgroundColor = UIColor.banana()
         videoPlayerView.delegate = self
         videoPlayerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         videoPlayerContainerView.addSubview(videoPlayerView)
-//        println("videoPlayerView: \(videoPlayerView)")
         
         avatarView = RoundImageView.avatarA3()
         avatarView.hidden = true
         self.contentView.addSubview(avatarView)
-//        println("avatarView: \(avatarView)")
 
         messageView = UIView()
-        messageView.backgroundColor = UIColor.greenColor()
         messageView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.contentView.addSubview(messageView)
-//        println("messageView: \(messageView)")
         
         timestampLabel = ChatLabel()
-        timestampLabel.backgroundColor = UIColor.purpleColor()
         timestampLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         timestampLabel.textColor = UIColor.deepSea()
         timestampLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         messageView.addSubview(timestampLabel)
-//        println("timestampLabel: \(timestampLabel)")
         
         messageTextLabel = ChatLabel()
-        messageTextLabel.backgroundColor = UIColor.blueColor()
         messageTextLabel.font = UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)
         messageTextLabel.textColor = UIColor.deepSea()
         messageTextLabel.alpha = 0
@@ -106,7 +92,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         messageTextLabel.setContentCompressionResistancePriority(751, forAxis: UILayoutConstraintAxis.Vertical)
         messageView.addSubview(messageTextLabel)
-//        println("messageTextLabel: \(messageTextLabel)")
     }
     
     func addConstraints() {
@@ -142,7 +127,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.bottom.equalTo()(self.messageTextLabel.mas_bottom)
-//            make.height.greaterThanOrEqualTo()(messageDateLineHeight + messageTextLineHeight)
             make.leading.equalTo()(self.contentView.mas_leading)
             make.trailing.equalTo()(self.contentView.mas_trailing)
         }
@@ -157,8 +141,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             make.top.equalTo()(self.timestampLabel.mas_bottom)
             make.centerX.equalTo()(self.messageView.mas_centerX)
             make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
-//            make.height.greaterThanOrEqualTo()(self.messageTextLabel.font.lineHeight).offset()(self.MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN)
-//            make.bottom.greaterThanOrEqualTo()(self.contentView.mas_bottom).with().offset()(-self.MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN)
         }
         
         self.contentView.mas_updateConstraints { (make) -> Void in
@@ -167,13 +149,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             make.trailing.equalTo()(self.mas_trailing)
             make.bottom.equalTo()(self.messageView.mas_bottom)
         }
-        
-//        self.mas_makeConstraints { (make) -> Void in
-//            make.top.equalTo()(self.contentView)
-//            make.leading.equalTo()(self.contentView)
-//            make.trailing.equalTo()(self.contentView)
-//            make.bottom.equalTo()(self.contentView)
-//        }
     }
     
     
@@ -189,8 +164,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     func setFlipMessage(flipMessage: FlipMessage) {
         self.flipMessageID = flipMessage.flipMessageID
 
-//        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
-//        let flipMessage: FlipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
         let loggedUserID: String? = User.loggedUser()?.userID
         let flipMessageSenderID: String = flipMessage.from.userID
         let formattedDate: String = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
@@ -202,7 +175,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         })
         
         self.timestampLabel.text = formattedDate
-//        self.timestampLabel.sizeToFit()
         
             if (flipMessage.notRead.boolValue) {
                 self.messageTextLabel.alpha = 0
@@ -210,14 +182,6 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 self.messageTextLabel.alpha = 1
             }
             self.messageTextLabel.text = messagePhrase
-//            self.messageTextLabel.sizeToFit()
-//            self.messageTextLabel.mas_updateConstraints { (update) -> Void in
-//                update.removeExisting = true
-//                update.top.equalTo()(self.timestampLabel.mas_bottom)
-//                update.centerX.equalTo()(self.messageView.mas_centerX)
-//                update.width.equalTo()(self.messageView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
-//                update.height.equalTo()(self.messageTextLabel.frame.size.height)
-//            }
         
             self.avatarView.setImageWithURL(avatarURL)
             
@@ -241,36 +205,9 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 })
             }
             self.avatarView.hidden = false
-        
-//        self.layoutSubviews()
-        
-//        let cellHeight: CGFloat = self.videoPlayerContainerView.frame.size.height + self.messageView.frame.size.height
-//        self.contentView.mas_updateConstraints { (update) -> Void in
-//            update.removeExisting = true
-//            update.top.equalTo()(self.mas_top)
-//            update.leading.equalTo()(self.mas_leading)
-//            update.trailing.equalTo()(self.mas_trailing)
-//            //            update.bottom.equalTo()(self.messageView.mas_bottom)
-//            update.height.equalTo()(cellHeight)
-//        }
-        
-//        self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetWidth(self.frame), cellHeight)
-//        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
-        
-
-        println("   ")
-        println("setFlipMessage: \(self.contentView.frame)")
-        println("   videoPlayerView.   : \(self.videoPlayerView.frame)")
-        println("   playerContainerView: \(self.videoPlayerContainerView.frame)")
-        println("   messageView        : \(self.messageView.frame)")
-        println("   timestampLabel     : \(self.timestampLabel.frame)")
-        println("   messageTextLabel   : \(self.messageTextLabel.frame)")
-        println("   ")
-
     }
     
     func heightForFlipMessage(flipMessage: FlipMessage) -> CGFloat {
-        
         var videoPlayerPadding: CGFloat = 0.0
         if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
             videoPlayerPadding = CELL_PADDING_FOR_IPHONE_4S * 2.0
@@ -279,44 +216,16 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         let videoPlayerHeight = self.frame.size.width - videoPlayerPadding
         
         self.flipMessageID = flipMessage.flipMessageID
-        
-//        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
-//        let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
-        
-//        self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips)
-        
+
         self.messageTextLabel.text = flipMessage.messagePhrase()
         self.messageTextLabel.sizeToFit()
-//        self.contentView.setNeedsLayout()
-//        self.contentView.setNeedsUpdateConstraints()
-        
-//        if (flipMessage.notRead.boolValue) {
-//            self.messageTextLabel.alpha = 0
-//        } else {
-            self.messageTextLabel.alpha = 1
-//        }
         
         let formattedDate: String = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         self.timestampLabel.text = formattedDate
         self.timestampLabel.sizeToFit()
         
-//        println("before self.timestampLabel: \(self.timestampLabel.frame)")
-//        println("before self.messageTextLabel: \(self.messageTextLabel.frame)")
         self.contentView.layoutIfNeeded()
-//        self.contentView.updateConstraintsIfNeeded()
-        
-//        self.messageTextLabel.mas_updateConstraints { (update) -> Void in
-//            update.removeExisting = true
-//            update.top.equalTo()(self.timestampLabel.mas_bottom)
-//            update.centerX.equalTo()(self.messageView.mas_centerX)
-//            update.width.equalTo()(self.messageView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
-//            update.height.equalTo()(self.messageTextLabel.frame.size.height)
-//        }
         self.contentView.updateConstraintsIfNeeded()
-        
-        println("after  self.timestampLabel: \(self.timestampLabel.frame)")
-        println("after  self.messageTextLabel: \(self.messageTextLabel.frame)")
-
         
         return videoPlayerHeight + messageTextLabel.frame.size.height + timestampLabel.frame.size.height + MESSAGE_DATE_LABEL_TOP_MARGIN + MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN
     }
@@ -334,53 +243,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        
-//        self.contentView.mas_updateConstraints { (update) -> Void in
-//            update.removeExisting = true
-//            update.top.equalTo()(self.mas_top)
-//            update.leading.equalTo()(self.mas_leading)
-//            update.trailing.equalTo()(self.mas_trailing)
-////            update.bottom.equalTo()(self.messageView.mas_bottom)
-//            update.height.equalTo()(cellHeight)
-//        }
-//        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
-//        self.setNeedsUpdateConstraints()
-
-//        self.contentView.updateConstraintsIfNeeded()
-        
-//        let cellHeight: CGFloat = self.videoPlayerContainerView.frame.size.height + self.messageView.frame.size.height
-//        self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetWidth(self.frame), cellHeight)
-//        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
-        
+   
         self.contentView.updateConstraintsIfNeeded()
         self.layoutIfNeeded()
         
-//        println("   ")
-        println("layoutSubviews: \(self.contentView.frame)")
-//        println("   videoPlayerView.   : \(self.videoPlayerView.frame)")
-//        println("   playerContainerView: \(self.videoPlayerContainerView.frame)")
-//        println("   messageView        : \(self.messageView.frame)")
-//        println("   timestampLabel     : \(self.timestampLabel.frame)")
-//        println("   messageTextLabel   : \(self.messageTextLabel.frame)")
-//        println("   ")
-
-
         self.messageTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.messageTextLabel.frame)
-    }
-    
-    public override func updateConstraints() {
-//        println("updateConstraints")
-
-//        self.messageTextLabel.sizeToFit()
-//        self.messageTextLabel.mas_updateConstraints { (update) -> Void in
-//            update.removeExisting = true
-//            update.top.equalTo()(self.timestampLabel.mas_bottom)
-//            update.centerX.equalTo()(self.messageView.mas_centerX)
-//            update.width.equalTo()(self.messageView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
-//            update.height.equalTo()(self.messageTextLabel.frame.size.height)
-//        }
-        
-        super.updateConstraints()
     }
     
 
