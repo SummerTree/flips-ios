@@ -497,10 +497,16 @@ public class UserService: FlipsService {
         
         self.get(url, parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                success(nil)
+                let exists = JSON(responseObject)["exists"].boolValue
+                success(exists)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                failure(nil)
+                if (operation.responseObject != nil) {
+                    let response = operation.responseObject as NSDictionary
+                    failure(FlipError(error: response["error"] as String!, details: nil))
+                } else {
+                    failure(FlipError(error: error.localizedDescription, details: nil))
+                }
         })
     }
     
