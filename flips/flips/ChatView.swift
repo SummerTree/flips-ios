@@ -48,6 +48,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var cellsHeightsCache: Dictionary<Int,CGFloat?>!
     private var indexPathToShow: NSIndexPath?
 
+    
     // MARK: - Required initializers
     
     init(showOnboarding: Bool) {
@@ -73,48 +74,46 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func viewDidLoad() {
         println("ChatView - viewDidLoad")
         self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
-        
         self.tableView.reloadData()
-        
-        println("indexPathToShow: \(self.indexPathToShow)")
     }
     
     func viewWillAppear() {
         println("ChatView - viewWillAppear")
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         
-//        replyView.mas_updateConstraints( { (make) in
-//            make.left.equalTo()(self)
-//            make.right.equalTo()(self)
-//            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
-//            make.bottom.equalTo()(self)
-//        })
-//        self.updateConstraints()
-        
-        println("   viewWillAppear 1")
+        replyView.mas_updateConstraints( { (make) in
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.getReplyTextHeight() + self.REPLY_VIEW_MARGIN)
+            make.bottom.equalTo()(self)
+        })
+        self.updateConstraints()
         
         self.replyTextField.viewWillAppear()
         
-        println("   viewWillAppear 2")
+        if (self.indexPathToShow != nil) {
+            self.tableView.alpha = 0
+        }
+    }
 
-//        if (self.indexPathToShow != nil) {
-//            let oneSecond = 1 * Double(NSEC_PER_SEC)
-//            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-//            self.tableView.alpha = 0
-//            dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-//                self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-//                self.indexPathToShow = nil
-//                UIView.animateWithDuration(0.25, animations: { () -> Void in
-//                    self.tableView.alpha = 1
-//                })
-//            }
-//        }
-        println("   viewWillAppear 3")
+    func didLayoutSubviews() {
+        if (self.indexPathToShow != nil) {
+            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
+            if (self.tableView.alpha == 0) {
+                let oneSecond = 1 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        self.tableView.alpha = 1
+                    })
+                }
+            }
+        }
     }
     
     func viewWillDisappear() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        
+        self.indexPathToShow = nil
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             cell.stopMovie()
@@ -236,26 +235,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     private func indexPathForCellThatShouldBeVisible() -> NSIndexPath {
-//        let flipMessagaDataSource: FlipMessageDataSource = FlipMessageDataSource()
-        
-        var firstNotReadMessageIndex: Int = 0
         if let numberOfMessages: Int = self.dataSource?.numberOfFlipMessages(self) as Int? {
-            firstNotReadMessageIndex = numberOfMessages - 1
-            
-            for (var i = 0; i < numberOfMessages; i++) {
-//                let flipMessageId: String? = self.dataSource?.chatView(self, flipMessageIdAtIndex: i)
-                if let flipMessage: FlipMessage? = self.dataSource?.chatView(self, flipMessageAtIndex: i) {
-//                    var flipMessage: FlipMessage = flipMessagaDataSource.retrieveFlipMessageById(flipMessageId!)
-                    if (flipMessage!.notRead.boolValue) {
-                        firstNotReadMessageIndex = i
-                        break
-                    }
-                }
-            }
+            return NSIndexPath(forRow: numberOfMessages - 1, inSection: 0)
         }
-        println("   after firstNotReadMessageIndex: \(firstNotReadMessageIndex)")
-
-        return NSIndexPath(forRow: firstNotReadMessageIndex, inSection: 0)
+        return NSIndexPath(forRow: 0, inSection: 0)
     }
     
     private func moveTableViewToCellAtIndexPath(indexPath: NSIndexPath) {
@@ -373,16 +356,19 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         println("cellForRowAtIndexPath \(indexPath.row)")
-        var cell: ChatTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell
+        var cell: ChatTableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell?
+        if (cell == nil) {
+            cell = ChatTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: CELL_IDENTIFIER)
+        }
         
-        cell.textLabel?.text = "Test \(indexPath.row)" // TODO: remove it
-        configureCell(cell, atIndexPath: indexPath)
+        cell!.textLabel?.text = "Test \(indexPath.row)" // TODO: remove it
+        configureCell(cell!, atIndexPath: indexPath)
         
-//        cell.updateConstraintsIfNeeded()
-        //        cell.contentView.setNeedsLayout()
-//        cell.contentView.layoutIfNeeded()
-        
-        return cell;
+        return cell!
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -438,9 +424,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return size
     }
     
-//    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        return UITableViewAutomaticDimension
-//    }
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
     
     
     // MARK: - Cell Height Auxiliary Methods

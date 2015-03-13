@@ -352,17 +352,17 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 //        self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetWidth(self.frame), cellHeight)
 //        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
         
-        self.contentView.setNeedsLayout()
-        self.contentView.layoutIfNeeded()
+        self.contentView.updateConstraintsIfNeeded()
+        self.layoutIfNeeded()
         
-        println("   ")
+//        println("   ")
         println("layoutSubviews: \(self.contentView.frame)")
-        println("   videoPlayerView.   : \(self.videoPlayerView.frame)")
-        println("   playerContainerView: \(self.videoPlayerContainerView.frame)")
-        println("   messageView        : \(self.messageView.frame)")
-        println("   timestampLabel     : \(self.timestampLabel.frame)")
-        println("   messageTextLabel   : \(self.messageTextLabel.frame)")
-        println("   ")
+//        println("   videoPlayerView.   : \(self.videoPlayerView.frame)")
+//        println("   playerContainerView: \(self.videoPlayerContainerView.frame)")
+//        println("   messageView        : \(self.messageView.frame)")
+//        println("   timestampLabel     : \(self.timestampLabel.frame)")
+//        println("   messageTextLabel   : \(self.messageTextLabel.frame)")
+//        println("   ")
 
 
         self.messageTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.messageTextLabel.frame)

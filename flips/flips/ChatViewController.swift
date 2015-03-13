@@ -20,9 +20,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var roomID: String!
     private var flipMessages = NSMutableOrderedSet()
     
-    private let flipMessageDataSource = FlipMessageDataSource()
-    
-    
+
     // MARK: - Initializers
     
     required init(coder: NSCoder) {
@@ -54,7 +52,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.chatView.delegate = self
         self.chatView.dataSource = self
         
         self.reloadFlipMessages()
@@ -70,6 +67,16 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.chatView.didLayoutSubviews()
+        
+        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
+            // Required only for iOS7
+            self.chatView.layoutIfNeeded()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -90,6 +97,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - FlipMessages Load Methods
     
     func reloadFlipMessages() {
+        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
         for flipMessage in flipMessages {
             self.flipMessages.addObject(flipMessage)
