@@ -123,7 +123,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         
         messageContainerView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerContainerView.mas_bottom)
-            make.bottom.equalTo()(self.messageTextLabel.mas_bottom)
+            make.bottom.equalTo()(self.messageTextLabel.mas_bottom).with().offset()(self.MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN)
             make.leading.equalTo()(self.contentView.mas_leading)
             make.trailing.equalTo()(self.contentView.mas_trailing)
         }

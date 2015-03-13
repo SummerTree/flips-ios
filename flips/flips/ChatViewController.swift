@@ -106,9 +106,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func reload() {
         self.reloadFlipMessages()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.chatView.loadNewFlipMessages()
-        })
     }
     
     
@@ -148,16 +145,23 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func notificationReceived(notification: NSNotification) {
         self.reload()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.chatView.loadNewFlipMessages()
+        })
     }
     
     
     // MARK: - ComposeViewControllerDelegate
     
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
-        self.navigationController?.popToViewController(self, animated: true)
-        self.chatView.clearReplyTextField()
-        self.chatView.hideTextFieldAndShowReplyButton()
         self.reload()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.navigationController?.popToViewController(self, animated: true)
+            self.chatView.clearReplyTextField()
+            self.chatView.hideTextFieldAndShowReplyButton()
+            self.chatView.loadNewFlipMessages()
+            self.chatView.showNewestMessage()
+        })
     }
     
     func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {

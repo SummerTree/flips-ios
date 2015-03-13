@@ -32,11 +32,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
 		self.delegate = self
     }
     
-   func viewWillAppear() {
-        setUpMenu()
-    }
-    
-    func setUpMenu() {
+    func setupMenu() {
         let menuController = UIMenuController.sharedMenuController()
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
         menuController.menuItems = NSArray(array: [lookupMenu])

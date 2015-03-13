@@ -72,7 +72,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - View Events
     
     func viewDidLoad() {
-        self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         self.tableView.reloadData()
     }
     
@@ -85,31 +84,21 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.height.equalTo()(self.REPLY_VIEW_INITIAL_HEIGHT + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
-        self.updateConstraints()
+        self.updateConstraintsIfNeeded()
         
-        self.replyTextField.viewWillAppear()
+        self.replyTextField.setupMenu()
         
-        if (self.indexPathToShow != nil) {
-            self.tableView.alpha = 0
-        }
+        self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
+        self.tableView.alpha = 0
     }
 
     func didLayoutSubviews() {
-        if (self.indexPathToShow != nil) {
-            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
-            if (self.tableView.alpha == 0) {
-                let oneSecond = 1 * Double(NSEC_PER_SEC)
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-                    UIView.animateWithDuration(0.25, animations: { () -> Void in
-                        self.tableView.alpha = 1
-                    })
-                }
-            }
-        }
+        self.showNewestMessage()
     }
     
     func viewWillDisappear() {
+        self.indexPathToShow = nil
+        
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
@@ -230,6 +219,20 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return NSIndexPath(forRow: 0, inSection: 0)
     }
     
+    func showNewestMessage() {
+        if (self.indexPathToShow != nil) {
+            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
+            if (self.tableView.alpha == 0) {
+                let oneSecond = 1 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        self.tableView.alpha = 1
+                    })
+                }
+            }
+        }
+    }
     
     // MARK: - CustomNavigationBarDelegate
     
@@ -241,21 +244,19 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Data Load Methods
     
     func loadNewFlipMessages() {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let currentNumberOfCells: Int = self.tableView.numberOfRowsInSection(0)
-
-            var newCellsIndexPaths: Array<NSIndexPath> = Array<NSIndexPath>()
-            if let newNumberOfCells: Int = self.dataSource?.numberOfFlipMessages(self) {
-                for (var i = currentNumberOfCells; i < newNumberOfCells; i++) {
-                    var indexPath = NSIndexPath(forRow: i, inSection: 0)
-                    newCellsIndexPaths.append(indexPath)
-                }
+        let currentNumberOfCells: Int = self.tableView.numberOfRowsInSection(0)
+        
+        var newCellsIndexPaths: Array<NSIndexPath> = Array<NSIndexPath>()
+        if let newNumberOfCells: Int = self.dataSource?.numberOfFlipMessages(self) {
+            for (var i = currentNumberOfCells; i < newNumberOfCells; i++) {
+                var indexPath = NSIndexPath(forRow: i, inSection: 0)
+                newCellsIndexPaths.append(indexPath)
             }
-            self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
-        })
+        }
+        self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
     }
-    
-    
+
+
     // MARK: - Table view data source
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
