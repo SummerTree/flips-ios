@@ -14,6 +14,8 @@
 #import "Flip.h"
 #import "Flips-Swift.h"
 
+#define THUMBNAIL_QUALITY .7
+
 @implementation VideoComposer
 
 - (void)flipVideoFromImage:(UIImage *)image andAudioURL:(NSURL *)audioURL successHandler:(VideoComposerSuccessHandler)successHandler {
@@ -25,7 +27,7 @@
             
             NSString *thumbnailPath = [TempFiles tempThumbnailFilePath];
             NSURL *thumbnailURL = [NSURL fileURLWithPath:thumbnailPath];
-            [UIImagePNGRepresentation(image) writeToFile:thumbnailPath atomically:YES];
+            [UIImageJPEGRepresentation(image, THUMBNAIL_QUALITY) writeToFile:thumbnailPath atomically:YES];
             
             if (audioURL) {
                 NSString *finalPath = [TempFiles tempVideoFilePath]; // We cannot reuse the same path(exportPath) here. It causes an error on iOS7.
@@ -41,7 +43,7 @@
         
         UIImage *thumbnail = [self thumbnailForVideo:videoURL];
         NSString *thumbnailPath = [TempFiles tempVideoFilePath];
-        [UIImagePNGRepresentation(thumbnail) writeToFile:thumbnailPath atomically:YES];
+        [UIImageJPEGRepresentation(thumbnail, THUMBNAIL_QUALITY) writeToFile:thumbnailPath atomically:YES];
         
         if (audioURL) {
             [self mergeVideo:videoURL withAudio:audioURL atPath:exportPath completionHandler:^{
@@ -59,8 +61,8 @@
     NSURL *croppedVideo = [self videoFromOriginalVideo:originalVideo];
     
     UIImage *thumbnail = [self thumbnailForVideo:croppedVideo];
-    NSString *thumbnailPath = [TempFiles tempVideoFilePath];
-    [UIImagePNGRepresentation(thumbnail) writeToFile:thumbnailPath atomically:YES];
+    NSString *thumbnailPath = [TempFiles tempThumbnailFilePath];
+    [UIImageJPEGRepresentation(thumbnail, THUMBNAIL_QUALITY) writeToFile:thumbnailPath atomically:YES];
     
     successHandler(croppedVideo, [NSURL fileURLWithPath:thumbnailPath]);
 }
@@ -115,7 +117,7 @@
     __block NSURL *outputURL = [NSURL fileURLWithPath:[TempFiles tempVideoFilePath]];
     
     AVAssetExportSession *exportSession;
-    exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
+    exportSession = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetMediumQuality];
     exportSession.videoComposition = videoComposition;
     exportSession.outputURL = outputURL;
     exportSession.outputFileType = AVFileTypeQuickTimeMovie;
@@ -265,7 +267,7 @@
     }
     
     AVAssetExportSession *assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition
-                                                                         presetName:AVAssetExportPresetHighestQuality];
+                                                                         presetName:AVAssetExportPresetMediumQuality];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:destPath]) {
         [[NSFileManager defaultManager] removeItemAtPath:destPath error:nil];
