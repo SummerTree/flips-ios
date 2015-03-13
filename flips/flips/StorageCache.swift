@@ -102,6 +102,11 @@ public class StorageCache {
                 self.cacheJournal.insertNewEntry(localPath)
                 self.scheduleCleanup()
                 
+                if (self.downloadInProgressURLs[localPath] == nil) {
+                    println("Local path (\(localPath)) has been downloaded but we already cleaned up its callbacks.")
+                    return
+                }
+                
                 for callbacks in self.downloadInProgressURLs[localPath]! {
                     if (result) {
                         callbacks.success?(localPath)
@@ -110,6 +115,7 @@ public class StorageCache {
                     }
                 }
                 
+                println("Cleaning up callbacks for \(localPath).")
                 self.downloadInProgressURLs[localPath] = nil
             }
         )
