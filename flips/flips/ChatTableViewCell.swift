@@ -47,9 +47,13 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        super.init(style: UITableViewCellStyle.Default, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.orangeColor()
+        println("cell style: \(style.hashValue)")
+        self.contentView.backgroundColor = UIColor.orangeColor()
+        
+//        self.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         self.addSubviews()
         self.addConstraints()
@@ -62,7 +66,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         videoPlayerContainerView = UIView()
         videoPlayerContainerView.backgroundColor = UIColor.redColor()
         videoPlayerContainerView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        contentView.addSubview(videoPlayerContainerView)
+        self.contentView.addSubview(videoPlayerContainerView)
 //        println("videoPlayerContainerView: \(videoPlayerContainerView)")
 
         videoPlayerView = PlayerView()
@@ -74,13 +78,13 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         
         avatarView = RoundImageView.avatarA3()
         avatarView.hidden = true
-        contentView.addSubview(avatarView)
+        self.contentView.addSubview(avatarView)
 //        println("avatarView: \(avatarView)")
 
         messageView = UIView()
         messageView.backgroundColor = UIColor.greenColor()
         messageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        contentView.addSubview(messageView)
+        self.contentView.addSubview(messageView)
 //        println("messageView: \(messageView)")
         
         timestampLabel = ChatLabel()
@@ -111,54 +115,65 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             videoPlayerPadding = -CELL_PADDING_FOR_IPHONE_4S * 2.0
         }
         
-        videoPlayerContainerView.mas_makeConstraints { (make) -> Void in
+        videoPlayerContainerView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.contentView.mas_top)
             make.centerX.equalTo()(self.contentView.mas_centerX)
             make.width.equalTo()(self.contentView.mas_width)
             make.height.equalTo()(self.contentView.mas_width).with().offset()(videoPlayerPadding)
         }
         
-        videoPlayerView.mas_makeConstraints { (make) -> Void in
+        videoPlayerView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerContainerView.mas_top)
             make.width.equalTo()(self.videoPlayerContainerView.mas_height)
             make.height.equalTo()(self.videoPlayerContainerView.mas_height)
             make.centerX.equalTo()(self.videoPlayerContainerView.mas_centerX)
         }
         
-        avatarView.mas_makeConstraints { (make) -> Void in
+        avatarView.mas_updateConstraints { (make) -> Void in
             make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.width.equalTo()(self.avatarView.frame.size.width)
             make.height.equalTo()(self.avatarView.frame.size.height)
         }
         
-        messageView.mas_makeConstraints { (make) -> Void in
+        let messageDateLineHeight: CGFloat = self.timestampLabel.font.lineHeight
+        let messageTextLineHeight: CGFloat = self.messageTextLabel.font.lineHeight
+        
+        messageView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerContainerView.mas_bottom)
             make.bottom.equalTo()(self.messageTextLabel.mas_bottom)
+//            make.height.greaterThanOrEqualTo()(messageDateLineHeight + messageTextLineHeight)
             make.leading.equalTo()(self.contentView.mas_leading)
             make.trailing.equalTo()(self.contentView.mas_trailing)
         }
         
-        timestampLabel.mas_makeConstraints { (make) -> Void in
+        timestampLabel.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.messageView.mas_top).with().offset()(self.MESSAGE_DATE_LABEL_TOP_MARGIN)
             make.centerX.equalTo()(self.messageView.mas_centerX)
             make.height.equalTo()(self.timestampLabel.font.lineHeight)
         }
         
-        messageTextLabel.mas_makeConstraints { (make) -> Void in
+        messageTextLabel.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.timestampLabel.mas_bottom)
             make.centerX.equalTo()(self.messageView.mas_centerX)
             make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
-            make.height.greaterThanOrEqualTo()(self.messageTextLabel.font.lineHeight).offset()(self.MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN)
+//            make.height.greaterThanOrEqualTo()(self.messageTextLabel.font.lineHeight).offset()(self.MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN)
 //            make.bottom.greaterThanOrEqualTo()(self.contentView.mas_bottom).with().offset()(-self.MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN)
         }
         
-        self.contentView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self)
-            make.leading.equalTo()(self)
-            make.trailing.equalTo()(self)
+        self.contentView.mas_updateConstraints { (make) -> Void in
+            make.top.equalTo()(self.mas_top)
+            make.leading.equalTo()(self.mas_leading)
+            make.trailing.equalTo()(self.mas_trailing)
             make.bottom.equalTo()(self.messageView.mas_bottom)
         }
+        
+//        self.mas_makeConstraints { (make) -> Void in
+//            make.top.equalTo()(self.contentView)
+//            make.leading.equalTo()(self.contentView)
+//            make.trailing.equalTo()(self.contentView)
+//            make.bottom.equalTo()(self.contentView)
+//        }
     }
     
     
@@ -186,8 +201,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips)
         })
         
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.timestampLabel.text = formattedDate
+        self.timestampLabel.text = formattedDate
 //        self.timestampLabel.sizeToFit()
         
             if (flipMessage.notRead.boolValue) {
@@ -227,38 +241,85 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 })
             }
             self.avatarView.hidden = false
-//        })
+        
+//        self.layoutSubviews()
+        
+//        let cellHeight: CGFloat = self.videoPlayerContainerView.frame.size.height + self.messageView.frame.size.height
+//        self.contentView.mas_updateConstraints { (update) -> Void in
+//            update.removeExisting = true
+//            update.top.equalTo()(self.mas_top)
+//            update.leading.equalTo()(self.mas_leading)
+//            update.trailing.equalTo()(self.mas_trailing)
+//            //            update.bottom.equalTo()(self.messageView.mas_bottom)
+//            update.height.equalTo()(cellHeight)
+//        }
+        
+//        self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetWidth(self.frame), cellHeight)
+//        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
+        
+
+        println("   ")
+        println("setFlipMessage: \(self.contentView.frame)")
+        println("   videoPlayerView.   : \(self.videoPlayerView.frame)")
+        println("   playerContainerView: \(self.videoPlayerContainerView.frame)")
+        println("   messageView        : \(self.messageView.frame)")
+        println("   timestampLabel     : \(self.timestampLabel.frame)")
+        println("   messageTextLabel   : \(self.messageTextLabel.frame)")
+        println("   ")
+
     }
     
-//    func setFlipMessageToCalculateHeight(flipMessage: FlipMessage) {
-//        self.flipMessageID = flipMessage.flipMessageID
-//        
-////        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
-////        let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
-//        
-////        self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips)
-//        
-//        self.messageTextLabel.text = flipMessage.messagePhrase()
-////        self.messageTextLabel.sizeToFit()
-////        self.messageTextLabel.mas_updateConstraints { (update) -> Void in
-////            update.removeExisting = true
-////            update.top.equalTo()(self.timestampLabel.mas_bottom)
-////            update.centerX.equalTo()(self.messageView.mas_centerX)
-////            update.width.equalTo()(self.messageView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
-////            update.height.equalTo()(self.messageTextLabel.frame.size.height)
-////        }
-////        self.contentView.setNeedsLayout()
-////        self.contentView.setNeedsUpdateConstraints()
-//        
-////        if (flipMessage.notRead.boolValue) {
-////            self.messageTextLabel.alpha = 0
-////        } else {
-//            self.messageTextLabel.alpha = 1
-////        }
-//        
-//        let formattedDate: String = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
-//        self.timestampLabel.text = formattedDate
-//    }
+    func heightForFlipMessage(flipMessage: FlipMessage) -> CGFloat {
+        
+        var videoPlayerPadding: CGFloat = 0.0
+        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+            videoPlayerPadding = CELL_PADDING_FOR_IPHONE_4S * 2.0
+        }
+
+        let videoPlayerHeight = self.frame.size.width - videoPlayerPadding
+        
+        self.flipMessageID = flipMessage.flipMessageID
+        
+//        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
+//        let flipMessage = flipMessageDataSource.retrieveFlipMessageById(flipMessageId)
+        
+//        self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips)
+        
+        self.messageTextLabel.text = flipMessage.messagePhrase()
+        self.messageTextLabel.sizeToFit()
+//        self.contentView.setNeedsLayout()
+//        self.contentView.setNeedsUpdateConstraints()
+        
+//        if (flipMessage.notRead.boolValue) {
+//            self.messageTextLabel.alpha = 0
+//        } else {
+            self.messageTextLabel.alpha = 1
+//        }
+        
+        let formattedDate: String = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
+        self.timestampLabel.text = formattedDate
+        self.timestampLabel.sizeToFit()
+        
+//        println("before self.timestampLabel: \(self.timestampLabel.frame)")
+//        println("before self.messageTextLabel: \(self.messageTextLabel.frame)")
+        self.contentView.layoutIfNeeded()
+//        self.contentView.updateConstraintsIfNeeded()
+        
+//        self.messageTextLabel.mas_updateConstraints { (update) -> Void in
+//            update.removeExisting = true
+//            update.top.equalTo()(self.timestampLabel.mas_bottom)
+//            update.centerX.equalTo()(self.messageView.mas_centerX)
+//            update.width.equalTo()(self.messageView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
+//            update.height.equalTo()(self.messageTextLabel.frame.size.height)
+//        }
+        self.contentView.updateConstraintsIfNeeded()
+        
+        println("after  self.timestampLabel: \(self.timestampLabel.frame)")
+        println("after  self.messageTextLabel: \(self.messageTextLabel.frame)")
+
+        
+        return videoPlayerHeight + messageTextLabel.frame.size.height + timestampLabel.frame.size.height + MESSAGE_DATE_LABEL_TOP_MARGIN + MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN
+    }
 
 
     // MARK: - Overridden Methods
@@ -267,22 +328,49 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         super.prepareForReuse()
         
         self.videoPlayerView.releaseResources()
-        messageTextLabel.text = " "
+        self.messageTextLabel.text = " "
         self.avatarView.hidden = true
     }
 
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        println("layoutSubviews: \(self.messageTextLabel.frame)")
+//        self.contentView.mas_updateConstraints { (update) -> Void in
+//            update.removeExisting = true
+//            update.top.equalTo()(self.mas_top)
+//            update.leading.equalTo()(self.mas_leading)
+//            update.trailing.equalTo()(self.mas_trailing)
+////            update.bottom.equalTo()(self.messageView.mas_bottom)
+//            update.height.equalTo()(cellHeight)
+//        }
+//        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
+//        self.setNeedsUpdateConstraints()
+
+//        self.contentView.updateConstraintsIfNeeded()
         
-        self.contentView.updateConstraintsIfNeeded()
+//        let cellHeight: CGFloat = self.videoPlayerContainerView.frame.size.height + self.messageView.frame.size.height
+//        self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetWidth(self.frame), cellHeight)
+//        self.contentView.frame = CGRectMake(CGRectGetMinX(self.contentView.frame), CGRectGetMinY(self.contentView.frame), CGRectGetWidth(self.contentView.frame), cellHeight)
+        
+        self.contentView.setNeedsLayout()
         self.contentView.layoutIfNeeded()
         
+        println("   ")
+        println("layoutSubviews: \(self.contentView.frame)")
+        println("   videoPlayerView.   : \(self.videoPlayerView.frame)")
+        println("   playerContainerView: \(self.videoPlayerContainerView.frame)")
+        println("   messageView        : \(self.messageView.frame)")
+        println("   timestampLabel     : \(self.timestampLabel.frame)")
+        println("   messageTextLabel   : \(self.messageTextLabel.frame)")
+        println("   ")
+
+
         self.messageTextLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.messageTextLabel.frame)
     }
     
     public override func updateConstraints() {
+//        println("updateConstraints")
+
 //        self.messageTextLabel.sizeToFit()
 //        self.messageTextLabel.mas_updateConstraints { (update) -> Void in
 //            update.removeExisting = true

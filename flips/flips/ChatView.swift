@@ -97,18 +97,18 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         println("   viewWillAppear 2")
 
-        if (self.indexPathToShow != nil) {
-            let oneSecond = 1 * Double(NSEC_PER_SEC)
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-            self.tableView.alpha = 0
-            dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-                self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-                self.indexPathToShow = nil
-                UIView.animateWithDuration(0.25, animations: { () -> Void in
-                    self.tableView.alpha = 1
-                })
-            }
-        }
+//        if (self.indexPathToShow != nil) {
+//            let oneSecond = 1 * Double(NSEC_PER_SEC)
+//            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+//            self.tableView.alpha = 0
+//            dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+//                self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+//                self.indexPathToShow = nil
+//                UIView.animateWithDuration(0.25, animations: { () -> Void in
+//                    self.tableView.alpha = 1
+//                })
+//            }
+//        }
         println("   viewWillAppear 3")
     }
     
@@ -128,7 +128,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func addSubviews() {
         tableView = UITableView(frame: self.frame, style: .Plain)
         tableView.backgroundColor = UIColor.grayColor()
-//        tableView.registerNib(UINib(nibName: "ChatTableViewCell", bundle: nil), forCellReuseIdentifier: CELL_IDENTIFIER)
         tableView.registerClass(ChatTableViewCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
         tableView.separatorStyle = .None
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -175,7 +174,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     func makeConstraints() {
-        
         tableView.mas_makeConstraints( { (make) in
             make.top.equalTo()(self)
             make.left.equalTo()(self)
@@ -380,6 +378,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         cell.textLabel?.text = "Test \(indexPath.row)" // TODO: remove it
         configureCell(cell, atIndexPath: indexPath)
         
+//        cell.updateConstraintsIfNeeded()
+        //        cell.contentView.setNeedsLayout()
+//        cell.contentView.layoutIfNeeded()
+        
         return cell;
     }
     
@@ -415,35 +417,41 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
 //        cell.setBounds(CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(cell.bounds)))
         
 //        self.configureCell(cell, atIndexPath: indexPath)
+        var size: CGFloat = 0
         if let flipMessage: FlipMessage? = dataSource?.chatView(self, flipMessageAtIndex: indexPath.row) {
 //        if (flipMessageId != nil) {
 //            cell.setFlipMessageToCalculateHeight(flipMessage!)
-            cell.setFlipMessage(flipMessage!)
+//            cell.setFlipMessage(flipMessage!)
+            size = cell.heightForFlipMessage(flipMessage!)
         }
         
+//        cell.updateConstraints()
+//        cell.contentView.setNeedsLayout()
 //        cell.updateConstraintsIfNeeded()
-        cell.contentView.setNeedsLayout()
-//        cell.contentView.layoutIfNeeded()
+//        cell.layoutIfNeeded()
+//        cell.layoutSubviews()
 
+        println("cell.frame: \(cell.frame)")
 //        return cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
-        let size: CGFloat = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingExpandedSize).height
+//        let size: CGFloat = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
         println("calculated height for cell \(indexPath.row): \(size)")
         return size
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
+//    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        return UITableViewAutomaticDimension
+//    }
     
     
     // MARK: - Cell Height Auxiliary Methods
     
     private func getPrototypeCell() -> ChatTableViewCell {
-        if (self.prototypeCell == nil) {
-            self.prototypeCell = (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
-        }
+//        if (self.prototypeCell == nil) {
+//            self.prototypeCell = (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
+//        }
         
-        return self.prototypeCell!
+//        return self.prototypeCell!
+        return (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
     }
     
     private func configureCell(cell: ChatTableViewCell, atIndexPath indexPath: NSIndexPath) {

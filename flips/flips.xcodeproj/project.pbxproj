@@ -731,8 +731,8 @@
 			isa = PBXGroup;
 			children = (
 				5786B2CC19EEADD400021DD3 /* ChatView.swift */,
-				07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */,
 				5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */,
+				07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */,
 				07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */,
 			);
 			name = "Thread Screen";
