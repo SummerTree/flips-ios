@@ -95,7 +95,7 @@ class TakePictureViewController : FlipsViewController, TakePictureViewDelegate, 
     }
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        self.picture = image.squareCrop(UIImageSource.Unknown)
+        self.picture = image.cropSquareThumbnail()
         confirmPictureView.setPicture(self.picture)
         self.showConfirmPictureView()
         self.dismissViewControllerAnimated(true, completion: nil)

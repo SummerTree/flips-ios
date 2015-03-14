@@ -561,17 +561,16 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 
                 if (imageDataSampleBuffer != nil) {
                     var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
-                    var image = UIImage(data: imageData)
-
-                    var squaredImage: UIImage
-
+                    var image = UIImage(data: imageData)!
+        
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
-                        squaredImage = image!.squareCrop(UIImageSource.FrontCamera)
+                        image = UIImage(CGImage: image.CGImage, scale: 1.0, orientation: UIImageOrientation.LeftMirrored)!
+                        image = image.cropSquareThumbnail()
                     } else {
-                        squaredImage = image!.squareCrop(UIImageSource.BackCamera)
+                        image = image.cropSquareThumbnail()
                     }
 
-                    success(squaredImage)
+                    success(image)
                 } else {
                     fail(error)
                 }

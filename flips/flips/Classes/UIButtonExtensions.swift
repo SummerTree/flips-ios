@@ -47,12 +47,8 @@ extension UIButton {
     }
     
     func setAvatarImage(image: UIImage, forState state: UIControlState) {
-        if ((image.size.width > self.frame.size.width) || (image.size.height > self.frame.size.height)) {
-            var resizedImage = image.resizedImageWithWidth(self.frame.size.width, andHeight: self.frame.size.height)
-            self.setImage(resizedImage, forState: state)
-        } else {
-            self.setImage(image, forState: state)
-        }
+        var resizedImage = image.cropSquareImage(self.frame.size.width)
+        self.setImage(resizedImage, forState: state)
     }
     
     func setLastCameraPhotoAsButtonImage() {

@@ -49,7 +49,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         self.addSubview(captureProgressBar)
         
         filterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
-        filterImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        filterImageView.contentMode = UIViewContentMode.ScaleAspectFill
         self.addSubview(filterImageView)
         
         flipWordLabel = UILabel.flipWordLabel()
@@ -57,6 +57,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         self.addSubview(flipWordLabel)
         
         flipImageView = UIImageView()
+        flipImageView.contentMode = UIViewContentMode.ScaleAspectFill
         self.addSubview(flipImageView)
     }
     
