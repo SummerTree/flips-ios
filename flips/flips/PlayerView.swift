@@ -109,15 +109,18 @@ class PlayerView: UIView {
                     self.thumbnailView.alpha = 0
                     self.playButtonView.alpha = 0
                     self.retryButtonView.alpha = 0
+                    self.retryLabel.alpha = 0
                     self.progressBarView.alpha = 0
                 }, completion: { (finished) -> Void in
                     self.thumbnailView.hidden = true
                     self.playButtonView.hidden = true
                     self.retryButtonView.hidden = true
+                    self.retryLabel.hidden = true
                     self.progressBarView.hidden = true
                     self.thumbnailView.alpha = 1
                     self.playButtonView.alpha = self.BUTTONS_ALPHA
                     self.retryButtonView.alpha = self.BUTTONS_ALPHA
+                    self.retryLabel.alpha = self.BUTTONS_ALPHA
                     self.progressBarView.alpha = 1
                     
                     // Since it needs to wait the animation, the user can press back button, so it won't exist.
@@ -214,12 +217,15 @@ class PlayerView: UIView {
             self.progressBarView.alpha = 1
             self.playButtonView.alpha = 0
             self.retryButtonView.alpha = 0
+            self.retryLabel.alpha = 0
         }) { (success) -> Void in
             self.progressBarView.hidden = false
             self.playButtonView.hidden = true
             self.retryButtonView.hidden = true
+            self.retryLabel.hidden = true
             self.playButtonView.alpha = self.BUTTONS_ALPHA
             self.retryButtonView.alpha = self.BUTTONS_ALPHA
+            self.retryLabel.alpha = self.BUTTONS_ALPHA
         }
 
         for (index, flip) in enumerate(self.flips) {
@@ -457,7 +463,7 @@ class PlayerView: UIView {
         self.addSubview(self.retryButtonView)
 
         self.retryLabel = UILabel()
-        self.retryLabel.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.6)
+        self.retryLabel.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: BUTTONS_ALPHA)
         self.retryLabel.textColor = UIColor.whiteColor()
         self.retryLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         self.retryLabel.textAlignment = NSTextAlignment.Center
