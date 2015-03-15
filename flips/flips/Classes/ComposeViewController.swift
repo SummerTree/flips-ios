@@ -724,7 +724,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        let croppedImage = image.squareCrop(UIImageSource.Unknown)
+        let croppedImage = image.cropSquareThumbnail()
         self.highlightedWordCurrentAssociatedImage = croppedImage
         
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)

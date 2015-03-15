@@ -47,15 +47,7 @@ class RoundImageView: UIView {
             return imageView.image
         }
         set(image) {
-            let imageWidth = CGRectGetWidth(imageView.frame)
-            let imageHeight = CGRectGetHeight(imageView.frame)
-            
-            if ((image?.size.width > imageWidth) || (image?.size.height >  imageHeight)) {
-                var resizedImage = image?.resizedImageWithWidth(imageWidth, andHeight: imageHeight)
-                imageView.image = resizedImage
-            } else {
-                imageView.image = image
-            }
+            imageView.image = image
         }
     }
     
@@ -139,6 +131,7 @@ class RoundImageView: UIView {
         self.imageView = UIImageView()
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.shouldRasterize = false
+        self.imageView.contentMode = UIViewContentMode.ScaleAspectFill
         
         self.addSubview(self.imageView)
 
