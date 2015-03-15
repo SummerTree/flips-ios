@@ -27,10 +27,15 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(chatTitle: String, roomID: String) {
+    init(room: Room) {
         super.init(nibName: nil, bundle: nil)
-        self.chatTitle = chatTitle
-        self.roomID = roomID
+        self.chatTitle = room.roomName()
+        self.roomID = room.roomID
+        
+        let roomMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
+        for flipMessage in roomMessages {
+            self.flipMessages.addObject(flipMessage)
+        }
     }
     
     
@@ -47,15 +52,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.view = self.chatView
         
         self.setupWhiteNavBarWithBackButton(self.chatTitle)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.chatView.dataSource = self
-        
-        self.reloadFlipMessages()
-        self.chatView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -104,10 +100,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         }
     }
     
-    func reload() {
-        self.reloadFlipMessages()
-    }
-    
     
     // MARK: - Delegate methods
     
@@ -144,7 +136,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - Messages Notification Handler
     
     func notificationReceived(notification: NSNotification) {
-        self.reload()
+        println("notificationReceived")
+        self.reloadFlipMessages()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.loadNewFlipMessages()
         })
@@ -154,13 +147,15 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - ComposeViewControllerDelegate
     
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
-        self.reload()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.navigationController?.popToViewController(self, animated: true)
-            self.chatView.clearReplyTextField()
-            self.chatView.hideTextFieldAndShowReplyButton()
-            self.chatView.loadNewFlipMessages()
-            self.chatView.showNewestMessage()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            self.reloadFlipMessages()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.navigationController?.popToViewController(self, animated: true)
+                self.chatView.clearReplyTextField()
+                self.chatView.hideTextFieldAndShowReplyButton()
+                self.chatView.loadNewFlipMessages()
+                self.chatView.showNewestMessage()
+            })
         })
     }
     

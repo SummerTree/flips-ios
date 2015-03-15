@@ -71,11 +71,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     // MARK: - View Events
     
-    func viewDidLoad() {
-        self.tableView.reloadData()
-    }
-    
     func viewWillAppear() {
+        self.tableView.reloadData()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         
         replyView.mas_updateConstraints( { (make) in
@@ -88,10 +85,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         self.replyTextField.setupMenu()
         
-        self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         self.tableView.alpha = 0
+        self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
     }
-
+    
     func didLayoutSubviews() {
         self.showNewestMessage()
     }
@@ -175,7 +172,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_makeConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.REPLY_VIEW_INITIAL_HEIGHT)
+            make.height.equalTo()(self.REPLY_VIEW_INITIAL_HEIGHT + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         
@@ -212,27 +209,21 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.replyTextField.setWords(words)
     }
     
-    private func indexPathForCellThatShouldBeVisible() -> NSIndexPath {
+    private func indexPathForCellThatShouldBeVisible() -> NSIndexPath? {
         if let numberOfMessages: Int = self.dataSource?.numberOfFlipMessages(self) as Int? {
-            return NSIndexPath(forRow: numberOfMessages - 1, inSection: 0)
+            if (numberOfMessages > 0) {
+                return NSIndexPath(forRow: numberOfMessages - 1, inSection: 0)
+            }
         }
-        return NSIndexPath(forRow: 0, inSection: 0)
+        return nil
     }
     
     func showNewestMessage() {
         if (self.indexPathToShow != nil) {
-            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
-            if (self.tableView.alpha == 0) {
-                let oneSecond = 1 * Double(NSEC_PER_SEC)
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-                    UIView.animateWithDuration(0.25, animations: { () -> Void in
-                        self.tableView.alpha = 1
-                    })
-                }
-            }
+            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
         }
     }
+
     
     // MARK: - CustomNavigationBarDelegate
     
@@ -253,7 +244,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 newCellsIndexPaths.append(indexPath)
             }
         }
-        self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
+        if (newCellsIndexPaths.count > 0) {
+            self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
+        }
     }
 
 
@@ -323,6 +316,24 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if ((self.indexPathToShow != nil) && (self.indexPathToShow?.row == indexPath.row)) {
+            // Only show the tableview when we are sure that the latest cell will appear.
+            if (self.tableView.alpha == 0) {
+                let time = 0.5 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
+                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        self.tableView.alpha = 1
+                    }, completion: { (finished) -> Void in
+                        self.indexPathToShow = nil
+                        self.playVideoForVisibleCell()
+                    })
+                }
+            }
+        }
     }
     
     
@@ -433,17 +444,14 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
         
         if (numberOfMessages > 0) {
-            let indexPath = NSIndexPath(forRow: numberOfMessages! - 1, inSection: 0)
-            
             replyView.mas_updateConstraints( { (make) in
                 make.left.equalTo()(self)
                 make.right.equalTo()(self)
                 make.height.equalTo()(self.REPLY_FIELD_INITIAL_HEIGHT + self.REPLY_VIEW_MARGIN)
                 make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
             })
-            self.updateConstraints()
+            self.updateConstraintsIfNeeded()
             self.layoutIfNeeded()
-            self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
         }
     }
     
@@ -464,7 +472,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.centerY.equalTo()(self.replyView)
             make.height.equalTo()(self.replyTextField.contentSize.height)
         })
-        self.updateConstraints()
+        self.updateConstraintsIfNeeded()
     }
     
     func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
