@@ -16,6 +16,8 @@ class PlayerView: UIView {
 
     let BUTTONS_FADE_IN_OUT_ANIMATION_DURATION = 0.25
     let BUTTONS_ALPHA: CGFloat = 0.6
+    let PROGRESS_BAR_PADDING = 10
+    let PROGRESS_BAR_HEIGHT = 20
     
     var isPlaying = false
     var loadPlayerOnInit = false
@@ -513,7 +515,7 @@ class PlayerView: UIView {
 
         self.progressBarView = ProgressBar()
         self.progressBarView.hidden = true
-        self.progressBarView.alpha = 0.6
+        self.progressBarView.alpha = BUTTONS_ALPHA
         self.addSubview(self.progressBarView)
     }
     
@@ -550,10 +552,10 @@ class PlayerView: UIView {
         })
 
         self.progressBarView.mas_makeConstraints({ (make) -> Void in
-            make.left.equalTo()(self.thumbnailView).with().offset()(10)
-            make.right.equalTo()(self.thumbnailView).with().offset()(-10)
+            make.left.equalTo()(self.thumbnailView).with().offset()(PROGRESS_BAR_PADDING)
+            make.right.equalTo()(self.thumbnailView).with().offset()(-PROGRESS_BAR_PADDING)
             make.centerY.equalTo()(self.thumbnailView)
-            make.height.equalTo()(20)
+            make.height.equalTo()(PROGRESS_BAR_HEIGHT)
         })
     }
 
