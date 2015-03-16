@@ -35,6 +35,7 @@ public class UserService: FlipsService {
     let FACEBOOK_CONTACTS_VERIFY: String = "/user/{{user_id}}/facebook/verify"
     let MY_FLIPS: String = "/user/{{user_id}}/flips"
     let PHONE_NUMBER_EXISTS_URL: String = "/phoneNumber/{{phone_number}}/exists"
+    let CHANGE_NUMBER_RESEND_CODE_URL: String = "/user/{{user_id}}/devices/{{device_id}}/change_resend"
     
     public class var sharedInstance : UserService {
         struct Static {
@@ -510,6 +511,39 @@ public class UserService: FlipsService {
         })
     }
     
+    // MARK: - Resend code
+    
+    func resendCodeWhenChangingNumber(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
+            return
+        }
+        if let loggedUser = User.loggedUser() {
+            var path = self.CHANGE_NUMBER_RESEND_CODE_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            path = path.stringByReplacingOccurrencesOfString("{{device_id}}", withString: DeviceHelper.sharedInstance.retrieveDeviceId()!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let url = self.HOST + path
+            
+            var params: Dictionary<String, AnyObject> = [
+                RequestParams.PHONE_NUMBER : phoneNumber
+            ]
+            
+            self.post(url,
+                parameters: params,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    let device = PersistentManager.sharedInstance.createDeviceWithJson(JSON(responseObject))
+                    success(device)
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failure(FlipError(error: response["error"] as String!, details: nil))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details: nil))
+                    }
+                }
+            )
+        }
+    }
 
     // MARK: - Requests constants
     

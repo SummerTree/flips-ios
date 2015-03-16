@@ -16,6 +16,8 @@ class PlayerView: UIView {
 
     let BUTTONS_FADE_IN_OUT_ANIMATION_DURATION = 0.25
     let BUTTONS_ALPHA: CGFloat = 0.6
+    let PROGRESS_BAR_PADDING = 10
+    let PROGRESS_BAR_HEIGHT = 20
     
     var isPlaying = false
     var loadPlayerOnInit = false
@@ -36,7 +38,7 @@ class PlayerView: UIView {
     private var retryButtonView: UIImageView!
     private var retryLabel: UILabel!
     private var activityIndicator: UIActivityIndicatorView!
-    private var progressBarView: UIProgressView!
+    private var progressBarView: ProgressBar!
 
     weak var delegate: PlayerViewDelegate?
 
@@ -210,7 +212,7 @@ class PlayerView: UIView {
         self.words = []
 
         var pendingFlips = self.flips.count
-        var numOfFlips = self.flips.count
+        var numOfFlips = Float(self.flips.count)
 
         self.progressBarView.alpha = 0
         UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
@@ -228,60 +230,82 @@ class PlayerView: UIView {
             self.retryLabel.alpha = self.BUTTONS_ALPHA
         }
 
+
         for (index, flip) in enumerate(self.flips) {
             self.words.append(flip.word)
 
-            if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
-                let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
-                let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
-                let playerItem = self.playerItemWithVideoAsset(videoAsset)
-                playerItem.order = index
-                self.playerItems.append(playerItem)
+                if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
+                    let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
+                    let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
+                    let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                    playerItem.order = index
+                    self.playerItems.append(playerItem)
 
-                pendingFlips--
+                    pendingFlips--
 
-                self.updateDownloadProgress(numOfFlips - pendingFlips, of:numOfFlips);
+                    var animated = numOfFlips > 1
 
-                if (pendingFlips <= 0) {
-                    self.loadingFlips = false
-                    self.sortPlayerItems()
-                    completion()
-                }
-
-            } else {
-                FlipsCache.sharedInstance.videoForFlip(flip,
-                    success: { (localPath: String!) in
-                        if (self.hasDownloadError) {
-                            return
-                        }
-
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            if (self.flips == nil) {
-                                return
-                            }
-                            
-                            let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
-                            let playerItem = self.playerItemWithVideoAsset(videoAsset)
-                            playerItem.order = index
-                            self.playerItems.append(playerItem)
-
-                            pendingFlips--
-
-                            self.updateDownloadProgress(numOfFlips - pendingFlips, of:numOfFlips);
-
+                    self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
+                        of: numOfFlips,
+                        animated: animated,
+                        completion: { () -> Void in
                             if (pendingFlips <= 0) {
                                 self.loadingFlips = false
                                 self.sortPlayerItems()
                                 completion()
                             }
-                        })
-                    },
-                    failure: { (error: FlipError) in
-                        println("Failed to get resource from cache, error: \(error)")
-                        self.showErrorState()
+                        }
+                    );
+
+                } else {
+                    let response = FlipsCache.sharedInstance.videoForFlip(flip,
+                        success: { (localPath: String!) in
+                            if (self.hasDownloadError) {
+                                return
+                            }
+
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                if (self.flips == nil) {
+                                    return
+                                }
+
+                                let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
+                                let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                                playerItem.order = index
+                                self.playerItems.append(playerItem)
+
+                                pendingFlips--
+
+                                self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
+                                    of: numOfFlips,
+                                    animated: true,
+                                    completion: { () -> Void in
+                                        if (pendingFlips <= 0) {
+                                            self.loadingFlips = false
+                                            self.sortPlayerItems()
+                                            completion()
+                                        }
+                                    }
+                                );
+                            })
+                        },
+                        failure: { (error: FlipError) in
+                            println("Failed to get resource from cache, error: \(error)")
+                            self.showErrorState()
+                        }
+                    )
+
+                    if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                        // Set the progress to animate slowly to 50% of the flip currently downloading
+                        let halfwayToDownloadCurrentClip = (numOfFlips - Float(pendingFlips) + 1.0) * 0.5
+                        self.updateDownloadProgress(halfwayToDownloadCurrentClip,
+                            of: numOfFlips,
+                            animated: true,
+                            duration: 1.0,
+                            completion: nil);
                     }
-                )
-            }
+
+                }
         }
     }
 
@@ -304,16 +328,33 @@ class PlayerView: UIView {
         }
     }
 
-    private func updateDownloadProgress(progress: Int, of: Int) {
-        self.progressBarView.progress = Float(progress) / Float(of);
+    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool) {
+        self.updateDownloadProgress(progress, of: of, animated: animated, completion: nil)
+    }
+
+    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool, completion:(() -> Void)?) {
+        self.updateDownloadProgress(progress, of: of, animated: animated, duration: 0.3, completion: completion)
+    }
+
+    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool, duration: NSTimeInterval, completion:(() -> Void)?) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            var progressRatio = progress / of
+
+            if (animated) {
+                self.progressBarView.setProgress(progressRatio,
+                    animated: animated,
+                    duration: duration,
+                    completion: completion
+                )
+            } else {
+                self.progressBarView.setProgress(progressRatio, animated: animated, completion: completion);
+            }
+        })
     }
 
     func setupPlayerWithFlips(flips: Array<Flip>) {
         self.flips = flips
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.updateDownloadProgress(0, of:flips.count);
-        })
+        self.updateDownloadProgress(0.0, of: Float(flips.count), animated: false);
 
         let firstFlip = flips.first
         if (firstFlip != nil) {
@@ -472,8 +513,9 @@ class PlayerView: UIView {
         self.retryLabel.hidden = true
         self.addSubview(self.retryLabel)
 
-        self.progressBarView = UIProgressView()
+        self.progressBarView = ProgressBar()
         self.progressBarView.hidden = true
+        self.progressBarView.alpha = BUTTONS_ALPHA
         self.addSubview(self.progressBarView)
     }
     
@@ -510,10 +552,10 @@ class PlayerView: UIView {
         })
 
         self.progressBarView.mas_makeConstraints({ (make) -> Void in
-            make.left.equalTo()(self.thumbnailView)
-            make.right.equalTo()(self.thumbnailView)
-            make.bottom.equalTo()(self.thumbnailView)
-            make.height.equalTo()(10)
+            make.left.equalTo()(self.thumbnailView).with().offset()(PROGRESS_BAR_PADDING)
+            make.right.equalTo()(self.thumbnailView).with().offset()(-PROGRESS_BAR_PADDING)
+            make.centerY.equalTo()(self.thumbnailView)
+            make.height.equalTo()(PROGRESS_BAR_HEIGHT)
         })
     }
 
