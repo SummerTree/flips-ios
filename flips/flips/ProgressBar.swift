@@ -86,16 +86,26 @@ class ProgressBar: UIView {
     }
 
     func setProgress(progress: Float, animated: Bool, completion:(() -> Void)?) {
+        self.setProgress(progress, animated: animated, duration: 0.3, completion: completion)
+    }
+
+    func setProgress(progress: Float, animated: Bool, duration: NSTimeInterval, completion:(() -> Void)?) {
         self.progress = progress
 
-        UIView.animateWithDuration(0.5,
-            animations: { () -> Void in
-                self.setNeedsLayout()
-                self.layoutIfNeeded()
+        if (animated) {
+            UIView.animateWithDuration(duration,
+                animations: { () -> Void in
+                    self.setNeedsLayout()
+                    self.layoutIfNeeded()
 
-        }) { (finish) -> Void in
+            }) { (finish) -> Void in
+                completion?()
+                return
+            }
+        } else {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
             completion?()
-            return
         }
     }
 
