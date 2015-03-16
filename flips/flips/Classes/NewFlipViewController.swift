@@ -97,7 +97,7 @@ class NewFlipViewController: FlipsViewController,
         
         registerForKeyboardNotifications()
         
-        self.flipTextField.viewWillAppear()
+        self.flipTextField.setupMenu()
 
         if self.contacts.isEmpty {
             self.contactPicker.becomeFirstResponder()

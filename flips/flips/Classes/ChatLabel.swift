@@ -1,6 +1,4 @@
 //
-//  ChatLabel.swift
-//
 // Copyright 2014 ArcTouch, Inc.
 // All rights reserved.
 //
@@ -12,9 +10,9 @@
 // the license agreement.
 //
 
-import Foundation
 
 class ChatLabel: UILabel {
+    
     override var bounds: CGRect {
         get {
             return super.bounds
@@ -31,5 +29,13 @@ class ChatLabel: UILabel {
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    override init() {
+        super.init(frame: CGRectZero)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
 }

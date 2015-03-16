@@ -18,11 +18,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var chatTitle: String!
     
     private var roomID: String!
-    private var flipMessageIds = NSMutableOrderedSet()
+    private var flipMessages = NSMutableOrderedSet()
     
-    private let flipMessageDataSource = FlipMessageDataSource()
-    
-    
+
     // MARK: - Initializers
     
     required init(coder: NSCoder) {
@@ -53,19 +51,32 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.chatView.dataSource = self
+        
         self.reloadFlipMessages()
+        self.chatView.viewDidLoad()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
         self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
-        self.chatView.reloadFlipMessages()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.chatView.didLayoutSubviews()
+        
+        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
+            // Required only for iOS7
+            self.chatView.layoutIfNeeded()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -86,17 +97,15 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - FlipMessages Load Methods
     
     func reloadFlipMessages() {
+        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
         let flipMessages = flipMessageDataSource.flipMessagesForRoomID(self.roomID)
         for flipMessage in flipMessages {
-            self.flipMessageIds.addObject(flipMessage.flipMessageID)
+            self.flipMessages.addObject(flipMessage)
         }
     }
     
     func reload() {
         self.reloadFlipMessages()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.chatView.reloadFlipMessages()
-        })
     }
     
     
@@ -117,14 +126,12 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func numberOfFlipMessages(chatView: ChatView) -> Int {
         var numberOfFlipMessages: Int!
-        numberOfFlipMessages = self.flipMessageIds.count
+        numberOfFlipMessages = self.flipMessages.count
         return numberOfFlipMessages
     }
     
-    func chatView(chatView: ChatView, flipMessageIdAtIndex index: Int) -> String {
-        var flipMessageId: String!
-        flipMessageId = self.flipMessageIds.objectAtIndex(index) as String
-        return flipMessageId
+    func chatView(chatView: ChatView, flipMessageAtIndex index: Int) -> FlipMessage {
+        return self.flipMessages.objectAtIndex(index) as FlipMessage
     }
     
     func chatView(chatView: ChatView, shouldAutoPlayFlipMessageAtIndex index: Int) -> Bool {
@@ -138,16 +145,23 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func notificationReceived(notification: NSNotification) {
         self.reload()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.chatView.loadNewFlipMessages()
+        })
     }
     
     
     // MARK: - ComposeViewControllerDelegate
     
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
-        self.navigationController?.popToViewController(self, animated: true)
-        self.chatView.clearReplyTextField()
-        self.chatView.hideTextFieldAndShowReplyButton()
         self.reload()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.navigationController?.popToViewController(self, animated: true)
+            self.chatView.clearReplyTextField()
+            self.chatView.hideTextFieldAndShowReplyButton()
+            self.chatView.loadNewFlipMessages()
+            self.chatView.showNewestMessage()
+        })
     }
     
     func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {

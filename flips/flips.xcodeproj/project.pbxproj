@@ -33,7 +33,6 @@
 		07DAAF781A40ED9D0017DBA1 /* ChatLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
-		07E47BA21A3B60B3001B3809 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */; };
 		0bc33393ddb88c6ca64d81a5 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A919D4A05F006F0A2F /* SwiftyJSON.swift */; };
 		0e0534f8774cb7f100ecebeb /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		0fef66f1ad9d7af8e38c54ff /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
@@ -329,7 +328,6 @@
 		c571f967d25d7429f71d501b /* UIImagePickerController+StatusBarLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */; };
 		c62bce0fab7b5c71187ded10 /* VerificationCodeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */; };
 		c6a23c7b2263536d5254a35a /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */; };
-		c8530b42b921072e2c3c5379 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */; };
 		cc8085af5920ec30087934af /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		cd9562909c82edbbe59c0a24 /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */; };
 		cedb8b76cbd703f2f6216787 /* BuilderWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711741A28D8B00082165A /* BuilderWord.m */; };
@@ -417,7 +415,6 @@
 		07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatLabel.swift; path = Classes/ChatLabel.swift; sourceTree = "<group>"; };
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
 		07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSErrorExtensions.swift; path = Classes/NSErrorExtensions.swift; sourceTree = "<group>"; };
-		07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
@@ -719,23 +716,22 @@
 			name = PubNub;
 			sourceTree = "<group>";
 		};
-		5786B2CA19EEADBC00021DD3 /* Chat */ = {
+		5786B2CA19EEADBC00021DD3 /* Thread Screen */ = {
 			isa = PBXGroup;
 			children = (
 				5786B2C819EEADB700021DD3 /* ChatViewController.swift */,
 			);
-			name = Chat;
+			name = "Thread Screen";
 			sourceTree = "<group>";
 		};
-		5786B2CF19EEADD900021DD3 /* Chat */ = {
+		5786B2CF19EEADD900021DD3 /* Thread Screen */ = {
 			isa = PBXGroup;
 			children = (
-				07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */,
-				5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */,
-				07E47BA11A3B60B3001B3809 /* ChatTableViewCell.xib */,
 				5786B2CC19EEADD400021DD3 /* ChatView.swift */,
+				5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */,
+				07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */,
 			);
-			name = Chat;
+			name = "Thread Screen";
 			sourceTree = "<group>";
 		};
 		57A3A6BC19D5E2E70043790E /* Verification */ = {
@@ -811,7 +807,6 @@
 			isa = PBXGroup;
 			children = (
 				7A0D6CED19D4961C00E39A1B /* Builder */,
-				5786B2CA19EEADBC00021DD3 /* Chat */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				705EF07B19F9767800D4CF74 /* Confirm Flip */,
 				709088231A1E1624009915FE /* Import Contact */,
@@ -826,6 +821,7 @@
 				70BD0E7019E30C5100FE8652 /* Splash Screen */,
 				7AB1683619E31951004E2162 /* Take a Picture */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
+				5786B2CA19EEADBC00021DD3 /* Thread Screen */,
 				57A3A6BF19D5E4C00043790E /* Verification */,
 			);
 			name = Controller;
@@ -835,7 +831,6 @@
 			isa = PBXGroup;
 			children = (
 				072AD71D1A16B0040011B212 /* Buttons */,
-				5786B2CF19EEADD900021DD3 /* Chat */,
 				7066E0A319EC4D570009BCF2 /* Compose */,
 				705EF07819F9738100D4CF74 /* Confirm Flip */,
 				7AD93F8C19E4B677009CC59A /* Confirm Picture */,
@@ -853,6 +848,7 @@
 				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
 				7AB1683919E319C7004E2162 /* Take a Picture */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
+				5786B2CF19EEADD900021DD3 /* Thread Screen */,
 				57A3A6BC19D5E2E70043790E /* Verification */,
 				70B560A319D996B900FE4C34 /* Web View */,
 			);
@@ -1539,7 +1535,6 @@
 			files = (
 				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
-				07E47BA21A3B60B3001B3809 /* ChatTableViewCell.xib in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
@@ -1552,7 +1547,6 @@
 			files = (
 				BE2E72091A98119400F237BE /* empty_video.mov in Resources */,
 				0fef66f1ad9d7af8e38c54ff /* NewFlip.storyboard in Resources */,
-				c8530b42b921072e2c3c5379 /* ChatTableViewCell.xib in Resources */,
 				a715422097ca6a65830ec19b /* ContactTableViewCell.xib in Resources */,
 				5a70e4ad35ad3e69743a5946 /* Images.xcassets in Resources */,
 				d076fba65b95ff056aa164ba /* SyncView.xib in Resources */,
