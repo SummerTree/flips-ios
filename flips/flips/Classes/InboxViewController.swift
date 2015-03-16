@@ -148,7 +148,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         roomID = self.roomIds.objectAtIndex(index) as String
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.retrieveRoomWithId(roomID)
-        self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+        self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
+        
     }
     
     
@@ -212,7 +213,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             let roomDataSource = RoomDataSource()
             let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
         })
     }
     
