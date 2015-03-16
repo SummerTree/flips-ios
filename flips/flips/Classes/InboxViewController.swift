@@ -159,17 +159,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let roomDataSource = RoomDataSource()
             let rooms = roomDataSource.getMyRoomsOrderedByMostRecentMessage()
-            for (index, room) in enumerate(rooms) {
-                if (self.roomIds.containsObject(room.roomID)) {
-                    let currentIndex = self.roomIds.indexOfObject(room.roomID)
-                    if (currentIndex != index) {
-                        let indexSet = NSMutableIndexSet()
-                        indexSet.addIndex(currentIndex)
-                        self.roomIds.moveObjectsAtIndexes(indexSet, toIndex: index)
-                    }
-                } else {
-                    self.roomIds.addObject(room.roomID)
-                }
+            self.roomIds.removeAllObjects()
+            for room in rooms {
+                self.roomIds.addObject(room.roomID)
             }
             
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
