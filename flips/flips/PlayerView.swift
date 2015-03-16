@@ -33,7 +33,7 @@ class PlayerView: UIView {
     private var retryButtonView: UIImageView!
     private var retryLabel: UILabel!
     private var activityIndicator: UIActivityIndicatorView!
-    private var progressBarView: UIProgressView!
+    private var progressBarView: ProgressBar!
 
     weak var delegate: PlayerViewDelegate?
 
@@ -266,7 +266,7 @@ class PlayerView: UIView {
     }
 
     private func updateDownloadProgress(progress: Int, of: Int) {
-        self.progressBarView.progress = Float(progress) / Float(of);
+        self.progressBarView.setProgress(Float(progress) / Float(of), animated: true);
     }
 
     func setupPlayerWithFlips(flips: Array<Flip>) {
@@ -428,7 +428,7 @@ class PlayerView: UIView {
         self.retryLabel.hidden = true
         self.addSubview(self.retryLabel)
 
-        self.progressBarView = UIProgressView()
+        self.progressBarView = ProgressBar()
         self.progressBarView.hidden = true
         self.addSubview(self.progressBarView)
     }
@@ -466,10 +466,10 @@ class PlayerView: UIView {
         })
 
         self.progressBarView.mas_makeConstraints({ (make) -> Void in
-            make.left.equalTo()(self.thumbnailView)
-            make.right.equalTo()(self.thumbnailView)
-            make.bottom.equalTo()(self.thumbnailView)
-            make.height.equalTo()(10)
+            make.left.equalTo()(self.thumbnailView).with().offset()(10)
+            make.right.equalTo()(self.thumbnailView).with().offset()(-10)
+            make.centerY.equalTo()(self.thumbnailView)
+            make.height.equalTo()(20)
         })
     }
 
