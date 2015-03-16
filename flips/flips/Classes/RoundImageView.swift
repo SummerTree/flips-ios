@@ -79,6 +79,9 @@ class RoundImageView: UIView {
     
     init(frame: CGRect, borderWidth: CGFloat! = nil, borderColor: UIColor! = nil) {
         super.init(frame: frame)
+        
+        self.backgroundColor = UIColor.whiteColor()
+        
         setup()
         
         if (borderWidth != nil) {

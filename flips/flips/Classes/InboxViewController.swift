@@ -148,7 +148,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         roomID = self.roomIds.objectAtIndex(index) as String
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.retrieveRoomWithId(roomID)
-        self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+        self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
+        
     }
     
     
@@ -157,7 +158,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     private func refreshRooms() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let roomDataSource = RoomDataSource()
-            let rooms = roomDataSource.getMyRoomsOrderedByOldestNotReadMessage()
+            let rooms = roomDataSource.getMyRoomsOrderedByMostRecentMessage()
             for (index, room) in enumerate(rooms) {
                 if (self.roomIds.containsObject(room.roomID)) {
                     let currentIndex = self.roomIds.indexOfObject(room.roomID)
@@ -212,7 +213,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             let roomDataSource = RoomDataSource()
             let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
         })
     }
     
