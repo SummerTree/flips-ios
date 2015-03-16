@@ -23,6 +23,15 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     private var flipImageView: UIImageView!
     private var flipPlayerView: PlayerView!
     
+    private enum PreviewType {
+        case None
+        case Camera
+        case Image
+        case Flip
+    }
+    
+    private var previewType: PreviewType = PreviewType.None
+    
     weak var delegate: ComposeTopViewContainerDelegate?
     
     
@@ -115,13 +124,53 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         }
     }
     
+    private func switchToPreviewType(type: PreviewType) {
+        if (self.previewType == type && type != PreviewType.Flip) {
+            return
+        }
+        
+        self.flipWordLabel.text = nil
+        self.flipImageView.image = nil
+        
+        if (self.previewType == PreviewType.Camera) {
+            self.cameraPreview.removeObservers()
+            self.cameraPreview.alpha = 0
+        } else if (self.previewType == PreviewType.Flip) {
+            self.flipPlayerView.removeFromSuperview()
+            self.flipPlayerView.releaseResources()
+        }
+        
+        if (type == PreviewType.Camera) {
+            self.cameraPreview.registerObservers()
+            self.cameraPreview.alpha = 1.0
+            self.bringSubviewToFront(self.cameraPreview)
+            self.bringSubviewToFront(self.filterImageView)
+            self.bringSubviewToFront(self.flipWordLabel)
+        } else if (type == PreviewType.Flip) {
+            self.createFlipPlayerView()
+        } else if (type == PreviewType.Image) {
+            self.bringSubviewToFront(self.flipImageView)
+            self.bringSubviewToFront(self.filterImageView)
+            self.bringSubviewToFront(self.flipWordLabel)
+        }
+        
+        self.previewType = type
+    }
+    
     // MARK: - Life Cycle
     
     func viewWillAppear() {
+        if (self.previewType == PreviewType.Camera) {
+            self.cameraPreview.registerObservers()
+        }
     }
     
     func viewWillDisappear() {
-        self.cameraPreview.removeObservers()
+        if (self.previewType == PreviewType.Camera) {
+            self.cameraPreview.removeObservers()
+        } else if (self.previewType == PreviewType.Flip) {
+            self.flipPlayerView.pause()
+        }
     }
     
     
@@ -129,19 +178,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     func showCameraWithWord(word: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.cameraPreview.registerObservers()
+            self.switchToPreviewType(PreviewType.Camera)
             self.flipWordLabel.text = word
-            self.flipImageView.image = nil
-            
-            if (self.flipPlayerView != nil) {
-                self.flipPlayerView.removeFromSuperview()
-                self.flipPlayerView.releaseResources()
-            }
-
-            self.cameraPreview.alpha = 1.0
-            self.bringSubviewToFront(self.cameraPreview)
-            self.bringSubviewToFront(self.filterImageView)
-            self.bringSubviewToFront(self.flipWordLabel)
         })
     }
     
@@ -149,13 +187,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.cameraPreview.removeObservers()
-
-                self.cameraPreview.alpha = 0
-                self.flipWordLabel.text = nil
-                self.flipImageView.image = nil
-                
-                self.createFlipPlayerView()
+                self.switchToPreviewType(PreviewType.Flip)
                 self.flipPlayerView.setupPlayerWithFlips([flip])
             })
         } else {
@@ -165,18 +197,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     func showImage(image: UIImage, andText text: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.cameraPreview.removeObservers()
-            
-            if (self.flipPlayerView != nil) {
-                self.flipPlayerView.removeFromSuperview()
-                self.flipPlayerView.releaseResources()
-            }
-            
+            self.switchToPreviewType(PreviewType.Image)
             self.flipWordLabel.text = text
             self.flipImageView.image = image
-
-            self.bringSubviewToFront(self.flipImageView)
-            self.bringSubviewToFront(self.flipWordLabel)
         })
     }
     
