@@ -18,6 +18,8 @@ public class CacheJournal {
     private let path: String
     private var entries: [JournalEntry]
     private let fileManagerQueue: dispatch_queue_t
+    private let entriesQueue: dispatch_queue_t
+    
     var cacheSize: UInt64 {
         get {
             var size: UInt64 = 0
@@ -32,6 +34,7 @@ public class CacheJournal {
         self.path = absolutePath
         self.entries = [JournalEntry]()
         self.fileManagerQueue = dispatch_queue_create(self.path, nil)
+        self.entriesQueue = dispatch_queue_create("entriesQueue", nil)
     }
     
     func open() {
@@ -51,42 +54,53 @@ public class CacheJournal {
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
         var newEntry = JournalEntry(key: key, size: entrySize, timestamp: entryTimestamp)
-        entries.append(newEntry)
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            self.entries.append(newEntry)
+        })
         self.persistJournal()
     }
     
     func updateEntry(key: String) -> Void {
-        for entry in entries {
-            if key == entry.key {
-                entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-                self.persistJournal()
-                return
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            for entry in self.entries {
+                if key == entry.key {
+                    entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
+                    break
+                }
             }
-        }
+        })
+        self.persistJournal()
     }
     
     func getLRUEntriesForSize(sizeInBytes: UInt64) -> Slice<String> {
-        entries.sort({ $0.timestamp < $1.timestamp })
+        var entriesSlice: Slice<String>!
         
-        var count: UInt64 = 0
-        var upperLimit: Int = 0
-        for entry in entries {
-            if count >= sizeInBytes {
-                break
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            self.entries.sort({ $0.timestamp < $1.timestamp })
+            
+            var count: UInt64 = 0
+            var upperLimit: Int = 0
+            for entry in self.entries {
+                if count >= sizeInBytes {
+                    break
+                }
+                count += entry.size
+                ++upperLimit
             }
-            count += entry.size
-            ++upperLimit
-        }
-        
-        if upperLimit <= 0 {
-            return Slice<String>()
-        }
-        
-        return entries[0..<upperLimit].map { $0.key }
+            
+            if upperLimit > 0 {
+                entriesSlice = Slice<String>()
+            } else {
+                entriesSlice = self.entries[0..<upperLimit].map { $0.key }
+            }
+        })
+        return entriesSlice
     }
     
     func removeLRUEntries(count: Int) -> Void {
-        self.entries.removeRange(0..<count)
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            self.entries.removeRange(0..<count)
+        })
         self.persistJournal()
     }
     
@@ -113,7 +127,6 @@ public class CacheJournal {
                 let timestamp: Int = (fields[2] as String).toInt()!
                 var entry = JournalEntry(key: key, size: size, timestamp: timestamp)
                 entries.append(entry)
-                
             }
         }
     }
