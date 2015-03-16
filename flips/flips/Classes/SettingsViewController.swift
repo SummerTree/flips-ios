@@ -80,7 +80,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         let flipboysRoom: Room? = roomDataSource.getFlipboysRoom()
         
         if let room = flipboysRoom {
-            var chatViewController = ChatViewController(chatTitle: FLIPSBOYS_CHAT_TITLE, roomID: room.roomID)
+            var chatViewController = ChatViewController(room: room)
             self.navigationController?.pushViewController(chatViewController, animated: true)
         } else {
             var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.FLIPBOYS_ROOM_NOT_FOUND, delegate: nil, cancelButtonTitle: LocalizedString.OK)

@@ -222,7 +222,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             let roomDataSource = RoomDataSource()
             let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(chatTitle: room.roomName(), roomID: roomID), animated: true)
+            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
         })
     }
 }
