@@ -60,5 +60,23 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
             }
         }
     }
+    
+    override func verificationCodeViewDidTapResendButton(view: VerificationCodeView!) {
+        view.resetVerificationCodeField()
+        view.focusKeyboardOnCodeField()
+        
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        
+        UserService.sharedInstance.resendCodeWhenChangingNumber(phoneNumber.intlPhoneNumber,
+            success: { (user) -> Void in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+            },
+            failure: { (flipError) -> Void in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                let alertView = UIAlertView(title: NSLocalizedString("Error when trying to resend verification code"), message: flipError?.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
+        )
+    }
 
 }
