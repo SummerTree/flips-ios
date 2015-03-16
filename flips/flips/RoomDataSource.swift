@@ -138,6 +138,27 @@ class RoomDataSource : BaseDataSource {
         }
     }
     
+    func getMyRoomsOrderedByMostRecentMessage() -> [Room] {
+        let now = NSDate()
+        
+        var myRooms = self.getMyRooms()
+        return myRooms.sorted { (room, nextRoom) -> Bool in
+            let roomMostRecentMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
+            var roomDate = roomMostRecentMessage?.createdAt
+            if (roomDate == nil) {
+                roomDate = now
+            }
+            
+            let nextRoomMostRecentMessage = nextRoom.flipMessagesNotRemoved().lastObject as? FlipMessage
+            var nextRoomDate = nextRoomMostRecentMessage?.createdAt
+            if (nextRoomDate == nil) {
+                nextRoomDate = now
+            }
+            
+            return (roomDate!.compare(nextRoomDate!) != NSComparisonResult.OrderedAscending)
+        }
+    }
+    
     func getRoomWithPubnubID(pubnubID: String) -> Room? {
         return Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID, inContext: currentContext) as? Room
     }

@@ -176,15 +176,12 @@ class ConversationTableViewCell : UITableViewCell {
     }
     
     private func layoutMessageInfo(room: Room) {
-        // All conversations should be sorted in the inbox by the above time stamp, with most recent at the top, and oldest at the bottom.
+        // All conversations should be sorted in the inbox by time stamp, with most recent at the top, and oldest at the bottom.
         
         let flipMessageDataSource = FlipMessageDataSource()
 
-        // The preview still photo should reflect the first frame of the video of the oldest unread message in the conversation
-        var flipMessage = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(room.roomID)
-        if (flipMessage == nil) {
-            flipMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
-        }
+        // The preview still photo should reflect the first frame of the video of the most recent message in the conversation
+        var flipMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
 
         if (flipMessage != nil) {
             let isMessageNotRead = flipMessage!.notRead.boolValue
@@ -193,17 +190,17 @@ class ConversationTableViewCell : UITableViewCell {
             let createdAtDate = flipMessage!.createdAt
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                // The avatar to the left should reflect the sender (other than the current user) of the oldest unread message in the conversation
+                // The avatar to the left should reflect the sender (other than the current user) of the most recent message in the conversation
                 self.userImageView.setImageWithURL(photoURL)
 
-                // Display "tap to play" when unread; display beginning of most recently received message text once all messages played
+                // Display "tap to play" when unread; display beginning of most recent message text once all messages have been played
                 if (isMessageNotRead) {
                     self.flipMessageLabel.text = NSLocalizedString("tap to play", comment: "tap to play")
                 } else {
                     self.flipMessageLabel.text = messagePhrase
                 }
 
-                // The time stamp should reflect the time sent of the oldest unread message in the conversation
+                // The time stamp should reflect the time sent of the most recent message in the conversation
                 let formatedDate = DateHelper.formatDateToApresentationFormat(createdAtDate)
                 self.flipTimeLabel.text = formatedDate
                 self.flipTimeLabel.sizeToFit()
