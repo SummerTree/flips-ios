@@ -48,6 +48,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var cellsHeightsCache: Dictionary<Int,CGFloat?>!
     private var indexPathToShow: NSIndexPath?
 
+    private var lastPlayedRow: Int!
     
     // MARK: - Required initializers
     
@@ -62,6 +63,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.makeConstraints()
         
         self.updateNextButtonState()
+
+        self.lastPlayedRow = -1
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -383,10 +386,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 if (indexPath == nil) {
                     return
                 }
+
                 var row = indexPath?.row
-                var shouldAutoPlay: Bool? = dataSource?.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!)
-                if (shouldAutoPlay != nil) {
-                    cell.playMovie()
+                if let shouldAutoPlay = dataSource?.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!) {
+                    if (shouldAutoPlay && (row != self.lastPlayedRow)) {
+                        self.lastPlayedRow = row
+                        cell.playMovie()
+                    }
                 }
             } else {
                 cell.stopMovie()
