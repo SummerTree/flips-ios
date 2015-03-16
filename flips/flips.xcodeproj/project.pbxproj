@@ -289,6 +289,7 @@
 		BE2E72081A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		BE2E72091A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
+		F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22611251AB6FEC4004C875A /* ProgressBar.swift */; };
 		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
@@ -590,6 +591,7 @@
 		BE2E72071A98119400F237BE /* empty_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = empty_video.mov; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		F22611251AB6FEC4004C875A /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		F29324701A1583B700355A4D /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		F29324741A19A36700355A4D /* FlipPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipPlayerItem.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
@@ -843,6 +845,7 @@
 				F293246D1A15833D00355A4D /* Player */,
 				705B3DDC1A03BBBA00E0D3E9 /* Preview */,
 				7056FE5719D8822F00BD6571 /* Privacy Policy */,
+				F22611241AB6FEAB004C875A /* ProgressBar */,
 				7033584419E415E60030CF11 /* Settings */,
 				7A9619E719DC2CD9005E4343 /* SignUp */,
 				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
@@ -1433,6 +1436,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F22611241AB6FEAB004C875A /* ProgressBar */ = {
+			isa = PBXGroup;
+			children = (
+				F22611251AB6FEC4004C875A /* ProgressBar.swift */,
+			);
+			name = ProgressBar;
+			sourceTree = "<group>";
+		};
 		F293246D1A15833D00355A4D /* Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -1889,6 +1900,7 @@
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7AF82E0119EFECC900D0393F /* DeviceDataSource.swift in Sources */,
 				07CE2ABA1A1E8FEC00CF1A70 /* LocalizedString.swift in Sources */,
+				F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */,
 				7056FE5A19D882DE00BD6571 /* PrivacyPolicyController.swift in Sources */,
 				7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */,
 				7A8A86381A1D1F9E00CB0B31 /* RoomService.swift in Sources */,
