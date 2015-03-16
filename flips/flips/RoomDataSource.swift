@@ -163,17 +163,29 @@ class RoomDataSource : BaseDataSource {
         return Room.findFirstByAttribute(RoomAttributes.PUBNUB_ID, withValue: pubnubID, inContext: currentContext) as? Room
     }
     
-    func hasRoomWithUserId(userId: String) -> (hasRoom: Bool, room: Room?) {
+    func hasRoomWithUserIDs(userIDs: [String]) -> (hasRoom: Bool, room: Room?) {
         let rooms = self.getAllRooms()
+        let loggedUserID: String? = User.loggedUser()?.userID
         
-        var roomFound: Room?
+        var roomFound: Room? = nil
         for room in rooms {
-            if (room.participants.count == 2) {
-                var allParticipants = room.participants.allObjects as [User]
-                if ((allParticipants[0].userID == userId) || (allParticipants[1].userID == userId)) {
-                    roomFound = room
+            var allParticipants = room.participants.allObjects as [User]
+            
+            if (allParticipants.count != userIDs.count+1) {
+                continue
+            }
+            
+            var sameParticipants = true
+            for participant in allParticipants {
+                if (find(userIDs, participant.userID) == nil && participant.userID != loggedUserID) {
+                    sameParticipants = false
                     break
                 }
+            }
+            
+            if (sameParticipants) {
+                roomFound = room
+                break
             }
         }
         

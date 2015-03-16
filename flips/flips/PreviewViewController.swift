@@ -104,7 +104,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    func previewButtonDidTapSendButton(previewView: PreviewView!) {
+    func previewViewDidTapSendButton(previewView: PreviewView!) {
         self.previewView.stopMovie()
         self.showActivityIndicator()
         
