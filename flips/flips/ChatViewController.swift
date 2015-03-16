@@ -57,6 +57,13 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        if (DeviceHelper.sharedInstance.systemVersion() >= 8) {
+            // It doesn't work properly on iOS7
+            self.view.addKeyboardPanningWithFrameBasedActionHandler(nil, constraintBasedActionHandler: { (keyBoardFrameInView: CGRect, openning: Bool, closing: Bool) -> Void in
+                self.chatView.keyboardPanningToFrame(keyBoardFrameInView)
+            })
+        }
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         
@@ -83,6 +90,10 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.chatView.viewWillDisappear()
         self.chatView.dataSource = nil
         self.chatView.delegate = nil
+        
+        if (DeviceHelper.sharedInstance.systemVersion() >= 8) {
+            self.chatView.removeKeyboardControl()
+        }
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
