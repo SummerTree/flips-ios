@@ -168,6 +168,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     func viewWillDisappear() {
         if (self.previewType == PreviewType.Camera) {
             self.cameraPreview.removeObservers()
+        } else if (self.previewType == PreviewType.Flip) {
+            self.flipPlayerView.pause()
         }
     }
     
