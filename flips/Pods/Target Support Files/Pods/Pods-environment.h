@@ -86,9 +86,10 @@
 
 // PubNub
 #define COCOAPODS_POD_AVAILABLE_PubNub
-#define COCOAPODS_VERSION_MAJOR_PubNub 3
-#define COCOAPODS_VERSION_MINOR_PubNub 7
-#define COCOAPODS_VERSION_PATCH_PubNub 0
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 3.7.9.3.
 
 // RHAddressBook
 #define COCOAPODS_POD_AVAILABLE_RHAddressBook
