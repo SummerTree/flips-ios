@@ -28,7 +28,7 @@ PODS:
   - FlurrySDK/FlurrySDK (5.4.0)
   - MagicalRecord/Shorthand (2.2)
   - Masonry (0.5.3)
-  - PubNub (3.7.0)
+  - PubNub (3.7.9.3)
   - RHAddressBook (1.1.1)
   - SplunkMint-iOS (4.0.21)
 
@@ -38,7 +38,7 @@ DEPENDENCIES:
   - FlurrySDK
   - MagicalRecord/Shorthand (~> 2.2)
   - Masonry (= 0.5.3)
-  - PubNub (= 3.7)
+  - PubNub (= 3.7.9.3)
   - RHAddressBook (= 1.1.1)
   - SplunkMint-iOS (= 4.0.21)
 
@@ -49,7 +49,7 @@ SPEC CHECKSUMS:
   FlurrySDK: bed9e5598353f867508d164795a451e3ada92cb6
   MagicalRecord: 2b471584fc9e3137f3d0a56967917baa4979e224
   Masonry: 35368c2ca9577ca87722c12fc52c4bad9b1c1516
-  PubNub: b374a88f661ff58ee3c42c5e8dc9ac52403e3954
+  PubNub: ffe871da6fd4a680faddecc3f20a563646869d4a
   RHAddressBook: 0cad9d33b9494d1e28323b62e5c7afc109cc4294
   SplunkMint-iOS: f5cb289736a4310c9326f0972b58bc55c660e67a
 

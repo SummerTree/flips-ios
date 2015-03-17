@@ -163,20 +163,31 @@ class NewFlipViewController: FlipsViewController,
                 alertView.show()
             }
         } else {
-            if ((contacts.count == 1) && (contacts[0].contactUser != nil)) {
-                let roomDataSource = RoomDataSource()
-                var result = roomDataSource.hasRoomWithUserId(contacts[0].contactUser.userID)
-                if (result.hasRoom) {
-                    let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getFlipTexts())
-                    composeViewController.delegate = self
-                    self.navigationController?.pushViewController(composeViewController, animated: true)
-                    return
-                }
+            let createNewRoom = { () -> Void in
+                let composeViewController = ComposeViewController(contacts: self.contacts, words: self.flipTextField.getFlipTexts())
+                composeViewController.delegate = self
+                self.navigationController?.pushViewController(composeViewController, animated: true)
             }
             
-            let composeViewController = ComposeViewController(contacts: contacts, words: flipTextField.getFlipTexts())
-            composeViewController.delegate = self
-            self.navigationController?.pushViewController(composeViewController, animated: true)
+            var userIDs = [String]()
+            for contact in self.contacts {
+                if (contact.contactUser == nil) {
+                    createNewRoom()
+                    return
+                }
+                userIDs.append(contact.contactUser.userID)
+            }
+            
+            let roomDataSource = RoomDataSource()
+            var result = roomDataSource.hasRoomWithUserIDs(userIDs)
+            if (result.hasRoom) {
+                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getFlipTexts())
+                composeViewController.delegate = self
+                self.navigationController?.pushViewController(composeViewController, animated: true)
+                return
+            }
+            
+            createNewRoom()
         }
     }
     

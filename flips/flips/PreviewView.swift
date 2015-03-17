@@ -83,7 +83,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     }
     
     func sendButtonTapped(sendButton: UIButton!) {
-        self.delegate?.previewButtonDidTapSendButton(self)
+        self.delegate?.previewViewDidTapSendButton(self)
     }
     
     
@@ -132,6 +132,6 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
 
 protocol PreviewViewDelegate: class {
     func previewViewDidTapBackButton(previewView: PreviewView!)
-    func previewButtonDidTapSendButton(previewView: PreviewView!)
+    func previewViewDidTapSendButton(previewView: PreviewView!)
     func previewViewMakeConstraintToNavigationBarBottom(container: UIView!)
 }
