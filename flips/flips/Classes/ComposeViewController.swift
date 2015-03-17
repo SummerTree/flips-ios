@@ -546,6 +546,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 let flipWord = self.flipWords[self.highlightedWordIndex]
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.navigationItem.rightBarButtonItem?.enabled = false
+
                     self.composeTopViewContainer.showImage(receivedImage, andText: flipWord.text)
                     self.composeBottomViewContainer.showAudioRecordButton()
                 })
@@ -738,10 +740,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if enabled {
             self.view.userInteractionEnabled = true
             self.navigationController?.view.userInteractionEnabled = true
+            self.navigationItem.rightBarButtonItem?.enabled = true
+
             println("User interaction enabled for compose view")
         } else {
             self.view.userInteractionEnabled = false
             self.navigationController?.view.userInteractionEnabled = false
+            self.navigationItem.rightBarButtonItem?.enabled = false
+
             println("User interaction disabled for compose view")
         }
     }
