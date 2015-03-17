@@ -211,6 +211,7 @@
 		7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
 		7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
 		7A997DBC1A274F7400346817 /* BuilderWordDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */; };
+		7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA3F93E1AB70DC500B562B9 /* DAKeyboardControl.m */; };
 		7AA711721A28D8AF0082165A /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711711A28D8AF0082165A /* Contact.m */; };
 		7AA711751A28D8B00082165A /* BuilderWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711741A28D8B00082165A /* BuilderWord.m */; };
 		7AA7117B1A28D8B10082165A /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
@@ -530,6 +531,8 @@
 		7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewDelegate.swift; sourceTree = "<group>"; };
 		7A9619EF19DC3F01005E4343 /* UserFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormView.swift; path = Classes/UserFormView.swift; sourceTree = "<group>"; };
 		7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderWordDataSource.swift; sourceTree = "<group>"; };
+		7AA3F93D1AB70DC500B562B9 /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAKeyboardControl.h; path = DAKeyboardControl/DAKeyboardControl.h; sourceTree = "<group>"; };
+		7AA3F93E1AB70DC500B562B9 /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DAKeyboardControl.m; path = DAKeyboardControl/DAKeyboardControl.m; sourceTree = "<group>"; };
 		7AA711701A28D8AF0082165A /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		7AA711711A28D8AF0082165A /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		7AA711731A28D8B00082165A /* BuilderWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuilderWord.h; sourceTree = "<group>"; };
@@ -1163,6 +1166,7 @@
 		70FD4E7319D064450024EBDB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7AA3F93C1AB70DB500B562B9 /* DAKeyboardControl */,
 				70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */,
 				70FD4E7419D064450024EBDB /* Info.plist */,
 			);
@@ -1343,6 +1347,15 @@
 				7AB946D919DEF1CC00779C73 /* UserFormViewDelegate.swift */,
 			);
 			name = UserForm;
+			sourceTree = "<group>";
+		};
+		7AA3F93C1AB70DB500B562B9 /* DAKeyboardControl */ = {
+			isa = PBXGroup;
+			children = (
+				7AA3F93D1AB70DC500B562B9 /* DAKeyboardControl.h */,
+				7AA3F93E1AB70DC500B562B9 /* DAKeyboardControl.m */,
+			);
+			name = DAKeyboardControl;
 			sourceTree = "<group>";
 		};
 		7AB1683619E31951004E2162 /* Take a Picture */ = {
@@ -1958,6 +1971,7 @@
 				F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
+				7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7AA711721A28D8AF0082165A /* Contact.m in Sources */,

@@ -52,4 +52,6 @@
 
 #import "SwiftTryCatch.h"
 
+#import "DAKeyboardControl.h"
+
 #endif
