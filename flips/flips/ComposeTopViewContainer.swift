@@ -207,7 +207,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     // MARK: - ProgressBar Handler
     
     func startRecordingProgressBar() {
+        self.captureProgressBar.hidden = false
         self.bringSubviewToFront(self.captureProgressBar)
+
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
@@ -219,6 +221,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
             
             self.layoutIfNeeded()
             }) { (completed) -> Void in
+                self.captureProgressBar.hidden = true
+
                 self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
                     update.removeExisting = true
                     update.top.equalTo()(self)
@@ -250,6 +254,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     }
     
     func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool) {
+        if (!success) {
+            self.captureProgressBar.hidden = true
+        }
         delegate?.composeTopViewContainer(self, didFinishRecordingVideoAtUrl: videoURL, withSuccess: success)
     }
     
