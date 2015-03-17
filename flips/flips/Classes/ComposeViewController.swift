@@ -779,6 +779,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.onFlipAssociated()
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)
+            self.composeBottomViewContainer.showCameraButtons()
         }
     }
     
