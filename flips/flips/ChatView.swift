@@ -359,8 +359,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             }
         }
         
+        let isKeyboardVisible: Bool = self.replyTextField.isFirstResponder()
         // I'm checking if the superview is not nil to make sure that the view is visible.
-        if ((DeviceHelper.sharedInstance.systemVersion() < 8) && (self.superview != nil)) {
+        if (isKeyboardVisible && (DeviceHelper.sharedInstance.systemVersion() < 8) && (self.superview != nil)) {
             self.replyTextField.resignFirstResponder()
             replyView.mas_updateConstraints( { (make) in
                 make.removeExisting = true
