@@ -173,6 +173,27 @@ static CGFloat const ROW_HEIGHT = 56.0;
     }];
 }
 
+- (NSString*)checkForPhoneNumber:(NSString*)text
+{
+    if ([text length] > 10) //whitespace before and at least 10 digits
+    {
+        NSString *maybePhoneNumber = [PhoneNumberHelper cleanFormattedPhoneNumber:text];
+        if ([maybePhoneNumber length] >= 10 && [maybePhoneNumber length] <= 12)
+        {
+            maybePhoneNumber = [PhoneNumberHelper formatUsingUSInternational:maybePhoneNumber];
+            NSString *maybeJustDigits = [maybePhoneNumber substringFromIndex:1];
+            NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
+            NSCharacterSet *entryString = [NSCharacterSet characterSetWithCharactersInString:maybeJustDigits];
+            BOOL isPhoneNumber = [digits isSupersetOfSet:entryString];
+            if (isPhoneNumber)
+            {
+                return maybePhoneNumber;
+            }
+        }
+    }
+    return nil;
+}
+
 #pragma mark - Properties
 
 - (NSArray*)contactsSelected
@@ -319,7 +340,7 @@ static CGFloat const ROW_HEIGHT = 56.0;
         [self.contactCollectionView performBatchUpdates:^{
             [self layoutIfNeeded];
         } completion:^(BOOL finished) {
-             [self.contactCollectionView setFocusOnEntry];
+            [self.contactCollectionView setFocusOnEntry];
         }];
         
         [self showSearchTableView];
@@ -330,7 +351,20 @@ static CGFloat const ROW_HEIGHT = 56.0;
         } else {
             predicate = [NSPredicate predicateWithFormat:@"contactTitle contains[cd] %@ && !SELF IN %@", searchString, self.contactCollectionView.selectedContacts];
         }
-        self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
+        
+        NSString* maybePhoneNumber = [self checkForPhoneNumber:text];
+        if (maybePhoneNumber != nil)
+        {
+            [[PersistentManager sharedInstance] createOrUpdateContactWith:maybePhoneNumber lastName:nil phoneNumber:maybePhoneNumber phoneType:@"" andContactUser:nil];
+            ContactDataSource* dataSource = [[ContactDataSource alloc] init];
+            NSArray* phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:maybePhoneNumber];
+            self.filteredContacts = [phoneNumberArray arrayByAddingObjectsFromArray:[self.contacts filteredArrayUsingPredicate:predicate]];
+        }
+        else
+        {
+            self.filteredContacts = [self.contacts filteredArrayUsingPredicate:predicate];
+        }
+        
         [self.searchTableView reloadData];
     }
     

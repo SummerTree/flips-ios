@@ -13,7 +13,7 @@
 public typealias CreateFlipSuccessCompletion = (Flip) -> Void
 public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
-public class PersistentManager: NSObject {
+@objc public class PersistentManager: NSObject {
     
     
     // MARK: - Singleton Implementation
