@@ -15,6 +15,8 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
 public class PersistentManager: NSObject {
     
+    private let LAST_STOCK_FLIPS_SYNC_AT = "lastStockFlipsUpdatedAt"
+    
     
     // MARK: - Singleton Implementation
     
@@ -76,7 +78,7 @@ public class PersistentManager: NSObject {
         
         MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
             let flipDataSourceInContext = FlipDataSource(context: context)
-            if (flip == nil) {
+            if (flip == nil && !flipDataSourceInContext.isFlipToBeDeleted(json)) {
                 flip = flipDataSourceInContext.createFlipWithJson(json)
             } else {
                 flip = flipDataSourceInContext.updateFlip(flip!.inContext(context) as Flip, withJson: json)
@@ -86,6 +88,9 @@ public class PersistentManager: NSObject {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                     self.associateFlip(flip!, withOwnerInJson: json)
                 })
+                if let timestamp = flip!.updatedAt {
+                    self.saveLastTimestamp(timestamp)
+                }
             }
         })
     }
@@ -159,6 +164,12 @@ public class PersistentManager: NSObject {
                     createFlipFailCompletion(flipError)
             }
         }
+    }
+    
+    private func saveLastTimestamp(timestamp: NSDate) {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+        userDefaults.synchronize()
     }
     
     
@@ -372,6 +383,29 @@ public class PersistentManager: NSObject {
                     error = flipError
                     dispatch_group_leave(group)
                 })
+            })
+            
+            // sync stock flips
+            let flipService = FlipService()
+            let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?
+            println("get stock flips")
+            dispatch_group_enter(group)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                flipService.stockFlipsForWord(nil, timestamp: timestamp,
+                    success: { (responseAsJSON) -> Void in
+                        let stockFlipsAsJSON = responseAsJSON?.array
+                        for stockFlipJson in stockFlipsAsJSON! {
+                            PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
+                        }
+                        dispatch_group_leave(group)
+                    },
+                    failure: { (flipError) -> Void in
+                        if (flipError != nil) {
+                            println("Error \(flipError)")
+                        }
+                        dispatch_group_leave(group)
+                    }
+                )
             })
             
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)

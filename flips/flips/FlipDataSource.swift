@@ -19,6 +19,8 @@ struct FlipJsonParams {
     static let OWNER = "owner"
     static let IS_PRIVATE = "isPrivate"
     static let THUMBNAIL_URL = "thumbnailURL"
+    static let IS_DELETED = "isDeleted"
+    static let UPDATED_AT = "updatedAt"
 }
 
 struct FlipAttributes {
@@ -54,6 +56,10 @@ class FlipDataSource : BaseDataSource {
         flip.backgroundURL = json[FlipJsonParams.BACKGROUND_URL].stringValue
         flip.thumbnailURL = json[FlipJsonParams.THUMBNAIL_URL].stringValue
         flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
+        flip.removed = json[FlipJsonParams.IS_DELETED].boolValue
+        println(json[FlipJsonParams.UPDATED_AT].stringValue)
+        flip.updatedAt = NSDate(dateTimeString: json[FlipJsonParams.UPDATED_AT].stringValue)
+        
     }
     
 
@@ -73,6 +79,10 @@ class FlipDataSource : BaseDataSource {
         var flipInContext = flip.inContext(currentContext) as Flip
         var ownerInContext = owner.inContext(currentContext) as User
         flipInContext.owner = ownerInContext
+    }
+    
+    func isFlipToBeDeleted(json: JSON) -> Bool {
+        return json[FlipJsonParams.IS_DELETED].boolValue
     }
     
     // This flip is never uploaded to the server and never saved in database. It is used only via Pubnub

@@ -36,6 +36,7 @@ public class FlipService: FlipsService {
         static let SOUND_URL = "sound_url"
         static let CATEGORY = "category"
         static let IS_PRIVATE = "is_private"
+        static let TIMESTAMP = "timestamp"
     }
     
     func createFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
@@ -60,20 +61,22 @@ public class FlipService: FlipsService {
         }
     }
     
-    func stockFlipsForWord(word: String, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+    func stockFlipsForWord(word: String?, timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
         
         let stockFlipUrl = HOST + STOCK_FLIPS
-        let stockFlipParams = [
-            RequestParams.WORD : word,
+        var stockFlipParams = [
+            RequestParams.WORD : (word == nil ? "" : word!),
+            RequestParams.TIMESTAMP: (timestamp == nil ? "" : timestamp!)
         ]
         
         self.get(stockFlipUrl,
             parameters: stockFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                println(JSON(responseObject))
                 success(JSON(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
@@ -87,7 +90,7 @@ public class FlipService: FlipsService {
         )
     }
     
-    func stockFlipsForWords(words: [String], success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+    func stockFlipsForWords(words: [String], timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -96,6 +99,7 @@ public class FlipService: FlipsService {
         let stockFlipUrl = HOST + STOCK_FLIPS
         let stockFlipParams = [
             RequestParams.WORD : words,
+            RequestParams.TIMESTAMP: (timestamp == nil ? "" : timestamp!)
         ]
         
         self.get(stockFlipUrl,

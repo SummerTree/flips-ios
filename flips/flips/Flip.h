@@ -1,13 +1,9 @@
 //
-// Copyright 2014 ArcTouch, Inc.
-// All rights reserved.
+//  Flip.h
+//  flips
 //
-// This file, its contents, concepts, methods, behavior, and operation
-// (collectively the "Software") are protected by trade secret, patent,
-// and copyright laws. The use of the Software is governed by a license
-// agreement. Disclosure of the Software to third parties, in any form,
-// in whole or in part, is expressly prohibited except as authorized by
-// the license agreement.
+//  Created by Ecil Teodoro on 3/18/15.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -26,8 +22,9 @@
 @property (nonatomic, retain) NSString * soundURL;
 @property (nonatomic, retain) NSString * thumbnailURL;
 @property (nonatomic, retain) NSString * word;
-@property (nonatomic, retain) User *owner;
+@property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSSet *entries;
+@property (nonatomic, retain) User *owner;
 @end
 
 @interface Flip (CoreDataGeneratedAccessors)
