@@ -59,19 +59,36 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     
     private func loadBuilderWords() {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+
+        self.reloadMyFlips()
+
+        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+    }
+
+    internal override func reloadMyFlips() {
         let builderWordDataSource = BuilderWordDataSource()
         let builderWords = builderWordDataSource.getWords()
-        
-        words = Array<String>()
+
+        var allWords = Array<String>()
         for builderWord in builderWords {
-            words.append(builderWord.word)
+            allWords.append(builderWord.word)
         }
-        
-        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-        self.initFlipWords(words)
+
+        let flipDataSource = FlipDataSource()
+        let myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(allWords)
+
+        self.words = Array<String>()
+        for word in allWords {
+            if (myFlipsDictionary[word]?.count == 0) {
+                words.append(word)
+            }
+        }
+
+        self.initFlipWords(self.words)
     }
-    
-    
+
+
+
     // MARK: - Builder Introduction Methods
     
     func showIntroduction() {
@@ -131,8 +148,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
                 self.loadBuilderWords()
                 if (self.words.count > 0) {
                     self.highlightedWordIndex = 0
-                    self.reloadMyFlips()
-                    self.updateFlipWordsState()
+                    self.loadBuilderWords()
                     self.showContentForHighlightedWord()
                 } 
             })
