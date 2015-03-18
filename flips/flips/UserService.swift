@@ -238,7 +238,9 @@ public class UserService: FlipsService {
                 success(nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
+                if (operation.response != nil && operation.response.statusCode == 404) {
+                    failure(nil)
+                } else if (operation.responseObject != nil) {
                     let response = operation.responseObject as NSDictionary
                     failure(FlipError(error: response["error"] as String!, details:nil))
                 } else {
