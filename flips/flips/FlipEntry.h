@@ -17,6 +17,7 @@
 
 @interface FlipEntry : NSManagedObject
 
+@property (nonatomic, retain) NSString * formattedWord;
 @property (nonatomic, retain) NSNumber * order;
 @property (nonatomic, retain) Flip *flip;
 @property (nonatomic, retain) FlipMessage *message;
