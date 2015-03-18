@@ -417,7 +417,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            self.showContentForHighlightedWord(shouldReloadWords: false)
+            self.showContentForHighlightedWord(shouldReloadWords: self.shouldShowPlusButtonInWords())
         }
     }
     
@@ -779,6 +779,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.onFlipAssociated()
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)
+            self.composeBottomViewContainer.showCameraButtons()
         }
     }
     

@@ -76,7 +76,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillAppear() {
         self.tableView.reloadData()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        
+        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        }
         
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
@@ -99,7 +102,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func viewWillDisappear() {
         self.indexPathToShow = nil
         
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
+            NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+        }
+        
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             cell.stopMovie()
@@ -352,6 +358,22 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 }
             }
         }
+        
+        let isKeyboardVisible: Bool = self.replyTextField.isFirstResponder()
+        // I'm checking if the superview is not nil to make sure that the view is visible.
+        if (isKeyboardVisible && (DeviceHelper.sharedInstance.systemVersion() < 8) && (self.superview != nil)) {
+            self.replyTextField.resignFirstResponder()
+            replyView.mas_updateConstraints( { (make) in
+                make.removeExisting = true
+                make.left.equalTo()(self)
+                make.right.equalTo()(self)
+                make.height.equalTo()(self.REPLY_FIELD_INITIAL_HEIGHT + self.REPLY_VIEW_MARGIN)
+                make.bottom.equalTo()(self)
+            })
+            self.updateConstraintsIfNeeded()
+            self.layoutIfNeeded()
+            self.hideTextFieldAndShowReplyButton()
+        }
     }
     
     private func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
@@ -437,7 +459,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     
-    // MARK: - Notifications
+    // MARK: - Keyboard handler
     
     func keyboardDidShow(notification: NSNotification) {
         let info = notification.userInfo!
@@ -448,7 +470,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         if (numberOfMessages == nil) {
             numberOfMessages = 0
         }
-        
+
         if (numberOfMessages > 0) {
             replyView.mas_updateConstraints( { (make) in
                 make.left.equalTo()(self)
@@ -458,6 +480,21 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             })
             self.updateConstraintsIfNeeded()
             self.layoutIfNeeded()
+        }
+    }
+    
+    func keyboardPanningToFrame(frame: CGRect) {
+        self.keyboardHeight = self.frame.height - frame.origin.y
+        replyView.mas_updateConstraints( { (make) in
+            make.removeExisting = true
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
+            make.height.equalTo()(self.REPLY_FIELD_INITIAL_HEIGHT + self.REPLY_VIEW_MARGIN)
+            make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
+        })
+        
+        if (self.keyboardHeight == 0) {
+            self.hideTextFieldAndShowReplyButton()
         }
     }
     
