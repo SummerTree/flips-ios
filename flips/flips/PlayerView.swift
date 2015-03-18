@@ -16,8 +16,8 @@ class PlayerView: UIView {
 
     let BUTTONS_FADE_IN_OUT_ANIMATION_DURATION = 0.25
     let BUTTONS_ALPHA: CGFloat = 0.6
-    let PROGRESS_BAR_PADDING: CGFloat = 10
-    let PROGRESS_BAR_HEIGHT: CGFloat = 20
+    let PROGRESS_BAR_PADDING: CGFloat = 30
+    let PROGRESS_BAR_HEIGHT: CGFloat = 10
     
     var isPlaying = false
     var loadPlayerOnInit = false
