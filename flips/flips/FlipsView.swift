@@ -192,7 +192,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
             if (indexPath.section == 1) {
                 reusableView.setTitle(STOCK_FLIPS_TITLE)
             } else {
-                if (numberOfFlips.myFlips > 0) {
+                if (numberOfFlips.myFlips > 0 || numberOfFlips.stockFlips == 0) {
                     reusableView.setTitle(MY_FLIPS_TITLE)
                 } else {
                     reusableView.setTitle(STOCK_FLIPS_TITLE)
