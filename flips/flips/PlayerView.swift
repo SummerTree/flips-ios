@@ -522,7 +522,6 @@ class PlayerView: UIView {
         self.retryButtonView.alpha = 0.0
         self.retryButtonView.contentMode = UIViewContentMode.Center
         self.retryButtonView.image = UIImage(named: "RetryButton")
-//        self.retryButtonView.hidden = true
         self.addSubview(self.retryButtonView)
 
         self.retryLabel = UILabel()
@@ -532,12 +531,10 @@ class PlayerView: UIView {
         self.retryLabel.textAlignment = NSTextAlignment.Center
         self.retryLabel.text = LocalizedString.DOWNLOAD_FAILED_RETRY
         self.retryLabel.sizeToFit()
-//        self.retryLabel.hidden = true
         self.retryLabel.alpha = 0.0
         self.addSubview(self.retryLabel)
 
         self.progressBarView = ProgressBar()
-//        self.progressBarView.hidden = true
         self.progressBarView.alpha = 0.0
         self.addSubview(self.progressBarView)
     }
