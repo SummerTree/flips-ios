@@ -188,7 +188,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.switchToPreviewType(PreviewType.Flip)
-                self.flipPlayerView.setupPlayerWithFlips([flip])
+                self.flipPlayerView.setupPlayerWithFlips([flip], andFormattedWords: [word])
             })
         } else {
             UIAlertView.showUnableToLoadFlip()
@@ -207,7 +207,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     // MARK: - ProgressBar Handler
     
     func startRecordingProgressBar() {
+        self.captureProgressBar.hidden = false
         self.bringSubviewToFront(self.captureProgressBar)
+
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
                 update.removeExisting = true
@@ -219,6 +221,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
             
             self.layoutIfNeeded()
             }) { (completed) -> Void in
+                self.captureProgressBar.hidden = true
+
                 self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
                     update.removeExisting = true
                     update.top.equalTo()(self)
@@ -250,6 +254,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     }
     
     func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool) {
+        if (!success) {
+            self.captureProgressBar.hidden = true
+        }
         delegate?.composeTopViewContainer(self, didFinishRecordingVideoAtUrl: videoURL, withSuccess: success)
     }
     

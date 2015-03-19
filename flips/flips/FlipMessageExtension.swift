@@ -17,17 +17,11 @@ private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
 extension FlipMessage {
 
-    var flips: Array<Flip> {
+    var flipsEntries: Array<FlipEntry> {
         get {
-            var flips = Array<Flip>()
+            var flipsEntries: Array<FlipEntry> = Array<FlipEntry>()
             let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
-            var orderedEntries = self.entries.sortedArrayUsingDescriptors([sortDescriptor])
-
-            for entry in orderedEntries {
-                flips.append((entry as FlipEntry).flip)
-            }
-
-            return flips
+            return self.entries.sortedArrayUsingDescriptors([sortDescriptor]) as Array<FlipEntry>
         }
     }
 
@@ -36,6 +30,7 @@ extension FlipMessage {
 
         var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
         entry.order = nextEntryOrder
+        entry.formattedWord = flip.word
         entry.flip = flip.inContext(context) as Flip
         entry.message = self
 
@@ -43,30 +38,32 @@ extension FlipMessage {
     }
     
     func messagePhrase() -> String {
-        let flips = self.flips
-        let words = flips.map {
-            (var flip) -> String in
-            return flip.word
+        let flipsEntries = self.flipsEntries
+        let words = flipsEntries.map {
+            (var flipEntry) -> String in
+            return flipEntry.formattedWord
         }
 
         return " ".join(words)
     }
     
     func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
-        if let firstFlip = self.flips.first {
-            if (firstFlip.thumbnailURL == nil || firstFlip.thumbnailURL == "") {
-                success?(UIImage.emptyFlipImage())
-                return
+        if let firstEntry: FlipEntry = self.flipsEntries.first {
+            if let firstFlip: Flip = firstEntry.flip {
+                if (firstFlip.thumbnailURL == nil || firstFlip.thumbnailURL == "") {
+                    success?(UIImage.emptyFlipImage())
+                    return
+                }
+                
+                let thumbnailsCache = ThumbnailsCache.sharedInstance
+                thumbnailsCache.get(NSURL(string: firstFlip.thumbnailURL!)!,
+                    success: { (localPath: String!) in
+                        var image = UIImage(contentsOfFile: localPath)
+                        success?(image)
+                    }, failure: { (error: FlipError) in
+                        println("Could not get thumbnail for flip \(firstFlip).")
+                })
             }
-            
-            let thumbnailsCache = ThumbnailsCache.sharedInstance
-            thumbnailsCache.get(NSURL(string: firstFlip.thumbnailURL!)!,
-                success: { (localPath: String!) in
-                    var image = UIImage(contentsOfFile: localPath)
-                    success?(image)
-                }, failure: { (error: FlipError) in
-                    println("Could not get thumbnail for flip \(firstFlip).")
-            })
         } else {
             success?(UIImage.emptyFlipImage())
         }
@@ -98,9 +95,9 @@ extension FlipMessage {
         dictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
         
         var flipsDictionary = Array<Dictionary<String, String>>()
-        let flips = self.flips
-        for (var i = 0; i < flips.count; i++) {
-            let flip = flips[i]
+        let flipsEntries = self.flipsEntries
+        for (var i = 0; i < flipsEntries.count; i++) {
+            let flip: Flip = flipsEntries[i].flip
             var dic = Dictionary<String, String>()
 
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
