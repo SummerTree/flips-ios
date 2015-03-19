@@ -88,10 +88,11 @@ public class PersistentManager: NSObject {
             }
         }, completion: { (success, error) -> Void in
             if (success) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                    self.associateFlip(flip!, withOwnerInJson: json)
-                })
-                
+                if (flip != nil) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                        self.associateFlip(flip!, withOwnerInJson: json)
+                    })
+                }
             }
         })
     }
