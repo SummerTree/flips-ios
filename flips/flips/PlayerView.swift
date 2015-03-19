@@ -105,7 +105,9 @@ class PlayerView: UIView {
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
 
                 let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
-                self.setWord(self.words![playerItem.order])
+                if ((self.words != nil) && (self.words?.count > playerItem.order)) {
+                    self.setWord(self.words![playerItem.order])
+                }
                 
                 UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
                     self.thumbnailView.alpha = 0
