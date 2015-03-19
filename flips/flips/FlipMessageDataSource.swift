@@ -107,7 +107,7 @@ class FlipMessageDataSource : BaseDataSource {
         entity.notRead = false
         entity.receivedAt = NSDate()
         for flip in flips {
-            entity.addFlip(flip.inContext(currentContext) as Flip, inContext: currentContext)
+            entity.addFlip(flip, inContext: currentContext)
         }
         
         return entity

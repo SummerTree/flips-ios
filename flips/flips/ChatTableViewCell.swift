@@ -168,7 +168,15 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         let avatarURL: NSURL? = NSURL(string: flipMessage.from.photoURL)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            self.videoPlayerView.setupPlayerWithFlips(flipMessage.flips)
+            var flips: Array<Flip> = Array<Flip>()
+            var formattedWords: Array<String> = Array<String>()
+            
+            for flipEntry: FlipEntry in flipMessage.flipsEntries {
+                flips.append(flipEntry.flip)
+                formattedWords.append(flipEntry.formattedWord)
+            }
+            
+            self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords)
         })
         
         self.messageDateLabel.text = formattedDate

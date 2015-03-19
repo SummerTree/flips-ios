@@ -26,7 +26,7 @@ class PlayerView: UIView {
     var hasDownloadError = false
     
     private var flips: Array<Flip>!
-    private var words: Array<String>!
+    private var words: Array<String>?
     private var playerItems: Array<FlipPlayerItem>!
     private var thumbnail: UIImage?
     private var timer: NSTimer?
@@ -98,14 +98,14 @@ class PlayerView: UIView {
 
         if (isPlayerReady) {
             self.preparePlayer { (player) -> Void in
-                if (self.words.count == 0) {
+                if ((self.words != nil) && (self.words!.count == 0)) {
                     return
                 }
                 
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
 
                 let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
-                self.setWord(self.words[playerItem.order])
+                self.setWord(self.words![playerItem.order])
                 
                 UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
                     self.thumbnailView.alpha = 0
@@ -209,7 +209,12 @@ class PlayerView: UIView {
         self.hasDownloadError = false
 
         self.playerItems = [FlipPlayerItem]()
-        self.words = []
+        
+        var isWordsPreInitialized: Bool = true
+        if (self.words == nil) {
+            self.words = []
+            isWordsPreInitialized = false
+        }
 
         var pendingFlips = self.flips.count
         var numOfFlips = Float(self.flips.count)
@@ -232,80 +237,82 @@ class PlayerView: UIView {
 
 
         for (index, flip) in enumerate(self.flips) {
-            self.words.append(flip.word)
+            if (!isWordsPreInitialized) {
+                self.words!.append(flip.word)
+            }
 
-                if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
-                    let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
-                    let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
-                    let playerItem = self.playerItemWithVideoAsset(videoAsset)
-                    playerItem.order = index
-                    self.playerItems.append(playerItem)
-
-                    pendingFlips--
-
-                    var animated = numOfFlips > 1
-
-                    self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
-                        of: numOfFlips,
-                        animated: animated,
-                        completion: { () -> Void in
-                            if (pendingFlips <= 0) {
-                                self.loadingFlips = false
-                                self.sortPlayerItems()
-                                completion()
-                            }
+            if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
+                let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
+                let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: emptyVideoPath!), options: nil)
+                let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                playerItem.order = index
+                self.playerItems.append(playerItem)
+                
+                pendingFlips--
+                
+                var animated = numOfFlips > 1
+                
+                self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
+                    of: numOfFlips,
+                    animated: animated,
+                    completion: { () -> Void in
+                        if (pendingFlips <= 0) {
+                            self.loadingFlips = false
+                            self.sortPlayerItems()
+                            completion()
                         }
-                    );
-
-                } else {
-                    let response = FlipsCache.sharedInstance.videoForFlip(flip,
-                        success: { (localPath: String!) in
-                            if (self.hasDownloadError) {
+                    }
+                );
+                
+            } else {
+                let response = FlipsCache.sharedInstance.videoForFlip(flip,
+                    success: { (localPath: String!) in
+                        if (self.hasDownloadError) {
+                            return
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if (self.flips == nil) {
                                 return
                             }
-
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                if (self.flips == nil) {
-                                    return
-                                }
-
-                                let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
-                                let playerItem = self.playerItemWithVideoAsset(videoAsset)
-                                playerItem.order = index
-                                self.playerItems.append(playerItem)
-
-                                pendingFlips--
-
-                                self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
-                                    of: numOfFlips,
-                                    animated: true,
-                                    completion: { () -> Void in
-                                        if (pendingFlips <= 0) {
-                                            self.loadingFlips = false
-                                            self.sortPlayerItems()
-                                            completion()
-                                        }
+                            
+                            let videoAsset = AVURLAsset(URL: NSURL(fileURLWithPath: localPath), options: nil)
+                            let playerItem = self.playerItemWithVideoAsset(videoAsset)
+                            playerItem.order = index
+                            self.playerItems.append(playerItem)
+                            
+                            pendingFlips--
+                            
+                            self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
+                                of: numOfFlips,
+                                animated: true,
+                                completion: { () -> Void in
+                                    if (pendingFlips <= 0) {
+                                        self.loadingFlips = false
+                                        self.sortPlayerItems()
+                                        completion()
                                     }
-                                );
-                            })
-                        },
-                        failure: { (error: FlipError) in
-                            println("Failed to get resource from cache, error: \(error)")
-                            self.showErrorState()
-                        }
-                    )
-
-                    if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                        // Set the progress to animate slowly to 50% of the flip currently downloading
-                        let halfwayToDownloadCurrentClip = (numOfFlips - Float(pendingFlips) + 1.0) * 0.5
-                        self.updateDownloadProgress(halfwayToDownloadCurrentClip,
-                            of: numOfFlips,
-                            animated: true,
-                            duration: 1.0,
-                            completion: nil);
+                                }
+                            );
+                        })
+                    },
+                    failure: { (error: FlipError) in
+                        println("Failed to get resource from cache, error: \(error)")
+                        self.showErrorState()
                     }
-
+                )
+                
+                if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                    // Set the progress to animate slowly to 50% of the flip currently downloading
+                    let halfwayToDownloadCurrentClip = (numOfFlips - Float(pendingFlips) + 1.0) * 0.5
+                    self.updateDownloadProgress(halfwayToDownloadCurrentClip,
+                        of: numOfFlips,
+                        animated: true,
+                        duration: 1.0,
+                        completion: nil);
                 }
+                
+            }
         }
     }
 
@@ -352,14 +359,19 @@ class PlayerView: UIView {
         })
     }
 
-    func setupPlayerWithFlips(flips: Array<Flip>) {
+    func setupPlayerWithFlips(flips: Array<Flip>, andFormattedWords formattedWords: Array<String>? = nil) {
         self.flips = flips
+        self.words = formattedWords
         self.updateDownloadProgress(0.0, of: Float(flips.count), animated: false);
 
         let firstFlip = flips.first
         if (firstFlip != nil) {
 
-            let word = firstFlip!.word
+            var word = firstFlip!.word
+            if (formattedWords != nil) {
+                word = formattedWords!.first
+            }
+
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.wordLabel.text = word
             })
@@ -437,8 +449,8 @@ class PlayerView: UIView {
                 player.insertItem(clonedPlayerItem, afterItem: nil)
                 
                 // Set next item's word
-                let nextWordIndex = (currentItem.order + 1) % self.words.count
-                self.setWord(self.words[nextWordIndex])
+                let nextWordIndex = (currentItem.order + 1) % self.words!.count
+                self.setWord(self.words![nextWordIndex])
                 
                 if (currentItem.order == self.playerItems.count - 1) {
                     delegate?.playerViewDidFinishPlayback(self)
