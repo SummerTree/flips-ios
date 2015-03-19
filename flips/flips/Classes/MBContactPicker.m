@@ -173,7 +173,7 @@ static CGFloat const ROW_HEIGHT = 56.0;
     }];
 }
 
-- (NSString*)checkForPhoneNumber:(NSString*)text
+- (NSString*)phoneNumberFromText:(NSString*)text
 {
     if ([text length] > 10) //whitespace before and at least 10 digits
     {
@@ -352,15 +352,15 @@ static CGFloat const ROW_HEIGHT = 56.0;
             predicate = [NSPredicate predicateWithFormat:@"contactTitle contains[cd] %@ && !SELF IN %@", searchString, self.contactCollectionView.selectedContacts];
         }
         
-        NSString* maybePhoneNumber = [self checkForPhoneNumber:text];
-        if (maybePhoneNumber != nil)
+        NSString* phoneNumber = [self phoneNumberFromText:text];
+        if (phoneNumber != nil)
         {
             ContactDataSource* dataSource = [[ContactDataSource alloc] init];
-            NSArray* phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:maybePhoneNumber];
+            NSArray* phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:phoneNumber];
             if (phoneNumberArray.count == 0)
             {
-                [[PersistentManager sharedInstance] createOrUpdateContactWith:maybePhoneNumber lastName:nil phoneNumber:maybePhoneNumber phoneType:@"" andContactUser:nil];
-                phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:maybePhoneNumber];
+                [[PersistentManager sharedInstance] createOrUpdateContactWith:phoneNumber lastName:nil phoneNumber:phoneNumber phoneType:@"" andContactUser:nil];
+                phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:phoneNumber];
             }
             self.filteredContacts = [phoneNumberArray arrayByAddingObjectsFromArray:[self.contacts filteredArrayUsingPredicate:predicate]];
         }

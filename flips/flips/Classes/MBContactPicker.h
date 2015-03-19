@@ -54,6 +54,6 @@
 @property (nonatomic, assign, readonly, getter=isInvalidContact) BOOL invalidContact;
 
 - (void)reloadData;
-- (NSString*)checkForPhoneNumber:(NSString*)text;
+- (NSString*)phoneNumberFromText:(NSString*)text;
 
 @end
