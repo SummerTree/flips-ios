@@ -26,7 +26,7 @@ class PlayerView: UIView {
     var hasDownloadError = false
     
     private var flips: Array<Flip>!
-    private var words: Array<String>!
+    private var words: Array<String>?
     private var playerItems: Array<FlipPlayerItem>!
     private var thumbnail: UIImage?
     private var timer: NSTimer?
@@ -159,14 +159,17 @@ class PlayerView: UIView {
 
         if (isPlayerReady) {
             self.preparePlayer { (player) -> Void in
-                if (self.words.count == 0) {
+                if ((self.words != nil) && (self.words!.count == 0)) {
                     return
                 }
                 
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
 
                 let playerItem: FlipPlayerItem = player!.currentItem as FlipPlayerItem
-                self.setWord(self.words[playerItem.order])
+
+                if ((self.words != nil) && (self.words?.count > playerItem.order)) {
+                    self.setWord(self.words![playerItem.order])
+                }
 
                 self.animateButtonsFadeOut({ () -> Void in
                     // Since it needs to wait the animation, the user can press back button, so it won't exist.
@@ -284,13 +287,20 @@ class PlayerView: UIView {
         self.hasDownloadError = false
 
         self.playerItems = [FlipPlayerItem]()
-        self.words = []
+        
+        var isWordsPreInitialized: Bool = true
+        if (self.words == nil) {
+            self.words = []
+            isWordsPreInitialized = false
+        }
 
         var pendingFlips = self.flips.count
         var numOfFlips = Float(self.flips.count)
 
         for (index, flip) in enumerate(self.flips) {
-            self.words.append(flip.word)
+            if (!isWordsPreInitialized) {
+                self.words!.append(flip.word)
+            }
 
             if (flip.backgroundURL == nil || flip.backgroundURL.isEmpty) {
                 let emptyVideoPath = NSBundle.mainBundle().pathForResource("empty_video", ofType: "mov")
@@ -313,7 +323,7 @@ class PlayerView: UIView {
                             completion()
                         }
                     }
-                );
+                )
 
             } else {
                 let response = FlipsCache.sharedInstance.videoForFlip(flip,
@@ -344,7 +354,7 @@ class PlayerView: UIView {
                                         completion()
                                     }
                                 }
-                            );
+                            )
                         })
                     },
                     failure: { (error: FlipError) in
@@ -374,14 +384,20 @@ class PlayerView: UIView {
         }
     }
 
-    func setupPlayerWithFlips(flips: Array<Flip>) {
+    func setupPlayerWithFlips(flips: Array<Flip>, andFormattedWords formattedWords: Array<String>? = nil) {
+
         self.flips = flips
+        self.words = formattedWords
         self.updateDownloadProgress(0.0, of: Float(flips.count), animated: false);
 
         let firstFlip = flips.first
         if (firstFlip != nil) {
 
-            let word = firstFlip!.word
+            var word = firstFlip!.word
+            if (formattedWords != nil) {
+                word = formattedWords!.first
+            }
+
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.wordLabel.text = word
             })
@@ -459,8 +475,8 @@ class PlayerView: UIView {
                 player.insertItem(clonedPlayerItem, afterItem: nil)
                 
                 // Set next item's word
-                let nextWordIndex = (currentItem.order + 1) % self.words.count
-                self.setWord(self.words[nextWordIndex])
+                let nextWordIndex = (currentItem.order + 1) % self.words!.count
+                self.setWord(self.words![nextWordIndex])
                 
                 if (currentItem.order == self.playerItems.count - 1) {
                     delegate?.playerViewDidFinishPlayback(self)
