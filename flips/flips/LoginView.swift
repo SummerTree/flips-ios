@@ -215,7 +215,7 @@ class LoginView : UIView, UITextFieldDelegate {
         emailTextField.rightViewMode = UITextFieldViewMode.Always
         emailTextField.textColor = UIColor.whiteColor()
         emailTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
-        emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", comment: "Email"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
+        emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", comment: "Email"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
         credentialsView.addSubview(emailTextField)
         
         emailPasswordSeparator = UIView()
@@ -243,9 +243,9 @@ class LoginView : UIView, UITextFieldDelegate {
         passwordTextField.returnKeyType = UIReturnKeyType.Done
         passwordTextField.rightViewMode = UITextFieldViewMode.Always
         passwordTextField.textColor = UIColor.whiteColor()
-        passwordTextField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
+        passwordTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         passwordTextField.secureTextEntry = true
-        passwordTextField.attributedPlaceholder = NSAttributedString(string:NSLocalizedString("Password", comment: "Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h2)])
+        passwordTextField.attributedPlaceholder = NSAttributedString(string:NSLocalizedString("Password", comment: "Password"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextMedium(UIFont.HeadingSize.h4)])
         credentialsView.addSubview(passwordTextField)
         
         facebookLogoImage = UIImage(named: "FacebookLogo")
