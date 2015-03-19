@@ -161,7 +161,6 @@
 		70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
 		70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */; };
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
-		70FD4E7919D064450024EBDB /* flips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* flips.xcdatamodeld */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		70FD4E8019D064450024EBDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
 		7310092198ad95d4fc6d60c6 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
@@ -247,6 +246,8 @@
 		7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0419EFED2100D0393F /* BaseDataSource.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
 		7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719A19FFBF1B002695AC /* Downloader.swift */; };
+		7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */; };
+		7AFE1F3F1AB8AB2D00E38673 /* FlipEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE1F3E1AB8AB2D00E38673 /* FlipEntry.m */; };
 		7b00d7878709597258267b57 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
 		7b1ded2644fb2233cce4e86f /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D6CEE19D4963100E39A1B /* SettingsViewController.swift */; };
 		7bbd5b05e1362ba9a7d0e182 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
@@ -294,7 +295,6 @@
 		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
-		F2DA96581A38C90000BAA359 /* FlipEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA96571A38C90000BAA359 /* FlipEntry.m */; };
 		F2DA965E1A38D06700BAA359 /* FlipMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA965D1A38D06700BAA359 /* FlipMessage.m */; };
 		F2DA96611A38F89500BAA359 /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA96601A38F89500BAA359 /* Flip.m */; };
 		a0a8f578dedcd0198f2af494 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
@@ -358,14 +358,12 @@
 		e56d901deadd87f843a01a4e /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
 		e5d6763e4e489743ed975264 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */; };
 		e74386e49924879161f5d2ae /* FlipError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A119D34F2B006F0A2F /* FlipError.swift */; };
-		e8167cd3a2c5d952af31e512 /* flips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7719D064450024EBDB /* flips.xcdatamodeld */; };
 		e8265806a60478ba43854d98 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */; };
 		e91a0b1e18b8a9f8e195b9e8 /* FlipMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */; };
 		ea35dd0273afa4855be8d581 /* PubNubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584719E462A20030CF11 /* PubNubService.swift */; };
 		ea4e073c79cf5a32d862610a /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */; };
 		ea57e36aeffcc7d59984d033 /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
 		ea7a16aa6073bb89b875800f /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
-		eddc4082678156abade47583 /* FlipEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA96571A38C90000BAA359 /* FlipEntry.m */; };
 		ee453c251b7b60e4b3cfecfb /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */; };
 		f004231ac2140590b2618d49 /* MBContactCollectionViewPromptCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B271A147B5800407A28 /* MBContactCollectionViewPromptCell.m */; };
 		f214d547c07cbcd498fd92e4 /* ImportContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67041A23C99F003FE3CA /* ImportContactView.swift */; };
@@ -483,7 +481,6 @@
 		70FD4E7019D064450024EBDB /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70FD4E7419D064450024EBDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		70FD4E7519D064450024EBDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		70FD4E7819D064450024EBDB /* flips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = flips.xcdatamodel; sourceTree = "<group>"; };
 		70FD4E7A19D064450024EBDB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		70FD4E7F19D064450024EBDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailsCache.swift; sourceTree = "<group>"; };
@@ -574,6 +571,9 @@
 		7AF82E0419EFED2100D0393F /* BaseDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDataSource.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
 		7AFB719A19FFBF1B002695AC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		7AFE1F371AB8A67500E38673 /* flips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = flips.xcdatamodel; sourceTree = "<group>"; };
+		7AFE1F3D1AB8AB2D00E38673 /* FlipEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipEntry.h; sourceTree = "<group>"; };
+		7AFE1F3E1AB8AB2D00E38673 /* FlipEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipEntry.m; sourceTree = "<group>"; };
 		8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8fb57652445e95acd4a620f1 /* CFNetwork.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
@@ -599,9 +599,6 @@
 		F29324741A19A36700355A4D /* FlipPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipPlayerItem.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
 		F2BF59801A0166CF00C44CC6 /* VideoComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoComposer.m; sourceTree = "<group>"; };
-		F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "mugchat 2 - added FlipEntry.xcdatamodel"; sourceTree = "<group>"; };
-		F2DA96561A38C90000BAA359 /* FlipEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipEntry.h; sourceTree = "<group>"; };
-		F2DA96571A38C90000BAA359 /* FlipEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipEntry.m; sourceTree = "<group>"; };
 		F2DA965C1A38D06700BAA359 /* FlipMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipMessage.h; sourceTree = "<group>"; };
 		F2DA965D1A38D06700BAA359 /* FlipMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipMessage.m; sourceTree = "<group>"; };
 		F2DA965F1A38F89500BAA359 /* Flip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flip.h; sourceTree = "<group>"; };
@@ -865,13 +862,13 @@
 			isa = PBXGroup;
 			children = (
 				7A2A7E1119EDBF9400033164 /* Extensions */,
-				70FD4E7719D064450024EBDB /* flips.xcdatamodeld */,
-				F2DA965C1A38D06700BAA359 /* FlipMessage.h */,
-				F2DA965D1A38D06700BAA359 /* FlipMessage.m */,
+				7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */,
 				F2DA965F1A38F89500BAA359 /* Flip.h */,
 				F2DA96601A38F89500BAA359 /* Flip.m */,
-				F2DA96561A38C90000BAA359 /* FlipEntry.h */,
-				F2DA96571A38C90000BAA359 /* FlipEntry.m */,
+				7AFE1F3D1AB8AB2D00E38673 /* FlipEntry.h */,
+				7AFE1F3E1AB8AB2D00E38673 /* FlipEntry.m */,
+				F2DA965C1A38D06700BAA359 /* FlipMessage.h */,
+				F2DA965D1A38D06700BAA359 /* FlipMessage.m */,
 				7AA711731A28D8B00082165A /* BuilderWord.h */,
 				7AA711741A28D8B00082165A /* BuilderWord.m */,
 				7AA711701A28D8AF0082165A /* Contact.h */,
@@ -1661,7 +1658,6 @@
 				0ffdec308ddb793617bd34ae /* ComposeTopViewContainer.swift in Sources */,
 				b64ff3137cf820dd0fdcbcb0 /* TakePictureViewControllerDelegate.swift in Sources */,
 				d3bea59b553b8096359da8ee /* BorderedView.swift in Sources */,
-				eddc4082678156abade47583 /* FlipEntry.m in Sources */,
 				fa6c53f6903fe1c5fee81d5c /* ChatTableViewCell.swift in Sources */,
 				2298fbb4724e7a83121c9f34 /* UITableViewExtensions.swift in Sources */,
 				583cfc8ad2dbcb04e2d66a58 /* FlipStringsUtil.swift in Sources */,
@@ -1754,7 +1750,6 @@
 				94fed75c8ffdfa87b35b5f27 /* BuilderIntroductionViewController.swift in Sources */,
 				1b2ddde60b35798e0c03d28c /* CustomBadgeView.swift in Sources */,
 				67df51e55dac6553bb5bec0c /* ActivityIndicatorHelper.swift in Sources */,
-				e8167cd3a2c5d952af31e512 /* flips.xcdatamodeld in Sources */,
 				7576d3fc93c156a5e249f71f /* MBContactCollectionViewContactCell.m in Sources */,
 				98906b98b5e01f63959cc852 /* NetworkReachabilityHelper.swift in Sources */,
 				467e8ee2206f6aa5d11ed429 /* JoinStringsTextField.swift in Sources */,
@@ -1845,7 +1840,6 @@
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
-				F2DA96581A38C90000BAA359 /* FlipEntry.m in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				A2392BF919EEE7C70037B0C0 /* FlipStringsUtil.swift in Sources */,
@@ -1870,6 +1864,7 @@
 				7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */,
 				0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
+				7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
 				705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */,
@@ -1903,6 +1898,7 @@
 				7049A7A21A111998001D8121 /* ChangeNumberInfoView.swift in Sources */,
 				70577C761A13AECF0006B1FD /* ContactListHelper.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
+				7AFE1F3F1AB8AB2D00E38673 /* FlipEntry.m in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				70736C321A0D471F004E55E4 /* UpdateUserProfileViewController.swift in Sources */,
 				5707186719D1AF110069064F /* UserService.swift in Sources */,
@@ -1941,7 +1937,6 @@
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
-				70FD4E7919D064450024EBDB /* flips.xcdatamodeld in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */,
 				BE22C9951AA6BEC00079298E /* TempFiles.swift in Sources */,
@@ -2318,13 +2313,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		70FD4E7719D064450024EBDB /* flips.xcdatamodeld */ = {
+		7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */,
-				70FD4E7819D064450024EBDB /* flips.xcdatamodel */,
+				7AFE1F371AB8A67500E38673 /* flips.xcdatamodel */,
 			);
-			currentVersion = F2DA96551A37CF5C00BAA359 /* mugchat 2 - added FlipEntry.xcdatamodel */;
+			currentVersion = 7AFE1F371AB8A67500E38673 /* flips.xcdatamodel */;
 			path = flips.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
