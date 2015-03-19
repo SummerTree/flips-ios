@@ -67,7 +67,8 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         flipMessagesWaiting[flipMessage.flipMessageID] = Array<String>()
 
         // Download the thumbnail only for the first flip of the message
-        let firstFlip = flipMessage.flips.first! as Flip
+        let firstEntry = flipMessage.flipsEntries.first! as FlipEntry
+        let firstFlip = firstEntry.flip
         flipMessagesWaiting[flipMessage.flipMessageID]?.append(firstFlip.flipID)
 
         println("   downloading thumbnail for flip #\(firstFlip.flipID)")
