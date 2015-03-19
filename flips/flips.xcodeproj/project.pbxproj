@@ -84,6 +84,7 @@
 		55da5edcef86e23ad11754f2 /* MBContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B291A147B5800407A28 /* MBContactModel.m */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
+		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
 		572f8e9703783cec896c21c6 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711711A28D8AF0082165A /* Contact.m */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
 		574156A219D34F2B006F0A2F /* FlipError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A119D34F2B006F0A2F /* FlipError.swift */; };
@@ -296,7 +297,6 @@
 		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
 		F2DA965E1A38D06700BAA359 /* FlipMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA965D1A38D06700BAA359 /* FlipMessage.m */; };
-		F2DA96611A38F89500BAA359 /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA96601A38F89500BAA359 /* Flip.m */; };
 		a0a8f578dedcd0198f2af494 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
 		a0b0a1a06cee44d31bf7db00 /* ThreadSafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075A0C081A43A1F800E92760 /* ThreadSafe.swift */; };
 		a39f7d83d9bcd515a2c3679a /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
@@ -349,7 +349,6 @@
 		dc26935ba97f2a28e15f6ec8 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E4C19EEF4E600033164 /* CameraView.swift */; };
 		dc8b1810acac91bcbc21a746 /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
 		df19d8e7bc84d9d7b14cd1af /* MBContactCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B1F1A147B5800407A28 /* MBContactCollectionView.m */; };
-		df8eb02d76c559ab1bda5828 /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA96601A38F89500BAA359 /* Flip.m */; };
 		e15b5d622a0f4ffe65c38e01 /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
 		e1b8cc614bd479e3eb1d6fe6 /* CustomNavigationBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11791C19DA03980086A66B /* CustomNavigationBarDelegate.swift */; };
 		e39fed40509679078da3ae21 /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CB19D1E97A0026E641 /* InboxViewController.swift */; };
@@ -419,6 +418,8 @@
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		572BF9161AB9E52600B0D75A /* Flip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flip.h; sourceTree = "<group>"; };
+		572BF9171AB9E52600B0D75A /* Flip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flip.m; sourceTree = "<group>"; };
 		5741569E19D33F30006F0A2F /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		574156A119D34F2B006F0A2F /* FlipError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipError.swift; sourceTree = "<group>"; };
 		574156A919D4A05F006F0A2F /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
@@ -601,8 +602,6 @@
 		F2BF59801A0166CF00C44CC6 /* VideoComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoComposer.m; sourceTree = "<group>"; };
 		F2DA965C1A38D06700BAA359 /* FlipMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipMessage.h; sourceTree = "<group>"; };
 		F2DA965D1A38D06700BAA359 /* FlipMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipMessage.m; sourceTree = "<group>"; };
-		F2DA965F1A38F89500BAA359 /* Flip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flip.h; sourceTree = "<group>"; };
-		F2DA96601A38F89500BAA359 /* Flip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flip.m; sourceTree = "<group>"; };
 		eccdb957ef1d66d53d8d5dd9 /* calabash.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; path = calabash.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -863,8 +862,8 @@
 			children = (
 				7A2A7E1119EDBF9400033164 /* Extensions */,
 				7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */,
-				F2DA965F1A38F89500BAA359 /* Flip.h */,
-				F2DA96601A38F89500BAA359 /* Flip.m */,
+				572BF9161AB9E52600B0D75A /* Flip.h */,
+				572BF9171AB9E52600B0D75A /* Flip.m */,
 				7AFE1F3D1AB8AB2D00E38673 /* FlipEntry.h */,
 				7AFE1F3E1AB8AB2D00E38673 /* FlipEntry.m */,
 				F2DA965C1A38D06700BAA359 /* FlipMessage.h */,
@@ -1698,7 +1697,6 @@
 				fde03864c27cb434b2baeff3 /* MessagesTopView.swift in Sources */,
 				31d023673336c28ffa816443 /* UIImageViewExtensions.swift in Sources */,
 				61d07aa89b5c03f6b701fab5 /* BuilderViewController.swift in Sources */,
-				df8eb02d76c559ab1bda5828 /* Flip.m in Sources */,
 				7bbd5b05e1362ba9a7d0e182 /* TermsOfUseViewController.swift in Sources */,
 				7310092198ad95d4fc6d60c6 /* PlayerView.swift in Sources */,
 				0e0534f8774cb7f100ecebeb /* AppDelegate.swift in Sources */,
@@ -1858,6 +1856,7 @@
 				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
 				07DAAF781A40ED9D0017DBA1 /* ChatLabel.swift in Sources */,
 				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
+				572BF9181AB9E52600B0D75A /* Flip.m in Sources */,
 				07B66B301A147B5800407A28 /* MBContactCollectionViewPromptCell.m in Sources */,
 				A2A5C6D91A001E7A00E4CB2C /* SelectedFlipOverlayView.swift in Sources */,
 				574156A219D34F2B006F0A2F /* FlipError.swift in Sources */,
@@ -1881,7 +1880,6 @@
 				7AB946DC19DF35E700779C73 /* MessagesTopView.swift in Sources */,
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
-				F2DA96611A38F89500BAA359 /* Flip.m in Sources */,
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
 				F29324711A1583B700355A4D /* PlayerView.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,

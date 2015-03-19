@@ -97,8 +97,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal func initFlipWords(words: [String]) {
         
-        findAndSaveStockFlips(words)
-        
         myFlipsDictionary = Dictionary<String, [String]>()
         stockFlipsDictionary = Dictionary<String, [String]>()
         
@@ -110,22 +108,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             myFlipsDictionary[word] = Array<String>()
             stockFlipsDictionary[word] = Array<String>()
         }
-    }
-    
-    private func findAndSaveStockFlips(words: [String]) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let flipService = FlipService()
-            flipService.stockFlipsForWords(words, success: { (responseAsJSON) -> Void in
-                let stockFlipsAsJSON = responseAsJSON?.array
-                for stockFlipJson in stockFlipsAsJSON! {
-                    PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
-                }
-            }, failure: { (flipError) -> Void in
-                if (flipError != nil) {
-                    println("Error \(flipError)")
-                }
-            })
-        })
     }
     
     private func checkForPermissionToCaptureMedia() -> Bool {
