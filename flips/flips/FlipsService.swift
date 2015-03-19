@@ -22,6 +22,8 @@ public class FlipsService : NSObject {
     }
 
     private let BACKEND_FORBIDDEN_REQUEST = 403
+    private let BACKEND_TIMED_OUT: Int = 408
+    private let BACKEND_TIMED_OUT_MESSAGE: String = "The request timed out."
     
     
     // MARK: - Service Methods
@@ -39,6 +41,8 @@ public class FlipsService : NSObject {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (self.isForbiddenRequest(error)) {
                     self.sendBlockedUserNotification()
+                } else if (self.isTimedOutError(error)) {
+                    failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
                 } else {
                     failure(operation, error)
                 }
@@ -59,6 +63,8 @@ public class FlipsService : NSObject {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (self.isForbiddenRequest(error)) {
                     self.sendBlockedUserNotification()
+                } else if (self.isTimedOutError(error)) {
+                    failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
                 } else {
                     failure(operation, error)
                 }
@@ -78,6 +84,8 @@ public class FlipsService : NSObject {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (self.isForbiddenRequest(error)) {
                     self.sendBlockedUserNotification()
+                } else if (self.isTimedOutError(error)) {
+                    failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
                 } else {
                     failure(operation, error)
                 }
@@ -91,6 +99,15 @@ public class FlipsService : NSObject {
     private func isForbiddenRequest(error: NSError!) -> Bool {
         println(error.localizedDescription)
         return (error.localizedDescription.rangeOfString(String(BACKEND_FORBIDDEN_REQUEST)) != nil)
+    }
+    
+    private func isTimedOutError(error: NSError) -> Bool {
+        return (error.description.rangeOfString(BACKEND_TIMED_OUT_MESSAGE) != nil)
+    }
+    
+    private func errorForTimedOutError() -> NSError {
+        let message = NSLocalizedString("The request timed out. Please check you internet connection.")
+        return NSError(domain: message, code: 408, userInfo: ["NSLocalizedDescriptionKey" : message])
     }
     
     private func sendBlockedUserNotification() {

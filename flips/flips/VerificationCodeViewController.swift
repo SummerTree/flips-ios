@@ -73,7 +73,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
             }) { (flipError) -> Void in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 
-                let alertView = UIAlertView(title: NSLocalizedString("Verification Error"), message: flipError?.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: NSLocalizedString("Verification Error"), message: flipError?.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }
