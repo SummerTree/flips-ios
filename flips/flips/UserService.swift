@@ -202,8 +202,10 @@ public class UserService: FlipsService {
             self.post(url,
                 parameters: params,
                 constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                    let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
-                    formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                    if (avatar != nil) {
+                        let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                        formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                    }
                 },
                 success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                     var user = self.parseUserResponse(responseObject)
