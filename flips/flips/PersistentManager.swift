@@ -83,14 +83,13 @@ public class PersistentManager: NSObject {
             } else {
                 flip = flipDataSourceInContext.updateFlip(flip!.inContext(context) as Flip, withJson: json)
             }
+            self.saveLastTimestampForStockFlip(flip!)
         }, completion: { (success, error) -> Void in
             if (success) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                     self.associateFlip(flip!, withOwnerInJson: json)
                 })
-                if let timestamp = flip!.updatedAt {
-                    self.saveLastTimestamp(timestamp)
-                }
+                
             }
         })
     }
@@ -166,10 +165,23 @@ public class PersistentManager: NSObject {
         }
     }
     
-    private func saveLastTimestamp(timestamp: NSDate) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
-        userDefaults.synchronize()
+    private func saveLastTimestampForStockFlip(flip: Flip) {
+        if let isPrivate = flip.isPrivate as? Bool {
+            if (!isPrivate) {
+                if let timestamp = flip.updatedAt {
+                    var userDefaults = NSUserDefaults.standardUserDefaults()
+                    if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?) {
+                        if (lastTimestamp.compare(timestamp) == NSComparisonResult.OrderedAscending) {
+                            userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+                        }
+                    } else {
+                        userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+                    }
+                    userDefaults.synchronize()
+                    println("Stock flips - Last Timestamp: \(timestamp)")
+                }
+            }
+        }
     }
     
     

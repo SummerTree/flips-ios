@@ -57,8 +57,11 @@ class FlipDataSource : BaseDataSource {
         flip.thumbnailURL = json[FlipJsonParams.THUMBNAIL_URL].stringValue
         flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
         flip.removed = json[FlipJsonParams.IS_DELETED].boolValue
-        println(json[FlipJsonParams.UPDATED_AT].stringValue)
-        flip.updatedAt = NSDate(dateTimeString: json[FlipJsonParams.UPDATED_AT].stringValue)
+        let updatedAtDate = json[FlipJsonParams.UPDATED_AT].stringValue
+        if (updatedAtDate != "") {
+            flip.updatedAt = NSDate(dateTimeString: updatedAtDate)
+            println("Filling a flip \(flip.flipID) with timestamp \(updatedAtDate)")
+        }
         
     }
     
