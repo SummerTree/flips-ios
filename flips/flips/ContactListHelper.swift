@@ -31,7 +31,59 @@ public class ContactListHelper {
         }
         return Static.instance
     }
-    
+
+    private func collectContactNumbers() -> Array<String>? {
+        let addressBook: ABAddressBook? = ABAddressBookCreateWithOptions(nil, nil)?.takeRetainedValue()
+        let people: NSArray? = ABAddressBookCopyArrayOfAllPeople(addressBook)?.takeRetainedValue()
+
+        if (people != nil) {
+            var numbers = Array<String>()
+
+            let loggedUser = User.loggedUser()
+            let cleanedLoggedUserPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser!.phoneNumber)
+
+            for person : ABRecord in people! {
+                let phoneNumbers: ABMultiValue? = ABRecordCopyValue(person, kABPersonPhoneProperty)?.takeRetainedValue()
+
+                for i : Int in 0..<(ABMultiValueGetCount(phoneNumbers)) {
+                    let phone : String? = ABMultiValueCopyValueAtIndex(phoneNumbers, i).takeRetainedValue() as? String
+
+                    if (phone != nil) {
+                        let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phone!)
+
+                        if (cleanedPhoneNumber != cleanedLoggedUserPhoneNumber) {
+                            numbers.append(cleanedPhoneNumber)
+                        }
+                    }
+                }
+            }
+
+            return numbers
+        }
+
+        return nil
+    }
+
+    func findAllContactsWithPhoneNumberNative(success: (Array<String>?) -> Void, failure: ContactListFailureResponse) {
+        let authorizationStatus = ABAddressBookGetAuthorizationStatus()
+
+        if (authorizationStatus == ABAuthorizationStatus.Authorized) {
+            success(self.collectContactNumbers())
+
+        } else if (authorizationStatus == ABAuthorizationStatus.NotDetermined) {
+            let addressBook: ABAddressBook? = ABAddressBookCreateWithOptions(nil, nil)?.takeRetainedValue()
+            ABAddressBookRequestAccessWithCompletion(addressBook) { (granted, error) -> Void in
+                if (!granted) {
+                    failure(NSLocalizedString("Denied", comment: "Denied"))
+                }
+
+                success(self.collectContactNumbers())
+            }
+        } else if (authorizationStatus == ABAuthorizationStatus.Denied || authorizationStatus == ABAuthorizationStatus.Restricted) {
+            failure(NSLocalizedString("Denied", comment: "Denied"))
+        }
+    }
+
     func findAllContactsWithPhoneNumber(success: ContactListSuccessResponse, failure: ContactListFailureResponse) {
         println("Trying to access Address Book")
         println("Authorization Status = \(RHAddressBook.authorizationStatus().value)")
