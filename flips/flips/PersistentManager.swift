@@ -78,8 +78,10 @@ public class PersistentManager: NSObject {
         
         MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
             let flipDataSourceInContext = FlipDataSource(context: context)
-            if (flip == nil && !flipDataSourceInContext.isFlipToBeDeleted(json)) {
-                flip = flipDataSourceInContext.createFlipWithJson(json)
+            if (flip == nil) {
+                if (!flipDataSourceInContext.isFlipToBeDeleted(json)) {
+                    flip = flipDataSourceInContext.createFlipWithJson(json)
+                }
             } else {
                 flip = flipDataSourceInContext.updateFlip(flip!.inContext(context) as Flip, withJson: json)
             }
@@ -178,7 +180,6 @@ public class PersistentManager: NSObject {
                         userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
                     }
                     userDefaults.synchronize()
-                    println("Stock flips - Last Timestamp: \(timestamp)")
                 }
             }
         }
@@ -400,10 +401,9 @@ public class PersistentManager: NSObject {
             // sync stock flips
             let flipService = FlipService()
             let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?
-            println("get stock flips")
             dispatch_group_enter(group)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                flipService.stockFlipsForWord(nil, timestamp: timestamp,
+                flipService.stockFlipsForWord(timestamp,
                     success: { (responseAsJSON) -> Void in
                         let stockFlipsAsJSON = responseAsJSON?.array
                         for stockFlipJson in stockFlipsAsJSON! {

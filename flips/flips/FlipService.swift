@@ -61,7 +61,7 @@ public class FlipService: FlipsService {
         }
     }
     
-    func stockFlipsForWord(word: String?, timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+    func stockFlipsForWord(timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -69,14 +69,12 @@ public class FlipService: FlipsService {
         
         let stockFlipUrl = HOST + STOCK_FLIPS
         var stockFlipParams = [
-            RequestParams.WORD : (word == nil ? "" : word!),
             RequestParams.TIMESTAMP: (timestamp == nil ? "" : timestamp!)
         ]
         
         self.get(stockFlipUrl,
             parameters: stockFlipParams,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                println(JSON(responseObject))
                 success(JSON(responseObject))
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
@@ -90,7 +88,7 @@ public class FlipService: FlipsService {
         )
     }
     
-    func stockFlipsForWords(words: [String], timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+    func stockFlipsForWords(timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -98,7 +96,6 @@ public class FlipService: FlipsService {
 
         let stockFlipUrl = HOST + STOCK_FLIPS
         let stockFlipParams = [
-            RequestParams.WORD : words,
             RequestParams.TIMESTAMP: (timestamp == nil ? "" : timestamp!)
         ]
         

@@ -60,7 +60,6 @@ class FlipDataSource : BaseDataSource {
         let updatedAtDate = json[FlipJsonParams.UPDATED_AT].stringValue
         if (updatedAtDate != "") {
             flip.updatedAt = NSDate(dateTimeString: updatedAtDate)
-            println("Filling a flip \(flip.flipID) with timestamp \(updatedAtDate)")
         }
         
     }
