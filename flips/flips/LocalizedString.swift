@@ -25,7 +25,7 @@ struct LocalizedString {
     static let INCORRECT_VALIDATION_CODE = NSLocalizedString("Incorrect Validation Code. Please try again.", comment: "")
     static let MICROPHONE_ACCESS = NSLocalizedString("Microphone Access", comment: "Microphone access title")
     static let MICROPHONE_MESSAGE = NSLocalizedString("Flips does not have permission to use the microphone.  Please grant permission under Settings > Privacy > Microphone.  If you do not wish to record audio, tap the \"X\" to bypass the recording.", comment: "Microphone message")
-    static let NO_INTERNET_CONNECTION = NSLocalizedString("Unable to connect to server.  Please try again later.", comment: "No internet connection")
+    static let NO_INTERNET_CONNECTION = NSLocalizedString("Unable to connect to server.  Please check your internet connection.", comment: "No internet connection")
     static let COULD_NOT_CREATE_FLIP = NSLocalizedString("Unable to create Flip video.  Please try again.", comment: "")
     static let COULD_NOT_UPLOAD_FLIP = NSLocalizedString("Unable to upload Flip to the server.  Please try again later.", comment: "")
     static let OK = NSLocalizedString("OK", comment: "OK")

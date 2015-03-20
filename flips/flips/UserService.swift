@@ -202,8 +202,10 @@ public class UserService: FlipsService {
             self.post(url,
                 parameters: params,
                 constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                    let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
-                    formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                    if (avatar != nil) {
+                        let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                        formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                    }
                 },
                 success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                     var user = self.parseUserResponse(responseObject)
@@ -238,9 +240,12 @@ public class UserService: FlipsService {
                 success(nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil))
+                let response = operation.response
+                if ((response != nil) && (response.statusCode == 404)) {
+                    failure(nil)
+                } else if (operation.responseObject != nil) {
+                    let responseObject = operation.responseObject as NSDictionary
+                    failure(FlipError(error: responseObject["error"] as String!, details:nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
                 }

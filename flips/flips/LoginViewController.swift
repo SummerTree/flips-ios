@@ -93,6 +93,11 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             self.hideActivityIndicator()
             println(flipError!.error)
             self.loginView.showValidationErrorInCredentialFields()
+            
+            if (flipError != nil) {
+                var alertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
         }
     }
     
