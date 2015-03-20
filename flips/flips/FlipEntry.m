@@ -17,6 +17,7 @@
 
 @implementation FlipEntry
 
+@dynamic formattedWord;
 @dynamic order;
 @dynamic flip;
 @dynamic message;

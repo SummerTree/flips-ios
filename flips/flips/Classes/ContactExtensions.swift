@@ -10,10 +10,6 @@
 // the license agreement.
 //
 
-import Foundation
-
-let NO_NAME = NSLocalizedString("No name", comment: "No name")
-
 extension Contact: MBContactPickerModelProtocol {
     public var contactInitials: String {
         var initials = ""

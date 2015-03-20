@@ -97,8 +97,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal func initFlipWords(words: [String]) {
         
-        findAndSaveStockFlips(words)
-        
         myFlipsDictionary = Dictionary<String, [String]>()
         stockFlipsDictionary = Dictionary<String, [String]>()
         
@@ -110,22 +108,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             myFlipsDictionary[word] = Array<String>()
             stockFlipsDictionary[word] = Array<String>()
         }
-    }
-    
-    private func findAndSaveStockFlips(words: [String]) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let flipService = FlipService()
-            flipService.stockFlipsForWords(words, success: { (responseAsJSON) -> Void in
-                let stockFlipsAsJSON = responseAsJSON?.array
-                for stockFlipJson in stockFlipsAsJSON! {
-                    PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
-                }
-            }, failure: { (flipError) -> Void in
-                if (flipError != nil) {
-                    println("Error \(flipError)")
-                }
-            })
-        })
     }
     
     private func checkForPermissionToCaptureMedia() -> Bool {
@@ -546,6 +528,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 let flipWord = self.flipWords[self.highlightedWordIndex]
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.navigationItem.rightBarButtonItem?.enabled = false
+
                     self.composeTopViewContainer.showImage(receivedImage, andText: flipWord.text)
                     self.composeBottomViewContainer.showAudioRecordButton()
                 })
@@ -738,10 +722,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if enabled {
             self.view.userInteractionEnabled = true
             self.navigationController?.view.userInteractionEnabled = true
+            self.navigationItem.rightBarButtonItem?.enabled = true
+
             println("User interaction enabled for compose view")
         } else {
             self.view.userInteractionEnabled = false
             self.navigationController?.view.userInteractionEnabled = false
+            self.navigationItem.rightBarButtonItem?.enabled = false
+
             println("User interaction disabled for compose view")
         }
     }

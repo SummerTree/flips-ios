@@ -26,8 +26,9 @@
 @property (nonatomic, retain) NSString * soundURL;
 @property (nonatomic, retain) NSString * thumbnailURL;
 @property (nonatomic, retain) NSString * word;
-@property (nonatomic, retain) User *owner;
+@property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) NSSet *entries;
+@property (nonatomic, retain) User *owner;
 @end
 
 @interface Flip (CoreDataGeneratedAccessors)

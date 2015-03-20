@@ -26,7 +26,8 @@
 @dynamic soundURL;
 @dynamic thumbnailURL;
 @dynamic word;
-@dynamic owner;
+@dynamic updatedAt;
 @dynamic entries;
+@dynamic owner;
 
 @end
