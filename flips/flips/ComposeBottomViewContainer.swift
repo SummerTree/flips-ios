@@ -121,6 +121,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         gridButton.setImage(UIImage(named: "Grid"), forState: .Normal)
         gridButton.sizeToFit()
         gridButton.addTarget(self, action: "gridButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        gridButton.hidden = true
         cameraButtonsView.addSubview(gridButton)
         
         galleryButton = UIButton()
