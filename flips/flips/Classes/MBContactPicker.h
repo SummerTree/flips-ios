@@ -30,7 +30,7 @@
 @optional
 
 - (void)contactPicker:(MBContactPicker*)contactPicker didUpdateContentHeightTo:(CGFloat)newHeight;
-- (void)contactPicker:(MBContactPicker *)contactPicker didChangeEntryText:(NSString *)entryText;
+- (void)contactPicker:(MBContactPicker*)contactPicker didChangeEntryText:(NSString *)entryText;
 - (void)didShowFilteredContactsForContactPicker:(MBContactPicker*)contactPicker;
 - (void)didHideFilteredContactsForContactPicker:(MBContactPicker*)contactPicker;
 
@@ -54,5 +54,6 @@
 @property (nonatomic, assign, readonly, getter=isInvalidContact) BOOL invalidContact;
 
 - (void)reloadData;
+- (NSString*)phoneNumberFromText:(NSString*)text;
 
 @end

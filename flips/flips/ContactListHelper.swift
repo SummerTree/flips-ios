@@ -15,7 +15,7 @@ public typealias ContactListFailureResponse = (String?) -> Void
 
 import Foundation
 
-public class ContactListHelper {
+@objc public class ContactListHelper {
     
     public struct Contact {
         let firstName: String!

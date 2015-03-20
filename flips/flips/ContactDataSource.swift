@@ -19,8 +19,7 @@ struct ContactAttributes {
     static let CONTACT_USER = "contactUser"
 }
 
-
-class ContactDataSource : BaseDataSource {
+@objc class ContactDataSource : BaseDataSource {
     
     // MARK: - CoreData Creator Methods
     

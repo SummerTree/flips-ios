@@ -13,7 +13,7 @@
 public typealias CreateFlipSuccessCompletion = (Flip) -> Void
 public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
-public class PersistentManager: NSObject {
+@objc public class PersistentManager: NSObject {
     
     private let LAST_STOCK_FLIPS_SYNC_AT = "lastStockFlipsUpdatedAt"
     private let STOCK_FLIPS = "stock_flips"
