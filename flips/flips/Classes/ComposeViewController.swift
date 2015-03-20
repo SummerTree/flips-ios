@@ -117,8 +117,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             let flipService = FlipService()
             flipService.stockFlipsForWords(words, success: { (responseAsJSON) -> Void in
                 let stockFlipsAsJSON = responseAsJSON?.array
-                for stockFlipJson in stockFlipsAsJSON! {
-                    PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
+                if (stockFlipsAsJSON != nil) {
+                    for stockFlipJson in stockFlipsAsJSON! {
+                        PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
+                    }
                 }
             }, failure: { (flipError) -> Void in
                 if (flipError != nil) {
