@@ -240,11 +240,12 @@ public class UserService: FlipsService {
                 success(nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.response != nil && operation.response.statusCode == 404) {
+                let response = operation.response
+                if ((response != nil) && (response.statusCode == 404)) {
                     failure(nil)
                 } else if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil))
+                    let responseObject = operation.responseObject as NSDictionary
+                    failure(FlipError(error: responseObject["error"] as String!, details:nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
                 }

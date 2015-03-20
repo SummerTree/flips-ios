@@ -106,8 +106,8 @@ public class FlipsService : NSObject {
     }
     
     private func errorForTimedOutError() -> NSError {
-        let message = NSLocalizedString("The request timed out. Please check you internet connection.")
-        return NSError(domain: message, code: 408, userInfo: ["NSLocalizedDescriptionKey" : message])
+        let message = NSLocalizedString("The request timed out. Please check your internet connection.")
+        return NSError(domain: message, code: BACKEND_TIMED_OUT, userInfo: ["NSLocalizedDescriptionKey" : message])
     }
     
     private func sendBlockedUserNotification() {
