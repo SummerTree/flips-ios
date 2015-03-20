@@ -202,8 +202,10 @@ public class UserService: FlipsService {
             self.post(url,
                 parameters: params,
                 constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
-                    let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
-                    formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                    if (avatar != nil) {
+                        let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                        formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
+                    }
                 },
                 success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                     var user = self.parseUserResponse(responseObject)
@@ -238,9 +240,12 @@ public class UserService: FlipsService {
                 success(nil)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil))
+                let response = operation.response
+                if ((response != nil) && (response.statusCode == 404)) {
+                    failure(nil)
+                } else if (operation.responseObject != nil) {
+                    let responseObject = operation.responseObject as NSDictionary
+                    failure(FlipError(error: responseObject["error"] as String!, details:nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
                 }
@@ -413,29 +418,36 @@ public class UserService: FlipsService {
         }
 
         if let loggedUser = User.loggedUser() {
-            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
-                if(countElements(contacts!) == 0) {
+            NSLog("IMPORT CONTACTS - BEGIN")
+            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelperContact>?) -> Void in
+                if (countElements(contacts!) == 0) {
+                    NSLog("IMPORT CONTACTS - ZERO TO IMPORT")
                     success(nil)
                     return
                 }
-                
+
+                NSLog("IMPORT CONTACTS - %d RETRIEVED FROM THE DEVICE", contacts!.count)
+
                 var numbers = Array<String>()
                 for contact in contacts! {
-                    if (countElements(contact.phoneNumber) > 0) {
-                        let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
-                        numbers.append(cleanPhone)
-                    }
+                    numbers.append(contact.phoneNumber)
                 }
-                
+
+                NSLog("IMPORT CONTACTS - ALL NUMBERS GATHERED AND FORMATTED")
+
                 var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 
                 var params: Dictionary<String, AnyObject> = [
                     RequestParams.PHONENUMBERS : numbers
                 ]
                 
+                NSLog("IMPORT CONTACTS - STARTING UPLOAD")
+
                 self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
                     var response:JSON = JSON(responseObject)
-                    
+
+                    NSLog("IMPORT CONTACTS - RESPONSE RECEIVED. %d MATCHES", response.count)
+
                     for (index, user) in response {
                         SwiftTryCatch.try({ () -> Void in
                             println("Trying to import: \(user)")
@@ -444,9 +456,13 @@ public class UserService: FlipsService {
                             println("Error: [\(error))")
                         }, finally: nil)
                     }
-                    
+
+                    NSLog("IMPORT CONTACTS - ALL IMPORTED")
+
                     success(nil)
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    NSLog("IMPORT CONTACTS - UPLOAD FAILED")
+
                     if (operation.responseObject != nil) {
                         var response = operation.responseObject as NSDictionary
                         failure(FlipError(error: response["error"] as String!, details: nil))
@@ -455,6 +471,8 @@ public class UserService: FlipsService {
                     }
                 })
             }, failure: { (error) -> Void in
+                NSLog("IMPORT CONTACTS - READ FROM DEVICE FAILED")
+
                 failure(FlipError(error: "Error retrieving contacts.", details:nil))
             })
         }

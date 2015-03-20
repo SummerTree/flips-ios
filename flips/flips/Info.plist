@@ -35,6 +35,8 @@
 	<string>338424696329576</string>
 	<key>FacebookDisplayName</key>
 	<string>Flips</string>
+	<key>FlipsServiceHostBaseURL</key>
+	<string>http://flips-dev95.arctouch.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -50,7 +52,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>FlipsServiceHostBaseURL</key>
-	<string>http://flips-dev95.arctouch.com</string>
 </dict>
 </plist>

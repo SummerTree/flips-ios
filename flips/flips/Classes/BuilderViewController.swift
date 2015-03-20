@@ -37,7 +37,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         super.viewDidAppear(animated)
 
         if (!DeviceHelper.sharedInstance.didUserAlreadySeenBuildIntroduction()) {
-            DeviceHelper.sharedInstance.setBuilderIntroductionShown(true)
+            DeviceHelper.sharedInstance.setBuilderIntroductionShown()
             self.showIntroduction()
         }
     }

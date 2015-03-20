@@ -14,7 +14,7 @@ import UIKit
 
 class ProgressBar: UIView {
 
-    let PROGRESS_BAR_FILL_SPACING: CGFloat = 4.0
+    var progressBarFillSpacing: CGFloat = 2.0
 
     private var _progress: Float = 0.0
     var progress: Float {
@@ -50,34 +50,48 @@ class ProgressBar: UIView {
         self.makeConstraints()
     }
 
+    override func layoutSubviews() {
+        let height = self.bounds.size.height
+
+        self.progressBarFillSpacing = height * 0.2
+
+        self.layer.cornerRadius = height / 2.0
+        self.layer.borderWidth = height * 0.1
+        self.progressFill.layer.cornerRadius = self.layer.cornerRadius - self.progressBarFillSpacing
+
+        self.progressFill.mas_updateConstraints { (make) -> Void in
+            make.left.equalTo()(self).with().offset()(self.progressBarFillSpacing)
+            make.top.equalTo()(self).with().offset()(self.progressBarFillSpacing)
+            make.bottom.equalTo()(self).with().offset()(-self.progressBarFillSpacing)
+        }
+        self.updateConstraintsIfNeeded()
+        
+        super.layoutSubviews()
+    }
+
     private func addSubviews() {
-        self.layer.cornerRadius = 10
         self.layer.borderColor = UIColor.whiteColor().CGColor
-        self.layer.borderWidth = 2.0
         self.backgroundColor = UIColor.blackColor()
 
         self.progressFill = UIView()
         self.progressFill.backgroundColor = UIColor.whiteColor()
-        self.progressFill.layer.cornerRadius = self.layer.cornerRadius - self.PROGRESS_BAR_FILL_SPACING
         self.addSubview(self.progressFill)
     }
 
     private func makeConstraints() {
         self.progressFill.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self).with().offset()(self.PROGRESS_BAR_FILL_SPACING)
-            make.top.equalTo()(self).with().offset()(self.PROGRESS_BAR_FILL_SPACING)
-            make.bottom.equalTo()(self).with().offset()(-self.PROGRESS_BAR_FILL_SPACING)
             make.width.equalTo()(0)
+            return
         }
     }
 
     private func updateProgressFill() {
-        let maxWidth = Float(self.bounds.width - (self.PROGRESS_BAR_FILL_SPACING * 2))
+        let maxWidth = Float(self.bounds.width - (self.progressBarFillSpacing * 2))
         let fillWidth = maxWidth * self.progress
 
         self.progressFill.mas_updateConstraints { (make) -> Void in
-            make.top.equalTo()(self).with().offset()(self.PROGRESS_BAR_FILL_SPACING)
             make.width.equalTo()(fillWidth)
+            return
         }
     }
 

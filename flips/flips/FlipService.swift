@@ -36,6 +36,7 @@ public class FlipService: FlipsService {
         static let SOUND_URL = "sound_url"
         static let CATEGORY = "category"
         static let IS_PRIVATE = "is_private"
+        static let TIMESTAMP = "timestamp"
     }
     
     func createFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
@@ -60,15 +61,15 @@ public class FlipService: FlipsService {
         }
     }
     
-    func stockFlipsForWord(word: String, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
+    func stockFlips(timestamp: NSDate?, success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
         
         let stockFlipUrl = HOST + STOCK_FLIPS
-        let stockFlipParams = [
-            RequestParams.WORD : word,
+        var stockFlipParams = [
+            RequestParams.TIMESTAMP: (timestamp == nil ? "" : timestamp!)
         ]
         
         self.get(stockFlipUrl,
@@ -87,33 +88,6 @@ public class FlipService: FlipsService {
         )
     }
     
-    func stockFlipsForWords(words: [String], success: StockFlipsSuccessResponse, failure: StockFlipsFailureResponse) {
-        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
-            return
-        }
-
-        let stockFlipUrl = HOST + STOCK_FLIPS
-        let stockFlipParams = [
-            RequestParams.WORD : words,
-        ]
-        
-        self.get(stockFlipUrl,
-            parameters: stockFlipParams,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                success(JSON(responseObject))
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: nil))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details: nil))
-                }
-            }
-        )
-    }
-
     private func uploadVideo(videoPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         var error: NSError?
 

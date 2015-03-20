@@ -13,8 +13,11 @@
 public typealias CreateFlipSuccessCompletion = (Flip) -> Void
 public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
-public class PersistentManager: NSObject {
+@objc public class PersistentManager: NSObject {
     
+    private let LAST_STOCK_FLIPS_SYNC_AT = "lastStockFlipsUpdatedAt"
+    private let STOCK_FLIPS = "stock_flips"
+    private let STOCK_FLIPS_LAST_TIMESTAMP = "last_timestamp"
     
     // MARK: - Singleton Implementation
     
@@ -77,15 +80,19 @@ public class PersistentManager: NSObject {
         MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
             let flipDataSourceInContext = FlipDataSource(context: context)
             if (flip == nil) {
-                flip = flipDataSourceInContext.createFlipWithJson(json)
+                if (!flipDataSourceInContext.isFlipToBeDeleted(json)) {
+                    flip = flipDataSourceInContext.createFlipWithJson(json)
+                }
             } else {
                 flip = flipDataSourceInContext.updateFlip(flip!.inContext(context) as Flip, withJson: json)
             }
         }, completion: { (success, error) -> Void in
             if (success) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                    self.associateFlip(flip!, withOwnerInJson: json)
-                })
+                if (flip != nil) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                        self.associateFlip(flip!, withOwnerInJson: json)
+                    })
+                }
             }
         })
     }
@@ -159,6 +166,18 @@ public class PersistentManager: NSObject {
                     createFlipFailCompletion(flipError)
             }
         }
+    }
+    
+    private func saveLastTimestampForStockFlip(timestamp: NSDate) {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?) {
+            if (lastTimestamp.compare(timestamp) == NSComparisonResult.OrderedAscending) {
+                userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+            }
+        } else {
+            userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+        }
+        userDefaults.synchronize()
     }
     
     
@@ -374,6 +393,34 @@ public class PersistentManager: NSObject {
                 })
             })
             
+            // sync stock flips
+            let flipService = FlipService()
+            let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?
+            dispatch_group_enter(group)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                flipService.stockFlips(timestamp,
+                    success: { (responseAsJSON) -> Void in
+                        let stockFlipsAsJSON = responseAsJSON?[self.STOCK_FLIPS].array
+                        for stockFlipJson in stockFlipsAsJSON! {
+                            PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
+                        }
+                        if let json = responseAsJSON {
+                            let lastTimestampAsString = json[self.STOCK_FLIPS_LAST_TIMESTAMP].stringValue
+                            if (lastTimestampAsString != "") {
+                                self.saveLastTimestampForStockFlip(NSDate(dateTimeString: lastTimestampAsString))
+                            }
+                        }
+                        dispatch_group_leave(group)
+                    },
+                    failure: { (flipError) -> Void in
+                        if (flipError != nil) {
+                            println("Error \(flipError)")
+                        }
+                        dispatch_group_leave(group)
+                    }
+                )
+            })
+            
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             
             if (error != nil) {
@@ -388,10 +435,35 @@ public class PersistentManager: NSObject {
     
     
     // MARK: - Contact Methods
-    
+
+    func createOrUpdateContacts(contacts: Array<ContactListHelperContact>, user: User? = nil) {
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+            let contactDataSource = ContactDataSource(context: context)
+
+            var contactID = contactDataSource.nextContactID()
+
+            for (var i = 0; i < contacts.count; i++) {
+                let contact: ContactListHelperContact = contacts[i] as ContactListHelperContact
+                let existingContact = contactDataSource.fetchContactByPhoneNumber(contact.phoneNumber)
+
+                if (existingContact == nil) {
+                    contactDataSource.createContactWith(String(contactID),
+                        firstName: contact.firstName, lastName: contact.lastName, phoneNumber: contact.phoneNumber,
+                        phoneType: contact.phoneType, andContactUser: user)
+
+                    contactID++
+
+                } else {
+                    contactDataSource.updateContact(existingContact!, withFirstName: contact.firstName,
+                        lastName: contact.lastName, phoneNumber: contact.phoneNumber, phoneType: contact.phoneType)
+                }
+            }
+        }
+    }
+
     func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
         let contactDataSource = ContactDataSource()
-        var contact = contactDataSource.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+        var contact = contactDataSource.findContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         let contactID = String(contactDataSource.nextContactID())
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in

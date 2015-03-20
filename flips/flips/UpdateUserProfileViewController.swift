@@ -101,7 +101,7 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
                 self.hideActivityIndicator()
             }) { (flipError) -> Void in
                 self.hideActivityIndicator()
-                let alertView = UIAlertView(title: "Error updating user", message: flipError?.error!, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: "Error updating user", message: flipError?.details!, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }

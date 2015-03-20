@@ -73,7 +73,7 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
             },
             failure: { (flipError) -> Void in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                let alertView = UIAlertView(title: NSLocalizedString("Error when trying to resend verification code"), message: flipError?.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: NSLocalizedString("Error when trying to resend verification code"), message: flipError?.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
             }
         )

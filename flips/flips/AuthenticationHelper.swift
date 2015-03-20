@@ -60,8 +60,6 @@ public class AuthenticationHelper: NSObject {
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)
         
-        DeviceHelper.sharedInstance.setBuilderIntroductionShown(false)
-        
         CoreDataHandler.sharedInstance.resetDatabase()
 
         PubNub.disconnect()

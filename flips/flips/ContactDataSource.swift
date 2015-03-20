@@ -19,8 +19,7 @@ struct ContactAttributes {
     static let CONTACT_USER = "contactUser"
 }
 
-
-class ContactDataSource : BaseDataSource {
+@objc class ContactDataSource : BaseDataSource {
     
     // MARK: - CoreData Creator Methods
     
@@ -208,8 +207,13 @@ class ContactDataSource : BaseDataSource {
     private func getContactById(id: String) -> Contact? {
         return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id, inContext: currentContext) as? Contact
     }
+
+    func fetchContactByPhoneNumber(phoneNumber: String) -> Contact? {
+        let predicate = NSPredicate(format: "%K = %@", ContactAttributes.PHONE_NUMBER, phoneNumber)
+        return Contact.findFirstWithPredicate(predicate) as? Contact
+    }
     
-    func getContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
+    func findContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
         var firstnamePredicate: NSPredicate!
         var lastnamePredicate: NSPredicate!
         var phonenumberPredicate: NSPredicate!
