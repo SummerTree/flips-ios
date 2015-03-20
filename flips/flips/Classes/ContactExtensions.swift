@@ -14,12 +14,12 @@ extension Contact: MBContactPickerModelProtocol {
     public var contactInitials: String {
         var initials = ""
         
-        if firstName != nil {
+        if (firstName != nil && !firstName.isEmpty) {
             let range = firstName.rangeOfComposedCharacterSequenceAtIndex(firstName.startIndex)
             initials = firstName.substringWithRange(range)
         }
         
-        if lastName != nil {
+        if (lastName != nil && !lastName.isEmpty) {
             let range = lastName.rangeOfComposedCharacterSequenceAtIndex(lastName.startIndex)
             initials += lastName.substringWithRange(range)
         }
@@ -30,11 +30,11 @@ extension Contact: MBContactPickerModelProtocol {
     public var contactTitle: String? {
         var name = ""
         
-        if firstName != nil {
+        if (firstName != nil && !firstName.isEmpty) {
             name = firstName!
         }
         
-        if lastName != nil {
+        if (lastName != nil && !lastName.isEmpty) {
             if !name.isEmpty {
                 name += " "
             }
