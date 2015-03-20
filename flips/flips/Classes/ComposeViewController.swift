@@ -417,7 +417,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            self.showContentForHighlightedWord(shouldReloadWords: self.shouldShowPlusButtonInWords())
+            self.showContentForHighlightedWord(shouldReloadWords: false)
         }
     }
     
