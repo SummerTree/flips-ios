@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14C1510" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="BuilderWord" representedClassName="BuilderWord" syncable="YES">
         <attribute name="addedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="fromServer" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -11,7 +10,7 @@
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="phoneNumber" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="phoneType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="contactUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="contacts" inverseEntity="User" syncable="YES"/>
@@ -86,7 +85,7 @@
     </entity>
     <elements>
         <element name="BuilderWord" positionX="-1233" positionY="108" width="128" height="90"/>
-        <element name="Contact" positionX="-461" positionY="296" width="128" height="163"/>
+        <element name="Contact" positionX="-461" positionY="296" width="128" height="165"/>
         <element name="Device" positionX="-857" positionY="36" width="128" height="133"/>
         <element name="Flip" positionX="-675" positionY="324" width="128" height="225"/>
         <element name="FlipEntry" positionX="-1008" positionY="117" width="128" height="105"/>

@@ -435,10 +435,35 @@ public class PersistentManager: NSObject {
     
     
     // MARK: - Contact Methods
-    
+
+    func createOrUpdateContacts(contacts: Array<ContactListHelperContact>, user: User? = nil) {
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+            let contactDataSource = ContactDataSource(context: context)
+
+            var contactID = contactDataSource.nextContactID()
+
+            for (var i = 0; i < contacts.count; i++) {
+                let contact: ContactListHelperContact = contacts[i] as ContactListHelperContact
+                let existingContact = contactDataSource.fetchContactByPhoneNumber(contact.phoneNumber)
+
+                if (existingContact == nil) {
+                    contactDataSource.createContactWith(String(contactID),
+                        firstName: contact.firstName, lastName: contact.lastName, phoneNumber: contact.phoneNumber,
+                        phoneType: contact.phoneType, andContactUser: user)
+
+                    contactID++
+
+                } else {
+                    contactDataSource.updateContact(existingContact!, withFirstName: contact.firstName,
+                        lastName: contact.lastName, phoneNumber: contact.phoneNumber, phoneType: contact.phoneType)
+                }
+            }
+        }
+    }
+
     func createOrUpdateContactWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String, andContactUser contactUser: User? = nil) -> Contact {
         let contactDataSource = ContactDataSource()
-        var contact = contactDataSource.getContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+        var contact = contactDataSource.findContactBy(firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         let contactID = String(contactDataSource.nextContactID())
         
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in

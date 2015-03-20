@@ -414,8 +414,7 @@ public class UserService: FlipsService {
 
         if let loggedUser = User.loggedUser() {
             NSLog("IMPORT CONTACTS - BEGIN")
-//            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelper.Contact>?) -> Void in
-            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumberNative({ (contacts: Array<String>?) -> Void in
+            ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelperContact>?) -> Void in
                 if (countElements(contacts!) == 0) {
                     NSLog("IMPORT CONTACTS - ZERO TO IMPORT")
                     success(nil)
@@ -424,20 +423,17 @@ public class UserService: FlipsService {
 
                 NSLog("IMPORT CONTACTS - %d RETRIEVED FROM THE DEVICE", contacts!.count)
 
-//                var numbers = Array<String>()
-//                for contact in contacts! {
-//                    if (countElements(contact.phoneNumber) > 0) {
-//                        let cleanPhone = PhoneNumberHelper.formatUsingUSInternational(contact.phoneNumber)
-//                        numbers.append(cleanPhone)
-//                    }
-//                }
+                var numbers = Array<String>()
+                for contact in contacts! {
+                    numbers.append(contact.phoneNumber)
+                }
 
                 NSLog("IMPORT CONTACTS - ALL NUMBERS GATHERED AND FORMATTED")
 
                 var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 
                 var params: Dictionary<String, AnyObject> = [
-                    RequestParams.PHONENUMBERS : contacts!
+                    RequestParams.PHONENUMBERS : numbers
                 ]
                 
                 NSLog("IMPORT CONTACTS - STARTING UPLOAD")

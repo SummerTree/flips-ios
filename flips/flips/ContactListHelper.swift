@@ -10,21 +10,29 @@
 // the license agreement.
 //
 
-public typealias ContactListSuccessResponse = (Array<ContactListHelper.Contact>?) -> Void
+public typealias ContactListSuccessResponse = (Array<ContactListHelperContact>?) -> Void
 public typealias ContactListFailureResponse = (String?) -> Void
 
 import Foundation
 
-public class ContactListHelper {
-    
-    public struct Contact {
-        let firstName: String!
-        let lastName: String!
-        let phoneNumber: String!
+public class ContactListHelperContact {
+
+    var firstName: String = ""
+    var lastName: String = ""
+    var phoneNumber: String = ""
+    var phoneType: String = ""
+
+    init(firstName: String, lastName: String, phoneNumber: String, phoneType: String) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.phoneNumber = phoneNumber
+        self.phoneType = phoneType
     }
-    
-    let addressBook: RHAddressBook! = RHAddressBook()
-    
+
+}
+
+public class ContactListHelper {
+
     public class var sharedInstance : ContactListHelper {
         struct Static {
             static let instance : ContactListHelper = ContactListHelper()
@@ -32,43 +40,11 @@ public class ContactListHelper {
         return Static.instance
     }
 
-    private func collectContactNumbers() -> Array<String>? {
-        let addressBook: ABAddressBook? = ABAddressBookCreateWithOptions(nil, nil)?.takeRetainedValue()
-        let people: NSArray? = ABAddressBookCopyArrayOfAllPeople(addressBook)?.takeRetainedValue()
-
-        if (people != nil) {
-            var numbers = Array<String>()
-
-            let loggedUser = User.loggedUser()
-            let cleanedLoggedUserPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser!.phoneNumber)
-
-            for person : ABRecord in people! {
-                let phoneNumbers: ABMultiValue? = ABRecordCopyValue(person, kABPersonPhoneProperty)?.takeRetainedValue()
-
-                for i : Int in 0..<(ABMultiValueGetCount(phoneNumbers)) {
-                    let phone : String? = ABMultiValueCopyValueAtIndex(phoneNumbers, i).takeRetainedValue() as? String
-
-                    if (phone != nil) {
-                        let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phone!)
-
-                        if (cleanedPhoneNumber != cleanedLoggedUserPhoneNumber) {
-                            numbers.append(cleanedPhoneNumber)
-                        }
-                    }
-                }
-            }
-
-            return numbers
-        }
-
-        return nil
-    }
-
-    func findAllContactsWithPhoneNumberNative(success: (Array<String>?) -> Void, failure: ContactListFailureResponse) {
+    func findAllContactsWithPhoneNumber(success: ContactListSuccessResponse, failure: ContactListFailureResponse) {
         let authorizationStatus = ABAddressBookGetAuthorizationStatus()
 
         if (authorizationStatus == ABAuthorizationStatus.Authorized) {
-            success(self.collectContactNumbers())
+            success(self.retrieveContacts())
 
         } else if (authorizationStatus == ABAuthorizationStatus.NotDetermined) {
             let addressBook: ABAddressBook? = ABAddressBookCreateWithOptions(nil, nil)?.takeRetainedValue()
@@ -77,55 +53,57 @@ public class ContactListHelper {
                     failure(NSLocalizedString("Denied", comment: "Denied"))
                 }
 
-                success(self.collectContactNumbers())
+                success(self.retrieveContacts())
             }
         } else if (authorizationStatus == ABAuthorizationStatus.Denied || authorizationStatus == ABAuthorizationStatus.Restricted) {
             failure(NSLocalizedString("Denied", comment: "Denied"))
         }
     }
 
-    func findAllContactsWithPhoneNumber(success: ContactListSuccessResponse, failure: ContactListFailureResponse) {
-        println("Trying to access Address Book")
-        println("Authorization Status = \(RHAddressBook.authorizationStatus().value)")
-        
-        if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusAuthorized.value) {
-            let contacts = retrieveContacts()
-            success(contacts)
-        } else if (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusNotDetermined.value) {
-            addressBook.requestAuthorizationWithCompletion({ (granted, error) -> Void in
-                let contacts = self.retrieveContacts()
-                success(contacts)
-            })
-        } else if ((RHAddressBook.authorizationStatus().value == RHAuthorizationStatusDenied.value) || (RHAddressBook.authorizationStatus().value == RHAuthorizationStatusRestricted.value)) {
-            failure(NSLocalizedString("Denied", comment: "Denied"))
-        }
-    }
-    
-    private func retrieveContacts() -> Array<ContactListHelper.Contact> {
-        var contacts = Array<ContactListHelper.Contact>()
-        
-        if let loggedUser = User.loggedUser() {
-            let people = self.addressBook.people() as Array<RHPerson>
-            for person in people {
-                let phones: RHMultiStringValue = person.phoneNumbers
-                for (var i:UInt = 0; i < phones.count(); i++) {
-                    if (person.firstName != nil && countElements(person.firstName) > 0) {
-                        var contact = ContactListHelper.Contact(firstName: person.firstName, lastName: person.lastName, phoneNumber: phones.valueAtIndex(i) as String)
-                        let phoneNumber: String! = phones.valueAtIndex(i) as String
-                        
-                        let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
-                        let cleanedLoggedUserPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber)
+    private func retrieveContacts() -> Array<ContactListHelperContact>? {
+        let addressBook: ABAddressBook? = ABAddressBookCreateWithOptions(nil, nil)?.takeRetainedValue()
+        let people: NSArray? = ABAddressBookCopyArrayOfAllPeople(addressBook)?.takeRetainedValue()
+
+        if (people != nil) {
+            var contacts = Array<ContactListHelperContact>()
+
+            let loggedUser = User.loggedUser()
+            let cleanedLoggedUserPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser!.phoneNumber)
+
+            for person : ABRecord in people! {
+                let firstName: String? = ABRecordCopyValue(person, kABPersonFirstNameProperty)?.takeRetainedValue() as? String
+                let lastName: String? = ABRecordCopyValue(person, kABPersonLastNameProperty)?.takeRetainedValue() as? String
+                let phoneNumbers: ABMultiValue? = ABRecordCopyValue(person, kABPersonPhoneProperty)?.takeRetainedValue()
+
+                for i: Int in 0..<(ABMultiValueGetCount(phoneNumbers)) {
+                    let phone: String? = ABMultiValueCopyValueAtIndex(phoneNumbers, i).takeRetainedValue() as? String
+
+                    if (phone != nil) {
+                        let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phone!)
 
                         if (cleanedPhoneNumber != cleanedLoggedUserPhoneNumber) {
-                            let phoneType = ABAddressBookCopyLocalizedLabel(phones.labelAtIndex(i)).takeRetainedValue() as NSString
-                            PersistentManager.sharedInstance.createOrUpdateContactWith(person.firstName, lastName: person.lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+                            let phoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, i).takeRetainedValue()
+                            let phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as NSString
+
+                            var contact = ContactListHelperContact(firstName: firstName!,
+                                lastName: lastName!, phoneNumber: cleanedPhoneNumber, phoneType: phoneType)
+
                             contacts.append(contact)
                         }
                     }
                 }
             }
+
+            NSLog("IMPORT CONTACTS - BEGIN CORE DATA UPDATES")
+
+            PersistentManager.sharedInstance.createOrUpdateContacts(contacts)
+            
+            NSLog("IMPORT CONTACTS - END CORE DATA UPDATES")
+            
+            return contacts
         }
         
-        return contacts
+        return nil
     }
+
 }
