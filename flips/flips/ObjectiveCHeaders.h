@@ -46,9 +46,6 @@
 
 #import "NSManagedObject+helpers.h"
 #import "VideoComposer.h"
-#import "RHAddressBook.h"
-#import "RHPerson.h"
-#import "RHPersonLabels.h"
 
 #import "SwiftTryCatch.h"
 

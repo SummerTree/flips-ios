@@ -52,7 +52,7 @@
 #define COCOAPODS_POD_AVAILABLE_Bolts
 #define COCOAPODS_VERSION_MAJOR_Bolts 1
 #define COCOAPODS_VERSION_MINOR_Bolts 1
-#define COCOAPODS_VERSION_PATCH_Bolts 3
+#define COCOAPODS_VERSION_PATCH_Bolts 4
 
 // Facebook-iOS-SDK
 #define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK
@@ -90,12 +90,6 @@
 // so we were not able to define version macros.
 // Please contact the author.
 // Version: 3.7.9.3.
-
-// RHAddressBook
-#define COCOAPODS_POD_AVAILABLE_RHAddressBook
-#define COCOAPODS_VERSION_MAJOR_RHAddressBook 1
-#define COCOAPODS_VERSION_MINOR_RHAddressBook 1
-#define COCOAPODS_VERSION_PATCH_RHAddressBook 1
 
 // SplunkMint-iOS
 #define COCOAPODS_POD_AVAILABLE_SplunkMint_iOS
