@@ -23,9 +23,15 @@ public class ContactListHelperContact {
     var phoneNumber: String = ""
     var phoneType: String = ""
 
-    init(firstName: String, lastName: String, phoneNumber: String, phoneType: String) {
-        self.firstName = firstName
-        self.lastName = lastName
+    init(firstName: String?, lastName: String?, phoneNumber: String, phoneType: String) {
+        if (firstName != nil) {
+            self.firstName = firstName!
+        }
+
+        if (lastName != nil) {
+            self.lastName = lastName!
+        }
+        
         self.phoneNumber = phoneNumber
         self.phoneType = phoneType
     }
@@ -86,8 +92,8 @@ public class ContactListHelperContact {
                             let phoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, i).takeRetainedValue()
                             let phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as NSString
 
-                            var contact = ContactListHelperContact(firstName: firstName!,
-                                lastName: lastName!, phoneNumber: cleanedPhoneNumber, phoneType: phoneType)
+                            var contact = ContactListHelperContact(firstName: firstName,
+                                lastName: lastName, phoneNumber: cleanedPhoneNumber, phoneType: phoneType)
 
                             contacts.append(contact)
                         }
