@@ -89,8 +89,12 @@ public class ContactListHelperContact {
                         let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phone!)
 
                         if (cleanedPhoneNumber != cleanedLoggedUserPhoneNumber) {
-                            let phoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, i).takeRetainedValue()
-                            let phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as NSString
+                            let phoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, i)?.takeRetainedValue()
+
+                            var phoneType = ""
+                            if (phoneLabel != nil) {
+                                phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as NSString
+                            }
 
                             var contact = ContactListHelperContact(firstName: firstName,
                                 lastName: lastName, phoneNumber: cleanedPhoneNumber, phoneType: phoneType)
