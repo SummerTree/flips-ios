@@ -64,6 +64,9 @@ class ProgressBar: UIView {
             make.top.equalTo()(self).with().offset()(self.progressBarFillSpacing)
             make.bottom.equalTo()(self).with().offset()(-self.progressBarFillSpacing)
         }
+        self.updateConstraintsIfNeeded()
+        
+        super.layoutSubviews()
     }
 
     private func addSubviews() {
