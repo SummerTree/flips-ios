@@ -18,7 +18,7 @@ public class DeviceHelper: NSObject {
     private let DEVICE_TOKEN_NSDATA = "device_token_nsdata"
     private let DEVICE_ID = "device_id"
     
-    private let ALREADY_SEEN_INTRODUCTION_KEY = "builder.introduction.watched"
+    private let BUILDER_ONBOARDING_SEEN_KEY = "builder.onboarding.seen"
     
     // MARK: - Singleton
     
@@ -117,17 +117,36 @@ public class DeviceHelper: NSObject {
         return userDefaults.valueForKey(DEVICE_ID) as String?
     }
     
-    func setBuilderIntroductionShown(hasShow: Bool) {
+    func setBuilderIntroductionShown() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.setObject(hasShow, forKey: ALREADY_SEEN_INTRODUCTION_KEY)
+        let userId = User.loggedUser()?.userID
+
+        var onboardingSeenArray = userDefaults.objectForKey(BUILDER_ONBOARDING_SEEN_KEY) as Array<String>?
+
+        if (onboardingSeenArray == nil) {
+            onboardingSeenArray = Array<String>()
+        }
+
+        if (find(onboardingSeenArray!, userId!) == nil) {
+            onboardingSeenArray!.append(userId!)
+        }
+
+        userDefaults.setObject(onboardingSeenArray, forKey: BUILDER_ONBOARDING_SEEN_KEY)
         userDefaults.synchronize()
     }
-    
+
     func didUserAlreadySeenBuildIntroduction() -> Bool {
+        let userId = User.loggedUser()?.userID
+
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        let alreadySeenIntroduction = userDefaults.objectForKey(ALREADY_SEEN_INTRODUCTION_KEY) as Bool?
-        if (alreadySeenIntroduction != nil) {
-            return alreadySeenIntroduction!
+        let onboardingSeenArray = userDefaults.objectForKey(BUILDER_ONBOARDING_SEEN_KEY) as Array<String>?
+
+        if (onboardingSeenArray == nil) {
+            return false
+        }
+
+        if (find(onboardingSeenArray!, userId!) != nil) {
+            return true
         }
         
         return false
