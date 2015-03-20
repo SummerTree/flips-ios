@@ -44,16 +44,16 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
         newPasswordView.viewDidAppear()
     }
     
+
     // MARK: - NewPasswordViewDelegate Methods
+    
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
         UserService.sharedInstance.updatePassword(self.username, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
             success: { () -> Void in
-                println("updatePassword success")
                 self.navigationController?.popToRootViewControllerAnimated(true)
                 self.dismissViewControllerAnimated(false, completion:nil)
             }) { (flipError) -> Void in
-                println(flipError!.error)
-                let alertView = UIAlertView(title: NSLocalizedString("Update Error"), message: flipError!.error, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: NSLocalizedString("Update Error"), message: flipError!.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }

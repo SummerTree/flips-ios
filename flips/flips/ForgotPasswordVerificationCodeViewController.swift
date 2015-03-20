@@ -36,17 +36,19 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 var newPasswordViewController = NewPasswordViewController(username: username, phoneNumber: self.phoneNumber, verificationCode: verificationCode)
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
-            failure: { (flipError) in
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+        failure: { (flipError) in
+            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+            
+            if (flipError!.error == self.FORGOT_CODE_DID_NOT_MATCH || flipError!.error == self.RESENT_SMS_MESSAGE) {
+                self.verificationCodeView.didEnterWrongVerificationCode()
+            } else {
+                var alertView: UIAlertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
                 
-                if (flipError!.error == self.FORGOT_CODE_DID_NOT_MATCH || flipError!.error == self.RESENT_SMS_MESSAGE) {
-                    self.verificationCodeView.didEnterWrongVerificationCode()
-                } else {
-                    println("Device code verification error: " + flipError!.error!)
-                    self.verificationCodeView.resetVerificationCodeField()
-                    self.verificationCodeView.focusKeyboardOnCodeField()
-                }
-            })
+                self.verificationCodeView.resetVerificationCodeField()
+                self.verificationCodeView.focusKeyboardOnCodeField()
+            }
+        })
     }
     
     

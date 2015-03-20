@@ -14,6 +14,7 @@ public typealias ContactListSuccessResponse = (Array<ContactListHelperContact>?)
 public typealias ContactListFailureResponse = (String?) -> Void
 
 import Foundation
+import AddressBook
 
 public class ContactListHelperContact {
 
@@ -31,7 +32,7 @@ public class ContactListHelperContact {
 
 }
 
-public class ContactListHelper {
+@objc public class ContactListHelper {
 
     public class var sharedInstance : ContactListHelper {
         struct Static {

@@ -34,7 +34,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         let roomMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
         for flipMessage in roomMessages {
-            self.flipMessages.addObject(flipMessage)
+            if (!flipMessage.removed.boolValue) {
+                self.flipMessages.addObject(flipMessage)
+            }
         }
     }
     

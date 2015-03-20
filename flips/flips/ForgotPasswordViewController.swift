@@ -66,7 +66,12 @@ class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDeleg
         }) { (flipError) -> Void in
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
             
-            let alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            var alertView: UIAlertView!
+            if (flipError != nil) {
+                alertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            } else {
+                alertView = UIAlertView(title: INVALID_NUMBER, message: INVALID_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            }
             alertView.show()
         }
     }
