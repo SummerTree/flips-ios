@@ -164,31 +164,33 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     // MARK: - Messages Top View methods
     
     func showTopMessagesView() {
-        if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
-            dispatch_async(dispatch_get_main_queue(), {
-                self.dismissKeyboard()
+        if (self.messagesTopView.frame.origin.y < 0) {
+            if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.dismissKeyboard()
+                })
+            }
+            UIGraphicsBeginImageContextWithOptions(navigationBar.frame.size, false, 0.0)
+            navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext())
+            var image = UIGraphicsGetImageFromCurrentImageContext()
+            
+            UIGraphicsEndImageContext()
+            messagesTopView.setMessagesTopViewBackgroundImage(image)
+            
+            delegate?.signUpView(self, setStatusBarHidden: true)
+            
+            self.messagesTopView.layoutIfNeeded()
+            UIView.animateWithDuration(self.MESSAGES_TOP_VIEW_ANIMATION_DURATION, animations: { () -> Void in
+                self.messagesTopView.mas_makeConstraints({ (make) -> Void in
+                    make.removeExisting = true
+                    make.top.equalTo()(self)
+                    make.bottom.equalTo()(self.navigationBar)
+                    make.centerX.equalTo()(self.navigationBar)
+                    make.width.equalTo()(self.navigationBar)
+                })
+                self.messagesTopView.layoutIfNeeded()
             })
         }
-        UIGraphicsBeginImageContextWithOptions(navigationBar.frame.size, false, 0.0)
-        navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext())
-        var image = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-        messagesTopView.setMessagesTopViewBackgroundImage(image)
-        
-        delegate?.signUpView(self, setStatusBarHidden: true)
-        
-        self.messagesTopView.layoutIfNeeded()
-        UIView.animateWithDuration(self.MESSAGES_TOP_VIEW_ANIMATION_DURATION, animations: { () -> Void in
-            self.messagesTopView.mas_makeConstraints({ (make) -> Void in
-                make.removeExisting = true
-                make.top.equalTo()(self)
-                make.bottom.equalTo()(self.navigationBar)
-                make.centerX.equalTo()(self.navigationBar)
-                make.width.equalTo()(self.navigationBar)
-            })
-            self.messagesTopView.layoutIfNeeded()
-        })
     }
     
     func showMissingPictureMessage() {
