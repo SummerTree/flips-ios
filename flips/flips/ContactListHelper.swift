@@ -78,39 +78,51 @@ public class ContactListHelperContact {
             let cleanedLoggedUserPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser!.phoneNumber)
 
             for person : ABRecord in people! {
-                let firstName: String? = ABRecordCopyValue(person, kABPersonFirstNameProperty)?.takeRetainedValue() as? String
-                let lastName: String? = ABRecordCopyValue(person, kABPersonLastNameProperty)?.takeRetainedValue() as? String
-                let phoneNumbers: ABMultiValue? = ABRecordCopyValue(person, kABPersonPhoneProperty)?.takeRetainedValue()
+                let rawPhoneNumbers: ABMultiValueRef? = ABRecordCopyValue(person, kABPersonPhoneProperty)?.takeRetainedValue()
+                
+                if (rawPhoneNumbers == nil) {
+                    continue
+                }
+                
+                let rawFirstName: AnyObject? = ABRecordCopyValue(person, kABPersonFirstNameProperty)?.takeRetainedValue()
+                let rawLastName: AnyObject? = ABRecordCopyValue(person, kABPersonLastNameProperty)?.takeRetainedValue()
+                var firstName: String?
+                var lastName: String?
 
+                if (rawFirstName != nil) {
+                    firstName = rawFirstName as? String
+                }
+                
+                if (rawLastName != nil) {
+                    lastName = rawLastName as? String
+                }
+ 
+                let phoneNumbers: ABMultiValueRef = rawPhoneNumbers!
                 for i: Int in 0..<(ABMultiValueGetCount(phoneNumbers)) {
                     let phone: String? = ABMultiValueCopyValueAtIndex(phoneNumbers, i).takeRetainedValue() as? String
-
+                    
                     if (phone != nil) {
                         let cleanedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phone!)
-
+                        
                         if (cleanedPhoneNumber != cleanedLoggedUserPhoneNumber) {
-                            let phoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, i)?.takeRetainedValue()
-
                             var phoneType = ""
+                            let phoneLabel = ABMultiValueCopyLabelAtIndex(phoneNumbers, i)?.takeRetainedValue()
+                            
                             if (phoneLabel != nil) {
-                                phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as NSString
+                                phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as String
                             }
-
+                            
                             var contact = ContactListHelperContact(firstName: firstName,
                                 lastName: lastName, phoneNumber: cleanedPhoneNumber, phoneType: phoneType)
-
+                            
                             contacts.append(contact)
                         }
                     }
                 }
             }
 
-            NSLog("IMPORT CONTACTS - BEGIN CORE DATA UPDATES")
-
             PersistentManager.sharedInstance.createOrUpdateContacts(contacts)
-            
-            NSLog("IMPORT CONTACTS - END CORE DATA UPDATES")
-            
+
             return contacts
         }
         
