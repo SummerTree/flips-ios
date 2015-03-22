@@ -80,6 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("token: \(token)")
         DeviceHelper.sharedInstance.saveDeviceToken(token)
         DeviceHelper.sharedInstance.saveDeviceTokenAsNsData(deviceToken)
+        PubNubService.sharedInstance.subscribeOnMyChannels()
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
@@ -87,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {
+        println("###########: \(identifier)")
         if (identifier == "declineAction") {
             println("User did not allow to receive push notifications")
         } else if (identifier == "answerAction") {
@@ -96,6 +98,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         println("did receive remote notification \(userInfo)")
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        println("now did receive remote notification \(userInfo)")
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

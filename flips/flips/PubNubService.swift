@@ -34,8 +34,7 @@ public class PubNubService: FlipsService, PNDelegate {
         var pubnubConfiguration = PNConfiguration(forOrigin: PUBNUB_ORIGIN,
             publishKey: PUBNUB_PUBLISH_KEY,
             subscribeKey: PUBNUB_SUBSCRIBE_KEY,
-            secretKey: PUBNUB_SECRET_KEY,
-            cipherKey: PUBNUB_CIPHER_KEY)
+            secretKey: PUBNUB_SECRET_KEY)
         
         pubnubConfiguration.useSecureConnection = true
         pubnubConfiguration.reduceSecurityLevelOnError = false
@@ -121,6 +120,28 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
 
+    // MARK: - Push Notifications
+    
+    func disablePushNotificationOnMyChannels() {
+        if let loggedUser = User.loggedUser() {
+            var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
+            
+            var channels = [AnyObject]()
+            channels.append(ownChannel)
+            
+            let roomDataSource = RoomDataSource()
+            var rooms = roomDataSource.getAllRooms()
+            for room in rooms {
+                channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
+            }
+            
+            let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
+            
+            PubNub.disablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
+                println("Result of disablePushNotificationOnChannels: channels=[\(channels), with error: \(pnError)")
+            }
+        }
+    }
 
     // MARK: - Message history
 
@@ -240,7 +261,31 @@ public class PubNubService: FlipsService, PNDelegate {
             }
         }
     }
-	
+    
+    // MARK: - Manual encryption methods
+    
+    func encrypt(text: String?) -> String! {
+        if (text == nil || text == "") {
+            return ""
+        }
+        var keyData : NSData = PUBNUB_CIPHER_KEY.dataUsingEnconding(NSUTF8Encoding)
+        //PubNub.configuration().cipherKey = self.PUBNUB_CIPHER_KEY;
+        //let encrypted = PubNub.AESEncrypt(text) as String
+        //PubNub.configuration().cipherKey = nil
+        //return encrypted
+        return text
+    }
+
+    func decrypt(text: String?) -> String! {
+        if (text == nil || text == "") {
+            return ""
+        }
+        //PubNub.configuration().cipherKey = self.PUBNUB_CIPHER_KEY;
+        //let decrypted = PubNub.AESDecrypt(text) as String
+        //PubNub.configuration().cipherKey = nil
+        //return decrypted
+        return text
+    }
 	
 	// MARK: - Notifications Handler
 	

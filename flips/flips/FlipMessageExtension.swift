@@ -100,12 +100,13 @@ extension FlipMessage {
             let flip: Flip = flipsEntries[i].flip
             var dic = Dictionary<String, String>()
 
+            println(flip.word)
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
-            dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
-            dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
+            dic.updateValue(PubNubService.sharedInstance.encrypt(flip.word), forKey: FlipJsonParams.WORD)
+            dic.updateValue(PubNubService.sharedInstance.encrypt(flip.backgroundURL), forKey: FlipJsonParams.BACKGROUND_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
-            dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
-
+            dic.updateValue(PubNubService.sharedInstance.encrypt(flip.thumbnailURL), forKey: FlipJsonParams.THUMBNAIL_URL)
+            
             flipsDictionary.append(dic)
         }
         
