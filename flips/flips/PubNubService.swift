@@ -262,31 +262,6 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
     
-    // MARK: - Manual encryption methods
-    
-    func encrypt(text: String?) -> String! {
-        if (text == nil || text == "") {
-            return ""
-        }
-        var keyData : NSData = PUBNUB_CIPHER_KEY.dataUsingEnconding(NSUTF8Encoding)
-        //PubNub.configuration().cipherKey = self.PUBNUB_CIPHER_KEY;
-        //let encrypted = PubNub.AESEncrypt(text) as String
-        //PubNub.configuration().cipherKey = nil
-        //return encrypted
-        return text
-    }
-
-    func decrypt(text: String?) -> String! {
-        if (text == nil || text == "") {
-            return ""
-        }
-        //PubNub.configuration().cipherKey = self.PUBNUB_CIPHER_KEY;
-        //let decrypted = PubNub.AESDecrypt(text) as String
-        //PubNub.configuration().cipherKey = nil
-        //return decrypted
-        return text
-    }
-	
 	// MARK: - Notifications Handler
 	
     public func pubnubClient(client: PubNub!, didReceivePushNotificationEnabledChannels channels: [AnyObject]!) {

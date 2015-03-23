@@ -52,9 +52,9 @@ class FlipDataSource : BaseDataSource {
         }
 
         flip.flipID = json[FlipJsonParams.ID].stringValue
-        flip.word = PubNubService.sharedInstance.decrypt(json[FlipJsonParams.WORD].stringValue)
-        flip.backgroundURL = PubNubService.sharedInstance.decrypt(json[FlipJsonParams.BACKGROUND_URL].stringValue)
-        flip.thumbnailURL = PubNubService.sharedInstance.decrypt(json[FlipJsonParams.THUMBNAIL_URL].stringValue)
+        flip.word = json[FlipJsonParams.WORD].stringValue
+        flip.backgroundURL = json[FlipJsonParams.BACKGROUND_URL].stringValue
+        flip.thumbnailURL = json[FlipJsonParams.THUMBNAIL_URL].stringValue
         flip.isPrivate = json[FlipJsonParams.IS_PRIVATE].boolValue
         flip.removed = json[FlipJsonParams.IS_DELETED].boolValue
         let updatedAtDate = json[FlipJsonParams.UPDATED_AT].stringValue

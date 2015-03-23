@@ -88,7 +88,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {
-        println("###########: \(identifier)")
         if (identifier == "declineAction") {
             println("User did not allow to receive push notifications")
         } else if (identifier == "answerAction") {
