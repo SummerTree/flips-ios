@@ -286,8 +286,8 @@ static CGFloat const ROW_HEIGHT = 56.0;
                 [cell.photoView setImageWithURL:url success:nil];
             }
         }
-        
-        [cell hideNumberLabel];
+
+        cell.numberLabel.text = [NSString stringWithFormat:@"(%@)", [user fullName]];
     } else {
         cell.photoView.borderColor = [UIColor lightGreyD8];
         
