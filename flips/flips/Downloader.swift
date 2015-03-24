@@ -29,11 +29,8 @@ public class Downloader : NSObject {
     }
     
     // MARK: - Download Public Methods
-    func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void)) {
-        self.downloadTask(url, localURL: localURL, completion: completion, progress: nil)
-    }
 
-    func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)?) {
+    func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil) {
         let request = NSMutableURLRequest(URL: url)
         request.timeoutInterval = TIME_OUT_INTERVAL
 

@@ -246,16 +246,8 @@ class PlayerView: UIView {
 
 
     // MARK: - View update
-    
-    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool) {
-        self.updateDownloadProgress(progress, of: of, animated: animated, completion: nil)
-    }
 
-    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool, completion:(() -> Void)?) {
-        self.updateDownloadProgress(progress, of: of, animated: animated, duration: 0.3, completion: completion)
-    }
-
-    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool, duration: NSTimeInterval, completion:(() -> Void)?) {
+    private func updateDownloadProgress(progress: Float, of: Float, animated: Bool, duration: NSTimeInterval = 0.3, completion:(() -> Void)? = nil) {
         let progressRatio = progress / of
 
         // Avoid going back in the progress bar
@@ -395,7 +387,6 @@ class PlayerView: UIView {
         }
 
         self.words = formattedWords
-//        self.updateDownloadProgress(0.0, of: Float(flips.count), animated: false);
         self.progressBarView.progress = 0
 
         let firstFlip = flips.first

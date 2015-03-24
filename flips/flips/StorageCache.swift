@@ -72,21 +72,6 @@ public class StorageCache {
     If the asset is not in the cache by the time this function is called, it's downloaded and
     inserted in the cache before its local path is passed to the success function. If some error occurs
     (e.g. not in cache and no internet connection), the failure function is called with some
-    error description.
-
-    :param: remoteURL The URL from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: success   A function that is called when the asset is successfully available.
-    :param: failure   A function that is called when the asset could not be retrieved.
-    */
-    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
-        return self.get(remoteURL, success: success, failure: failure, progress: nil)
-    }
-
-    /**
-    Asynchronously retrieves an asset. Whenever it's available, the success function is called.
-    If the asset is not in the cache by the time this function is called, it's downloaded and
-    inserted in the cache before its local path is passed to the success function. If some error occurs
-    (e.g. not in cache and no internet connection), the failure function is called with some
     error description. While the asset is being downloaded the progress callback will be called to indicate
     the progress of the operation.
     
@@ -95,7 +80,7 @@ public class StorageCache {
     :param: failure   A function that is called when the asset could not be retrieved.
     :param: progress  A function that is called while the asset is being retrieved to indicate progress.
     */
-    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback?) -> CacheGetResponse {
+    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback? = nil) -> CacheGetResponse {
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
             dispatch_async(self.cacheQueue) {
