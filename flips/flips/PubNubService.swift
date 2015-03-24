@@ -31,7 +31,7 @@ public class PubNubService: FlipsService, PNDelegate {
     private let PRODUCTION_SUBSCRIBE_KEY = "sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe"
     private let PRODUCTION_SECRET_KEY = "sec-c-MzFhZjgyOWQtNDRiOS00NTBiLTkwZjAtOGUyM2U5MDNhMTdh"
     
-    private let MESSAGE_CONTENT = "content"
+    private let MESSAGE_DATA = "data"
     
     private var cryptoHelper: PNCryptoHelper
     
@@ -227,7 +227,7 @@ public class PubNubService: FlipsService, PNDelegate {
                 
                 for pnMessage in messages! {
                     let messageJSON: JSON = JSON(pnMessage.message)
-                    let decryptedContentString = self.decrypt(messageJSON[self.MESSAGE_CONTENT].stringValue)
+                    let decryptedContentString = self.decrypt(messageJSON[self.MESSAGE_DATA].stringValue)
                     let decryptedMessage = JSON(self.jsonParseDictionary(decryptedContentString))
                     decryptedMessages.append(HistoryMessage(receivedDate: pnMessage.receiveDate.date, message: decryptedMessage))
                 }
@@ -297,7 +297,7 @@ public class PubNubService: FlipsService, PNDelegate {
         println("pnMessage.channel.name: \(pnMessage.channel.name)")
 
         let messageJSON: JSON = JSON(pnMessage.message)
-        let decryptedContentString = self.decrypt(messageJSON[MESSAGE_CONTENT].stringValue)
+        let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
         let contentJson : JSON = JSON(self.jsonParseDictionary(decryptedContentString))
         self.delegate?.pubnubClient(client, didReceiveMessage:contentJson, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
     }
@@ -321,7 +321,11 @@ public class PubNubService: FlipsService, PNDelegate {
         let channel = PNChannel.channelWithName(pubnubID) as PNChannel
 
         var encryptedMessage = message
-        encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_CONTENT]!).rawString()), forKey: MESSAGE_CONTENT)
+        encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_DATA]!).rawString()), forKey: MESSAGE_DATA)
+        
+        println("##################################")
+        println(encryptedMessage)
+        println("##################################")
         
         PubNub.sendMessage(encryptedMessage, toChannel: channel, storeInHistory: true) { (state, data) -> Void in
             println("message sent: \(data)")

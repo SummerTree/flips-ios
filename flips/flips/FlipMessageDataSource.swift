@@ -15,6 +15,7 @@ struct FlipMessageJsonParams {
     static let FROM_USER_ID = "fromUserId"
     static let SENT_AT = "sentAt"
     static let CONTENT = "content"
+    static let DATA = "data"
 }
 
 private struct FlipMessageAttributes {

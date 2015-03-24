@@ -11,6 +11,7 @@
 //
 
 public let POP_TO_ROOT_NOTIFICATION_NAME = "POP_TO_ROOT_NOTIFICATION_NAME"
+public let POP_TO_CHAT_NOTIFICATION_NAME = "POP_TO_CHAT_NOTIFICATION_NAME"
 
 public class NavigationHandler : NSObject {
     
@@ -23,6 +24,7 @@ public class NavigationHandler : NSObject {
     
     func registerForNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPopToRootViewControllerNotificationReceived:", name: POP_TO_ROOT_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPopToChatViewControllerNotificationReceived:", name: POP_TO_CHAT_NOTIFICATION_NAME, object: nil)
     }
     
     func onPopToRootViewControllerNotificationReceived(notification: NSNotification) {
@@ -52,4 +54,27 @@ public class NavigationHandler : NSObject {
             }
         }
     }
+    
+    func onPopToChatViewControllerNotificationReceived(notification: NSNotification) {
+        if (AuthenticationHelper.sharedInstance.isAuthenticated()) {
+            if let keyWindow = UIApplication.sharedApplication().keyWindow {
+                if let rootViewController = keyWindow.rootViewController {
+                    if rootViewController is UINavigationController {
+                        var rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
+                        if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                            rootNavigationViewController.popToRootViewControllerAnimated(false)
+                            rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(true, completion: nil)
+                        } else {
+                            rootNavigationViewController.popToRootViewControllerAnimated(true)
+                            if ((rootNavigationViewController.viewControllers.count == 1) && (rootNavigationViewController.viewControllers[0] is SplashScreenViewController)) {
+                                let splashViewController = rootNavigationViewController.viewControllers[0] as SplashScreenViewController
+                                splashViewController.openLoginViewController()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }

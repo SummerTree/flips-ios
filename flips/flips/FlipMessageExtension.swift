@@ -74,12 +74,12 @@ extension FlipMessage {
     // MARK: - Message Handler
     
     func toJSON() -> Dictionary<String, AnyObject> {
-        var contentDictionary = Dictionary<String, AnyObject>()
+        var dataDictionary = Dictionary<String, AnyObject>()
         
-        contentDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
-        contentDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
-        contentDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
-        contentDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
+        dataDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
+        dataDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
+        dataDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
+        dataDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         var notificationMessage = ""
         if let loggedUser = User.loggedUser() {
@@ -102,7 +102,7 @@ extension FlipMessage {
             flipsDictionary.append(dic)
         }
         
-        contentDictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        dataDictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
@@ -115,7 +115,7 @@ extension FlipMessage {
         var messageDictionary = Dictionary<String, AnyObject>()
         
         messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
-        messageDictionary.updateValue(contentDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        messageDictionary.updateValue(dataDictionary, forKey: FlipMessageJsonParams.DATA)
         
         return messageDictionary
     }

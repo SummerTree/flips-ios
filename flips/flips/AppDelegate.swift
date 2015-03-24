@@ -101,7 +101,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         println("did receive remote notification with fetch completion handler \(userInfo)")
-        
+//        if let roomId = (userInfo["room_id"] as? String) {
+//            let roomDataSource = RoomDataSource()
+//            let room = roomDataSource.retrieveRoomWithId(roomId)
+//            let chatViewController = ChatViewController(room: room)
+//            let navigationViewControler = UINavigationController(rootViewController: chatViewController)
+//            self.window?.rootViewController = navigationViewControler
+//            self.window?.makeKeyAndVisible()
+//        }
+
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
