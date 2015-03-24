@@ -472,8 +472,7 @@ public class UserService: FlipsService {
                 })
             }, failure: { (error) -> Void in
                 NSLog("IMPORT CONTACTS - READ FROM DEVICE FAILED")
-
-                failure(FlipError(error: "Error retrieving contacts.", details:nil))
+                failure(FlipError(error: LocalizedString.CONTACTS_ACCESS_TITLE, details:LocalizedString.CONTACTS_ACCESS_MESSAGE))
             })
         }
     }
