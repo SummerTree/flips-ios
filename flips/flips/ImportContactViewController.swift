@@ -74,7 +74,10 @@ class ImportContactViewController: UIViewController {
                 println("Error importing local contacts")
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    let alertView = UIAlertView(title: LocalizedString.CONTACTS_ACCESS_TITLE, message: LocalizedString.CONTACTS_ACCESS_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    let alertView = UIAlertView(title: error!.error,
+                        message: error!.details,
+                        delegate: nil,
+                        cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 }
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
