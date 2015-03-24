@@ -36,7 +36,7 @@
 	<key>FacebookDisplayName</key>
 	<string>Flips</string>
 	<key>FlipsServiceHostBaseURL</key>
-	<string>http://10.0.0.181:1337</string>
+	<string>http://192.168.50.202:1337</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

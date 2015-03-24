@@ -188,10 +188,10 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         }
     }
 
-    func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<PNMessage>, fromChannelName: String) {
-        for pnMessage in messages {
-            self.processFlipMessageJson(JSON(pnMessage.message),
-                atDate: pnMessage.receiveDate.date,
+    func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<HistoryMessage>, fromChannelName: String) {
+        for hMessage in messages {
+            self.processFlipMessageJson(hMessage.message,
+                atDate: hMessage.receivedDate,
                 fromChannelName: fromChannelName)
         }
     }

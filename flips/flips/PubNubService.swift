@@ -13,6 +13,12 @@
 public let PUBNUB_DID_CONNECT_NOTIFICATION: String = "pubnub_did_connect_notification"
 public let PUBNUB_DID_FETCH_MESSAGE_HISTORY: String = "pubnub_did_fetch_message_history"
 
+public struct HistoryMessage {
+    
+    var receivedDate : NSDate
+    var message : JSON
+}
+
 public class PubNubService: FlipsService, PNDelegate {
     
     private let PUBNUB_ORIGIN = "pubsub.pubnub.com"
@@ -25,12 +31,32 @@ public class PubNubService: FlipsService, PNDelegate {
     private let PRODUCTION_SUBSCRIBE_KEY = "sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe"
     private let PRODUCTION_SECRET_KEY = "sec-c-MzFhZjgyOWQtNDRiOS00NTBiLTkwZjAtOGUyM2U5MDNhMTdh"
     
+    private let MESSAGE_CONTENT = "content"
+    
+    private var cryptoHelper: PNCryptoHelper
+    
     var delegate: PubNubServiceDelegate?
     
     // MARK: - Initialization Methods
     
     override init() {
+        let cipherConfiguration = PNConfiguration(forOrigin: PUBNUB_ORIGIN,
+            publishKey: PUBNUB_PUBLISH_KEY,
+            subscribeKey: PUBNUB_SUBSCRIBE_KEY,
+            secretKey: PUBNUB_SECRET_KEY,
+            cipherKey: PUBNUB_CIPHER_KEY)
+        
+        cryptoHelper = PNCryptoHelper()
+        var helperInitializationError : PNError?
+        cryptoHelper.updateWithConfiguration(cipherConfiguration, withError: &helperInitializationError)
+
+        
+        if (helperInitializationError != nil) {
+            println("Error initializing CryptoHelper")
+        }
+
         super.init()
+        
         var pubnubConfiguration = PNConfiguration(forOrigin: PUBNUB_ORIGIN,
             publishKey: PUBNUB_PUBLISH_KEY,
             subscribeKey: PUBNUB_SUBSCRIBE_KEY,
@@ -42,6 +68,7 @@ public class PubNubService: FlipsService, PNDelegate {
         
         PubNub.setConfiguration(pubnubConfiguration)
         PubNub.setDelegate(self)
+        
     }
     
     public class var sharedInstance : PubNubService {
@@ -62,6 +89,7 @@ public class PubNubService: FlipsService, PNDelegate {
             },
             errorBlock: { (error: PNError!) -> Void in
                 println("Could not connect to PubNub");
+                println(error.description);
             })
         }
     }
@@ -142,6 +170,35 @@ public class PubNubService: FlipsService, PNDelegate {
             }
         }
     }
+    
+    // MARK: - Encryption/decryption
+    
+    func encrypt(text: String?) -> String {
+        if (text == nil || text == "") {
+            return ""
+        }
+        var encryptionError: PNError?
+        var encryptedInput = self.cryptoHelper.encryptedStringFromString(text!, error: &encryptionError)
+        if (encryptionError != nil) {
+            println("Error trying to encrypt text.")
+            return ""
+        }
+        return encryptedInput
+    }
+    
+    func decrypt(text: String?) -> String {
+        if (text == nil || text == "") {
+            return ""
+        }
+        var decryptionError: PNError?
+        var decryptedInput = self.cryptoHelper.decryptedStringFromString(text!, error: &decryptionError)
+        if (decryptionError != nil) {
+            println("Error trying to decrypt text.")
+            return ""
+        }
+        return decryptedInput
+    }
+
 
     // MARK: - Message history
 
@@ -162,11 +219,22 @@ public class PubNubService: FlipsService, PNDelegate {
 
         let completionBlock : PNClientHistoryLoadHandlingBlock = { (messages, channel, startDate, endDate, error) -> Void in
             let messages = messages as? Array<PNMessage>
-
+            
             if (messages != nil && messages!.count > 0) {
                 println("\(messages!.count) messages retrieved from channel \(channel.name)")
+                
+                var decryptedMessages : Array<HistoryMessage> = []
+                
+                for pnMessage in messages! {
+                    let messageJSON: JSON = JSON(pnMessage.message)
+                    let decryptedContentString = self.decrypt(messageJSON[self.MESSAGE_CONTENT].stringValue)
+                    let decryptedMessage = JSON(self.jsonParseDictionary(decryptedContentString))
+                    decryptedMessages.append(HistoryMessage(receivedDate: pnMessage.receiveDate.date, message: decryptedMessage))
+                }
+                
+
                 self.delegate?.pubnubClient(PubNub.sharedInstance(),
-                    didReceiveMessageHistory: messages!,
+                    didReceiveMessageHistory: decryptedMessages,
                     fromChannelName: channel.name)
             } else if (error != nil) {
                 println("Could not retrieve message history for channel \(channel.name). \(error.localizedDescription)")
@@ -229,20 +297,33 @@ public class PubNubService: FlipsService, PNDelegate {
         println("pnMessage.channel.name: \(pnMessage.channel.name)")
 
         let messageJSON: JSON = JSON(pnMessage.message)
-        self.delegate?.pubnubClient(client, didReceiveMessage:messageJSON, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
+        let decryptedContentString = self.decrypt(messageJSON[MESSAGE_CONTENT].stringValue)
+        let contentJson : JSON = JSON(self.jsonParseDictionary(decryptedContentString))
+        self.delegate?.pubnubClient(client, didReceiveMessage:contentJson, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
     }
     
     public func pubnubClient(client: PubNub!, didConnectToOrigin origin: String!) {
         NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
     }
-
+    
+    private func jsonParseDictionary(jsonString: String) -> [String: AnyObject] {
+        if let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding) {
+            if let dictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: nil)  as? [String: AnyObject] {
+                return dictionary
+            }
+        }
+        return [String: AnyObject]()
+    }
 
     // MARK: - Send Messages Methods
     
     func sendMessage(message: Dictionary<String, AnyObject>, pubnubID: String, completion: CompletionBlock) {
         let channel = PNChannel.channelWithName(pubnubID) as PNChannel
 
-        PubNub.sendMessage(message, toChannel: channel, storeInHistory: true) { (state, data) -> Void in
+        var encryptedMessage = message
+        encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_CONTENT]!).rawString()), forKey: MESSAGE_CONTENT)
+        
+        PubNub.sendMessage(encryptedMessage, toChannel: channel, storeInHistory: true) { (state, data) -> Void in
             println("message sent: \(data)")
             switch (state) {
             case PNMessageState.Sending:
@@ -272,6 +353,6 @@ public class PubNubService: FlipsService, PNDelegate {
 protocol PubNubServiceDelegate {
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date:NSDate, fromChannelName: String)
-    func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<PNMessage>, fromChannelName: String)
+    func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<HistoryMessage>, fromChannelName: String)
 
 }

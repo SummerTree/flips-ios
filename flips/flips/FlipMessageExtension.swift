@@ -73,26 +73,18 @@ extension FlipMessage {
     // MARK: - Message Handler
     
     func toJSON() -> Dictionary<String, AnyObject> {
-        var dictionary = Dictionary<String, AnyObject>()
+        var contentDictionary = Dictionary<String, AnyObject>()
         
-        dictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
-        dictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
-        dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
-        dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
+        contentDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
+        contentDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
+        contentDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
+        contentDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         var notificationMessage = ""
         if let loggedUser = User.loggedUser() {
             let loggedUserFirstName = loggedUser.firstName
             notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
         }
-        
-        var notificationDictionary = Dictionary<String, AnyObject>()
-        notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
-        
-        var notificationApsDictionary = Dictionary<String, AnyObject>()
-        notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
-        
-        dictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
         
         var flipsDictionary = Array<Dictionary<String, String>>()
         let flipsEntries = self.flipsEntries
@@ -109,7 +101,19 @@ extension FlipMessage {
             flipsDictionary.append(dic)
         }
         
-        dictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
-        return dictionary
+        contentDictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        
+        var notificationDictionary = Dictionary<String, AnyObject>()
+        notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
+        
+        var notificationApsDictionary = Dictionary<String, AnyObject>()
+        notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
+        
+        var messageDictionary = Dictionary<String, AnyObject>()
+        
+        messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
+        messageDictionary.updateValue(contentDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        
+        return messageDictionary
     }
 }
