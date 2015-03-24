@@ -27,7 +27,8 @@ class PlayerView: UIView {
     
     private var flips: Array<Flip>!
     private var words: Array<String>?
-    private var playerItems: Array<FlipPlayerItem>!
+    private var playerItems: Array<FlipPlayerItem> = [FlipPlayerItem]()
+    private var flipsDownloadProgress: Array<Float> = [Float]()
     private var thumbnail: UIImage?
     private var timer: NSTimer?
 
@@ -154,7 +155,7 @@ class PlayerView: UIView {
             isPlayerReady = true
 
         } else {
-            isPlayerReady = self.progressBarView.progress == 1
+            isPlayerReady = self.playerItems.count == self.flips.count
         }
 
         if (isPlayerReady) {
@@ -255,18 +256,19 @@ class PlayerView: UIView {
     }
 
     private func updateDownloadProgress(progress: Float, of: Float, animated: Bool, duration: NSTimeInterval, completion:(() -> Void)?) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            var progressRatio = progress / of
+        let progressRatio = progress / of
 
-            if (animated) {
-                self.progressBarView.setProgress(progressRatio,
-                    animated: animated,
-                    duration: duration,
-                    completion: completion
-                )
-            } else {
-                self.progressBarView.setProgress(progressRatio, animated: animated, completion: completion);
-            }
+        // Avoid going back in the progress bar
+        if (progressRatio < self.progressBarView.progress) {
+            return
+        }
+
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.progressBarView.setProgress(progressRatio,
+                animated: animated,
+                duration: duration,
+                completion: completion
+            )
         })
     }
 
@@ -274,7 +276,7 @@ class PlayerView: UIView {
         self.loadingFlips = false
         self.hasDownloadError = true
         self.playerItems.removeAll(keepCapacity: true)
-        self.progressBarView.progress = 0;
+        self.progressBarView.progress = 0
 
         self.animateErrorStateFadeIn(nil)
     }
@@ -286,16 +288,13 @@ class PlayerView: UIView {
         self.loadingFlips = true
         self.hasDownloadError = false
 
-        self.playerItems = [FlipPlayerItem]()
-        
+        self.playerItems.removeAll(keepCapacity: true)
+
         var isWordsPreInitialized: Bool = true
         if (self.words == nil) {
             self.words = []
             isWordsPreInitialized = false
         }
-
-        var pendingFlips = self.flips.count
-        var numOfFlips = Float(self.flips.count)
 
         for (index, flip) in enumerate(self.flips) {
             if (!isWordsPreInitialized) {
@@ -309,15 +308,15 @@ class PlayerView: UIView {
                 playerItem.order = index
                 self.playerItems.append(playerItem)
 
-                pendingFlips--
+                self.flipsDownloadProgress[index] = 1.0
 
-                var animated = numOfFlips > 1
+                var animated = self.flips.count > 1
 
-                self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
-                    of: numOfFlips,
+                self.updateDownloadProgress(Float(self.playerItems.count),
+                    of: Float(self.flips.count),
                     animated: animated,
                     completion: { () -> Void in
-                        if (pendingFlips <= 0) {
+                        if (self.playerItems.count == self.flips.count) {
                             self.loadingFlips = false
                             self.sortPlayerItems()
                             completion()
@@ -326,6 +325,7 @@ class PlayerView: UIView {
                 )
 
             } else {
+
                 let response = FlipsCache.sharedInstance.videoForFlip(flip,
                     success: { (localPath: String!) in
                         if (self.hasDownloadError) {
@@ -342,37 +342,39 @@ class PlayerView: UIView {
                             playerItem.order = index
                             self.playerItems.append(playerItem)
 
-                            pendingFlips--
+                            self.flipsDownloadProgress[index] = 1.0
 
-                            self.updateDownloadProgress(numOfFlips - Float(pendingFlips),
-                                of: numOfFlips,
-                                animated: true,
-                                completion: { () -> Void in
-                                    if (pendingFlips <= 0) {
-                                        self.loadingFlips = false
-                                        self.sortPlayerItems()
-                                        completion()
-                                    }
-                                }
-                            )
+                            if (self.playerItems.count == self.flips.count) {
+                                self.loadingFlips = false
+                                self.sortPlayerItems()
+                                completion()
+                            }
                         })
                     },
                     failure: { (error: FlipError) in
                         println("Failed to get resource from cache, error: \(error)")
                         self.showErrorState()
+                    },
+                    progress: { (p: Float) -> Void in
+
+                        self.flipsDownloadProgress[index] = p
+
+                        var progressPosition: Float = 0.0
+                        for ratio in self.flipsDownloadProgress {
+                            progressPosition += ratio
+                        }
+
+                            self.updateDownloadProgress(progressPosition,
+                                of: Float(self.flips.count),
+                                animated: true,
+                                completion: nil
+                            )
+
                     }
                 )
 
                 if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                    // Set the progress to animate slowly to 50% of the flip currently downloading
-                    self.animateProgressBarFadeIn { () -> Void in
-                        let halfwayToDownloadCurrentClip = (numOfFlips - Float(pendingFlips) + 1.0) * 0.5
-                        self.updateDownloadProgress(halfwayToDownloadCurrentClip,
-                            of: numOfFlips,
-                            animated: true,
-                            duration: 1.0,
-                            completion: nil);
-                    }
+                    self.animateProgressBarFadeIn(nil)
                 }
             }
         }
@@ -387,8 +389,14 @@ class PlayerView: UIView {
     func setupPlayerWithFlips(flips: Array<Flip>, andFormattedWords formattedWords: Array<String>? = nil) {
 
         self.flips = flips
+        self.flipsDownloadProgress = [Float]()
+        for (var i=0; i<flips.count; i++) {
+            self.flipsDownloadProgress.append(0.0);
+        }
+
         self.words = formattedWords
-        self.updateDownloadProgress(0.0, of: Float(flips.count), animated: false);
+//        self.updateDownloadProgress(0.0, of: Float(flips.count), animated: false);
+        self.progressBarView.progress = 0
 
         let firstFlip = flips.first
         if (firstFlip != nil) {
