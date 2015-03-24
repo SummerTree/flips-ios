@@ -66,9 +66,15 @@ class GroupPartcipantsTableViewCell: UITableViewCell {
     func configureCellWithUser(user: User) {
         var fullName: String = ""
         if (user.isTemporary.boolValue) {
-            if let contact: Contact = user.contacts.allObjects[0] as? Contact {
-                fullName = contact.contactTitle!
-                self.avatarView.initials = contact.contactInitials
+            if (user.contacts.count > 0) {
+                if let contact: Contact = user.contacts.allObjects[0] as? Contact {
+                    fullName = contact.contactTitle!
+                    self.avatarView.initials = contact.contactInitials
+                }
+            } else {
+                // If you invited a contact in another device, you will not have him on this one.
+                fullName = user.phoneNumber
+                self.avatarView.initials = "+"
             }
         } else {
             fullName = user.fullName()
