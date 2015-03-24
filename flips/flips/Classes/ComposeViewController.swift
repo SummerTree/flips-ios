@@ -109,7 +109,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             stockFlipsDictionary[word] = Array<String>()
         }
     }
-    
+
     private func checkForPermissionToCaptureMedia() -> Bool {
         switch AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) {
         case .NotDetermined:
@@ -399,7 +399,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            self.showContentForHighlightedWord(shouldReloadWords: self.shouldShowPlusButtonInWords())
+            self.showContentForHighlightedWord(shouldReloadWords: false)
         }
     }
     
