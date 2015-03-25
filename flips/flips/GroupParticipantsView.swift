@@ -15,6 +15,8 @@ class GroupParticipantsView: UIView, UITableViewDelegate, UITableViewDataSource 
     private let CELL_IDENTIFIER: String = "participantCell"
     private let CELL_HEIGHT: CGFloat = 50
     
+    private let VIEW_ALPHA: CGFloat = 0.989 // Since the original blur wasn't applied, we need a very small transparency.
+    
     private var participantsTableView: UITableView!
     private var participants: Array<User>!
     
@@ -26,7 +28,7 @@ class GroupParticipantsView: UIView, UITableViewDelegate, UITableViewDataSource 
         self.participants = participants
         
         self.tintColor = UIColor.whiteColor()
-        self.alpha = 0.989
+        self.alpha = VIEW_ALPHA
         
         self.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
@@ -66,16 +68,13 @@ class GroupParticipantsView: UIView, UITableViewDelegate, UITableViewDataSource 
     // MARK: - TableViewDataSource Methods
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: GroupPartcipantsTableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as GroupPartcipantsTableViewCell?
-        if (cell == nil) {
-            cell = GroupPartcipantsTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: CELL_IDENTIFIER)
-        }
+        var cell: GroupPartcipantsTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as GroupPartcipantsTableViewCell
         
         let user = self.participants[indexPath.row]
-        cell!.configureCellWithUser(user)
-        cell!.removeSeparatorInsets()
+        cell.configureCellWithUser(user)
+        cell.removeSeparatorInsets()
         
-        return cell!
+        return cell
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
