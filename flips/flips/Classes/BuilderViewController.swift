@@ -53,7 +53,17 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     override func shouldShowPlusButtonInWords() -> Bool {
         return true
     }
-    
+
+    override func onFlipAssociated() {
+        let flipWord = self.flipWords[self.highlightedWordIndex]
+
+        let builderWordDataSource = BuilderWordDataSource()
+        builderWordDataSource.removeBuilderWordWithWord(flipWord.text)
+
+        self.loadBuilderWords()
+        super.onFlipAssociated()
+    }
+
     
     // MARK: - Load BuilderWords Methods
     
@@ -70,8 +80,16 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
         self.initFlipWords(words)
     }
-    
-    
+
+
+    // MARK: - ComposeBottomViewContainerDataSource
+
+    override func composeBottomViewContainerStockFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
+        // We only allow My Flips in this neighborhood
+        return Array<String>()
+    }
+
+
     // MARK: - Builder Introduction Methods
     
     func showIntroduction() {
@@ -109,14 +127,10 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     // MARK: - FlipMessageWordListView Delegate
     
     override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
-        var addWordWords = Array<String>()
-        for flipWord in self.flipWords {
-            println(" flipWord: \(flipWord.text) - \(flipWord.state)")
-            if (flipWord.state == FlipState.NotAssociatedAndNoResourcesAvailable) {
-                addWordWords.append(flipWord.text)
-            }
+        var addWordWords: Array<String> = self.flipWords.map {
+            return $0.text
         }
-        
+
         let builderAddWordTableViewController = BuilderAddWordTableViewController(words: addWordWords)
         builderAddWordTableViewController.delegate = self
         self.navigationController?.pushViewController(builderAddWordTableViewController, animated: true)
