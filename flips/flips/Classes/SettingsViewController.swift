@@ -43,6 +43,12 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         self.settingsView.viewWillAppear()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        self.settingsView.viewDidAppear()
+    }
+
+    
     
     // MARK: - Settings View Delegate
     

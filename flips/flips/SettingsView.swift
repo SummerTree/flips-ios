@@ -58,6 +58,10 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         })
     }
     
+    func viewDidAppear() {
+        self.updateUserProfileInfo()
+    }
+    
     func viewDidLoad() {
         self.makeConstraints()
     }
