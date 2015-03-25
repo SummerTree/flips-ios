@@ -47,7 +47,7 @@ extension UIButton {
     }
     
     func setAvatarImage(image: UIImage, forStates states: [UIControlState]) {
-        var resizedImage = image.cropSquareImage(self.frame.size.width)
+        var resizedImage = image.cropSquareImage(UIScreen.mainScreen().scale*self.frame.size.width)
         for state in states {
             self.setImage(resizedImage, forState: state)
         }
