@@ -37,12 +37,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
         CoreDataHandler.sharedInstance.setupDatabase()
-
-        let splashScreenViewController = SplashScreenViewController()
-        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
         
-        self.window?.rootViewController = navigationViewControler
-        self.window?.makeKeyAndVisible()
+    
+        if (launchOptions != nil) {
+            if let pushNotificationPayload = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
+                self.application(application, didReceiveRemoteNotification: pushNotificationPayload)
+            } else {
+                gotoSplashScreen()
+            }
+        } else {
+            gotoSplashScreen()
+        }
         
         NavigationHandler.sharedInstance.registerForNotifications()
         
@@ -101,18 +106,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         println("did receive remote notification with fetch completion handler \(userInfo)")
-//        if let roomId = (userInfo["room_id"] as? String) {
-//            let roomDataSource = RoomDataSource()
-//            let room = roomDataSource.retrieveRoomWithId(roomId)
-//            let chatViewController = ChatViewController(room: room)
-//            let navigationViewControler = UINavigationController(rootViewController: chatViewController)
-//            self.window?.rootViewController = navigationViewControler
-//            self.window?.makeKeyAndVisible()
-//        }
+        if let loggedUser = User.loggedUser() {
+            if let roomId = (userInfo["room_id"] as? String) {
+                let roomDataSource = RoomDataSource()
+                let room = roomDataSource.retrieveRoomWithId(roomId)
+                
+//                var inboxViewController = InboxViewController()
+//                inboxViewController.userDataSource = userDataSource
+//                
+//                let navigationViewControler = UINavigationController(rootViewController: inboxViewController)
+//                self.window?.rootViewController = navigationViewControler
+//                self.window?.makeKeyAndVisible()
+                
+                let chatViewController = ChatViewController(room: room)
+                let navigationViewControler = UINavigationController(rootViewController: chatViewController)
+                self.window?.rootViewController = navigationViewControler
+                self.window?.makeKeyAndVisible()
 
+                
+            }
+
+        } else {
+            gotoSplashScreen()
+        }
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
     }
+    
+    // MARK: - private functions
+    
+    func gotoSplashScreen() {
+        let splashScreenViewController = SplashScreenViewController()
+        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
+        self.window?.rootViewController = navigationViewControler
+        self.window?.makeKeyAndVisible()
+    }
+    
 }
