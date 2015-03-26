@@ -10,6 +10,11 @@
 // the license agreement.
 //
 
+struct CacheSize {
+    static let KILOBYTE: UInt64 = 1024
+    static let MEGABYTE: UInt64 = 1024*KILOBYTE
+}
+
 public class StorageCache {
 
     public typealias CacheSuccessCallback = (String!) -> Void
