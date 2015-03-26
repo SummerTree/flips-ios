@@ -52,16 +52,11 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         if let selected = self.tableView.indexPathForSelectedRow() {
             self.tableView.deselectRowAtIndexPath(selected, animated: true)
         }
-        
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.updateUserProfileInfo()
-        })
+         self.updateUserProfileInfo()
     }
     
     func viewDidAppear() {
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            self.updateUserProfileInfo()
-        })
+        self.updateUserProfileInfo()
     }
     
     func viewDidLoad() {
