@@ -356,11 +356,11 @@ class PlayerView: UIView {
                             progressPosition += ratio
                         }
 
-                            self.updateDownloadProgress(progressPosition,
-                                of: Float(self.flips.count),
-                                animated: true,
-                                completion: nil
-                            )
+                        self.updateDownloadProgress(progressPosition,
+                            of: Float(self.flipsDownloadProgress.count),
+                            animated: true,
+                            completion: nil
+                        )
 
                     }
                 )
