@@ -590,10 +590,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     if (flipWord.associatedFlipId == nil) {
                         let flipsCache = FlipsCache.sharedInstance
                         flipsCache.videoForFlip(selectedFlip,
-                            success: { (localPath: String!) in
+                            success: { (url: String!, localPath: String!) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 self.onFlipSelected(flipId)
-                            }, failure: { (error: FlipError) in
+                            }, failure: { (url: String!, error: FlipError) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     println("Downloading stock flip(id: \(flipId)) error: \(error)")

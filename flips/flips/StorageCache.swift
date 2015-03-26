@@ -12,8 +12,8 @@
 
 public class StorageCache {
 
-    public typealias CacheSuccessCallback = (String!) -> Void
-    public typealias CacheFailureCallback = (FlipError) -> Void
+    public typealias CacheSuccessCallback = (String!, String!) -> Void
+    public typealias CacheFailureCallback = (String!, FlipError) -> Void
     public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?)
     
     public enum CacheGetResponse {
@@ -81,7 +81,7 @@ public class StorageCache {
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
             dispatch_async(self.cacheQueue) {
-                success?(localPath)
+                success?(remoteURL.absoluteString, localPath)
                 return
             }
             self.cacheJournal.updateEntry(localPath)
@@ -109,9 +109,9 @@ public class StorageCache {
                 
                 for callbacks in self.downloadInProgressURLs[localPath]! {
                     if (result) {
-                        callbacks.success?(localPath)
+                        callbacks.success?(remoteURL.absoluteString, localPath)
                     } else {
-                        callbacks.failure?(FlipError(error: "Error downloading media file", details: nil))
+                        callbacks.failure?(remoteURL.absoluteString, FlipError(error: "Error downloading media file", details: nil))
                     }
                 }
                 
@@ -156,7 +156,7 @@ public class StorageCache {
     :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: data      The actual asset that is going to be inserted into the cache.
     */
-    func put(remoteURL: NSURL, data: NSData) -> Void {
+    func put(remoteURL: NSURL, data: NSData) -> String {
         let localPath = self.createLocalPath(remoteURL)
         
         let fileManager = NSFileManager.defaultManager()
@@ -166,6 +166,7 @@ public class StorageCache {
             self.cacheJournal.insertNewEntry(localPath)
             self.scheduleCleanup()
         }
+        return localPath
     }
     
     private func createLocalPath(remoteURL: NSURL) -> String {
