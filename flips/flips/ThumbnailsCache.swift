@@ -45,9 +45,4 @@ public class ThumbnailsCache {
     func has(remoteURL: NSURL) -> Bool {
         return self.cache.has(remoteURL)
     }
-    
-    func clear() -> Void {
-        cache.clear()
-    }
-    
 }

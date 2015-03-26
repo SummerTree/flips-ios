@@ -33,8 +33,8 @@ public class CacheJournal {
     init(absolutePath: String) {
         self.path = absolutePath
         self.entries = [JournalEntry]()
-        self.fileManagerQueue = dispatch_queue_create("\(self.path)FileManagerQueue", nil)
-        self.entriesQueue = dispatch_queue_create("\(self.path)EntriesQueue", nil)
+        self.fileManagerQueue = dispatch_queue_create(self.path, nil)
+        self.entriesQueue = dispatch_queue_create("entriesQueue", nil)
     }
     
     func open() {
@@ -100,21 +100,6 @@ public class CacheJournal {
     func removeLRUEntries(count: Int) -> Void {
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.removeRange(0..<count)
-        })
-        self.persistJournal()
-    }
-    
-    func getEntries() -> [String] {
-        var paths: [String] = [String]()
-        dispatch_sync(self.entriesQueue, { () -> Void in
-            paths = self.entries.map { $0.key }
-        })
-        return paths
-    }
-    
-    func clear() -> Void {
-        dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.removeAll(keepCapacity: false)
         })
         self.persistJournal()
     }
