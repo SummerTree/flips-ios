@@ -45,7 +45,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     private var prototypeCell: ChatTableViewCell?
     
-    private var cellsHeightsCache: Dictionary<Int,CGFloat?>!
     private var indexPathToShow: NSIndexPath?
 
     private var lastPlayedRow: Int!
@@ -55,8 +54,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     init(showOnboarding: Bool) {
         super.init(frame: CGRect.zeroRect)
         self.backgroundColor = UIColor.whiteColor()
-        
-        self.cellsHeightsCache = Dictionary<Int,CGFloat?>()
         
         self.showOnboarding = showOnboarding
         self.addSubviews()
