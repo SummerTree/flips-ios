@@ -600,7 +600,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                                     let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                                     alertView.show()
                                 })
-                        })
+                            },
+                            progress: nil
+                        )
                     } else {
                         self.onFlipSelected(flipId)
                         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)

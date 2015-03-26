@@ -14,7 +14,8 @@ public class StorageCache {
 
     public typealias CacheSuccessCallback = (String!, String!) -> Void
     public typealias CacheFailureCallback = (String!, FlipError) -> Void
-    public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?)
+    public typealias CacheProgressCallback = (Float) -> Void
+    public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback?)
     
     public enum CacheGetResponse {
         case DATA_IS_READY
@@ -65,22 +66,25 @@ public class StorageCache {
             println("Error excluding cache dir from backup: \(error)")
         }
     }
-    
+
     /**
     Asynchronously retrieves an asset. Whenever it's available, the success function is called.
     If the asset is not in the cache by the time this function is called, it's downloaded and
     inserted in the cache before its local path is passed to the success function. If some error occurs
     (e.g. not in cache and no internet connection), the failure function is called with some
-    error description.
+    error description. While the asset is being downloaded the progress callback will be called to indicate
+    the progress of the operation.
     
     :param: remoteURL The URL from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: success   A function that is called when the asset is successfully available.
     :param: failure   A function that is called when the asset could not be retrieved.
+    :param: progress  A function that is called while the asset is being retrieved to indicate progress.
     */
-    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
+    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback? = nil) -> CacheGetResponse {
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
             dispatch_async(self.cacheQueue) {
+                progress?(1.0)
                 success?(remoteURL.absoluteString, localPath)
                 return
             }
@@ -89,12 +93,12 @@ public class StorageCache {
         }
         
         if (self.downloadInProgressURLs[localPath] != nil) {
-            self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure))
+            self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
             return CacheGetResponse.DOWNLOAD_WILL_START
         }
         
         self.downloadInProgressURLs[localPath] = [DownloadFinishedCallbacks]()
-        self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure))
+        self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
         
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,
@@ -117,6 +121,16 @@ public class StorageCache {
                 
                 println("Cleaning up callbacks for \(localPath).")
                 self.downloadInProgressURLs[localPath] = nil
+            },
+            progress: { (downloadProgress) -> Void in
+                if (self.downloadInProgressURLs[localPath] == nil) {
+                    println("Local path (\(localPath)) is being downloaded but we already cleaned up its callbacks.")
+                    return
+                }
+
+                for callbacks in self.downloadInProgressURLs[localPath]! {
+                    callbacks.progress?(downloadProgress)
+                }
             }
         )
         

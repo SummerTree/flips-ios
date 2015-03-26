@@ -131,24 +131,24 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 }
                 
                 self.authenticateWithFacebook() { (flipError) -> Void in
-                    self.hideActivityIndicator()
-                    if (flipError != nil) {
+                    let errorHandler: (FlipError?) -> Void = { (flipError) -> Void in
+                        self.hideActivityIndicator()
                         println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
                         var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
                         alertView.show()
+                    }
+                    
+                    if (flipError != nil) {
+                        errorHandler(flipError)
                     } else {
                         //no error message, assuming User Not Found
-                        self.showActivityIndicator()
                         UserService.sharedInstance.getFacebookUserInfo({ (userObject) -> Void in
                             self.hideActivityIndicator()
                             println("User not found, going to Sign Up View")
                             let signUpController = SignUpViewController(facebookInput: userObject)
                             self.navigationController?.pushViewController(signUpController, animated: true)
                         }, failure: { (flipError) -> Void in
-                            self.hideActivityIndicator()
-                            println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                            var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
-                            alertView.show()
+                            errorHandler(flipError)
                         })
                     }
                 }
