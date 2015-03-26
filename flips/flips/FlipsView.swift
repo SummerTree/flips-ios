@@ -151,7 +151,6 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ADD_FLIP_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
 
             if (self.addFlipButton.superview == nil) {
-                println("adding plus button")
                 cell.addSubview(addFlipButton)
             }
 
