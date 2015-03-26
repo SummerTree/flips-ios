@@ -18,6 +18,8 @@ class ContactPhotoView: RoundImageView {
     private let BORDER_WIDTH: CGFloat = 1.0
     private let INITIAL_FONT_SIZE: CGFloat = 18.0
     
+    private let DEFAULT_SIZE: CGFloat = 42 // same value used in the XIB
+    
     var initialLabel: UILabel!
     
     var initials: String! {
@@ -25,6 +27,11 @@ class ContactPhotoView: RoundImageView {
             initialLabel.text = initials
             initialLabel.hidden = (initials == nil || initials.isEmpty)
         }
+    }
+    
+    init() {
+        super.init(frame: CGRectMake(0, 0, DEFAULT_SIZE, DEFAULT_SIZE), borderWidth: 0, borderColor: UIColor.clearColor())
+        self.setup()
     }
     
     required init(coder aDecoder: NSCoder) {

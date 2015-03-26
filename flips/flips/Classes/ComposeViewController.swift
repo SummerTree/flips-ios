@@ -593,14 +593,17 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                             success: { (localPath: String!) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 self.onFlipSelected(flipId)
-                            }, failure: { (error: FlipError) in
+                            },
+                            failure: { (error: FlipError) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     println("Downloading stock flip(id: \(flipId)) error: \(error)")
                                     let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                                     alertView.show()
                                 })
-                        })
+                            },
+                            progress: nil
+                        )
                     } else {
                         self.onFlipSelected(flipId)
                         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)

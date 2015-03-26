@@ -14,7 +14,11 @@ import Foundation
 
 class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
     
+    private let groupTitle: String = NSLocalizedString("Group Chat")
+    
     private var chatView: ChatView!
+    private var groupParticipantsView: GroupParticipantsView?
+    
     private var chatTitle: String!
     
     private var roomID: String!
@@ -31,6 +35,11 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         super.init(nibName: nil, bundle: nil)
         self.chatTitle = room.roomName()
         self.roomID = room.roomID
+
+        if (room.participants.count > 2) {
+            self.chatTitle = groupTitle
+            self.groupParticipantsView = GroupParticipantsView(participants: room.participants.allObjects as Array<User> as [User])
+        }
         
         let roomMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
         for flipMessage in roomMessages {
@@ -54,6 +63,22 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.view = self.chatView
         
         self.setupWhiteNavBarWithBackButton(self.chatTitle)
+
+        if (self.groupParticipantsView != nil) {
+            var participantsButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: "groupParticipantsButtonTapped")
+            self.navigationItem.rightBarButtonItem = participantsButton
+
+            let participantsViewInitialY: CGFloat = -self.groupParticipantsView!.calculatedHeight()
+            
+            self.view.addSubview(self.groupParticipantsView!)
+            self.groupParticipantsView!.mas_makeConstraints( { (make: MASConstraintMaker!) -> Void in
+                make.top.equalTo()(self.view).with().offset()(participantsViewInitialY)
+                make.leading.equalTo()(self.view)
+                make.trailing.equalTo()(self.view)
+                make.height.equalTo()(self.groupParticipantsView!.calculatedHeight())
+            })
+            self.groupParticipantsView!.setupView()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -72,6 +97,17 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.groupParticipantsView?.mas_updateConstraints( { (update: MASConstraintMaker!) -> Void in
+            update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+            update.height.equalTo()(0)
+        })
+        self.groupParticipantsView?.updateConstraintsIfNeeded()
+        self.groupParticipantsView?.layoutIfNeeded()
     }
     
     override func viewDidLayoutSubviews() {
@@ -126,6 +162,26 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.navigationController?.pushViewController(composeViewController, animated: true)
     }
     
+    func groupParticipantsButtonTapped() {
+        self.view.layoutIfNeeded()
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            if (self.groupParticipantsView?.frame.height == 0) {
+                // show
+                self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
+                    update.height.equalTo()(self.groupParticipantsView?.calculatedHeight())
+                    return
+                })
+            } else {
+                // dismiss
+                self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
+                    update.height.equalTo()(0)
+                    return
+                })
+            }
+            self.view.updateConstraintsIfNeeded()
+            self.view.layoutIfNeeded()
+        })
+    }
 
     // MARK: - ChatViewDataSource
     
@@ -149,7 +205,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - Messages Notification Handler
     
     func notificationReceived(notification: NSNotification) {
-        println("notificationReceived")
         self.reloadFlipMessages()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.loadNewFlipMessages()
