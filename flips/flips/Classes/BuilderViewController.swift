@@ -61,7 +61,12 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         builderWordDataSource.removeBuilderWordWithWord(flipWord.text)
 
         self.loadBuilderWords()
-        super.onFlipAssociated()
+
+        if (self.words.count == 0) {
+            self.showEmptyState()
+        } else {
+            super.onFlipAssociated()
+        }
     }
 
     override func updateFlipWordsState() {
@@ -72,6 +77,15 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
                 flipWord.state = .NotAssociatedButResourcesAvailable
             }
         }
+    }
+
+
+    // MARK: - Private
+
+    private func showEmptyState() {
+        self.composeTopViewContainer.showEmptyState()
+        self.flipMessageWordListView.reloadWords()
+        self.composeBottomViewContainer.showAllFlipCreateMessage()
     }
 
 
@@ -151,15 +165,15 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     
     func builderAddWordTableViewControllerDelegate(tableViewController: BuilderAddWordTableViewController, finishingWithChanges hasChanges: Bool) {
         if (hasChanges) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                self.loadBuilderWords()
-                if (self.words.count > 0) {
-                    self.highlightedWordIndex = 0
-                    self.reloadMyFlips()
-                    self.updateFlipWordsState()
-                    self.showContentForHighlightedWord()
-                } 
-            })
+            self.loadBuilderWords()
+            if (self.words.count > 0) {
+                self.highlightedWordIndex = 0
+                self.reloadMyFlips()
+                self.updateFlipWordsState()
+                self.showContentForHighlightedWord()
+            } else {
+                self.showEmptyState()
+            }
         }
     }
 }

@@ -29,9 +29,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private let IPHONE_4S_TOP_CONTAINER_HEIGHT: CGFloat = 240.0
     private let FLIP_MESSAGE_WORDS_LIST_HEIGHT: CGFloat = 50.0
     
-    private var composeTopViewContainer: ComposeTopViewContainer!
-    private var flipMessageWordListView: FlipMessageWordListView!
-    private var composeBottomViewContainer: ComposeBottomViewContainer!
+    internal var composeTopViewContainer: ComposeTopViewContainer!
+    internal var flipMessageWordListView: FlipMessageWordListView!
+    internal var composeBottomViewContainer: ComposeBottomViewContainer!
     
     private var composeTitle: String!
     internal var flipWords: [FlipText]!
