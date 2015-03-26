@@ -416,6 +416,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                         if (flipError != nil) {
                             println("Error \(flipError)")
                         }
+                        error = flipError
                         dispatch_group_leave(group)
                     }
                 )
@@ -428,6 +429,10 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                 callback(false, error, userDataSource)
                 return
             }
+            
+            dispatch_sync(dispatch_get_main_queue(), {
+                NSNotificationCenter.defaultCenter().postNotificationName(USER_DATA_SYNCED_NOTIFICATION_NAME, object: nil, userInfo: nil)
+            })
             
             callback(true, nil, userDataSource)
         })
