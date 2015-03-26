@@ -46,4 +46,9 @@ public class FlipsCache {
         self.loggedUserStorageCache.put(remoteURL, localPath: localPath)
     }
     
+    func clear() -> Void {
+        self.loggedUserStorageCache.clear()
+        self.otherUsersStorageCache.clear()
+    }
+    
 }
