@@ -228,7 +228,7 @@ public class PubNubService: FlipsService, PNDelegate {
                 for pnMessage in messages! {
                     let messageJSON: JSON = JSON(pnMessage.message)
                     let decryptedContentString = self.decrypt(messageJSON[self.MESSAGE_CONTENT].stringValue)
-                    let decryptedMessage = JSON(self.jsonParseDictionary(decryptedContentString))
+                    let decryptedMessage = JSON(self.dictionaryFromJSON(decryptedContentString))
                     decryptedMessages.append(HistoryMessage(receivedDate: pnMessage.receiveDate.date, message: decryptedMessage))
                 }
                 
@@ -298,7 +298,7 @@ public class PubNubService: FlipsService, PNDelegate {
 
         let messageJSON: JSON = JSON(pnMessage.message)
         let decryptedContentString = self.decrypt(messageJSON[MESSAGE_CONTENT].stringValue)
-        let contentJson : JSON = JSON(self.jsonParseDictionary(decryptedContentString))
+        let contentJson : JSON = JSON(self.dictionaryFromJSON(decryptedContentString))
         self.delegate?.pubnubClient(client, didReceiveMessage:contentJson, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
     }
     
@@ -306,7 +306,7 @@ public class PubNubService: FlipsService, PNDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
     }
     
-    private func jsonParseDictionary(jsonString: String) -> [String: AnyObject] {
+    private func dictionaryFromJSON(jsonString: String) -> [String: AnyObject] {
         if let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding) {
             if let dictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(0), error: nil)  as? [String: AnyObject] {
                 return dictionary
