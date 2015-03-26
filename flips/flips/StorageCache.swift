@@ -102,10 +102,12 @@ public class StorageCache {
         
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,
-            completion: { (result) -> Void in
-                dispatch_async(self.cacheQueue) {
-                    self.cacheJournal.insertNewEntry(localPath)
-                    self.scheduleCleanup()
+            completion: { (success) -> Void in
+                if (success) {
+                    dispatch_async(self.cacheQueue) {
+                        self.cacheJournal.insertNewEntry(localPath)
+                        self.scheduleCleanup()
+                    }
                 }
                 
                 if (self.downloadInProgressURLs[localPath] == nil) {
@@ -114,7 +116,7 @@ public class StorageCache {
                 }
                 
                 for callbacks in self.downloadInProgressURLs[localPath]! {
-                    if (result) {
+                    if (success) {
                         callbacks.success?(localPath)
                     } else {
                         callbacks.failure?(FlipError(error: "Error downloading media file", details: nil))
