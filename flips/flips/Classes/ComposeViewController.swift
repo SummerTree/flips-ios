@@ -38,7 +38,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal var highlightedWordIndex: Int!
     
-    private var myFlipsDictionary: Dictionary<String, [String]>!
+    internal var myFlipsDictionary: Dictionary<String, [String]>!
     private var stockFlipsDictionary: Dictionary<String, [String]>!
     
     weak private var highlightedWordCurrentAssociatedImage: UIImage?
@@ -300,12 +300,12 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     private func showFlipCreatedState(flipId: String) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        
-        self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
+
         if (self.canShowMyFlips()) {
+            self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
             self.composeBottomViewContainer.showMyFlips()
         } else {
-            self.composeBottomViewContainer.showFlipCreateMessage()
+            self.showNewFlipWithoutSavedFlipsForWord(flipWord.text)
         }
     }
     
@@ -347,7 +347,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - FlipWords Methods
     
-    private func onFlipAssociated() {
+    func onFlipAssociated() {
         self.reloadMyFlips()
         self.updateFlipWordsState()
         self.moveToNextFlipWord()
@@ -388,10 +388,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         return NO_EMPTY_FLIP_INDEX
     }
     
-    private func moveToNextFlipWord() {
+    internal func moveToNextFlipWord() {
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
-            self.showContentForHighlightedWord(shouldReloadWords: false)
+            self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
             if (self.shouldShowPreviewButton()) {
                 self.openPreview()
             } else {
@@ -399,7 +399,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            self.showContentForHighlightedWord(shouldReloadWords: false)
+            self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
         }
     }
     
@@ -442,12 +442,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 composeBottomViewContainer.showCameraButtons()
             }
         case FlipState.AssociatedAndNoResourcesAvailable, FlipState.AssociatedAndResourcesAvailable:
-            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
-            if (self.canShowMyFlips()) {
-                composeBottomViewContainer.showMyFlips()
-            } else {
-                composeBottomViewContainer.showFlipCreateMessage()
-            }
+            self.showFlipCreatedState(flipWord.associatedFlipId!)
         }
     }
     
