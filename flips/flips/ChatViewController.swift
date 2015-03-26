@@ -65,8 +65,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.setupWhiteNavBarWithBackButton(self.chatTitle)
 
         if (self.groupParticipantsView != nil) {
-            var backBarButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: "groupParticipantsButtonTapped")
-            self.navigationItem.rightBarButtonItem = backBarButton
+            var participantsButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: "groupParticipantsButtonTapped")
+            self.navigationItem.rightBarButtonItem = participantsButton
 
             let participantsViewInitialY: CGFloat = -self.groupParticipantsView!.calculatedHeight()
             
