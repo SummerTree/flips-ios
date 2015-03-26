@@ -384,7 +384,19 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 builderService.getSuggestedWords({ (words) -> Void in
                     println("   getSuggestedWords - success")
-                    self.addBuilderWords(words, fromServer: true)
+
+                    let flipDataSource = FlipDataSource()
+                    let myFlips = flipDataSource.getMyFlipsIdsForWords(words)
+                    var newWords = [String]()
+
+                    for word in words {
+                        if (myFlips[word]?.count == 0) {
+                            newWords.append(word)
+                        }
+                    }
+
+                    // Only add the words that doesn't have flips associated
+                    self.addBuilderWords(newWords, fromServer: true)
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
                     println("   getSuggestedWords - fail")
