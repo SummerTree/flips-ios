@@ -92,7 +92,6 @@ class PlayerView: UIView {
     }
     
     private func generateRandomIdentifier() {
-        // Generate a random identifier
         let value = Int(arc4random_uniform(UInt32(100000)))
         let currentDate: NSDate = NSDate()
         let dateValue = currentDate.timeIntervalSince1970
