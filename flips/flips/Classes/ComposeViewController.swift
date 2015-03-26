@@ -38,7 +38,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal var highlightedWordIndex: Int!
     
-    private var myFlipsDictionary: Dictionary<String, [String]>!
+    internal var myFlipsDictionary: Dictionary<String, [String]>!
     private var stockFlipsDictionary: Dictionary<String, [String]>!
     
     weak private var highlightedWordCurrentAssociatedImage: UIImage?

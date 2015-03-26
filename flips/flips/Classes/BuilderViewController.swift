@@ -64,7 +64,17 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         super.onFlipAssociated()
     }
 
-    
+    override func updateFlipWordsState() {
+        for flipWord in self.flipWords {
+            let myFlipsForWord = self.myFlipsDictionary[flipWord.text]
+
+            if (myFlipsForWord!.count > 0) {
+                flipWord.state = .NotAssociatedButResourcesAvailable
+            }
+        }
+    }
+
+
     // MARK: - Load BuilderWords Methods
     
     private func loadBuilderWords() {
