@@ -28,18 +28,18 @@ public class FlipsCache {
         self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 5000000) //5MB
     }
     
-    func videoForFlip(flip: Flip, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?) -> StorageCache.CacheGetResponse {
+    func videoForFlip(flip: Flip, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?, progress: StorageCache.CacheProgressCallback?) -> StorageCache.CacheGetResponse {
         if (flip.backgroundURL == nil || flip.backgroundURL == "") {
             return StorageCache.CacheGetResponse.INVALID_URL
         }
         
         if let loggedUser = User.loggedUser() {
             if (flip.owner != nil && flip.owner.userID == loggedUser.userID) {
-                return self.loggedUserStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure)
+                return self.loggedUserStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure, progress: progress)
             }
         }
         
-        return self.otherUsersStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure)
+        return self.otherUsersStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure, progress: progress)
     }
     
     func put(remoteURL: NSURL, localPath: String) -> Void {
