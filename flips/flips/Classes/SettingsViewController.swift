@@ -12,6 +12,8 @@
 
 import Foundation
 
+let USER_DATA_SYNCED_NOTIFICATION_NAME: String = "user_data_synced_notification"
+
 class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     
     private let FLIPSBOYS_CHAT_TITLE: String = "FlipBoys"
@@ -41,11 +43,17 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.settingsView.viewWillAppear()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDataSyncedNotificationReceived:", name: USER_DATA_SYNCED_NOTIFICATION_NAME, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.settingsView.viewDidAppear()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: USER_DATA_SYNCED_NOTIFICATION_NAME, object: nil)
     }
 
     
@@ -147,4 +155,9 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
+    
+    func userDataSyncedNotificationReceived(notification: NSNotification) {
+        self.settingsView.updateUserProfileInfo()
+    }
+    
 }

@@ -59,7 +59,9 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     }
     
     func viewDidAppear() {
-        self.updateUserProfileInfo()
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.updateUserProfileInfo()
+        })
     }
     
     func viewDidLoad() {
@@ -304,9 +306,10 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     
     // MARK: - Setters
-    private func updateUserProfileInfo() {
+    func updateUserProfileInfo() {
 		if let loggedUser = User.loggedUser() {
-			let detailedLabel = loggedUser.username + "\n" + loggedUser.phoneNumber
+			let detailedLabel = loggedUser.username + "\n" + loggedUser.formattedPhoneNumber()
+
 			let fullname = loggedUser.fullName()
 			
 			self.userProfileCell.setAvatarURL(loggedUser.photoURL)
