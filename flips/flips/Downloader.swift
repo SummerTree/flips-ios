@@ -46,8 +46,8 @@ public class Downloader : NSObject {
 
         if (progress != nil) {
             operation.setDownloadProgressBlock { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
-                println("progress: \(Float(totalBytesRead) / Float(totalBytesExpectedToRead))")
                 progress?(Float(totalBytesRead) / Float(totalBytesExpectedToRead))
+                return
             }
         }
 

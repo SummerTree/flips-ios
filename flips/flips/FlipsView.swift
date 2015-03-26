@@ -26,6 +26,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     private let MY_FLIPS_TITLE = NSLocalizedString("My Flips", comment: "My Flips")
     private let STOCK_FLIPS_TITLE = NSLocalizedString("Stock Flips", comment: "Stock Flips")
     
+    private let ADD_FLIP_CELL_REUSE_IDENTIFIER = "addFlipCell"
     private let FLIP_VIEW_CELL_REUSE_IDENTIFIER = "flipCell"
     private let FLIP_VIEW_HEADER_REUSE_IDENTIFIER = "flipHeader"
     
@@ -63,6 +64,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         myFlipsCollectionView!.dataSource = self
         myFlipsCollectionView!.delegate = self
         myFlipsCollectionView.registerClass(FlipsViewCell.self, forCellWithReuseIdentifier:FLIP_VIEW_CELL_REUSE_IDENTIFIER);
+        myFlipsCollectionView.registerClass(FlipsViewCell.self, forCellWithReuseIdentifier:ADD_FLIP_CELL_REUSE_IDENTIFIER);
         myFlipsCollectionView.registerClass(FlipsHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: FLIP_VIEW_HEADER_REUSE_IDENTIFIER)
         myFlipsCollectionView!.backgroundColor = self.backgroundColor
         myFlipsCollectionView!.allowsSelection = true
@@ -146,14 +148,16 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FLIP_VIEW_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
         
         if (indexPath.section == 0 && indexPath.row == 0) {
-            cell.addSubview(addFlipButton)
-        } else {
-            for subview in cell.subviews {
-                if (subview as NSObject == addFlipButton) {
-                    addFlipButton.removeFromSuperview()
-                }
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ADD_FLIP_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
+
+            if (self.addFlipButton.superview == nil) {
+                cell.addSubview(addFlipButton)
             }
-            
+
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FLIP_VIEW_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
+
             let numberOfFlips = self.getNumberOfFlips()
             
             var flipId: String!
@@ -176,9 +180,9 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
             } else {
                 UIAlertView.showUnableToLoadFlip()
             }
+
+            return cell
         }
-        
-        return cell
     }
     
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
