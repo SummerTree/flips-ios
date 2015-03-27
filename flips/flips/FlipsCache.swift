@@ -27,7 +27,7 @@ public class FlipsCache {
         CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
-    func videoForFlip(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?, progress: StorageCache.CacheProgressCallback?) -> StorageCache.CacheGetResponse {
+    func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?, progress: StorageCache.CacheProgressCallback?) -> StorageCache.CacheGetResponse {
         if (remoteURL.path == nil || remoteURL.path! == "") {
             return StorageCache.CacheGetResponse.INVALID_URL
         }

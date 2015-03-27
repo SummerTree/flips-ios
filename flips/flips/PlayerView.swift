@@ -387,7 +387,7 @@ class PlayerView: UIView {
                 )
                 
             } else {
-                let response = FlipsCache.sharedInstance.videoForFlip(NSURL(string: flip.backgroundURL)!,
+                let response = FlipsCache.sharedInstance.get(NSURL(string: flip.backgroundURL)!,
                     success: { (url: String!, localPath: String!) in
                         if (self.hasDownloadError) {
                             return
