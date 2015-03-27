@@ -516,6 +516,7 @@ class PlayerView: UIView {
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
         
         self.thumbnailView = UIImageView()
+        self.thumbnailView.contentMode = UIViewContentMode.ScaleAspectFit
         self.addSubview(self.thumbnailView)
         
         self.gradientLayer = CALayer()
@@ -587,9 +588,8 @@ class PlayerView: UIView {
         })
 
         self.progressBarView.mas_makeConstraints({ (make) -> Void in
-            make.left.equalTo()(self.thumbnailView).with().offset()(self.PROGRESS_BAR_PADDING)
-            make.right.equalTo()(self.thumbnailView).with().offset()(-self.PROGRESS_BAR_PADDING)
-            make.centerY.equalTo()(self.thumbnailView)
+            make.center.equalTo()(self.thumbnailView)
+            make.width.equalTo()(self.thumbnailView.mas_height).with().offset()(-(self.PROGRESS_BAR_PADDING * 2))
             make.height.equalTo()(self.PROGRESS_BAR_HEIGHT)
         })
     }
