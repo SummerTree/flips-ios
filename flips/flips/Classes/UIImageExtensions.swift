@@ -69,10 +69,12 @@ extension UIImage {
                 transform = CGAffineTransformScale(transform, -1, 1);
         }
         
+        var bitmapInfo = self.normalizeBitmapInfo(CGImageGetBitmapInfo(self.CGImage))
+        
         var ctx:CGContextRef = CGBitmapContextCreate(nil, UInt(squareSize), UInt(squareSize),
             CGImageGetBitsPerComponent(self.CGImage), 0,
             CGImageGetColorSpace(self.CGImage),
-            CGImageGetBitmapInfo(self.CGImage));
+            bitmapInfo)
         
         CGContextScaleCTM(ctx, scale, scale)
         CGContextConcatCTM(ctx, transform)

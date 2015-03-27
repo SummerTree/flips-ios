@@ -12,8 +12,8 @@
 
 public class StorageCache {
 
-    public typealias CacheSuccessCallback = (String!) -> Void
-    public typealias CacheFailureCallback = (FlipError) -> Void
+    public typealias CacheSuccessCallback = (String!, String!) -> Void
+    public typealias CacheFailureCallback = (String!, FlipError) -> Void
     public typealias CacheProgressCallback = (Float) -> Void
     public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback?)
     
@@ -85,7 +85,7 @@ public class StorageCache {
         if (self.cacheHit(localPath)) {
             dispatch_async(self.cacheQueue) {
                 progress?(1.0)
-                success?(localPath)
+                success?(remoteURL.absoluteString, localPath)
                 self.cacheJournal.updateEntry(localPath)
                 return
             }
@@ -117,9 +117,9 @@ public class StorageCache {
                 
                 for callbacks in self.downloadInProgressURLs[localPath]! {
                     if (success) {
-                        callbacks.success?(localPath)
+                        callbacks.success?(remoteURL.absoluteString, localPath)
                     } else {
-                        callbacks.failure?(FlipError(error: "Error downloading media file", details: nil))
+                        callbacks.failure?(remoteURL.absoluteString, FlipError(error: "Error downloading media file", details: nil))
                     }
                 }
                 
@@ -175,7 +175,7 @@ public class StorageCache {
     :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: data      The actual asset that is going to be inserted into the cache.
     */
-    func put(remoteURL: NSURL, data: NSData) -> Void {
+    func put(remoteURL: NSURL, data: NSData) -> String {
         let localPath = self.createLocalPath(remoteURL)
         
         if (!self.cacheHit(localPath)) {
@@ -186,6 +186,7 @@ public class StorageCache {
                 self.scheduleCleanup()
             }
         }
+        return localPath
     }
     
     func clear() -> Void {

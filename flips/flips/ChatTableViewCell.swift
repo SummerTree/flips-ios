@@ -176,7 +176,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 formattedWords.append(flipEntry.formattedWord)
             }
             
-            self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords)
+            self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords, blurringThumbnail: flipMessage.notRead.boolValue)
         })
         
         self.messageDateLabel.text = formattedDate
