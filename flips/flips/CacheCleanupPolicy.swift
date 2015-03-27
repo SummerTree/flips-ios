@@ -16,7 +16,7 @@ public class CacheCleanupPolicy {
     let KILOBYTE: Int64 = 1024
     let MEGABYTE: Int64 = 1024*1024
     
-    let caches: NSHashTable = NSHashTable.weakObjectsHashTable()
+    var caches = [StorageCache]()
     private let sizeLimitInBytes: Int64
     
     public class var sharedInstance: CacheCleanupPolicy {
@@ -31,20 +31,15 @@ public class CacheCleanupPolicy {
     }
     
     func register(cache: StorageCache) -> Void {
-        caches.addObject(cache)
+        self.caches.append(cache)
     }
     
     func freeSizeInBytes() -> Int64 {
         let deviceFreeSpace = self.deviceFreeSpaceInBytes() - 50*MEGABYTE
         
         var cachesSize: Int64 = 0
-        let enumerator = self.caches.objectEnumerator()
-        var cache: AnyObject? = enumerator.nextObject()
-        while (cache != nil) {
-            if let actualCache = cache as? StorageCache {
-                cachesSize += actualCache.sizeInBytes
-            }
-            cache = enumerator.nextObject()
+        for cache in self.caches {
+            cachesSize += cache.sizeInBytes
         }
         
         let cacheFreeSpace = self.sizeLimitInBytes - cachesSize
