@@ -250,6 +250,8 @@
 		7AF82E0319EFECDC00D0393F /* FlipDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0219EFECDC00D0393F /* FlipDataSource.swift */; };
 		7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0419EFED2100D0393F /* BaseDataSource.swift */; };
 		7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
+		7AFB1E991AC2FA0700C60D8E /* BlurredThumbnailsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB1E981AC2FA0700C60D8E /* BlurredThumbnailsCache.swift */; };
+		7AFB1E9B1AC3050E00C60D8E /* ThumbnailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB1E9A1AC3050E00C60D8E /* ThumbnailsDataSource.swift */; };
 		7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719A19FFBF1B002695AC /* Downloader.swift */; };
 		7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */; };
 		7AFE1F3F1AB8AB2D00E38673 /* FlipEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE1F3E1AB8AB2D00E38673 /* FlipEntry.m */; };
@@ -579,6 +581,8 @@
 		7AF82E0219EFECDC00D0393F /* FlipDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipDataSource.swift; sourceTree = "<group>"; };
 		7AF82E0419EFED2100D0393F /* BaseDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDataSource.swift; sourceTree = "<group>"; };
 		7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomBadgeView.swift; path = Classes/CustomBadgeView.swift; sourceTree = "<group>"; };
+		7AFB1E981AC2FA0700C60D8E /* BlurredThumbnailsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurredThumbnailsCache.swift; sourceTree = "<group>"; };
+		7AFB1E9A1AC3050E00C60D8E /* ThumbnailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailsDataSource.swift; sourceTree = "<group>"; };
 		7AFB719A19FFBF1B002695AC /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		7AFE1F371AB8A67500E38673 /* flips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = flips.xcdatamodel; sourceTree = "<group>"; };
 		7AFE1F3D1AB8AB2D00E38673 /* FlipEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipEntry.h; sourceTree = "<group>"; };
@@ -1187,8 +1191,10 @@
 				7330F8071A89624F00446CD8 /* CacheJournal.swift */,
 				7330F8091A89670300446CD8 /* JournalEntry.swift */,
 				73192A881A8B9B660010C949 /* FlipsCache.swift */,
+				7AFB1E9A1AC3050E00C60D8E /* ThumbnailsDataSource.swift */,
 				7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */,
 				731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */,
+				7AFB1E981AC2FA0700C60D8E /* BlurredThumbnailsCache.swift */,
 			);
 			name = Caching;
 			sourceTree = "<group>";
@@ -1857,6 +1863,7 @@
 				705B3DD91A03B9DD00E0D3E9 /* PreviewView.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
 				7049A7A51A11238A001D8121 /* ChangeNumberInfoViewController.swift in Sources */,
+				7AFB1E9B1AC3050E00C60D8E /* ThumbnailsDataSource.swift in Sources */,
 				7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */,
@@ -1979,6 +1986,7 @@
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
 				7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */,
+				7AFB1E991AC2FA0700C60D8E /* BlurredThumbnailsCache.swift in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7AA711721A28D8AF0082165A /* Contact.m in Sources */,

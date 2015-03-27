@@ -45,12 +45,12 @@ class FlipsViewCell : UICollectionViewCell {
             
             if (flip.isPrivate.boolValue) {
                 let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
-                    success: { (localThumbnailPath: String!) in
+                    success: { (url: String!, localThumbnailPath: String!) in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             self.cellImageView.image = UIImage(contentsOfFile: localThumbnailPath)
                         })
                     },
-                    failure: { (error: FlipError) in
+                    failure: { (url: String!, error: FlipError) in
                         println("Failed to get resource from cache, error: \(error)")
                     })
                 

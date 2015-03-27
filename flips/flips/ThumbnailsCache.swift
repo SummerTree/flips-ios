@@ -11,7 +11,7 @@
 //
 
 
-public class ThumbnailsCache {
+public class ThumbnailsCache: ThumbnailsDataSource {
     
     let cache: StorageCache
     
@@ -32,7 +32,11 @@ public class ThumbnailsCache {
             return StorageCache.CacheGetResponse.INVALID_URL
         }
         
-        return self.cache.get(remoteURL, success: success, failure: failure)
+        return self.cache.get(remoteURL,
+            success: { (url: String!, localPath: String!) -> Void in
+                BlurredThumbnailsCache.sharedInstance.put(NSURL(string: url)!, localPath: localPath)
+                success?(url, localPath)
+            }, failure: failure)
     }
     
     func put(remoteURL: NSURL, localPath: String) -> Void {
