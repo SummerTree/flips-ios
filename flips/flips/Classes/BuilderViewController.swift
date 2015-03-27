@@ -53,8 +53,42 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     override func shouldShowPlusButtonInWords() -> Bool {
         return true
     }
-    
-    
+
+    override func onFlipAssociated() {
+        let flipWord = self.flipWords[self.highlightedWordIndex]
+
+        let builderWordDataSource = BuilderWordDataSource()
+        builderWordDataSource.removeBuilderWordWithWord(flipWord.text)
+
+        self.loadBuilderWords()
+
+        if (self.words.count == 0) {
+            self.showEmptyState()
+        } else {
+            super.onFlipAssociated()
+        }
+    }
+
+    override func updateFlipWordsState() {
+        for flipWord in self.flipWords {
+            let myFlipsForWord = self.myFlipsDictionary[flipWord.text]
+
+            if (myFlipsForWord!.count > 0) {
+                flipWord.state = .NotAssociatedButResourcesAvailable
+            }
+        }
+    }
+
+
+    // MARK: - Private
+
+    private func showEmptyState() {
+        self.composeTopViewContainer.showEmptyState()
+        self.flipMessageWordListView.reloadWords()
+        self.composeBottomViewContainer.showAllFlipCreateMessage()
+    }
+
+
     // MARK: - Load BuilderWords Methods
     
     private func loadBuilderWords() {
@@ -70,8 +104,16 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
         self.initFlipWords(words)
     }
-    
-    
+
+
+    // MARK: - ComposeBottomViewContainerDataSource
+
+    override func composeBottomViewContainerStockFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {
+        // We only allow My Flips in this neighborhood
+        return Array<String>()
+    }
+
+
     // MARK: - Builder Introduction Methods
     
     func showIntroduction() {
@@ -109,14 +151,10 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     // MARK: - FlipMessageWordListView Delegate
     
     override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
-        var addWordWords = Array<String>()
-        for flipWord in self.flipWords {
-            println(" flipWord: \(flipWord.text) - \(flipWord.state)")
-            if (flipWord.state == FlipState.NotAssociatedAndNoResourcesAvailable) {
-                addWordWords.append(flipWord.text)
-            }
+        var addWordWords: Array<String> = self.flipWords.map {
+            return $0.text
         }
-        
+
         let builderAddWordTableViewController = BuilderAddWordTableViewController(words: addWordWords)
         builderAddWordTableViewController.delegate = self
         self.navigationController?.pushViewController(builderAddWordTableViewController, animated: true)
@@ -127,15 +165,15 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     
     func builderAddWordTableViewControllerDelegate(tableViewController: BuilderAddWordTableViewController, finishingWithChanges hasChanges: Bool) {
         if (hasChanges) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                self.loadBuilderWords()
-                if (self.words.count > 0) {
-                    self.highlightedWordIndex = 0
-                    self.reloadMyFlips()
-                    self.updateFlipWordsState()
-                    self.showContentForHighlightedWord()
-                } 
-            })
+            self.loadBuilderWords()
+            if (self.words.count > 0) {
+                self.highlightedWordIndex = 0
+                self.reloadMyFlips()
+                self.updateFlipWordsState()
+                self.showContentForHighlightedWord()
+            } else {
+                self.showEmptyState()
+            }
         }
     }
 }
