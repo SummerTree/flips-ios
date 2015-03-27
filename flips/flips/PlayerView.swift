@@ -637,7 +637,7 @@ class PlayerView: UIView {
 
     private func addSubviews() {
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
-    
+
         self.gradientLayer = CALayer()
         self.gradientLayer.contents = UIImage(named: "Filter_Photo")?.CGImage
         self.gradientLayer.frame = self.layer.bounds
@@ -648,6 +648,7 @@ class PlayerView: UIView {
         self.addSubview(self.wordLabel)
         
         self.thumbnailView = UIImageView()
+        self.thumbnailView.contentMode = UIViewContentMode.ScaleAspectFit
         self.addSubview(self.thumbnailView)
     
         self.playButtonView = UIImageView()
@@ -712,9 +713,8 @@ class PlayerView: UIView {
         })
 
         self.progressBarView.mas_makeConstraints({ (make) -> Void in
-            make.left.equalTo()(self.thumbnailView).with().offset()(self.PROGRESS_BAR_PADDING)
-            make.right.equalTo()(self.thumbnailView).with().offset()(-self.PROGRESS_BAR_PADDING)
-            make.centerY.equalTo()(self.thumbnailView)
+            make.center.equalTo()(self.thumbnailView)
+            make.width.equalTo()(self.thumbnailView.mas_height).with().offset()(-(self.PROGRESS_BAR_PADDING * 2))
             make.height.equalTo()(self.PROGRESS_BAR_HEIGHT)
         })
     }
