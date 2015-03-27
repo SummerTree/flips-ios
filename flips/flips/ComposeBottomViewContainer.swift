@@ -32,7 +32,11 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     private var flipsView: FlipsView!
     
     weak var delegate: ComposeBottomViewContainerDelegate?
-    weak var dataSource: ComposeBottomViewContainerDataSource?
+    weak var dataSource: ComposeBottomViewContainerDataSource? {
+        didSet {
+            self.updateGridButton()
+        }
+    }
     
     
     override init() {
@@ -186,7 +190,10 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     func showCameraButtons() {
         self.hideFlipCreatedMessage()
         self.slideToCameraView(notifyDelegate: false)
-        
+        self.updateGridButton()
+    }
+
+    func updateGridButton() {
         if let canShowMyFlipsButton = dataSource?.composeBottomViewContainerCanShowMyFlipsButton(self) {
             if (canShowMyFlipsButton) {
                 gridButton.hidden = false

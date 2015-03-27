@@ -393,7 +393,7 @@ public class UserService: FlipsService {
             return
         }
         
-        let graphPath = "me?fields=id,first_name,last_name,email,picture.width(500)"
+        let graphPath = "me?fields=id,first_name,last_name,email,picture.width(300)"
         FBRequestConnection.startWithGraphPath(graphPath) { (connection, result, error) -> Void in
             if (error != nil) {
                 failure(FlipError(error: error.localizedDescription, details:nil))

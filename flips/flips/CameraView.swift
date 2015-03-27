@@ -359,6 +359,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     func registerObservers() {
+        self.previewView.alpha = 1.0
+        
         dispatch_async(self.sessionQueue, { () -> Void in
             self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
             self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
@@ -383,6 +385,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     func removeObservers() {
+        self.previewView.alpha = 0.0
+
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
             

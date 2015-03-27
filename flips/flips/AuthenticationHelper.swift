@@ -61,6 +61,9 @@ public class AuthenticationHelper: NSObject {
         FBSession.setActiveSession(nil)
         
         CoreDataHandler.sharedInstance.resetDatabase()
+        
+        FlipsCache.sharedInstance.clear()
+        ThumbnailsCache.sharedInstance.clear()
 
         PubNub.disconnect()
         

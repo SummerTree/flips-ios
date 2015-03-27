@@ -326,8 +326,7 @@ class CustomNavigationBar : UIView {
     
     func setAvatarImage(image: UIImage) {
         if (avatarButton != nil) {
-            avatarButton.setAvatarImage(image, forState: .Normal)
-            avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
+            avatarButton.setAvatarImage(image, forStates: [.Normal, UIControlState.Highlighted])
         } else if (avatarImageView != nil) {
             avatarImageView.image = image
         }
@@ -341,8 +340,7 @@ class CustomNavigationBar : UIView {
             avatarButton.setImageForState(.Normal, withURLRequest: urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
                 
-                self.avatarButton.setAvatarImage(image, forState: .Normal)
-                self.avatarButton.setAvatarImage(image, forState: UIControlState.Highlighted)
+                self.avatarButton.setAvatarImage(image, forStates: [.Normal, UIControlState.Highlighted])
                 success?(image)
                 
                 }, failure: { (error) -> Void in

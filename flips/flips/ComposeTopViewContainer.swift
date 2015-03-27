@@ -152,6 +152,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
             self.bringSubviewToFront(self.flipImageView)
             self.bringSubviewToFront(self.filterImageView)
             self.bringSubviewToFront(self.flipWordLabel)
+        } else if (type == PreviewType.None) {
+            // Show "disabled" camera
+            self.cameraPreview.alpha = 1.0
+            self.bringSubviewToFront(self.cameraPreview)
+            self.bringSubviewToFront(self.filterImageView)
         }
         
         self.previewType = type
@@ -175,7 +180,13 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     
     // MARK: - Container State Setter Methods
-    
+
+    func showEmptyState() {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.switchToPreviewType(PreviewType.None)
+        })
+    }
+
     func showCameraWithWord(word: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.switchToPreviewType(PreviewType.Camera)
