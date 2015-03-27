@@ -41,12 +41,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         if (launchOptions != nil) {
             if let pushNotificationPayload = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                self.application(application, didReceiveRemoteNotification: pushNotificationPayload)
+                self.onNotificationReceived(application, withUserInfo: pushNotificationPayload)
             } else {
-                gotoSplashScreen()
+                openSplashScreen()
             }
         } else {
-            gotoSplashScreen()
+            openSplashScreen()
         }
         
         NavigationHandler.sharedInstance.registerForNotifications()
@@ -79,6 +79,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MagicalRecord.cleanUp()
     }
     
+    
+    // MARK: - Notification Methods
+    
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"))
         token = token.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -100,34 +103,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        println("did receive remote notification \(userInfo)")
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        self.onNotificationReceived(application, withUserInfo: userInfo)
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        println("did receive remote notification with fetch completion handler \(userInfo)")
+    private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
         if let loggedUser = User.loggedUser() {
             if let roomId = (userInfo["room_id"] as? String) {
-                let roomDataSource = RoomDataSource()
-                let room = roomDataSource.retrieveRoomWithId(roomId)
-                
-//                var inboxViewController = InboxViewController()
-//                inboxViewController.userDataSource = userDataSource
-//                
-//                let navigationViewControler = UINavigationController(rootViewController: inboxViewController)
-//                self.window?.rootViewController = navigationViewControler
-//                self.window?.makeKeyAndVisible()
-                
-                let chatViewController = ChatViewController(room: room)
-                let navigationViewControler = UINavigationController(rootViewController: chatViewController)
-                self.window?.rootViewController = navigationViewControler
-                self.window?.makeKeyAndVisible()
-
-                
+                if (UIApplication.sharedApplication().keyWindow == nil)  {
+                    self.openSplashScreen(roomID: roomId)
+                } else if (application.applicationState != UIApplicationState.Active) {
+                    NavigationHandler.sharedInstance.showThreadScreenWithRoomId(roomId)
+                }
             }
-
-        } else {
-            gotoSplashScreen()
         }
     }
     
@@ -137,8 +125,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - private functions
     
-    func gotoSplashScreen() {
-        let splashScreenViewController = SplashScreenViewController()
+    func openSplashScreen(roomID: String? = nil) {
+        let splashScreenViewController = SplashScreenViewController(roomID: roomID)
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()

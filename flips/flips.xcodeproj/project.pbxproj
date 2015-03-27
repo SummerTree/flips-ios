@@ -662,13 +662,13 @@
 			name = Contact;
 			sourceTree = "<group>";
 		};
-		075A0C071A43A1C100E92760 /* Untilities */ = {
+		075A0C071A43A1C100E92760 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				7A54599B1A9A84FC00EAC679 /* NavigationHandler.swift */,
 				075A0C081A43A1F800E92760 /* ThreadSafe.swift */,
 			);
-			name = Untilities;
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		0794A9C01A0A981300DA8CFA /* New Flip */ = {
@@ -1153,7 +1153,7 @@
 				5707185619D19D180069064F /* Services */,
 				BE2E72061A98119400F237BE /* Resources */,
 				70FD4E7319D064450024EBDB /* Supporting Files */,
-				075A0C071A43A1C100E92760 /* Untilities */,
+				075A0C071A43A1C100E92760 /* Utilities */,
 				704E110B19D08E4700D2BB88 /* View */,
 			);
 			path = flips;

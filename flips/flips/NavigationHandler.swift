@@ -24,7 +24,6 @@ public class NavigationHandler : NSObject {
     
     func registerForNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPopToRootViewControllerNotificationReceived:", name: POP_TO_ROOT_NOTIFICATION_NAME, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPopToChatViewControllerNotificationReceived:", name: POP_TO_CHAT_NOTIFICATION_NAME, object: nil)
     }
     
     func onPopToRootViewControllerNotificationReceived(notification: NSNotification) {
@@ -55,26 +54,43 @@ public class NavigationHandler : NSObject {
         }
     }
     
-    func onPopToChatViewControllerNotificationReceived(notification: NSNotification) {
-        if (AuthenticationHelper.sharedInstance.isAuthenticated()) {
-            if let keyWindow = UIApplication.sharedApplication().keyWindow {
-                if let rootViewController = keyWindow.rootViewController {
-                    if rootViewController is UINavigationController {
-                        var rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
-                        if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
-                            rootNavigationViewController.popToRootViewControllerAnimated(false)
-                            rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(true, completion: nil)
-                        } else {
-                            rootNavigationViewController.popToRootViewControllerAnimated(true)
-                            if ((rootNavigationViewController.viewControllers.count == 1) && (rootNavigationViewController.viewControllers[0] is SplashScreenViewController)) {
-                                let splashViewController = rootNavigationViewController.viewControllers[0] as SplashScreenViewController
-                                splashViewController.openLoginViewController()
-                            }
+    func showThreadScreenWithRoomId(roomId: String) {
+        let application: UIApplication = UIApplication.sharedApplication()
+        if let keyWindow = UIApplication.sharedApplication().keyWindow {
+            if let rootViewController: UIViewController = keyWindow.rootViewController {
+                if (rootViewController is UINavigationController) {
+                    let rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
+                    
+                    // Checking if the app is showing a modal
+                    while (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                        rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(false, completion: nil)
+                    }
+                    
+                    if (rootNavigationViewController.visibleViewController is ChatViewController) {
+                        let chatViewController = rootNavigationViewController.visibleViewController as ChatViewController
+                        if (chatViewController.getRoomId() == roomId) {
+                            return
                         }
+                    }
+                    
+                    var i: Int = 0
+                    var inboxViewController: UIViewController? = nil
+                    for viewController in rootNavigationViewController.childViewControllers {
+                        if (viewController is InboxViewController) {
+                            inboxViewController = viewController as? UIViewController
+                            rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
+                            break
+                        }
+                    }
+
+                    if (inboxViewController != nil) {
+                        let roomDataSource = RoomDataSource()
+                        let room = roomDataSource.retrieveRoomWithId(roomId)
+                        let chatViewController: UIViewController = ChatViewController(room: room)
+                        rootNavigationViewController.pushViewController(chatViewController, animated: true)
                     }
                 }
             }
-        }
+        } 
     }
-    
 }

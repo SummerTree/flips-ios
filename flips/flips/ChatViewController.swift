@@ -101,6 +101,13 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
+    
+    
+    // MARK: - Getters
+    
+    func getRoomId() -> String {
+        return self.roomID
+    }
 
     
     // MARK: - FlipMessages Load Methods

@@ -19,19 +19,39 @@ let LOGOUT_NOTIFICATION_NAME: String = "logout_notification"
 let LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY: String = "logout_notification_facebook_user"
 let LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY: String = "logout_notification_first_name"
 
-class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
+class SplashScreenViewController: FlipsViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
     
-    let splashScreenView = SplashScreenView()
     var loginMode: LoginViewController.LoginMode = LoginViewController.LoginMode.ORDINARY_LOGIN
     var userFirstName: String? = nil
     
+    private var roomIdToShow: String?
+    
+    // MARK: - Initialization Method
+    
+    init(roomID: String?) {
+        super.init(nibName: nil, bundle: nil)
+        self.roomIdToShow = roomID
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     // MARK: - View Lifecycle
     
+    override func loadView() {
+        let splashScreenView = SplashScreenView()
+        splashScreenView.delegate = self
+        self.view = splashScreenView
+    }
+    
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = false
     }
     
@@ -47,10 +67,6 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        splashScreenView.delegate = self
-        
-        self.view = splashScreenView
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "logoutNotificationReceived:", name: LOGOUT_NOTIFICATION_NAME, object: nil)
     }
@@ -129,7 +145,7 @@ class SplashScreenViewController: UIViewController, SplashScreenViewDelegate, UI
     }
     
     private func openInboxViewController(userDataSource: UserDataSource) {
-        var inboxViewController = InboxViewController()
+        var inboxViewController = InboxViewController(roomID: self.roomIdToShow)
         inboxViewController.userDataSource = userDataSource
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
