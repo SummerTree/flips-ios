@@ -53,7 +53,7 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
                 self.navigationController?.popToRootViewControllerAnimated(true)
                 self.dismissViewControllerAnimated(false, completion:nil)
             }) { (flipError) -> Void in
-                let alertView = UIAlertView(title: NSLocalizedString("Update Error"), message: flipError!.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: NSLocalizedString("Update Error"), message: flipError!.error, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }
