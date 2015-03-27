@@ -163,10 +163,10 @@ class UserDataSource : BaseDataSource {
             let cache = ThumbnailsCache.sharedInstance
 
             cache.get(NSURL(string: flip.thumbnailURL)!,
-                success: { (localPath: String!) in
+                success: { (url: String!, localPath: String!) in
                     callback()
                 },
-                failure: { (error: FlipError) in
+                failure: { (url: String!, error: FlipError) in
                     println("Error downloading data for my flip (\(flip.flipID))")
                     callback()
             })
