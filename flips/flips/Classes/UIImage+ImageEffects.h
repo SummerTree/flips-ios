@@ -104,4 +104,6 @@
 
 - (UIImage *)applyBlurWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage;
 
+- (CGBitmapInfo)normalizeBitmapInfo:(CGBitmapInfo)oldBitmapInfo;
+
 @end

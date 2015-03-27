@@ -92,10 +92,7 @@ class PlayerView: UIView {
     }
     
     private func generateRandomIdentifier() {
-        let value = Int(arc4random_uniform(UInt32(100000)))
-        let currentDate: NSDate = NSDate()
-        let dateValue = currentDate.timeIntervalSince1970
-        self.contentIdentifier = "\(value)\(dateValue)"
+        self.contentIdentifier = NSUUID().UUIDString
     }
 
 
@@ -378,7 +375,6 @@ class PlayerView: UIView {
                     animated: animated,
                     completion: { () -> Void in
                         if (currentIdentifier != self.contentIdentifier) {
-                            println("\n loadFlipsResourcesForPlayback identifiers diferent")
                             return
                         }
                         
@@ -399,7 +395,6 @@ class PlayerView: UIView {
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (currentIdentifier != self.contentIdentifier) {
-                                println("\n loadFlipsResourcesForPlayback identifiers diferent")
                                 return
                             }
                             
@@ -424,7 +419,6 @@ class PlayerView: UIView {
                     failure: { (url: String!, error: FlipError) in
                         println("Failed to get resource from cache, error: \(error)")
                         if (currentIdentifier != self.contentIdentifier) {
-                            println("\n loadFlipsResourcesForPlayback identifiers diferent")
                             return
                         }
                         
@@ -432,12 +426,7 @@ class PlayerView: UIView {
                     },
                     progress: { (p: Float) -> Void in
                         if (currentIdentifier != self.contentIdentifier) {
-                            println("\n loadFlipsResourcesForPlayback identifiers diferent")
                             return
-                        }
-                        
-                        if (self.flips == nil) {
-                            println("\n   FLIPS == NIL!!!!!!")
                         }
                         
                         self.flipsDownloadProgress[index] = p
