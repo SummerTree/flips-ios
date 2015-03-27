@@ -13,11 +13,14 @@
 
 public class CacheCleanupPolicy {
     
-    let KILOBYTE: Int64 = 1024
-    let MEGABYTE: Int64 = 1024*1024
+    private struct Constants {
+        static let KILOBYTE: Int64 = 1024
+        static let MEGABYTE: Int64 = 1024*KILOBYTE
+        static let CACHE_SIZE_LIMIT_IN_BYTES = 500*MEGABYTE
+        static let STORAGE_MINIMUM_FREE_SIZE_IN_BYTES = 50*MEGABYTE
+    }
     
     var caches = [StorageCache]()
-    private let sizeLimitInBytes: Int64
     
     public class var sharedInstance: CacheCleanupPolicy {
         struct Static {
@@ -26,23 +29,19 @@ public class CacheCleanupPolicy {
         return Static.instance
     }
     
-    init() {
-        self.sizeLimitInBytes = 500*MEGABYTE
-    }
-    
     func register(cache: StorageCache) -> Void {
         self.caches.append(cache)
     }
     
     func freeSizeInBytes() -> Int64 {
-        let deviceFreeSpace = self.deviceFreeSpaceInBytes() - 50*MEGABYTE
+        let deviceFreeSpace = self.deviceFreeSpaceInBytes() - Constants.STORAGE_MINIMUM_FREE_SIZE_IN_BYTES
         
         var cachesSize: Int64 = 0
         for cache in self.caches {
             cachesSize += cache.sizeInBytes
         }
         
-        let cacheFreeSpace = self.sizeLimitInBytes - cachesSize
+        let cacheFreeSpace = Constants.CACHE_SIZE_LIMIT_IN_BYTES - cachesSize
         return min(cacheFreeSpace, deviceFreeSpace)
     }
     

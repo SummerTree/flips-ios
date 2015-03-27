@@ -24,9 +24,9 @@ public class FlipsCache {
     }
     
     init() {
-        self.loggedUserStorageCache = StorageCache(cacheID: "loggedUserStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: { CacheCleanupPolicy.sharedInstance.freeSizeInBytes() })
+        self.loggedUserStorageCache = StorageCache(cacheID: "loggedUserStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
         CacheCleanupPolicy.sharedInstance.register(self.loggedUserStorageCache)
-        self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: { CacheCleanupPolicy.sharedInstance.freeSizeInBytes() })
+        self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
         CacheCleanupPolicy.sharedInstance.register(self.otherUsersStorageCache)
     }
     

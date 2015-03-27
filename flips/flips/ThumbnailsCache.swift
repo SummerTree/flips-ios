@@ -23,7 +23,7 @@ public class ThumbnailsCache {
     }
     
     init() {
-        self.cache = StorageCache(cacheID: "thumbnailsCache", cacheDirectoryName: "thumbnails_cache", freeSizeInBytes: { CacheCleanupPolicy.sharedInstance.freeSizeInBytes() })
+        self.cache = StorageCache(cacheID: "thumbnailsCache", cacheDirectoryName: "thumbnails_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
         CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
