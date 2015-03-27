@@ -152,9 +152,11 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         }
         
         self.layoutWords()
-        
-        let centeredWordIndex = dataSource?.flipMessageWordListViewHighlightedWordIndex(self)
-        self.centerScrollViewAtView(flipTextViews[centeredWordIndex!], animated: animated)
+
+        if (self.flipTextViews.count > 0) {
+            let centeredWordIndex = dataSource?.flipMessageWordListViewHighlightedWordIndex(self)
+            self.centerScrollViewAtView(flipTextViews[centeredWordIndex!], animated: animated)
+        }
     }
     
     func updateWordState() {

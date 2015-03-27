@@ -41,13 +41,15 @@ public class Downloader : NSObject {
             completion(success: true)
         }, failure: { (operation, error) -> Void in
             println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
+            let fileManager = NSFileManager.defaultManager()
+            fileManager.removeItemAtURL(localURL, error: nil)
             completion(success: false)
         })
 
         if (progress != nil) {
             operation.setDownloadProgressBlock { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
-                println("progress: \(Float(totalBytesRead) / Float(totalBytesExpectedToRead))")
                 progress?(Float(totalBytesRead) / Float(totalBytesExpectedToRead))
+                return
             }
         }
 
