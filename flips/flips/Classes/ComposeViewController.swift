@@ -584,7 +584,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     let flipWord = self.flipWords[self.highlightedWordIndex]
                     if (flipWord.associatedFlipId == nil) {
                         let flipsCache = FlipsCache.sharedInstance
-                        flipsCache.videoForFlip(selectedFlip,
+                        flipsCache.get(NSURL(string: selectedFlip.backgroundURL)!,
                             success: { (url: String!, localPath: String!) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 self.onFlipSelected(flipId)
