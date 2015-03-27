@@ -167,6 +167,7 @@
 		7310092198ad95d4fc6d60c6 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */; };
 		73192A891A8B9B660010C949 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
+		731BA3001AC4B294007F12D5 /* CacheCleanupPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */; };
 		7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8071A89624F00446CD8 /* CacheJournal.swift */; };
 		7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
 		73D7279A1A83E7A1006DCC92 /* StorageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D727991A83E7A1006DCC92 /* StorageCache.swift */; };
@@ -489,6 +490,7 @@
 		70FD4E7F19D064450024EBDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailsCache.swift; sourceTree = "<group>"; };
 		73192A881A8B9B660010C949 /* FlipsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCache.swift; sourceTree = "<group>"; };
+		731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheCleanupPolicy.swift; sourceTree = "<group>"; };
 		7330F8071A89624F00446CD8 /* CacheJournal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheJournal.swift; sourceTree = "<group>"; };
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		73D727971A83E721006DCC92 /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1186,6 +1188,7 @@
 				7330F8091A89670300446CD8 /* JournalEntry.swift */,
 				73192A881A8B9B660010C949 /* FlipsCache.swift */,
 				7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */,
+				731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */,
 			);
 			name = Caching;
 			sourceTree = "<group>";
@@ -2013,6 +2016,7 @@
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
 				7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */,
 				5784778F19DDB9530063A543 /* DeviceService.swift in Sources */,
+				731BA3001AC4B294007F12D5 /* CacheCleanupPolicy.swift in Sources */,
 				7A2ED6AF19FA7AA6000C6B86 /* RoomExtension.swift in Sources */,
 				5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */,
 				7A7937A11A3085E500136144 /* FlipsHeaderView.swift in Sources */,

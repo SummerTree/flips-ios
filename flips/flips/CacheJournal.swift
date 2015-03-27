@@ -20,11 +20,11 @@ public class CacheJournal {
     private let fileManagerQueue: dispatch_queue_t
     private let entriesQueue: dispatch_queue_t
     
-    var cacheSize: UInt64 {
+    var cacheSize: Int64 {
         get {
-            var size: UInt64 = 0
+            var size: Int64 = 0
             for entry in entries {
-                size += entry.size
+                size += Int64(entry.size)
             }
             return size
         }
@@ -72,19 +72,19 @@ public class CacheJournal {
         self.persistJournal()
     }
     
-    func getLRUEntriesForSize(sizeInBytes: UInt64) -> Slice<String> {
+    func getLRUEntriesForSize(sizeInBytes: Int64) -> Slice<String> {
         var entriesSlice: Slice<String>!
         
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.sort({ $0.timestamp < $1.timestamp })
             
-            var count: UInt64 = 0
+            var count: Int64 = 0
             var upperLimit: Int = 0
             for entry in self.entries {
                 if count >= sizeInBytes {
                     break
                 }
-                count += entry.size
+                count += Int64(entry.size)
                 ++upperLimit
             }
             

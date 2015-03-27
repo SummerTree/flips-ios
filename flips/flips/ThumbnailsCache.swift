@@ -23,7 +23,8 @@ public class ThumbnailsCache {
     }
     
     init() {
-        self.cache = StorageCache(cacheID: "thumbnailsCache", cacheDirectoryName: "thumbnails_cache", sizeLimitInBytes: 500*CacheSize.MEGABYTE)
+        self.cache = StorageCache(cacheID: "thumbnailsCache", cacheDirectoryName: "thumbnails_cache", freeSizeInBytes: {CacheCleanupPolicy.sharedInstance.freeSizeInBytes()})
+        CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
     func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?) -> StorageCache.CacheGetResponse {

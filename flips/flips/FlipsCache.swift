@@ -24,8 +24,10 @@ public class FlipsCache {
     }
     
     init() {
-        self.loggedUserStorageCache = StorageCache(cacheID: "loggedUserStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 500*CacheSize.MEGABYTE)
-        self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 500*CacheSize.MEGABYTE)
+        self.loggedUserStorageCache = StorageCache(cacheID: "loggedUserStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: {CacheCleanupPolicy.sharedInstance.freeSizeInBytes()})
+        CacheCleanupPolicy.sharedInstance.register(self.loggedUserStorageCache)
+        self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: {CacheCleanupPolicy.sharedInstance.freeSizeInBytes()})
+        CacheCleanupPolicy.sharedInstance.register(self.otherUsersStorageCache)
     }
     
     func videoForFlip(flip: Flip, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?, progress: StorageCache.CacheProgressCallback?) -> StorageCache.CacheGetResponse {
