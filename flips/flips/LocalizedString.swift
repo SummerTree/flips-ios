@@ -33,7 +33,7 @@ struct LocalizedString {
     static let DOWNLOAD_FAILED_RETRY = NSLocalizedString("Download failed.  Tap to retry.", comment: "Download failed message on video player")
     static let PHONE_NUMBER_ALREADY_EXISTS = NSLocalizedString("This phone number is already used by an existing Flips user.", comment: "This phone number is already used by an existing Flips user.")
     static let DEVICE_ERROR = NSLocalizedString("Device Error", comment: "Device Error")
-    static let DEVICE_ID_ERROR = NSLocalizedString("It was not possible to retrieve this device ID. Please contact Flips support.", comment: "It was not possible to retrieve this device ID. Please contact Flips support.")
+    static let DEVICE_ID_ERROR = NSLocalizedString("Unable to complete operation because an unexpected error occurred.  Please try again.  If the issue persists, please contact Flips support.", comment: "Unable to complete operation because an unexpected error occurred.  Please try again.  If the issue persists, please contact Flips support.")
 }
 
 func NSLocalizedString(key: String) -> String {
