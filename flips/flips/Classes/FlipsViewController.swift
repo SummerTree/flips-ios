@@ -28,16 +28,16 @@ class FlipsViewController : UIViewController {
     
     // MARK: - Init methods
     
+    override init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     required init(coder: NSCoder) {
 		super.init(coder: coder)
     }
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nil, bundle: nil)
-    }
-    
-    convenience override init() {
-        self.init(nibName: nil, bundle: nil)
     }
     
     

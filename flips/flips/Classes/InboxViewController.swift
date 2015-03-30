@@ -29,6 +29,19 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     private var syncView: SyncView!
     private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
     
+    private var roomIdToShow: String?
+    
+    // MARK: - Initialization Methods
+    
+    init(roomID: String? = nil) {
+        super.init()
+        self.roomIdToShow = roomID
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
     }
@@ -90,6 +103,13 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             }
         }
         self.refreshRooms()
+        
+        if let roomID = self.roomIdToShow {
+            let roomDataSource = RoomDataSource()
+            let room = roomDataSource.retrieveRoomWithId(roomID)
+            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
+            self.roomIdToShow = nil
+        }
     }
     
     func imageForView() -> UIImage {
