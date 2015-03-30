@@ -231,26 +231,30 @@ public class UserService: FlipsService {
             return
         }
         
-        let url = HOST + self.FORGOT_URL
-        let params = [RequestParams.PHONE_NUMBER : phoneNumber]
-        
-        self.post(url,
-            parameters: params,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                success(nil)
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                let response = operation.response
-                if ((response != nil) && (response.statusCode == 404)) {
-                    failure(nil)
-                } else if (operation.responseObject != nil) {
-                    let responseObject = operation.responseObject as NSDictionary
-                    failure(FlipError(error: responseObject["error"] as String!, details:nil))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
+        if let deviceId = DeviceHelper.sharedInstance.retrieveDeviceId() {
+            let url = HOST + self.FORGOT_URL
+            let params = [RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.DEVICE_ID: deviceId]
+            
+            self.post(url,
+                parameters: params,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    success(nil)
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    let response = operation.response
+                    if ((response != nil) && (response.statusCode == 404)) {
+                        failure(nil)
+                    } else if (operation.responseObject != nil) {
+                        let responseObject = operation.responseObject as NSDictionary
+                        failure(FlipError(error: responseObject["error"] as String!, details:nil))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details:nil))
+                    }
                 }
-            }
-        )
+            )
+        } else {
+            failure(FlipError(error: LocalizedString.DEVICE_ERROR, details: LocalizedString.DEVICE_ID_ERROR))
+        }
     }
     
     
@@ -262,30 +266,36 @@ public class UserService: FlipsService {
             return
         }
         
-        let url = HOST + VERIFY_URL
-        let params = [RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.VERIFICATION_CODE : verificationCode]
-        
-        self.post(url,
-            parameters: params,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                let json = JSON(responseObject)
-                let username = json["user", "username"].stringValue
-                
-                if !username.isEmpty {
-                    success(username: username)
-                } else {
-                    failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number.")))
+        if let deviceId = DeviceHelper.sharedInstance.retrieveDeviceId() {
+            let url = HOST + VERIFY_URL
+            let params = [RequestParams.PHONE_NUMBER : phoneNumber,
+                RequestParams.VERIFICATION_CODE : verificationCode,
+                RequestParams.DEVICE_ID: deviceId]
+            
+            self.post(url,
+                parameters: params,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    let json = JSON(responseObject)
+                    let username = json["user", "username"].stringValue
+                    
+                    if !username.isEmpty {
+                        success(username: username)
+                    } else {
+                        failure(FlipError(error: NSLocalizedString("Unable to find username."), details: NSLocalizedString("The server did not return the username associated with this phone number.")))
+                    }
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details:nil))
+                    }
                 }
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details:nil))
-                }
-            }
-        )
+            )
+        } else {
+            failure(FlipError(error: LocalizedString.DEVICE_ERROR, details: LocalizedString.DEVICE_ID_ERROR))
+        }
     }
     
     
@@ -297,23 +307,32 @@ public class UserService: FlipsService {
             return
         }
         
-        let url = HOST + UPDATE_PASSWORD_URL
-        let params = [RequestParams.EMAIL : username, RequestParams.PHONE_NUMBER : phoneNumber.intlPhoneNumber, RequestParams.VERIFICATION_CODE : verificationCode, RequestParams.PASSWORD : newPassword]
-        
-        self.post(url,
-            parameters: params,
-            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                success()
-            },
-            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: nil))
-                } else {
-                    failure(FlipError(error: error.localizedDescription, details: nil))
+        if let deviceId = DeviceHelper.sharedInstance.retrieveDeviceId() {
+            let url = HOST + UPDATE_PASSWORD_URL
+            let params = [RequestParams.EMAIL : username,
+                RequestParams.PHONE_NUMBER : phoneNumber.intlPhoneNumber,
+                RequestParams.VERIFICATION_CODE : verificationCode,
+                RequestParams.PASSWORD : newPassword,
+                RequestParams.DEVICE_ID : deviceId]
+            
+            self.post(url,
+                parameters: params,
+                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                    success()
+                },
+                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                    if (operation.responseObject != nil) {
+                        let response = operation.responseObject as NSDictionary
+                        failure(FlipError(error: response["error"] as String!, details: nil))
+                    } else {
+                        failure(FlipError(error: error.localizedDescription, details: nil))
+                    }
                 }
-            }
-        )
+            )
+
+        } else {
+            failure(FlipError(error: LocalizedString.DEVICE_ERROR, details: LocalizedString.DEVICE_ID_ERROR))
+        }
     }
     
     
@@ -393,7 +412,7 @@ public class UserService: FlipsService {
             return
         }
         
-        let graphPath = "me?fields=id,first_name,last_name,email,picture.width(500)"
+        let graphPath = "me?fields=id,first_name,last_name,email,picture.width(300)"
         FBRequestConnection.startWithGraphPath(graphPath) { (connection, result, error) -> Void in
             if (error != nil) {
                 failure(FlipError(error: error.localizedDescription, details:nil))
@@ -472,8 +491,7 @@ public class UserService: FlipsService {
                 })
             }, failure: { (error) -> Void in
                 NSLog("IMPORT CONTACTS - READ FROM DEVICE FAILED")
-
-                failure(FlipError(error: "Error retrieving contacts.", details:nil))
+                failure(FlipError(error: LocalizedString.CONTACTS_ACCESS_TITLE, details:LocalizedString.CONTACTS_ACCESS_MESSAGE))
             })
         }
     }
@@ -585,5 +603,6 @@ public class UserService: FlipsService {
         static let VERIFICATION_CODE = "verification_code"
         static let PHOTO = "photo"
         static let FACEBOOK_IDS = "facebookIDs"
+        static let DEVICE_ID = "device_id"
     }
 }

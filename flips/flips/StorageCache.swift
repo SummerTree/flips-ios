@@ -12,9 +12,10 @@
 
 public class StorageCache {
 
-    public typealias CacheSuccessCallback = (String!) -> Void
-    public typealias CacheFailureCallback = (FlipError) -> Void
-    public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?)
+    public typealias CacheSuccessCallback = (String!, String!) -> Void
+    public typealias CacheFailureCallback = (String!, FlipError) -> Void
+    public typealias CacheProgressCallback = (Float) -> Void
+    public typealias DownloadFinishedCallbacks = (success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback?)
     
     public enum CacheGetResponse {
         case DATA_IS_READY
@@ -23,14 +24,20 @@ public class StorageCache {
     }
     
     private let cacheDirectoryPath: NSURL
-    private let sizeLimitInBytes: UInt64
+    private let freeSizeInBytes: () -> Int64
     private let cacheJournal: CacheJournal
     private let cacheQueue: dispatch_queue_t
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
     
-    init(cacheID: String, cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
-        self.sizeLimitInBytes = sizeLimitInBytes
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
+    var sizeInBytes: Int64 {
+        get {
+            return self.cacheJournal.cacheSize
+        }
+    }
+    
+    init(cacheID: String, cacheDirectoryName: String, freeSizeInBytes: () -> Int64) {
+        self.freeSizeInBytes = freeSizeInBytes
+        let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
         let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
@@ -65,42 +72,49 @@ public class StorageCache {
             println("Error excluding cache dir from backup: \(error)")
         }
     }
-    
+
     /**
     Asynchronously retrieves an asset. Whenever it's available, the success function is called.
     If the asset is not in the cache by the time this function is called, it's downloaded and
     inserted in the cache before its local path is passed to the success function. If some error occurs
     (e.g. not in cache and no internet connection), the failure function is called with some
-    error description.
+    error description. While the asset is being downloaded the progress callback will be called to indicate
+    the progress of the operation.
     
     :param: remoteURL The URL from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: success   A function that is called when the asset is successfully available.
     :param: failure   A function that is called when the asset could not be retrieved.
+    :param: progress  A function that is called while the asset is being retrieved to indicate progress.
     */
-    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?) -> CacheGetResponse {
+    func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback? = nil) -> CacheGetResponse {
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
             dispatch_async(self.cacheQueue) {
-                success?(localPath)
+                progress?(1.0)
+                success?(remoteURL.absoluteString, localPath)
+                self.cacheJournal.updateEntry(localPath)
                 return
             }
-            self.cacheJournal.updateEntry(localPath)
             return CacheGetResponse.DATA_IS_READY
         }
         
         if (self.downloadInProgressURLs[localPath] != nil) {
-            self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure))
+            self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
             return CacheGetResponse.DOWNLOAD_WILL_START
         }
         
         self.downloadInProgressURLs[localPath] = [DownloadFinishedCallbacks]()
-        self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure))
+        self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
         
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,
-            completion: { (result) -> Void in
-                self.cacheJournal.insertNewEntry(localPath)
-                self.scheduleCleanup()
+            completion: { (success) -> Void in
+                if (success) {
+                    dispatch_async(self.cacheQueue) {
+                        self.cacheJournal.insertNewEntry(localPath)
+                        self.scheduleCleanup()
+                    }
+                }
                 
                 if (self.downloadInProgressURLs[localPath] == nil) {
                     println("Local path (\(localPath)) has been downloaded but we already cleaned up its callbacks.")
@@ -108,15 +122,25 @@ public class StorageCache {
                 }
                 
                 for callbacks in self.downloadInProgressURLs[localPath]! {
-                    if (result) {
-                        callbacks.success?(localPath)
+                    if (success) {
+                        callbacks.success?(remoteURL.absoluteString, localPath)
                     } else {
-                        callbacks.failure?(FlipError(error: "Error downloading media file", details: nil))
+                        callbacks.failure?(remoteURL.absoluteString, FlipError(error: "Error downloading media file", details: nil))
                     }
                 }
                 
                 println("Cleaning up callbacks for \(localPath).")
                 self.downloadInProgressURLs[localPath] = nil
+            },
+            progress: { (downloadProgress) -> Void in
+                if (self.downloadInProgressURLs[localPath] == nil) {
+                    println("Local path (\(localPath)) is being downloaded but we already cleaned up its callbacks.")
+                    return
+                }
+
+                for callbacks in self.downloadInProgressURLs[localPath]! {
+                    callbacks.progress?(downloadProgress)
+                }
             }
         )
         
@@ -137,16 +161,17 @@ public class StorageCache {
     func put(remoteURL: NSURL, localPath srcPath: String) -> Void {
         let toPath = self.createLocalPath(remoteURL)
         
-        let fileManager = NSFileManager.defaultManager()
-
         if (!self.cacheHit(toPath)) {
-            var error: NSError? = nil
-            fileManager.moveItemAtPath(srcPath, toPath: toPath, error: &error)
-            if (error != nil) {
-                println("Error move asset to the cache dir: \(error)")
+            dispatch_async(self.cacheQueue) {
+                var error: NSError? = nil
+                let fileManager = NSFileManager.defaultManager()
+                fileManager.moveItemAtPath(srcPath, toPath: toPath, error: &error)
+                if (error != nil) {
+                    println("Error move asset to the cache dir: \(error)")
+                }
+                self.cacheJournal.insertNewEntry(toPath)
+                self.scheduleCleanup()
             }
-            self.cacheJournal.insertNewEntry(toPath)
-            self.scheduleCleanup()
         }
     }
     
@@ -156,15 +181,33 @@ public class StorageCache {
     :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
     :param: data      The actual asset that is going to be inserted into the cache.
     */
-    func put(remoteURL: NSURL, data: NSData) -> Void {
+    func put(remoteURL: NSURL, data: NSData) -> String {
         let localPath = self.createLocalPath(remoteURL)
         
-        let fileManager = NSFileManager.defaultManager()
-        
         if (!self.cacheHit(localPath)) {
-            fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
-            self.cacheJournal.insertNewEntry(localPath)
-            self.scheduleCleanup()
+            dispatch_async(self.cacheQueue) {
+                let fileManager = NSFileManager.defaultManager()
+                fileManager.createFileAtPath(localPath, contents: data, attributes: nil)
+                self.cacheJournal.insertNewEntry(localPath)
+                self.scheduleCleanup()
+            }
+        }
+        return localPath
+    }
+    
+    func clear() -> Void {
+        dispatch_async(self.cacheQueue) {
+            let entries = self.cacheJournal.getEntries()
+            let fileManager = NSFileManager.defaultManager()
+            for path in entries {
+                var error: NSError? = nil
+                if (!fileManager.removeItemAtPath(path, error: &error)) {
+                    println("Could not remove file \(path). Error: \(error)")
+                }
+            }
+            
+            self.cacheJournal.clear()
+            self.downloadInProgressURLs.removeAll(keepCapacity: false)
         }
     }
     
@@ -179,23 +222,21 @@ public class StorageCache {
     }
     
     private func scheduleCleanup() -> Void {
-        dispatch_async(self.cacheQueue) {
-            let cacheSize = self.cacheJournal.cacheSize
-            if (cacheSize < self.sizeLimitInBytes) {
-                return
-            }
-            
-            let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheSize-self.sizeLimitInBytes)
-            let fileManager = NSFileManager.defaultManager()
-            for path in leastRecentlyUsed {
-                var error: NSError? = nil
-                if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(path). Error: \(error)")
-                }
-            }
-            
-            self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
+        let freeSize = self.freeSizeInBytes()
+        if (freeSize >= 0) {
+            return
         }
+        
+        let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(-freeSize)
+        let fileManager = NSFileManager.defaultManager()
+        for path in leastRecentlyUsed {
+            var error: NSError? = nil
+            if (!fileManager.removeItemAtPath(path, error: &error)) {
+                println("Could not remove file \(path). Error: \(error)")
+            }
+        }
+        
+        self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
     }
     
 }

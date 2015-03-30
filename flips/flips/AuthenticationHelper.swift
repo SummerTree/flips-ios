@@ -63,6 +63,9 @@ public class AuthenticationHelper: NSObject {
         PubNubService.sharedInstance.disablePushNotificationOnMyChannels()
         
         CoreDataHandler.sharedInstance.resetDatabase()
+        
+        FlipsCache.sharedInstance.clear()
+        ThumbnailsCache.sharedInstance.clear()
 
         PubNub.disconnect()
         

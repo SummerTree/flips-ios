@@ -75,10 +75,10 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 
         let cache = ThumbnailsCache.sharedInstance
         cache.get(NSURL(string: firstFlip.thumbnailURL)!,
-            success: { (localPath: String!) -> Void in
+            success: { (remoteURL: String!, localPath: String!) -> Void in
                 self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: nil)
             },
-            failure: { (error: FlipError) -> Void in
+            failure: { (remoteURL: String!, error: FlipError) -> Void in
                 println("Failed to get resource from cache, error: \(error)")
                 self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: error)
         })

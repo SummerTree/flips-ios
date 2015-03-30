@@ -29,16 +29,16 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private let IPHONE_4S_TOP_CONTAINER_HEIGHT: CGFloat = 240.0
     private let FLIP_MESSAGE_WORDS_LIST_HEIGHT: CGFloat = 50.0
     
-    private var composeTopViewContainer: ComposeTopViewContainer!
-    private var flipMessageWordListView: FlipMessageWordListView!
-    private var composeBottomViewContainer: ComposeBottomViewContainer!
+    internal var composeTopViewContainer: ComposeTopViewContainer!
+    internal var flipMessageWordListView: FlipMessageWordListView!
+    internal var composeBottomViewContainer: ComposeBottomViewContainer!
     
     private var composeTitle: String!
     internal var flipWords: [FlipText]!
     
     internal var highlightedWordIndex: Int!
     
-    private var myFlipsDictionary: Dictionary<String, [String]>!
+    internal var myFlipsDictionary: Dictionary<String, [String]>!
     private var stockFlipsDictionary: Dictionary<String, [String]>!
     
     weak private var highlightedWordCurrentAssociatedImage: UIImage?
@@ -300,12 +300,12 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     private func showFlipCreatedState(flipId: String) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
-        
-        self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
+
         if (self.canShowMyFlips()) {
+            self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
             self.composeBottomViewContainer.showMyFlips()
         } else {
-            self.composeBottomViewContainer.showFlipCreateMessage()
+            self.showNewFlipWithoutSavedFlipsForWord(flipWord.text)
         }
     }
     
@@ -347,7 +347,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - FlipWords Methods
     
-    private func onFlipAssociated() {
+    func onFlipAssociated() {
         self.reloadMyFlips()
         self.updateFlipWordsState()
         self.moveToNextFlipWord()
@@ -388,10 +388,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         return NO_EMPTY_FLIP_INDEX
     }
     
-    private func moveToNextFlipWord() {
+    internal func moveToNextFlipWord() {
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_EMPTY_FLIP_INDEX) {
-            self.showContentForHighlightedWord(shouldReloadWords: false)
+            self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
             if (self.shouldShowPreviewButton()) {
                 self.openPreview()
             } else {
@@ -399,7 +399,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            self.showContentForHighlightedWord(shouldReloadWords: false)
+            self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
         }
     }
     
@@ -442,12 +442,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 composeBottomViewContainer.showCameraButtons()
             }
         case FlipState.AssociatedAndNoResourcesAvailable, FlipState.AssociatedAndResourcesAvailable:
-            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
-            if (self.canShowMyFlips()) {
-                composeBottomViewContainer.showMyFlips()
-            } else {
-                composeBottomViewContainer.showFlipCreateMessage()
-            }
+            self.showFlipCreatedState(flipWord.associatedFlipId!)
         }
     }
     
@@ -589,18 +584,20 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     let flipWord = self.flipWords[self.highlightedWordIndex]
                     if (flipWord.associatedFlipId == nil) {
                         let flipsCache = FlipsCache.sharedInstance
-                        flipsCache.videoForFlip(selectedFlip,
-                            success: { (localPath: String!) in
+                        flipsCache.get(NSURL(string: selectedFlip.backgroundURL)!,
+                            success: { (url: String!, localPath: String!) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 self.onFlipSelected(flipId)
-                            }, failure: { (error: FlipError) in
+                            }, failure: { (url: String!, error: FlipError) in
                                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     println("Downloading stock flip(id: \(flipId)) error: \(error)")
                                     let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                                     alertView.show()
                                 })
-                        })
+                            },
+                            progress: nil
+                        )
                     } else {
                         self.onFlipSelected(flipId)
                         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)

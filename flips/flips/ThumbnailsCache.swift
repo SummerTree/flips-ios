@@ -11,7 +11,7 @@
 //
 
 
-public class ThumbnailsCache {
+public class ThumbnailsCache: ThumbnailsDataSource {
     
     let cache: StorageCache
     
@@ -23,7 +23,8 @@ public class ThumbnailsCache {
     }
     
     init() {
-        self.cache = StorageCache(cacheID: "thumbnailsCache", cacheDirectoryName: "thumbnails_cache", sizeLimitInBytes: 5000000) //5MB
+        self.cache = StorageCache(cacheID: "thumbnailsCache", cacheDirectoryName: "thumbnails_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
+        CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
     func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?) -> StorageCache.CacheGetResponse {
@@ -31,7 +32,11 @@ public class ThumbnailsCache {
             return StorageCache.CacheGetResponse.INVALID_URL
         }
         
-        return self.cache.get(remoteURL, success: success, failure: failure)
+        return self.cache.get(remoteURL,
+            success: { (url: String!, localPath: String!) -> Void in
+                BlurredThumbnailsCache.sharedInstance.put(NSURL(string: url)!, localPath: localPath)
+                success?(url, localPath)
+            }, failure: failure)
     }
     
     func put(remoteURL: NSURL, localPath: String) -> Void {
@@ -45,4 +50,9 @@ public class ThumbnailsCache {
     func has(remoteURL: NSURL) -> Bool {
         return self.cache.has(remoteURL)
     }
+    
+    func clear() -> Void {
+        cache.clear()
+    }
+    
 }

@@ -58,10 +58,10 @@ extension FlipMessage {
                 
                 let thumbnailsCache = ThumbnailsCache.sharedInstance
                 thumbnailsCache.get(NSURL(string: firstFlip.thumbnailURL!)!,
-                    success: { (localPath: String!) in
+                    success: { (url: String!, localPath: String!) in
                         var image = UIImage(contentsOfFile: localPath)
                         success?(image)
-                    }, failure: { (error: FlipError) in
+                    }, failure: { (url: String!, error: FlipError) in
                         println("Could not get thumbnail for flip \(firstFlip).")
                 })
             }
