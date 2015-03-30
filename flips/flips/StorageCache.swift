@@ -24,14 +24,20 @@ public class StorageCache {
     }
     
     private let cacheDirectoryPath: NSURL
-    private let sizeLimitInBytes: UInt64
+    private let freeSizeInBytes: () -> Int64
     private let cacheJournal: CacheJournal
     private let cacheQueue: dispatch_queue_t
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
     
-    init(cacheID: String, cacheDirectoryName: String, sizeLimitInBytes: UInt64) {
-        self.sizeLimitInBytes = sizeLimitInBytes
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.LocalDomainMask, true)
+    var sizeInBytes: Int64 {
+        get {
+            return self.cacheJournal.cacheSize
+        }
+    }
+    
+    init(cacheID: String, cacheDirectoryName: String, freeSizeInBytes: () -> Int64) {
+        self.freeSizeInBytes = freeSizeInBytes
+        let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
         let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
@@ -216,12 +222,12 @@ public class StorageCache {
     }
     
     private func scheduleCleanup() -> Void {
-        let cacheSize = self.cacheJournal.cacheSize
-        if (cacheSize < self.sizeLimitInBytes) {
+        let freeSize = self.freeSizeInBytes()
+        if (freeSize >= 0) {
             return
         }
         
-        let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(cacheSize-self.sizeLimitInBytes)
+        let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(-freeSize)
         let fileManager = NSFileManager.defaultManager()
         for path in leastRecentlyUsed {
             var error: NSError? = nil

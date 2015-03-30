@@ -13,8 +13,7 @@
 
 public class FlipsCache {
     
-    let loggedUserStorageCache: StorageCache
-    let otherUsersStorageCache: StorageCache
+    let cache: StorageCache
     
     public class var sharedInstance : FlipsCache {
         struct Static {
@@ -24,31 +23,24 @@ public class FlipsCache {
     }
     
     init() {
-        self.loggedUserStorageCache = StorageCache(cacheID: "loggedUserStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 5000000) //5MB
-        self.otherUsersStorageCache = StorageCache(cacheID: "otherUsersStorageCache", cacheDirectoryName: "flips_cache", sizeLimitInBytes: 5000000) //5MB
+        self.cache = StorageCache(cacheID: "allFlipsStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
+        CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
-    func videoForFlip(flip: Flip, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?, progress: StorageCache.CacheProgressCallback?) -> StorageCache.CacheGetResponse {
-        if (flip.backgroundURL == nil || flip.backgroundURL == "") {
+    func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?, progress: StorageCache.CacheProgressCallback?) -> StorageCache.CacheGetResponse {
+        if (remoteURL.path == nil || remoteURL.path! == "") {
             return StorageCache.CacheGetResponse.INVALID_URL
         }
         
-        if let loggedUser = User.loggedUser() {
-            if (flip.owner != nil && flip.owner.userID == loggedUser.userID) {
-                return self.loggedUserStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure, progress: progress)
-            }
-        }
-        
-        return self.otherUsersStorageCache.get(NSURL(string: flip.backgroundURL)!, success: success, failure: failure, progress: progress)
+        return self.cache.get(remoteURL, success: success, failure: failure, progress: progress)
     }
     
     func put(remoteURL: NSURL, localPath: String) -> Void {
-        self.loggedUserStorageCache.put(remoteURL, localPath: localPath)
+        self.cache.put(remoteURL, localPath: localPath)
     }
     
     func clear() -> Void {
-        self.loggedUserStorageCache.clear()
-        self.otherUsersStorageCache.clear()
+        self.cache.clear()
     }
     
 }
