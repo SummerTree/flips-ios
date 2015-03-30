@@ -226,8 +226,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
         //If the user removes or inserts characters changing the current text, the previously joined texts are lost
         if (range.location < countElements(self.text)) {
-            self.resetTextColor()
             joinedTextRanges.removeAll(keepCapacity: false)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.resetTextColor()
+            })
         }
         
         //handling when user changes (delete or replace) parts of a previously joined text
