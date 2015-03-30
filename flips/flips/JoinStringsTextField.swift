@@ -13,6 +13,7 @@
 class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     var joinedTextRanges : [NSRange] = [NSRange]()
+    private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private let WHITESPACE: Character = " "
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
@@ -182,7 +183,9 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func isSpecialCharacter(char : Character) -> Bool {
-        return char == Character(",") || char == Character(";") || char == Character(".") || char == Character("!") || char == Character("?")
+        let str = String(char)
+        let range = NSRange(location: 0, length: countElements(str))
+        return wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) == 0
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {
