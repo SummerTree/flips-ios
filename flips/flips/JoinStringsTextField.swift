@@ -15,11 +15,13 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private let WHITESPACE: Character = " "
+    let DEFAULT_HEIGHT: CGFloat = 42.0
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
     override init() {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
+        self.returnKeyType = .Next
         self.delegate = self
     }
     
@@ -154,7 +156,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
         
         if (lastWord != "") {
-           flipTexts.append(lastWord)
+            flipTexts.append(lastWord)
         }
         
         self.becomeFirstResponder()
@@ -235,13 +237,6 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func textViewDidChange(textView: UITextView) {
-        var currentFrameHeight: CGFloat = self.frame.size.height
-        var neededFrameHeight = self.contentSize.height
-
-        if (neededFrameHeight != currentFrameHeight) {
-            joinStringsTextFieldDelegate?.joinStringsTextFieldNeedsToHaveItsHeightUpdated(self)
-        }
-        
         joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: text)
     }
     
@@ -327,9 +322,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
 // MARK: - View Delegate
 
 @objc protocol JoinStringsTextFieldDelegate {
-    
-    optional func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
-    
+        
     optional func joinStringsTextFieldShouldReturn(joinStringsTextField: JoinStringsTextField) -> Bool
     
     optional func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!)

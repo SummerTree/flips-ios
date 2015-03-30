@@ -134,17 +134,7 @@ class NewFlipViewController: FlipsViewController,
     }
     
     private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
-        let maxHeight = CGRectGetHeight(self.view.frame)/2
-        var neededHeight = view.contentSize.height
-        
-        if (neededHeight > maxHeight) {
-            neededHeight = maxHeight
-            view.contentOffset = CGPointZero
-        }
-        
-        if (neededHeight != heightConstraint.constant) {
-            heightConstraint.constant = neededHeight
-        }
+        heightConstraint.constant = flipTextField.DEFAULT_HEIGHT
     }
     
     private func updateNextButtonState() {
@@ -222,10 +212,6 @@ class NewFlipViewController: FlipsViewController,
     }
     
     // MARK: - JointStringsTextFieldDelegate
-    
-    func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!) {
-        self.view.setNeedsUpdateConstraints()
-    }
     
     func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
         updateNextButtonState()
