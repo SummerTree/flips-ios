@@ -13,6 +13,8 @@
 class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     var joinedTextRanges : [NSRange] = [NSRange]()
+    private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
+    private let WHITESPACE: Character = " "
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
@@ -45,8 +47,31 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
         var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
-        var selectionLength : Int = posEnd - posInit
-        var joinedTextRange = NSMakeRange(posInit, selectionLength)
+        
+        var newPosInit = posInit
+        var newPosEnd = posEnd
+        var string = Array(self.text)
+        let firstCharIsSpecial = isSpecialCharacter(string[posInit])
+        if (string[posInit] != WHITESPACE) {
+            for var i = posInit-1; i >= 0; --i {
+                if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ firstCharIsSpecial) {
+                    break
+                }
+                --newPosInit
+            }
+        }
+        
+        let lastCharIsSpecial = isSpecialCharacter(string[posEnd-1])
+        if (string[posEnd-1] != WHITESPACE) {
+            for var i = posEnd; i < string.count; ++i {
+                if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ lastCharIsSpecial) {
+                    break
+                }
+                ++newPosEnd
+            }
+        }
+        
+        var joinedTextRange = NSMakeRange(newPosInit, newPosEnd-newPosInit)
         
         self.joinedTextRanges.append(joinedTextRange)
 
@@ -82,10 +107,9 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         var charIndex = 0
         var lastWord: String = ""
-        let whitespace: Character = " "
         
         for character in self.text {
-            if (character == whitespace) {
+            if (character == WHITESPACE) {
                 let result = isPartOfJoinedTextRanges(charIndex)
                 //Avoids that joining a word with a space before or after to join the previous or next word respectivelly
                 var locationFirst: Int?
@@ -158,11 +182,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return false
     }
     
-    func isSpecialCharacter(charac : Character) -> Bool {
-        if (charac == Character(",") || charac == Character(";") || charac == Character(".") || charac == Character("!") || charac == Character("?") ) {
-            return true
-        }
-        return false
+    func isSpecialCharacter(char : Character) -> Bool {
+        let str = String(char)
+        let range = NSRange(location: 0, length: countElements(str))
+        return wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) == 0
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {
