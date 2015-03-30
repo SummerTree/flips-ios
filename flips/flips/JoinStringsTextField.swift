@@ -12,7 +12,7 @@
 
 class JoinStringsTextField : UITextView, UITextViewDelegate {
     
-    var joinedTextRanges : [NSRange] = [NSRange]()
+    private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private let WHITESPACE: Character = " "
     
@@ -20,17 +20,17 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     override init() {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
-        
         self.delegate = self
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer!) {
         super.init(frame: frame, textContainer: textContainer)
+        self.returnKeyType = .Next
     }
     
     required init(coder: NSCoder) {
 		super.init(coder: coder)
-		
+        self.returnKeyType = .Next
 		self.delegate = self
     }
     
@@ -275,6 +275,20 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             self.setColorOnTextRange(deprecatedJoinedTextRange!, color: UIColor.blackColor())
         }*/
         
+        if (text == "\n") {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.joinStringsTextFieldDelegate?.joinStringsTextFieldShouldReturn?(self)
+                return
+            })
+            return false
+        }
+        
+        if (text.rangeOfString("\n") != nil) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.text = self.text.stringByReplacingOccurrencesOfString("\n", withString: " ")
+            })
+        }
+        
         return true
     }
     
@@ -314,7 +328,9 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
 
 @objc protocol JoinStringsTextFieldDelegate {
     
-    func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
+    optional func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
+    
+    optional func joinStringsTextFieldShouldReturn(joinStringsTextField: JoinStringsTextField) -> Bool
     
     optional func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!)
 

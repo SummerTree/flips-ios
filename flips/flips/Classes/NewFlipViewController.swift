@@ -231,6 +231,14 @@ class NewFlipViewController: FlipsViewController,
         updateNextButtonState()
     }
     
+    func joinStringsTextFieldShouldReturn(joinStringsTextField: JoinStringsTextField) -> Bool {
+        if (nextButton.enabled) {
+            self.nextButtonAction(self.nextButton)
+            return true
+        }
+        return false
+    }
+    
     // MARK: - MBContactPickerDataSource
     
     func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {

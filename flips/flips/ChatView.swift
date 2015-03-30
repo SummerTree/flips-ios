@@ -519,6 +519,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         updateNextButtonState()
     }
     
+    func joinStringsTextFieldShouldReturn(joinStringsTextField: JoinStringsTextField) -> Bool {
+        if (nextButton.enabled) {
+            didTapNextButton()
+            return true
+        }
+        return false
+    }
     
     // MARK: - ChatTableViewCellDelegate
     
