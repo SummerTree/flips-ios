@@ -223,8 +223,6 @@ public class PubNubService: FlipsService, PNDelegate {
             return
         }
 
-        
-
         let completionBlock : PNClientHistoryLoadHandlingBlock = { (messages, channel, startDate, endDate, error) -> Void in
             let messages = messages as? Array<PNMessage>
             
@@ -354,15 +352,15 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
     
-    func sendMarkAsReadMessageForFlipMessage(message: Dictionary<String, AnyObject>) {
-        println("\nsendMarkAsReadMessageForFlipMessage: \(message)")
+    func sendMessageToLoggedUserPrivateChannel(message: Dictionary<String, AnyObject>) {
+        println("\nsendMessageToLoggedUserPrivateChannel: \(message)")
         
         if let loggedUser = User.loggedUser() {
             let privateChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
             
             var encryptedMessage = message
             encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_CONTENT]!).rawString()), forKey: MESSAGE_CONTENT)
-
+            
             PubNub.sendMessage(encryptedMessage, toChannel: privateChannel, storeInHistory: true, withCompletionBlock: { (state: PNMessageState, data: AnyObject!) -> Void in
                 println("mark as read message sent: \(data)")
                 switch (state) {
@@ -382,7 +380,8 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
     
-	// MARK: - Notifications Handler
+   
+    // MARK: - Notifications Handler
 	
     public func pubnubClient(client: PubNub!, didReceivePushNotificationEnabledChannels channels: [AnyObject]!) {
         println("didReceivePushNotificationEnabledChannels")

@@ -15,6 +15,9 @@
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="contactUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="contacts" inverseEntity="User" syncable="YES"/>
     </entity>
+    <entity name="DeletedFlipMessage" representedClassName="DeletedFlipMessage" syncable="YES">
+        <attribute name="flipMessageID" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Device" representedClassName="Device" syncable="YES">
         <attribute name="deviceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isVerified" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -93,8 +96,9 @@
         <element name="Flip" positionX="-675" positionY="324" width="128" height="223"/>
         <element name="FlipEntry" positionX="-1008" positionY="117" width="128" height="105"/>
         <element name="FlipMessage" positionX="-144" positionY="470" width="128" height="165"/>
+        <element name="ReadFlipMessage" positionX="-1215" positionY="333" width="128" height="58"/>
         <element name="Room" positionX="-974" positionY="428" width="128" height="165"/>
         <element name="User" positionX="-623" positionY="-54" width="128" height="313"/>
-        <element name="ReadFlipMessage" positionX="-1215" positionY="333" width="128" height="58"/>
+        <element name="DeletedFlipMessage" positionX="-1008" positionY="117" width="128" height="60"/>
     </elements>
 </model>

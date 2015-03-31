@@ -202,26 +202,34 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             flips.append(flip)
         }
         
-        let readFlipMessageDataSource: ReadFlipMessageDataSource = ReadFlipMessageDataSource()
-        let isMessageMarkedAsRead = readFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
+        let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource()
+        let isMessageDeleted: Bool = deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
         
-        let flipMessageDataSource = FlipMessageDataSource()
-        var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
-        if (entity != nil) {
-            return entity // if the user already has his message do not recreate
-        }
-        
-        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
-            flipMessage = flipMessageDataSourceInContext.createFlipMessageWithJson(json, receivedDate: receivedDate)
+        // Shouldn't add a message if it already was removed.
+        if (!isMessageDeleted) {
+            let readFlipMessageDataSource: ReadFlipMessageDataSource = ReadFlipMessageDataSource()
+            let isMessageMarkedAsRead: Bool = readFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
             
-            if (isMessageMarkedAsRead) {
-                flipMessage?.notRead = false
+            let flipMessageDataSource = FlipMessageDataSource()
+            var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
+            if (entity != nil) {
+                return entity // if the user already has his message do not recreate
             }
             
-            flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, flips: flips, andRoom: room)
+            MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+                let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
+                flipMessage = flipMessageDataSourceInContext.createFlipMessageWithJson(json, receivedDate: receivedDate)
+                
+                if (isMessageMarkedAsRead) {
+                    flipMessage?.notRead = false
+                }
+                
+                flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, flips: flips, andRoom: room)
+            }
+            return flipMessage
         }
-        return flipMessage
+        
+        return nil
     }
     
     func createFlipMessageWithFlips(flips: [Flip], toRoom room: Room) -> FlipMessage {
@@ -272,7 +280,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         }, completion: { (success: Bool, error: NSError!) -> Void in
             if (success) {
                 if (readFlipMessageJSON != nil) {
-                    PubNubService.sharedInstance.sendMarkAsReadMessageForFlipMessage(readFlipMessageJSON!)
+                    PubNubService.sharedInstance.sendMessageToLoggedUserPrivateChannel(readFlipMessageJSON!)
                 } else {
                     println("Error: readFlipMessageJSON is nil")
                 }
@@ -308,6 +316,31 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         return updatedFlipMessage
     }
     
+    
+    // MARK: - DeletedFlipMessage Method
+    
+    func onMessageForDeletedFlipMessageReceivedWithJson(json: JSON) -> FlipMessage? {
+        let flipMessageID: String = json[DeletedFlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
+        
+        let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource()
+        let hasDeletedFlipMessage = deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
+        
+        var updatedFlipMessage: FlipMessage? = nil
+        if (!hasDeletedFlipMessage) {
+            MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
+                let deletedFlipMessageDataSourceInContext: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource(context: context)
+                deletedFlipMessageDataSourceInContext.createDeletedFlipMessageWithJSON(json)
+                
+                let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource(context: context)
+                if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
+                    flipMessage.removed = true
+                    updatedFlipMessage = flipMessage
+                }
+            })
+        }
+        
+        return updatedFlipMessage
+    }
     
     // MARK: - User Methods
     
