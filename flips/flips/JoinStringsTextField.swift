@@ -47,34 +47,63 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func joinStrings() {
         var selectedTextRange: UITextRange = self.selectedTextRange!
         
+        var string = Array(self.text)
+        
         var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
         var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
         
-        var newPosInit = posInit
-        var newPosEnd = posEnd
-        var string = Array(self.text)
-        let firstCharIsSpecial = isSpecialCharacter(string[posInit])
-        if (string[posInit] != WHITESPACE) {
-            for var i = posInit-1; i >= 0; --i {
-                if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ firstCharIsSpecial) {
-                    break
-                }
-                --newPosInit
+        for (var i = posInit; i < posEnd; ++i) {
+            if (string[i] != WHITESPACE) {
+                break
             }
+            ++posInit
+        }
+        
+        for (var i = posEnd-1; i >= posInit; --i) {
+            if (string[i] != WHITESPACE) {
+                break
+            }
+            --posEnd
+        }
+        
+        if (posInit == posEnd) {
+            return
+        }
+        
+        let firstCharIsSpecial = isSpecialCharacter(string[posInit])
+        for (var i = posInit-1; i >= 0; --i) {
+            if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ firstCharIsSpecial) {
+                break
+            }
+            --posInit
         }
         
         let lastCharIsSpecial = isSpecialCharacter(string[posEnd-1])
-        if (string[posEnd-1] != WHITESPACE) {
-            for var i = posEnd; i < string.count; ++i {
-                if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ lastCharIsSpecial) {
-                    break
-                }
-                ++newPosEnd
+        for (var i = posEnd; i < string.count; ++i) {
+            if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ lastCharIsSpecial) {
+                break
+            }
+            ++posEnd
+        }
+        
+        var newRange = NSMakeRange(posInit, posEnd-posInit)
+        var intersections = [(Int,NSRange)]()
+        for (var i = 0; i < self.joinedTextRanges.count; ++i) {
+            let intersection = NSIntersectionRange(newRange, self.joinedTextRanges[i])
+            if (intersection.length > 0) {
+                intersections.append((i, self.joinedTextRanges[i]))
             }
         }
         
-        var joinedTextRange = NSMakeRange(newPosInit, newPosEnd-newPosInit)
+        var minimum = newRange.location
+        var maximum = newRange.location+newRange.length
+        for intersection in intersections {
+            minimum = min(minimum, intersection.1.location)
+            maximum = max(maximum, intersection.1.location+intersection.1.length)
+            self.joinedTextRanges.removeAtIndex(intersection.0)
+        }
         
+        var joinedTextRange = NSMakeRange(minimum, maximum-minimum)
         self.joinedTextRanges.append(joinedTextRange)
 
         self.updateColorOnJoinedTexts(UIColor.flipOrange())
@@ -82,7 +111,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     func updateColorOnJoinedTexts(color: UIColor) {
         var attributedString = NSMutableAttributedString(string:self.text + " ")
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text))) //looses the current font, if we don't set here explicitly
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text)))
         
         for joinedTextRange in joinedTextRanges {
             attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: joinedTextRange)
@@ -92,7 +121,6 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: countElements(self.text), length: 1))
         
         self.attributedText = attributedString
-
     }
     
     func resetTextColor() {
@@ -238,34 +266,12 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        //For now, to simplify, after joining some words, the user can only type new text in the end of the text view
-        //If the user removes or inserts characters changing the current text, the previously joined texts are lost
         if (range.location < countElements(self.text)) {
             joinedTextRanges.removeAll(keepCapacity: false)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.resetTextColor()
             })
         }
-        
-        //handling when user changes (delete or replace) parts of a previously joined text
-        /*var deprecatedJoinedTextRange : UITextRange?
-        var index : Int = 0
-        for textRange in joinedTextRanges {
-            var posInit : Int = textRange.location
-            var posEnd : Int = textRange.location + textRange.length
-            
-            if (range.location >= posInit && range.location < posEnd) {
-                deprecatedJoinedTextRange = textRange
-                break
-            }
-            index++
-        }
-        
-        if (deprecatedJoinedTextRange != nil) {
-            joinedTextRanges.removeAtIndex(index)
-            //If the position of this character is part of a joined text, this text should have its color changed to black again.
-            self.setColorOnTextRange(deprecatedJoinedTextRange!, color: UIColor.blackColor())
-        }*/
         
         if (text == "\n") {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
