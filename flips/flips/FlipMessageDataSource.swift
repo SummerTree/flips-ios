@@ -14,7 +14,6 @@ struct FlipMessageJsonParams {
     static let FLIP_MESSAGE_ID = "flipMessageId" // used to identify messages sent by the logged user that are from history or not. To do not duplicate it.
     static let FROM_USER_ID = "fromUserId"
     static let SENT_AT = "sentAt"
-    static let CONTENT = "content"
 }
 
 private struct FlipMessageAttributes {
@@ -56,7 +55,7 @@ class FlipMessageDataSource : BaseDataSource {
             return false
         }
 
-        let content = json[FlipMessageJsonParams.CONTENT]
+        let content = json[MESSAGE_CONTENT]
         if (content == nil) {
             return false
         }

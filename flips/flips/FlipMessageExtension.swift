@@ -102,7 +102,7 @@ extension FlipMessage {
             flipsDictionary.append(dic)
         }
         
-        contentDictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        contentDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
@@ -115,7 +115,7 @@ extension FlipMessage {
         var messageDictionary = Dictionary<String, AnyObject>()
         
         messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
-        messageDictionary.updateValue(contentDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        messageDictionary.updateValue(contentDictionary, forKey: MESSAGE_CONTENT)
         
         return messageDictionary
     }
