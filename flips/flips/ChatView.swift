@@ -326,7 +326,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         if ((self.indexPathToShow != nil) && (self.indexPathToShow?.row == indexPath.row)) {
             // Only show the tableview when we are sure that the latest cell will appear.
             if (self.tableView.alpha == 0) {
-                let time = 0.5 * Double(NSEC_PER_SEC)
+                let time = 1 * Double(NSEC_PER_SEC)
                 let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
                 dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
                     UIView.animateWithDuration(0.25, animations: { () -> Void in
