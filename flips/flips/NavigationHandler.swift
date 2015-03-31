@@ -60,38 +60,50 @@ public class NavigationHandler : NSObject {
                 if (rootViewController is UINavigationController) {
                     let rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
                     
+                    let completionBlock: () -> Void = { () -> Void in
+                        if (rootNavigationViewController.visibleViewController is ChatViewController) {
+                            let chatViewController = rootNavigationViewController.visibleViewController as ChatViewController
+                            if (chatViewController.getRoomId() == roomId) {
+                                return
+                            }
+                        }
+                        
+                        var i: Int = 0
+                        var inboxViewController: UIViewController? = nil
+                        for viewController in rootNavigationViewController.childViewControllers {
+                            if (viewController is InboxViewController) {
+                                inboxViewController = viewController as? UIViewController
+                                rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
+                                break
+                            }
+                        }
+                        
+                        if (inboxViewController != nil) {
+                            let roomDataSource = RoomDataSource()
+                            let room = roomDataSource.retrieveRoomWithId(roomId)
+                            let chatViewController: UIViewController = ChatViewController(room: room)
+                            rootNavigationViewController.pushViewController(chatViewController, animated: true)
+                        }
+                    }
+                    
                     // Checking if the app is showing a modal
-                    while (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
-                        println("trying to pop to root controller")
-                        rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(false, completion: nil)
-                    }
-                    
-                    if (rootNavigationViewController.visibleViewController is ChatViewController) {
-                        let chatViewController = rootNavigationViewController.visibleViewController as ChatViewController
-                        if (chatViewController.getRoomId() == roomId) {
-                            chatViewController.enableViewingNewestMessage()
-                            return
-                        }
-                    }
-                    
-                    var i: Int = 0
-                    var inboxViewController: UIViewController? = nil
-                    for viewController in rootNavigationViewController.childViewControllers {
-                        if (viewController is InboxViewController) {
-                            inboxViewController = viewController as? UIViewController
-                            rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
-                            break
-                        }
-                    }
-
-                    if (inboxViewController != nil) {
-                        let roomDataSource = RoomDataSource()
-                        let room = roomDataSource.retrieveRoomWithId(roomId)
-                        let chatViewController: ChatViewController = ChatViewController(room: room, shouldShowNewestMessage: true)
-                        rootNavigationViewController.pushViewController(chatViewController, animated: true)
+                    if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                        self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completionBlock)
+                    } else {
+                        completionBlock()
                     }
                 }
             }
         } 
+    }
+    
+    private func dismissVisibleModalFromRootViewController(rootNavigationViewController: UINavigationController, withCompletion completion: () -> Void) {
+        if (rootNavigationViewController.visibleViewController.presentingViewController != nil) {
+            rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(false, completion: { () -> Void in
+                self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completion)
+            })
+        } else {
+            completion()
+        }
     }
 }
