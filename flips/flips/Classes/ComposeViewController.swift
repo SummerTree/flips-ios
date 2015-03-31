@@ -470,7 +470,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             flipWords = newFlipWords
             
-            self.delegate?.composeViewController?(self, didChangeFlipWords: flipWords.map { $0.text})
+            self.delegate?.composeViewController?(self, didChangeFlipWords: flipWords.map { $0.text })
             
             self.reloadMyFlips()
             self.updateFlipWordsState()

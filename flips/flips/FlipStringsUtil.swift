@@ -37,6 +37,7 @@ class FlipStringsUtil {
             if (currentCharType == FlipCharType.WHITESPACE || currentCharType != lastCharType) {
                 if (countElements(newWord) > 0) {
                     arrayOfFlips.append(newWord)
+                    newWord = ""
                 }
                 if (currentCharType != FlipCharType.WHITESPACE) {
                     newWord = "\(char)"
