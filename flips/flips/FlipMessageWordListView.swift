@@ -206,69 +206,6 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         delegate?.flipMessageWordListViewDidTapAddWordButton(self)
     }
     
-    func replaceFlipWord(flipWord: FlipText, forFlipWords flipWords: [FlipText]) {
-        var startPositionToStartUpdate = flipWord.position
-        
-        var initialFrame : CGRect!
-        for (var i = 0; i < flipTextViews.count; i++) {
-            var textView = flipTextViews[i]
-            if (textView.flipText.position == flipWord.position) {
-                textView.removeFromSuperview()
-                flipTextViews.removeAtIndex(i)
-                initialFrame = textView.frame
-                break
-            }
-        }
-
-        for newFlipWord in flipWords {
-            var flipTextView = FlipTextView(flipText: newFlipWord)
-            flipTextView.sizeToFit()
-            
-            var requiredWidth = self.getTextWidth(flipTextView.textLabel.text!) + self.FLIP_TEXT_ADDITIONAL_WIDTH
-            var flipTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-            initialFrame.size.width = flipTextViewWidth
-            flipTextView.frame = initialFrame
-            
-            addGestureRecognizers(flipTextView)
-            scrollView.addSubview(flipTextView)
-            flipTextViews.insert(flipTextView, atIndex: newFlipWord.position)
-        }
-        
-        // Update FlipTexts
-        for (var i = 0; i < flipTextViews.count; i++) {
-            var flipWord = dataSource?.flipMessageWordListView(self, flipWordAtIndex: i)
-            var textView = flipTextViews[i]
-            textView.flipText = flipWord
-        }
-    
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            var contentOffset: CGFloat = 0
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                var totalOffsetX: CGFloat = 0
-                var itemX: CGFloat = initialFrame.origin.x
-                for flipTextView in self.flipTextViews {
-                    if (flipTextView.flipText.position >= startPositionToStartUpdate) {
-                        var x = itemX + totalOffsetX
-                        var requiredWidth = self.getTextWidth(flipTextView.textLabel.text!) + self.FLIP_TEXT_ADDITIONAL_WIDTH
-                        var flipTextViewWidth = requiredWidth > self.MIN_BUTTON_WIDTH ? requiredWidth : self.MIN_BUTTON_WIDTH
-                        
-                        flipTextView.frame = CGRectMake(x,
-                            CGRectGetMinY(flipTextView.frame),
-                            flipTextViewWidth,
-                            CGRectGetHeight(flipTextView.frame))
-                        
-                        totalOffsetX = totalOffsetX + flipTextViewWidth + self.SPACE_BETWEEN_FLIP_TEXTS
-                    }
-                    contentOffset = CGRectGetMidX(flipTextView.frame) + (CGRectGetWidth(self.frame) / 2)
-                }
-
-            }, completion: { (finished) -> Void in
-                self.centerScrollViewAtClosestItem()
-            })
-        })
-    }
-    
-    
     // MARK: - Scroll Position Setters
     
     func centerAtFlipWord(flipWord: FlipText?) {
