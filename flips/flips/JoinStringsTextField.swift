@@ -86,25 +86,19 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             ++posEnd
         }
         
-        var newRange = NSMakeRange(posInit, posEnd-posInit)
-        var intersections = [(Int,NSRange)]()
+        var newRanges = [NSRange]()
         for (var i = 0; i < self.joinedTextRanges.count; ++i) {
-            let intersection = NSIntersectionRange(newRange, self.joinedTextRanges[i])
+            let range = self.joinedTextRanges[i]
+            let intersection = NSIntersectionRange(NSMakeRange(posInit, posEnd-posInit), range)
             if (intersection.length > 0) {
-                intersections.append((i, self.joinedTextRanges[i]))
+                posInit = min(posInit, range.location)
+                posEnd = max(posEnd, range.location+range.length)
+            } else {
+                newRanges.append(range)
             }
         }
-        
-        var minimum = newRange.location
-        var maximum = newRange.location+newRange.length
-        for intersection in intersections {
-            minimum = min(minimum, intersection.1.location)
-            maximum = max(maximum, intersection.1.location+intersection.1.length)
-            self.joinedTextRanges.removeAtIndex(intersection.0)
-        }
-        
-        var joinedTextRange = NSMakeRange(minimum, maximum-minimum)
-        self.joinedTextRanges.append(joinedTextRange)
+        newRanges.append(NSMakeRange(posInit, posEnd-posInit))
+        self.joinedTextRanges = newRanges
 
         self.updateColorOnJoinedTexts(UIColor.flipOrange())
     }
