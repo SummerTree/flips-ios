@@ -10,18 +10,48 @@
 // the license agreement.
 //
 
+private enum FlipCharType {
+    case WORD
+    case SPECIAL
+    case WHITESPACE
+}
+
 class FlipStringsUtil {
     
     class func splitFlipString(flipString: String) -> [String] {
-        var newString = Array(flipString).reduce("") { $0 + (String($1) == "!" ? " !" : String($1)) }
-        newString = Array(newString).reduce("") { $0 + (String($1) == "?" ? " ?" : String($1)) }
-        newString = Array(newString).reduce("") { $0 + (String($1) == "." ? " ." : String($1)) }
-        newString = Array(newString).reduce("") { $0 + (String($1) == "," ? " ," : String($1)) }
-        newString = Array(newString).reduce("") { $0 + (String($1) == ";" ? " ;" : String($1)) }
+        let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
+        var arrayOfFlips = [String]()
+        var lastCharType = FlipCharType.WHITESPACE
+        var newWord = ""
+        for char in flipString {
+            var currentCharType: FlipCharType
+            if (char == " ") {
+                currentCharType = FlipCharType.WHITESPACE
+            } else {
+                let str = String(char)
+                let range = NSRange(location: 0, length: countElements(str))
+                let isWordChar = wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) > 0
+                currentCharType = isWordChar ? FlipCharType.WORD : FlipCharType.SPECIAL
+            }
+            
+            if (currentCharType == FlipCharType.WHITESPACE || currentCharType != lastCharType) {
+                if (countElements(newWord) > 0) {
+                    arrayOfFlips.append(newWord)
+                    newWord = ""
+                }
+                if (currentCharType != FlipCharType.WHITESPACE) {
+                    newWord = "\(char)"
+                }
+            } else {
+                newWord.append(char)
+            }
+            
+            lastCharType = currentCharType
+        }
         
-        var arrayOfFlips : [String] = newString.componentsSeparatedByCharactersInSet(NSCharacterSet (charactersInString: " "))
-        
-        // Strings of punctuation without whitespace in between are joined together and treated as one word (such as "!!!" or "?!?!").
+        if (countElements(newWord) > 0) {
+            arrayOfFlips.append(newWord)
+        }
         
         return arrayOfFlips
     }
