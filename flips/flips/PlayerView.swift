@@ -470,7 +470,7 @@ class PlayerView: UIView {
 
         self.words = formattedWords
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.progressBarView.progress = 0
+            self.progressBarView.progress = 0.0
         })
             
         let firstFlip = flips.first
@@ -731,13 +731,18 @@ class PlayerView: UIView {
         self.playerItems = [FlipPlayerItem]()
         self.words = []
         
-        self.playButtonView.alpha = 1
-        self.progressBarView.alpha = 0
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.playButtonView.alpha = 1.0
+            self.progressBarView.alpha = 0.0
+            self.progressBarView.progress = 0.0
+        })
+
+        self.flipsDownloadProgress.removeAll()
 
         if let player = self.player() {
             player.removeAllItems()
         }
-        
+
         let layer = self.layer as AVPlayerLayer
         layer.player = nil
     }
