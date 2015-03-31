@@ -195,23 +195,20 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             return false
         }
             
-        else if action == "copy:" {
+        if action == "copy:" {
             return true
         }
             
-        else if action == "paste:" {
+        if action == "paste:" {
             return true
         }
             
-        else if action == "_define:" {
+        if action == "_define:" {
             return false
         }
         
-        else if action == "joinStrings" {
-            if (self.selectedTextCanBeJoined()) {
-                return true
-            }
-            return false
+        if action == "joinStrings" {
+            return self.selectedTextCanBeJoined()
         }
         
         return super.canPerformAction(action, withSender: sender)
