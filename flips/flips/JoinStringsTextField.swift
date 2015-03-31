@@ -127,58 +127,35 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func getFlipTexts() -> [String] {
         self.resignFirstResponder()
         
-        var flipTexts : [String] = [String]()
+        var flipTexts = [String]()
         
-        var charIndex = 0
-        var lastWord: String = ""
-        
-        for character in self.text {
-            if (character == WHITESPACE) {
-                let result = isPartOfJoinedTextRanges(charIndex)
-                //Avoids that joining a word with a space before or after to join the previous or next word respectivelly
-                var locationFirst: Int?
-                var locationLast: Int?
-                if (result.textRange != nil) {
-                    locationFirst = result.textRange!.location
-                    locationLast = locationFirst! + result.textRange!.length-1
+        var text = Array(self.text)
+        var word: String = ""
+        var index: Int = 0
+        while (index < text.count) {
+            let partOfRange = isPartOfJoinedTextRanges(index)
+            if (partOfRange.isPart) {
+                if (countElements(word) > 0) {
+                    flipTexts.append(word)
+                    word = ""
                 }
-
-                let isTheFirstCharacterOfJoinedText = (charIndex == locationFirst)
-                let isTheLastCharacterOfJoinedText = (charIndex == locationLast)
-                if (result.isPart && !isTheFirstCharacterOfJoinedText && !isTheLastCharacterOfJoinedText) {
-                    lastWord.append(character)
-                } else {
-                    if (lastWord != "") {
-                        flipTexts.append(lastWord)
-                        lastWord = ""
-                    }
-                }
-            } else if (isSpecialCharacter(character)) {
-                if (hasSpecialCharacters(lastWord)) {
-                    lastWord.append(character)
-                } else {
-                    let result = isPartOfJoinedTextRanges(charIndex)
-                    if (result.isPart) {
-                        lastWord.append(character)
-                    } else {
-                        if (lastWord != "") {
-                            flipTexts.append(lastWord)
-                            lastWord = ""
-                            lastWord.append(character)
-                        } else {
-                            lastWord.append(character)
-                        }
-                    }
-                }
+                flipTexts.append((self.text as NSString).substringWithRange(partOfRange.range!))
+                index = partOfRange.range!.location+partOfRange.range!.length
             } else {
-                lastWord.append(character)
+                let i = index++
+                if (countElements(word) > 0 && (text[i] == WHITESPACE || (isSpecialCharacter(Array(word)[0]) ^ isSpecialCharacter(text[i])))) {
+                    flipTexts.append(word)
+                    word = ""
+                }
+                
+                if (text[i] != WHITESPACE) {
+                    word.append(text[i])
+                }
             }
-            
-            charIndex++
         }
         
-        if (lastWord != "") {
-            flipTexts.append(lastWord)
+        if (word != "") {
+            flipTexts.append(word)
         }
         
         self.becomeFirstResponder()
@@ -186,10 +163,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return flipTexts
     }
     
-    func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, textRange: NSRange?) {
+    func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, range: NSRange?) {
         for textRange in self.joinedTextRanges {
-            var posInit : Int = textRange.location
-            var posEnd : Int = textRange.location + textRange.length
+            let posInit = textRange.location
+            let posEnd = textRange.location + textRange.length
             if (posInit <= charIndex && charIndex < posEnd) {
                 return (true, textRange)
             }
