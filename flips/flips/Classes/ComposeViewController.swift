@@ -481,7 +481,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 self.showContentForHighlightedWord(shouldReloadWords: false)
             }
             
-            self.flipMessageWordListView.replaceFlipWord(flipWord, forFlipWords: flipWordsToAdd)
+            self.flipMessageWordListView.reloadWords(animated: true)
         }
     }
     
