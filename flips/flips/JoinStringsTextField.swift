@@ -12,25 +12,27 @@
 
 class JoinStringsTextField : UITextView, UITextViewDelegate {
     
-    var joinedTextRanges : [NSRange] = [NSRange]()
+    private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private let WHITESPACE: Character = " "
+    let DEFAULT_HEIGHT: CGFloat = 42.0
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
     override init() {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
-        
+        self.returnKeyType = .Next
         self.delegate = self
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer!) {
         super.init(frame: frame, textContainer: textContainer)
+        self.returnKeyType = .Next
     }
     
     required init(coder: NSCoder) {
 		super.init(coder: coder)
-		
+        self.returnKeyType = .Next
 		self.delegate = self
     }
     
@@ -154,7 +156,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
         
         if (lastWord != "") {
-           flipTexts.append(lastWord)
+            flipTexts.append(lastWord)
         }
         
         self.becomeFirstResponder()
@@ -235,13 +237,6 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func textViewDidChange(textView: UITextView) {
-        var currentFrameHeight: CGFloat = self.frame.size.height
-        var neededFrameHeight = self.contentSize.height
-
-        if (neededFrameHeight != currentFrameHeight) {
-            joinStringsTextFieldDelegate?.joinStringsTextFieldNeedsToHaveItsHeightUpdated(self)
-        }
-        
         joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: text)
     }
     
@@ -274,6 +269,20 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             //If the position of this character is part of a joined text, this text should have its color changed to black again.
             self.setColorOnTextRange(deprecatedJoinedTextRange!, color: UIColor.blackColor())
         }*/
+        
+        if (text == "\n") {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.joinStringsTextFieldDelegate?.joinStringsTextFieldShouldReturn?(self)
+                return
+            })
+            return false
+        }
+        
+        if (text.rangeOfString("\n") != nil) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.text = self.text.stringByReplacingOccurrencesOfString("\n", withString: " ")
+            })
+        }
         
         return true
     }
@@ -313,8 +322,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
 // MARK: - View Delegate
 
 @objc protocol JoinStringsTextFieldDelegate {
-    
-    func joinStringsTextFieldNeedsToHaveItsHeightUpdated(joinStringsTextField: JoinStringsTextField!)
+        
+    optional func joinStringsTextFieldShouldReturn(joinStringsTextField: JoinStringsTextField) -> Bool
     
     optional func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!)
 
