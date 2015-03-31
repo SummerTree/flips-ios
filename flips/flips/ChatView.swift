@@ -225,6 +225,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     func showNewestMessage() {
+        self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         if (self.indexPathToShow != nil) {
             self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
         }

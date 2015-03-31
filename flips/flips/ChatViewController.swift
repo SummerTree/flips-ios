@@ -24,6 +24,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var roomID: String!
     private var flipMessages = NSMutableOrderedSet()
     
+    private var shouldShowNewestMessage: Bool?
+    
 
     // MARK: - Initializers
     
@@ -31,10 +33,11 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(room: Room) {
+    init(room: Room, shouldShowNewestMessage: Bool? = false) {
         super.init(nibName: nil, bundle: nil)
         self.chatTitle = room.roomName()
         self.roomID = room.roomID
+        self.shouldShowNewestMessage = shouldShowNewestMessage
 
         if (room.participants.count > 2) {
             self.chatTitle = groupTitle
@@ -156,6 +159,18 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         }
     }
     
+    // MARK: - jump to newest message
+    
+    func showChatViewNewestMessage() {
+        if (self.chatView != nil) {
+            self.chatView.showNewestMessage()
+        }
+    }
+    
+    func enableViewingNewestMessage() {
+        self.shouldShowNewestMessage = true
+    }
+    
     
     // MARK: - Delegate methods
     
@@ -215,6 +230,12 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.reloadFlipMessages()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.loadNewFlipMessages()
+            if let displayLastMessage = self.shouldShowNewestMessage {
+                if (displayLastMessage) {
+                    self.showChatViewNewestMessage()
+                    self.shouldShowNewestMessage = false
+                }
+            }
         })
     }
     

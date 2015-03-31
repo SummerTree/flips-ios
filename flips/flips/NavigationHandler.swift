@@ -55,7 +55,6 @@ public class NavigationHandler : NSObject {
     }
     
     func showThreadScreenWithRoomId(roomId: String) {
-        let application: UIApplication = UIApplication.sharedApplication()
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController: UIViewController = keyWindow.rootViewController {
                 if (rootViewController is UINavigationController) {
@@ -63,12 +62,14 @@ public class NavigationHandler : NSObject {
                     
                     // Checking if the app is showing a modal
                     while (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                        println("trying to pop to root controller")
                         rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(false, completion: nil)
                     }
                     
                     if (rootNavigationViewController.visibleViewController is ChatViewController) {
                         let chatViewController = rootNavigationViewController.visibleViewController as ChatViewController
                         if (chatViewController.getRoomId() == roomId) {
+                            chatViewController.enableViewingNewestMessage()
                             return
                         }
                     }
@@ -86,7 +87,7 @@ public class NavigationHandler : NSObject {
                     if (inboxViewController != nil) {
                         let roomDataSource = RoomDataSource()
                         let room = roomDataSource.retrieveRoomWithId(roomId)
-                        let chatViewController: UIViewController = ChatViewController(room: room)
+                        let chatViewController: ChatViewController = ChatViewController(room: room, shouldShowNewestMessage: true)
                         rootNavigationViewController.pushViewController(chatViewController, animated: true)
                     }
                 }
