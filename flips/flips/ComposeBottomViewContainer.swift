@@ -265,7 +265,10 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     
     func captureAudioButtonTapped(sender: UIButton!) {
         self.delegate?.composeBottomViewContainerDidTapCaptureAudioButton(self)
-        self.hideRecordingView()
+        // Hide after one second
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC)), dispatch_get_main_queue()) { () -> Void in
+            self.hideRecordingView()
+        }
     }
     
     func cancelCaptureAudioButtonTapped(sender: UIButton!) {

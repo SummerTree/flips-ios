@@ -106,7 +106,10 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         super.viewDidAppear(animated)
         
         self.groupParticipantsView?.mas_updateConstraints( { (update: MASConstraintMaker!) -> Void in
+            update.removeExisting = true
             update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+            update.leading.equalTo()(self.view)
+            update.trailing.equalTo()(self.view)
             update.height.equalTo()(0)
         })
         self.groupParticipantsView?.updateConstraintsIfNeeded()
@@ -185,22 +188,27 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     func groupParticipantsButtonTapped() {
-        self.view.layoutIfNeeded()
+        if (self.groupParticipantsView?.frame.height == 0) {
+            // show
+            self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
+                update.removeExisting = true
+                update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+                update.leading.equalTo()(self.view)
+                update.trailing.equalTo()(self.view)
+                update.height.equalTo()(self.groupParticipantsView?.calculatedHeight())
+            })
+        } else {
+            // dismiss
+            self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
+                update.removeExisting = true
+                update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+                update.leading.equalTo()(self.view)
+                update.trailing.equalTo()(self.view)
+                update.height.equalTo()(0)
+            })
+        }
+
         UIView.animateWithDuration(0.25, animations: { () -> Void in
-            if (self.groupParticipantsView?.frame.height == 0) {
-                // show
-                self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
-                    update.height.equalTo()(self.groupParticipantsView?.calculatedHeight())
-                    return
-                })
-            } else {
-                // dismiss
-                self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
-                    update.height.equalTo()(0)
-                    return
-                })
-            }
-            self.view.updateConstraintsIfNeeded()
             self.view.layoutIfNeeded()
         })
     }
