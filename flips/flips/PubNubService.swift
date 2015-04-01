@@ -13,10 +13,7 @@
 public let PUBNUB_DID_CONNECT_NOTIFICATION: String = "pubnub_did_connect_notification"
 public let PUBNUB_DID_FETCH_MESSAGE_HISTORY: String = "pubnub_did_fetch_message_history"
 
-public let MESSAGE_CONTENT = "content"
-
 public struct HistoryMessage {
-    
     var receivedDate : NSDate
     var message : JSON
 }
@@ -237,7 +234,7 @@ public class PubNubService: FlipsService, PNDelegate {
                 
                 for pnMessage in messages! {
                     let messageJSON: JSON = JSON(pnMessage.message)
-                    let decryptedContentString = self.decrypt(messageJSON[MESSAGE_CONTENT].stringValue)
+                    let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
                     let decryptedMessage = JSON(self.dictionaryFromJSON(decryptedContentString))
                     decryptedMessages.append(HistoryMessage(receivedDate: pnMessage.receiveDate.date, message: decryptedMessage))
                 }
@@ -306,7 +303,7 @@ public class PubNubService: FlipsService, PNDelegate {
         println("pnMessage.channel.name: \(pnMessage.channel.name)")
 
         let messageJSON: JSON = JSON(pnMessage.message)
-        let decryptedContentString = self.decrypt(messageJSON[MESSAGE_CONTENT].stringValue)
+        let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
         let contentJson : JSON = JSON(self.dictionaryFromJSON(decryptedContentString))
         self.delegate?.pubnubClient(client, didReceiveMessage:contentJson, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
     }
@@ -331,7 +328,7 @@ public class PubNubService: FlipsService, PNDelegate {
         let channel = PNChannel.channelWithName(pubnubID) as PNChannel
 
         var encryptedMessage = message
-        encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_CONTENT]!).rawString()), forKey: MESSAGE_CONTENT)
+        encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_DATA]!).rawString()), forKey: MESSAGE_DATA)
         
         PubNub.sendMessage(encryptedMessage, toChannel: channel, storeInHistory: true) { (state, data) -> Void in
             println("message sent: \(data)")
@@ -352,8 +349,8 @@ public class PubNubService: FlipsService, PNDelegate {
             }
         }
     }
-    
-   
+
+
     // MARK: - Notifications Handler
 	
     public func pubnubClient(client: PubNub!, didReceivePushNotificationEnabledChannels channels: [AnyObject]!) {
