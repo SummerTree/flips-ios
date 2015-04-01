@@ -134,7 +134,6 @@ class NewFlipViewController: FlipsViewController,
     }
     
     private func handleReplyTextFieldSize() {
-        flipTextField.backgroundColor = UIColor.banana()
         var textFieldHeight = flipTextField.DEFAULT_HEIGHT
         if (flipTextField.numberOfLines > 1) {
             textFieldHeight = flipTextField.DEFAULT_HEIGHT+flipTextField.DEFAULT_LINE_HEIGHT
