@@ -324,9 +324,10 @@ public class PubNubService: FlipsService, PNDelegate {
         return [String: AnyObject]()
     }
 
+    
     // MARK: - Send Messages Methods
     
-    func sendMessage(message: Dictionary<String, AnyObject>, pubnubID: String, completion: CompletionBlock) {
+    func sendMessage(message: Dictionary<String, AnyObject>, pubnubID: String, completion: CompletionBlock?) {
         let channel = PNChannel.channelWithName(pubnubID) as PNChannel
 
         var encryptedMessage = message
@@ -341,42 +342,14 @@ public class PubNubService: FlipsService, PNDelegate {
             case PNMessageState.SendingError:
                 // PubNub client failed to send message and reason is in 'data' object.
                 println("SendingError")
-                completion(false)
+                completion?(false)
             case PNMessageState.Sent:
                 // PubNub client successfully sent message to specified channel. 'data' stores reference on PNMessage instance which has been sent.
                 println("Sent")
-                completion(true)
+                completion?(true)
             default:
                 println("default")
             }
-        }
-    }
-    
-    func sendMessageToLoggedUserPrivateChannel(message: Dictionary<String, AnyObject>) {
-        println("\nsendMessageToLoggedUserPrivateChannel: \(message)")
-        
-        if let loggedUser = User.loggedUser() {
-            let privateChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
-            
-            var encryptedMessage = message
-            encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_CONTENT]!).rawString()), forKey: MESSAGE_CONTENT)
-            
-            PubNub.sendMessage(encryptedMessage, toChannel: privateChannel, storeInHistory: true, withCompletionBlock: { (state: PNMessageState, data: AnyObject!) -> Void in
-                println("mark as read message sent: \(data)")
-                switch (state) {
-                case PNMessageState.Sending:
-                    // PubNub client is sending message at this moment. 'data' stores reference on PNMessage instance which is processing at this moment.
-                    println("   Sending")
-                case PNMessageState.SendingError:
-                    // PubNub client failed to send message and reason is in 'data' object.
-                    println("   SendingError")
-                case PNMessageState.Sent:
-                    // PubNub client successfully sent message to specified channel. 'data' stores reference on PNMessage instance which has been sent.
-                    println("   Sent")
-                default:
-                    println("   default")
-                }
-            })
         }
     }
     

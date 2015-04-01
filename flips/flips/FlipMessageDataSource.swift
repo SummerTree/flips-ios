@@ -162,10 +162,12 @@ class FlipMessageDataSource : BaseDataSource {
     }
     
     private func sendMessageForDeletedFlipMessage(deletedFlipMessage: DeletedFlipMessage) {
-        let deletedFlipMessageJson = deletedFlipMessage.toJSON()
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
-            PubNubService.sharedInstance.sendMessageToLoggedUserPrivateChannel(deletedFlipMessageJson)
-        })
+        if let loggedUser: User = User.loggedUser() {
+            let deletedFlipMessageJson = deletedFlipMessage.toJSON()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
+                PubNubService.sharedInstance.sendMessage(deletedFlipMessageJson, pubnubID: loggedUser.pubnubID, completion: nil)
+            })
+        }
     }
     
     func flipMessagesForRoomID(roomID: String) -> [FlipMessage] {

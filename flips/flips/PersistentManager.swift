@@ -280,7 +280,9 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         }, completion: { (success: Bool, error: NSError!) -> Void in
             if (success) {
                 if (readFlipMessageJSON != nil) {
-                    PubNubService.sharedInstance.sendMessageToLoggedUserPrivateChannel(readFlipMessageJSON!)
+                    if let loggedUser: User = User.loggedUser() {
+                        PubNubService.sharedInstance.sendMessage(readFlipMessageJSON!, pubnubID: loggedUser.pubnubID, completion: nil)
+                    }
                 } else {
                     println("Error: readFlipMessageJSON is nil")
                 }
