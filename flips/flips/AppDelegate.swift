@@ -80,6 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("token: \(token)")
         DeviceHelper.sharedInstance.saveDeviceToken(token)
         DeviceHelper.sharedInstance.saveDeviceTokenAsNsData(deviceToken)
+        PubNubService.sharedInstance.subscribeOnMyChannels()
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
@@ -96,6 +97,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         println("did receive remote notification \(userInfo)")
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        println("did receive remote notification with fetch completion handler \(userInfo)")
+        
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

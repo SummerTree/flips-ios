@@ -60,6 +60,10 @@ public class AuthenticationHelper: NSObject {
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)
         
+        DeviceHelper.sharedInstance.setLastTimeUserSynchronizePrivateChannel(nil)
+        
+        PubNubService.sharedInstance.disablePushNotificationOnMyChannels()
+        
         CoreDataHandler.sharedInstance.resetDatabase()
         
         FlipsCache.sharedInstance.clear()
@@ -67,8 +71,6 @@ public class AuthenticationHelper: NSObject {
 
         PubNub.disconnect()
         
-        // Unregister for push notifications
-        UIApplication.sharedApplication().unregisterForRemoteNotifications()
     }
 
     
