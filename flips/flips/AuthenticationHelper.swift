@@ -66,8 +66,6 @@ public class AuthenticationHelper: NSObject {
 
         PubNub.disconnect()
         
-        // Unregister for push notifications
-        UIApplication.sharedApplication().unregisterForRemoteNotifications()
     }
 
     
