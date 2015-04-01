@@ -138,14 +138,18 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     func addWord() -> Bool {
         if (countElements(self.newWordTextField.text!) > 0) {
             let word = self.newWordTextField.text!
-            PersistentManager.sharedInstance.addBuilderWord(word, fromServer: false)
-            self.didUpdateWordList = true
-            words.insert(word, atIndex: 0)
-            tableView.reloadData()
+            let result = PersistentManager.sharedInstance.addBuilderWord(word, fromServer: false)
+
+            if (result) {
+                self.didUpdateWordList = true
+                words.insert(word, atIndex: 0)
+                tableView.reloadData()
+            }
 
             self.newWordTextField.text = ""
             self.newWordTextField.becomeFirstResponder()
-            return true
+
+            return result
         }
 
         return false

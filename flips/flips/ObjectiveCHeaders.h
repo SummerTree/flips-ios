@@ -43,6 +43,8 @@
 #import "FlipMessage.h"
 #import "Contact.h"
 #import "BuilderWord.h"
+#import "ReadFlipMessage.h"
+#import "DeletedFlipMessage.h"
 
 #import "NSManagedObject+helpers.h"
 #import "VideoComposer.h"

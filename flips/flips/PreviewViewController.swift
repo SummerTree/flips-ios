@@ -108,14 +108,14 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         self.previewView.stopMovie()
         self.showActivityIndicator()
         
-        var flipMessageIds = Dictionary<String, String>()
+        var flipMessageIds = Dictionary<Int, String>()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             var error: FlipError?
             var flipIds = Array<String>()
             
             for flipWord in self.flipWords {
-                flipMessageIds[flipWord.text] = ""
+                flipMessageIds[flipWord.position] = ""
             }
             
             var group = dispatch_group_create()
@@ -126,15 +126,15 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 if (flipWord.associatedFlipId != nil) {
                     var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                     flip.word = flipWord.text // Sometimes the saved word is in a different case. So we need to change it.
-                    flipMessageIds[flipWord.text] = flipWord.associatedFlipId!
+                    flipMessageIds[flipWord.position] = flipWord.associatedFlipId!
                     dispatch_group_leave(group)
                 } else {
                     PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
-                        flipMessageIds[flipWord.text] = flip.flipID
+                        flipMessageIds[flipWord.position] = flip.flipID
                         dispatch_group_leave(group)
                     }, createFlipFailCompletion: { (flipError) -> Void in
                         error = flipError
-                        flipMessageIds[flipWord.text] = "-1"
+                        flipMessageIds[flipWord.position] = "-1"
                         dispatch_group_leave(group)
                     })
                 }
@@ -179,7 +179,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 }
                 
                 for flipWord in self.flipWords {
-                    flipIds.append(flipMessageIds[flipWord.text]!)
+                    flipIds.append(flipMessageIds[flipWord.position]!)
                 }
                 
                 let messageService = MessageService.sharedInstance
