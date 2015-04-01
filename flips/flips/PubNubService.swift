@@ -106,7 +106,7 @@ public class PubNubService: FlipsService, PNDelegate {
             var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
             println("LoggedUser PubnubID: \(loggedUser.pubnubID)")
             
-            var channels = [AnyObject]()
+            var channels = [PNChannel]()
             channels.append(ownChannel)
             
             let roomDataSource = RoomDataSource()
@@ -155,7 +155,7 @@ public class PubNubService: FlipsService, PNDelegate {
         if let loggedUser = User.loggedUser() {
             var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
             
-            var channels = [AnyObject]()
+            var channels = [PNChannel]()
             channels.append(ownChannel)
             
             let roomDataSource = RoomDataSource()
