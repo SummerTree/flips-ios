@@ -38,6 +38,7 @@ class BuilderWordDataSource: BaseDataSource {
     
     func addWord(word: String, fromServer: Bool) -> Bool {
         var result: Bool!
+
         var predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
         var existingWord = BuilderWord.findAllWithPredicate(predicate, inContext: currentContext)
         if (existingWord.count > 0) {
@@ -49,7 +50,7 @@ class BuilderWordDataSource: BaseDataSource {
             builderWord.addedAt = NSDate()
             result = true
         }
-        
+
         return result
     }
     
