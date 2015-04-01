@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - private functions
     
-    func openSplashScreen(roomID: String? = nil) {
+    private func openSplashScreen(roomID: String? = nil) {
         let splashScreenViewController = SplashScreenViewController(roomID: roomID)
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
         self.window?.rootViewController = navigationViewControler
