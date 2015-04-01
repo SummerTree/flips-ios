@@ -58,7 +58,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         let flipWord = self.flipWords[self.highlightedWordIndex]
 
         let builderWordDataSource = BuilderWordDataSource()
-        builderWordDataSource.removeBuilderWordWithWord(flipWord.text)
+        PersistentManager.sharedInstance.removeBuilderWordWithWord(flipWord.text)
 
         self.loadBuilderWords()
 

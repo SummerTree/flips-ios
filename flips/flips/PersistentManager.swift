@@ -630,7 +630,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     }
     
     func removeBuilderWordWithWord(word: String) {
-        MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
+        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             var builderWordDataSource = BuilderWordDataSource(context: context)
             builderWordDataSource.removeBuilderWordWithWord(word)
         }
