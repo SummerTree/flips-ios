@@ -60,6 +60,8 @@ public class AuthenticationHelper: NSObject {
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)
         
+        DeviceHelper.sharedInstance.setLastTimeUserSynchronizePrivateChannel(nil)
+        
         PubNubService.sharedInstance.disablePushNotificationOnMyChannels()
         
         CoreDataHandler.sharedInstance.resetDatabase()

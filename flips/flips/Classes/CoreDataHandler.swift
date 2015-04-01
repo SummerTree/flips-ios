@@ -40,6 +40,8 @@ public class CoreDataHandler: NSObject {
             Device.truncateAllInContext(context)
             User.truncateAllInContext(context)
             Room.truncateAllInContext(context)
+            ReadFlipMessage.truncateAllInContext(context)
+            DeletedFlipMessage.truncateAllInContext(context)
         }
     }
 }

@@ -20,6 +20,8 @@ public class DeviceHelper: NSObject {
     
     private let BUILDER_ONBOARDING_SEEN_KEY = "builder.onboarding.seen"
     
+    private let LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL = "last_sync_user_date"
+    
     // MARK: - Singleton
     
     public class var sharedInstance : DeviceHelper {
@@ -150,5 +152,21 @@ public class DeviceHelper: NSObject {
         }
         
         return false
+    }
+    
+    func lastTimeUserSynchronizedPrivateChannel() -> NSDate? {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.objectForKey(LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL) as NSDate?
+    }
+    
+    func setLastTimeUserSynchronizePrivateChannel(date: NSDate?) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if (date != nil) {
+            userDefaults.setObject(date, forKey: LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL)
+        } else {
+            userDefaults.removeObjectForKey(LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL)
+        }
+        userDefaults.synchronize()
     }
 }

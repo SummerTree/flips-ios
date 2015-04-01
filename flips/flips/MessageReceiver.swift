@@ -16,7 +16,6 @@ private struct ChatMessageJsonParams {
     static let SENT_AT = "sentAt"
     static let PARTICIPANTS = "participants"
     static let ROOM_ID = "roomID"
-    static let CONTENT = "content"
     static let CONTENT_ID = "id"
     static let CONTENT_WORD = "word"
     static let CONTENT_BACKGROUND_URL = "backgroundURL"
@@ -26,6 +25,8 @@ private struct ChatMessageJsonParams {
 let MESSAGE_TYPE = "type"
 let MESSAGE_ROOM_INFO_TYPE = "1"
 let MESSAGE_FLIPS_INFO_TYPE = "2"
+let MESSAGE_READ_INFO_TYPE = "3"
+let MESSAGE_DELETED_INFO_TYPE = "4"
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
@@ -96,7 +97,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
 
     private func onRoomReceived(messageJson: JSON) {
-        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[ChatMessageJsonParams.CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        let room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(messageJson[MESSAGE_CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as Room
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 
@@ -155,8 +156,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 
     private func processFlipMessageJson(messageJson: JSON, atDate date: NSDate, fromChannelName: String) -> FlipMessage? {
         if (messageJson[MESSAGE_TYPE] == nil) {
-            println("MESSAGE IN OLD FORMAT. SHOULD BE IGNORED")
-            println("\nMessage received:\n\(messageJson)\n")
+            println("Msg ignored")
             return nil
         }
 
@@ -164,12 +164,21 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             println("User is not logged. Ignoring message.")
             return nil
         }
+        
+        let messageType: String = messageJson[MESSAGE_TYPE].stringValue
 
-        if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
+        switch messageType {
+        case MESSAGE_ROOM_INFO_TYPE:
             self.onRoomReceived(messageJson)
-        } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
-            // Message Received
+        case MESSAGE_FLIPS_INFO_TYPE:
             return PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+        case MESSAGE_READ_INFO_TYPE:
+            // Returning the updated flipMessage, so, if it was updated, the app will refresh any screen that is showing the message or has it cached.
+            return PersistentManager.sharedInstance.onMarkFlipMessageAsReadReceivedWithJson(messageJson)
+        case MESSAGE_DELETED_INFO_TYPE:
+            return PersistentManager.sharedInstance.onMessageForDeletedFlipMessageReceivedWithJson(messageJson)
+        default:
+            break;
         }
 
         return nil
