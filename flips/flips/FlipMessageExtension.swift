@@ -13,6 +13,7 @@
 private let NOTIFICATION_PN_KEY = "pn_apns"
 private let NOTIFICATION_KEY = "aps"
 private let NOTIFICATION_ALERT_KEY = "alert"
+private let NOTIFICATION_ROOM_KEY = "room_id"
 private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
 public struct FormattedFlip {
@@ -78,26 +79,18 @@ extension FlipMessage {
     // MARK: - Message Handler
     
     func toJsonUsingFlipWords(flipWords: [FlipText]) -> Dictionary<String, AnyObject> {
-        var dictionary = Dictionary<String, AnyObject>()
+        var contentDictionary = Dictionary<String, AnyObject>()
         
-        dictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
-        dictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
-        dictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
-        dictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
+        contentDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
+        contentDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
+        contentDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
+        contentDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         var notificationMessage = ""
         if let loggedUser = User.loggedUser() {
             let loggedUserFirstName = loggedUser.firstName
             notificationMessage = "\(NOTIFICATION_MESSAGE) \(loggedUserFirstName)"
         }
-        
-        var notificationDictionary = Dictionary<String, AnyObject>()
-        notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
-        
-        var notificationApsDictionary = Dictionary<String, AnyObject>()
-        notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
-        
-        dictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
         
         var flipsDictionary = Array<Dictionary<String, String>>()
         let flipsEntries = self.flipsEntries
@@ -112,11 +105,25 @@ extension FlipMessage {
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
             dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
-
+            
             flipsDictionary.append(dic)
         }
         
-        dictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
-        return dictionary
+        contentDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
+        
+        var notificationDictionary = Dictionary<String, AnyObject>()
+        notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
+        
+        var notificationApsDictionary = Dictionary<String, AnyObject>()
+        notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
+        notificationApsDictionary.updateValue(self.room.roomID, forKey: NOTIFICATION_ROOM_KEY)
+        
+        
+        var messageDictionary = Dictionary<String, AnyObject>()
+        
+        messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
+        messageDictionary.updateValue(contentDictionary, forKey: MESSAGE_CONTENT)
+        
+        return messageDictionary
     }
 }

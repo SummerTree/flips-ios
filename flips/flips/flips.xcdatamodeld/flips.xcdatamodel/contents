@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14C1514" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="BuilderWord" representedClassName="BuilderWord" syncable="YES">
         <attribute name="addedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="fromServer" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -14,6 +14,9 @@
         <attribute name="phoneType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="contactUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="contacts" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="DeletedFlipMessage" representedClassName="DeletedFlipMessage" syncable="YES">
+        <attribute name="flipMessageID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES">
         <attribute name="deviceID" optional="YES" attributeType="String" syncable="YES"/>
@@ -53,6 +56,9 @@
         <relationship name="from" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="flipsSent" inverseEntity="User" syncable="YES"/>
         <relationship name="room" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Room" inverseName="flipMessages" inverseEntity="Room" syncable="YES"/>
     </entity>
+    <entity name="ReadFlipMessage" representedClassName="ReadFlipMessage" syncable="YES">
+        <attribute name="flipMessageID" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Room" representedClassName="Room" syncable="YES">
         <attribute name="lastMessageReceivedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -87,10 +93,12 @@
         <element name="BuilderWord" positionX="-1233" positionY="108" width="128" height="90"/>
         <element name="Contact" positionX="-461" positionY="296" width="128" height="165"/>
         <element name="Device" positionX="-857" positionY="36" width="128" height="133"/>
-        <element name="Flip" positionX="-675" positionY="324" width="128" height="225"/>
+        <element name="Flip" positionX="-675" positionY="324" width="128" height="223"/>
         <element name="FlipEntry" positionX="-1008" positionY="117" width="128" height="105"/>
         <element name="FlipMessage" positionX="-144" positionY="470" width="128" height="165"/>
+        <element name="ReadFlipMessage" positionX="-1215" positionY="333" width="128" height="58"/>
         <element name="Room" positionX="-974" positionY="428" width="128" height="165"/>
         <element name="User" positionX="-623" positionY="-54" width="128" height="313"/>
+        <element name="DeletedFlipMessage" positionX="-1008" positionY="117" width="128" height="60"/>
     </elements>
 </model>

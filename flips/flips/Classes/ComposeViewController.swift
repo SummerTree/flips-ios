@@ -155,6 +155,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             self.reloadMyFlips()
+            self.mapWordsToFirstAvailableFlip()
             self.updateFlipWordsState()
             self.showContentForHighlightedWord()
         })
@@ -336,7 +337,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
         self.stockFlipsDictionary = flipDataSource.getStockFlipsIdsForWords(words)
-        
+    }
+
+    private func mapWordsToFirstAvailableFlip() {
         for flipWord in self.flipWords {
             if let firstFlipId:String = self.myFlipsDictionary[flipWord.text]?.first {
                 flipWord.associatedFlipId = firstFlipId
@@ -631,7 +634,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
         })
     }
-    
+
     // MARK: - ComposeBottomViewContainerDataSource
     
     func composeBottomViewContainerFlipIdsForHighlightedWord(composeBottomViewContainer: ComposeBottomViewContainer) -> [String] {

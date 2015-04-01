@@ -36,7 +36,7 @@
 	<key>FacebookDisplayName</key>
 	<string>Flips</string>
 	<key>FlipsServiceHostBaseURL</key>
-	<string>http://flips-dev95.arctouch.com</string>
+	<string>http://flips-qa.elasticbeanstalk.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

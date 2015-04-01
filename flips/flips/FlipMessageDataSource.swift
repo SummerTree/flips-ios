@@ -14,7 +14,6 @@ struct FlipMessageJsonParams {
     static let FLIP_MESSAGE_ID = "flipMessageId" // used to identify messages sent by the logged user that are from history or not. To do not duplicate it.
     static let FROM_USER_ID = "fromUserId"
     static let SENT_AT = "sentAt"
-    static let CONTENT = "content"
 }
 
 private struct FlipMessageAttributes {
@@ -56,7 +55,7 @@ class FlipMessageDataSource : BaseDataSource {
             return false
         }
 
-        let content = json[FlipMessageJsonParams.CONTENT]
+        let content = json[MESSAGE_CONTENT]
         if (content == nil) {
             return false
         }
@@ -134,17 +133,41 @@ class FlipMessageDataSource : BaseDataSource {
     }
     
     func removeAllFlipMessagesFromRoomID(roomID: String) {
+        let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource(context: currentContext)
+        
         let roomDataSource = RoomDataSource(context: currentContext)
         let room = roomDataSource.retrieveRoomWithId(roomID)
         for (var i = 0; i < room.flipMessages.count; i++) {
             let flipMessage = room.flipMessages.objectAtIndex(i).inContext(currentContext) as FlipMessage
             flipMessage.removed = true
+            
+            let flipMessageID: String = flipMessage.flipMessageID
+            if (!deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)) {
+                let deletedFlipMessage: DeletedFlipMessage = deletedFlipMessageDataSource.createDeletedFlipMessageWithID(flipMessageID)
+                self.sendMessageForDeletedFlipMessage(deletedFlipMessage)
+            }
         }
     }
     
     func markFlipMessageAsRemoved(flipMessage: FlipMessage) {
         let flipMessageInContext: FlipMessage = flipMessage.inContext(currentContext) as FlipMessage
         flipMessageInContext.removed = true
+        
+        let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource(context: currentContext)
+        let flipMessageID: String = flipMessageInContext.flipMessageID
+        if (!deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)) {
+            let deletedFlipMessage: DeletedFlipMessage = deletedFlipMessageDataSource.createDeletedFlipMessageWithID(flipMessageID)
+            self.sendMessageForDeletedFlipMessage(deletedFlipMessage)
+        }
+    }
+    
+    private func sendMessageForDeletedFlipMessage(deletedFlipMessage: DeletedFlipMessage) {
+        if let loggedUser: User = User.loggedUser() {
+            let deletedFlipMessageJson = deletedFlipMessage.toJSON()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
+                PubNubService.sharedInstance.sendMessage(deletedFlipMessageJson, pubnubID: loggedUser.pubnubID, completion: nil)
+            })
+        }
     }
     
     func flipMessagesForRoomID(roomID: String) -> [FlipMessage] {
