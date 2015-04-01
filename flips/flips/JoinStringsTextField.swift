@@ -22,6 +22,12 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
+    var numberOfLines: Int {
+        get {
+            return Int(self.contentSize.height/self.font.lineHeight)
+        }
+    }
+    
     override init() {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
         self.returnKeyType = .Next
@@ -212,6 +218,20 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         var arrayOfWords = FlipStringsUtil.splitFlipString(stringFromSelection)
         return arrayOfWords.count > 1
+    }
+    
+    func handleMultipleLines(height: CGFloat) {
+        if (numberOfLines > 1) {
+            let y = self.contentSize.height-height
+            let cursorRect = self.caretRectForPosition(self.selectedTextRange?.start)
+            if (cursorRect.origin.y < y) {
+                let cursorLineRect = CGRectMake(0, cursorRect.origin.y, self.contentSize.width, cursorRect.size.height)
+                self.scrollRectToVisible(cursorLineRect, animated: false)
+            } else {
+                let lastLinesRect = CGRectMake(0, y, self.contentSize.width, height)
+                self.scrollRectToVisible(lastLinesRect, animated: false)
+            }
+        }
     }
     
     func textViewDidChange(textView: UITextView) {

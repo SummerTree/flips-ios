@@ -18,6 +18,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private let REPLY_VIEW_DEFAULT_HEIGHT : CGFloat = 42.0
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
     private let REPLY_VIEW_MARGIN : CGFloat = 10.0
+    private let NEXT_BUTTON_MARGIN : CGFloat = 8.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     private let AUTOPLAY_ON_LOAD_DELAY : Double = 0.3
 
@@ -195,8 +196,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         nextButton.mas_makeConstraints( { (make) in
             make.right.equalTo()(self.replyView)
-            make.top.equalTo()(self.replyView)
-            make.bottom.equalTo()(self.replyView)
+            make.bottom.equalTo()(self.NEXT_BUTTON_MARGIN)
             make.width.equalTo()(self.nextButton.frame.width)
         })
         
@@ -419,9 +419,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
 
     private func handleReplyTextFieldSize() {
-        let numberOfLines = Int(replyTextField.contentSize.height/replyTextField.font.lineHeight)
         var textFieldHeight = replyTextField.DEFAULT_HEIGHT
-        if (numberOfLines > 1) {
+        if (replyTextField.numberOfLines > 1) {
             textFieldHeight = replyTextField.DEFAULT_HEIGHT+replyTextField.DEFAULT_LINE_HEIGHT
         }
         
@@ -440,17 +439,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         })
         self.updateConstraintsIfNeeded()
         
-        if (numberOfLines > 1) {
-            let y = replyTextField.contentSize.height-textFieldHeight
-            let cursorRect = replyTextField.caretRectForPosition(replyTextField.selectedTextRange?.start)
-            if (cursorRect.origin.y < y) {
-                let cursorLineRect = CGRectMake(0, cursorRect.origin.y, replyTextField.contentSize.width, cursorRect.size.height)
-                replyTextField.scrollRectToVisible(cursorLineRect, animated: false)
-            } else {
-                let lastLinesRect = CGRectMake(0, y, replyTextField.contentSize.width, textFieldHeight)
-                replyTextField.scrollRectToVisible(lastLinesRect, animated: false)
-            }
-        }
+        replyTextField.handleMultipleLines(textFieldHeight)
     }
     
     
