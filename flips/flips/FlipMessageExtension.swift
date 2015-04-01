@@ -16,6 +16,9 @@ private let NOTIFICATION_ALERT_KEY = "alert"
 private let NOTIFICATION_ROOM_KEY = "room_id"
 private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
+public let MESSAGE_CONTENT = "content"
+public let MESSAGE_DATA = "data"
+
 extension FlipMessage {
 
     var flipsEntries: Array<FlipEntry> {
@@ -102,7 +105,7 @@ extension FlipMessage {
             flipsDictionary.append(dic)
         }
         
-        dataDictionary.updateValue(flipsDictionary, forKey: FlipMessageJsonParams.CONTENT)
+        dataDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
@@ -115,7 +118,7 @@ extension FlipMessage {
         var messageDictionary = Dictionary<String, AnyObject>()
         
         messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
-        messageDictionary.updateValue(dataDictionary, forKey: FlipMessageJsonParams.DATA)
+        messageDictionary.updateValue(dataDictionary, forKey: MESSAGE_DATA)
         
         return messageDictionary
     }

@@ -232,6 +232,9 @@
 		7AB946DC19DF35E700779C73 /* MessagesTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946DB19DF35E700779C73 /* MessagesTopView.swift */; };
 		7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBED01A024F4300A7109C /* DateHelper.swift */; };
 		7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */; };
+		7ACC60401AC97E110052076D /* ReadFlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACC603F1AC97E110052076D /* ReadFlipMessageDataSource.swift */; };
+		7ACC60461AC97F090052076D /* ReadFlipMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACC60451AC97F090052076D /* ReadFlipMessage.m */; };
+		7ACC60481AC988B70052076D /* ReadFlipMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACC60471AC988B70052076D /* ReadFlipMessageExtension.swift */; };
 		7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */; };
 		7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
 		7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */; };
@@ -563,6 +566,10 @@
 		7AB946DB19DF35E700779C73 /* MessagesTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopView.swift; path = Classes/MessagesTopView.swift; sourceTree = "<group>"; };
 		7ACBBED01A024F4300A7109C /* DateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorHelper.swift; sourceTree = "<group>"; };
+		7ACC603F1AC97E110052076D /* ReadFlipMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadFlipMessageDataSource.swift; sourceTree = "<group>"; };
+		7ACC60441AC97F090052076D /* ReadFlipMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadFlipMessage.h; sourceTree = "<group>"; };
+		7ACC60451AC97F090052076D /* ReadFlipMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReadFlipMessage.m; sourceTree = "<group>"; };
+		7ACC60471AC988B70052076D /* ReadFlipMessageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadFlipMessageExtension.swift; sourceTree = "<group>"; };
 		7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfirmPictureView.swift; path = Classes/ConfirmPictureView.swift; sourceTree = "<group>"; };
 		7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfirmPictureViewDelegate.swift; path = Classes/ConfirmPictureViewDelegate.swift; sourceTree = "<group>"; };
 		7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewControllerDelegate.swift; path = Classes/TakePictureViewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -876,6 +883,8 @@
 			children = (
 				7A2A7E1119EDBF9400033164 /* Extensions */,
 				7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */,
+				7ACC60441AC97F090052076D /* ReadFlipMessage.h */,
+				7ACC60451AC97F090052076D /* ReadFlipMessage.m */,
 				572BF9161AB9E52600B0D75A /* Flip.h */,
 				572BF9171AB9E52600B0D75A /* Flip.m */,
 				7AFE1F3D1AB8AB2D00E38673 /* FlipEntry.h */,
@@ -1270,6 +1279,7 @@
 				7A2ED6AE19FA7AA6000C6B86 /* RoomExtension.swift */,
 				7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */,
 				07B66B011A14340C00407A28 /* ContactExtensions.swift */,
+				7ACC60471AC988B70052076D /* ReadFlipMessageExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1286,6 +1296,7 @@
 				7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */,
 				7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */,
 				7A356E4419F95546002D923B /* ContactDataSource.swift */,
+				7ACC603F1AC97E110052076D /* ReadFlipMessageDataSource.swift */,
 			);
 			name = "Data Sources";
 			sourceTree = "<group>";
@@ -1952,12 +1963,14 @@
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,
 				7AE3C6661A824C0700910CBC /* PersistentManager.swift in Sources */,
 				7A9619E619DC2A7A005E4343 /* SignUpViewController.swift in Sources */,
+				7ACC60401AC97E110052076D /* ReadFlipMessageDataSource.swift in Sources */,
 				1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */,
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */,
+				7ACC60461AC97F090052076D /* ReadFlipMessage.m in Sources */,
 				BE22C9951AA6BEC00079298E /* TempFiles.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
 				7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */,
@@ -2019,6 +2032,7 @@
 				702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
+				7ACC60481AC988B70052076D /* ReadFlipMessageExtension.swift in Sources */,
 				7A07EB9A1AC07ED80002DE18 /* GroupPartcipantsTableViewCell.swift in Sources */,
 				F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */,
 				7AD93F8E19E4B705009CC59A /* ConfirmPictureView.swift in Sources */,
