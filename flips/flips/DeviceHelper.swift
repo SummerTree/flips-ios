@@ -167,5 +167,6 @@ public class DeviceHelper: NSObject {
         } else {
             userDefaults.removeObjectForKey(LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL)
         }
+        userDefaults.synchronize()
     }
 }
