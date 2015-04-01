@@ -26,6 +26,7 @@ let MESSAGE_TYPE = "type"
 let MESSAGE_ROOM_INFO_TYPE = "1"
 let MESSAGE_FLIPS_INFO_TYPE = "2"
 let MESSAGE_READ_INFO_TYPE = "3"
+let MESSAGE_DELETED_INFO_TYPE = "4"
 
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
@@ -163,14 +164,21 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             println("User is not logged. Ignoring message.")
             return nil
         }
+        
+        let messageType: String = messageJson[MESSAGE_TYPE].stringValue
 
-        if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_ROOM_INFO_TYPE) {
+        switch messageType {
+        case MESSAGE_ROOM_INFO_TYPE:
             self.onRoomReceived(messageJson)
-        } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_FLIPS_INFO_TYPE) {
+        case MESSAGE_FLIPS_INFO_TYPE:
             return PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
-        } else if (messageJson[MESSAGE_TYPE].stringValue == MESSAGE_READ_INFO_TYPE) {
+        case MESSAGE_READ_INFO_TYPE:
             // Returning the updated flipMessage, so, if it was updated, the app will refresh any screen that is showing the message or has it cached.
             return PersistentManager.sharedInstance.onMarkFlipMessageAsReadReceivedWithJson(messageJson)
+        case MESSAGE_DELETED_INFO_TYPE:
+            return PersistentManager.sharedInstance.onMessageForDeletedFlipMessageReceivedWithJson(messageJson)
+        default:
+            break;
         }
 
         return nil
