@@ -16,7 +16,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private var rangeThatWillChange: NSRange? = nil
     private let WHITESPACE: Character = " "
-    let DEFAULT_HEIGHT: CGFloat = 42.0
+    let DEFAULT_HEIGHT: CGFloat = 38.0
+    let DEFAULT_LINE_HEIGHT: CGFloat = 20.0
     let JOINED_COLOR: UIColor = UIColor.flipOrange()
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
