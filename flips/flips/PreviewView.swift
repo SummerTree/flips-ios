@@ -40,8 +40,8 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         }
     }
 
-    func setupVideoPlayerWithFlips(flips: Array<Flip>) {
-        self.videoPlayerView.setupPlayerWithFlips(flips)
+    func setupVideoPlayerWithFlips(flips: Array<Flip>, formattedWords: Array<String>) {
+        self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords)
     }
 
     func addSubviews() {
