@@ -333,6 +333,8 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
                 })
                 
                 self.layoutIfNeeded()
+            }, completion: { (finished) -> Void in
+                self.flipsView.flashScrollIndicators()
             })
         })
     }
