@@ -14,8 +14,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
+    private var rangeThatWillChange: NSRange? = nil
     private let WHITESPACE: Character = " "
     let DEFAULT_HEIGHT: CGFloat = 42.0
+    let JOINED_COLOR: UIColor = UIColor.flipOrange()
     
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
@@ -100,28 +102,21 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         newRanges.append(NSMakeRange(posInit, posEnd-posInit))
         self.joinedTextRanges = newRanges
 
-        self.updateColorOnJoinedTexts(UIColor.flipOrange())
+        self.updateColorOnJoinedTexts()
     }
     
-    func updateColorOnJoinedTexts(color: UIColor) {
-        var attributedString = NSMutableAttributedString(string:self.text + " ")
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text)))
-        
-        for joinedTextRange in joinedTextRanges {
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: color, range: joinedTextRange)
-        }
-        
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: countElements(self.text), length: 1))
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSRange(location: countElements(self.text), length: 1))
-        
-        self.attributedText = attributedString
-    }
-    
-    func resetTextColor() {
+    private func updateColorOnJoinedTexts() {
+        var selectedTextRange = self.selectedTextRange
         var attributedString = NSMutableAttributedString(string:self.text)
         attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text)))
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, countElements(self.text)))
+        
+        for joinedTextRange in joinedTextRanges {
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
+        }
+
         self.attributedText = attributedString
+        self.selectedTextRange = selectedTextRange
     }
     
     func getFlipTexts() -> [String] {
@@ -174,15 +169,6 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return (false, nil)
     }
     
-    func hasSpecialCharacters(text : String) -> Bool {
-        for character in text {
-            if (isSpecialCharacter(character)) {
-                return true
-            }
-        }
-        return false
-    }
-    
     func isSpecialCharacter(char : Character) -> Bool {
         let str = String(char)
         let range = NSRange(location: 0, length: countElements(str))
@@ -216,34 +202,46 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func selectedTextCanBeJoined() -> Bool {
         var selectedTextRange: UITextRange = self.selectedTextRange!
         
-        var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
-        var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
-        var selectionLength : Int = posEnd - posInit
-        var selectionTextRange = NSMakeRange(posInit, selectionLength)
+        var posInit: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
+        var posEnd: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
+        var selectionTextRange = NSMakeRange(posInit, posEnd-posInit)
         
         let textNSString = self.text as NSString
         var stringFromSelection = textNSString.substringWithRange(selectionTextRange)
         
-        var arrayOfWords : [String] = FlipStringsUtil.splitFlipString(stringFromSelection)
-        if (arrayOfWords.count > 1) {
-            return true
-        }
-        
-        return false
+        var arrayOfWords = FlipStringsUtil.splitFlipString(stringFromSelection)
+        return arrayOfWords.count > 1
     }
     
     func textViewDidChange(textView: UITextView) {
+        if (self.text.rangeOfString("\n") != nil) {
+            self.text = self.text.stringByReplacingOccurrencesOfString("\n", withString: " ")
+        }
+        
+        if let range = self.rangeThatWillChange {
+            var newRanges = [NSRange]()
+            for (var i = 0; i < self.joinedTextRanges.count; ++i) {
+                let joinedRange = self.joinedTextRanges[i]
+                if (range.length == 0) {
+                    if (range.location < joinedRange.location || range.location >= joinedRange.location+joinedRange.length) {
+                        newRanges.append(joinedRange)
+                    }
+                } else {
+                    let intersection = NSIntersectionRange(range, joinedRange)
+                    if (intersection.length == 0) {
+                        newRanges.append(joinedRange)
+                    }
+                }
+            }
+            self.joinedTextRanges = newRanges
+            self.rangeThatWillChange = nil
+            self.updateColorOnJoinedTexts()
+        }
+        
         joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: text)
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if (range.location < countElements(self.text)) {
-            joinedTextRanges.removeAll(keepCapacity: false)
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.resetTextColor()
-            })
-        }
-        
         if (text == "\n") {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.joinStringsTextFieldDelegate?.joinStringsTextFieldShouldReturn?(self)
@@ -252,12 +250,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             return false
         }
         
-        if (text.rangeOfString("\n") != nil) {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.text = self.text.stringByReplacingOccurrencesOfString("\n", withString: " ")
-            })
-        }
-        
+        self.rangeThatWillChange = range
         return true
     }
     
@@ -265,7 +258,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         let joiner = " "
         var text = "";
         var firstWord = true
-        joinedTextRanges = []
+        self.joinedTextRanges.removeAll(keepCapacity: false)
         for word in words {
             if (!firstWord) {
                 text += " "
@@ -279,16 +272,12 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             text += word
         }
         self.text = text
-        self.updateColorOnJoinedTexts(UIColor.flipOrange())
+        self.updateColorOnJoinedTexts()
     }
     
     private func isCompoundText(word: String) -> Bool {
         let wordWithoutSpaces = word.removeWhiteSpaces()
-        if (wordWithoutSpaces != word) {
-            return true
-        } else {
-            return false
-        }
+        return wordWithoutSpaces != word
     }
     
 }
