@@ -104,12 +104,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         }
         self.refreshRooms()
         
-        if let roomID = self.roomIdToShow {
-            let roomDataSource = RoomDataSource()
-            let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
-            self.roomIdToShow = nil
-        }
     }
     
     func imageForView() -> UIImage {
@@ -206,6 +200,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 println("Thumbnail download failed for flip: \(flip.flipID)")
             } else {
                 self.refreshRooms()
+                
+                if let roomID = self.roomIdToShow {
+                    let roomDataSource = RoomDataSource()
+                    let room = roomDataSource.retrieveRoomWithId(roomID)
+                    self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
+                    self.roomIdToShow = nil
+                }
+                
             }
         } else {
             UIAlertView.showUnableToLoadFlip()

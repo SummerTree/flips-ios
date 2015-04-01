@@ -113,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if (UIApplication.sharedApplication().keyWindow == nil)  {
                     self.openSplashScreen(roomID: roomId)
                 } else if (application.applicationState != UIApplicationState.Active) {
-                    NavigationHandler.sharedInstance.showThreadScreenWithRoomId(roomId)
+                    NavigationHandler.sharedInstance.waitFlipDowloadAndShowThreadScreenWithRoomId(roomId)
                 }
             }
         }
