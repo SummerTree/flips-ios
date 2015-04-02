@@ -19,6 +19,11 @@ private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 public let MESSAGE_CONTENT = "content"
 public let MESSAGE_DATA = "data"
 
+public struct FormattedFlip {
+    var flip: Flip
+    var word: String
+}
+
 extension FlipMessage {
 
     var flipsEntries: Array<FlipEntry> {
@@ -29,13 +34,13 @@ extension FlipMessage {
         }
     }
 
-    func addFlip(flip: Flip, inContext context: NSManagedObjectContext) {
+    func addFlip(formatedFlip: FormattedFlip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
         var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
         entry.order = nextEntryOrder
-        entry.formattedWord = flip.word
-        entry.flip = flip.inContext(context) as Flip
+        entry.formattedWord = formatedFlip.word
+        entry.flip = formatedFlip.flip.inContext(context) as Flip
         entry.message = self
 
         self.addEntriesObject(entry)
@@ -76,7 +81,7 @@ extension FlipMessage {
     
     // MARK: - Message Handler
     
-    func toJSON() -> Dictionary<String, AnyObject> {
+    func toJsonUsingFlipWords(flipWords: [FlipText]) -> Dictionary<String, AnyObject> {
         var dataDictionary = Dictionary<String, AnyObject>()
         
         dataDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
@@ -94,10 +99,12 @@ extension FlipMessage {
         let flipsEntries = self.flipsEntries
         for (var i = 0; i < flipsEntries.count; i++) {
             let flip: Flip = flipsEntries[i].flip
+            let flipWord: FlipText = flipWords[i]
+            
             var dic = Dictionary<String, String>()
 
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
-            dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
+            dic.updateValue(flipWord.text, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
             dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
