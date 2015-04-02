@@ -21,12 +21,13 @@ class LoginView : UIView, UITextFieldDelegate {
 
     private let FLIPS_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
     private var FLIPS_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat! = 20.0
-    private var FLIPS_WORD_ANIMATION_OFFSET: CGFloat!
-
+    private var FLIPS_WORD_ORIGINAL_OFFSET: CGFloat! = nil
+    
+    private var BUBBLECHAT_IMAGE_ORIGINAL_OFFSET: CGFloat! = nil
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
     private var LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
-    private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
-    private var FORGOT_PASSWORD_ANIMATION_OFFSET: CGFloat!
+    private var CREDENTIALS_ORIGINAL_OFFSET: CGFloat! = nil
+    private var FORGOT_PASSWORD_ORIGINAL_OFFSET: CGFloat! = nil
 
     private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
     private let ANDWORD_MARGIN_LEFT: CGFloat = 2
@@ -652,33 +653,44 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
+                if (self.CREDENTIALS_ORIGINAL_OFFSET == nil) {
+                    self.CREDENTIALS_ORIGINAL_OFFSET = self.credentialsView.frame.origin.y
+                }
+                
+                if (self.FORGOT_PASSWORD_ORIGINAL_OFFSET == nil) {
+                    self.FORGOT_PASSWORD_ORIGINAL_OFFSET = self.forgotPasswordButton.center.y
+                }
+                
+                if (self.FLIPS_WORD_ORIGINAL_OFFSET == nil) {
+                    self.FLIPS_WORD_ORIGINAL_OFFSET = self.flipsWordImageView.frame.origin.y
+                }
+                
+                if (self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET == nil) {
+                    self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET = self.bubbleChatImageView.frame.origin.y
+                }
+
                 self.forgotPasswordButton.alpha = 1.0
                 
                 // positioning credentials above keyboard
                 var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
-                self.CREDENTIALS_ANIMATION_OFFSET = self.credentialsView.frame.origin.y - credentialsFinalPosition
-                self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
+                self.credentialsView.frame.origin.y = credentialsFinalPosition
                 
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     // positioning Flips word below the top of the screen with a defined offset
-                    var flipsWordFinalPosition = self.FLIPS_WORD_LOGO_POSITION_WHEN_ERROR
-                    self.FLIPS_WORD_ANIMATION_OFFSET = self.flipsWordImageView.frame.origin.y - flipsWordFinalPosition
-                    self.flipsWordImageView.frame.origin.y -= self.FLIPS_WORD_ANIMATION_OFFSET
-                    self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                    self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_LOGO_POSITION_WHEN_ERROR
+                    self.bubbleChatImageView.frame.origin.y = self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET-self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                 }
                 
                 // positioning forgot password button between credentials and Flips word
-                var forgotPasswordFinalPosition = (self.credentialsView.center.y + self.flipsWordImageView.frame.origin.y) / 2
-                self.FORGOT_PASSWORD_ANIMATION_OFFSET = self.forgotPasswordButton.frame.origin.y - forgotPasswordFinalPosition
-                self.forgotPasswordButton.center.y -= self.FORGOT_PASSWORD_ANIMATION_OFFSET
-                
+                var finalPosition = (self.credentialsView.center.y + self.flipsWordImageView.frame.origin.y) / 2
+                self.forgotPasswordButton.center.y = self.FORGOT_PASSWORD_ORIGINAL_OFFSET-self.forgotPasswordButton.frame.origin.y+finalPosition
             } else {
                 self.forgotPasswordButton.alpha = 0.0
-                self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
-                self.forgotPasswordButton.center.y += self.FORGOT_PASSWORD_ANIMATION_OFFSET
+                self.credentialsView.frame.origin.y = self.CREDENTIALS_ORIGINAL_OFFSET
+                self.forgotPasswordButton.center.y = self.FORGOT_PASSWORD_ORIGINAL_OFFSET
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
-                    self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                    self.flipsWordImageView.frame.origin.y += self.FLIPS_WORD_ANIMATION_OFFSET
+                    self.bubbleChatImageView.frame.origin.y = self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET
+                    self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_ORIGINAL_OFFSET
                 }
             }
         })
