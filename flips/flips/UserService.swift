@@ -179,7 +179,7 @@ public class UserService: FlipsService {
     
     // MARK: Update user profile
     
-    func update(username: String, password: String?, firstName: String, lastName: String, avatar: UIImage?, birthday: NSDate, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func update(username: String, password: String?, firstName: String, lastName: String, avatar: UIImage?, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -191,8 +191,7 @@ public class UserService: FlipsService {
             var params: Dictionary<String, AnyObject> = [
                 RequestParams.USERNAME : username,
                 RequestParams.FIRSTNAME : firstName,
-                RequestParams.LASTNAME : lastName,
-                RequestParams.BIRTHDAY : birthday
+                RequestParams.LASTNAME : lastName
             ]
             
             if let newPassword = password {

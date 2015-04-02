@@ -119,10 +119,10 @@ class SettingsTableViewCell: UITableViewCell {
     
     func setAvatarURL(url: String!) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.actionImageView, style: UIActivityIndicatorViewStyle.White)
+        self.actionImageView.layer.cornerRadius = self.actionImageView.frame.size.width / 2
+        self.actionImageView.layer.masksToBounds = true
         self.actionImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.actionImageView.layer.cornerRadius = self.actionImageView.frame.size.width / 2
-                self.actionImageView.layer.masksToBounds = true
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.actionImageView)
                 self.actionImageView.mas_updateConstraints({ (update) -> Void in
                     update.removeExisting = true

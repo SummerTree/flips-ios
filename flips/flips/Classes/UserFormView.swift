@@ -28,8 +28,9 @@ class UserFormView : UIView, UITextFieldDelegate {
     private let BIRTHDAY_YEAR_CHARACTER = NSLocalizedString("Y", comment: "Year Abreviation")
     
     var delegate: UserFormViewDelegate?
+    var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
+    var allFieldsValid, allFieldsFilled, nameValid, nameFilled, emailValid, emailFilled, passwordValid, passwordFilled, birthdayValid, birthdayFilled : Bool
     
-    private var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
 	private var birthdayDatePicker : UIDatePicker!
     private var isPaddingAdjusted: Bool = false
     
@@ -44,11 +45,22 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     override init(frame: CGRect) {
+        self.allFieldsValid = true
+        self.allFieldsFilled = false
+        self.nameValid = true
+        self.nameFilled = false
+        self.emailValid = true
+        self.emailFilled = false
+        self.passwordValid = true
+        self.passwordFilled = false
+        self.birthdayValid = true
+        self.birthdayFilled = false
+        
         super.init(frame: frame)
+        
         self.backgroundColor = UIColor.deepSea()
         
         self.initSubviews()
-        
         self.updateConstraintsIfNeeded()
     }
     
@@ -101,7 +113,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         textField.rightViewMode = UITextFieldViewMode.Always
         textField.rightView = UIImageView(image: UIImage(named: "Error"))
         textField.rightView?.hidden = true
-        
+        textField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         textField.delegate = self
         
         if (leftImage != nil) {
@@ -268,11 +280,11 @@ class UserFormView : UIView, UITextFieldDelegate {
             }
         }
         
-        if shouldChangeTextFieldText {
-            self.delegate?.userFormViewDidUpdateField?(self)
-        }
-        
         return shouldChangeTextFieldText
+    }
+    
+    func textFieldDidChange(textField: UITextField) {
+        self.validateFields(includeFieldsBeingEdited: false)
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -285,7 +297,6 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        
         if (textField == birthdayTextField) {
             var stringWithOnlyDigits = textField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
@@ -299,62 +310,71 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     // MARK: - Validation Methods
     
-    private func validateFields() -> Bool {
-        var allFieldsAreValid = true
-        
-        if (firstNameTextField.text.isEmpty ||
-            lastNameTextField.text.isEmpty ||
-            emailTextField.text.isEmpty ||
-            (!passwordTextField.hidden && passwordTextField.text.isEmpty) ||
-            birthdayTextField.text.isEmpty) {
-                allFieldsAreValid = false
+    func validateFields(includeFieldsBeingEdited: Bool = true) -> Bool {
+        self.allFieldsValid = true
+        self.allFieldsFilled = true
+
+        if (firstNameTextField.text.isEmpty || lastNameTextField.text.isEmpty || emailTextField.text.isEmpty ||
+            (!birthdayTextField.hidden && birthdayTextField.text.isEmpty) ||
+            (!passwordTextField.hidden && passwordTextField.text.isEmpty)) {
+                
+            self.allFieldsFilled = false
         }
         
-        if (!emailTextField.text.isEmpty) {
+        if (!firstNameTextField.text.isEmpty && !lastNameTextField.text.isEmpty) {
+            self.nameFilled = true
+            self.nameValid = true
+        } else if ((!firstNameTextField.isFirstResponder() && !lastNameTextField.isFirstResponder()) || includeFieldsBeingEdited) {
+            self.nameFilled = false
+            self.nameValid = false
+            self.allFieldsFilled = false
+        }
+
+        if (emailTextField.text.isEmpty) {
+            self.emailFilled = false
+        } else {
+            self.emailFilled = true
             if (emailTextField.text.isValidEmail()) {
                 emailTextField.rightView?.hidden = true
-                delegate?.userFormView(self, didValidateEmailWithSuccess: true)
-            } else {
+                self.emailValid = true
+            } else if (!emailTextField.isFirstResponder() || includeFieldsBeingEdited) {
                 emailTextField.rightView?.hidden = false
-                allFieldsAreValid = false
-                delegate?.userFormView(self, didValidateEmailWithSuccess: false)
+                self.allFieldsValid = false
+                self.emailValid = false
             }
-        } else {
-            // To hide messages in the top messages view.
-            delegate?.userFormView(self, didValidateEmailWithSuccess: true)
         }
         
-        if (!passwordTextField.text.isEmpty) {
+        if (passwordTextField.text.isEmpty) {
+            self.passwordFilled = false
+        } else {
+            self.passwordFilled = true
             if (passwordTextField.text.isValidPassword()) {
                 passwordTextField.rightView?.hidden = true
-                delegate?.userFormView(self, didValidatePasswordWithSuccess: true)
-            } else {
+                self.passwordValid = true
+            } else if (!passwordTextField.isFirstResponder() || includeFieldsBeingEdited) {
                 passwordTextField.rightView?.hidden = false
-                allFieldsAreValid = false
-                delegate?.userFormView(self, didValidatePasswordWithSuccess: false)
+                self.allFieldsValid = false
+                self.passwordValid = false
             }
-        } else {
-            // To hide messages in the top messages view.
-            delegate?.userFormView(self, didValidatePasswordWithSuccess: true)
         }
         
-        if (!birthdayTextField.text.isEmpty) {
+        if (birthdayTextField.text.isEmpty) {
+            self.birthdayFilled = false
+        } else {
+            self.birthdayFilled = true
             if (self.isBirthdayValid(birthdayTextField.text)) {
                 birthdayTextField.rightView?.hidden = true
-                delegate?.userFormView(self, didValidateBirthdayWithSuccess: true)
-            } else {
+                self.birthdayValid = true
+            } else if (!birthdayTextField.isFirstResponder() || includeFieldsBeingEdited) {
                 birthdayTextField.rightView?.hidden = false
-                allFieldsAreValid = false
-                delegate?.userFormView(self, didValidateBirthdayWithSuccess: false)
+                self.allFieldsValid = false
+                self.birthdayValid = false
             }
-        } else {
-            // To hide messages in the top messages view.
-            delegate?.userFormView(self, didValidateBirthdayWithSuccess: true)
         }
         
-        delegate?.userFormView(self, didValidateAllFieldsWithSuccess: allFieldsAreValid)
+        delegate?.userFormView(self, didValidateAllFieldsWithSuccess: (self.allFieldsValid && self.allFieldsFilled))
         
-        return allFieldsAreValid
+        return self.allFieldsValid && self.allFieldsFilled
     }
     
     func isBirthdayValid(birthday: String) -> Bool {
@@ -468,6 +488,11 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func setPasswordFieldVisible(visible: Bool) {
         passwordTextField.hidden = !visible
+        self.updateConstraints()
+    }
+    
+    func setBirthdayFieldVisible(visible: Bool) {
+        birthdayTextField.hidden = !visible
         self.updateConstraints()
     }
     

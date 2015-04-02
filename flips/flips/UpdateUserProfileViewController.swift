@@ -92,31 +92,30 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
     
     // MARK: - UpdateUserProfileViewDidTapSaveButton
     
-    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String, avatar: UIImage!) {
+    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, avatar: UIImage!) {
         self.showActivityIndicator()
 
-        UserService.sharedInstance.update(email, password: password, firstName: firstName, lastName: lastName, avatar: avatar, birthday: birthday.dateValue(),
+        UserService.sharedInstance.update(email, password: password, firstName: firstName, lastName: lastName, avatar: avatar,
             success: { (user) -> Void in
                 self.navigationController?.popViewControllerAnimated(true)
                 self.hideActivityIndicator()
             }) { (flipError) -> Void in
                 self.hideActivityIndicator()
-                let alertView = UIAlertView(title: "Error updating user", message: flipError?.details!, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: NSLocalizedString("Error updating user"), message: flipError?.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }
     
     func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapBackButton withEditions: Bool) {
-        
         if (!withEditions) {
             self.navigationController?.popViewControllerAnimated(true)
         } else {
             let alertView = UIAlertView(
-                title: "Discard Changes",
-                message: "Going back without tapping 'Save' will discard your changes.\nDo you wish to discard any changes you have made?",
+                title: NSLocalizedString("Discard Changes"),
+                message: NSLocalizedString("Going back without tapping 'Save' will discard your changes.\nDo you wish to discard any changes you have made?"),
                 delegate: self,
                 cancelButtonTitle: nil,
-                otherButtonTitles: "No", "Discard")
+                otherButtonTitles: NSLocalizedString("No"), NSLocalizedString("Discard"))
             
             alertView.show()
         }

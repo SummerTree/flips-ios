@@ -40,7 +40,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func initSubviews() {
+    internal func initSubviews() {
         self.backgroundColor = getBackgroundColor()
         
         navigationBar = addCustomNavigationBar()
@@ -61,7 +61,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         return CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showNextButton: true)
     }
     
-    private func initConstraints() {
+    internal func initConstraints() {
         navigationBar.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.trailing.equalTo()(self)
@@ -121,43 +121,39 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     // MARK: - UserFormViewDelegate
     
-    func userFormView(userFormView: UserFormView, didValidateEmailWithSuccess success: Bool) {
-        if (success) {
-            messagesTopView.hideInvalidEmailMessage()
-        } else {
-            messagesTopView.showInvalidEmailMessage()
-            self.showTopMessagesView()
-        }
-    }
-    
-    func userFormView(userFormView: UserFormView, didValidatePasswordWithSuccess success: Bool) {
-        if (success) {
-            messagesTopView.hideInvalidPasswordMessage()
-        } else {
-            messagesTopView.showInvalidPasswordMessage()
-            self.showTopMessagesView()
-        }
-    }
-    
-    func userFormView(userFormView: UserFormView, didValidateBirthdayWithSuccess success: Bool) {
-        if (success) {
-            messagesTopView.hideInvalidBirthdayMessage()
-        } else {
-            messagesTopView.showInvalidBirthdayMessage()
-            self.showTopMessagesView()
-        }
-    }
-    
     func userFormView(userFormView: UserFormView, didValidateAllFieldsWithSuccess success: Bool) {
+        var hasInvalidFields = false
+        
+        if (self.userFormView.emailValid) {
+            messagesTopView.hideInvalidEmailMessage()
+        } else if (self.userFormView.emailFilled) {
+            messagesTopView.showInvalidEmailMessage()
+            hasInvalidFields = true
+        }
+        
+        if (self.userFormView.passwordValid) {
+            messagesTopView.hideInvalidPasswordMessage()
+        } else if (self.userFormView.passwordFilled) {
+            messagesTopView.showInvalidPasswordMessage()
+            hasInvalidFields = true
+        }
+        
+        if (self.userFormView.birthdayValid) {
+            messagesTopView.hideInvalidBirthdayMessage()
+        } else if (self.userFormView.birthdayFilled) {
+            messagesTopView.showInvalidBirthdayMessage()
+            hasInvalidFields = true
+        }
+        
+        if (hasInvalidFields) {
+            self.showTopMessagesView()
+        }
+        
         enableRightButton(success)
     }
 
     func enableRightButton(success: Bool) {
         navigationBar.setRightButtonEnabled(success)
-    }
-    
-    func userFormViewDidUpdateField(userFormView: UserFormView) {
-        // do nothing
     }
     
     
