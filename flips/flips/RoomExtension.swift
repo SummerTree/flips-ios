@@ -71,7 +71,7 @@ extension Room {
                     var userFirstName = participant.firstName
                     if (participant.isTemporary!.boolValue) {
                         if let phoneNumber = participant.phoneNumber {
-                            userFirstName = phoneNumber!
+                            userFirstName = (participant as User).formattedPhoneNumber()
                         }
                         
                         if let contacts = participant.contacts {
@@ -85,13 +85,13 @@ extension Room {
                                 }
                                 
                                 if (hasTemporaryName(contact.firstName)) {
-                                    userFirstName = contact.phoneNumber
+                                    userFirstName = contact.formattedPhoneNumber()
                                 } else if (contact.firstName != "") {
                                     userFirstName = contact.firstName
                                 } else if (contact.lastName != "") {
                                     userFirstName = contact.lastName
-                                } else if (contact.phoneNumber != "") {
-                                    userFirstName = contact.phoneNumber
+                                } else if (contact.formattedPhoneNumber() != "") {
+                                    userFirstName = contact.formattedPhoneNumber()
                                 }
                             }
                         }

@@ -58,4 +58,13 @@ extension Contact: MBContactPickerModelProtocol {
         
         return phone
     }
+    
+    func formattedPhoneNumber() -> String {
+        if let phoneNumber = self.phoneNumber {
+            return phoneNumber.toFormattedPhoneNumber()
+        }
+        
+        return ""
+    }
+    
 }

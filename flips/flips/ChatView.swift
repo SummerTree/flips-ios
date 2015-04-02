@@ -15,8 +15,10 @@ import Foundation
 class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate,ChatTableViewCellDelegate {
     
     private let CELL_IDENTIFIER: String = "flipChatCell"
+    private let REPLY_VIEW_DEFAULT_HEIGHT : CGFloat = 42.0
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
     private let REPLY_VIEW_MARGIN : CGFloat = 10.0
+    private let NEXT_BUTTON_MARGIN : CGFloat = 8.0
     private let HORIZONTAL_RULER_HEIGHT : CGFloat = 1.0
     private let AUTOPLAY_ON_LOAD_DELAY : Double = 0.3
 
@@ -79,7 +81,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.replyTextField.DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.REPLY_VIEW_DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         self.updateConstraintsIfNeeded()
@@ -176,7 +178,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyView.mas_makeConstraints( { (make) in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            make.height.equalTo()(self.replyTextField.DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
+            make.height.equalTo()(self.REPLY_VIEW_DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
             make.bottom.equalTo()(self)
         })
         
@@ -189,13 +191,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             make.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
             make.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
             make.centerY.equalTo()(self.replyView)
-            make.height.equalTo()(self.replyTextField.DEFAULT_HEIGHT)
+            make.height.equalTo()(self.REPLY_VIEW_DEFAULT_HEIGHT)
         })
         
         nextButton.mas_makeConstraints( { (make) in
             make.right.equalTo()(self.replyView)
-            make.top.equalTo()(self.replyView)
-            make.bottom.equalTo()(self.replyView)
+            make.bottom.equalTo()(self.NEXT_BUTTON_MARGIN)
             make.width.equalTo()(self.nextButton.frame.width)
         })
         
@@ -364,7 +365,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 make.removeExisting = true
                 make.left.equalTo()(self)
                 make.right.equalTo()(self)
-                make.height.equalTo()(self.replyTextField.DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
+                make.height.equalTo()(self.REPLY_VIEW_DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
                 make.bottom.equalTo()(self)
             })
             self.updateConstraintsIfNeeded()
@@ -419,6 +420,30 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
     }
 
+    private func handleReplyTextFieldSize() {
+        var textFieldHeight = replyTextField.DEFAULT_HEIGHT
+        if (replyTextField.numberOfLines > 1) {
+            textFieldHeight = replyTextField.DEFAULT_HEIGHT+replyTextField.DEFAULT_LINE_HEIGHT
+        }
+        
+        replyView.mas_updateConstraints( { (update) in
+            update.left.equalTo()(self)
+            update.right.equalTo()(self)
+            update.height.equalTo()(textFieldHeight + self.REPLY_VIEW_MARGIN)
+            update.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
+        })
+        
+        replyTextField.mas_updateConstraints( { (update) in
+            update.left.equalTo()(self.replyView).with().offset()(self.REPLY_VIEW_OFFSET)
+            update.right.equalTo()(self.nextButton.mas_left).with().offset()(-self.REPLY_VIEW_OFFSET)
+            update.centerY.equalTo()(self.replyView)
+            update.height.equalTo()(textFieldHeight)
+        })
+        self.updateConstraintsIfNeeded()
+        
+        replyTextField.handleMultipleLines(textFieldHeight)
+    }
+    
     
     // MARK: - Button Handlers
     
@@ -469,14 +494,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
 
         if (numberOfMessages > 0) {
-            replyView.mas_updateConstraints( { (make) in
-                make.left.equalTo()(self)
-                make.right.equalTo()(self)
-                make.height.equalTo()(self.replyTextField.DEFAULT_HEIGHT + self.REPLY_VIEW_MARGIN)
-                make.bottom.equalTo()(self).with().offset()(-self.keyboardHeight)
-            })
-            self.updateConstraintsIfNeeded()
-            self.layoutIfNeeded()
+            handleReplyTextFieldSize()
         }
     }
     
@@ -499,6 +517,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - JoinStringsTextFieldDelegate delegate
     
     func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
+        handleReplyTextFieldSize()
         updateNextButtonState()
     }
     

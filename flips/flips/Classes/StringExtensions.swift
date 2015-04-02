@@ -96,4 +96,13 @@ extension String {
             return self[Range(start: startIndex, end: endIndex)]
         }
     }
+    
+    func toFormattedPhoneNumber() -> String {
+        if (countElements(self) != 12) {
+            return self
+        }
+        
+        return "\(self[2..<5])-\(self[5..<8])-\(self[8...11])"
+    }
+    
 }

@@ -117,7 +117,7 @@ class NewFlipViewController: FlipsViewController,
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
-        self.updateHeightConstraintIfNeeded(self.flipTextFieldHeightConstraint, view: self.flipTextField)        
+        handleReplyTextFieldSize()
     }
     
     // MARK: - Private methods
@@ -133,8 +133,14 @@ class NewFlipViewController: FlipsViewController,
         self.view.animateConstraintWithDuration(NSTimeInterval(contactPicker.animationSpeed))
     }
     
-    private func updateHeightConstraintIfNeeded(heightConstraint: NSLayoutConstraint, view: UIScrollView) {
-        heightConstraint.constant = flipTextField.DEFAULT_HEIGHT
+    private func handleReplyTextFieldSize() {
+        var textFieldHeight = flipTextField.DEFAULT_HEIGHT
+        if (flipTextField.numberOfLines > 1) {
+            textFieldHeight = flipTextField.DEFAULT_HEIGHT+flipTextField.DEFAULT_LINE_HEIGHT
+        }
+        
+        flipTextFieldHeightConstraint.constant = textFieldHeight
+        flipTextField.handleMultipleLines(textFieldHeight)
     }
     
     private func updateNextButtonState() {
@@ -214,6 +220,7 @@ class NewFlipViewController: FlipsViewController,
     // MARK: - JointStringsTextFieldDelegate
     
     func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!) {
+        handleReplyTextFieldSize()
         updateNextButtonState()
     }
     
