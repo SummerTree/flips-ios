@@ -84,7 +84,6 @@ class FlipMessageDataSource : BaseDataSource {
             }
         }
 
-        var i: Int = 0
         for formattedFlip in formattedFlips {
             flipMessageInContext.addFlip(formattedFlip, inContext: currentContext)
         }
