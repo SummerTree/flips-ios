@@ -87,6 +87,13 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     }
     
     
+    // MARK: - UI Methods
+    
+    func flashScrollIndicators() {
+        myFlipsCollectionView.flashScrollIndicators()
+    }
+    
+    
     // MARK: - Data Handler Methods
     
     func reload() {
@@ -113,18 +120,10 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         let numberOfFlips = self.getNumberOfFlips()
         
-        var numberOfSections = 0
-        
-        if (numberOfFlips.myFlips > 0) {
-            numberOfSections++
-        }
+        var numberOfSections = 1
         
         if (numberOfFlips.stockFlips > 0) {
             numberOfSections++
-        }
-        
-        if (numberOfSections == 0) {
-            return 1
         }
         
         return numberOfSections
@@ -133,14 +132,10 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let numberOfFlips = self.getNumberOfFlips()
         
-        if (section == 1) {
-            return numberOfFlips.stockFlips
+        if (section == 0) {
+            return numberOfFlips.myFlips + 1 //addFlipButton
         } else {
-            if (numberOfFlips.myFlips > 0) {
-                return numberOfFlips.myFlips + 1 //addFlipButton
-            } else {
-                return numberOfFlips.stockFlips + 1 //addFlipButton
-            }
+            return numberOfFlips.stockFlips
         }
     }
     
@@ -193,14 +188,10 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         if (kind == UICollectionElementKindSectionHeader) {
             let numberOfFlips = self.getNumberOfFlips()
             
-            if (indexPath.section == 1) {
-                reusableView.setTitle(STOCK_FLIPS_TITLE)
+            if (indexPath.section == 0) {
+                reusableView.setTitle(MY_FLIPS_TITLE)
             } else {
-                if (numberOfFlips.myFlips > 0 || numberOfFlips.stockFlips == 0) {
-                    reusableView.setTitle(MY_FLIPS_TITLE)
-                } else {
-                    reusableView.setTitle(STOCK_FLIPS_TITLE)
-                }
+                reusableView.setTitle(STOCK_FLIPS_TITLE)
             }
         }
         
