@@ -24,6 +24,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var roomID: String!
     private var flipMessages = NSMutableOrderedSet()
     
+    private var shouldShowNewestMessage: Bool?
+    
 
     // MARK: - Initializers
     
@@ -31,10 +33,11 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(room: Room) {
+    init(room: Room, shouldShowNewestMessage: Bool? = false) {
         super.init(nibName: nil, bundle: nil)
         self.chatTitle = room.roomName()
         self.roomID = room.roomID
+        self.shouldShowNewestMessage = shouldShowNewestMessage
 
         if (room.participants.count > 2) {
             self.chatTitle = groupTitle
@@ -103,7 +106,10 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         super.viewDidAppear(animated)
         
         self.groupParticipantsView?.mas_updateConstraints( { (update: MASConstraintMaker!) -> Void in
+            update.removeExisting = true
             update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+            update.leading.equalTo()(self.view)
+            update.trailing.equalTo()(self.view)
             update.height.equalTo()(0)
         })
         self.groupParticipantsView?.updateConstraintsIfNeeded()
@@ -137,6 +143,13 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
     }
+    
+    
+    // MARK: - Getters
+    
+    func getRoomId() -> String {
+        return self.roomID
+    }
 
     
     // MARK: - FlipMessages Load Methods
@@ -147,6 +160,18 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         for flipMessage in flipMessages {
             self.flipMessages.addObject(flipMessage)
         }
+    }
+    
+    // MARK: - jump to newest message
+    
+    func showChatViewNewestMessage() {
+        if (self.chatView != nil) {
+            self.chatView.showNewestMessage()
+        }
+    }
+    
+    func enableViewingNewestMessage() {
+        self.shouldShowNewestMessage = true
     }
     
     
@@ -163,22 +188,27 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     func groupParticipantsButtonTapped() {
-        self.view.layoutIfNeeded()
+        if (self.groupParticipantsView?.frame.height == 0) {
+            // show
+            self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
+                update.removeExisting = true
+                update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+                update.leading.equalTo()(self.view)
+                update.trailing.equalTo()(self.view)
+                update.height.equalTo()(self.groupParticipantsView?.calculatedHeight())
+            })
+        } else {
+            // dismiss
+            self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
+                update.removeExisting = true
+                update.top.equalTo()(self.view).with().offset()(CGRectGetMaxY(self.navigationController!.navigationBar.frame))
+                update.leading.equalTo()(self.view)
+                update.trailing.equalTo()(self.view)
+                update.height.equalTo()(0)
+            })
+        }
+
         UIView.animateWithDuration(0.25, animations: { () -> Void in
-            if (self.groupParticipantsView?.frame.height == 0) {
-                // show
-                self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
-                    update.height.equalTo()(self.groupParticipantsView?.calculatedHeight())
-                    return
-                })
-            } else {
-                // dismiss
-                self.groupParticipantsView?.mas_updateConstraints({ (update: MASConstraintMaker!) -> Void in
-                    update.height.equalTo()(0)
-                    return
-                })
-            }
-            self.view.updateConstraintsIfNeeded()
             self.view.layoutIfNeeded()
         })
     }
@@ -208,6 +238,12 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.reloadFlipMessages()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.loadNewFlipMessages()
+            if let displayLastMessage = self.shouldShowNewestMessage {
+                if (displayLastMessage) {
+                    self.showChatViewNewestMessage()
+                    self.shouldShowNewestMessage = false
+                }
+            }
         })
     }
     

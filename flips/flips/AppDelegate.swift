@@ -37,12 +37,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
         CoreDataHandler.sharedInstance.setupDatabase()
-
-        let splashScreenViewController = SplashScreenViewController()
-        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
         
-        self.window?.rootViewController = navigationViewControler
-        self.window?.makeKeyAndVisible()
+    
+        if (launchOptions != nil) {
+            if let pushNotificationPayload = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
+                self.onNotificationReceived(application, withUserInfo: pushNotificationPayload)
+            } else {
+                openSplashScreen()
+            }
+        } else {
+            openSplashScreen()
+        }
         
         NavigationHandler.sharedInstance.registerForNotifications()
         
@@ -74,6 +79,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MagicalRecord.cleanUp()
     }
     
+    
+    // MARK: - Notification Methods
+    
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"))
         token = token.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -95,16 +103,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        println("did receive remote notification \(userInfo)")
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        self.onNotificationReceived(application, withUserInfo: userInfo)
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        println("did receive remote notification with fetch completion handler \(userInfo)")
-        
+    private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
+        if let loggedUser = User.loggedUser() {
+            if let roomId = (userInfo["room_id"] as? String) {
+                if (UIApplication.sharedApplication().keyWindow == nil)  {
+                    self.openSplashScreen(roomID: roomId)
+                } else if (application.applicationState != UIApplicationState.Active) {
+                    NavigationHandler.sharedInstance.waitFlipDowloadAndShowThreadScreenWithRoomId(roomId)
+                }
+            }
+        }
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
     }
+    
+    // MARK: - private functions
+    
+    private func openSplashScreen(roomID: String? = nil) {
+        let splashScreenViewController = SplashScreenViewController(roomID: roomID)
+        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
+        self.window?.rootViewController = navigationViewControler
+        self.window?.makeKeyAndVisible()
+    }
+    
 }

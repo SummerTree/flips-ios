@@ -16,6 +16,9 @@ private let NOTIFICATION_ALERT_KEY = "alert"
 private let NOTIFICATION_ROOM_KEY = "room_id"
 private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
+public let MESSAGE_CONTENT = "content"
+public let MESSAGE_DATA = "data"
+
 public struct FormattedFlip {
     var flip: Flip
     var word: String
@@ -79,12 +82,12 @@ extension FlipMessage {
     // MARK: - Message Handler
     
     func toJsonUsingFlipWords(flipWords: [FlipText]) -> Dictionary<String, AnyObject> {
-        var contentDictionary = Dictionary<String, AnyObject>()
+        var dataDictionary = Dictionary<String, AnyObject>()
         
-        contentDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
-        contentDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
-        contentDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
-        contentDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
+        dataDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
+        dataDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
+        dataDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
+        dataDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         var notificationMessage = ""
         if let loggedUser = User.loggedUser() {
@@ -109,7 +112,7 @@ extension FlipMessage {
             flipsDictionary.append(dic)
         }
         
-        contentDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
+        dataDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
@@ -122,7 +125,7 @@ extension FlipMessage {
         var messageDictionary = Dictionary<String, AnyObject>()
         
         messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
-        messageDictionary.updateValue(contentDictionary, forKey: MESSAGE_CONTENT)
+        messageDictionary.updateValue(dataDictionary, forKey: MESSAGE_DATA)
         
         return messageDictionary
     }
