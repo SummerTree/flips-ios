@@ -45,7 +45,7 @@ class UpdateUserProfileView: SignUpView {
     
     override func initSubviews() {
         super.initSubviews()
-        self.userFormView.birthdayTextField.hidden = true
+        self.userFormView.setBirthdayFieldVisible(false)
     }
 
     func setUser(user: User!) {

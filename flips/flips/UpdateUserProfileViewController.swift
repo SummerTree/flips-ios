@@ -101,7 +101,7 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
                 self.hideActivityIndicator()
             }) { (flipError) -> Void in
                 self.hideActivityIndicator()
-                let alertView = UIAlertView(title: "Error updating user", message: flipError?.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: NSLocalizedString("Error updating user"), message: flipError?.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
         }
     }
@@ -111,11 +111,11 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
             self.navigationController?.popViewControllerAnimated(true)
         } else {
             let alertView = UIAlertView(
-                title: "Discard Changes",
-                message: "Going back without tapping 'Save' will discard your changes.\nDo you wish to discard any changes you have made?",
+                title: NSLocalizedString("Discard Changes"),
+                message: NSLocalizedString("Going back without tapping 'Save' will discard your changes.\nDo you wish to discard any changes you have made?"),
                 delegate: self,
                 cancelButtonTitle: nil,
-                otherButtonTitles: "No", "Discard")
+                otherButtonTitles: NSLocalizedString("No"), NSLocalizedString("Discard"))
             
             alertView.show()
         }

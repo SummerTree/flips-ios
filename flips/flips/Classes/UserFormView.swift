@@ -491,6 +491,11 @@ class UserFormView : UIView, UITextFieldDelegate {
         self.updateConstraints()
     }
     
+    func setBirthdayFieldVisible(visible: Bool) {
+        birthdayTextField.hidden = !visible
+        self.updateConstraints()
+    }
+    
     // MARK: - Getters
     
     func getUserData() -> (firstName: String, lastName: String, email: String, password: String, birthday:String) {
