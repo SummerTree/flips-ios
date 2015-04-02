@@ -16,8 +16,10 @@ class UpdateUserProfileView: SignUpView {
     
     var updateUserProfileViewDelegate: UpdateUserProfileViewDelegate?
     
-    private var isUserProfileChanged = false
-    
+    private var isFormValid = false
+    private var pictureHasChanged = false
+    private var originalUser: User?
+
     override func addCustomNavigationBar() -> CustomNavigationBar! {
         let navigationBar = CustomNavigationBar.CustomLargeNavigationBar(UIImage(named: "AddProfilePhoto")!, isAvatarButtonInteractionEnabled: true, showBackButton: true, showSaveButton: true)
         navigationBar.setBackgroundImageColor(UIColor.whiteColor())
@@ -25,49 +27,88 @@ class UpdateUserProfileView: SignUpView {
     }
     
     override func customNavigationBarDidTapLeftButton(navBar: CustomNavigationBar) {
-        self.updateUserProfileViewDelegate?.updateUserProfileView(self, didTapBackButton: isUserProfileChanged)
+        self.updateUserProfileViewDelegate?.updateUserProfileView(self, didTapBackButton: self.hasUserInfoChanged())
     }
     
     override func customNavigationBarDidTapRightButton(navBar: CustomNavigationBar) {
-        let userData = getUserData()
-        self.updateUserProfileViewDelegate?.updateUserProfileView(self, didTapSaveButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday, avatar: navBar.getAvatarImage())
+        self.userFormView.validateFields()
+        
+        if (isFormValid) {
+            let userData = getUserData()
+            self.updateUserProfileViewDelegate?.updateUserProfileView(self, didTapSaveButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, avatar: navBar.getAvatarImage())
+        }
     }
     
     override func getBackgroundColor() -> UIColor {
-        return UIColor.whiteColor()
+        return UIColor.deepSea()
     }
     
+    override func initSubviews() {
+        super.initSubviews()
+        self.userFormView.birthdayTextField.hidden = true
+    }
+
     func setUser(user: User!) {
+        self.originalUser = user
         userFormView.setUserData(user)
-        userFormView.setPasswordFieldVisible(user.facebookID == nil)
         navigationBar.setRightButtonEnabled(false)
+        
+        if (user.facebookID == nil) {
+            let changePasswdLabel = UILabel()
+            changePasswdLabel.numberOfLines = 2
+            changePasswdLabel.text = NSLocalizedString("To change your password, type a\nnew password above and tap \"Save\".")
+            changePasswdLabel.textColor = UIColor.whiteColor()
+            changePasswdLabel.textAlignment = NSTextAlignment.Center
+            changePasswdLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
+            self.userFormView.addSubview(changePasswdLabel)
+            
+            changePasswdLabel.mas_updateConstraints { (update) -> Void in
+                update.trailing.equalTo()(self.userFormView)
+                update.leading.equalTo()(self.userFormView)
+                update.height.equalTo()(44)
+                update.bottom.equalTo()(self.userFormView)
+            }
+        } else {
+            userFormView.setPasswordFieldVisible(false)
+        }
+        
+        self.updateConstraints()
+    }
+    
+    private func hasUserInfoChanged() -> Bool {
+        if (originalUser == nil) {
+            return true
+        }
+        
+        return pictureHasChanged || self.originalUser!.firstName != self.userFormView.firstNameTextField.text ||
+            self.originalUser!.lastName != self.userFormView.lastNameTextField.text ||
+            self.originalUser!.username != self.userFormView.emailTextField.text ||
+            !self.userFormView.passwordTextField.text.isEmpty
     }
     
     override func setUserPicture(picture: UIImage) {
         super.setUserPicture(picture)
-        
-        if (!isUserProfileChanged) {
-            navigationBar.setRightButtonEnabled(true)
-        }
-    }
 
+        pictureHasChanged = true
+        navigationBar.setRightButtonEnabled(true)
+    }
+    
     override func enableRightButton(allFieldsCompleted: Bool) {
-        if (allFieldsCompleted && isUserProfileChanged) {
+        if (self.userFormView.nameFilled && self.userFormView.nameValid &&
+            self.userFormView.emailFilled && self.userFormView.emailValid &&
+            (!self.userFormView.passwordFilled || self.userFormView.passwordValid)) {
+                
+            isFormValid = true
             navigationBar.setRightButtonEnabled(true)
         } else {
+            isFormValid = false
             navigationBar.setRightButtonEnabled(false)
         }
     }
     
-    
-    // MARK: - UserFormViewDelegate
-    
-    override func userFormViewDidUpdateField(userFormView: UserFormView) {
-        isUserProfileChanged = true
-    }
 }
 
 protocol UpdateUserProfileViewDelegate {
-    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String, avatar: UIImage!)
+    func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapSaveButtonWith firstName: String, lastName: String, email: String, password: String, avatar: UIImage!)
     func updateUserProfileView(updateUserProfileView: UpdateUserProfileView!, didTapBackButton withEditions: Bool)
 }
