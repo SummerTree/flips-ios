@@ -493,6 +493,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func setBirthdayFieldVisible(visible: Bool) {
         birthdayTextField.hidden = !visible
+        birthdayTextField.enabled = visible
         self.updateConstraints()
     }
     
