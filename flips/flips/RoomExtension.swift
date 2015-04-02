@@ -85,13 +85,13 @@ extension Room {
                                 }
                                 
                                 if (hasTemporaryName(contact.firstName)) {
-                                    userFirstName = contact.formattedPhoneNumber
+                                    userFirstName = contact.formattedPhoneNumber()
                                 } else if (contact.firstName != "") {
                                     userFirstName = contact.firstName
                                 } else if (contact.lastName != "") {
                                     userFirstName = contact.lastName
-                                } else if (contact.formattedPhoneNumber != "") {
-                                    userFirstName = contact.formattedPhoneNumber
+                                } else if (contact.formattedPhoneNumber() != "") {
+                                    userFirstName = contact.formattedPhoneNumber()
                                 }
                             }
                         }

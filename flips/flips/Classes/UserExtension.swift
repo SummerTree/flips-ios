@@ -36,14 +36,9 @@ extension User {
         return self.firstName + " " + self.lastName
     }
     
-    func formattedPhoneNumber() -> String! {
+    func formattedPhoneNumber() -> String {
         if let phoneNumber = self.phoneNumber {
-            
-            if (countElements(phoneNumber) == 0) {
-                return ""
-            }
-            
-            return "\(phoneNumber[2..<5])-\(phoneNumber[5..<8])-\(phoneNumber[8...11])"
+            return phoneNumber.toFormattedPhoneNumber()
         }
         
         return ""
