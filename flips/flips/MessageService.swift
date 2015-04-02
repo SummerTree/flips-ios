@@ -21,7 +21,7 @@ public class MessageService {
         return Static.instance
     }
     
-    func sendMessage(flipIds: [String]!, toContacts contactIds: [String], completion: SendMessageCompletion) {
+    func sendMessage(flipWords: [FlipText], toContacts contactIds: [String], completion: SendMessageCompletion) {
         let roomService = RoomService()
 
         var userIds = Array<String>()
@@ -60,23 +60,26 @@ public class MessageService {
         let roomInContext = room.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
         PubNubService.sharedInstance.subscribeToChannelID(roomInContext.pubnubID)
         
-        self.sendMessage(flipIds, roomID: roomInContext.roomID, completion: completion)
+        self.sendMessage(flipWords, roomID: roomInContext.roomID, completion: completion)
     }
     
-    func sendMessage(flipIds: [String]!, roomID: String, completion: SendMessageCompletion) {
+    func sendMessage(flipWords: [FlipText], roomID: String, completion: SendMessageCompletion) {
         let flipDataSource = FlipDataSource()
         let roomDataSource = RoomDataSource()
         
-        var flips = Array<Flip>()
-        for flipId in flipIds {
-            if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-                flips.append(flip)
+        var formattedFlips = Array<FormattedFlip>()
+        for flipWord in flipWords {
+            if let flipId: String = flipWord.associatedFlipId {
+                if let flip = flipDataSource.retrieveFlipWithId(flipId) {
+                    var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipWord.text)
+                    formattedFlips.append(formattedFlip)
+                }
             }
         }
         
         let room = roomDataSource.retrieveRoomWithId(roomID)
-        let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(flips, toRoom: room)
-        let messageJson = flipMessage.toJSON()
+        let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(formattedFlips, toRoom: room)
+        let messageJson = flipMessage.toJsonUsingFlipWords(flipWords)
         
         PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
             if (!success) {

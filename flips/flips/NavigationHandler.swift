@@ -11,8 +11,11 @@
 //
 
 public let POP_TO_ROOT_NOTIFICATION_NAME = "POP_TO_ROOT_NOTIFICATION_NAME"
+public let POP_TO_CHAT_NOTIFICATION_NAME = "POP_TO_CHAT_NOTIFICATION_NAME"
 
 public class NavigationHandler : NSObject {
+    
+    private var roomIdToShow: String?
     
     public class var sharedInstance : NavigationHandler {
         struct Static {
@@ -23,6 +26,7 @@ public class NavigationHandler : NSObject {
     
     func registerForNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPopToRootViewControllerNotificationReceived:", name: POP_TO_ROOT_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showThreadScreen:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
     }
     
     func onPopToRootViewControllerNotificationReceived(notification: NSNotification) {
@@ -50,6 +54,70 @@ public class NavigationHandler : NSObject {
                     }
                 }
             }
+        }
+    }
+    
+    func waitFlipDowloadAndShowThreadScreenWithRoomId(roomId: String) {
+        self.roomIdToShow = roomId
+    }
+    
+    func showThreadScreen(notification: NSNotification) {
+        if let roomId = self.roomIdToShow {
+            
+            self.roomIdToShow = nil
+            
+            if let keyWindow = UIApplication.sharedApplication().keyWindow {
+                if let rootViewController: UIViewController = keyWindow.rootViewController {
+                    if (rootViewController is UINavigationController) {
+                        let rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
+                        
+                        let completionBlock: () -> Void = { () -> Void in
+                            if (rootNavigationViewController.visibleViewController is ChatViewController) {
+                                let chatViewController = rootNavigationViewController.visibleViewController as ChatViewController
+                                if (chatViewController.getRoomId() == roomId) {
+                                    chatViewController.enableViewingNewestMessage()
+                                    return
+                                }
+                            }
+                            
+                            var i: Int = 0
+                            var inboxViewController: UIViewController? = nil
+                            for viewController in rootNavigationViewController.childViewControllers {
+                                if (viewController is InboxViewController) {
+                                    inboxViewController = viewController as? UIViewController
+                                    rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
+                                    break
+                                }
+                            }
+                            
+                            if (inboxViewController != nil) {
+                                let roomDataSource = RoomDataSource()
+                                let room = roomDataSource.retrieveRoomWithId(roomId)
+                                let chatViewController: UIViewController = ChatViewController(room: room, shouldShowNewestMessage: true)
+                                rootNavigationViewController.pushViewController(chatViewController, animated: true)
+                            }
+                        }
+                        
+                        // Checking if the app is showing a modal
+                        if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                            self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completionBlock)
+                        } else {
+                            completionBlock()
+                        }
+                    }
+                }
+            } 
+
+        }
+    }
+    
+    private func dismissVisibleModalFromRootViewController(rootNavigationViewController: UINavigationController, withCompletion completion: () -> Void) {
+        if (rootNavigationViewController.visibleViewController.presentingViewController != nil) {
+            rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(false, completion: { () -> Void in
+                self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completion)
+            })
+        } else {
+            completion()
         }
     }
 }

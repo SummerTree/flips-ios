@@ -180,7 +180,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         userDefaults.synchronize()
     }
     
-    
+
     // MARK: - FlipMessage Methods
     
     func createFlipMessageWithJson(json: JSON, receivedDate:NSDate, receivedAtChannel pubnubID: String) -> FlipMessage? {
@@ -193,15 +193,17 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.getRoomWithPubnubID(pubnubID) as Room!
         
-        let flipDataSource = FlipDataSource()
-        let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         let content = json[MESSAGE_CONTENT]
-        var flips = Array<Flip>()
+
+        var formattedFlips: [FormattedFlip] = Array<FormattedFlip>()
         for (index: String, flipJson: JSON) in content {
             let flip = self.createOrUpdateFlipWithJson(flipJson)
-            flips.append(flip)
+            
+            var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
+            formattedFlips.append(formattedFlip)
         }
         
+        let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource()
         let isMessageDeleted: Bool = deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
         
@@ -224,7 +226,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     flipMessage?.notRead = false
                 }
                 
-                flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, flips: flips, andRoom: room)
+                flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, formattedFlips: formattedFlips, andRoom: room)
             }
             return flipMessage
         }
@@ -232,14 +234,14 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         return nil
     }
     
-    func createFlipMessageWithFlips(flips: [Flip], toRoom room: Room) -> FlipMessage {
+    func createFlipMessageWithFlips(formattedFlips: [FormattedFlip], toRoom room: Room) -> FlipMessage {
         var flipMessage: FlipMessage!
         
         let flipMessageDataSource = FlipMessageDataSource()
         let messageId = flipMessageDataSource.nextFlipMessageID()
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
-            flipMessage = flipMessageDataSourceInContext.createFlipMessageWithId(messageId, andFlips: flips, toRoom: room)
+            flipMessage = flipMessageDataSourceInContext.createFlipMessageWithId(messageId, andFormattedFlips: formattedFlips, toRoom: room)
         }
         return flipMessage.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage
     }

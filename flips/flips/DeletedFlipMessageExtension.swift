@@ -21,7 +21,7 @@ extension DeletedFlipMessage {
         messageDictionary.updateValue(self.flipMessageID, forKey: DeletedFlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         var contentDictionary = Dictionary<String, AnyObject>()
-        contentDictionary.updateValue(messageDictionary, forKey: MESSAGE_CONTENT)
+        contentDictionary.updateValue(messageDictionary, forKey: MESSAGE_DATA)
         
         return contentDictionary
     }

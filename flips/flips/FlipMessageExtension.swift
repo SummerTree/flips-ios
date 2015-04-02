@@ -16,6 +16,14 @@ private let NOTIFICATION_ALERT_KEY = "alert"
 private let NOTIFICATION_ROOM_KEY = "room_id"
 private let NOTIFICATION_MESSAGE = "You received a new flip message from"
 
+public let MESSAGE_CONTENT = "content"
+public let MESSAGE_DATA = "data"
+
+public struct FormattedFlip {
+    var flip: Flip
+    var word: String
+}
+
 extension FlipMessage {
 
     var flipsEntries: Array<FlipEntry> {
@@ -26,13 +34,13 @@ extension FlipMessage {
         }
     }
 
-    func addFlip(flip: Flip, inContext context: NSManagedObjectContext) {
+    func addFlip(formatedFlip: FormattedFlip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
         var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
         entry.order = nextEntryOrder
-        entry.formattedWord = flip.word
-        entry.flip = flip.inContext(context) as Flip
+        entry.formattedWord = formatedFlip.word
+        entry.flip = formatedFlip.flip.inContext(context) as Flip
         entry.message = self
 
         self.addEntriesObject(entry)
@@ -73,13 +81,13 @@ extension FlipMessage {
     
     // MARK: - Message Handler
     
-    func toJSON() -> Dictionary<String, AnyObject> {
-        var contentDictionary = Dictionary<String, AnyObject>()
+    func toJsonUsingFlipWords(flipWords: [FlipText]) -> Dictionary<String, AnyObject> {
+        var dataDictionary = Dictionary<String, AnyObject>()
         
-        contentDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
-        contentDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
-        contentDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
-        contentDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
+        dataDictionary.updateValue(MESSAGE_FLIPS_INFO_TYPE, forKey: MESSAGE_TYPE)
+        dataDictionary.updateValue(self.from.userID, forKey: FlipMessageJsonParams.FROM_USER_ID)
+        dataDictionary.updateValue(self.createdAt.toFormattedString(), forKey: FlipMessageJsonParams.SENT_AT)
+        dataDictionary.updateValue(self.flipMessageID, forKey: FlipMessageJsonParams.FLIP_MESSAGE_ID)
         
         var notificationMessage = ""
         if let loggedUser = User.loggedUser() {
@@ -91,10 +99,12 @@ extension FlipMessage {
         let flipsEntries = self.flipsEntries
         for (var i = 0; i < flipsEntries.count; i++) {
             let flip: Flip = flipsEntries[i].flip
+            let flipWord: FlipText = flipWords[i]
+            
             var dic = Dictionary<String, String>()
 
             dic.updateValue(flip.flipID, forKey: FlipJsonParams.ID)
-            dic.updateValue(flip.word, forKey: FlipJsonParams.WORD)
+            dic.updateValue(flipWord.text, forKey: FlipJsonParams.WORD)
             dic.updateValue(flip.backgroundURL, forKey: FlipJsonParams.BACKGROUND_URL)
             dic.updateValue(flip.isPrivate.stringValue, forKey: FlipJsonParams.IS_PRIVATE)
             dic.updateValue(flip.thumbnailURL, forKey: FlipJsonParams.THUMBNAIL_URL)
@@ -102,7 +112,7 @@ extension FlipMessage {
             flipsDictionary.append(dic)
         }
         
-        contentDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
+        dataDictionary.updateValue(flipsDictionary, forKey: MESSAGE_CONTENT)
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
@@ -115,7 +125,7 @@ extension FlipMessage {
         var messageDictionary = Dictionary<String, AnyObject>()
         
         messageDictionary.updateValue(notificationApsDictionary, forKey: NOTIFICATION_PN_KEY)
-        messageDictionary.updateValue(contentDictionary, forKey: MESSAGE_CONTENT)
+        messageDictionary.updateValue(dataDictionary, forKey: MESSAGE_DATA)
         
         return messageDictionary
     }

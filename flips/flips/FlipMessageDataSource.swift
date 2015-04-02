@@ -72,7 +72,7 @@ class FlipMessageDataSource : BaseDataSource {
         return self.createEntityWithJson(json, andReceivedDate: receivedDate)
     }
     
-    func associateFlipMessage(flipMessage: FlipMessage, withUser user: User, flips: [Flip], andRoom room: Room) {
+    func associateFlipMessage(flipMessage: FlipMessage, withUser user: User, formattedFlips: [FormattedFlip], andRoom room: Room) {
         let flipMessageInContext = flipMessage.inContext(currentContext) as FlipMessage
         let userInContext = user.inContext(currentContext) as User
         
@@ -84,9 +84,8 @@ class FlipMessageDataSource : BaseDataSource {
             }
         }
 
-        for flip in flips {
-            let flipInContext = flip.inContext(currentContext) as Flip
-            flipMessageInContext.addFlip(flip, inContext: currentContext)
+        for formattedFlip in formattedFlips {
+            flipMessageInContext.addFlip(formattedFlip, inContext: currentContext)
         }
         
         let roomInContext = room.inContext(currentContext) as Room
@@ -97,7 +96,7 @@ class FlipMessageDataSource : BaseDataSource {
         }
     }
     
-    func createFlipMessageWithId(flipMessageID: String, andFlips flips: [Flip], toRoom room: Room) -> FlipMessage {
+    func createFlipMessageWithId(flipMessageID: String, andFormattedFlips formattedFlips: [FormattedFlip], toRoom room: Room) -> FlipMessage {
         var entity = FlipMessage.createInContext(currentContext) as FlipMessage
         entity.flipMessageID = flipMessageID
         entity.room = room.inContext(currentContext) as Room
@@ -105,8 +104,8 @@ class FlipMessageDataSource : BaseDataSource {
         entity.createdAt = NSDate()
         entity.notRead = false
         entity.receivedAt = NSDate()
-        for flip in flips {
-            entity.addFlip(flip, inContext: currentContext)
+        for formattedFlip in formattedFlips {
+            entity.addFlip(formattedFlip, inContext: currentContext)
         }
         
         return entity
