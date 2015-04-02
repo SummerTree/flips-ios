@@ -68,6 +68,10 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     var lockInterfaceRotation: Bool!
     var runtimeErrorHandlingObserver: AnyObject!
     private var observersRegistered: Bool! = false
+    private var observersRegisteredBeforeResignActive: Bool! = false
+
+    private var observerResignActive: AnyObject!
+    private var observerBecomeActive: AnyObject!
     
     // MARK: - Initialization Methods
     
@@ -78,13 +82,33 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         self.isMicrophoneAvailable = false
 
         super.init(frame: CGRect.zeroRect)
-        
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        self.observerBecomeActive = notificationCenter.addObserverForName("UIApplicationDidBecomeActiveNotification", object: nil, queue: nil) { (notification) -> Void in
+            if (self.observersRegisteredBeforeResignActive!) {
+                self.registerObservers()
+            }
+        }
+        self.observerResignActive = notificationCenter.addObserverForName("UIApplicationWillResignActiveNotification", object: nil, queue: nil) { (notification) -> Void in
+            self.observersRegisteredBeforeResignActive = self.observersRegistered
+            if (self.observersRegisteredBeforeResignActive!) {
+                self.removeObservers()
+                self.previewView.alpha = 1.0
+            }
+        }
+
         currentInterfaceOrientation = interfaceOrientation
         
         self.initSubviews()
         self.initCamera()
         
         self.updateConstraintsIfNeeded()
+    }
+
+    deinit {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self.observerBecomeActive, name: "UIApplicationDidBecomeActiveNotification", object: nil)
+        notificationCenter.removeObserver(self.observerResignActive, name: "UIApplicationWillResignActiveNotification", object: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
