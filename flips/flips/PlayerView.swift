@@ -32,7 +32,7 @@ class PlayerView: UIView {
     private var thumbnail: UIImage?
     private var timer: NSTimer?
 
-    private var gradientLayer: CALayer!
+    private var gradientLayer: UIImageView!
     private var wordLabel: UILabel!
     private var thumbnailView: UIImageView!
     private var playButtonView: UIImageView!
@@ -646,19 +646,19 @@ class PlayerView: UIView {
     private func addSubviews() {
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
 
-        self.gradientLayer = CALayer()
-        self.gradientLayer.contents = UIImage(named: "Filter_Photo")?.CGImage
-        self.gradientLayer.frame = self.layer.bounds
-        self.layer.addSublayer(self.gradientLayer)
-        
+        self.thumbnailView = UIImageView()
+        self.thumbnailView.contentMode = UIViewContentMode.ScaleAspectFit
+        self.addSubview(self.thumbnailView)
+
+        self.gradientLayer = UIImageView(image: UIImage(named: "Filter_Photo"))
+        self.gradientLayer.backgroundColor = UIColor.clearColor()
+        self.gradientLayer.frame = self.bounds
+        self.addSubview(self.gradientLayer)
+
         self.wordLabel = UILabel.flipWordLabel()
         self.wordLabel.textAlignment = NSTextAlignment.Center
         self.addSubview(self.wordLabel)
         
-        self.thumbnailView = UIImageView()
-        self.thumbnailView.contentMode = UIViewContentMode.ScaleAspectFit
-        self.addSubview(self.thumbnailView)
-    
         self.playButtonView = UIImageView()
         self.playButtonView.alpha = self.BUTTONS_ALPHA
         self.playButtonView.contentMode = UIViewContentMode.Center
