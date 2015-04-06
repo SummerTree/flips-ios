@@ -669,6 +669,7 @@ class LoginView : UIView, UITextFieldDelegate {
                 }
 
                 self.forgotPasswordButton.alpha = 1.0
+                self.forgotPasswordButton.center.y = self.FORGOT_PASSWORD_ORIGINAL_OFFSET
                 
                 // positioning credentials above keyboard
                 let credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
@@ -678,11 +679,20 @@ class LoginView : UIView, UITextFieldDelegate {
                     // positioning Flips word below the top of the screen with a defined offset
                     self.bubbleChatImageView.frame.origin.y = self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET-self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_LOGO_SMALL_SCREEN_POSITION
+                } else {
+                    self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_ORIGINAL_OFFSET
                 }
                 
-                // positioning forgot password button between credentials and Flips word
                 let flipsWordImageViewBottom = self.flipsWordImageView.frame.origin.y + self.flipsWordImageView.frame.height
-                self.forgotPasswordButton.center.y = (self.credentialsView.frame.origin.y + flipsWordImageViewBottom) / 2
+                
+                let forgotPasswordDesirableCenter = (self.credentialsView.frame.origin.y + flipsWordImageViewBottom) / 2
+                if ((forgotPasswordDesirableCenter + (self.forgotPasswordButton.frame.height/2)) > self.credentialsView.frame.origin.y) {
+                    self.forgotPasswordButton.center.y = self.credentialsView.frame.origin.y-(self.forgotPasswordButton.frame.height/2)
+                    self.flipsWordImageView.frame.origin.y = -self.flipsWordImageView.frame.size.height
+                } else {
+                    // positioning forgot password button between credentials and Flips word
+                    self.forgotPasswordButton.center.y = forgotPasswordDesirableCenter
+                }
             } else {
                 self.forgotPasswordButton.alpha = 0.0
                 
