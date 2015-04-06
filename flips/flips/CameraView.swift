@@ -93,7 +93,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.observersRegisteredBeforeResignActive = self.observersRegistered
             if (self.observersRegisteredBeforeResignActive!) {
                 self.removeObservers()
-                self.previewView.alpha = 1.0
             }
         }
 
@@ -383,8 +382,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     func registerObservers() {
-        self.previewView.alpha = 1.0
-        
         dispatch_async(self.sessionQueue, { () -> Void in
             self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
             self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
@@ -405,12 +402,16 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             })
             self.session.startRunning()
             self.observersRegistered = true
+
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.previewView.alpha = 1.0
+                })
+            })
         })
     }
     
     func removeObservers() {
-        self.previewView.alpha = 0.0
-
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
             
@@ -427,6 +428,12 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 self.removeObserver(self, forKeyPath: self.RECORDING_KEY_PATH, context: RecordingContext)
                 
                 self.observersRegistered = false
+
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        self.previewView.alpha = 0.0
+                    })
+                })
             }
         })
     }
@@ -797,7 +804,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     
-    // MARK: Finish Record Output Delegate
+    // MARK: - Finish Record Output Delegate
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         if (error != nil) {
@@ -809,6 +816,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 }
 
+
+//MARK: - CameraViewDelegate protocol declaration
 
 @objc protocol CameraViewDelegate {
     

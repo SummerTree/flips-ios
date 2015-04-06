@@ -53,21 +53,21 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         cameraPreview.delegate = self
         self.addSubview(cameraPreview)
         
-        captureProgressBar = UIView()
-        captureProgressBar.backgroundColor = UIColor.avacado()
-        self.addSubview(captureProgressBar)
-        
-        filterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
-        filterImageView.contentMode = UIViewContentMode.ScaleAspectFill
-        self.addSubview(filterImageView)
-        
-        flipWordLabel = UILabel.flipWordLabel()
-        flipWordLabel.sizeToFit()
-        self.addSubview(flipWordLabel)
-        
         flipImageView = UIImageView()
         flipImageView.contentMode = UIViewContentMode.ScaleAspectFill
         self.addSubview(flipImageView)
+
+        filterImageView = UIImageView(image: UIImage(named: "Filter_Photo"))
+        filterImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        self.addSubview(filterImageView)
+
+        captureProgressBar = UIView()
+        captureProgressBar.backgroundColor = UIColor.avacado()
+        self.addSubview(captureProgressBar)
+
+        flipWordLabel = UILabel.flipWordLabel()
+        flipWordLabel.sizeToFit()
+        self.addSubview(flipWordLabel)
     }
     
     private func addConstraints() {
@@ -107,8 +107,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     private func createFlipPlayerView() {
         if (self.flipPlayerView != nil) {
-            self.flipPlayerView.removeFromSuperview()
-            self.flipPlayerView.releaseResources()
+            return
         }
 
         self.flipPlayerView = PlayerView()
@@ -123,43 +122,53 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
             make.height.equalTo()(self.cameraPreview.mas_width)
         }
     }
-    
-    private func switchToPreviewType(type: PreviewType) {
+
+    private func switchToPreviewType(type: PreviewType, completion: (() -> Void)? = nil) {
         if (self.previewType == type && type != PreviewType.Flip) {
             return
         }
         
         self.flipWordLabel.text = nil
-        self.flipImageView.image = nil
-        
+
+        var cameraAlpha: CGFloat = 0.0
+        var playerAlpha: CGFloat = 0.0
+        var imageAlpha: CGFloat = 0.0
+
         if (self.previewType == PreviewType.Camera) {
             self.cameraPreview.removeObservers()
-            self.cameraPreview.alpha = 0
-        } else if (self.previewType == PreviewType.Flip) {
-            self.flipPlayerView.removeFromSuperview()
-            self.flipPlayerView.releaseResources()
         }
-        
+
         if (type == PreviewType.Camera) {
             self.cameraPreview.registerObservers()
-            self.cameraPreview.alpha = 1.0
-            self.bringSubviewToFront(self.cameraPreview)
-            self.bringSubviewToFront(self.filterImageView)
-            self.bringSubviewToFront(self.flipWordLabel)
         } else if (type == PreviewType.Flip) {
             self.createFlipPlayerView()
-        } else if (type == PreviewType.Image) {
-            self.bringSubviewToFront(self.flipImageView)
-            self.bringSubviewToFront(self.filterImageView)
-            self.bringSubviewToFront(self.flipWordLabel)
-        } else if (type == PreviewType.None) {
-            // Show "disabled" camera
-            self.cameraPreview.alpha = 1.0
-            self.bringSubviewToFront(self.cameraPreview)
-            self.bringSubviewToFront(self.filterImageView)
         }
-        
-        self.previewType = type
+
+        switch (type) {
+        case PreviewType.Camera:
+            cameraAlpha = 1.0
+        case PreviewType.Flip:
+            playerAlpha = 1.0
+        case PreviewType.Image:
+            imageAlpha = 1.0
+        case PreviewType.None:
+            // Show "disabled" camera
+            cameraAlpha = 1.0
+        }
+
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.cameraPreview.alpha = cameraAlpha
+            self.flipPlayerView?.alpha = playerAlpha
+            self.flipImageView.alpha = imageAlpha
+        }) { (finished) -> Void in
+            if (self.previewType == PreviewType.Flip) {
+                self.flipPlayerView.releaseResources()
+            }
+
+            self.previewType = type
+
+            completion?()
+        }
     }
     
     // MARK: - Life Cycle
@@ -198,8 +207,10 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.switchToPreviewType(PreviewType.Flip)
-                self.flipPlayerView.setupPlayerWithFlips([flip], andFormattedWords: [word])
+                self.switchToPreviewType(PreviewType.Flip) { () -> Void in
+                    self.flipPlayerView.setupPlayerWithFlips([flip], andFormattedWords: [word])
+                    self.flipPlayerView.play()
+                }
             })
         } else {
             UIAlertView.showUnableToLoadFlip()
@@ -208,9 +219,9 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     func showImage(image: UIImage, andText text: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.flipImageView.image = image
             self.switchToPreviewType(PreviewType.Image)
             self.flipWordLabel.text = text
-            self.flipImageView.image = image
         })
     }
     
@@ -219,7 +230,6 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     func startRecordingProgressBar() {
         self.captureProgressBar.hidden = false
-        self.bringSubviewToFront(self.captureProgressBar)
 
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             self.captureProgressBar.mas_updateConstraints({ (update) -> Void in
