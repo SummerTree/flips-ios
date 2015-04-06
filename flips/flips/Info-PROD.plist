@@ -35,8 +35,6 @@
 	<string>338424696329576</string>
 	<key>FacebookDisplayName</key>
 	<string>Flips</string>
-	<key>FlipsServiceHostBaseURL</key>
-	<string>http://flips-qa.elasticbeanstalk.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -52,5 +50,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>FlipsServiceHostBaseURL</key>
+	<string>http://flips-qa.elasticbeanstalk.com</string>
+	<key>PubNubPublishKey</key>
+	<string>pub-c-18de6448-8924-43b5-9f5b-a333e7d7e6d9</string>
+	<key>PubNubSubscribeKey</key>
+	<string>sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe</string>
+	<key>PubNubSecretKey</key>
+	<string>sec-c-MzFhZjgyOWQtNDRiOS00NTBiLTkwZjAtOGUyM2U5MDNhMTdh</string>
 </dict>
 </plist>
