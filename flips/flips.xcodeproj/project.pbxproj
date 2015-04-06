@@ -1036,9 +1036,7 @@
 		BE245F8B1AD2D57800859233 /* Info-PROD.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-PROD.plist"; sourceTree = "<group>"; };
 		BE245F8C1AD2D57800859233 /* Info-QA.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-QA.plist"; sourceTree = "<group>"; };
 		BE2460681AD2D95900859233 /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE2460691AD2D95900859233 /* flips copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "flips copy-Info.plist"; path = "/Users/phmichels/arctouch/flips-ios/flips/flips copy-Info.plist"; sourceTree = "<absolute>"; };
 		BE2461421AD2D9C600859233 /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE2461431AD2D9C600859233 /* flips-DEV copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "flips-DEV copy-Info.plist"; path = "/Users/phmichels/arctouch/flips-ios/flips/flips-DEV copy-Info.plist"; sourceTree = "<absolute>"; };
 		BE2E72071A98119400F237BE /* empty_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = empty_video.mov; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -1598,8 +1596,6 @@
 				70FD4E7119D064450024EBDB /* Products */,
 				EC5A81A5795A49A3B7523B70 /* Frameworks */,
 				F7C1F4A6A883BC105DD3A82D /* Pods */,
-				BE2460691AD2D95900859233 /* flips copy-Info.plist */,
-				BE2461431AD2D9C600859233 /* flips-DEV copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
