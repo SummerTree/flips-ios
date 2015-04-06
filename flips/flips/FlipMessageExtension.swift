@@ -14,7 +14,7 @@ private let NOTIFICATION_PN_KEY = "pn_apns"
 private let NOTIFICATION_KEY = "aps"
 private let NOTIFICATION_ALERT_KEY = "alert"
 private let NOTIFICATION_ROOM_KEY = "room_id"
-private let NOTIFICATION_MESSAGE = "You received a new flip message from"
+private let NOTIFICATION_MESSAGE = "You received a new Flip message from"
 
 public let MESSAGE_CONTENT = "content"
 public let MESSAGE_DATA = "data"
