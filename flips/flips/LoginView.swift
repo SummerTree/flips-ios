@@ -20,13 +20,13 @@ class LoginView : UIView, UITextFieldDelegate {
     private let MARGIN_LEFT:CGFloat = 40.0
 
     private let FLIPS_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
-    private var FLIPS_WORD_LOGO_POSITION_WHEN_ERROR: CGFloat! = 20.0
-    private var FLIPS_WORD_ANIMATION_OFFSET: CGFloat!
-
+    private let FLIPS_WORD_LOGO_SMALL_SCREEN_POSITION: CGFloat = 20.0
+    private var FLIPS_WORD_ORIGINAL_OFFSET: CGFloat! = nil
+    private let LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
     private let BUBBLECHAT_IMAGE_ANIMATION_OFFSET: CGFloat = 200.0
-    private var LOGO_VIEW_ANIMATION_OFFSET: CGFloat = 100.0
-    private var CREDENTIALS_ANIMATION_OFFSET: CGFloat = 100.0
-    private var FORGOT_PASSWORD_ANIMATION_OFFSET: CGFloat!
+    private var BUBBLECHAT_IMAGE_ORIGINAL_OFFSET: CGFloat! = nil
+    private var CREDENTIALS_ORIGINAL_OFFSET: CGFloat! = nil
+    private var FORGOT_PASSWORD_ORIGINAL_OFFSET: CGFloat! = nil
 
     private let ACCEPTANCE_VIEW_HEIGHT: CGFloat = 30.0
     private let ANDWORD_MARGIN_LEFT: CGFloat = 2
@@ -652,33 +652,56 @@ class LoginView : UIView, UITextFieldDelegate {
     func slideViews(movedUp: Bool, keyboardTop: CGFloat) {
         UIView.animateWithDuration(0.75, animations: { () -> Void in
             if (movedUp) {
+                if (self.CREDENTIALS_ORIGINAL_OFFSET == nil) {
+                    self.CREDENTIALS_ORIGINAL_OFFSET = self.credentialsView.frame.origin.y
+                }
+                
+                if (self.FORGOT_PASSWORD_ORIGINAL_OFFSET == nil) {
+                    self.FORGOT_PASSWORD_ORIGINAL_OFFSET = self.forgotPasswordButton.center.y
+                }
+                
+                if (self.FLIPS_WORD_ORIGINAL_OFFSET == nil) {
+                    self.FLIPS_WORD_ORIGINAL_OFFSET = self.flipsWordImageView.frame.origin.y
+                }
+                
+                if (self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET == nil) {
+                    self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET = self.bubbleChatImageView.frame.origin.y
+                }
+
                 self.forgotPasswordButton.alpha = 1.0
+                self.forgotPasswordButton.center.y = self.FORGOT_PASSWORD_ORIGINAL_OFFSET
                 
                 // positioning credentials above keyboard
-                var credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
-                self.CREDENTIALS_ANIMATION_OFFSET = self.credentialsView.frame.origin.y - credentialsFinalPosition
-                self.credentialsView.frame.origin.y -= self.CREDENTIALS_ANIMATION_OFFSET
+                let credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
+                self.credentialsView.frame.origin.y = credentialsFinalPosition
                 
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     // positioning Flips word below the top of the screen with a defined offset
-                    var flipsWordFinalPosition = self.FLIPS_WORD_LOGO_POSITION_WHEN_ERROR
-                    self.FLIPS_WORD_ANIMATION_OFFSET = self.flipsWordImageView.frame.origin.y - flipsWordFinalPosition
-                    self.flipsWordImageView.frame.origin.y -= self.FLIPS_WORD_ANIMATION_OFFSET
-                    self.bubbleChatImageView.frame.origin.y -= self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                    self.bubbleChatImageView.frame.origin.y = self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET-self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
+                    self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_LOGO_SMALL_SCREEN_POSITION
+                } else {
+                    self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_ORIGINAL_OFFSET
                 }
                 
-                // positioning forgot password button between credentials and Flips word
-                var forgotPasswordFinalPosition = (self.credentialsView.center.y + self.flipsWordImageView.frame.origin.y) / 2
-                self.FORGOT_PASSWORD_ANIMATION_OFFSET = self.forgotPasswordButton.frame.origin.y - forgotPasswordFinalPosition
-                self.forgotPasswordButton.center.y -= self.FORGOT_PASSWORD_ANIMATION_OFFSET
+                let flipsWordImageViewBottom = self.flipsWordImageView.frame.origin.y + self.flipsWordImageView.frame.height
                 
+                let forgotPasswordDesirableCenter = (self.credentialsView.frame.origin.y + flipsWordImageViewBottom) / 2
+                if ((forgotPasswordDesirableCenter + (self.forgotPasswordButton.frame.height/2)) > self.credentialsView.frame.origin.y) {
+                    self.forgotPasswordButton.center.y = self.credentialsView.frame.origin.y-(self.forgotPasswordButton.frame.height/2)
+                    self.flipsWordImageView.frame.origin.y = -self.flipsWordImageView.frame.size.height
+                } else {
+                    // positioning forgot password button between credentials and Flips word
+                    self.forgotPasswordButton.center.y = forgotPasswordDesirableCenter
+                }
             } else {
                 self.forgotPasswordButton.alpha = 0.0
-                self.credentialsView.frame.origin.y += self.CREDENTIALS_ANIMATION_OFFSET
-                self.forgotPasswordButton.center.y += self.FORGOT_PASSWORD_ANIMATION_OFFSET
+                
+                self.credentialsView.frame.origin.y = self.CREDENTIALS_ORIGINAL_OFFSET
+                self.forgotPasswordButton.center.y = self.FORGOT_PASSWORD_ORIGINAL_OFFSET
+                
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
-                    self.bubbleChatImageView.frame.origin.y += self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
-                    self.flipsWordImageView.frame.origin.y += self.FLIPS_WORD_ANIMATION_OFFSET
+                    self.bubbleChatImageView.frame.origin.y = self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET
+                    self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_ORIGINAL_OFFSET
                 }
             }
         })
@@ -699,7 +722,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue()
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
     
