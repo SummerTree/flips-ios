@@ -251,6 +251,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
         if (newCellsIndexPaths.count > 0) {
             self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
+            self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         }
     }
 
