@@ -245,7 +245,7 @@ public class UserService: FlipsService {
                         failure(nil)
                     } else if (operation.responseObject != nil) {
                         let responseObject = operation.responseObject as NSDictionary
-                        failure(FlipError(error: responseObject["error"] as String!, details:nil))
+                        failure(FlipError(error: responseObject["error"] as String!, details: responseObject["details"] as? String))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details:nil))
                     }
