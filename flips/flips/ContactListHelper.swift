@@ -58,6 +58,7 @@ public class ContactListHelperContact {
             ABAddressBookRequestAccessWithCompletion(addressBook) { (granted, error) -> Void in
                 if (!granted) {
                     failure(NSLocalizedString("Denied", comment: "Denied"))
+                    return
                 }
 
                 success(self.retrieveContacts())
