@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-protocol MessagesTopViewDelegate {
+protocol MessagesTopViewDelegate: class {
     
     func dismissMessagesTopView(messageTopView: MessagesTopView)
     

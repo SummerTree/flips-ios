@@ -14,7 +14,7 @@ import Foundation
 
 class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     
-    var delegate: ConfirmFlipViewControllerDelegate?
+    weak var delegate: ConfirmFlipViewControllerDelegate?
     
     private var confirmFlipView: ConfirmFlipView!
 
@@ -149,6 +149,6 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
 
 }
 
-protocol ConfirmFlipViewControllerDelegate {
+protocol ConfirmFlipViewControllerDelegate: class {
     func confirmFlipViewController(confirmFlipViewController: ConfirmFlipViewController!, didFinishEditingWithSuccess success:Bool, flipID: String?)
 }

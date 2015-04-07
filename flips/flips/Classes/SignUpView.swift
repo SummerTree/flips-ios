@@ -17,7 +17,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     internal var navigationBar : CustomNavigationBar!
     internal var userFormView : UserFormView!
     
-    var delegate : SignUpViewDelegate?
+    weak var delegate : SignUpViewDelegate?
     
     
     // MARK: - Initialization Methods

@@ -12,7 +12,7 @@
 
 import UIKit
 
-protocol NewPasswordViewDelegate {
+protocol NewPasswordViewDelegate: class {
     
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!)
     

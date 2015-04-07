@@ -22,7 +22,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     private var takePictureButton: UIButton!
     private var galleryButton: UIButton!
     
-    var delegate: TakePictureViewDelegate?
+    weak var delegate: TakePictureViewDelegate?
     
 
     // MARK: - Initialization Methods

@@ -14,7 +14,7 @@ import UIKit
 
 class BuilderIntroductionViewController : UIViewController {
     
-    var delegate: BuilderIntroductionViewControllerDelegate?
+    weak var delegate: BuilderIntroductionViewControllerDelegate?
     
     private let CONTENT_MARGIN_LEFT:    CGFloat = 25.0
     private let CONTENT_MARGIN_RIGHT:   CGFloat = -25.0
@@ -191,6 +191,6 @@ class BuilderIntroductionViewController : UIViewController {
     }
 }
 
-protocol BuilderIntroductionViewControllerDelegate {
+protocol BuilderIntroductionViewControllerDelegate: class {
     func builderIntroductionViewControllerDidTapOkSweetButton(builderIntroductionViewController: BuilderIntroductionViewController!)
 }

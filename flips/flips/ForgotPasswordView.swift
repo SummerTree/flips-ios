@@ -14,7 +14,7 @@ import Foundation
 
 class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
     
-    var delegate: ForgotPasswordViewDelegate?
+    weak var delegate: ForgotPasswordViewDelegate?
     
     private let HINT_VIEW_MARGIN_LEFT: CGFloat = 25.0
     private let HINT_VIEW_MARGIN_RIGHT: CGFloat = 25.0
