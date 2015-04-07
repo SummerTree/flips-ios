@@ -90,14 +90,16 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 })
             })
         }) { (flipError) -> Void in
-            self.hideActivityIndicator()
-            println(flipError!.error)
-            self.loginView.showValidationErrorInCredentialFields()
-            
-            if (flipError != nil) {
-                var alertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
-                alertView.show()
-            }
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.hideActivityIndicator()
+                println(flipError!.error)
+                self.loginView.showValidationErrorInCredentialFields()
+                
+                if (flipError != nil) {
+                    var alertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
+            })
         }
     }
     
@@ -130,6 +132,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                     return
                 }
                 
+                self.showActivityIndicator()
                 self.authenticateWithFacebook() { (flipError) -> Void in
                     let errorHandler: (FlipError?) -> Void = { (flipError) -> Void in
                         self.hideActivityIndicator()
@@ -163,7 +166,6 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     // MARK: - Private methods
     
     private func authenticateWithFacebook(failureHandler: (FlipError?) -> Void) {
-        showActivityIndicator()
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.onLogin(user as User)
