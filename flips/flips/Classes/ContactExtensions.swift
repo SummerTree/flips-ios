@@ -52,7 +52,11 @@ extension Contact: MBContactPickerModelProtocol {
             phone = phoneNumber
             
             if phoneType != nil {
-                phone += " (\(phoneType))"
+                if (phoneType.isEmpty) {
+                    phone += " (no label)"
+                } else {
+                    phone += " (\(phoneType))"
+                }
             }
         }
         

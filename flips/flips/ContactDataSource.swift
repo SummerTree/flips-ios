@@ -210,7 +210,7 @@ struct ContactAttributes {
 
     func fetchContactByPhoneNumber(phoneNumber: String) -> Contact? {
         let predicate = NSPredicate(format: "%K = %@", ContactAttributes.PHONE_NUMBER, phoneNumber)
-        return Contact.findFirstWithPredicate(predicate) as? Contact
+        return Contact.findFirstWithPredicate(predicate, inContext: currentContext) as? Contact
     }
     
     func findContactBy(firstName: String?, lastName: String?, phoneNumber: String?, phoneType: String?) -> Contact? {
