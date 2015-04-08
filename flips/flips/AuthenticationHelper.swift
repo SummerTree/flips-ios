@@ -15,6 +15,7 @@ import Foundation
 public class AuthenticationHelper: NSObject {
 
     private let LOGIN_USERNAME_KEY = "username"
+    private let LAST_STOCK_FLIPS_SYNC_AT = "lastStockFlipsUpdatedAt"
 
     func onLogin(user: User) {
         PubNubService.sharedInstance.connect()
@@ -41,11 +42,19 @@ public class AuthenticationHelper: NSObject {
         userDefaults.synchronize()
     }
     
+    private func resetTimestampForStockFlips() {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setValue(nil, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+        userDefaults.synchronize()
+    }
+    
     func retrieveAuthenticatedUsernameIfExists() -> String? {
         var loggedUserInfo = User.isUserLoggedIn()
         var userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(LOGIN_USERNAME_KEY) as String?
     }
+    
+    
     
     func logout() {
         if let userInSession = User.loggedUser() {
@@ -70,6 +79,8 @@ public class AuthenticationHelper: NSObject {
         ThumbnailsCache.sharedInstance.clear()
 
         PubNub.disconnect()
+        
+        self.resetTimestampForStockFlips()
         
     }
 

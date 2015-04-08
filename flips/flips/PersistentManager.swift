@@ -294,7 +294,6 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         })
     }
     
-    
     // MARK: - ReadFlipMessage Method
     
     func onMarkFlipMessageAsReadReceivedWithJson(json: JSON) -> FlipMessage? {
