@@ -11,6 +11,7 @@
 //
 
 extension Contact: MBContactPickerModelProtocol {
+    
     public var contactInitials: String {
         var initials = ""
         
@@ -46,13 +47,18 @@ extension Contact: MBContactPickerModelProtocol {
     }
     
     public var contactSubtitle: String? {
+        let NO_LABEL = "(no label)"
         var phone = ""
         
         if phoneNumber != nil {
             phone = phoneNumber
             
             if phoneType != nil {
-                phone += " (\(phoneType))"
+                if (phoneType.isEmpty) {
+                    phone += " \(NSLocalizedString(NO_LABEL, comment: NO_LABEL))"
+                } else {
+                    phone += " (\(phoneType))"
+                }
             }
         }
         
