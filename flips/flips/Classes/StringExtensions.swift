@@ -106,3 +106,11 @@ extension String {
     }
     
 }
+
+extension NSString {
+    
+    func toFormattedPhoneNumber() -> NSString {
+        return NSString(string: (self as String).toFormattedPhoneNumber())
+    }
+    
+}

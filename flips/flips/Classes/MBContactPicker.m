@@ -359,7 +359,11 @@ static CGFloat const ROW_HEIGHT = 56.0;
             NSArray* phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:phoneNumber];
             if (phoneNumberArray.count == 0)
             {
-                [[PersistentManager sharedInstance] createOrUpdateContactWith:phoneNumber lastName:nil phoneNumber:phoneNumber phoneType:@"" andContactUser:nil];
+                [[PersistentManager sharedInstance] createOrUpdateContactWith:[phoneNumber toFormattedPhoneNumber]
+                                                                     lastName:nil
+                                                                  phoneNumber:phoneNumber
+                                                                    phoneType:@""
+                                                               andContactUser:nil];
                 phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:phoneNumber];
             }
             self.filteredContacts = [phoneNumberArray arrayByAddingObjectsFromArray:[self.contacts filteredArrayUsingPredicate:predicate]];
