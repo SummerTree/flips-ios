@@ -51,7 +51,7 @@ extension Contact: MBContactPickerModelProtocol {
         var phone = ""
         
         if phoneNumber != nil {
-            phone = phoneNumber
+            phone = phoneNumber.toFormattedPhoneNumber()
             
             if phoneType != nil {
                 if (phoneType.isEmpty) {
