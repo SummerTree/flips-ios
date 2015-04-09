@@ -269,12 +269,11 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 self.chatView.loadNewFlipMessages()
                 self.chatView.showNewestMessage(shouldScrollAnimated: false)
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
+                
+                self.navigationController?.popToViewController(self, animated: true)
+                self.chatView.clearReplyTextField()
+                self.chatView.hideTextFieldAndShowReplyButton()
             })
-        })
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.navigationController?.popToViewController(self, animated: true)
-            self.chatView.clearReplyTextField()
-            self.chatView.hideTextFieldAndShowReplyButton()
         })
     }
     
