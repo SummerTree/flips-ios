@@ -24,16 +24,19 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var roomID: String!
     private var flipMessages = NSMutableOrderedSet()
     
+    private var flipMessageIdFromPushNotification: String?
+    
     // MARK: - Initializers
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(room: Room) {
+    init(room: Room, andFlipMessageIdFromPushNotification flipMessageID: String? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.chatTitle = room.roomName()
         self.roomID = room.roomID
+        self.flipMessageIdFromPushNotification = flipMessageID
 
         if (room.participants.count > 2) {
             self.chatTitle = groupTitle
@@ -57,7 +60,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             showOnboarding = true
         }
         
-        self.chatView = ChatView(showOnboarding: false) // Onboarding is disabled for now.
+        let isOpeningFromNotification = (self.flipMessageIdFromPushNotification != nil)
+        
+        self.chatView = ChatView(showOnboarding: false, isOpeningFromPushNotification: isOpeningFromNotification) // Onboarding is disabled for now.
         self.chatView.delegate = self
         self.view = self.chatView
         
@@ -96,6 +101,20 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
+        
+        if let flipMessageID = self.flipMessageIdFromPushNotification {
+            let flipMessagesArray: [FlipMessage] = self.flipMessages.array as [FlipMessage]
+            var alreadyReceivedMessage: Bool = false
+            for flipMessage in flipMessagesArray {
+                if (flipMessage.flipMessageID == flipMessageID) {
+                    alreadyReceivedMessage = true
+                }
+            }
+            
+            if (!alreadyReceivedMessage) {
+                self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+            }
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -141,13 +160,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     
-    // MARK: - Getters
-    
-    func getRoomId() -> String {
-        return self.roomID
-    }
-
-    
     // MARK: - FlipMessages Load Methods
     
     func reloadFlipMessages() {
@@ -160,9 +172,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     // MARK: - jump to newest message
     
-    func showChatViewNewestMessage() {
+    func showChatViewNewestMessage(shouldScrollAnimated: Bool) {
         if (self.chatView != nil) {
-            self.chatView.showNewestMessage()
+            self.chatView.showNewestMessage(shouldScrollAnimated: shouldScrollAnimated)
         }
     }
     
@@ -227,9 +239,22 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func notificationReceived(notification: NSNotification) {
         self.reloadFlipMessages()
+        
+        var scrollToReceivedMessage: Bool = false
+        if (self.flipMessageIdFromPushNotification != nil) {
+            if let flipMessageIdReceived: String = notification.userInfo?[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as? String {
+                if (flipMessageIdReceived == self.flipMessageIdFromPushNotification) {
+                    scrollToReceivedMessage = true
+                }
+            }
+        }
+
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.loadNewFlipMessages()
-            self.showChatViewNewestMessage()
+            self.showChatViewNewestMessage(scrollToReceivedMessage)
+            if (scrollToReceivedMessage) {
+                self.hideActivityIndicator()
+            }
         })
     }
     
@@ -244,7 +269,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 self.chatView.clearReplyTextField()
                 self.chatView.hideTextFieldAndShowReplyButton()
                 self.chatView.loadNewFlipMessages()
-                self.chatView.showNewestMessage()
+                self.chatView.showNewestMessage(shouldScrollAnimated: false)
             })
         })
     }

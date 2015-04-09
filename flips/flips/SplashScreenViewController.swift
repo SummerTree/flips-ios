@@ -25,12 +25,14 @@ class SplashScreenViewController: FlipsViewController, SplashScreenViewDelegate,
     var userFirstName: String? = nil
     
     private var roomIdToShow: String?
+    private var flipMessageIdToShow: String?
     
     // MARK: - Initialization Method
     
-    init(roomID: String?) {
+    init(roomID: String?, flipMessageID: String?) {
         super.init(nibName: nil, bundle: nil)
         self.roomIdToShow = roomID
+        self.flipMessageIdToShow = flipMessageID
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -145,7 +147,7 @@ class SplashScreenViewController: FlipsViewController, SplashScreenViewDelegate,
     }
     
     private func openInboxViewController(userDataSource: UserDataSource) {
-        var inboxViewController = InboxViewController(roomID: self.roomIdToShow)
+        var inboxViewController = InboxViewController(roomID: self.roomIdToShow, flipMessageID: self.flipMessageIdToShow)
         inboxViewController.userDataSource = userDataSource
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }

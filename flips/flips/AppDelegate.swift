@@ -109,11 +109,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
         if let loggedUser = User.loggedUser() {
-            if let roomId = (userInfo["room_id"] as? String) {
+            if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
+                let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
                 if (UIApplication.sharedApplication().keyWindow == nil)  {
-                    self.openSplashScreen(roomID: roomId)
+                    self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
                 } else if (application.applicationState != UIApplicationState.Active) {
-                    NavigationHandler.sharedInstance.showThreadScreenForRoomId(roomId)
+                    NavigationHandler.sharedInstance.showThreadScreenForRoomId(roomId, andFlipMessageID: flipMessageId)
                 }
             }
         }
@@ -125,8 +126,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - private functions
     
-    private func openSplashScreen(roomID: String? = nil) {
-        let splashScreenViewController = SplashScreenViewController(roomID: roomID)
+    private func openSplashScreen(roomID: String? = nil, andFlipMessageID flipMessageID: String? = nil) {
+        let splashScreenViewController = SplashScreenViewController(roomID: roomID, flipMessageID: flipMessageID)
         let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()

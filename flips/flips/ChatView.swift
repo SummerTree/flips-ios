@@ -49,11 +49,16 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
 
     private var lastPlayedRow: Int!
     
+    private var openingFromPushNotification: Bool!
+    
+    
     // MARK: - Required initializers
     
-    init(showOnboarding: Bool) {
+    init(showOnboarding: Bool, isOpeningFromPushNotification: Bool) {
         super.init(frame: CGRect.zeroRect)
         self.backgroundColor = UIColor.whiteColor()
+        
+        self.openingFromPushNotification = isOpeningFromPushNotification
         
         self.showOnboarding = showOnboarding
         self.addSubviews()
@@ -93,7 +98,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     func didLayoutSubviews() {
-        self.showNewestMessage()
+        self.showNewestMessage(shouldScrollAnimated: false)
     }
     
     func viewWillDisappear() {
@@ -223,9 +228,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         return nil
     }
     
-    func showNewestMessage() {
+    func showNewestMessage(shouldScrollAnimated scrollAnimated: Bool) {
+        if (scrollAnimated) {
+            self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
+        }
+
         if (self.indexPathToShow != nil) {
-            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
+            self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: scrollAnimated)
         }
     }
 
@@ -251,7 +260,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
         if (newCellsIndexPaths.count > 0) {
             self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
-            self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         }
     }
 
@@ -335,7 +343,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                         self.tableView.alpha = 1
                     }, completion: { (finished) -> Void in
                         self.indexPathToShow = nil
-                        self.playVideoForVisibleCell()
+                        if (!self.openingFromPushNotification) {
+                            self.playVideoForVisibleCell()
+                        }
                     })
                 }
             }
@@ -347,7 +357,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let visibleCells: [AnyObject] = self.tableView.visibleCells()
-
         for cell: ChatTableViewCell in visibleCells as [ChatTableViewCell] {
             if !self.isCell(cell, totallyVisibleOnView: self) {
                 if cell.isPlayingFlip() {
@@ -355,6 +364,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 }
             }
         }
+        
+        let currentOffset = scrollView.contentSize.height - scrollView.contentOffset.y
+        println("\nscrollView.contentSize.height: \(scrollView.contentSize.height)")
+        println("scrollView.contentOffset.y: \(scrollView.contentOffset.y)")
+        println("tableView.frame.size.height: \(tableView.frame.size.height)")
+        println("currentOffset")
+        println("\n")
         
         let isKeyboardVisible: Bool = self.replyTextField.isFirstResponder()
         // I'm checking if the superview is not nil to make sure that the view is visible.
@@ -395,6 +411,15 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.playVideoForVisibleCell()
         })
+    }
+    
+    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+        if (self.openingFromPushNotification!) {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.playVideoForVisibleCell()
+                self.openingFromPushNotification = false
+            })
+        }
     }
 
     private func playVideoForVisibleCell() {
