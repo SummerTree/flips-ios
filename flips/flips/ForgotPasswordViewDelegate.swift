@@ -12,7 +12,7 @@
 
 import UIKit
 
-protocol ForgotPasswordViewDelegate {
+protocol ForgotPasswordViewDelegate: class {
     
     func phoneNumberView(mobileNumberField : UITextField!, didFinishTypingMobileNumber mobileNumber : String!)
     

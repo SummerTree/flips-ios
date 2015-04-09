@@ -15,7 +15,7 @@ import MediaPlayer
 
 public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     
-    var delegate: ConfirmFlipViewDelegate?
+    weak var delegate: ConfirmFlipViewDelegate?
     
     private let LOW_RES_VIDEO_WIDTH: CGFloat = 240.0
     private let LOW_RES_VIDEO_MARGIN: CGFloat = 15.0
@@ -152,7 +152,7 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     }
 }
 
-protocol ConfirmFlipViewDelegate {
+protocol ConfirmFlipViewDelegate: class {
     func confirmFlipViewMakeConstraintToNavigationBarBottom(pictureContainerView: UIView!)
     func confirmFlipViewDidTapRejectButton(flipView: ConfirmFlipView!)
     func confirmFlipViewDidTapAcceptButton(flipView: ConfirmFlipView!)

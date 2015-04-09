@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-protocol ConfirmPictureViewDelegate {
+protocol ConfirmPictureViewDelegate: class {
     
     func confirmPictureViewDidTapBackButton(confirmPictureView: ConfirmPictureView)
     func confirmPictureViewDidApprovePicture(confirmPictureView: ConfirmPictureView)

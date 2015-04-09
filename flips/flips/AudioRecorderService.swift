@@ -20,7 +20,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     private var player: AVAudioPlayer!
     private var soundFileURL:NSURL?
     
-    var delegate: AudioRecorderServiceDelegate?
+    weak var delegate: AudioRecorderServiceDelegate?
     
     public class var sharedInstance : AudioRecorderService {
     struct Static {
@@ -161,7 +161,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     }
 }
 
-protocol AudioRecorderServiceDelegate {
+protocol AudioRecorderServiceDelegate: class {
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL: NSURL?, success: Bool!)
     

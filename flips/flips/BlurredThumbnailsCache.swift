@@ -65,6 +65,10 @@ public class BlurredThumbnailsCache: ThumbnailsDataSource {
     func has(remoteURL: NSURL) -> Bool {
         return self.cache.has(remoteURL)
     }
+    
+    func clear() -> Void {
+        cache.clear()
+    }
 
     private func blurredImageDataFrom(image: UIImage) -> NSData {
         let resizedImage: UIImage = image.cropSquareImage(image.size.width / 2)

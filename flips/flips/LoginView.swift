@@ -669,7 +669,6 @@ class LoginView : UIView, UITextFieldDelegate {
                 }
 
                 self.forgotPasswordButton.alpha = 1.0
-                self.forgotPasswordButton.center.y = self.FORGOT_PASSWORD_ORIGINAL_OFFSET
                 
                 // positioning credentials above keyboard
                 let credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
@@ -686,13 +685,8 @@ class LoginView : UIView, UITextFieldDelegate {
                 let flipsWordImageViewBottom = self.flipsWordImageView.frame.origin.y + self.flipsWordImageView.frame.height + self.FLIPS_WORD_LOGO_MARGIN_TOP
                 
                 let forgotPasswordDesirableCenter = (self.credentialsView.frame.origin.y + flipsWordImageViewBottom) / 2
-                if ((forgotPasswordDesirableCenter + (self.forgotPasswordButton.frame.height/2)) > self.credentialsView.frame.origin.y) {
-                    self.forgotPasswordButton.frame.origin.y = self.FLIPS_WORD_LOGO_SMALL_SCREEN_POSITION
-                    self.flipsWordImageView.frame.origin.y = -self.flipsWordImageView.frame.size.height-self.FLIPS_WORD_LOGO_MARGIN_TOP
-                } else {
-                    // positioning forgot password button between credentials and Flips word
-                    self.forgotPasswordButton.center.y = forgotPasswordDesirableCenter
-                }
+                // positioning forgot password button between credentials and Flips word
+                self.forgotPasswordButton.center.y = forgotPasswordDesirableCenter
             } else {
                 self.forgotPasswordButton.alpha = 0.0
                 

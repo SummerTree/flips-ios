@@ -14,8 +14,6 @@ import UIKit
 
 class SplashScreenView: UIView {
     
-    var delegate: SplashScreenViewDelegate?
-    
     private let MARGIN_RIGHT:CGFloat = 40.0
     private let MARGIN_LEFT:CGFloat = 40.0
     private let FLIPS_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
@@ -88,8 +86,3 @@ class SplashScreenView: UIView {
     }
 
 }
-
-protocol SplashScreenViewDelegate {
-    
-}
-

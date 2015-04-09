@@ -11,7 +11,7 @@
 //
 
 
-protocol NotificationMessageViewDelegate {
+protocol NotificationMessageViewDelegate: class {
 
     func notificationMessageViewShouldBeDismissed(view: NotificationMessageView)
     
