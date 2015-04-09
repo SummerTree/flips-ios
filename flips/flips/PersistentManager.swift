@@ -168,18 +168,6 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         }
     }
     
-    private func saveLastTimestampForStockFlip(timestamp: NSDate) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?) {
-            if (lastTimestamp.compare(timestamp) == NSComparisonResult.OrderedAscending) {
-                userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
-            }
-        } else {
-            userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
-        }
-        userDefaults.synchronize()
-    }
-    
 
     // MARK: - FlipMessage Methods
     
@@ -509,7 +497,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                         if let json = responseAsJSON {
                             let lastTimestampAsString = json[self.STOCK_FLIPS_LAST_TIMESTAMP].stringValue
                             if (lastTimestampAsString != "") {
-                                self.saveLastTimestampForStockFlip(NSDate(dateTimeString: lastTimestampAsString))
+                                AuthenticationHelper.sharedInstance.saveLastTimestampForStockFlip(NSDate(dateTimeString: lastTimestampAsString))
                             }
                         }
                         dispatch_group_leave(group)
