@@ -287,7 +287,11 @@ static CGFloat const ROW_HEIGHT = 56.0;
             }
         }
 
-        cell.numberLabel.text = [NSString stringWithFormat:@"(%@)", [user fullName]];
+        if (!user.isTemporary.boolValue && [user fullName].length > 1) {
+            cell.numberLabel.text = [NSString stringWithFormat:@"(%@)", [user fullName]];
+        } else if ([contact respondsToSelector:@selector(contactSubtitle)]) {
+            cell.numberLabel.text = contact.contactSubtitle;
+        }
     } else {
         cell.photoView.borderColor = [UIColor lightGreyD8];
         
