@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-protocol TakePictureViewControllerDelegate {
+protocol TakePictureViewControllerDelegate: class {
     
     func takePictureViewController(viewController: TakePictureViewController, didFinishWithPicture picture: UIImage)
     

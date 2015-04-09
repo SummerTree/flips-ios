@@ -18,7 +18,7 @@ class TakePictureViewController : FlipsViewController, TakePictureViewDelegate, 
     private var confirmPictureView: ConfirmPictureView!
     private var picture: UIImage!
     
-    var delegate: TakePictureViewControllerDelegate?
+    weak var delegate: TakePictureViewControllerDelegate?
     
     
     // MARK: - Overriden Methods

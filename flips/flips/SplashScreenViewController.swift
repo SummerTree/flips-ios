@@ -19,7 +19,7 @@ let LOGOUT_NOTIFICATION_NAME: String = "logout_notification"
 let LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY: String = "logout_notification_facebook_user"
 let LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY: String = "logout_notification_first_name"
 
-class SplashScreenViewController: FlipsViewController, SplashScreenViewDelegate, UIAlertViewDelegate {
+class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     
     var loginMode: LoginViewController.LoginMode = LoginViewController.LoginMode.ORDINARY_LOGIN
     var userFirstName: String? = nil
@@ -43,7 +43,6 @@ class SplashScreenViewController: FlipsViewController, SplashScreenViewDelegate,
     
     override func loadView() {
         let splashScreenView = SplashScreenView()
-        splashScreenView.delegate = self
         self.view = splashScreenView
     }
     
@@ -76,8 +75,6 @@ class SplashScreenViewController: FlipsViewController, SplashScreenViewDelegate,
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: LOGOUT_NOTIFICATION_NAME, object: nil)
     }
-    
-    // MARK: SplashScreenViewDelegate methods
     
     func splashScreenViewAttemptLoginWithFacebook() {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)

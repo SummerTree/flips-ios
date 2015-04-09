@@ -79,6 +79,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MagicalRecord.cleanUp()
     }
     
+    func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
+        return extensionPointIdentifier != "com.apple.keyboard-service"
+    }
     
     // MARK: - Notification Methods
     

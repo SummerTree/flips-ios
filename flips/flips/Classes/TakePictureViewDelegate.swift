@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-protocol TakePictureViewDelegate {
+protocol TakePictureViewDelegate: class {
     
     func takePictureViewDidTapBackButton(takePictureView: TakePictureView)
     

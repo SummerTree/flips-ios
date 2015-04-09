@@ -18,7 +18,7 @@ class NotificationMessageView : UIView {
     private var messageLabel: UILabel!
     private var message: String!
     
-    var delegate: NotificationMessageViewDelegate?
+    weak var delegate: NotificationMessageViewDelegate?
     
     // MARK: - Initialization Methods
     

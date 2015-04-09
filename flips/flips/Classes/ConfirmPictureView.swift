@@ -23,7 +23,7 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     
     private var picture: UIImage!
     
-    var delegate: ConfirmPictureViewDelegate?
+    weak var delegate: ConfirmPictureViewDelegate?
     
     
     // MARK: - Initialization Methods

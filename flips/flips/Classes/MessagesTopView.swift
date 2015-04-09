@@ -29,7 +29,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     private var messages: Dictionary<String, NSAttributedString>!
     
-    var delegate: MessagesTopViewDelegate?
+    weak var delegate: MessagesTopViewDelegate?
     
     
     // MARK: - Initialization Methods

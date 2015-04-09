@@ -303,7 +303,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let flipWord = self.flipWords[self.highlightedWordIndex]
 
         if (self.canShowMyFlips()) {
-            self.composeTopViewContainer.showFlip(flipId, withWord: flipWord.text)
             self.composeBottomViewContainer.showMyFlips()
         } else {
             self.showNewFlipWithoutSavedFlipsForWord(flipWord.text)
