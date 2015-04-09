@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-protocol PhoneNumberViewDelegate {
+protocol PhoneNumberViewDelegate: class {
     
     func phoneNumberView(phoneNumberView : PhoneNumberView!, didFinishTypingMobileNumber mobileNumber : String!)
     

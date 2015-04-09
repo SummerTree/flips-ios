@@ -237,15 +237,19 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - ComposeViewControllerDelegate
     
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
+        ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             self.reloadFlipMessages()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.navigationController?.popToViewController(self, animated: true)
-                self.chatView.clearReplyTextField()
-                self.chatView.hideTextFieldAndShowReplyButton()
                 self.chatView.loadNewFlipMessages()
                 self.chatView.showNewestMessage()
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
             })
+        })
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.navigationController?.popToViewController(self, animated: true)
+            self.chatView.clearReplyTextField()
+            self.chatView.hideTextFieldAndShowReplyButton()
         })
     }
     

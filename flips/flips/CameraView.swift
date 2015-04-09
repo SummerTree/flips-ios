@@ -67,8 +67,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     private var sessionRunningAndDeviceAuthorized: Bool!
     var lockInterfaceRotation: Bool!
     var runtimeErrorHandlingObserver: AnyObject!
-    private var observersRegistered: Bool! = false
-    private var observersRegisteredBeforeResignActive: Bool! = false
+    private var observersRegistered: Bool = false
+    private var observersRegisteredBeforeResignActive: Bool = false
 
     private var observerResignActive: AnyObject!
     private var observerBecomeActive: AnyObject!
@@ -84,15 +84,20 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         super.init(frame: CGRect.zeroRect)
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
+        weak var weakSelf = self
         self.observerBecomeActive = notificationCenter.addObserverForName("UIApplicationDidBecomeActiveNotification", object: nil, queue: nil) { (notification) -> Void in
-            if (self.observersRegisteredBeforeResignActive!) {
-                self.registerObservers()
+            if let strongSelf = weakSelf {
+                if (strongSelf.observersRegisteredBeforeResignActive) {
+                    strongSelf.registerObservers()
+                }
             }
         }
         self.observerResignActive = notificationCenter.addObserverForName("UIApplicationWillResignActiveNotification", object: nil, queue: nil) { (notification) -> Void in
-            self.observersRegisteredBeforeResignActive = self.observersRegistered
-            if (self.observersRegisteredBeforeResignActive!) {
-                self.removeObservers()
+            if let strongSelf = weakSelf {
+                strongSelf.observersRegisteredBeforeResignActive = strongSelf.observersRegistered
+                if (strongSelf.observersRegisteredBeforeResignActive) {
+                    strongSelf.removeObservers()
+                }
             }
         }
 
@@ -415,7 +420,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
             
-            if (self.observersRegistered!) {
+            if (self.observersRegistered) {
                 
                 if let deviceInput = self.videoDeviceInput {
                     NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)

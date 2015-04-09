@@ -25,7 +25,7 @@ public class PubNubService: FlipsService, PNDelegate {
     
     private var cryptoHelper: PNCryptoHelper
     
-    var delegate: PubNubServiceDelegate?
+    weak var delegate: PubNubServiceDelegate?
     
     // MARK: - Initialization Methods
     
@@ -355,7 +355,7 @@ public class PubNubService: FlipsService, PNDelegate {
 	}
 }
 
-protocol PubNubServiceDelegate {
+protocol PubNubServiceDelegate: class {
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date:NSDate, fromChannelName: String)
     func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<HistoryMessage>, fromChannelName: String)

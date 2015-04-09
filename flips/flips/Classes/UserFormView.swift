@@ -27,7 +27,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     private let BIRTHDAY_DAY_CHARACTER = NSLocalizedString("D", comment: "Day Abreviation")
     private let BIRTHDAY_YEAR_CHARACTER = NSLocalizedString("Y", comment: "Year Abreviation")
     
-    var delegate: UserFormViewDelegate?
+    weak var delegate: UserFormViewDelegate?
     var firstNameTextField, lastNameTextField, emailTextField, passwordTextField, birthdayTextField : UITextField!
     var allFieldsValid, allFieldsFilled, nameValid, nameFilled, emailValid, emailFilled, passwordValid, passwordFilled, birthdayValid, birthdayFilled : Bool
     

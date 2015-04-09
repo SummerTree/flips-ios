@@ -24,7 +24,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     
     private var didUpdateWordList = false
     
-    var delegate: BuilderAddWordTableViewControllerDelegate?
+    weak var delegate: BuilderAddWordTableViewControllerDelegate?
     
     override init() {
         super.init()
@@ -162,7 +162,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     }
 }
 
-protocol BuilderAddWordTableViewControllerDelegate {
+protocol BuilderAddWordTableViewControllerDelegate: class {
     
     func builderAddWordTableViewControllerDelegate(tableViewController: BuilderAddWordTableViewController, finishingWithChanges hasChanges: Bool)
     

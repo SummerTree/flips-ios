@@ -33,7 +33,7 @@ class NewFlipViewController: FlipsViewController,
     private let INVALID_CONTACT_TITLE = NSLocalizedString("Invalid Contact", comment: "Invalid Contact")
     private let INVALID_CONTACT_MESSAGE = NSLocalizedString("Please choose a valid contact.", comment: "Please choose a valid contact.")
     
-    var delegate: NewFlipViewControllerDelegate?
+    weak var delegate: NewFlipViewControllerDelegate?
     
     // MARK: - Class methods
     
@@ -302,7 +302,7 @@ class NewFlipViewController: FlipsViewController,
 
 }
 
-protocol NewFlipViewControllerDelegate {
+protocol NewFlipViewControllerDelegate: class {
     
     func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String)
     
