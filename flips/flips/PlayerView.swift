@@ -99,16 +99,18 @@ class PlayerView: UIView {
     // MARK: - Animations
 
     private func animateButtonsFadeOut(completion: (() -> Void)?) {
-        UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-            self.thumbnailView.alpha = 0.0
-            self.playButtonView.alpha = 0.0
-            self.retryButtonView.alpha = 0.0
-            self.retryLabel.alpha = 0.0
-            self.progressBarView.alpha = 0.0
-        }) { (finished) -> Void in
-            completion?()
-            return
-        }
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
+                self.thumbnailView.alpha = 0.0
+                self.playButtonView.alpha = 0.0
+                self.retryButtonView.alpha = 0.0
+                self.retryLabel.alpha = 0.0
+                self.progressBarView.alpha = 0.0
+            }) { (finished) -> Void in
+                completion?()
+                return
+            }
+        })
     }
 
     private func animatePlayButtonFadeIn(completion: (() -> Void)?) {
@@ -201,9 +203,20 @@ class PlayerView: UIView {
                 }
             }
         } else {
-            self.loadFlipsResourcesForPlayback({ () -> Void in
+            var isLoadingStarted: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
                 self.play()
             })
+            
+            if (!isLoadingStarted) {
+                // Retry after half second
+                let oneSecond = 0.5 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
+                    var isLoadingStarted: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
+                        self.play()
+                    })
+                })
+            }
         }
     }
     
@@ -340,7 +353,7 @@ class PlayerView: UIView {
 
     // MARK: - Resource loading
 
-    private func loadFlipsResourcesForPlayback(completion: () -> Void) {
+    private func loadFlipsResourcesForPlayback(completion: () -> Void) -> Bool {
         let currentIdentifier = self.contentIdentifier
         
         self.loadingFlips = true
@@ -357,7 +370,7 @@ class PlayerView: UIView {
         if let flipsArray: Array<Flip> = self.flips {
             for (index, flip) in enumerate(flipsArray) {
                 if (currentIdentifier != self.contentIdentifier) {
-                    return
+                    return true // shouldn't retry
                 }
                 
                 if (!isWordsPreInitialized) {
@@ -450,7 +463,11 @@ class PlayerView: UIView {
                     }
                 }
             }
+        } else {
+            self.loadingFlips = false
+            return false
         }
+        return true
     }
 
     private func sortPlayerItems() {
@@ -738,8 +755,9 @@ class PlayerView: UIView {
         self.flips = nil
         self.playerItems = [FlipPlayerItem]()
         self.words = []
+        self.isPlaying = false
         
-        self.playButtonView.alpha = 1.0
+        self.playButtonView.alpha = self.BUTTONS_ALPHA
         self.progressBarView.alpha = 0.0
         self.progressBarView.progress = 0.0
 

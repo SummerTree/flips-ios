@@ -24,7 +24,7 @@ private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storag
 
 class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
     
-    private let NO_EMPTY_FLIP_INDEX = -1
+    private let NO_FLIP_SELECTED_INDEX = -1
     
     private let IPHONE_4S_TOP_CONTAINER_HEIGHT: CGFloat = 240.0
     private let FLIP_MESSAGE_WORDS_LIST_HEIGHT: CGFloat = 50.0
@@ -387,13 +387,12 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             index++
         }
-        return NO_EMPTY_FLIP_INDEX
+        return NO_FLIP_SELECTED_INDEX
     }
     
     internal func moveToNextFlipWord() {
         let nextIndex = self.nextEmptyFlipWordIndex()
-        if (nextIndex == NO_EMPTY_FLIP_INDEX) {
-            self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
+        if (nextIndex == NO_FLIP_SELECTED_INDEX) {
             if (self.shouldShowPreviewButton()) {
                 self.openPreview()
             } else {
@@ -401,8 +400,9 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
         } else {
             self.highlightedWordIndex = nextIndex
-            self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
         }
+        
+        self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
     }
     
     
@@ -546,7 +546,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let flipWord = flipWords[highlightedWordIndex]
         
         if (flipWord.associatedFlipId != nil) {
-            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
+            var autoPlay = (self.navigationController?.topViewController == self)
+            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text, autoPlay: autoPlay);
         } else {
             composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
         }

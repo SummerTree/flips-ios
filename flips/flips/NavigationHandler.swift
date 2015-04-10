@@ -75,20 +75,13 @@ public class NavigationHandler : NSObject {
         alertView.show()
     }
     
-    func showThreadScreenForRoomId(roomId: String) {
+    func showThreadScreenForRoomId(roomId: String, andFlipMessageID flipMessageID: String) {
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController: UIViewController = keyWindow.rootViewController {
                 if (rootViewController is UINavigationController) {
                     let rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
                     
                     let completionBlock: () -> Void = { () -> Void in
-                        if (rootNavigationViewController.visibleViewController is ChatViewController) {
-                            let chatViewController = rootNavigationViewController.visibleViewController as ChatViewController
-                            if (chatViewController.getRoomId() == roomId) {
-                                return
-                            }
-                        }
-                        
                         var inboxViewController: UIViewController? = nil
                         for viewController in rootNavigationViewController.childViewControllers {
                             if (viewController is InboxViewController) {
@@ -101,7 +94,7 @@ public class NavigationHandler : NSObject {
                         if (inboxViewController != nil) {
                             let roomDataSource = RoomDataSource()
                             let room = roomDataSource.retrieveRoomWithId(roomId)
-                            let chatViewController: UIViewController = ChatViewController(room: room)
+                            let chatViewController: UIViewController = ChatViewController(room: room, andFlipMessageIdFromPushNotification: flipMessageID)
                             rootNavigationViewController.pushViewController(chatViewController, animated: true)
                         }
                     }

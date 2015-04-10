@@ -22,6 +22,8 @@ public let FLIP_BOYS_USER_ID: String = "850"
 
 public class UserService: FlipsService {
     
+    private let PLATFORM = "ios"
+    
     let SIGNUP_URL: String = "/signup"
     let SIGNIN_URL: String = "/signin"
     let FACEBOOK_SIGNIN_URL: String = "/signin/facebook"
@@ -230,30 +232,40 @@ public class UserService: FlipsService {
             return
         }
         
-        if let deviceId = DeviceHelper.sharedInstance.retrieveDeviceId() {
-            let url = HOST + self.FORGOT_URL
-            let params = [RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.DEVICE_ID: deviceId]
-            
-            self.post(url,
-                parameters: params,
-                success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                    success(nil)
-                },
-                failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                    let response = operation.response
-                    if ((response != nil) && (response.statusCode == 404)) {
-                        failure(nil)
-                    } else if (operation.responseObject != nil) {
-                        let responseObject = operation.responseObject as NSDictionary
-                        failure(FlipError(error: responseObject["error"] as String!, details: responseObject["details"] as? String))
-                    } else {
-                        failure(FlipError(error: error.localizedDescription, details:nil))
-                    }
-                }
-            )
-        } else {
-            failure(FlipError(error: LocalizedString.DEVICE_ERROR, details: LocalizedString.DEVICE_ID_ERROR))
+        let url = HOST + self.FORGOT_URL
+        var params = [RequestParams.PHONE_NUMBER : phoneNumber, RequestParams.DEVICE_PLATFORM : self.PLATFORM]
+        
+        if (DeviceHelper.sharedInstance.retrieveDeviceId() != nil) {
+            params[RequestParams.DEVICE_ID] = DeviceHelper.sharedInstance.retrieveDeviceId()
         }
+        
+        if (DeviceHelper.sharedInstance.retrieveDeviceToken() != nil) {
+            params[RequestParams.DEVICE_TOKEN] = DeviceHelper.sharedInstance.retrieveDeviceToken()
+        }
+        
+        self.post(url,
+            parameters: params,
+            success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
+                let deviceID = self.parseDeviceId(JSON(responseObject))
+                DeviceHelper.sharedInstance.saveDeviceId(deviceID)
+                success(nil)
+            },
+            failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
+                let response = operation.response
+                if ((response != nil) && (response.statusCode == 404)) {
+                    failure(nil)
+                } else if (operation.responseObject != nil) {
+                    let responseObject = operation.responseObject as NSDictionary
+                    failure(FlipError(error: responseObject["error"] as String!, details: responseObject["details"] as? String))
+                } else {
+                    failure(FlipError(error: error.localizedDescription, details:nil))
+                }
+            }
+        )
+    }
+    
+    private func parseDeviceId(json: JSON) -> String {
+        return json[RequestParams.ID].stringValue
     }
     
     
@@ -603,5 +615,8 @@ public class UserService: FlipsService {
         static let PHOTO = "photo"
         static let FACEBOOK_IDS = "facebookIDs"
         static let DEVICE_ID = "device_id"
+        static let DEVICE_TOKEN = "device_token"
+        static let DEVICE_PLATFORM = "platform"
+        static let ID = "id"
     }
 }

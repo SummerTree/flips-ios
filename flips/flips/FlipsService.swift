@@ -22,11 +22,7 @@ public struct FlipsServiceResponseCode {
 
 public class FlipsService : NSObject {
 
-    var HOST: String {
-        let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!
-
-        return infoPlist["FlipsServiceHostBaseURL"] as String
-    }
+    var HOST = AppSettings.currentSettings().serverURL()
     
     var APP_VERSION: String {
         let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!

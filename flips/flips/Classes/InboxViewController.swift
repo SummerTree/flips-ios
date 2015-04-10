@@ -23,6 +23,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         }
     }
     
+    private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
+    private var downloadingMessageFromNotificationRetries: Int = 0
+    
     private let animationDuration: NSTimeInterval = 0.25
     
     private var inboxView: InboxView!
@@ -30,12 +33,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
     
     private var roomIdToShow: String?
+    private var flipMessageIdToShow: String?
     
     // MARK: - Initialization Methods
     
-    init(roomID: String? = nil) {
+    init(roomID: String? = nil, flipMessageID: String? = nil) {
         super.init()
         self.roomIdToShow = roomID
+        self.flipMessageIdToShow = flipMessageID
     }
 
     required init(coder: NSCoder) {
@@ -53,7 +58,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         if (!OnboardingHelper.onboardingHasBeenShown()) {
             showOnboarding = true
         }
-
+        
         inboxView = InboxView(showOnboarding: false) // Onboarding is disabled for now.
         inboxView.delegate = self
         inboxView.dataSource = self
@@ -85,6 +90,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+        
+        self.roomIdToShow = nil
+        self.flipMessageIdToShow = nil
+        self.hideActivityIndicator()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -104,13 +113,55 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         }
         self.refreshRooms()
         
-        if let roomID = self.roomIdToShow {
-            let roomDataSource = RoomDataSource()
-            let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
-            self.roomIdToShow = nil
+        if (self.flipMessageIdToShow != nil) {
+            self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+            self.openRoomForPushNotificationIfMessageReceived()
         }
-        
+    }
+    
+    private func openRoomForPushNotificationIfMessageReceived() {
+        if let roomID = self.roomIdToShow {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                var flipMessageAlreadyReceived = false
+                if let flipMessageID: String = self.flipMessageIdToShow {
+                    let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
+                    if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
+                        flipMessageAlreadyReceived = true
+                    }
+                }
+                
+                if (flipMessageAlreadyReceived) {
+                    self.openThreadViewControllerWithRoomID(roomID)
+                    self.hideActivityIndicator()
+                    self.roomIdToShow = nil
+                    self.flipMessageIdToShow = nil
+                } else {
+                    self.retryToOpenRoomForPushNotification()
+                }
+            })
+        }
+    }
+    
+    private func retryToOpenRoomForPushNotification() {
+        let time = 1 * Double(NSEC_PER_SEC)
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
+        dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            if let roomID = self.roomIdToShow { // Just to make sure that the user didn't close this screen.
+                self.downloadingMessageFromNotificationRetries++
+                if (self.downloadingMessageFromNotificationRetries < self.DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES) {
+                    self.openRoomForPushNotificationIfMessageReceived()
+                } else {
+                    self.hideActivityIndicator()
+                    self.roomIdToShow = nil
+                    self.flipMessageIdToShow = nil
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
+                        alertView.show()
+                        
+                    })
+                }
+            }
+        })
     }
     
     func imageForView() -> UIImage {
@@ -167,10 +218,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
         var roomID: String!
         roomID = self.roomIds.objectAtIndex(index) as String
-        let roomDataSource = RoomDataSource()
-        let room = roomDataSource.retrieveRoomWithId(roomID)
-        self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
-        
+        self.openThreadViewControllerWithRoomID(roomID)
     }
     
     
@@ -191,6 +239,16 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         })
     }
     
+    private func openThreadViewControllerWithRoomID(roomID: String) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let roomDataSource = RoomDataSource()
+            let room = roomDataSource.retrieveRoomWithId(roomID)
+            
+            let chatViewController: ChatViewController = ChatViewController(room: room)
+            self.navigationController?.pushViewController(chatViewController, animated: true)
+        })
+    }
+    
     
     // MARK: - Messages Notification Handler
 
@@ -200,8 +258,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
 
     func notificationReceived(notification: NSNotification) {
         var userInfo: Dictionary = notification.userInfo!
-        var flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
-        let flipDataSource = FlipDataSource()
+        var flipID: String = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
+        var receivedFlipMessageID: String = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as String
+        let flipDataSource: FlipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipID) {
             if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
                 println("Thumbnail download failed for flip: \(flip.flipID)")
@@ -210,6 +269,17 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             }
         } else {
             UIAlertView.showUnableToLoadFlip()
+        }
+        
+        if let roomID: String = self.roomIdToShow {
+            if let flipMessageID: String = self.flipMessageIdToShow {
+                if (flipMessageID == receivedFlipMessageID) {
+                    self.hideActivityIndicator()
+                    self.roomIdToShow = nil
+                    self.flipMessageIdToShow = nil
+                    self.openThreadViewControllerWithRoomID(roomID)
+                }
+            }
         }
     }
     
