@@ -160,7 +160,7 @@ class NewFlipViewController: FlipsViewController,
             }
         } else {
             let createNewRoom = { () -> Void in
-                let composeViewController = ComposeViewController(contacts: self.contacts, words: self.flipTextField.getFlipTexts())
+                let composeViewController = ComposeViewController(contacts: self.contacts, words: self.flipTextField.getTextWords())
                 composeViewController.delegate = self
                 self.navigationController?.pushViewController(composeViewController, animated: true)
             }
@@ -177,7 +177,7 @@ class NewFlipViewController: FlipsViewController,
             let roomDataSource = RoomDataSource()
             var result = roomDataSource.hasRoomWithUserIDs(userIDs)
             if (result.hasRoom) {
-                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getFlipTexts())
+                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getTextWords())
                 composeViewController.delegate = self
                 self.navigationController?.pushViewController(composeViewController, animated: true)
                 return
