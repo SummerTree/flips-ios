@@ -88,7 +88,7 @@ public class CacheJournal {
                 ++upperLimit
             }
             
-            if upperLimit > 0 {
+            if (upperLimit <= 0) {
                 entriesSlice = Slice<String>()
             } else {
                 entriesSlice = self.entries[0..<upperLimit].map { $0.key }
