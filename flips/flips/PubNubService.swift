@@ -143,28 +143,17 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
 
+    
     // MARK: - Push Notifications
     
     func disablePushNotificationOnMyChannels() {
-        if let loggedUser = User.loggedUser() {
-            var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
-            
-            var channels = [PNChannel]()
-            channels.append(ownChannel)
-            
-            let roomDataSource = RoomDataSource()
-            var rooms = roomDataSource.getAllRooms()
-            for room in rooms {
-                channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
-            }
-            
-            let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
-            
-            PubNub.disablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
-                println("Result of disablePushNotificationOnChannels: channels=[\(channels), with error: \(pnError)")
-            }
+        if let token: NSData = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData() {
+            PubNub.removeAllPushNotificationsForDevicePushToken(token, withCompletionHandlingBlock: { (error: PNError!) -> Void in
+                println("Push notification removed with error: \(error.description)")
+            })
         }
     }
+    
     
     // MARK: - Encryption/decryption
     

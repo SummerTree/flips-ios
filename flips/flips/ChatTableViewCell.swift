@@ -166,6 +166,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         let formattedDate: String = DateHelper.formatDateToApresentationFormat(flipMessage.createdAt)
         let messagePhrase: String = flipMessage.messagePhrase()
         let avatarURL: NSURL? = NSURL(string: flipMessage.from.photoURL)
+        let isMessagedNotRead: Bool = flipMessage.notRead.boolValue
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             var flips: Array<Flip> = Array<Flip>()
@@ -176,12 +177,12 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 formattedWords.append(flipEntry.formattedWord)
             }
             
-            self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords, blurringThumbnail: flipMessage.notRead.boolValue)
+            self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords, blurringThumbnail: isMessagedNotRead)
         })
         
         self.messageDateLabel.text = formattedDate
         
-        if (flipMessage.notRead.boolValue) {
+        if (isMessagedNotRead) {
             self.messageTextLabel.alpha = 0
         } else {
             self.messageTextLabel.alpha = 1
