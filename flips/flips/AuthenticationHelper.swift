@@ -15,6 +15,7 @@ import Foundation
 public class AuthenticationHelper: NSObject {
 
     private let LOGIN_USERNAME_KEY = "username"
+    private let LAST_STOCK_FLIPS_SYNC_AT = "lastStockFlipsUpdatedAt"
 
     func onLogin(user: User) {
         PubNubService.sharedInstance.connect()
@@ -40,6 +41,25 @@ public class AuthenticationHelper: NSObject {
         userDefaults.removeObjectForKey(LOGIN_USERNAME_KEY)
         userDefaults.synchronize()
     }
+    
+    private func resetTimestampForStockFlips() {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setValue(nil, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+        userDefaults.synchronize()
+    }
+    
+    func saveLastTimestampForStockFlip(timestamp: NSDate) {
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?) {
+            if (lastTimestamp.compare(timestamp) == NSComparisonResult.OrderedAscending) {
+                userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+            }
+        } else {
+            userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
+        }
+        userDefaults.synchronize()
+    }
+
     
     func retrieveAuthenticatedUsernameIfExists() -> String? {
         var loggedUserInfo = User.isUserLoggedIn()
@@ -71,6 +91,8 @@ public class AuthenticationHelper: NSObject {
         BlurredThumbnailsCache.sharedInstance.clear()
 
         PubNub.disconnect()
+        
+        self.resetTimestampForStockFlips()
         
     }
 
