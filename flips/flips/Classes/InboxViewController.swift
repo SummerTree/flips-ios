@@ -93,6 +93,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         self.roomIdToShow = nil
         self.flipMessageIdToShow = nil
+        self.hideActivityIndicator()
     }
     
     override func viewDidAppear(animated: Bool) {
