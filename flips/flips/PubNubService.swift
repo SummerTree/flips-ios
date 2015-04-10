@@ -30,9 +30,9 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Initialization Methods
     
     override init() {
-        let pubnubPublishKey = AppSettings.currentSettings().PubNubPublishKey()
-        let pubnubSubscribeKey = AppSettings.currentSettings().PubNubSubscribeKey()
-        let pubnubSecretKey = AppSettings.currentSettings().PubNubSecretKey()
+        let pubnubPublishKey = AppSettings.currentSettings().pubNubPublishKey()
+        let pubnubSubscribeKey = AppSettings.currentSettings().pubNubSubscribeKey()
+        let pubnubSecretKey = AppSettings.currentSettings().pubNubSecretKey()
     
         let cipherConfiguration = PNConfiguration(forOrigin: PUBNUB_ORIGIN,
             publishKey: pubnubPublishKey,

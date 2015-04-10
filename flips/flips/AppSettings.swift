@@ -42,19 +42,19 @@ class AppSettings {
         self.init(env: currentEnv)
     }
     
-    func ServerURL() -> String {
+    func serverURL() -> String {
         return envSettings["ServerURL"] as String
     }
 
-    func PubNubPublishKey() -> String {
+    func pubNubPublishKey() -> String {
         return envSettings["PubNubPublishKey"] as String
     }
     
-    func PubNubSubscribeKey() -> String {
+    func pubNubSubscribeKey() -> String {
         return envSettings["PubNubSubscribeKey"] as String
     }
     
-    func PubNubSecretKey() -> String {
+    func pubNubSecretKey() -> String {
         return envSettings["PubNubSecretKey"] as String
     }
     
