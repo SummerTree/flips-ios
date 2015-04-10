@@ -70,8 +70,10 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         self.previewView.viewWillDisappear()
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        self.hideActivityIndicator()
     }
-    
+
     
     // MARK: - Notification Handler
 
@@ -146,7 +148,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (success) {
-                            self.hideActivityIndicator()
                             self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
                         } else {
                             if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
