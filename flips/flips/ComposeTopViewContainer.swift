@@ -203,13 +203,13 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         })
     }
     
-    func showFlip(flipId: String, withWord word: String) {
+    func showFlip(flipId: String, withWord word: String, autoPlay: Bool = true) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.switchToPreviewType(PreviewType.Flip) { () -> Void in
+                    self.flipPlayerView.loadPlayerOnInit = autoPlay
                     self.flipPlayerView.setupPlayerWithFlips([flip], andFormattedWords: [word])
-                    self.flipPlayerView.play()
                 }
             })
         } else {
