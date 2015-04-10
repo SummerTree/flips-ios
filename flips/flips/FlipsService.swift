@@ -15,12 +15,8 @@ public typealias OperationFailureCallback = (AFHTTPRequestOperation, NSError) ->
 
 public class FlipsService : NSObject {
 
-    var HOST: String {
-        let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!
-
-        return infoPlist["FlipsServiceHostBaseURL"] as String
-    }
-
+    var HOST = AppSettings.currentSettings().ServerURL()
+    
     private let BACKEND_FORBIDDEN_REQUEST = 403
     private let BACKEND_TIMED_OUT: Int = 408
     private let BACKEND_TIMED_OUT_MESSAGE: String = "The request timed out."

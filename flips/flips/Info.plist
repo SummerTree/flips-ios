@@ -50,13 +50,41 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>FlipsServiceHostBaseURL</key>
-	<string>http://flips-qa.elasticbeanstalk.com</string>
-	<key>PubNubPublishKey</key>
-	<string>pub-c-18de6448-8924-43b5-9f5b-a333e7d7e6d9</string>
-	<key>PubNubSubscribeKey</key>
-	<string>sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe</string>
-	<key>PubNubSecretKey</key>
-	<string>sec-c-MzFhZjgyOWQtNDRiOS00NTBiLTkwZjAtOGUyM2U5MDNhMTdh</string>
+	<key>AppSettings</key>
+	<dict>
+		<key>QA</key>
+		<dict>
+            <key>ServerURL</key>
+            <string>http://flips-qa.elasticbeanstalk.com</string>
+			<key>PubNubPublishKey</key>
+			<string>pub-c-579fbcaa-1c0a-44fc-bb1c-e02e43e7eb30</string>
+			<key>PubNubSubscribeKey</key>
+			<string>sub-c-3bcb7c42-59ff-11e4-9632-02ee2ddab7fe</string>
+			<key>PubNubSecretKey</key>
+			<string>sec-c-MTA5MjJmZWUtOGI4Ni00NTUwLTgzN2ItNWU0ZGIyZmI0MWY4</string>
+		</dict>
+		<key>DEV</key>
+		<dict>
+            <key>ServerURL</key>
+            <string>http://flips-dev95.arctouch.com</string>
+			<key>PubNubPublishKey</key>
+			<string>pub-c-07cf42ec-470f-486b-aeb3-5a0026e24dc0</string>
+			<key>PubNubSubscribeKey</key>
+			<string>sub-c-881a367e-dc6d-11e4-adc7-0619f8945a4f</string>
+			<key>PubNubSecretKey</key>
+			<string>sec-c-MmJmZDBhNWYtYTZhNi00OWI1LWI0Y2MtNGE2ZTIzNWU3MDFm</string>
+		</dict>
+		<key>PROD</key>
+		<dict>
+            <key>ServerURL</key>
+            <string>http://flips-qa.elasticbeanstalk.com</string>
+			<key>PubNubPublishKey</key>
+			<string>pub-c-18de6448-8924-43b5-9f5b-a333e7d7e6d9</string>
+			<key>PubNubSubscribeKey</key>
+			<string>sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe</string>
+			<key>PubNubSecretKey</key>
+			<string>sec-c-MzFhZjgyOWQtNDRiOS00NTBiLTkwZjAtOGUyM2U5MDNhMTdh</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

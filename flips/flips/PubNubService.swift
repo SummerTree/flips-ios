@@ -30,11 +30,10 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Initialization Methods
     
     override init() {
-        let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!
-        let pubnubPublishKey = infoPlist["PubNubPublishKey"] as String
-        let pubnubSubscribeKey = infoPlist["PubNubSubscribeKey"] as String
-        let pubnubSecretKey = infoPlist["PubNubSecretKey"] as String
- 
+        let pubnubPublishKey = AppSettings.currentSettings().PubNubPublishKey()
+        let pubnubSubscribeKey = AppSettings.currentSettings().PubNubSubscribeKey()
+        let pubnubSecretKey = AppSettings.currentSettings().PubNubSecretKey()
+    
         let cipherConfiguration = PNConfiguration(forOrigin: PUBNUB_ORIGIN,
             publishKey: pubnubPublishKey,
             subscribeKey: pubnubSubscribeKey,

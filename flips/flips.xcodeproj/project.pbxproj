@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0158939742db0dcedd3ddbae /* MessagesTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */; };
 		072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71B1A168CAC0011B212 /* BorderedView.swift */; };
 		072AD71F1A16B01B0011B212 /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
 		0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
@@ -33,64 +32,14 @@
 		07DAAF781A40ED9D0017DBA1 /* ChatLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */; };
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
-		0bc33393ddb88c6ca64d81a5 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A919D4A05F006F0A2F /* SwiftyJSON.swift */; };
-		0e0534f8774cb7f100ecebeb /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
-		0fef66f1ad9d7af8e38c54ff /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
-		0ffdec308ddb793617bd34ae /* ComposeTopViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */; };
-		1146cb99c2c6abba23547446 /* NSManagedObject+helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C53DC91A11C6B40011E6A2 /* NSManagedObject+helpers.m */; };
-		12008bacdae45f5c3272e713 /* PhoneNumberViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763B19DC57970060AAA8 /* PhoneNumberViewDelegate.swift */; };
-		14c246d1dbcee2caf9cf3cf7 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E519DC2A7A005E4343 /* SignUpViewController.swift */; };
-		195eedca167927d65f12afa7 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8fb57652445e95acd4a620f1 /* CFNetwork.framework */; };
 		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
-		1a3091ceeebc0aafcece8e96 /* ConfirmFlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07919F973A600D4CF74 /* ConfirmFlipView.swift */; };
-		1b2ddde60b35798e0c03d28c /* CustomBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB0B6719D5ABB900634C4B /* CustomBadgeView.swift */; };
-		1d3dac80bc725b92272bae35 /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6BD19D5E3160043790E /* PhoneNumberView.swift */; };
-		1d6743154ee3d88c8edc5cd6 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
-		2298fbb4724e7a83121c9f34 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */; };
-		24339cbfbc5b3a9b927758ed /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2B13F219DD91CF00C6ABF3 /* UIButtonExtensions.swift */; };
-		271ea55cb0272fa9da7b63ba /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E6E19E30A4A00FE8652 /* SplashScreenView.swift */; };
-		288025f53e73a6435b790bcc /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
-		2a3ecb4a235ac46c045f5c00 /* RoomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */; };
-		2c90b09b015d8fdbbd7db566 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CD19D1EE050026E641 /* ConversationTableViewCell.swift */; };
-		2d95f88b15de65fc747caa39 /* ConfirmPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8D19E4B705009CC59A /* ConfirmPictureView.swift */; };
-		2ddaf2ff68c9f9b09117a90c /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
-		2e1b658145138c09e0737aae /* UserFormViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946D919DEF1CC00779C73 /* UserFormViewDelegate.swift */; };
-		2e4025d02eaeb1fbb2750ebe /* ComposeBottomViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */; };
-		31d023673336c28ffa816443 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
-		320d7022467fcb57368de75e /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
-		32a04f56fa2ed23a154275b0 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
-		3350eb2b5abd19478d2a43c5 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
-		342d20dcebc89d8e7e9ac379 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
-		343d1815a1c50e5cc456321c /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
-		36e934c5860cd62551c6284b /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
-		37d6827a33b95292c68abcfd /* UpdateUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70736C371A0D582A004E55E4 /* UpdateUserProfileView.swift */; };
-		380bd1f9ddc435622d350f4f /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946D719DED95900779C73 /* StringExtensions.swift */; };
-		39bd0425dece71bbc2e6dc18 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */; };
-		3ca6e0fdf40c55e6fe0a724d /* GalleryAssetsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A44759B1A24B1020077A6F6 /* GalleryAssetsHelper.swift */; };
-		3d18b599789bf7c47688f17c /* MBContactPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B2B1A147B5800407A28 /* MBContactPicker.m */; };
-		3db784026f683b653f283cf2 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
-		3ed55f6f1df3b959270013e8 /* PhoneNumberHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */; };
-		3f143b9899844aeecf8812a0 /* FlipMessageWordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */; };
-		40070dfbab3d36980cc07dc7 /* AVCamPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1685719E32CD2004E2162 /* AVCamPreviewView.m */; };
-		436dfbd765d584dc6697da08 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711801A28D8B10082165A /* Device.m */; };
-		467e8ee2206f6aa5d11ed429 /* JoinStringsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A216D3D719E708E800AD10DB /* JoinStringsTextField.swift */; };
-		4a63679bf228c8fb92df9222 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7202EB1A36196F00FF5784 /* BubbleView.swift */; };
-		4bf686f14060cd2885214aaa /* ContactListHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70577C751A13AECF0006B1FD /* ContactListHelper.swift */; };
-		4c66434d1d90019dddbaf57c /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708BC2711A0BA80C00EE0DA5 /* UIApplicationExtension.swift */; };
-		4d62004413ebd139272cb3c1 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5919D882DE00BD6571 /* PrivacyPolicyController.swift */; };
-		4fa2aab428d59d37b5cc3870 /* BuilderWordDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */; };
-		5476cbf109ece6eb3f137e59 /* ChangeNumberInputPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7043DF351A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift */; };
-		54c9ba53793990150516f79e /* ContactDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A356E4419F95546002D923B /* ContactDataSource.swift */; };
-		55da5edcef86e23ad11754f2 /* MBContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B291A147B5800407A28 /* MBContactModel.m */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
-		572f8e9703783cec896c21c6 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711711A28D8AF0082165A /* Contact.m */; };
 		5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
 		574156A219D34F2B006F0A2F /* FlipError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A119D34F2B006F0A2F /* FlipError.swift */; };
 		574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A919D4A05F006F0A2F /* SwiftyJSON.swift */; };
 		5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
-		57763e5cf68062834633657b /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E110E19D0935F00D2BB88 /* LoginView.swift */; };
 		5784778F19DDB9530063A543 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5784778E19DDB9530063A543 /* DeviceService.swift */; };
 		5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2C819EEADB700021DD3 /* ChatViewController.swift */; };
 		5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */; };
@@ -102,26 +51,8 @@
 		57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */; };
 		57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */; };
 		57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
-		58294c661c185dd66e48ef3b /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719A19FFBF1B002695AC /* Downloader.swift */; };
-		583cfc8ad2dbcb04e2d66a58 /* FlipStringsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF519EEE7C70037B0C0 /* FlipStringsUtil.swift */; };
-		5a04c073619354035b54aa06 /* TakePictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683C19E31B8E004E2162 /* TakePictureViewDelegate.swift */; };
-		5a2f150a05a3a2cf3011deac /* FlipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733C819FADDE800D1E87B /* FlipService.swift */; };
-		5a70e4ad35ad3e69743a5946 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
-		5ec4ad7b081b3426ba2b978a /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
-		61d07aa89b5c03f6b701fab5 /* BuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D6CF019D4966700E39A1B /* BuilderViewController.swift */; };
-		6352f62063f9d48a7a608909 /* NotificationMessageViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA619E62F4E009CC59A /* NotificationMessageViewDelegate.swift */; };
-		661cdfd7044335ac80325bf1 /* BuilderAddWordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */; };
-		664f175b8f8fb4683e0fc1af /* ContactExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B011A14340C00407A28 /* ContactExtensions.swift */; };
-		67df51e55dac6553bb5bec0c /* ActivityIndicatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBED21A02B41400A7109C /* ActivityIndicatorHelper.swift */; };
-		682ca07ee728a6a28f25dab4 /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078D4BD81A1FC71100F24262 /* RoundImageView.swift */; };
-		6885aab54c1686633b99b8b6 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
-		6acba617a3692993f8f4b235 /* NewFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794A9C31A0A9AAD00DA8CFA /* NewFlipViewController.swift */; };
-		6bf26b718e4019125f7b9d56 /* RoomExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2ED6AE19FA7AA6000C6B86 /* RoomExtension.swift */; };
-		6dfecb41cd03471a0d22a292 /* NotificationMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9F19E62530009CC59A /* NotificationMessageView.swift */; };
-		6f8c1ff7bc09c373e371d01e /* MBContactCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B251A147B5800407A28 /* MBContactCollectionViewFlowLayout.m */; };
 		70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70057E9319DADF59004343ED /* DeviceHelper.swift */; };
 		7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
-		70289d869f3ecea03c4404d2 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704E111319D0ACAB00D2BB88 /* UIColorExtensions.swift */; };
 		702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702ED0241A1520D500E91881 /* BuilderAddWordTableViewController.swift */; };
 		7033584619E4160B0030CF11 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584519E4160B0030CF11 /* SettingsView.swift */; };
 		7033584819E462A20030CF11 /* PubNubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584719E462A20030CF11 /* PubNubService.swift */; };
@@ -164,16 +95,12 @@
 		70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7519D064450024EBDB /* AppDelegate.swift */; };
 		70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		70FD4E8019D064450024EBDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
-		7310092198ad95d4fc6d60c6 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */; };
 		73192A891A8B9B660010C949 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
 		731BA3001AC4B294007F12D5 /* CacheCleanupPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */; };
 		7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8071A89624F00446CD8 /* CacheJournal.swift */; };
 		7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
 		73D7279A1A83E7A1006DCC92 /* StorageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D727991A83E7A1006DCC92 /* StorageCache.swift */; };
-		7576d3fc93c156a5e249f71f /* MBContactCollectionViewContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B211A147B5800407A28 /* MBContactCollectionViewContactCell.m */; };
-		7876bdcfe43a3faddb9f8005 /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708E2E9519D1EF2F0076C3E4 /* UIFontExtensions.swift */; };
-		797f52e691e806ff92867335 /* DeviceDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0019EFECC900D0393F /* DeviceDataSource.swift */; };
 		7A03911C1A1CFD8300846BA1 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
 		7A07EB961AC07AC60002DE18 /* GroupParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07EB951AC07AC60002DE18 /* GroupParticipantsView.swift */; };
 		7A07EB9A1AC07ED80002DE18 /* GroupPartcipantsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07EB991AC07ED80002DE18 /* GroupPartcipantsTableViewCell.swift */; };
@@ -261,30 +188,6 @@
 		7AFB719B19FFBF1B002695AC /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB719A19FFBF1B002695AC /* Downloader.swift */; };
 		7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */; };
 		7AFE1F3F1AB8AB2D00E38673 /* FlipEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE1F3E1AB8AB2D00E38673 /* FlipEntry.m */; };
-		7b00d7878709597258267b57 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
-		7b1ded2644fb2233cce4e86f /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D6CEE19D4963100E39A1B /* SettingsViewController.swift */; };
-		7bbd5b05e1362ba9a7d0e182 /* TermsOfUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5219D859D700BD6571 /* TermsOfUseViewController.swift */; };
-		7df09d5e8fa2443d50777993 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
-		7fe4bec89091de49cf20c34e /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
-		80a88165c74c100f5f34ce13 /* UpdateUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70736C311A0D471F004E55E4 /* UpdateUserProfileViewController.swift */; };
-		8397d4bb461366c67a168ace /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27FA5019D58DFE005104A9 /* CustomNavigationBar.swift */; };
-		85ff9d1799dbfde8ec88f622 /* ChangeNumberInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7049A7A11A111998001D8121 /* ChangeNumberInfoView.swift */; };
-		88367c5049a591761d5b8bfb /* SyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075A0C0C1A44B86300E92760 /* SyncView.swift */; };
-		88ed610446aa5e48b8f97113 /* ChangeNumberInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7049A7A41A11238A001D8121 /* ChangeNumberInfoViewController.swift */; };
-		8a2df47ada2b06cf5aee7c30 /* ChangeNumberVerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3431A1240140044AEC1 /* ChangeNumberVerificationCodeView.swift */; };
-		8aee951e9a8cb1c7352205af /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */; };
-		8c08145a4e61ffa3225cf925 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
-		8c98666c7cc3dfbb69317fc0 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2C819EEADB700021DD3 /* ChatViewController.swift */; };
-		90ba4d1b6db65222a92f4b27 /* ImportContactTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709088241A1E163B009915FE /* ImportContactTableViewController.swift */; };
-		9394cef779009dd8d7522572 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
-		94741e80a4992cdb946f270d /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACBBED01A024F4300A7109C /* DateHelper.swift */; };
-		94fed75c8ffdfa87b35b5f27 /* BuilderIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */; };
-		97531a398b1c7f4d77b5b575 /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 709EC33B1A26074B00C13F05 /* SwiftTryCatch.m */; };
-		98906b98b5e01f63959cc852 /* NetworkReachabilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709D8EB91A2E1C9A007A119F /* NetworkReachabilityHelper.swift */; };
-		9c4e8fe1b90167adbd770fc7 /* VerificationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4819DB510D0066BEE7 /* VerificationCodeView.swift */; };
-		9ea95d30c8951c07888af56d /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584519E4160B0030CF11 /* SettingsView.swift */; };
-		9eea83cd80a2a24c3e6a1b21 /* TermsOfUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE4F19D8598600BD6571 /* TermsOfUseView.swift */; };
-		9f769fab6db42974ef9b67f0 /* MessageReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7696119E706B100CAA9A9 /* MessageReceiver.swift */; };
 		A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		A2124E9819DB268C00631FE0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
 		A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
@@ -300,10 +203,6 @@
 		A2D60FD219E45EFF001C92A0 /* NewPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */; };
 		A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
 		BE22C9951AA6BEC00079298E /* TempFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22C9941AA6BEC00079298E /* TempFiles.swift */; };
-		BE22C9961AA6BEC00079298E /* TempFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22C9941AA6BEC00079298E /* TempFiles.swift */; };
-		BE245F8D1AD2D57800859233 /* Info-DEV.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8A1AD2D57800859233 /* Info-DEV.plist */; };
-		BE245F8E1AD2D57800859233 /* Info-PROD.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8B1AD2D57800859233 /* Info-PROD.plist */; };
-		BE245F8F1AD2D57800859233 /* Info-QA.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8C1AD2D57800859233 /* Info-QA.plist */; };
 		BE245F931AD2D95900859233 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
 		BE245F941AD2D95900859233 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
 		BE245F951AD2D95900859233 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
@@ -504,12 +403,9 @@
 		BE2460591AD2D95900859233 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		BE24605B1AD2D95900859233 /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		BE24605C1AD2D95900859233 /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
-		BE24605D1AD2D95900859233 /* Info-QA.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8C1AD2D57800859233 /* Info-QA.plist */; };
 		BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		BE24605F1AD2D95900859233 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
-		BE2460601AD2D95900859233 /* Info-DEV.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8A1AD2D57800859233 /* Info-DEV.plist */; };
 		BE2460611AD2D95900859233 /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
-		BE2460621AD2D95900859233 /* Info-PROD.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8B1AD2D57800859233 /* Info-PROD.plist */; };
 		BE24606D1AD2D9C600859233 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
 		BE24606E1AD2D9C600859233 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
 		BE24606F1AD2D9C600859233 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
@@ -710,101 +606,20 @@
 		BE2461331AD2D9C600859233 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		BE2461351AD2D9C600859233 /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
 		BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0794A9C11A0A986800DA8CFA /* NewFlip.storyboard */; };
-		BE2461371AD2D9C600859233 /* Info-QA.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8C1AD2D57800859233 /* Info-QA.plist */; };
 		BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		BE2461391AD2D9C600859233 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
-		BE24613A1AD2D9C600859233 /* Info-DEV.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8A1AD2D57800859233 /* Info-DEV.plist */; };
 		BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
-		BE24613C1AD2D9C600859233 /* Info-PROD.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE245F8B1AD2D57800859233 /* Info-PROD.plist */; };
 		BE2E72081A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
-		BE2E72091A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
+		BE3897AA1AD43D5100471B88 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE3897A91AD43D5100471B88 /* Info.plist */; };
+		BE3A904D1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
+		BE3A904E1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
+		BE3A904F1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22611251AB6FEC4004C875A /* ProgressBar.swift */; };
 		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
 		F2DA965E1A38D06700BAA359 /* FlipMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA965D1A38D06700BAA359 /* FlipMessage.m */; };
-		a0a8f578dedcd0198f2af494 /* ChangeNumberVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DAB3451A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift */; };
-		a0b0a1a06cee44d31bf7db00 /* ThreadSafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075A0C081A43A1F800E92760 /* ThreadSafe.swift */; };
-		a39f7d83d9bcd515a2c3679a /* NextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71E1A16B01B0011B212 /* NextButton.swift */; };
-		a441fc8d03a66765fe778207 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB1685919E32DE3004E2162 /* AVFoundation.framework */; };
-		a715422097ca6a65830ec19b /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
-		a8588e884937486ad70ccfa6 /* FlipsWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A119D995E600FE4C34 /* FlipsWebViewController.swift */; };
-		aacefc60cf956282471ee2a9 /* ForgotPasswordVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCA19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift */; };
-		ab18775ff7f287d1bf629891 /* UIAlertViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CB53711A3E4A3C00853A78 /* UIAlertViewExtensions.swift */; };
-		ab1b404c25c6922c2be8162a /* CoreDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E1E19EDBFB800033164 /* CoreDataHandler.swift */; };
-		ab8eee90fcfe5787fd66157d /* FlipMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F2DA965D1A38D06700BAA359 /* FlipMessage.m */; };
-		acd0dd14a4ce3b92bd9b5100 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2CC19EEADD400021DD3 /* ChatView.swift */; };
-		ad038f5439fd9161ae78a907 /* OnboardingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */; };
-		ad1c1e9f22f38ad63b88ccf0 /* FlipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* FlipsView.swift */; };
-		ad803784753af97fc7499bc0 /* ForgotPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9919DB269700631FE0 /* ForgotPasswordViewDelegate.swift */; };
-		b0b73612083ad1f27706d077 /* MBContactCollectionViewEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B231A147B5800407A28 /* MBContactCollectionViewEntryCell.m */; };
-		b2b2a78286c1f2a54b5b2c42 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */; };
-		b32c43abfaa9cd91cb72e283 /* ChangeNumberInputPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7043DF371A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift */; };
-		b50221445ba96b758ba89e9c /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711831A28D8B10082165A /* User.m */; };
-		b57b45ab0ad9d69cba9e2f35 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */; };
-		b64ff3137cf820dd0fdcbcb0 /* TakePictureViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9119E56D41009CC59A /* TakePictureViewControllerDelegate.swift */; };
-		ba2c112a8ac25f9d76164763 /* BaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0419EFED2100D0393F /* BaseDataSource.swift */; };
-		ba6d364c3fa74b5f18271e92 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705B3DD81A03B9DD00E0D3E9 /* PreviewView.swift */; };
-		bdf2edda5a08b763c44d3878 /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
-		be7adc5db069a5f4431f42b2 /* FlipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619DB19DB2976005E4343 /* FlipsViewController.swift */; };
-		bf1167f65d6b606fec5f736f /* ImportContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67011A23C98A003FE3CA /* ImportContactViewController.swift */; };
-		bf99cca1f97fcf0373ac1da0 /* ConfirmFlipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705EF07C19F9768A00D4CF74 /* ConfirmFlipViewController.swift */; };
-		c2c9e497b8ef8dec1d8e9671 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E819DC2CF0005E4343 /* SignUpView.swift */; };
-		c3a01d3030b2dc6d292d7a7c /* FlipsWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B560A419D996F000FE4C34 /* FlipsWebView.swift */; };
-		c49f645aac189e17894ecd88 /* FlipText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF619EEE7C70037B0C0 /* FlipText.swift */; };
-		c4b10f3b9cbd443f012599df /* MessagesTopViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */; };
-		c571f967d25d7429f71d501b /* UIImagePickerController+StatusBarLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B7695819E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift */; };
-		c62bce0fab7b5c71187ded10 /* VerificationCodeViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3763D19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift */; };
-		c6a23c7b2263536d5254a35a /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B81A0A8E5E00725953 /* AboutViewController.swift */; };
-		cc8085af5920ec30087934af /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
-		cd9562909c82edbbe59c0a24 /* CropOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93FA819E6BBAA009CC59A /* CropOverlayView.swift */; };
-		cedb8b76cbd703f2f6216787 /* BuilderWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711741A28D8B00082165A /* BuilderWord.m */; };
-		cf1a7addf79f692478d82e51 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
-		cfcd599fd35637f3453b56d8 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */; };
-		d076fba65b95ff056aa164ba /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
-		d0b5fca60a8177cbe334bfe5 /* FlipsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7937A01A3085E500136144 /* FlipsHeaderView.swift */; };
-		d16f702ece453cb197212235 /* FlipTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2392BF819EEE7C70037B0C0 /* FlipTextView.swift */; };
-		d309985a44c4165edf919ae2 /* StringPhoneNumberExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B5B7681A30E59E0087AD61 /* StringPhoneNumberExtensions.swift */; };
-		d3bea59b553b8096359da8ee /* BorderedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072AD71B1A168CAC0011B212 /* BorderedView.swift */; };
-		d3f89c8970c104f6a487501a /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
-		d788bb9f7412070a44b0891d /* ChatLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAAF771A40ED9D0017DBA1 /* ChatLabel.swift */; };
-		d80780f42bb85e010f6618de /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F9319E574B6009CC59A /* UIImageExtensions.swift */; };
-		d859042b472d55da0712a59c /* AudioRecorderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7046C9B619F18EB100CBD72D /* AudioRecorderService.swift */; };
-		da44c185daec05d4e340d352 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792119DA07F30086A66B /* ComposeViewController.swift */; };
-		dbaca75a7a05f5eb660cc815 /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
-		dc26935ba97f2a28e15f6ec8 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A7E4C19EEF4E600033164 /* CameraView.swift */; };
-		dc8b1810acac91bcbc21a746 /* ContactPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECB01A11A61600D0277C /* ContactPhotoView.swift */; };
-		df19d8e7bc84d9d7b14cd1af /* MBContactCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B1F1A147B5800407A28 /* MBContactCollectionView.m */; };
-		e15b5d622a0f4ffe65c38e01 /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
-		e1b8cc614bd479e3eb1d6fe6 /* CustomNavigationBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11791C19DA03980086A66B /* CustomNavigationBarDelegate.swift */; };
-		e39fed40509679078da3ae21 /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1892CB19D1E97A0026E641 /* InboxViewController.swift */; };
-		e413db8baecebda9b8e887da /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705B3DDA1A03BBB400E0D3E9 /* PreviewViewController.swift */; };
-		e44636361c467f5aea6f70e0 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5784778E19DDB9530063A543 /* DeviceService.swift */; };
-		e56d901deadd87f843a01a4e /* NewPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FCB19E45EEA001C92A0 /* NewPasswordViewController.swift */; };
-		e5d6763e4e489743ed975264 /* VerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57EECE4619DB50390066BEE7 /* VerificationCodeViewController.swift */; };
-		e74386e49924879161f5d2ae /* FlipError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574156A119D34F2B006F0A2F /* FlipError.swift */; };
-		e8265806a60478ba43854d98 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */; };
-		e91a0b1e18b8a9f8e195b9e8 /* FlipMessageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3733DC19FE619300D1E87B /* FlipMessageExtension.swift */; };
-		ea35dd0273afa4855be8d581 /* PubNubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033584719E462A20030CF11 /* PubNubService.swift */; };
-		ea4e073c79cf5a32d862610a /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7056FE5519D8822900BD6571 /* PrivacyPolicyView.swift */; };
-		ea57e36aeffcc7d59984d033 /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
-		ea7a16aa6073bb89b875800f /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70BD0E7119E30C6300FE8652 /* SplashScreenViewController.swift */; };
-		ee453c251b7b60e4b3cfecfb /* UserDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */; };
-		f004231ac2140590b2618d49 /* MBContactCollectionViewPromptCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B66B271A147B5800407A28 /* MBContactCollectionViewPromptCell.m */; };
-		f214d547c07cbcd498fd92e4 /* ImportContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70AC67041A23C99F003FE3CA /* ImportContactView.swift */; };
-		f221d13eb22a0f2c9f44a32a /* FlipsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6DA1A01457A00E4CB2C /* FlipsViewCell.swift */; };
-		f2249d4d255d4f3dde01ba40 /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7024C19319DC6B85008EF445 /* AuthenticationHelper.swift */; };
-		f22e74de28a28d2160b853d2 /* ContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757ECA91A114FA500D0277C /* ContactTableViewCell.swift */; };
-		f29dfe861b69f5278e45c65d /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A3A6C019D5E4D90043790E /* PhoneNumberViewController.swift */; };
-		f2e96ee8e4cd7eb0ae56f3c8 /* FlipDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82E0219EFECDC00D0393F /* FlipDataSource.swift */; };
-		f3c740e76781fa92a89cb64a /* calabash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = eccdb957ef1d66d53d8d5dd9 /* calabash.framework */; };
-		f6ae7428ba7004088566a245 /* SelectedFlipOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D81A001E7A00E4CB2C /* SelectedFlipOverlayView.swift */; };
-		f97a07c50af97e156690f75d /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
-		fa6c53f6903fe1c5fee81d5c /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5786B2CB19EEADD400021DD3 /* ChatTableViewCell.swift */; };
-		fad749bd06e005b25d4f709c /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A2A5B51A0A8DFE00725953 /* AboutView.swift */; };
-		fde03864c27cb434b2baeff3 /* MessagesTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB946DB19DF35E700779C73 /* MessagesTopView.swift */; };
-		fdf0cc9b722e7fc01c928215 /* InboxViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A11792319DA08800086A66B /* InboxViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -915,7 +730,6 @@
 		731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheCleanupPolicy.swift; sourceTree = "<group>"; };
 		7330F8071A89624F00446CD8 /* CacheJournal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheJournal.swift; sourceTree = "<group>"; };
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
-		73D727971A83E721006DCC92 /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73D727991A83E7A1006DCC92 /* StorageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageCache.swift; sourceTree = "<group>"; };
 		7A03911B1A1CFD8300846BA1 /* MessageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
 		7A07EB951AC07AC60002DE18 /* GroupParticipantsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupParticipantsView.swift; sourceTree = "<group>"; };
@@ -1032,12 +846,11 @@
 		A2D60FCF19E45EFF001C92A0 /* NewPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordView.swift; sourceTree = "<group>"; };
 		A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordViewDelegate.swift; sourceTree = "<group>"; };
 		BE22C9941AA6BEC00079298E /* TempFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempFiles.swift; sourceTree = "<group>"; };
-		BE245F8A1AD2D57800859233 /* Info-DEV.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-DEV.plist"; sourceTree = "<group>"; };
-		BE245F8B1AD2D57800859233 /* Info-PROD.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-PROD.plist"; sourceTree = "<group>"; };
-		BE245F8C1AD2D57800859233 /* Info-QA.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-QA.plist"; sourceTree = "<group>"; };
 		BE2460681AD2D95900859233 /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2461421AD2D9C600859233 /* Flips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Flips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2E72071A98119400F237BE /* empty_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = empty_video.mov; sourceTree = "<group>"; };
+		BE3897A91AD43D5100471B88 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE3A904C1AD70DF300405EC8 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F22611251AB6FEC4004C875A /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
@@ -1075,17 +888,6 @@
 			files = (
 				BE2461321AD2D9C600859233 /* AVFoundation.framework in Frameworks */,
 				BE2461331AD2D9C600859233 /* libPods.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		e45ff4ecc5a08c739e14b0e7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				a441fc8d03a66765fe778207 /* AVFoundation.framework in Frameworks */,
-				320d7022467fcb57368de75e /* libPods.a in Frameworks */,
-				195eedca167927d65f12afa7 /* CFNetwork.framework in Frameworks */,
-				f3c740e76781fa92a89cb64a /* calabash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1603,7 +1405,6 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7019D064450024EBDB /* Flips.app */,
-				73D727971A83E721006DCC92 /* Flips.app */,
 				BE2460681AD2D95900859233 /* Flips.app */,
 				BE2461421AD2D9C600859233 /* Flips.app */,
 			);
@@ -1614,6 +1415,8 @@
 			isa = PBXGroup;
 			children = (
 				70FD4E7519D064450024EBDB /* AppDelegate.swift */,
+				BE3A904C1AD70DF300405EC8 /* AppSettings.swift */,
+				07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */,
 				7AB1685519E32CB0004E2162 /* Camera */,
 				704E110A19D08E3C00D2BB88 /* Controller */,
 				704E110C19D08E7B00D2BB88 /* CoreData */,
@@ -1621,7 +1424,6 @@
 				704E111519D0ACAF00D2BB88 /* Extensions */,
 				70057E9219DADEB5004343ED /* Helpers */,
 				70FD4E7F19D064450024EBDB /* Images.xcassets */,
-				07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */,
 				5707185619D19D180069064F /* Services */,
 				BE2E72061A98119400F237BE /* Resources */,
 				70FD4E7319D064450024EBDB /* Supporting Files */,
@@ -1634,11 +1436,9 @@
 		70FD4E7319D064450024EBDB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				BE245F8C1AD2D57800859233 /* Info-QA.plist */,
-				BE245F8A1AD2D57800859233 /* Info-DEV.plist */,
-				BE245F8B1AD2D57800859233 /* Info-PROD.plist */,
-				7AA3F93C1AB70DB500B562B9 /* DAKeyboardControl */,
+				BE3897A91AD43D5100471B88 /* Info.plist */,
 				70CA340D19D06E3D00995A19 /* ObjectiveCHeaders.h */,
+				7AA3F93C1AB70DB500B562B9 /* DAKeyboardControl */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1965,25 +1765,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		322455a3f1c63cdfc91580d3 /* flips-cal */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0856850a60001948e808f00a /* Build configuration list for PBXNativeTarget "flips-cal" */;
-			buildPhases = (
-				35536d6013a5c5e3da60745f /* Check Pods Manifest.lock */,
-				2e30ff81860137f4f002e900 /* Sources */,
-				e45ff4ecc5a08c739e14b0e7 /* Frameworks */,
-				cda3445602034ac09f868781 /* Resources */,
-				b81151e7ed526c632a705666 /* Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "flips-cal";
-			productName = "flips-cal";
-			productReference = 73D727971A83E721006DCC92 /* Flips.app */;
-			productType = "com.apple.product-type.application";
-		};
 		70FD4E6F19D064450024EBDB /* flips-QA */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 70FD4E9219D064450024EBDB /* Build configuration list for PBXNativeTarget "flips-QA" */;
@@ -2064,7 +1845,6 @@
 				70FD4E6F19D064450024EBDB /* flips-QA */,
 				BE245F901AD2D95900859233 /* flips-DEV */,
 				BE24606A1AD2D9C600859233 /* flips-PROD */,
-				322455a3f1c63cdfc91580d3 /* flips-cal */,
 			);
 		};
 /* End PBXProject section */
@@ -2076,12 +1856,10 @@
 			files = (
 				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
-				BE245F8F1AD2D57800859233 /* Info-QA.plist in Resources */,
+				BE3897AA1AD43D5100471B88 /* Info.plist in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
-				BE245F8D1AD2D57800859233 /* Info-DEV.plist in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
-				BE245F8E1AD2D57800859233 /* Info-PROD.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2091,12 +1869,9 @@
 			files = (
 				BE24605B1AD2D95900859233 /* empty_video.mov in Resources */,
 				BE24605C1AD2D95900859233 /* NewFlip.storyboard in Resources */,
-				BE24605D1AD2D95900859233 /* Info-QA.plist in Resources */,
 				BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */,
 				BE24605F1AD2D95900859233 /* Images.xcassets in Resources */,
-				BE2460601AD2D95900859233 /* Info-DEV.plist in Resources */,
 				BE2460611AD2D95900859233 /* SyncView.xib in Resources */,
-				BE2460621AD2D95900859233 /* Info-PROD.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2106,45 +1881,15 @@
 			files = (
 				BE2461351AD2D9C600859233 /* empty_video.mov in Resources */,
 				BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */,
-				BE2461371AD2D9C600859233 /* Info-QA.plist in Resources */,
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
 				BE2461391AD2D9C600859233 /* Images.xcassets in Resources */,
-				BE24613A1AD2D9C600859233 /* Info-DEV.plist in Resources */,
 				BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */,
-				BE24613C1AD2D9C600859233 /* Info-PROD.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		cda3445602034ac09f868781 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BE2E72091A98119400F237BE /* empty_video.mov in Resources */,
-				0fef66f1ad9d7af8e38c54ff /* NewFlip.storyboard in Resources */,
-				a715422097ca6a65830ec19b /* ContactTableViewCell.xib in Resources */,
-				5a70e4ad35ad3e69743a5946 /* Images.xcassets in Resources */,
-				d076fba65b95ff056aa164ba /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		35536d6013a5c5e3da60745f /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		3628194CFFFD4347B72D4904 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2235,202 +1980,9 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		b81151e7ed526c632a705666 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2e30ff81860137f4f002e900 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				f97a07c50af97e156690f75d /* Room.m in Sources */,
-				288025f53e73a6435b790bcc /* ForgotPasswordViewController.swift in Sources */,
-				1d6743154ee3d88c8edc5cd6 /* MessageService.swift in Sources */,
-				9394cef779009dd8d7522572 /* ForgotPasswordView.swift in Sources */,
-				3350eb2b5abd19478d2a43c5 /* NSDateExtension.swift in Sources */,
-				2ddaf2ff68c9f9b09117a90c /* LoginViewController.swift in Sources */,
-				c4b10f3b9cbd443f012599df /* MessagesTopViewDelegate.swift in Sources */,
-				b50221445ba96b758ba89e9c /* User.m in Sources */,
-				ad1c1e9f22f38ad63b88ccf0 /* FlipsView.swift in Sources */,
-				e15b5d622a0f4ffe65c38e01 /* ConfirmPictureViewDelegate.swift in Sources */,
-				55da5edcef86e23ad11754f2 /* MBContactModel.m in Sources */,
-				0ffdec308ddb793617bd34ae /* ComposeTopViewContainer.swift in Sources */,
-				b64ff3137cf820dd0fdcbcb0 /* TakePictureViewControllerDelegate.swift in Sources */,
-				d3bea59b553b8096359da8ee /* BorderedView.swift in Sources */,
-				fa6c53f6903fe1c5fee81d5c /* ChatTableViewCell.swift in Sources */,
-				2298fbb4724e7a83121c9f34 /* UITableViewExtensions.swift in Sources */,
-				583cfc8ad2dbcb04e2d66a58 /* FlipStringsUtil.swift in Sources */,
-				BE22C9961AA6BEC00079298E /* TempFiles.swift in Sources */,
-				664f175b8f8fb4683e0fc1af /* ContactExtensions.swift in Sources */,
-				ba6d364c3fa74b5f18271e92 /* PreviewView.swift in Sources */,
-				9f769fab6db42974ef9b67f0 /* MessageReceiver.swift in Sources */,
-				88ed610446aa5e48b8f97113 /* ChangeNumberInfoViewController.swift in Sources */,
-				5476cbf109ece6eb3f137e59 /* ChangeNumberInputPhoneView.swift in Sources */,
-				0bc33393ddb88c6ca64d81a5 /* SwiftyJSON.swift in Sources */,
-				9c4e8fe1b90167adbd770fc7 /* VerificationCodeView.swift in Sources */,
-				436dfbd765d584dc6697da08 /* Device.m in Sources */,
-				0158939742db0dcedd3ddbae /* MessagesTopViewCell.swift in Sources */,
-				b57b45ab0ad9d69cba9e2f35 /* UIImage+ImageEffects.m in Sources */,
-				b0b73612083ad1f27706d077 /* MBContactCollectionViewEntryCell.m in Sources */,
-				40070dfbab3d36980cc07dc7 /* AVCamPreviewView.m in Sources */,
-				d788bb9f7412070a44b0891d /* ChatLabel.swift in Sources */,
-				6352f62063f9d48a7a608909 /* NotificationMessageViewDelegate.swift in Sources */,
-				f004231ac2140590b2618d49 /* MBContactCollectionViewPromptCell.m in Sources */,
-				f6ae7428ba7004088566a245 /* SelectedFlipOverlayView.swift in Sources */,
-				e74386e49924879161f5d2ae /* FlipError.swift in Sources */,
-				3db784026f683b653f283cf2 /* UILabelExtensions.swift in Sources */,
-				f22e74de28a28d2160b853d2 /* ContactTableViewCell.swift in Sources */,
-				e1b8cc614bd479e3eb1d6fe6 /* CustomNavigationBarDelegate.swift in Sources */,
-				6dfecb41cd03471a0d22a292 /* NotificationMessageView.swift in Sources */,
-				da44c185daec05d4e340d352 /* ComposeViewController.swift in Sources */,
-				bf99cca1f97fcf0373ac1da0 /* ConfirmFlipViewController.swift in Sources */,
-				e39fed40509679078da3ae21 /* InboxViewController.swift in Sources */,
-				cedb8b76cbd703f2f6216787 /* BuilderWord.m in Sources */,
-				88367c5049a591761d5b8bfb /* SyncView.swift in Sources */,
-				2e4025d02eaeb1fbb2750ebe /* ComposeBottomViewContainer.swift in Sources */,
-				3ca6e0fdf40c55e6fe0a724d /* GalleryAssetsHelper.swift in Sources */,
-				cc8085af5920ec30087934af /* NSErrorExtensions.swift in Sources */,
-				97531a398b1c7f4d77b5b575 /* SwiftTryCatch.m in Sources */,
-				342d20dcebc89d8e7e9ac379 /* SignUpViewDelegate.swift in Sources */,
-				7b00d7878709597258267b57 /* TakePictureView.swift in Sources */,
-				6f8c1ff7bc09c373e371d01e /* MBContactCollectionViewFlowLayout.m in Sources */,
-				fde03864c27cb434b2baeff3 /* MessagesTopView.swift in Sources */,
-				31d023673336c28ffa816443 /* UIImageViewExtensions.swift in Sources */,
-				61d07aa89b5c03f6b701fab5 /* BuilderViewController.swift in Sources */,
-				7bbd5b05e1362ba9a7d0e182 /* TermsOfUseViewController.swift in Sources */,
-				7310092198ad95d4fc6d60c6 /* PlayerView.swift in Sources */,
-				0e0534f8774cb7f100ecebeb /* AppDelegate.swift in Sources */,
-				e413db8baecebda9b8e887da /* PreviewViewController.swift in Sources */,
-				54c9ba53793990150516f79e /* ContactDataSource.swift in Sources */,
-				fdf0cc9b722e7fc01c928215 /* InboxViewDelegate.swift in Sources */,
-				a0a8f578dedcd0198f2af494 /* ChangeNumberVerificationCodeViewController.swift in Sources */,
-				df19d8e7bc84d9d7b14cd1af /* MBContactCollectionView.m in Sources */,
-				7876bdcfe43a3faddb9f8005 /* UIFontExtensions.swift in Sources */,
-				dc8b1810acac91bcbc21a746 /* ContactPhotoView.swift in Sources */,
-				343d1815a1c50e5cc456321c /* NewPasswordView.swift in Sources */,
-				6acba617a3692993f8f4b235 /* NewFlipViewController.swift in Sources */,
-				c49f645aac189e17894ecd88 /* FlipText.swift in Sources */,
-				85ff9d1799dbfde8ec88f622 /* ChangeNumberInfoView.swift in Sources */,
-				4bf686f14060cd2885214aaa /* ContactListHelper.swift in Sources */,
-				57763e5cf68062834633657b /* LoginView.swift in Sources */,
-				9eea83cd80a2a24c3e6a1b21 /* TermsOfUseView.swift in Sources */,
-				80a88165c74c100f5f34ce13 /* UpdateUserProfileViewController.swift in Sources */,
-				cf1a7addf79f692478d82e51 /* UserService.swift in Sources */,
-				9ea95d30c8951c07888af56d /* SettingsView.swift in Sources */,
-				c571f967d25d7429f71d501b /* UIImagePickerController+StatusBarLight.swift in Sources */,
-				ea57e36aeffcc7d59984d033 /* UserExtension.swift in Sources */,
-				bf1167f65d6b606fec5f736f /* ImportContactViewController.swift in Sources */,
-				39bd0425dece71bbc2e6dc18 /* UIViewControllerExtensions.swift in Sources */,
-				797f52e691e806ff92867335 /* DeviceDataSource.swift in Sources */,
-				e8265806a60478ba43854d98 /* LocalizedString.swift in Sources */,
-				4d62004413ebd139272cb3c1 /* PrivacyPolicyController.swift in Sources */,
-				2a3ecb4a235ac46c045f5c00 /* RoomDataSource.swift in Sources */,
-				cfcd599fd35637f3453b56d8 /* RoomService.swift in Sources */,
-				ea4e073c79cf5a32d862610a /* PrivacyPolicyView.swift in Sources */,
-				4a63679bf228c8fb92df9222 /* BubbleView.swift in Sources */,
-				1a3091ceeebc0aafcece8e96 /* ConfirmFlipView.swift in Sources */,
-				d80780f42bb85e010f6618de /* UIImageExtensions.swift in Sources */,
-				58294c661c185dd66e48ef3b /* Downloader.swift in Sources */,
-				ee453c251b7b60e4b3cfecfb /* UserDataSource.swift in Sources */,
-				acd0dd14a4ce3b92bd9b5100 /* ChatView.swift in Sources */,
-				d859042b472d55da0712a59c /* AudioRecorderService.swift in Sources */,
-				d16f702ece453cb197212235 /* FlipTextView.swift in Sources */,
-				aacefc60cf956282471ee2a9 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
-				ad038f5439fd9161ae78a907 /* OnboardingHelper.swift in Sources */,
-				8397d4bb461366c67a168ace /* CustomNavigationBar.swift in Sources */,
-				5a04c073619354035b54aa06 /* TakePictureViewDelegate.swift in Sources */,
-				ab18775ff7f287d1bf629891 /* UIAlertViewExtensions.swift in Sources */,
-				ab1b404c25c6922c2be8162a /* CoreDataHandler.swift in Sources */,
-				8aee951e9a8cb1c7352205af /* UIViewExtensions.swift in Sources */,
-				e5d6763e4e489743ed975264 /* VerificationCodeViewController.swift in Sources */,
-				14c246d1dbcee2caf9cf3cf7 /* SignUpViewController.swift in Sources */,
-				5ec4ad7b081b3426ba2b978a /* BuilderService.swift in Sources */,
-				94fed75c8ffdfa87b35b5f27 /* BuilderIntroductionViewController.swift in Sources */,
-				1b2ddde60b35798e0c03d28c /* CustomBadgeView.swift in Sources */,
-				67df51e55dac6553bb5bec0c /* ActivityIndicatorHelper.swift in Sources */,
-				7576d3fc93c156a5e249f71f /* MBContactCollectionViewContactCell.m in Sources */,
-				98906b98b5e01f63959cc852 /* NetworkReachabilityHelper.swift in Sources */,
-				467e8ee2206f6aa5d11ed429 /* JoinStringsTextField.swift in Sources */,
-				5a2f150a05a3a2cf3011deac /* FlipService.swift in Sources */,
-				3d18b599789bf7c47688f17c /* MBContactPicker.m in Sources */,
-				ab8eee90fcfe5787fd66157d /* FlipMessage.m in Sources */,
-				c62bce0fab7b5c71187ded10 /* VerificationCodeViewDelegate.swift in Sources */,
-				682ca07ee728a6a28f25dab4 /* RoundImageView.swift in Sources */,
-				1d3dac80bc725b92272bae35 /* PhoneNumberView.swift in Sources */,
-				37d6827a33b95292c68abcfd /* UpdateUserProfileView.swift in Sources */,
-				4fa2aab428d59d37b5cc3870 /* BuilderWordDataSource.swift in Sources */,
-				a0b0a1a06cee44d31bf7db00 /* ThreadSafe.swift in Sources */,
-				3ed55f6f1df3b959270013e8 /* PhoneNumberHelper.swift in Sources */,
-				a39f7d83d9bcd515a2c3679a /* NextButton.swift in Sources */,
-				1146cb99c2c6abba23547446 /* NSManagedObject+helpers.m in Sources */,
-				12008bacdae45f5c3272e713 /* PhoneNumberViewDelegate.swift in Sources */,
-				90ba4d1b6db65222a92f4b27 /* ImportContactTableViewController.swift in Sources */,
-				f221d13eb22a0f2c9f44a32a /* FlipsViewCell.swift in Sources */,
-				2e1b658145138c09e0737aae /* UserFormViewDelegate.swift in Sources */,
-				94741e80a4992cdb946f270d /* DateHelper.swift in Sources */,
-				ba2c112a8ac25f9d76164763 /* BaseDataSource.swift in Sources */,
-				bdf2edda5a08b763c44d3878 /* FlipsService.swift in Sources */,
-				d309985a44c4165edf919ae2 /* StringPhoneNumberExtensions.swift in Sources */,
-				b2b2a78286c1f2a54b5b2c42 /* SettingsTableViewCell.swift in Sources */,
-				dbaca75a7a05f5eb660cc815 /* FlipPlayerItem.swift in Sources */,
-				70289d869f3ecea03c4404d2 /* UIColorExtensions.swift in Sources */,
-				32a04f56fa2ed23a154275b0 /* TakePictureViewController.swift in Sources */,
-				e56d901deadd87f843a01a4e /* NewPasswordViewController.swift in Sources */,
-				7fe4bec89091de49cf20c34e /* UserFormView.swift in Sources */,
-				572f8e9703783cec896c21c6 /* Contact.m in Sources */,
-				be7adc5db069a5f4431f42b2 /* FlipsViewController.swift in Sources */,
-				fad749bd06e005b25d4f709c /* AboutView.swift in Sources */,
-				ad803784753af97fc7499bc0 /* ForgotPasswordViewDelegate.swift in Sources */,
-				a8588e884937486ad70ccfa6 /* FlipsWebViewController.swift in Sources */,
-				f2e96ee8e4cd7eb0ae56f3c8 /* FlipDataSource.swift in Sources */,
-				b32c43abfaa9cd91cb72e283 /* ChangeNumberInputPhoneViewController.swift in Sources */,
-				c6a23c7b2263536d5254a35a /* AboutViewController.swift in Sources */,
-				271ea55cb0272fa9da7b63ba /* SplashScreenView.swift in Sources */,
-				ea7a16aa6073bb89b875800f /* SplashScreenViewController.swift in Sources */,
-				ea35dd0273afa4855be8d581 /* PubNubService.swift in Sources */,
-				24339cbfbc5b3a9b927758ed /* UIButtonExtensions.swift in Sources */,
-				d3f89c8970c104f6a487501a /* FlipMessageDataSource.swift in Sources */,
-				f2249d4d255d4f3dde01ba40 /* AuthenticationHelper.swift in Sources */,
-				8a2df47ada2b06cf5aee7c30 /* ChangeNumberVerificationCodeView.swift in Sources */,
-				dc26935ba97f2a28e15f6ec8 /* CameraView.swift in Sources */,
-				4c66434d1d90019dddbaf57c /* UIApplicationExtension.swift in Sources */,
-				e91a0b1e18b8a9f8e195b9e8 /* FlipMessageExtension.swift in Sources */,
-				6885aab54c1686633b99b8b6 /* NewPasswordViewDelegate.swift in Sources */,
-				f214d547c07cbcd498fd92e4 /* ImportContactView.swift in Sources */,
-				3f143b9899844aeecf8812a0 /* FlipMessageWordListView.swift in Sources */,
-				f29dfe861b69f5278e45c65d /* PhoneNumberViewController.swift in Sources */,
-				7b1ded2644fb2233cce4e86f /* SettingsViewController.swift in Sources */,
-				380bd1f9ddc435622d350f4f /* StringExtensions.swift in Sources */,
-				c3a01d3030b2dc6d292d7a7c /* FlipsWebView.swift in Sources */,
-				c2c9e497b8ef8dec1d8e9671 /* SignUpView.swift in Sources */,
-				661cdfd7044335ac80325bf1 /* BuilderAddWordTableViewController.swift in Sources */,
-				cd9562909c82edbbe59c0a24 /* CropOverlayView.swift in Sources */,
-				36e934c5860cd62551c6284b /* DeviceHelper.swift in Sources */,
-				7df09d5e8fa2443d50777993 /* VideoComposer.m in Sources */,
-				2d95f88b15de65fc747caa39 /* ConfirmPictureView.swift in Sources */,
-				8c08145a4e61ffa3225cf925 /* InboxView.swift in Sources */,
-				e44636361c467f5aea6f70e0 /* DeviceService.swift in Sources */,
-				6bf26b718e4019125f7b9d56 /* RoomExtension.swift in Sources */,
-				8c98666c7cc3dfbb69317fc0 /* ChatViewController.swift in Sources */,
-				d0b5fca60a8177cbe334bfe5 /* FlipsHeaderView.swift in Sources */,
-				2c90b09b015d8fdbbd7db566 /* ConversationTableViewCell.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		70FD4E6C19D064450024EBDB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2453,6 +2005,7 @@
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
+				BE3A904D1AD70DF300405EC8 /* AppSettings.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
 				A2392BF919EEE7C70037B0C0 /* FlipStringsUtil.swift in Sources */,
 				07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */,
@@ -2656,6 +2209,7 @@
 				BE245FA21AD2D95900859233 /* TakePictureViewControllerDelegate.swift in Sources */,
 				BE245FA31AD2D95900859233 /* BorderedView.swift in Sources */,
 				BE245FA41AD2D95900859233 /* ChatTableViewCell.swift in Sources */,
+				BE3A904E1AD70DF300405EC8 /* AppSettings.swift in Sources */,
 				BE245FA51AD2D95900859233 /* UITableViewExtensions.swift in Sources */,
 				BE245FA61AD2D95900859233 /* FlipStringsUtil.swift in Sources */,
 				BE245FA71AD2D95900859233 /* ContactExtensions.swift in Sources */,
@@ -2859,6 +2413,7 @@
 				BE24607C1AD2D9C600859233 /* TakePictureViewControllerDelegate.swift in Sources */,
 				BE24607D1AD2D9C600859233 /* BorderedView.swift in Sources */,
 				BE24607E1AD2D9C600859233 /* ChatTableViewCell.swift in Sources */,
+				BE3A904F1AD70DF300405EC8 /* AppSettings.swift in Sources */,
 				BE24607F1AD2D9C600859233 /* UITableViewExtensions.swift in Sources */,
 				BE2460801AD2D9C600859233 /* FlipStringsUtil.swift in Sources */,
 				BE2460811AD2D9C600859233 /* ContactExtensions.swift in Sources */,
@@ -3130,10 +2685,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-QA.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				OTHER_SWIFT_FLAGS = "-DQA -D DEBUG";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3151,9 +2707,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-QA.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DQA";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3171,10 +2729,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-DEV.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				OTHER_SWIFT_FLAGS = "-DDEV -D DEBUG";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3192,9 +2751,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-DEV.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DDEV";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3212,9 +2773,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-DEV.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DDEV";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3232,10 +2795,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-PROD.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				OTHER_SWIFT_FLAGS = "-DPROD -D DEBUG";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3253,9 +2817,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-PROD.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DPROD";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3273,9 +2839,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-PROD.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DPROD";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -3328,120 +2896,21 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "flips/Info-QA.plist";
+				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DQA";
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Distribution;
-		};
-		b52cb35e9cc9396fb373f406 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				INFOPLIST_FILE = "flips/Info-QA.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-force_load",
-					"\"$(SRCROOT)/calabash.framework/calabash\"",
-					"-lstdc++",
-				);
-				PRODUCT_NAME = Flips;
-				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
-			};
-			name = Distribution;
-		};
-		c83a431ce25abd31670bbf3c /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B391FD29BBD8E8F0D3CEC0C /* Pods.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				INFOPLIST_FILE = "flips/Info-QA.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-force_load",
-					"\"$(SRCROOT)/calabash.framework/calabash\"",
-					"-lstdc++",
-				);
-				OTHER_SWIFT_FLAGS = "-D DEBUG";
-				PRODUCT_NAME = Flips;
-				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
-			};
-			name = Debug;
-		};
-		d811e90c5faeba6862f01b05 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C42F2704A96077C5800507B0 /* Pods.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				INFOPLIST_FILE = "flips/Info-QA.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-force_load",
-					"\"$(SRCROOT)/calabash.framework/calabash\"",
-					"-lstdc++",
-				);
-				PRODUCT_NAME = Flips;
-				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0856850a60001948e808f00a /* Build configuration list for PBXNativeTarget "flips-cal" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				c83a431ce25abd31670bbf3c /* Debug */,
-				d811e90c5faeba6862f01b05 /* Release */,
-				b52cb35e9cc9396fb373f406 /* Distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		70FD4E6B19D064450024EBDB /* Build configuration list for PBXProject "flips" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

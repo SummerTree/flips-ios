@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-               BuildableName = "Flips-QA.app"
+               BuildableName = "Flips.app"
                BlueprintName = "flips-QA"
                ReferencedContainer = "container:flips.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-            BuildableName = "Flips-QA.app"
+            BuildableName = "Flips.app"
             BlueprintName = "flips-QA"
             ReferencedContainer = "container:flips.xcodeproj">
          </BuildableReference>
@@ -63,7 +63,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-            BuildableName = "Flips-QA.app"
+            BuildableName = "Flips.app"
             BlueprintName = "flips-QA"
             ReferencedContainer = "container:flips.xcodeproj">
          </BuildableReference>
@@ -89,7 +89,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "70FD4E6F19D064450024EBDB"
-            BuildableName = "Flips-QA.app"
+            BuildableName = "Flips.app"
             BlueprintName = "flips-QA"
             ReferencedContainer = "container:flips.xcodeproj">
          </BuildableReference>
