@@ -365,13 +365,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             }
         }
         
-        let currentOffset = scrollView.contentSize.height - scrollView.contentOffset.y
-        println("\nscrollView.contentSize.height: \(scrollView.contentSize.height)")
-        println("scrollView.contentOffset.y: \(scrollView.contentOffset.y)")
-        println("tableView.frame.size.height: \(tableView.frame.size.height)")
-        println("currentOffset")
-        println("\n")
-        
         let isKeyboardVisible: Bool = self.replyTextField.isFirstResponder()
         // I'm checking if the superview is not nil to make sure that the view is visible.
         if (isKeyboardVisible && (DeviceHelper.sharedInstance.systemVersion() < 8) && (self.superview != nil)) {
