@@ -107,7 +107,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             var alreadyReceivedMessage: Bool = false
             for flipMessage in flipMessagesArray {
                 if (flipMessage.flipMessageID == flipMessageID) {
-                    alreadyReceivedMessage = true
+                    return
                 }
             }
             
