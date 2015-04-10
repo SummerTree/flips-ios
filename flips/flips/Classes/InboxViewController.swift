@@ -146,18 +146,20 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         let time = 1 * Double(NSEC_PER_SEC)
         let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
         dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            self.downloadingMessageFromNotificationRetries++
-            if (self.downloadingMessageFromNotificationRetries < self.DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES) {
-                self.openRoomForPushNotificationIfMessageReceived()
-            } else {
-                self.hideActivityIndicator()
-                self.roomIdToShow = nil
-                self.flipMessageIdToShow = nil
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
-                    alertView.show()
-                    
-                })
+            if let roomID = self.roomIdToShow { // Just to make sure that the user didn't close this screen.
+                self.downloadingMessageFromNotificationRetries++
+                if (self.downloadingMessageFromNotificationRetries < self.DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES) {
+                    self.openRoomForPushNotificationIfMessageReceived()
+                } else {
+                    self.hideActivityIndicator()
+                    self.roomIdToShow = nil
+                    self.flipMessageIdToShow = nil
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
+                        alertView.show()
+                        
+                    })
+                }
             }
         })
     }
