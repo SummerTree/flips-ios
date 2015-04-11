@@ -24,7 +24,8 @@ public class BlurredThumbnailsCache: ThumbnailsDataSource {
     }
     
     init() {
-        self.cache = StorageCache(cacheID: "blurredThumbnailsCache", cacheDirectoryName: "blurred_thumbnails_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
+        self.cache = StorageCache(cacheID: "blurredThumbnailsCache", cacheDirectoryName: "blurred_thumbnails_cache", scheduleCleanup: CacheCleanupPolicy.sharedInstance.scheduleCleanup)
+        CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
     func get(remoteURL: NSURL, success: StorageCache.CacheSuccessCallback?, failure: StorageCache.CacheFailureCallback?) -> StorageCache.CacheGetResponse {
