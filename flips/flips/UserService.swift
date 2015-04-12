@@ -98,7 +98,7 @@ public class UserService: FlipsService {
     
     // MARK: - Sign-in
     
-    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) -> ServiceResult {
+    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) -> ReturnValue {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return .NO_INTERNET_CONNECTION
