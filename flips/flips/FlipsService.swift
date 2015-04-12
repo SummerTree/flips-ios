@@ -32,6 +32,11 @@ public class FlipsService : NSObject {
     private let BACKEND_TIMED_OUT_MESSAGE: String = "The request timed out."
     private let APP_VERSION_HEADER: String = "app_version"
     
+    public enum ReturnValue {
+        case NO_INTERNET_CONNECTION
+        case WAITING_FOR_RESPONSE
+    }
+    
     
     // MARK: - Service Methods
     

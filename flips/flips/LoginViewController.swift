@@ -68,9 +68,9 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     }
     
     func loginViewDidTapSignInButton(loginView: LoginView!, username: String, password: String) {
-        showActivityIndicator()
-        UserService.sharedInstance.signIn(username, password: password, success: { (user) -> Void in
+        let returnValue = UserService.sharedInstance.signIn(username, password: password, success: { (user) -> Void in
             if (user == nil) {
+                self.hideActivityIndicator()
                 self.loginView.showValidationErrorInCredentialFields()
                 return
             }
@@ -79,8 +79,8 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             AuthenticationHelper.sharedInstance.onLogin(authenticatedUser)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 PersistentManager.sharedInstance.syncUserData({ (success, FlipError, userDataSource) -> Void in
-                    self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.hideActivityIndicator()
                         if (success) {
                             var inboxViewController = InboxViewController()
                             inboxViewController.userDataSource = userDataSource
@@ -92,14 +92,12 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         }) { (flipError) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.hideActivityIndicator()
-                println(flipError!.error)
-                self.loginView.showValidationErrorInCredentialFields()
-                
-                if (flipError != nil) {
-                    var alertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
-                    alertView.show()
-                }
+                self.loginView.showValidationErrorInCredentialFields(error: flipError)
             })
+        }
+        
+        if (returnValue == FlipsService.ReturnValue.WAITING_FOR_RESPONSE) {
+            showActivityIndicator()
         }
     }
     
