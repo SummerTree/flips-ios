@@ -143,7 +143,7 @@ class LoginView : UIView, UITextFieldDelegate {
         self.passwordTextField.text = nil
     }
     
-    func showValidationErrorInCredentialFields() {
+    func showValidationErrorInCredentialFields(error: FlipError? = nil) {
         
         if (!self.isInformedWrongPassword) {
             self.isInformedWrongPassword = true
@@ -159,6 +159,11 @@ class LoginView : UIView, UITextFieldDelegate {
                 self.passwordTextField.rightView?.alpha = 1.0
                 self.forgotPasswordButton.alpha = 1.0
             })
+        }
+
+        if let flipError = error {
+            var alertView = UIAlertView(title: flipError.error, message: flipError.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
         }
         
     }
