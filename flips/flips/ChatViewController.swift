@@ -15,7 +15,10 @@ import Foundation
 class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
     
     private let groupTitle: String = NSLocalizedString("Group Chat")
-    
+
+    private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
+    private var downloadingMessageFromNotificationRetries: Int = 0
+
     private var chatView: ChatView!
     private var groupParticipantsView: GroupParticipantsView?
     
@@ -26,6 +29,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     private var flipMessageIdFromPushNotification: String?
     
+
     // MARK: - Initializers
     
     required init(coder: NSCoder) {
@@ -103,16 +107,25 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.chatView.viewWillAppear()
         
         if let flipMessageID = self.flipMessageIdFromPushNotification {
-            let flipMessagesArray: [FlipMessage] = self.flipMessages.array as [FlipMessage]
-            var alreadyReceivedMessage: Bool = false
-            for flipMessage in flipMessagesArray {
-                if (flipMessage.flipMessageID == flipMessageID) {
-                    return
+            if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                self.flipMessageIdFromPushNotification = nil
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    let alertView: UIAlertView = UIAlertView(title: "", message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                })
+            } else {
+                let flipMessagesArray: [FlipMessage] = self.flipMessages.array as [FlipMessage]
+                var alreadyReceivedMessage: Bool = false
+                for flipMessage in flipMessagesArray {
+                    if (flipMessage.flipMessageID == flipMessageID) {
+                        return
+                    }
                 }
-            }
-            
-            if (!alreadyReceivedMessage) {
-                self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+                
+                if (!alreadyReceivedMessage) {
+                    self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+                    self.showMessageFromReceivedPushNotificationWhenDownloaded()
+                }
             }
         }
     }
@@ -170,6 +183,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         }
     }
     
+    
     // MARK: - jump to newest message
     
     func showChatViewNewestMessage(shouldScrollAnimated: Bool) {
@@ -177,6 +191,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             self.chatView.showNewestMessage(shouldScrollAnimated: shouldScrollAnimated)
         }
     }
+    
     
     // MARK: - Delegate methods
     
@@ -216,6 +231,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         })
     }
 
+    
     // MARK: - ChatViewDataSource
     
     func numberOfFlipMessages(chatView: ChatView) -> Int {
@@ -245,15 +261,72 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             if let flipMessageIdReceived: String = notification.userInfo?[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as? String {
                 if (flipMessageIdReceived == self.flipMessageIdFromPushNotification) {
                     scrollToReceivedMessage = true
+                    self.flipMessageIdFromPushNotification = nil
                 }
             }
         }
 
+        self.refreshThreadView(scrollToReceivedMessage)
+    }
+    
+    private func refreshThreadView(scrollToReceivedMessage: Bool) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.chatView.loadNewFlipMessages()
             self.showChatViewNewestMessage(scrollToReceivedMessage)
             if (scrollToReceivedMessage) {
                 self.hideActivityIndicator()
+            }
+        })
+    }
+    
+    
+    // MARK: - Message From Push Notification Handlers
+    
+    private func showMessageFromReceivedPushNotificationWhenDownloaded() {
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            self.flipMessageIdFromPushNotification = nil
+            self.hideActivityIndicator()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let alertView: UIAlertView = UIAlertView(title: "", message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            })
+        } else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                if let flipMessageID = self.flipMessageIdFromPushNotification {
+                    var flipMessageAlreadyReceived = false
+                    let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
+                    if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
+                        flipMessageAlreadyReceived = true
+                        self.flipMessageIdFromPushNotification = nil
+                    }
+                    
+                    if (flipMessageAlreadyReceived) {
+                        self.refreshThreadView(true)
+                        self.hideActivityIndicator()
+                    } else {
+                        self.retryToShowMessageFromPushNotification()
+                    }
+                }
+            })
+        }
+    }
+    
+    private func retryToShowMessageFromPushNotification() {
+        let time = 1 * Double(NSEC_PER_SEC)
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
+        dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            if let flipMessageID = self.flipMessageIdFromPushNotification { // Just to make sure that the user didn't close this screen.
+                self.downloadingMessageFromNotificationRetries++
+                if (self.downloadingMessageFromNotificationRetries < self.DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES) {
+                    self.showMessageFromReceivedPushNotificationWhenDownloaded()
+                } else {
+                    self.hideActivityIndicator()
+                    self.flipMessageIdFromPushNotification = nil
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
+                        alertView.show()
+                    })
+                }
             }
         })
     }
