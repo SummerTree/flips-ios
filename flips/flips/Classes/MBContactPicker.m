@@ -177,17 +177,16 @@ static CGFloat const ROW_HEIGHT = 56.0;
 {
     if ([text length] > 10) //whitespace before and at least 10 digits
     {
-        NSString *maybePhoneNumber = [PhoneNumberHelper cleanFormattedPhoneNumber:text];
-        if ([maybePhoneNumber length] >= 10 && [maybePhoneNumber length] <= 12)
+        NSString *phoneNumber = [PhoneNumberHelper formatUsingUSInternationalStrict:text];
+        if (phoneNumber != nil)
         {
-            maybePhoneNumber = [PhoneNumberHelper formatUsingUSInternational:maybePhoneNumber];
-            NSString *maybeJustDigits = [maybePhoneNumber substringFromIndex:1];
+            NSString *justDigits = [phoneNumber substringFromIndex:1];
             NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
-            NSCharacterSet *entryString = [NSCharacterSet characterSetWithCharactersInString:maybeJustDigits];
-            BOOL isPhoneNumber = [digits isSupersetOfSet:entryString];
+            NSCharacterSet *entryCharSet = [NSCharacterSet characterSetWithCharactersInString:justDigits];
+            BOOL isPhoneNumber = [digits isSupersetOfSet:entryCharSet];
             if (isPhoneNumber)
             {
-                return maybePhoneNumber;
+                return phoneNumber;
             }
         }
     }
@@ -357,7 +356,8 @@ static CGFloat const ROW_HEIGHT = 56.0;
         }
         
         NSString* phoneNumber = [self phoneNumberFromText:text];
-        if (phoneNumber != nil)
+        User* user = [User loggedUser];
+        if (phoneNumber != nil && (user == nil || ![[user formattedPhoneNumber] isEqual:[phoneNumber toFormattedPhoneNumber]]))
         {
             ContactDataSource* dataSource = [[ContactDataSource alloc] init];
             NSArray* phoneNumberArray = [dataSource retrieveContactsWithPhoneNumber:phoneNumber];
