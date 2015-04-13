@@ -14,56 +14,22 @@ import AVFoundation
 
 public typealias RecordError = (String?) -> Void
 
-public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
     
     private var recorder: AVAudioRecorder!
-    private var player: AVAudioPlayer!
-    private var soundFileURL:NSURL?
+    private var soundFileURL: NSURL?
     
     weak var delegate: AudioRecorderServiceDelegate?
     
-    public class var sharedInstance : AudioRecorderService {
-    struct Static {
-        static let instance : AudioRecorderService = AudioRecorderService()
-        }
-        return Static.instance
-    }
-    
-    override init() {
-        super.init()
-        
-        let session:AVAudioSession = AVAudioSession.sharedInstance()
-        
-        if (session.respondsToSelector("requestRecordPermission:")) {
-            AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool)-> Void in
-                if (granted) {
-                    println("Permission to record granted")
-                    self.setupRecorder()
-                    self.setSessionPlayAndRecord()
-                } else {
-                    println("Permission to record not granted")
-                }
-            })
-        } else {
-            println("requestRecordPermission unrecognized")
-        }
-    }
-    
-    func setupRecorder() {
+    private func setupRecorder() {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
         let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).m4a"
-        println(currentFileName)
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         var docsDir: AnyObject = dirPaths[0]
         var soundFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
         soundFileURL = NSURL(fileURLWithPath: soundFilePath)
-        let filemanager = NSFileManager.defaultManager()
-        if filemanager.fileExistsAtPath(soundFilePath) {
-            // probably won't happen after to choose a name. want to do something about it?
-            println("sound exists")
-        }
         
         var recordSettings = [
             AVFormatIDKey: kAudioFormatAppleLossless,
@@ -72,6 +38,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
             AVNumberOfChannelsKey: 2,
             AVSampleRateKey : 44100.0
         ]
+        
         var error: NSError?
         recorder = AVAudioRecorder(URL: soundFileURL!, settings: recordSettings, error: &error)
         if let e = error {
@@ -83,10 +50,10 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
         }
     }
     
-    func setSessionPlayAndRecord() {
+    private func setSessionPlayAndRecord() {
         let session:AVAudioSession = AVAudioSession.sharedInstance()
         var error: NSError?
-        if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: AVAudioSessionCategoryOptions.DefaultToSpeaker, error:&error) {
+        if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker, error:&error) {
             println("could not set session category")
             if let e = error {
                 println(e.localizedDescription)
@@ -114,9 +81,8 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
             self.delegate?.audioRecorderService(self, didRequestRecordPermission: granted)
             
             if (granted) {
-                if (self.player != nil && self.player.playing) {
-                    self.player.stop()
-                }
+                self.setupRecorder()
+                self.setSessionPlayAndRecord()
                 self.recorder.record()
                 NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
             } else {
@@ -127,38 +93,16 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate, AVAudioPla
     
     func stopRecording() {
         self.recorder.stop()
-    }
-    
-    func playAudio(audioURL: NSURL!) {
         var error: NSError?
-        self.player = AVAudioPlayer(contentsOfURL: audioURL, error: &error)
-        
-        if player == nil {
+        if (!AVAudioSession.sharedInstance().setActive(false, error: &error)) {
+            println("could not deactivate audio session")
             if let e = error {
                 println(e.localizedDescription)
             }
-            return
         }
-        
-        player.delegate = self
-        player.prepareToPlay()
-        player.volume = 1.0
-        player.play()
+        self.recorder = nil
     }
-    
-    func stopAudio() {
-        if (player.playing) {
-            player.stop()
-        }
-    }
-    
-    func isPlaying() -> Bool {
-        return player.playing
-    }
-    
-    public func audioPlayerDidFinishPlaying(player: AVAudioPlayer!, successfully flag: Bool) {
-        delegate?.audioRecorderServiceDidFinishPlaying(self)
-    }
+
 }
 
 protocol AudioRecorderServiceDelegate: class {
@@ -166,7 +110,5 @@ protocol AudioRecorderServiceDelegate: class {
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL: NSURL?, success: Bool!)
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool)
-    
-    func audioRecorderServiceDidFinishPlaying(audioRecorderService: AudioRecorderService!)
     
 }
