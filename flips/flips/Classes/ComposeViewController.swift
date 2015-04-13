@@ -29,6 +29,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private let IPHONE_4S_TOP_CONTAINER_HEIGHT: CGFloat = 240.0
     private let FLIP_MESSAGE_WORDS_LIST_HEIGHT: CGFloat = 50.0
     
+    private let MILLISECONDS_UNTIL_RECORDING_SESSION_IS_REALLY_DONE: UInt64 = 300
+    
     internal var composeTopViewContainer: ComposeTopViewContainer!
     internal var flipMessageWordListView: FlipMessageWordListView!
     internal var composeBottomViewContainer: ComposeBottomViewContainer!
@@ -50,6 +52,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     weak var delegate: ComposeViewControllerDelegate?
     
+    var audioRecorder: AudioRecorderService?
     
     // MARK: - Init Methods
     
@@ -171,8 +174,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         composeTopViewContainer?.viewWillAppear()
         composeTopViewContainer?.delegate = self
         
-        AudioRecorderService.sharedInstance.delegate = self
-        
         self.shouldEnableUserInteraction(true)
     }
     
@@ -180,7 +181,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         super.viewWillDisappear(animated)
         composeTopViewContainer?.viewWillDisappear()
         composeTopViewContainer?.delegate = nil
-        AudioRecorderService.sharedInstance.delegate = nil
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -494,11 +494,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - ComposeBottomViewContainerDelegate Methods
     
     func composeBottomViewContainerDidTapCaptureAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
-        AudioRecorderService.sharedInstance.startRecording { (error) -> Void in
-            if let error = error {
-                self.composeTopViewContainer.showCameraWithWord(self.flipWords[self.highlightedWordIndex].text)
-                var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                alertMessage.show()
+        self.audioRecorder = AudioRecorderService()
+        if let recorder = self.audioRecorder {
+            recorder.delegate = self
+            recorder.startRecording { (error) -> Void in
+                if let error = error {
+                    self.composeTopViewContainer.showCameraWithWord(self.flipWords[self.highlightedWordIndex].text)
+                    var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertMessage.show()
+                }
             }
         }
     }
@@ -740,23 +744,25 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - Audio Recorder Service Delegate
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didFinishRecordingAudioURL fileURL: NSURL?, success: Bool!) {
-        let flipWord = self.flipWords[self.highlightedWordIndex]
-        var flipImage = self.highlightedWordCurrentAssociatedImage
+        self.audioRecorder = nil
         
-        let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
-        confirmFlipViewController.delegate = self
-        confirmFlipViewController.title = self.composeTitle
-        self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+        let time = MILLISECONDS_UNTIL_RECORDING_SESSION_IS_REALLY_DONE * NSEC_PER_MSEC
+        let delayInMilliseconds = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
+        dispatch_after(delayInMilliseconds, dispatch_get_main_queue()) { () -> Void in            
+            let flipWord = self.flipWords[self.highlightedWordIndex]
+            var flipImage = self.highlightedWordCurrentAssociatedImage
+            
+            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
+            confirmFlipViewController.delegate = self
+            confirmFlipViewController.title = self.composeTitle
+            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+        }
     }
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool) {
         if (didRequestRecordPermission) {
             self.composeTopViewContainer.startRecordingProgressBar()
         }
-    }
-    
-    func audioRecorderServiceDidFinishPlaying(audioRecorderService: AudioRecorderService!) {
-        self.shouldEnableUserInteraction(true)
     }
     
     
