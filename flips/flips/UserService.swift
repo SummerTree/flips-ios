@@ -98,10 +98,10 @@ public class UserService: FlipsService {
     
     // MARK: - Sign-in
     
-    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func signIn(username: String, password: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) -> ReturnValue {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
-            return
+            return .NO_INTERNET_CONNECTION
         }
         
         let url = HOST + SIGNIN_URL
@@ -122,6 +122,8 @@ public class UserService: FlipsService {
                 }
             }
         )
+        
+        return .WAITING_FOR_RESPONSE
     }
     
     func signInWithFacebookToken(accessToken: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {

@@ -82,7 +82,7 @@ public class PubNubService: FlipsService, PNDelegate {
             },
             errorBlock: { (error: PNError!) -> Void in
                 println("Could not connect to PubNub");
-                println(error.description);
+                println(error?.description);
             })
         }
     }
@@ -252,7 +252,12 @@ public class PubNubService: FlipsService, PNDelegate {
 
     func loadMessagesHistory() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let subscribedChannels = PubNub.sharedInstance().subscribedObjectsList() as Array<PNChannelProtocol>
+            let list = PubNub.sharedInstance().subscribedObjectsList()
+            if (list == nil) {
+                return
+            }
+            
+            let subscribedChannels = list as Array<PNChannelProtocol>
 
             let group = dispatch_group_create()
 
