@@ -116,9 +116,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     private func updateColorOnJoinedTexts() {
         var selectedTextRange = self.selectedTextRange
-        var attributedString = NSMutableAttributedString(string:self.text)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text)))
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, countElements(self.text)))
+        var attributedString = NSMutableAttributedString(string: self.text)
+        let textLength = (self.text as NSString).length
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSMakeRange(0, textLength))
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, textLength))
         
         for joinedTextRange in joinedTextRanges {
             attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
@@ -194,7 +195,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     func isSpecialCharacter(char : Character) -> Bool {
         let str = String(char)
-        let range = NSRange(location: 0, length: countElements(str))
+        let range = NSRange(location: 0, length: (str as NSString).length)
         return wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) == 0
     }
     
@@ -317,7 +318,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 firstWord = false
             }
             if (isCompoundText(word)) {
-                var compoundTextRange = NSMakeRange(countElements(text), countElements(word))
+                var compoundTextRange = NSMakeRange((text as NSString).length, (word as NSString).length)
                 joinedTextRanges.append(compoundTextRange)
             }
             text += word
