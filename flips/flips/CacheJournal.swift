@@ -72,28 +72,51 @@ public class CacheJournal {
         self.persistJournal()
     }
     
-    func getLRUEntriesForSize(sizeInBytes: Int64) -> Slice<String> {
-        var entriesSlice: Slice<String>!
+    func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> Slice<(UInt64,Int)> {
+        var entriesSlice: Slice<(UInt64,Int)>!
         
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.value.sort({ $0.timestamp < $1.timestamp })
             
             var count: Int64 = 0
             var upperLimit: Int = 0
-            for entry in self.entries.value {
-                if count >= sizeInBytes {
-                    break
+
+            if (self.entries.value.count > 1) {
+                for entry in self.entries.value {
+                    if count >= sizeInBytes {
+                        break
+                    }
+                    count += Int64(entry.size)
+                    ++upperLimit
                 }
-                count += Int64(entry.size)
-                ++upperLimit
             }
             
             if (upperLimit <= 0) {
-                entriesSlice = Slice<String>()
+                entriesSlice = Slice<(UInt64,Int)>()
             } else {
-                entriesSlice = self.entries.value[0..<upperLimit].map { $0.key }
+                entriesSlice = self.entries.value[0..<upperLimit].map { ($0.size, $0.timestamp) }
             }
         })
+        return entriesSlice
+    }
+    
+    func getLRUEntries(count: Int) -> Slice<String> {
+        if (count <= 0) {
+            return Slice<String>()
+        }
+        
+        var entriesSlice: Slice<String>!
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            self.entries.value.sort({ $0.timestamp < $1.timestamp })
+
+            if (count <= self.entries.value.count) {
+                entriesSlice = self.entries.value[0..<count].map { $0.key }
+            } else {
+                println("Failed to get all LRU entries from cache journal, expected \(count), found \(self.entries.value.count)")
+                entriesSlice = Slice<String>()
+            }
+        })
+        
         return entriesSlice
     }
     

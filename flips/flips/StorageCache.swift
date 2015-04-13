@@ -24,7 +24,7 @@ public class StorageCache {
     }
     
     private let cacheDirectoryPath: NSURL
-    private let freeSizeInBytes: () -> Int64
+    private let scheduleCleanup: () -> Void
     private let cacheJournal: CacheJournal
     private let cacheQueue: dispatch_queue_t
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
@@ -35,8 +35,8 @@ public class StorageCache {
         }
     }
     
-    init(cacheID: String, cacheDirectoryName: String, freeSizeInBytes: () -> Int64) {
-        self.freeSizeInBytes = freeSizeInBytes
+    init(cacheID: String, cacheDirectoryName: String, scheduleCleanup: () -> Void) {
+        self.scheduleCleanup = scheduleCleanup
         let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! as String
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
@@ -194,6 +194,29 @@ public class StorageCache {
         return localPath
     }
     
+    func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> Slice<(UInt64,Int)> {
+        var slice: Slice<(UInt64,Int)>!
+        dispatch_sync(self.cacheQueue) {
+            slice = self.cacheJournal.getLRUSizesAndTimestamps(sizeInBytes)
+        }
+        return slice
+    }
+    
+    func removeLRUEntries(count: Int) -> Void {
+        dispatch_async(self.cacheQueue) {
+            let leastRecentlyUsed = self.cacheJournal.getLRUEntries(count)
+            let fileManager = NSFileManager.defaultManager()
+            for path in leastRecentlyUsed {
+                var error: NSError? = nil
+                if (!fileManager.removeItemAtPath(path, error: &error)) {
+                    println("Could not remove file \(path). Error: \(error)")
+                }
+            }
+            
+            self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
+        }
+    }
+    
     func clear() -> Void {
         dispatch_async(self.cacheQueue) {
             let entries = self.cacheJournal.getEntries()
@@ -218,24 +241,6 @@ public class StorageCache {
     
     private func cacheHit(localPath: String) -> Bool {
         return NSFileManager.defaultManager().fileExistsAtPath(localPath)
-    }
-    
-    private func scheduleCleanup() -> Void {
-        let freeSize = self.freeSizeInBytes()
-        if (freeSize >= 0) {
-            return
-        }
-        
-        let leastRecentlyUsed = self.cacheJournal.getLRUEntriesForSize(-freeSize)
-        let fileManager = NSFileManager.defaultManager()
-        for path in leastRecentlyUsed {
-            var error: NSError? = nil
-            if (!fileManager.removeItemAtPath(path, error: &error)) {
-                println("Could not remove file \(path). Error: \(error)")
-            }
-        }
-        
-        self.cacheJournal.removeLRUEntries(leastRecentlyUsed.count)
     }
     
 }

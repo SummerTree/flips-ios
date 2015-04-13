@@ -23,7 +23,7 @@ public class FlipsCache {
     }
     
     init() {
-        self.cache = StorageCache(cacheID: "allFlipsStorageCache", cacheDirectoryName: "flips_cache", freeSizeInBytes: CacheCleanupPolicy.sharedInstance.freeSizeInBytes)
+        self.cache = StorageCache(cacheID: "allFlipsStorageCache", cacheDirectoryName: "flips_cache", scheduleCleanup: CacheCleanupPolicy.sharedInstance.scheduleCleanup)
         CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
