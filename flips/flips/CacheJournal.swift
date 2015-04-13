@@ -16,14 +16,14 @@ public class CacheJournal {
     let EOL: Character = "\n"
     
     private let path: String
-    private var entries: [JournalEntry]
+    private var entries: ThreadSafe<[JournalEntry]>
     private let fileManagerQueue: dispatch_queue_t
     private let entriesQueue: dispatch_queue_t
     
     var cacheSize: Int64 {
         get {
             var size: Int64 = 0
-            for entry in entries {
+            for entry in entries.value {
                 size += Int64(entry.size)
             }
             return size
@@ -32,7 +32,7 @@ public class CacheJournal {
     
     init(absolutePath: String) {
         self.path = absolutePath
-        self.entries = [JournalEntry]()
+        self.entries = ThreadSafe(Array<JournalEntry>())
         self.fileManagerQueue = dispatch_queue_create("\(self.path)FileManagerQueue", nil)
         self.entriesQueue = dispatch_queue_create("\(self.path)EntriesQueue", nil)
     }
@@ -55,14 +55,14 @@ public class CacheJournal {
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
         var newEntry = JournalEntry(key: key, size: entrySize, timestamp: entryTimestamp)
         dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.append(newEntry)
+            self.entries.value.append(newEntry)
         })
         self.persistJournal()
     }
     
     func updateEntry(key: String) -> Void {
         dispatch_sync(self.entriesQueue, { () -> Void in
-            for entry in self.entries {
+            for entry in self.entries.value {
                 if key == entry.key {
                     entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
                     break
@@ -76,11 +76,11 @@ public class CacheJournal {
         var entriesSlice: Slice<String>!
         
         dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.sort({ $0.timestamp < $1.timestamp })
+            self.entries.value.sort({ $0.timestamp < $1.timestamp })
             
             var count: Int64 = 0
             var upperLimit: Int = 0
-            for entry in self.entries {
+            for entry in self.entries.value {
                 if count >= sizeInBytes {
                     break
                 }
@@ -91,7 +91,7 @@ public class CacheJournal {
             if (upperLimit <= 0) {
                 entriesSlice = Slice<String>()
             } else {
-                entriesSlice = self.entries[0..<upperLimit].map { $0.key }
+                entriesSlice = self.entries.value[0..<upperLimit].map { $0.key }
             }
         })
         return entriesSlice
@@ -99,7 +99,7 @@ public class CacheJournal {
     
     func removeLRUEntries(count: Int) -> Void {
         dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.removeRange(0..<count)
+            self.entries.value.removeRange(0..<count)
         })
         self.persistJournal()
     }
@@ -107,21 +107,21 @@ public class CacheJournal {
     func getEntries() -> [String] {
         var paths: [String] = [String]()
         dispatch_sync(self.entriesQueue, { () -> Void in
-            paths = self.entries.map { $0.key }
+            paths = self.entries.value.map { $0.key }
         })
         return paths
     }
     
     func clear() -> Void {
         dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.removeAll(keepCapacity: false)
+            self.entries.value.removeAll(keepCapacity: false)
         })
         self.persistJournal()
     }
     
     private func readEntries() {
-        if !self.entries.isEmpty {
-            self.entries.removeAll(keepCapacity: false)
+        if !self.entries.value.isEmpty {
+            self.entries.value.removeAll(keepCapacity: false)
         }
         
         var error: NSError?
@@ -141,14 +141,14 @@ public class CacheJournal {
                 let size: UInt64 = UInt64((fields[1] as String).toInt()!)
                 let timestamp: Int = (fields[2] as String).toInt()!
                 var entry = JournalEntry(key: key, size: size, timestamp: timestamp)
-                entries.append(entry)
+                entries.value.append(entry)
             }
         }
     }
     
     private func persistJournal() -> Void {
         dispatch_async(self.fileManagerQueue, { () -> Void in
-            let newContent = "".join(self.entries.map { $0.toString(self.SEP, eol: self.EOL) })
+            let newContent = "".join(self.entries.value.map { $0.toString(self.SEP, eol: self.EOL) })
             if let outputStream = NSOutputStream(toFileAtPath: self.path, append: false) {
                 outputStream.open()
                 outputStream.write(newContent, maxLength: countElements(newContent))

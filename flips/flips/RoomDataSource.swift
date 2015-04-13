@@ -106,10 +106,12 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getMyRooms() -> [Room] {
+//        println("\n - getMyRooms(\(NSThread.currentThread()))")
+        
         var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
-            if (room.flipMessagesNotRemoved().count > 0) {
+            if (room.flipMessagesNotRemoved(inContext: self.currentContext).count > 0) {
                 roomsWithMessages.append(room)
             }
         }
@@ -122,13 +124,13 @@ class RoomDataSource : BaseDataSource {
         
         var myRooms = self.getMyRooms()
         return myRooms.sorted { (room, nextRoom) -> Bool in
-            let roomOldestMessage = room.oldestNotReadMessage()
+            let roomOldestMessage = room.oldestNotReadMessage(inContext: self.currentContext)
             var roomDate = roomOldestMessage?.createdAt
             if (roomDate == nil) {
                 roomDate = now
             }
             
-            let nextRoomOldestMessage = nextRoom.oldestNotReadMessage()
+            let nextRoomOldestMessage = nextRoom.oldestNotReadMessage(inContext: self.currentContext)
             var nextRoomDate = nextRoomOldestMessage?.createdAt
             if (nextRoomDate == nil) {
                 nextRoomDate = now
@@ -143,13 +145,13 @@ class RoomDataSource : BaseDataSource {
         
         var myRooms = self.getMyRooms()
         return myRooms.sorted { (room, nextRoom) -> Bool in
-            let roomMostRecentMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
+            let roomMostRecentMessage = room.flipMessagesNotRemoved(inContext: self.currentContext).lastObject as? FlipMessage
             var roomDate = roomMostRecentMessage?.createdAt
             if (roomDate == nil) {
                 roomDate = now
             }
             
-            let nextRoomMostRecentMessage = nextRoom.flipMessagesNotRemoved().lastObject as? FlipMessage
+            let nextRoomMostRecentMessage = nextRoom.flipMessagesNotRemoved(inContext: self.currentContext).lastObject as? FlipMessage
             var nextRoomDate = nextRoomMostRecentMessage?.createdAt
             if (nextRoomDate == nil) {
                 nextRoomDate = now

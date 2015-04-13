@@ -25,7 +25,10 @@ public class PubNubService: FlipsService, PNDelegate {
     
     private var cryptoHelper: PNCryptoHelper
     
+    private var onPubnubConnectedBlock: (() -> Void)?
+    
     weak var delegate: PubNubServiceDelegate?
+    
     
     // MARK: - Initialization Methods
     
@@ -79,10 +82,10 @@ public class PubNubService: FlipsService, PNDelegate {
         if (!self.isConnected()) {
             PubNub.connectWithSuccessBlock({ (origin: String!) -> Void in
                 println("Successfully connected to PubNub");
+                self.onPubnubConnectedBlock?()
             },
             errorBlock: { (error: PNError!) -> Void in
-                println("Could not connect to PubNub");
-                println(error.description);
+                println("Could not connect to PubNub: \(error.description)");
             })
         }
     }
@@ -95,6 +98,13 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Channel Subscription
 
     func subscribeOnMyChannels() {
+        if (!self.isConnected()) {
+            self.onPubnubConnectedBlock = { () -> Void in
+                self.subscribeOnMyChannels()
+            }
+            return
+        }
+        
         if let loggedUser = User.loggedUser() {
             var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
             println("LoggedUser PubnubID: \(loggedUser.pubnubID)")
@@ -104,16 +114,17 @@ public class PubNubService: FlipsService, PNDelegate {
             
             let roomDataSource = RoomDataSource()
             var rooms = roomDataSource.getAllRooms() // We need to subscribe even in rooms without messages
-            println("\nSubscribeOnMyChannels")
             for room in rooms {
                 println("   Will subscribe to room: \(room.roomID)")
                 channels.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
             }
-            println("\n")
             
             let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
             
             PubNub.subscribeOn(channels, withCompletionHandlingBlock: { (state, channels, error) -> Void in
+                if (error != nil) {
+                    println("Error subscribing to channels: \(error)")
+                }
                 self.loadMessagesHistory()
             })
             PubNub.enablePushNotificationsOnChannels(channels, withDevicePushToken: token) { (channels, pnError) -> Void in
@@ -131,13 +142,13 @@ public class PubNubService: FlipsService, PNDelegate {
         if (!PubNub.isSubscribedOn(channel)) {
             PubNub.subscribeOn([channel], withCompletionHandlingBlock: { (state, channels, error) -> Void in
                 if (error != nil) {
-                    println("\nsubcribe error: \(error)\n")
+                    println("\nSubcribe error: \(error)\n")
                 }
             })
             
             let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
             PubNub.enablePushNotificationsOnChannel(channel, withDevicePushToken: token) { (channels, pnError) -> Void in
-                println("Result of enablePushNotificationsOnChannel: channels=[\(channels), with error: \(pnError)")
+                println("Result of enablePushNotificationsOnChannel: channels=[\(channels)], with error: \(pnError)")
             }
         }
     }

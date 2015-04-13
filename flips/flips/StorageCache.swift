@@ -129,7 +129,6 @@ public class StorageCache {
                     }
                 }
                 
-                println("Cleaning up callbacks for \(localPath).")
                 self.downloadInProgressURLs[localPath] = nil
             },
             progress: { (downloadProgress) -> Void in
