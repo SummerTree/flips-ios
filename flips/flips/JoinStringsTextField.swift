@@ -12,6 +12,8 @@
 
 class JoinStringsTextField : UITextView, UITextViewDelegate {
     
+    private let NUM_WORDS_LIMIT = 60
+    
     private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private var rangeThatWillChange: NSRange? = nil
@@ -126,43 +128,57 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         self.selectedTextRange = selectedTextRange
     }
     
-    func getFlipTexts() -> [String] {
-        self.resignFirstResponder()
-        
-        var flipTexts = [String]()
-        
-        var text = Array(self.text)
+    private func getTextWords(text: String, limit: Int = -1) -> (words: [String], truncatedText: String) {
+        var words = [String]()
+        var textArray = Array(text)
         var word: String = ""
         var index: Int = 0
-        while (index < text.count) {
+        var limitIndex: Int = -1
+        
+        while (index < textArray.count) {
+            if (limitIndex == -1 && limit >= 0 && words.count >= limit) {
+                limitIndex = index
+            }
+            
             let partOfRange = isPartOfJoinedTextRanges(index)
             if (partOfRange.isPart) {
                 if (countElements(word) > 0) {
-                    flipTexts.append(word)
+                    words.append(word)
                     word = ""
                 }
-                flipTexts.append((self.text as NSString).substringWithRange(partOfRange.range!))
+                words.append((text as NSString).substringWithRange(partOfRange.range!))
                 index = partOfRange.range!.location+partOfRange.range!.length
             } else {
                 let i = index++
-                if (countElements(word) > 0 && (text[i] == WHITESPACE || (isSpecialCharacter(Array(word)[0]) ^ isSpecialCharacter(text[i])))) {
-                    flipTexts.append(word)
+                if (countElements(word) > 0 && (textArray[i] == WHITESPACE || (isSpecialCharacter(Array(word)[0]) ^ isSpecialCharacter(textArray[i])))) {
+                    words.append(word)
                     word = ""
                 }
                 
-                if (text[i] != WHITESPACE) {
-                    word.append(text[i])
+                if (textArray[i] != WHITESPACE) {
+                    word.append(textArray[i])
                 }
             }
         }
         
         if (word != "") {
-            flipTexts.append(word)
+            words.append(word)
         }
         
+        var truncatedText = text
+        if (limitIndex >= 0) {
+            truncatedText = text.substringToIndex(advance(text.startIndex, limitIndex))
+        }
+
+        return (words, truncatedText)
+    }
+    
+    func getTextWords() -> [String] {
+        self.resignFirstResponder()
+        let textWords = self.getTextWords(self.text)
         self.becomeFirstResponder()
         
-        return flipTexts
+        return textWords.words
     }
     
     func isPartOfJoinedTextRanges(charIndex: Int) -> (isPart: Bool, range: NSRange?) {
@@ -263,6 +279,20 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).stringByReplacingCharactersInRange(range, withString: text)
+        let textWords = self.getTextWords(newText, limit: NUM_WORDS_LIMIT)
+        
+        if (textWords.words.count > NUM_WORDS_LIMIT) {
+            self.text = textWords.truncatedText // " ".join(words[0..<NUM_WORDS_LIMIT])
+            
+            let limitAlert = UIAlertView(title: NSLocalizedString("Flips"), message: NSLocalizedString("Flip Messages cannot be longer than 60 words."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK"))
+            limitAlert.show()
+            
+            joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: self.text)
+            
+            return false
+        }
+        
         if (text == "\n") {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.joinStringsTextFieldDelegate?.joinStringsTextFieldShouldReturn?(self)
