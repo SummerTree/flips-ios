@@ -89,6 +89,10 @@ class UserDataSource : BaseDataSource {
     }
     
     func updateUser(user: User, withJson json: JSON, isLoggedUser: Bool = false) -> User {
+        let userIsTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
+        if (userIsTemporary) {
+            return user
+        }
         var userInContext = user.inContext(currentContext) as User
         self.fillUser(userInContext, withJsonData: json)
         return userInContext
