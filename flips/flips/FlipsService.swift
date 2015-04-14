@@ -17,6 +17,7 @@ public struct FlipsServiceResponseCode {
     static let BACKEND_FORBIDDEN_REQUEST: Int = 403
     static let BACKEND_TIMED_OUT: Int = 408
     static let BACKEND_APP_VERSION_OUTDATED: Int = 420
+    static let BACKEND_BLOCKED_USER: Int = 421
     static let RESPONSE_CODE_KEY: String = "response_code"
 }
 
@@ -52,15 +53,7 @@ public class FlipsService : NSObject {
                 success(operation, responseObject)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (self.isForbiddenRequest(error)) {
-                    self.sendUserNotification(FlipsServiceResponseCode.BACKEND_FORBIDDEN_REQUEST)
-                } else if (self.isTimedOutError(error)) {
-                    failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
-                } else if (self.isAppVersionOutdated(error)) {
-                    self.sendUserNotification(FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED)
-                } else {
-                    failure(operation, error)
-                }
+                self.handleResponseError(failure, operation: operation, error: error);
             }
         )
     }
@@ -77,15 +70,7 @@ public class FlipsService : NSObject {
                 success(operation, responseObject)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (self.isForbiddenRequest(error)) {
-                    self.sendUserNotification(FlipsServiceResponseCode.BACKEND_FORBIDDEN_REQUEST)
-                } else if (self.isTimedOutError(error)) {
-                    failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
-                } else if (self.isAppVersionOutdated(error)) {
-                    self.sendUserNotification(FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED)
-                } else {
-                    failure(operation, error)
-                }
+                self.handleResponseError(failure, operation: operation, error: error);
             }
         )
     }
@@ -101,15 +86,7 @@ public class FlipsService : NSObject {
                 success(operation, responseObject)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                if (self.isForbiddenRequest(error)) {
-                    self.sendUserNotification(FlipsServiceResponseCode.BACKEND_FORBIDDEN_REQUEST)
-                } else if (self.isTimedOutError(error)) {
-                    failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
-                } else if (self.isAppVersionOutdated(error)) {
-                    self.sendUserNotification(FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED)
-                } else {
-                    failure(operation, error)
-                }
+                self.handleResponseError(failure, operation: operation, error: error);
             }
         )
     }
@@ -129,6 +106,9 @@ public class FlipsService : NSObject {
         return (error.localizedDescription.rangeOfString(String(FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED)) != nil)
     }
 
+    private func isUserBlocked(error: NSError) -> Bool {
+        return (error.localizedDescription.rangeOfString(String(FlipsServiceResponseCode.BACKEND_BLOCKED_USER)) != nil)
+    }
     
     private func errorForTimedOutError() -> NSError {
         let message = NSLocalizedString("The request timed out. Please check your internet connection.")
@@ -139,5 +119,19 @@ public class FlipsService : NSObject {
         var userInfo = [String : Int]()
         userInfo[FlipsServiceResponseCode.RESPONSE_CODE_KEY] = responseCode
         NSNotificationCenter.defaultCenter().postNotificationName(POP_TO_ROOT_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
+    }
+    
+    private func handleResponseError(failure: OperationFailureCallback, operation: AFHTTPRequestOperation, error: NSError) {
+        if (self.isForbiddenRequest(error)) {
+            self.sendUserNotification(FlipsServiceResponseCode.BACKEND_FORBIDDEN_REQUEST)
+        } else if (self.isTimedOutError(error)) {
+            failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
+        } else if (self.isAppVersionOutdated(error)) {
+            self.sendUserNotification(FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED)
+        } else if (self.isUserBlocked(error)) {
+            self.sendUserNotification(FlipsServiceResponseCode.BACKEND_BLOCKED_USER)
+        } else {
+            failure(operation, error)
+        }
     }
 }

@@ -66,6 +66,9 @@ public class NavigationHandler : NSObject {
         case FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED:
             title = "App Version Error"
             message = "This version of Flips is no longer supported. Please update to the latest version in the App Store. Flips will now close."
+        case FlipsServiceResponseCode.BACKEND_BLOCKED_USER:
+            title = "Account Disabled"
+            message = "Please contact Flips Support via www.flipsapp.com."
         default:
             title = "Server Error"
             message = "Please try to log in again. If the issue persists, please contact support."
