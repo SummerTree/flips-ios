@@ -54,12 +54,6 @@ class RoomDataSource : BaseDataSource {
         return self.createEntityWithJson(json)
     }
     
-    func updateRoom(room: Room, withJson json: JSON) -> Room {
-        var roomInContext = room.inContext(currentContext) as Room
-        fillRoom(roomInContext, withJson: json)
-        return roomInContext
-    }
-    
     func associateRoom(room: Room, withAdmin admin: User, andParticipants participants: [User]) {
         var roomInContext = room.inContext(currentContext) as Room
 
@@ -106,8 +100,6 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getMyRooms() -> [Room] {
-//        println("\n - getMyRooms(\(NSThread.currentThread()))")
-        
         var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {

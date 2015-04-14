@@ -43,7 +43,7 @@ public class RemoteRequestManager: NSObject {
         self.privateQueue = dispatch_queue_create("RemoteRequestManagerQueue", DISPATCH_QUEUE_SERIAL)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "onNetworkReachabilityChangedNotificationReceived",
+            selector: "onNetworkReachabilityChangedNotificationReceived:",
             name: NETWORK_REACHABILITY_CHANGED_NOTIFICATION_KEY,
             object: nil)
     }
@@ -118,7 +118,7 @@ public class RemoteRequestManager: NSObject {
     
     // MARK: - Notification Handlers
     
-    private func onNetworkReachabilityChangedNotificationReceived(notification: NSNotification) {
+    func onNetworkReachabilityChangedNotificationReceived(notification: NSNotification) {
         println("onNetworkReachabilityChangedNotificationReceived")
         if (NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             if ((!self.isRunning) && (self.blocksQueue.count > 0)) {
