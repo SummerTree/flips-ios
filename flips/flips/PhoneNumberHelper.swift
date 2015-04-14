@@ -46,4 +46,24 @@ private let PERIOD = "."
             return phone
         }
     }
+    
+    class func formatUsingUSInternationalStrict(phoneNumber: String) -> String? {
+        let phone = cleanFormattedPhoneNumber(phoneNumber)
+        let phoneNumberLength = countElements(phone)
+        
+        if (phoneNumberLength == 10) {
+            return "+1\(phone)"
+        }
+        
+        if (phoneNumberLength == 11 && phone[0...0] == "1") {
+            return "+\(phone)"
+        }
+        
+        if (phoneNumberLength == 12 && phone[0...1] == "+1") {
+            return phone
+        }
+        
+        return nil
+    }
+    
 }

@@ -12,9 +12,9 @@
 
 extension Room {
     
-    func numberOfUnreadMessages() -> Int {
+    func numberOfUnreadMessages(inContext context: NSManagedObjectContext? = NSManagedObjectContext.MR_defaultContext()) -> Int {
         var notReadMessagesCount = 0
-        let flipMessagesNotRemoved = self.flipMessagesNotRemoved()
+        let flipMessagesNotRemoved = self.flipMessagesNotRemoved(inContext: context)
         for (var i = 0; i < flipMessagesNotRemoved.count; i++) {
             let flipMessage = flipMessagesNotRemoved[i] as FlipMessage
             
@@ -26,23 +26,27 @@ extension Room {
         return notReadMessagesCount
     }
     
-    func oldestNotReadMessage() -> FlipMessage? {
+    func oldestNotReadMessage(inContext context: NSManagedObjectContext) -> FlipMessage? {
         let flipMessageDataSource = FlipMessageDataSource()
         
         var oldestMessageNotRead = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(self.roomID)
         
         if (oldestMessageNotRead == nil) {
-            return self.flipMessagesNotRemoved().lastObject as? FlipMessage
+            return self.flipMessagesNotRemoved(inContext: context).lastObject as? FlipMessage
         }
         
         return oldestMessageNotRead
     }
     
-    func flipMessagesNotRemoved() -> NSOrderedSet {
+    func flipMessagesNotRemoved(inContext context: NSManagedObjectContext? = NSManagedObjectContext.MR_defaultContext()) -> NSOrderedSet {
+//        if (currentThread != NSThread.currentThread()) {
+//            println(" - flipMessagesNotRemoved thread differents: Current(\(NSThread.currentThread())) - Original(\(currentThread))")
+//        }
+        
         var notRemovedMessages = NSMutableOrderedSet()
         
         for (var i = 0; i < self.flipMessages.count; i++) {
-            let flipMessage = self.flipMessages[i] as FlipMessage
+            let flipMessage = self.flipMessages[i].inContext(context) as FlipMessage
             
             if (!flipMessage.removed.boolValue) {
                 notRemovedMessages.addObject(flipMessage)
