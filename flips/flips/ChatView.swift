@@ -343,6 +343,12 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                         self.tableView.alpha = 1
                     }, completion: { (finished) -> Void in
                         self.indexPathToShow = nil
+
+                        if (self.replyTextField.text != "") {
+                            self.hideReplyButtonAndShowTextField()
+                            self.replyTextField.becomeFirstResponder()
+                        }
+
                         if (!self.openingFromPushNotification) {
                             self.playVideoForVisibleCell()
                         }
