@@ -114,31 +114,46 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.refreshRooms()
         
         if (self.flipMessageIdToShow != nil) {
-            self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
-            self.openRoomForPushNotificationIfMessageReceived()
+            if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                let alertView: UIAlertView = UIAlertView(title: nil, message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            } else {
+                self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+                self.openRoomForPushNotificationIfMessageReceived()
+            }
         }
     }
     
     private func openRoomForPushNotificationIfMessageReceived() {
-        if let roomID = self.roomIdToShow {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                var flipMessageAlreadyReceived = false
-                if let flipMessageID: String = self.flipMessageIdToShow {
-                    let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
-                    if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
-                        flipMessageAlreadyReceived = true
-                    }
-                }
-                
-                if (flipMessageAlreadyReceived) {
-                    self.openThreadViewControllerWithRoomID(roomID)
-                    self.hideActivityIndicator()
-                    self.roomIdToShow = nil
-                    self.flipMessageIdToShow = nil
-                } else {
-                    self.retryToOpenRoomForPushNotification()
-                }
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            self.hideActivityIndicator()
+            self.roomIdToShow = nil
+            self.flipMessageIdToShow = nil
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                let alertView: UIAlertView = UIAlertView(title: "", message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
             })
+        } else {
+            if let roomID = self.roomIdToShow {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                    var flipMessageAlreadyReceived = false
+                    if let flipMessageID: String = self.flipMessageIdToShow {
+                        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
+                        if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
+                            flipMessageAlreadyReceived = true
+                        }
+                    }
+                    
+                    if (flipMessageAlreadyReceived) {
+                        self.openThreadViewControllerWithRoomID(roomID)
+                        self.hideActivityIndicator()
+                        self.roomIdToShow = nil
+                        self.flipMessageIdToShow = nil
+                    } else {
+                        self.retryToOpenRoomForPushNotification()
+                    }
+                })
+            }
         }
     }
     
@@ -157,7 +172,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
                         alertView.show()
-                        
                     })
                 }
             }
