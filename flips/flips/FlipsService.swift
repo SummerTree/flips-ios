@@ -44,6 +44,7 @@ public class FlipsService : NSObject {
 	func post(urlString: String, parameters: AnyObject?, success: OperationSuccessCallback, failure: OperationFailureCallback) -> AFHTTPRequestOperation {
 
         let request: AFHTTPRequestOperationManager = AFHTTPRequestOperationManager()
+        request.requestSerializer = AFJSONRequestSerializer() as AFJSONRequestSerializer
         request.requestSerializer.setValue(APP_VERSION, forHTTPHeaderField: self.APP_VERSION_HEADER)
         request.responseSerializer = AFJSONResponseSerializer() as AFJSONResponseSerializer
 
