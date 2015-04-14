@@ -307,24 +307,18 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             self.updateColorOnJoinedTexts()
         }
         
-        joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: text)
-    }
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).stringByReplacingCharactersInRange(range, withString: text)
-        let textWords = self.getTextWords(newText, limit: NUM_WORDS_LIMIT)
-        
+        let textWords = self.getTextWords(self.text, limit: NUM_WORDS_LIMIT)
         if (textWords.words.count > NUM_WORDS_LIMIT) {
             self.text = textWords.truncatedText // " ".join(words[0..<NUM_WORDS_LIMIT])
             
             let limitAlert = UIAlertView(title: NSLocalizedString("Flips"), message: NSLocalizedString("Flip Messages cannot be longer than 60 words."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK"))
             limitAlert.show()
-            
-            joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: self.text)
-            
-            return false
         }
         
+        joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: self.text)
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.joinStringsTextFieldDelegate?.joinStringsTextFieldShouldReturn?(self)
