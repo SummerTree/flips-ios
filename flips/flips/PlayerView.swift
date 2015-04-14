@@ -53,6 +53,7 @@ class PlayerView: UIView {
         self.makeConstraints()
 
         self.contentIdentifier = nil
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -61,6 +62,7 @@ class PlayerView: UIView {
         self.makeConstraints()
         
         self.contentIdentifier = nil
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
     }
     
     deinit {
@@ -101,11 +103,7 @@ class PlayerView: UIView {
     private func animateButtonsFadeOut(completion: (() -> Void)?) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-                self.thumbnailView.alpha = 0.0
-                self.playButtonView.alpha = 0.0
-                self.retryButtonView.alpha = 0.0
-                self.retryLabel.alpha = 0.0
-                self.progressBarView.alpha = 0.0
+                self.playingViewState()
             }) { (finished) -> Void in
                 completion?()
                 return
@@ -115,10 +113,7 @@ class PlayerView: UIView {
 
     private func animatePlayButtonFadeIn(completion: (() -> Void)?) {
         UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-            self.playButtonView.alpha = self.BUTTONS_ALPHA
-            self.progressBarView.alpha = 0.0
-            self.retryButtonView.alpha = 0.0
-            self.retryLabel.alpha = 0.0
+            self.initialViewState()
         }) { (finished) -> Void in
             completion?()
             return
@@ -127,10 +122,7 @@ class PlayerView: UIView {
 
     private func animateErrorStateFadeIn(completion: (() -> Void)?) {
         UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-            self.retryButtonView.alpha = self.BUTTONS_ALPHA
-            self.retryLabel.alpha = 1.0
-            self.playButtonView.alpha = 0.0
-            self.progressBarView.alpha = 0.0
+            self.errorViewState()
         }) { (finished) -> Void in
             completion?()
             return
@@ -139,10 +131,7 @@ class PlayerView: UIView {
 
     private func animateProgressBarFadeIn(completion: (() -> Void)?) {
         UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-            self.progressBarView.alpha = 1.0
-            self.playButtonView.alpha = 0.0
-            self.retryButtonView.alpha = 0.0
-            self.retryLabel.alpha = 0.0
+            self.downloadingViewState()
         }) { (finished) -> Void in
             completion?()
             return
@@ -348,6 +337,42 @@ class PlayerView: UIView {
         self.progressBarView.progress = 0
 
         self.animateErrorStateFadeIn(nil)
+    }
+
+
+    // MARK: - View state
+
+    private func errorViewState() {
+        self.thumbnailView.alpha = 1.0
+        self.playButtonView.alpha = 0.0
+        self.progressBarView.alpha = 0.0
+        self.retryButtonView.alpha = self.BUTTONS_ALPHA
+        self.retryLabel.alpha = 1.0
+    }
+
+    private func downloadingViewState() {
+        self.thumbnailView.alpha = 1.0
+        self.playButtonView.alpha = 0.0
+        self.progressBarView.alpha = 1.0
+        self.retryButtonView.alpha = 0.0
+        self.retryLabel.alpha = 0.0
+    }
+
+    private func playingViewState() {
+        self.thumbnailView.alpha = 0.0
+        self.playButtonView.alpha = 0.0
+        self.progressBarView.alpha = 0.0
+        self.retryButtonView.alpha = 0.0
+        self.retryLabel.alpha = 0.0
+    }
+
+    private func initialViewState() {
+        self.thumbnailView.alpha = 1.0
+        self.playButtonView.alpha = self.BUTTONS_ALPHA
+        self.progressBarView.alpha = 0.0
+        self.progressBarView.progress = 0.0
+        self.retryButtonView.alpha = 0.0
+        self.retryLabel.alpha = 0.0
     }
 
 
@@ -677,13 +702,11 @@ class PlayerView: UIView {
         self.addSubview(self.wordLabel)
         
         self.playButtonView = UIImageView()
-        self.playButtonView.alpha = self.BUTTONS_ALPHA
         self.playButtonView.contentMode = UIViewContentMode.Center
         self.playButtonView.image = UIImage(named: "PlayButton")
         self.addSubview(self.playButtonView)
 
         self.retryButtonView = UIImageView()
-        self.retryButtonView.alpha = 0.0
         self.retryButtonView.contentMode = UIViewContentMode.Center
         self.retryButtonView.image = UIImage(named: "RetryButton")
         self.addSubview(self.retryButtonView)
@@ -695,12 +718,12 @@ class PlayerView: UIView {
         self.retryLabel.textAlignment = NSTextAlignment.Center
         self.retryLabel.text = LocalizedString.DOWNLOAD_FAILED_RETRY
         self.retryLabel.sizeToFit()
-        self.retryLabel.alpha = 0.0
         self.addSubview(self.retryLabel)
 
         self.progressBarView = ProgressBar()
-        self.progressBarView.alpha = 0.0
         self.addSubview(self.progressBarView)
+
+        self.initialViewState()
     }
     
     override func layoutSubviews() {
@@ -757,9 +780,7 @@ class PlayerView: UIView {
         self.words = []
         self.isPlaying = false
         
-        self.playButtonView.alpha = self.BUTTONS_ALPHA
-        self.progressBarView.alpha = 0.0
-        self.progressBarView.progress = 0.0
+        self.initialViewState()
 
         self.flipsDownloadProgress.removeAll()
 
