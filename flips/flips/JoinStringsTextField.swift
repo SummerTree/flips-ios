@@ -77,9 +77,9 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             }
             
             if (range.location + range.length == initialRange!.location + initialRange!.length) {
-                tempEnd = countSubstrings! + range.length
+                tempEnd = countSubstrings! + 1
             }
-            
+                        
             string.append((char, range))
             ++countSubstrings!
         }
