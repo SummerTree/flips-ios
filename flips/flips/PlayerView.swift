@@ -53,6 +53,7 @@ class PlayerView: UIView {
         self.makeConstraints()
 
         self.contentIdentifier = nil
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -61,6 +62,7 @@ class PlayerView: UIView {
         self.makeConstraints()
         
         self.contentIdentifier = nil
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
     }
     
     deinit {
