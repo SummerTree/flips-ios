@@ -91,8 +91,8 @@ class FlipMessageDataSource : BaseDataSource {
         let roomInContext = room.inContext(currentContext) as Room
         flipMessageInContext.room = roomInContext
         if ((roomInContext.lastMessageReceivedAt == nil) ||
-            (room.lastMessageReceivedAt.compare(flipMessageInContext.receivedAt) == NSComparisonResult.OrderedAscending)) {
-            flipMessage.room.lastMessageReceivedAt = flipMessageInContext.receivedAt
+            (roomInContext.lastMessageReceivedAt.compare(flipMessageInContext.receivedAt) == NSComparisonResult.OrderedAscending)) {
+            roomInContext.lastMessageReceivedAt = flipMessageInContext.receivedAt
         }
     }
     
