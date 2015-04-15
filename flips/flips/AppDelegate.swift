@@ -72,6 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
+        application.applicationIconBadgeNumber = 0
         FBAppCall.handleDidBecomeActive()
     }
 
@@ -117,19 +118,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         completionHandler(UIBackgroundFetchResult.NewData)
     }
     
-    private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
-        if let loggedUser = User.loggedUser() {
-            if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
-                let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
-                if (UIApplication.sharedApplication().keyWindow == nil)  {
-                    self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
-                } else if (application.applicationState != UIApplicationState.Active) {
-                    NavigationHandler.sharedInstance.showThreadScreenForRoomId(roomId, andFlipMessageID: flipMessageId)
-                }
-            }
-        }
-    }
-    
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
     }
@@ -150,5 +138,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
     }
+  
+    private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
+        if let loggedUser = User.loggedUser() {
+            if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
+                let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
+                if (UIApplication.sharedApplication().keyWindow == nil)  {
+                    self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
+                } else if (application.applicationState != UIApplicationState.Active) {
+                    NavigationHandler.sharedInstance.showThreadScreenForRoomId(roomId, andFlipMessageID: flipMessageId)
+                }
+            }
+        }
+    }
     
+
 }
