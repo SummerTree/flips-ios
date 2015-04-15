@@ -105,7 +105,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         
         self.initSubviews()
         self.initCamera()
-        
+        self.setCameraButtonsEnabled(enabled: false)
+
         self.updateConstraintsIfNeeded()
     }
 
@@ -317,8 +318,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             var deviceInput: AVCaptureDeviceInput! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as? AVCaptureDeviceInput
             
             if (deviceInput == nil || error != nil) {
-                self.toggleCameraButton.enabled = false
-                
+                self.setCameraButtonsEnabled(enabled: false)
+
                 println("TakePicture error: \(error)")
                 self.showAlert(self.CAMERA_ERROR, message: error?.localizedDescription ?? self.CAMERA_ERROR_MESSAGE)
                 self.activityIndicator.stopAnimating()
@@ -406,6 +407,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 })
             })
             self.session.startRunning()
+            self.setCameraButtonsEnabled()
+
             self.observersRegistered = true
 
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -419,7 +422,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func removeObservers() {
         dispatch_async(self.sessionQueue, { () -> Void in
             self.session.stopRunning()
-            
+            self.setCameraButtonsEnabled(enabled: false)
+
             if (self.observersRegistered) {
                 
                 if let deviceInput = self.videoDeviceInput {
@@ -467,10 +471,10 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (isRunning) {
                             self.delegate?.cameraView(self, cameraAvailable: true)
-                            self.toggleCameraButton.enabled = true
+                            self.setCameraButtonsEnabled()
                         } else {
                             self.delegate?.cameraView(self, cameraAvailable: false)
-                            self.toggleCameraButton.enabled = false
+                            self.setCameraButtonsEnabled(enabled: false)
                         }
                     })
                 }
@@ -492,7 +496,20 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.bringSubviewToFront(microphoneButton)
         }
     }
-    
+
+    private func setCameraButtonsEnabled(enabled: Bool = true) {
+        let flashEnabled = !self.showingFrontCamera && enabled
+
+        self.flashButton.enabled = flashEnabled
+        self.flashLabel.enabled = flashEnabled
+
+        self.toggleCameraButton.enabled = enabled
+
+        if (self.showMicrophoneButton) {
+            self.microphoneButton.enabled = enabled
+        }
+    }
+
     func toggleCameraButtonTapped() {
         var overlayView: UIView? = nil
 
@@ -733,7 +750,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
     private func prepareForCameraSwitch() {
         self.delegate?.cameraView(self, cameraAvailable: false)
-        self.toggleCameraButton.enabled = false
+        self.setCameraButtonsEnabled(enabled: false)
 
         dispatch_async(self.sessionQueue, { () -> Void in
             if let currentVideoDevice = self.videoDeviceInput?.device {
@@ -775,12 +792,11 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 
     private func commitCameraSwitch() {
-        let flashEnabled = !self.showingFrontCamera
-        self.flashButton.enabled = flashEnabled
-        self.flashLabel.hidden = !flashEnabled
+        self.setCameraButtonsEnabled()
+
+        self.flashLabel.hidden = self.showingFrontCamera
 
         self.delegate?.cameraView(self, cameraAvailable: true)
-        self.toggleCameraButton.enabled = true
         self.bringButtonsToFront()
     }
 
