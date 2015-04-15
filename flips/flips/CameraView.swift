@@ -110,20 +110,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 
     deinit {
-        self.session.stopRunning()
-        
-        if (self.observersRegistered) {
-            if let deviceInput = self.videoDeviceInput {
-                NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
-            }
-            
-            NSNotificationCenter.defaultCenter().removeObserver(self.runtimeErrorHandlingObserver)
-            
-            self.removeObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, context: SessionRunningAndDeviceAuthorizedContext)
-            self.removeObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, context: CapturingStillImageContext)
-            self.removeObserver(self, forKeyPath: self.RECORDING_KEY_PATH, context: RecordingContext)
-        }
-            
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.removeObserver(self.observerBecomeActive, name: "UIApplicationDidBecomeActiveNotification", object: nil)
         notificationCenter.removeObserver(self.observerResignActive, name: "UIApplicationWillResignActiveNotification", object: nil)
