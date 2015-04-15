@@ -34,15 +34,29 @@ public class Downloader : NSObject {
         let request = NSMutableURLRequest(URL: url)
         request.timeoutInterval = TIME_OUT_INTERVAL
 
+        let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
+        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
+        let tempURL = NSURL(fileURLWithPath: tempPath)!
+        
         let operation = AFHTTPRequestOperation(request: request)
-        operation.outputStream = NSOutputStream(URL: localURL, append: false)
+        operation.outputStream = NSOutputStream(URL: tempURL, append: false)
 
         operation.setCompletionBlockWithSuccess({ (operation, responseObject) -> Void in
+            var error: NSError? = nil
+            let fileManager = NSFileManager.defaultManager()
+            fileManager.moveItemAtURL(tempURL, toURL: localURL, error: &error)
+            if let err = error {
+                println("Error moving item to path \(localURL.path!), error \(err)")
+            }
             completion(success: true)
         }, failure: { (operation, error) -> Void in
             println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
             let fileManager = NSFileManager.defaultManager()
-            fileManager.removeItemAtURL(localURL, error: nil)
+            var err: NSError? = nil
+            fileManager.removeItemAtURL(tempURL, error: &err)
+            if let e = err {
+                println("Error removing invalid file \(tempURL), error \(e)")
+            }
             completion(success: false)
         })
 

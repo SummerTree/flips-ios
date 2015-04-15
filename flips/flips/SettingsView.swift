@@ -46,6 +46,12 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         super.init()
         
         self.addSubviews()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
     }
     
     func viewWillAppear() {
@@ -129,6 +135,12 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     func logOutButtonTapped(sender: AnyObject?) {
         self.delegate?.settingsViewDidTapLogOutButton(self)
+    }
+    
+    func resyncNotificationReceived(notification: NSNotification) {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.userProfileCell.setActionDetailLabelText(NSLocalizedString("Updating..."));
+        })
     }
     
     
