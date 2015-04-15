@@ -33,7 +33,18 @@ public class Downloader : NSObject {
     // MARK: - Download Public Methods
 
     func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil) {
-        self.downloadTaskRetryingNumberOfTimes(NUMBER_OF_RETRIES, url: url, localURL: localURL, success: { (responseObject) -> Void in
+        
+        let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
+        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
+        let tempURL = NSURL(fileURLWithPath: tempPath)!
+
+        self.downloadTaskRetryingNumberOfTimes(NUMBER_OF_RETRIES, url: url, localURL: tempURL, success: { (responseObject) -> Void in
+            var error: NSError? = nil
+            let fileManager = NSFileManager.defaultManager()
+            fileManager.moveItemAtURL(tempURL, toURL: localURL, error: &error)
+            if let err = error {
+                println("Error moving item to path \(tempURL.path!), error \(err)")
+            }
             completion(success: true)
         }, failure: { (error: NSError?) -> Void in
             println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")

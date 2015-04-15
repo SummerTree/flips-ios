@@ -67,8 +67,14 @@ extension FlipMessage {
                     return
                 }
                 
-                let thumbnailsCache = ThumbnailsCache.sharedInstance
-                thumbnailsCache.get(NSURL(string: firstFlip.thumbnailURL!)!,
+                var cacheInstance: ThumbnailsDataSource!
+                if (self.notRead.boolValue) {
+                    cacheInstance = BlurredThumbnailsCache.sharedInstance
+                } else {
+                    cacheInstance = ThumbnailsCache.sharedInstance
+                }
+
+                cacheInstance.get(NSURL(string: firstFlip.thumbnailURL!)!,
                     success: { (url: String!, localPath: String!) in
                         var image = UIImage(contentsOfFile: localPath)
                         success?(image)
