@@ -256,20 +256,16 @@ public class PubNubService: FlipsService, PNDelegate {
 
         RemoteRequestManager.sharedInstance.executeBlock { (retryCompletionBlock) -> Void in
             if (lastMessageReceivedDate == nil) {
-                println("No message received for channel. Retrieving full history.")
                 PubNub.requestFullHistoryForChannel(channel, includingTimeToken: true, withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
-                    println("\requestFullHistoryForChannel callback called for channel \(channel.name)")
                     requestHistoryCompletionBlock(messages, channel, startDate, endDate, error)
                     retryCompletionBlock(error == nil)
                 })
             } else {
-                println("Retrieving incremental history from: \(lastMessageReceivedDate)")
                 PubNub.requestHistoryForChannel(channel,
                     from: PNDate(date: NSDate()), // From: now
                     to: PNDate(date: lastMessageReceivedDate?.dateByAddingTimeInterval(1)), // To: imediatelly after last received message timestamp
                     includingTimeToken: true,
                     withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
-                        println("\nrequestFullHistoryForChannel callback called for channel \(channel.name)")
                         requestHistoryCompletionBlock(messages, channel, startDate, endDate, error)
                         retryCompletionBlock(error == nil)
                 })
@@ -317,8 +313,7 @@ public class PubNubService: FlipsService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
         println("Did receive message. Forwading it to delegate.")
-        println("pnMessage.channel.name: \(pnMessage.channel.name)")
-
+        
         let messageJSON: JSON = JSON(pnMessage.message)
         let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
         let contentJson : JSON = JSON(self.dictionaryFromJSON(decryptedContentString))
