@@ -83,6 +83,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return extensionPointIdentifier != "com.apple.keyboard-service"
     }
     
+    func applicationDidEnterBackground(application: UIApplication) {
+        if let loggedUser = User.loggedUser() {
+            application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()        }
+    }
+    
     // MARK: - Notification Methods
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
@@ -108,12 +113,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         self.onNotificationReceived(application, withUserInfo: userInfo)
+        completionHandler(UIBackgroundFetchResult.NewData)
     }
     
     private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
         if let loggedUser = User.loggedUser() {
             if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
                 let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
+                self.incrementBadgeCounter()
                 if (UIApplication.sharedApplication().keyWindow == nil)  {
                     self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
                 } else if (application.applicationState != UIApplicationState.Active) {
@@ -125,6 +132,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
+    }
+    
+    // MARK: - Badge functions
+    
+    func incrementBadgeCounter() -> Int {
+        var newValue = UIApplication.sharedApplication().applicationIconBadgeNumber + 1
+        UIApplication.sharedApplication().applicationIconBadgeNumber = newValue
+        return newValue
     }
     
     // MARK: - private functions

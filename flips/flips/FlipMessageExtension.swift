@@ -13,6 +13,7 @@
 private let NOTIFICATION_PN_KEY = "pn_apns"
 private let NOTIFICATION_KEY = "aps"
 private let NOTIFICATION_ALERT_KEY = "alert"
+private let NOTIFICATION_CONTENT_KEY = "content-available"
 private let NOTIFICATION_MESSAGE = "You received a new Flip message from"
 
 public let NOTIFICATION_ROOM_KEY = "room_id"
@@ -119,6 +120,7 @@ extension FlipMessage {
         
         var notificationDictionary = Dictionary<String, AnyObject>()
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
+        notificationDictionary.updateValue(1, forKey: NOTIFICATION_CONTENT_KEY)
         
         var notificationApsDictionary = Dictionary<String, AnyObject>()
         notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
