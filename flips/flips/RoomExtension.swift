@@ -41,11 +41,14 @@ extension Room {
     func flipMessagesNotRemoved(inContext context: NSManagedObjectContext? = NSManagedObjectContext.MR_defaultContext()) -> NSOrderedSet {
         var notRemovedMessages = NSMutableOrderedSet()
         
-        for (var i = 0; i < self.flipMessages.count; i++) {
-            let flipMessage = self.flipMessages[i].inContext(context) as FlipMessage
-            
-            if (!flipMessage.removed.boolValue) {
-                notRemovedMessages.addObject(flipMessage)
+        // http://stackoverflow.com/questions/6139989/core-data-nsoperation-crash-while-enumerating-through-and-deleting-objects
+        var messages: NSOrderedSet = NSOrderedSet(orderedSet: self.flipMessages) //, copyItems: true
+        
+        for (var i = 0; i < messages.count; i++) {
+            if let flipMessage: FlipMessage = messages[i].inContext(context) as? FlipMessage {
+                if (!flipMessage.removed.boolValue) {
+                    notRemovedMessages.addObject(flipMessage)
+                }
             }
         }
         

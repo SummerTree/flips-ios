@@ -158,8 +158,8 @@ public class PubNubService: FlipsService, PNDelegate {
     
     func disablePushNotificationOnMyChannels() {
         if let token: NSData = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData() {
-            PubNub.removeAllPushNotificationsForDevicePushToken(token, withCompletionHandlingBlock: { (error: PNError!) -> Void in
-                println("Push notification removed with error: \(error.description)")
+            PubNub.removeAllPushNotificationsForDevicePushToken(token, withCompletionHandlingBlock: { (error: PNError?) -> Void in
+                println("Push notification removed with error: \(error?.description)")
             })
         }
     }
@@ -240,6 +240,11 @@ public class PubNubService: FlipsService, PNDelegate {
                 self.delegate?.pubnubClient(PubNub.sharedInstance(),
                     didReceiveMessageHistory: decryptedMessages,
                     fromChannelName: channel.name)
+                
+                if (methodCompletion == nil) {
+                    // The notification is called in the completion. So, if is there no completion, we need to notify it.
+                    NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+                }
             } else if (error != nil) {
                 println("Could not retrieve message history for channel \(channel.name). \(error.localizedDescription)")
             }

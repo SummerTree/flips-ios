@@ -142,6 +142,12 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         })
     }
     
+    func reloadCells() {
+        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells() as [ConversationTableViewCell] {
+            cell.refreshCell(shouldSetThumbnailAnimated: false)
+        }
+    }
+    
     
     // MARK: - UITableViewDataSource
     

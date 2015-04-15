@@ -154,12 +154,16 @@ class ConversationTableViewCell : UITableViewCell {
     
     func setRoomId(roomID: String) {
         self.roomId = roomID
-            
+        self.refreshCell()
+    }
+    
+    func refreshCell(shouldSetThumbnailAnimated: Bool = true) {
+        let currentRoomId: String = self.roomId
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            if (self.roomId == roomID) {
+            if (self.roomId == currentRoomId) {
                 let roomDataSource = RoomDataSource()
                 var room = roomDataSource.retrieveRoomWithId(self.roomId)
-                self.layoutCell(room)
+                self.layoutCell(room, shouldSetThumbnailAnimated: shouldSetThumbnailAnimated)
             }
         })
     }
@@ -167,7 +171,7 @@ class ConversationTableViewCell : UITableViewCell {
 
     // MARK: - Cell Layout Methods
     
-    private func layoutCell(room: Room) {
+    private func layoutCell(room: Room, shouldSetThumbnailAnimated: Bool = true) {
         // All conversations should be sorted in the inbox by time stamp, with most recent at the top, and oldest at the bottom.
         
         // The preview still photo should reflect the first frame of the video of the most recent message in the conversation
@@ -195,11 +199,14 @@ class ConversationTableViewCell : UITableViewCell {
                         if (originalRoomId != self.roomId) {
                             return
                         }
-                        self.flipImageView.alpha = 0
+                        
                         self.flipImageView.image = thumbnail!
-                        UIView.animateWithDuration(0.25, animations: { () -> Void in
-                            self.flipImageView.alpha = 1
-                        })
+                        if (shouldSetThumbnailAnimated) {
+                            self.flipImageView.alpha = 0
+                            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                                self.flipImageView.alpha = 1
+                            })
+                        }
                     })
                 } else {
                     println("Retrieved thumbnail error: Thumbnail(\(thumbnail)) - Initial RoomId (\(originalRoomId)) - Current RoomId (\(self.roomId))")
