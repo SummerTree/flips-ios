@@ -34,9 +34,8 @@ public class Downloader : NSObject {
         let request = NSMutableURLRequest(URL: url)
         request.timeoutInterval = TIME_OUT_INTERVAL
 
-        let finalPath = localURL.path!
-        let tempFileName = "tmp_\(finalPath.lastPathComponent)"
-        let tempPath = finalPath.stringByReplacingOccurrencesOfString(finalPath.lastPathComponent, withString: tempFileName)
+        let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
+        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
         let tempURL = NSURL(fileURLWithPath: tempPath)!
         
         let operation = AFHTTPRequestOperation(request: request)
