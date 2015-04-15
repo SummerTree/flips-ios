@@ -112,6 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        self.incrementBadgeCounter()
         self.onNotificationReceived(application, withUserInfo: userInfo)
         completionHandler(UIBackgroundFetchResult.NewData)
     }
@@ -120,7 +121,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let loggedUser = User.loggedUser() {
             if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
                 let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
-                self.incrementBadgeCounter()
                 if (UIApplication.sharedApplication().keyWindow == nil)  {
                     self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
                 } else if (application.applicationState != UIApplicationState.Active) {
