@@ -99,12 +99,16 @@ class RoomDataSource : BaseDataSource {
         return nil
     }
     
-    func getMyRooms() -> [Room] {
+    func getMyRoomsWithMessages() -> [Room] {
         var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
-            if (room.flipMessagesNotRemoved(inContext: self.currentContext).count > 0) {
-                roomsWithMessages.append(room)
+            let roomFlipMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
+            for flipMessage : FlipMessage in roomFlipMessages {
+                if (!flipMessage.removed.boolValue) {
+                    roomsWithMessages.append(room)
+                    break
+                }
             }
         }
         
@@ -114,7 +118,7 @@ class RoomDataSource : BaseDataSource {
     func getMyRoomsOrderedByOldestNotReadMessage() -> [Room] {
         let now = NSDate()
         
-        var myRooms = self.getMyRooms()
+        var myRooms = self.getMyRoomsWithMessages()
         return myRooms.sorted { (room, nextRoom) -> Bool in
             let roomOldestMessage = room.oldestNotReadMessage(inContext: self.currentContext)
             var roomDate = roomOldestMessage?.createdAt
@@ -135,7 +139,7 @@ class RoomDataSource : BaseDataSource {
     func getMyRoomsOrderedByMostRecentMessage() -> [Room] {
         let now = NSDate()
         
-        var myRooms = self.getMyRooms()
+        var myRooms = self.getMyRoomsWithMessages()
         return myRooms.sorted { (room, nextRoom) -> Bool in
             let roomMostRecentMessage = room.flipMessagesNotRemoved(inContext: self.currentContext).lastObject as? FlipMessage
             var roomDate = roomMostRecentMessage?.createdAt

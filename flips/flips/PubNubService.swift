@@ -101,6 +101,7 @@ public class PubNubService: FlipsService, PNDelegate {
         if (!self.isConnected()) {
             self.onPubnubConnectedBlock = { () -> Void in
                 self.subscribeOnMyChannels()
+                self.onPubnubConnectedBlock = nil
             }
             return
         }

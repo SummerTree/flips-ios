@@ -226,7 +226,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                 
                 flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, formattedFlips: formattedFlips, andRoom: room)
             }
-            return flipMessage
+            return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage?
         }
         
         return nil

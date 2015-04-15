@@ -54,7 +54,7 @@ public class Downloader : NSObject {
             operation.setCompletionBlockWithSuccess({ (operation, responseObject) -> Void in
                 success(responseObject)
             }, failure: { (operation, error) -> Void in
-                println("\nDownload failed - numberOfRetries: \(numberOfRetries)")
+                println("Download failed - retries remaining: \(numberOfRetries - 1)")
                 let fileManager = NSFileManager.defaultManager()
                 fileManager.removeItemAtURL(localURL, error: nil)
                 self.downloadTaskRetryingNumberOfTimes(numberOfRetries - 1, url: url, localURL: localURL, success: success, failure: failure, progress: progress, latestError: error)
