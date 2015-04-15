@@ -110,6 +110,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 
     deinit {
+        self.removeObservers()
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.removeObserver(self.observerBecomeActive, name: "UIApplicationDidBecomeActiveNotification", object: nil)
         notificationCenter.removeObserver(self.observerResignActive, name: "UIApplicationWillResignActiveNotification", object: nil)
