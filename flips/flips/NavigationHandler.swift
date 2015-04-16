@@ -61,20 +61,17 @@ public class NavigationHandler : NSObject {
         
         switch responseCode {
         case FlipsServiceResponseCode.BACKEND_FORBIDDEN_REQUEST:
-            title = "Session Expired"
-            message = "Please try to log in again. If the issue persists, please contact support."
-        case FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED:
-            title = "App Version Error"
-            message = "This version of Flips is no longer supported. Please update to the latest version in the App Store. Flips will now close."
+            title = NSLocalizedString("Session Expired")
+            message = NSLocalizedString("Please try to log in again. If the issue persists, please contact support.")
         case FlipsServiceResponseCode.BACKEND_BLOCKED_USER:
-            title = "Account Disabled"
-            message = "Please contact Flips Support via www.flipsapp.com."
+            title = NSLocalizedString("Account Disabled")
+            message = NSLocalizedString("Please contact Flips Support via www.flipsapp.com.")
         default:
-            title = "Server Error"
-            message = "Please try to log in again. If the issue persists, please contact support."
+            title = NSLocalizedString("Server Error")
+            message = NSLocalizedString("Please try to log in again. If the issue persists, please contact support.")
         }
         
-        let alertView = UIAlertView(title: NSLocalizedString(title), message: NSLocalizedString(message), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+        let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
         alertView.show()
     }
     
