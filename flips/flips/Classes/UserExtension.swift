@@ -43,4 +43,15 @@ extension User {
         
         return ""
     }
+    
+    func countUnreadMessages() -> Int {
+        var totalUnreadMessages : Int = 0
+        if let rooms = self.rooms.array as? [Room] {
+            for room : Room in rooms {
+                totalUnreadMessages += room.numberOfUnreadMessages()
+            }
+        }
+        return totalUnreadMessages
+    }
+    
 }

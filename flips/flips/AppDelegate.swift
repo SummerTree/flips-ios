@@ -70,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
+        application.applicationIconBadgeNumber = 0
         FBAppCall.handleDidBecomeActive()
     }
 
@@ -79,6 +80,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: String) -> Bool {
         return extensionPointIdentifier != "com.apple.keyboard-service"
+    }
+    
+    func applicationDidEnterBackground(application: UIApplication) {
+        if let loggedUser = User.loggedUser() {
+            application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()
+        }
     }
     
     // MARK: - Notification Methods
@@ -105,9 +112,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        self.incrementBadgeCounter()
         self.onNotificationReceived(application, withUserInfo: userInfo)
+        completionHandler(UIBackgroundFetchResult.NewData)
     }
     
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        println(error.description)
+    }
+    
+    // MARK: - Badge functions
+    
+    func incrementBadgeCounter() -> Int {
+        var newValue = UIApplication.sharedApplication().applicationIconBadgeNumber + 1
+        UIApplication.sharedApplication().applicationIconBadgeNumber = newValue
+        return newValue
+    }
+    
+    // MARK: - private functions
+    
+    private func openSplashScreen(roomID: String? = nil, andFlipMessageID flipMessageID: String? = nil) {
+        let splashScreenViewController = SplashScreenViewController(roomID: roomID, flipMessageID: flipMessageID)
+        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
+        self.window?.rootViewController = navigationViewControler
+        self.window?.makeKeyAndVisible()
+    }
+  
     private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
         if let loggedUser = User.loggedUser() {
             if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
@@ -121,17 +151,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        println(error.description)
-    }
-    
-    // MARK: - private functions
-    
-    private func openSplashScreen(roomID: String? = nil, andFlipMessageID flipMessageID: String? = nil) {
-        let splashScreenViewController = SplashScreenViewController(roomID: roomID, flipMessageID: flipMessageID)
-        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
-        self.window?.rootViewController = navigationViewControler
-        self.window?.makeKeyAndVisible()
-    }
-    
+
 }
