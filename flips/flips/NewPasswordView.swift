@@ -50,6 +50,10 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+    }
+    
     func viewDidAppear() {
         passwordField.becomeFirstResponder()
     }
