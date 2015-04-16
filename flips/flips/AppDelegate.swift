@@ -86,7 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidEnterBackground(application: UIApplication) {
         if let loggedUser = User.loggedUser() {
-            application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()        }
+            application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()
+        }
     }
     
     // MARK: - Notification Methods
