@@ -120,7 +120,6 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                     
                     self.navigationController?.popToRootViewControllerAnimated(true)
-                    self.dismissViewControllerAnimated(false, completion:nil)
                     
                     NSNotificationCenter.defaultCenter().postNotificationName(RESYNC_INBOX_NOTIFICATION_NAME, object: nil, userInfo: nil)
                 })
