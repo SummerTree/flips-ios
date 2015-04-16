@@ -100,42 +100,37 @@ class PlayerView: UIView {
 
     // MARK: - Animations
 
-    private func animateButtonsFadeOut(completion: (() -> Void)?) {
+    private func fadeAnimation(animations: () -> Void, completion: (() -> Void)? = nil) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-                self.playingViewState()
-            }) { (finished) -> Void in
+            UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: animations, completion: { (finished) -> Void in
                 completion?()
                 return
-            }
+            })
         })
     }
 
-    private func animatePlayButtonFadeIn(completion: (() -> Void)?) {
-        UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-            self.initialViewState()
-        }) { (finished) -> Void in
-            completion?()
-            return
-        }
+    private func fadeToPlayingState(completion: (() -> Void)? = nil) {
+        self.fadeAnimation({ () -> Void in
+            self.playingViewState()
+        }, completion: completion)
     }
 
-    private func animateErrorStateFadeIn(completion: (() -> Void)?) {
-        UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
+    private func fadeToPausedState(completion: (() -> Void)? = nil) {
+        self.fadeAnimation({ () -> Void in
+            self.pausedViewState()
+        }, completion: completion)
+    }
+
+    private func fadeToErrorState(completion: (() -> Void)? = nil) {
+        self.fadeAnimation({ () -> Void in
             self.errorViewState()
-        }) { (finished) -> Void in
-            completion?()
-            return
-        }
+        }, completion: completion)
     }
 
-    private func animateProgressBarFadeIn(completion: (() -> Void)?) {
-        UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
+    private func fadeToDownloadingState(completion: (() -> Void)? = nil) {
+        self.fadeAnimation({ () -> Void in
             self.downloadingViewState()
-        }) { (finished) -> Void in
-            completion?()
-            return
-        }
+        }, completion: completion)
     }
 
 
@@ -177,7 +172,7 @@ class PlayerView: UIView {
                         self.setWord(self.words![playerItem.order])
                     }
                     
-                    self.animateButtonsFadeOut({ () -> Void in
+                    self.fadeToPlayingState({ () -> Void in
                         if (currentIdentifier != self.contentIdentifier) {
                             return
                         }
@@ -243,12 +238,12 @@ class PlayerView: UIView {
         if (fadeOutVolume) {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.isPlaying = false
-                self.animatePlayButtonFadeIn(nil)
+                self.fadeToPausedState()
                 self.fadeOutVolume()
             })
         } else {
             self.isPlaying = false
-            self.animatePlayButtonFadeIn(nil)
+            self.fadeToPausedState()
             if let player = self.player() {
                 player.pause()
             }
@@ -336,7 +331,7 @@ class PlayerView: UIView {
         self.playerItems.removeAll(keepCapacity: true)
         self.progressBarView.progress = 0
 
-        self.animateErrorStateFadeIn(nil)
+        self.fadeToErrorState()
     }
 
 
@@ -362,6 +357,15 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 0.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 0.0
+        self.retryButtonView.alpha = 0.0
+        self.retryLabel.alpha = 0.0
+    }
+
+    private func pausedViewState() {
+        self.thumbnailView.alpha = 0.0
+        self.playButtonView.alpha = self.BUTTONS_ALPHA
+        self.progressBarView.alpha = 0.0
+        self.progressBarView.progress = 0.0
         self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
@@ -484,7 +488,7 @@ class PlayerView: UIView {
                     )
                     
                     if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                        self.animateProgressBarFadeIn(nil)
+                        self.fadeToDownloadingState()
                     }
                 }
             }
