@@ -84,7 +84,7 @@ public class RoomService: FlipsService {
 
     private func parseCreateRoomResponse(response: AnyObject) -> Room {
         let json = JSON(response)
-        return PersistentManager.sharedInstance.createOrUpdateRoomWithJson(json)
+        return PersistentManager.sharedInstance.createRoomWithJson(json)
     }
     
     private func parseGetRoomsResponse(response: AnyObject) -> [Room] {
@@ -93,7 +93,7 @@ public class RoomService: FlipsService {
         
         if let jsonArray = json.array {
             for roomJson in jsonArray {
-                var room = PersistentManager.sharedInstance.createOrUpdateRoomWithJson(roomJson)
+                var room = PersistentManager.sharedInstance.createRoomWithJson(roomJson)
                 rooms.append(room)
             }
         }

@@ -82,6 +82,8 @@ public class AuthenticationHelper: NSObject {
         
         DeviceHelper.sharedInstance.setLastTimeUserSynchronizePrivateChannel(nil)
         
+        RemoteRequestManager.sharedInstance.cleanQueue()
+        
         PubNubService.sharedInstance.disablePushNotificationOnMyChannels()
         
         CoreDataHandler.sharedInstance.resetDatabase()

@@ -71,12 +71,6 @@ class FlipDataSource : BaseDataSource {
         return self.createEntityWithJson(json)
     }
     
-    func updateFlip(flip: Flip, withJson json: JSON) -> Flip {
-        var flipInContext = flip.inContext(currentContext) as Flip
-        self.fillFlip(flipInContext, withJsonData: json)
-        return flipInContext
-    }
-    
     func associateFlip(flip: Flip, withOwner owner: User) {
         var flipInContext = flip.inContext(currentContext) as Flip
         var ownerInContext = owner.inContext(currentContext) as User

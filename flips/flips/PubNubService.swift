@@ -101,6 +101,7 @@ public class PubNubService: FlipsService, PNDelegate {
         if (!self.isConnected()) {
             self.onPubnubConnectedBlock = { () -> Void in
                 self.subscribeOnMyChannels()
+                self.onPubnubConnectedBlock = nil
             }
             return
         }
@@ -158,8 +159,8 @@ public class PubNubService: FlipsService, PNDelegate {
     
     func disablePushNotificationOnMyChannels() {
         if let token: NSData = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData() {
-            PubNub.removeAllPushNotificationsForDevicePushToken(token, withCompletionHandlingBlock: { (error: PNError!) -> Void in
-                println("Push notification removed with error: \(error.description)")
+            PubNub.removeAllPushNotificationsForDevicePushToken(token, withCompletionHandlingBlock: { (error: PNError?) -> Void in
+                println("Push notification removed with error: \(error?.description)")
             })
         }
     }
@@ -196,8 +197,10 @@ public class PubNubService: FlipsService, PNDelegate {
 
     // MARK: - Message history
 
-    private func loadMessagesHistoryForChannel(channel: PNChannel, completion:(() -> Void)?) {
+    private func loadMessagesHistoryForChannel(channel: PNChannel, loadMessagesHistoryCompletion:(() -> Void)?) {
         println("Requesting history for channel: \(channel.name)")
+        
+        var methodCompletion: (() -> Void)? = loadMessagesHistoryCompletion
 
         let roomDataSource = RoomDataSource()
         let room = roomDataSource.getRoomWithPubnubID(channel.name)
@@ -212,11 +215,11 @@ public class PubNubService: FlipsService, PNDelegate {
         } else {
             // Is not getting history from user's private channel, so should be ignored
             println("Local Room was not found for channel. Skipping.")
-            completion?()
+            methodCompletion?()
             return
         }
-
-        let completionBlock : PNClientHistoryLoadHandlingBlock = { (messages, channel, startDate, endDate, error) -> Void in
+        
+        let requestHistoryCompletionBlock : PNClientHistoryLoadHandlingBlock = { (messages, channel, startDate, endDate, error) -> Void in
             let messages = messages as? Array<PNMessage>
             
             if (messages != nil && messages!.count > 0) {
@@ -238,26 +241,35 @@ public class PubNubService: FlipsService, PNDelegate {
                 self.delegate?.pubnubClient(PubNub.sharedInstance(),
                     didReceiveMessageHistory: decryptedMessages,
                     fromChannelName: channel.name)
+                
+                if (methodCompletion == nil) {
+                    // The notification is called in the completion. So, if is there no completion, we need to notify it.
+                    NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+                }
             } else if (error != nil) {
                 println("Could not retrieve message history for channel \(channel.name). \(error.localizedDescription)")
             }
 
-            completion?()
+            methodCompletion?()
+            methodCompletion = nil
         }
 
-        if (lastMessageReceivedDate == nil) {
-            println("No message received for channel. Retrieving full history.")
-            PubNub.requestFullHistoryForChannel(channel,
-                includingTimeToken: true,
-                withCompletionBlock: completionBlock)
-
-        } else {
-            println("Retrieving incremental history from: \(lastMessageReceivedDate)")
-            PubNub.requestHistoryForChannel(channel,
-                from: PNDate(date: NSDate()), // From: now
-                to: PNDate(date: lastMessageReceivedDate?.dateByAddingTimeInterval(1)), // To: imediatelly after last received message timestamp
-                includingTimeToken: true,
-                withCompletionBlock: completionBlock)
+        RemoteRequestManager.sharedInstance.executeBlock { (retryCompletionBlock) -> Void in
+            if (lastMessageReceivedDate == nil) {
+                PubNub.requestFullHistoryForChannel(channel, includingTimeToken: true, withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
+                    requestHistoryCompletionBlock(messages, channel, startDate, endDate, error)
+                    retryCompletionBlock(error == nil)
+                })
+            } else {
+                PubNub.requestHistoryForChannel(channel,
+                    from: PNDate(date: NSDate()), // From: now
+                    to: PNDate(date: lastMessageReceivedDate?.dateByAddingTimeInterval(1)), // To: imediatelly after last received message timestamp
+                    includingTimeToken: true,
+                    withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
+                        requestHistoryCompletionBlock(messages, channel, startDate, endDate, error)
+                        retryCompletionBlock(error == nil)
+                })
+            }
         }
     }
 
@@ -279,14 +291,14 @@ public class PubNubService: FlipsService, PNDelegate {
 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                     var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
-                    self.loadMessagesHistoryForChannel(channel, completion: { () -> Void in
+                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { () -> Void in
                         dispatch_group_leave(group)
                     })
                 })
             }
 
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
-
+            
             NSLog("HISTORY FETCH ENDED")
 
             NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
@@ -301,8 +313,7 @@ public class PubNubService: FlipsService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didReceiveMessage pnMessage: PNMessage!) {
         println("Did receive message. Forwading it to delegate.")
-        println("pnMessage.channel.name: \(pnMessage.channel.name)")
-
+        
         let messageJSON: JSON = JSON(pnMessage.message)
         let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
         let contentJson : JSON = JSON(self.dictionaryFromJSON(decryptedContentString))

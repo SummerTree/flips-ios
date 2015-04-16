@@ -33,8 +33,8 @@ public class CacheJournal {
     init(absolutePath: String) {
         self.path = absolutePath
         self.entries = ThreadSafe(Array<JournalEntry>())
-        self.fileManagerQueue = dispatch_queue_create("\(self.path)FileManagerQueue", nil)
-        self.entriesQueue = dispatch_queue_create("\(self.path)EntriesQueue", nil)
+        self.fileManagerQueue = dispatch_queue_create("\(self.path)FileManagerQueue", DISPATCH_QUEUE_SERIAL)
+        self.entriesQueue = dispatch_queue_create("\(self.path)EntriesQueue", DISPATCH_QUEUE_SERIAL)
     }
     
     func open() {

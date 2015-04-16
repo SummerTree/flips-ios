@@ -17,7 +17,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
     private var rangeThatWillChange: NSRange? = nil
-    private let WHITESPACE: Character = " "
+    private let WHITESPACE: String = " "
+    private let WHITESPACE_CHAR: Character = " "
     let DEFAULT_HEIGHT: CGFloat = 38.0
     let DEFAULT_LINE_HEIGHT: CGFloat = 20.0
     let JOINED_COLOR: UIColor = UIColor.flipOrange()
@@ -58,43 +59,70 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func joinStrings() {
         var selectedTextRange: UITextRange = self.selectedTextRange!
         
-        var string = Array(self.text)
+        var string = [(String,NSRange)]()
         
-        var posInit : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
-        var posEnd : Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
+        var posInit: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
+        var posEnd: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
         
-        for (var i = posInit; i < posEnd; ++i) {
-            if (string[i] != WHITESPACE) {
-                break
+        let initialRange: NSRange? = NSMakeRange(posInit, posEnd-posInit)
+        var tempInit: Int?
+        var tempEnd: Int?
+        var countSubstrings: Int? = 0
+        
+        var nsstring = self.text as NSString
+        let fullRange = NSMakeRange(0, nsstring.length)
+        nsstring.enumerateSubstringsInRange(fullRange, options: .ByComposedCharacterSequences) { (char: String!, range: NSRange, enclosingRange: NSRange, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+            if (range.location == initialRange!.location) {
+                tempInit = countSubstrings!
             }
-            ++posInit
+            
+            if (range.location + range.length == initialRange!.location + initialRange!.length) {
+                tempEnd = countSubstrings! + 1
+            }
+                        
+            string.append((char, range))
+            ++countSubstrings!
         }
         
-        for (var i = posEnd-1; i >= posInit; --i) {
-            if (string[i] != WHITESPACE) {
+        var rangeInit: Int = tempInit!
+        var rangeEnd: Int = tempEnd!
+    
+        for (var i = rangeInit; i < rangeEnd; ++i) {
+            if (string[i].0 != WHITESPACE) {
                 break
             }
-            --posEnd
+            ++rangeInit
+            posInit += string[i].1.length
         }
         
-        if (posInit == posEnd) {
+        for (var i = rangeEnd-1; i >= rangeInit; --i) {
+            if (string[i].0 != WHITESPACE) {
+                break
+            }
+            --rangeEnd
+            posEnd -= string[i].1.length
+        }
+        
+        if (rangeInit == rangeEnd) {
             return
         }
         
-        let firstCharIsSpecial = isSpecialCharacter(string[posInit])
-        for (var i = posInit-1; i >= 0; --i) {
-            if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ firstCharIsSpecial) {
+        let firstCharIsSpecial = isSpecialCharacter(string[rangeInit].0)
+        for (var i = rangeInit-1; i >= 0; --i) {
+            if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) ^ firstCharIsSpecial) {
                 break
             }
-            --posInit
+            --rangeInit
+            posInit -= string[i].1.length
         }
         
-        let lastCharIsSpecial = isSpecialCharacter(string[posEnd-1])
-        for (var i = posEnd; i < string.count; ++i) {
-            if (string[i] == WHITESPACE || isSpecialCharacter(string[i]) ^ lastCharIsSpecial) {
+        let lastCharIsSpecial = isSpecialCharacter(string[rangeEnd-1].0)
+        for (var i = rangeEnd; i < string.count; ++i) {
+            if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) ^ lastCharIsSpecial) {
                 break
             }
-            ++posEnd
+            ++rangeEnd
+            posEnd += string[i].1.length
         }
         
         var newRanges = [NSRange]()
@@ -116,9 +144,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     private func updateColorOnJoinedTexts() {
         var selectedTextRange = self.selectedTextRange
-        var attributedString = NSMutableAttributedString(string:self.text)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSRange(location: 0, length: countElements(self.text)))
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, countElements(self.text)))
+        var attributedString = NSMutableAttributedString(string: self.text)
+        let textLength = (self.text as NSString).length
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSMakeRange(0, textLength))
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, textLength))
         
         for joinedTextRange in joinedTextRanges {
             attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
@@ -150,12 +179,12 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 index = partOfRange.range!.location+partOfRange.range!.length
             } else {
                 let i = index++
-                if (countElements(word) > 0 && (textArray[i] == WHITESPACE || (isSpecialCharacter(Array(word)[0]) ^ isSpecialCharacter(textArray[i])))) {
+                if (countElements(word) > 0 && (textArray[i] == WHITESPACE_CHAR || (isSpecialCharacter(Array(word)[0]) ^ isSpecialCharacter(textArray[i])))) {
                     words.append(word)
                     word = ""
                 }
                 
-                if (textArray[i] != WHITESPACE) {
+                if (textArray[i] != WHITESPACE_CHAR) {
                     word.append(textArray[i])
                 }
             }
@@ -192,13 +221,16 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return (false, nil)
     }
     
-    func isSpecialCharacter(char : Character) -> Bool {
-        let str = String(char)
-        let range = NSRange(location: 0, length: countElements(str))
-        return wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) == 0
+    private func isSpecialCharacter(char: String) -> Bool {
+        return wordCharRegex.numberOfMatchesInString(char, options: nil, range: NSMakeRange(0, (char as NSString).length)) == 0
     }
     
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool     {
+    private func isSpecialCharacter(char: Character) -> Bool {
+        let str = String(char)
+        return wordCharRegex.numberOfMatchesInString(str, options: nil, range: NSMakeRange(0, (str as NSString).length)) == 0
+    }
+    
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
         if action == "cut:" {
             return false
         }
@@ -275,24 +307,18 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             self.updateColorOnJoinedTexts()
         }
         
-        joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: text)
-    }
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        let newText = (textView.text as NSString).stringByReplacingCharactersInRange(range, withString: text)
-        let textWords = self.getTextWords(newText, limit: NUM_WORDS_LIMIT)
-        
+        let textWords = self.getTextWords(self.text, limit: NUM_WORDS_LIMIT)
         if (textWords.words.count > NUM_WORDS_LIMIT) {
             self.text = textWords.truncatedText // " ".join(words[0..<NUM_WORDS_LIMIT])
             
             let limitAlert = UIAlertView(title: NSLocalizedString("Flips"), message: NSLocalizedString("Flip Messages cannot be longer than 60 words."), delegate: nil, cancelButtonTitle: NSLocalizedString("OK"))
             limitAlert.show()
-            
-            joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: self.text)
-            
-            return false
         }
         
+        joinStringsTextFieldDelegate?.joinStringsTextField?(self, didChangeText: self.text)
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.joinStringsTextFieldDelegate?.joinStringsTextFieldShouldReturn?(self)
@@ -317,7 +343,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 firstWord = false
             }
             if (isCompoundText(word)) {
-                var compoundTextRange = NSMakeRange(countElements(text), countElements(word))
+                var compoundTextRange = NSMakeRange((text as NSString).length, (word as NSString).length)
                 joinedTextRanges.append(compoundTextRange)
             }
             text += word

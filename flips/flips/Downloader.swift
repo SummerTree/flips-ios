@@ -19,6 +19,8 @@ public class Downloader : NSObject {
     
     let TIME_OUT_INTERVAL: NSTimeInterval = 60 //seconds
     
+    private let NUMBER_OF_RETRIES: Int = 3
+    
     // MARK: - Singleton Implementation
     
     public class var sharedInstance : Downloader {
@@ -31,29 +33,52 @@ public class Downloader : NSObject {
     // MARK: - Download Public Methods
 
     func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil) {
-        let request = NSMutableURLRequest(URL: url)
-        request.timeoutInterval = TIME_OUT_INTERVAL
+        
+        let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
+        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
+        let tempURL = NSURL(fileURLWithPath: tempPath)!
 
-        let operation = AFHTTPRequestOperation(request: request)
-        operation.outputStream = NSOutputStream(URL: localURL, append: false)
-
-        operation.setCompletionBlockWithSuccess({ (operation, responseObject) -> Void in
-            completion(success: true)
-        }, failure: { (operation, error) -> Void in
-            println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
+        self.downloadTaskRetryingNumberOfTimes(NUMBER_OF_RETRIES, url: url, localURL: tempURL, success: { (responseObject) -> Void in
+            var error: NSError? = nil
             let fileManager = NSFileManager.defaultManager()
-            fileManager.removeItemAtURL(localURL, error: nil)
-            completion(success: false)
-        })
-
-        if (progress != nil) {
-            operation.setDownloadProgressBlock { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
-                progress?(Float(totalBytesRead) / Float(totalBytesExpectedToRead))
-                return
+            fileManager.moveItemAtURL(tempURL, toURL: localURL, error: &error)
+            if let err = error {
+                println("Error moving item to path \(localURL.path!), error \(err)")
             }
-        }
-
-        operation.start()
+            completion(success: true)
+        }, failure: { (error: NSError?) -> Void in
+            println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
+            completion(success: false)
+        }, progress: progress, latestError: nil)
     }
     
+    private func downloadTaskRetryingNumberOfTimes(numberOfRetries: Int, url: NSURL, localURL: NSURL, success: (AnyObject?) -> Void, failure: (NSError?) -> Void, progress: ((Float) -> Void)? = nil, latestError: NSError?) {
+        if (numberOfRetries <= 0) {
+            failure(latestError)
+        } else {
+            let request = NSMutableURLRequest(URL: url)
+            request.timeoutInterval = TIME_OUT_INTERVAL
+            
+            let operation = AFHTTPRequestOperation(request: request)
+            operation.outputStream = NSOutputStream(URL: localURL, append: false)
+            
+            operation.setCompletionBlockWithSuccess({ (operation, responseObject) -> Void in
+                success(responseObject)
+            }, failure: { (operation, error) -> Void in
+                println("Download failed - retries remaining: \(numberOfRetries - 1)")
+                let fileManager = NSFileManager.defaultManager()
+                fileManager.removeItemAtURL(localURL, error: nil)
+                self.downloadTaskRetryingNumberOfTimes(numberOfRetries - 1, url: url, localURL: localURL, success: success, failure: failure, progress: progress, latestError: error)
+            })
+            
+            if (progress != nil) {
+                operation.setDownloadProgressBlock { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
+                    progress?(Float(totalBytesRead) / Float(totalBytesExpectedToRead))
+                    return
+                }
+            }
+            
+            operation.start()
+        }
+    }
 }

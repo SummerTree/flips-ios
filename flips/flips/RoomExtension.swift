@@ -39,17 +39,13 @@ extension Room {
     }
     
     func flipMessagesNotRemoved(inContext context: NSManagedObjectContext? = NSManagedObjectContext.MR_defaultContext()) -> NSOrderedSet {
-//        if (currentThread != NSThread.currentThread()) {
-//            println(" - flipMessagesNotRemoved thread differents: Current(\(NSThread.currentThread())) - Original(\(currentThread))")
-//        }
-        
         var notRemovedMessages = NSMutableOrderedSet()
         
         for (var i = 0; i < self.flipMessages.count; i++) {
-            let flipMessage = self.flipMessages[i].inContext(context) as FlipMessage
-            
-            if (!flipMessage.removed.boolValue) {
-                notRemovedMessages.addObject(flipMessage)
+            if let flipMessage: FlipMessage = self.flipMessages[i].inContext(context) as? FlipMessage {
+                if (!flipMessage.removed.boolValue) {
+                    notRemovedMessages.addObject(flipMessage)
+                }
             }
         }
         

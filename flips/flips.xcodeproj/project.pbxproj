@@ -127,6 +127,9 @@
 		7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */; };
 		7A7202EC1A36196F00FF5784 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7202EB1A36196F00FF5784 /* BubbleView.swift */; };
 		7A76C68919D303F500D0ACA7 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A76C68819D303F500D0ACA7 /* InboxView.swift */; };
+		7A777A561ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A777A551ADD44210004BEB1 /* RemoteRequestManager.swift */; };
+		7A777A571ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A777A551ADD44210004BEB1 /* RemoteRequestManager.swift */; };
+		7A777A581ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A777A551ADD44210004BEB1 /* RemoteRequestManager.swift */; };
 		7A7937A11A3085E500136144 /* FlipsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7937A01A3085E500136144 /* FlipsHeaderView.swift */; };
 		7A8A86381A1D1F9E00CB0B31 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */; };
 		7A8A964D19E1F3CF00FB5515 /* MessagesTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */; };
@@ -757,6 +760,7 @@
 		7A6D3C9819D2058500057058 /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Classes/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7A7202EB1A36196F00FF5784 /* BubbleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
 		7A76C68819D303F500D0ACA7 /* InboxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InboxView.swift; path = Classes/InboxView.swift; sourceTree = "<group>"; };
+		7A777A551ADD44210004BEB1 /* RemoteRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteRequestManager.swift; sourceTree = "<group>"; };
 		7A7937A01A3085E500136144 /* FlipsHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsHeaderView.swift; sourceTree = "<group>"; };
 		7A8A86371A1D1F9E00CB0B31 /* RoomService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
 		7A8A964C19E1F3CF00FB5515 /* MessagesTopViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopViewCell.swift; path = Classes/MessagesTopViewCell.swift; sourceTree = "<group>"; };
@@ -948,6 +952,7 @@
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				7A777A541ADD43F40004BEB1 /* Remote Request Manager */,
 				73D727981A83E728006DCC92 /* Caching */,
 				5707185719D19D580069064F /* Backend */,
 				7AF82E2719F07CF700D0393F /* Chat Handler */,
@@ -1561,6 +1566,14 @@
 			name = Onboarding;
 			sourceTree = "<group>";
 		};
+		7A777A541ADD43F40004BEB1 /* Remote Request Manager */ = {
+			isa = PBXGroup;
+			children = (
+				7A777A551ADD44210004BEB1 /* RemoteRequestManager.swift */,
+			);
+			name = "Remote Request Manager";
+			sourceTree = "<group>";
+		};
 		7A8BFEDB1A09597600E7F2A3 /* Flips Collection */ = {
 			isa = PBXGroup;
 			children = (
@@ -2004,6 +2017,7 @@
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
 				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
+				7A777A561ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
 				BE3A904D1AD70DF300405EC8 /* AppSettings.swift in Sources */,
 				7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */,
@@ -2208,6 +2222,7 @@
 				BE245FA11AD2D95900859233 /* CacheJournal.swift in Sources */,
 				BE245FA21AD2D95900859233 /* TakePictureViewControllerDelegate.swift in Sources */,
 				BE245FA31AD2D95900859233 /* BorderedView.swift in Sources */,
+				7A777A571ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */,
 				BE245FA41AD2D95900859233 /* ChatTableViewCell.swift in Sources */,
 				BE3A904E1AD70DF300405EC8 /* AppSettings.swift in Sources */,
 				BE245FA51AD2D95900859233 /* UITableViewExtensions.swift in Sources */,
@@ -2412,6 +2427,7 @@
 				BE24607B1AD2D9C600859233 /* CacheJournal.swift in Sources */,
 				BE24607C1AD2D9C600859233 /* TakePictureViewControllerDelegate.swift in Sources */,
 				BE24607D1AD2D9C600859233 /* BorderedView.swift in Sources */,
+				7A777A581ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */,
 				BE24607E1AD2D9C600859233 /* ChatTableViewCell.swift in Sources */,
 				BE3A904F1AD70DF300405EC8 /* AppSettings.swift in Sources */,
 				BE24607F1AD2D9C600859233 /* UITableViewExtensions.swift in Sources */,
@@ -2616,7 +2632,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2658,7 +2674,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2684,7 +2700,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2692,7 +2708,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Debug;
@@ -2706,7 +2722,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2714,7 +2730,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Release;
@@ -2728,7 +2744,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2736,7 +2752,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Debug;
@@ -2750,7 +2766,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2758,7 +2774,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Release;
@@ -2772,7 +2788,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2780,7 +2796,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Distribution;
@@ -2794,7 +2810,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2802,7 +2818,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Debug;
@@ -2816,7 +2832,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2824,7 +2840,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Release;
@@ -2838,7 +2854,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2846,7 +2862,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Distribution;
@@ -2869,7 +2885,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2895,7 +2911,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COPY_PHASE_STRIP = NO;
+				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2903,7 +2919,7 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = Flips;
 				PROVISIONING_PROFILE = "";
-				STRIP_INSTALLED_PRODUCT = NO;
+				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
 			};
 			name = Distribution;
