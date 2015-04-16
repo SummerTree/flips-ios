@@ -43,7 +43,7 @@ public class Downloader : NSObject {
             let fileManager = NSFileManager.defaultManager()
             fileManager.moveItemAtURL(tempURL, toURL: localURL, error: &error)
             if let err = error {
-                println("Error moving item to path \(tempURL.path!), error \(err)")
+                println("Error moving item to path \(localURL.path!), error \(err)")
             }
             completion(success: true)
         }, failure: { (error: NSError?) -> Void in

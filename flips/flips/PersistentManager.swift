@@ -65,13 +65,10 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         if (isNewRoom) {
             let userDataSource = UserDataSource()
             var admin = userDataSource.getUserById(json[RoomJsonParams.ADMIN_ID].stringValue)
-            if (admin == nil) {
-                println("An error happened. Room's admin doesn't exists in database. He should be created with the others participants.")
-            }
-            
+
             MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
                 let roomDataSourceInContext = RoomDataSource(context: context)
-                roomDataSourceInContext.associateRoom(room!, withAdmin: admin!, andParticipants: participants)
+                roomDataSourceInContext.associateRoom(room!, withAdmin: admin, andParticipants: participants)
             }
         }
         

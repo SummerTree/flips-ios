@@ -54,14 +54,14 @@ class RoomDataSource : BaseDataSource {
         return self.createEntityWithJson(json)
     }
     
-    func associateRoom(room: Room, withAdmin admin: User, andParticipants participants: [User]) {
+    func associateRoom(room: Room, withAdmin admin: User?, andParticipants participants: [User]) {
         var roomInContext = room.inContext(currentContext) as Room
 
         for user in participants {
             roomInContext.addParticipantsObject(user.inContext(currentContext) as User)
         }
 
-        roomInContext.admin = admin.inContext(currentContext) as User
+        roomInContext.admin = admin?.inContext(currentContext) as User
     }
     
     
