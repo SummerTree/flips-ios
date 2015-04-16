@@ -225,6 +225,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     }
     
     func hideRecordingView() {
+        self.captureAudioButton.enabled = true
         self.captureAudioButton.hidden = true
         self.cancelCaptureAudioButton.hidden = true
         self.takePictureButton.hidden = false
@@ -255,6 +256,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     // MARK: - Button Handlers
     
     func captureAudioButtonTapped(sender: UIButton!) {
+        sender.enabled = false
         self.delegate?.composeBottomViewContainerDidTapCaptureAudioButton(self)
     }
     

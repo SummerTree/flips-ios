@@ -207,6 +207,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         }
     }
     
+    
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
@@ -242,14 +243,31 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let roomDataSource = RoomDataSource()
             let rooms = roomDataSource.getMyRoomsOrderedByMostRecentMessage()
-            self.roomIds.removeAllObjects()
-            for room in rooms {
-                self.roomIds.addObject(room.roomID)
+            
+            var shouldReloadTableView: Bool = false
+            if (self.roomIds.count != rooms.count) {
+                shouldReloadTableView = true
+            } else {
+                for (var i: Int = 0; i < rooms.count; i++) {
+                    if (self.roomIds[i] as NSString != rooms[i].roomID) {
+                        shouldReloadTableView = true
+                    }
+                }
             }
             
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.inboxView.reloadData()
-            })
+            if (!shouldReloadTableView) {
+                // reload cells internally
+                self.inboxView.reloadCells()
+            } else {
+                self.roomIds.removeAllObjects()
+                for room in rooms {
+                    self.roomIds.addObject(room.roomID)
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.inboxView.reloadData()
+                })
+            }
         })
     }
     
@@ -340,6 +358,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     func userDataSourceDidFinishFlipsDownload(userDataSource: UserDataSource) {
+        self.refreshRooms()
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             // dismiss sync view
             UIView.animateWithDuration(self.animationDuration, animations: { () -> Void in

@@ -31,18 +31,20 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     // MARK: - Room Methods
     
-    func createOrUpdateRoomWithJson(json: JSON) -> Room {
+    func createRoomWithJson(json: JSON) -> Room {
         let roomDataSource = RoomDataSource()
         let roomID = json[RoomJsonParams.ROOM_ID].stringValue
         var room = roomDataSource.getRoomById(roomID)
         
+        var isNewRoom: Bool = false
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
             let roomDataSourceInContext = RoomDataSource(context: context)
             var roomInContext: Room
             if (room == nil) {
+                isNewRoom = true
                 roomInContext = roomDataSourceInContext.createRoomWithJson(json)
             } else {
-                roomInContext = roomDataSourceInContext.updateRoom(room!, withJson: json)
+                roomInContext = room!
             }
             
             room = roomInContext
@@ -51,19 +53,23 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         var content = json[RoomJsonParams.PARTICIPANTS]
         var participants = Array<User>()
         for (index: String, json: JSON) in content {
-            // ONLY USERS CAN PARTICIPATE IN A ROOM
-            participants.append(self.createOrUpdateUserWithJson(json))
+            if (isNewRoom) {
+                // Only users can participate of a room
+                participants.append(self.createOrUpdateUserWithJson(json))
+            } else {
+                // Just updating user's info
+                self.createOrUpdateUserWithJson(json)
+            }
         }
         
-        let userDataSource = UserDataSource()
-        var admin = userDataSource.getUserById(json[RoomJsonParams.ADMIN_ID].stringValue)
-        if (admin == nil) {
-            println("An error happened. Room's admin doesn't exists in database. He should be created with the others participants.")
-        }
-        
-        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            let roomDataSourceInContext = RoomDataSource(context: context)
-            roomDataSourceInContext.associateRoom(room!, withAdmin: admin!, andParticipants: participants)
+        if (isNewRoom) {
+            let userDataSource = UserDataSource()
+            var admin = userDataSource.getUserById(json[RoomJsonParams.ADMIN_ID].stringValue)
+
+            MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+                let roomDataSourceInContext = RoomDataSource(context: context)
+                roomDataSourceInContext.associateRoom(room!, withAdmin: admin, andParticipants: participants)
+            }
         }
         
         return room!
@@ -72,29 +78,31 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     // MARK: - Flip Methods
     
-    func createOrUpdateFlipWithJsonAsync(json: JSON) {
+    func createFlipWithJsonAsync(json: JSON) {
         let flipDataSource = FlipDataSource()
         let flipID = json[FlipJsonParams.ID].stringValue
         var flip = flipDataSource.getFlipById(flipID)
         
-        MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
-            let flipDataSourceInContext = FlipDataSource(context: context)
-            if (flip == nil) {
-                if (!flipDataSourceInContext.isFlipToBeDeleted(json)) {
-                    flip = flipDataSourceInContext.createFlipWithJson(json)
+        if (flip != nil) {
+            return
+        } else {
+            MagicalRecord.saveWithBlock({ (context: NSManagedObjectContext!) -> Void in
+                let flipDataSourceInContext = FlipDataSource(context: context)
+                if (flip == nil) {
+                    if (!flipDataSourceInContext.isFlipToBeDeleted(json)) {
+                        flip = flipDataSourceInContext.createFlipWithJson(json)
+                    }
                 }
-            } else {
-                flip = flipDataSourceInContext.updateFlip(flip!.inContext(context) as Flip, withJson: json)
-            }
-        }, completion: { (success, error) -> Void in
-            if (success) {
-                if (flip != nil) {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                        self.associateFlip(flip!, withOwnerInJson: json)
-                    })
+            }, completion: { (success, error) -> Void in
+                if (success) {
+                    if (flip != nil) {
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                            self.associateFlip(flip!, withOwnerInJson: json)
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
     }
     
     private func associateFlip(flip: Flip, withOwnerInJson json: JSON) {
@@ -120,23 +128,22 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         }
     }
     
-    func createOrUpdateFlipWithJson(json: JSON) -> Flip {
+    func createFlipWithJson(json: JSON) -> Flip {
         let flipDataSource = FlipDataSource()
         let flipID = json[FlipJsonParams.ID].stringValue
         var flip = flipDataSource.getFlipById(flipID)
-        
-        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            let flipDataSourceInContext = FlipDataSource(context: context)
-            if (flip == nil) {
+
+        if (flip != nil) {
+            return flip!
+        } else {
+            MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+                let flipDataSourceInContext = FlipDataSource(context: context)
                 flip = flipDataSourceInContext.createFlipWithJson(json)
-            } else {
-                flip = flipDataSourceInContext.updateFlip(flip!.inContext(context) as Flip, withJson: json)
             }
+            self.associateFlip(flip!, withOwnerInJson: json)
+            
+            return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
         }
-        
-        self.associateFlip(flip!, withOwnerInJson: json)
-        
-        return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
     }
 
     func createAndUploadFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, createFlipSuccessCompletion: CreateFlipSuccessCompletion, createFlipFailCompletion: CreateFlipFailureCompletion) {
@@ -185,7 +192,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
         var formattedFlips: [FormattedFlip] = Array<FormattedFlip>()
         for (index: String, flipJson: JSON) in content {
-            let flip = self.createOrUpdateFlipWithJson(flipJson)
+            let flip = self.createFlipWithJson(flipJson)
             
             var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
             formattedFlips.append(formattedFlip)
@@ -203,7 +210,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             let flipMessageDataSource = FlipMessageDataSource()
             var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
             if (entity != nil) {
-                return entity // if the user already has his message do not recreate
+                return entity // if the user already has his message do not recreate it
             }
             
             MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
@@ -216,7 +223,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                 
                 flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, formattedFlips: formattedFlips, andRoom: room)
             }
-            return flipMessage
+            return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage?
         }
         
         return nil
@@ -427,7 +434,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     let myFlipsAsJSON = jsonResponse.array
                     
                     for myFlipJson in myFlipsAsJSON! {
-                        let flip = self.createOrUpdateFlipWithJson(myFlipJson)
+                        let flip = self.createFlipWithJson(myFlipJson)
                         myFlips.append(flip)
                     }
                     
@@ -492,7 +499,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     success: { (responseAsJSON) -> Void in
                         let stockFlipsAsJSON = responseAsJSON?[self.STOCK_FLIPS].array
                         for stockFlipJson in stockFlipsAsJSON! {
-                            PersistentManager.sharedInstance.createOrUpdateFlipWithJsonAsync(stockFlipJson)
+                            PersistentManager.sharedInstance.createFlipWithJsonAsync(stockFlipJson)
                         }
                         if let json = responseAsJSON {
                             let lastTimestampAsString = json[self.STOCK_FLIPS_LAST_TIMESTAMP].stringValue

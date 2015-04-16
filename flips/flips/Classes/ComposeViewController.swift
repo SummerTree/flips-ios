@@ -156,7 +156,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.addSubviews()
         self.addConstraints()
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             self.reloadMyFlips()
             self.mapWordsToFirstAvailableFlip()
             self.updateFlipWordsState()
@@ -178,9 +178,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
         composeTopViewContainer?.viewWillDisappear()
         composeTopViewContainer?.delegate = nil
+
+        super.viewWillDisappear(animated)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

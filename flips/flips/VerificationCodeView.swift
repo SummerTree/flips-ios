@@ -36,6 +36,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     private var hintText: UILabel!
     private var phoneNumberLabel: UILabel!
     private var codeView: UIView!
+    private var disableUserInteractionCodeView: UIView!
     private var codeViewLeadingSpace: UIView!
     private var codeField0: UITextField!
     private var codeField1: UITextField!
@@ -122,6 +123,10 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         
         codeViewTrailingSpace = UIView()
         codeView.addSubview(codeViewTrailingSpace)
+        
+        disableUserInteractionCodeView = UIView()
+        disableUserInteractionCodeView.contentMode = UIViewContentMode.Center
+        self.addSubview(disableUserInteractionCodeView)
         
         resendButtonView = UIView()
         resendButtonView.contentMode = .Center
@@ -228,6 +233,14 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             make.left.equalTo()(self.codeField3.mas_right)
             make.right.equalTo()(self.codeView)
         })
+        
+        disableUserInteractionCodeView.mas_updateConstraints { (make) in
+            make.removeExisting = true
+            make.top.equalTo()(self.codeView)
+            make.height.equalTo()(self.codeView)
+            make.left.equalTo()(self.codeView)
+            make.right.equalTo()(self.codeView)
+        }
         
         resendButtonView.mas_updateConstraints({ (make) in
             make.removeExisting = true
