@@ -116,6 +116,12 @@ public class FlipsService : NSObject {
         return NSError(domain: message, code: FlipsServiceResponseCode.BACKEND_TIMED_OUT, userInfo: ["NSLocalizedDescriptionKey" : message])
     }
     
+    private func errorForOutdatedAppVersion() -> NSError {
+        let message = NSLocalizedString("This version of Flips is no longer supported. Please update to the latest version in the App Store.")
+        let error = NSError(domain: message, code: FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED, userInfo: ["NSLocalizedDescriptionKey" : message])
+        return error
+    }
+    
     private func sendUserNotification(responseCode: Int) {
         var userInfo = [String : Int]()
         userInfo[FlipsServiceResponseCode.RESPONSE_CODE_KEY] = responseCode
@@ -128,11 +134,12 @@ public class FlipsService : NSObject {
         } else if (self.isTimedOutError(error)) {
             failure(AFHTTPRequestOperation(), self.errorForTimedOutError())
         } else if (self.isAppVersionOutdated(error)) {
-            self.sendUserNotification(FlipsServiceResponseCode.BACKEND_APP_VERSION_OUTDATED)
+            failure(AFHTTPRequestOperation(), self.errorForOutdatedAppVersion())
         } else if (self.isUserBlocked(error)) {
             self.sendUserNotification(FlipsServiceResponseCode.BACKEND_BLOCKED_USER)
         } else {
             failure(operation, error)
         }
     }
+    
 }
