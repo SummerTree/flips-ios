@@ -291,7 +291,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 alertView.show()
             })
         } else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            dispatch_async(dispatch_get_global_queue(PRIORITY_DEFAULT, 0), { () -> Void in
                 if let flipMessageID = self.flipMessageIdFromPushNotification {
                     var flipMessageAlreadyReceived = false
                     let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
