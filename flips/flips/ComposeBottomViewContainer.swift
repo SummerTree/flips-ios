@@ -60,6 +60,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         self.builderFlipCreateLabel.textColor = UIColor.deepSea()
         self.builderFlipCreateLabel.backgroundColor = UIColor.sand()
         self.builderFlipCreateLabel.textAlignment = NSTextAlignment.Center
+        self.builderFlipCreateLabel.userInteractionEnabled = true
         self.addSubview(self.builderFlipCreateLabel)
         
         self.addCameraButtons()
@@ -133,7 +134,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         galleryButton.addTarget(self, action: "galleryButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(galleryButton)
     }
-    
+
     private func addCameraButtonsViewConstraints() {
         cameraButtonsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
@@ -234,7 +235,6 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     func showFlipCreateMessage() {
         self.bringSubviewToFront(self.builderFlipCreateLabel)
         self.builderFlipCreateLabel.hidden = false
-        setCreationButtonsEnabled(false)
     }
     
     func showAllFlipCreateMessage() {
@@ -250,15 +250,6 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     func hideFlipCreatedMessage() {
         self.sendSubviewToBack(self.builderFlipCreateLabel)
         self.builderFlipCreateLabel.hidden = true
-        setCreationButtonsEnabled(true)
-    }
-    
-    private func setCreationButtonsEnabled(enabled: Bool) {
-        self.captureAudioButton.enabled = enabled
-        self.cancelCaptureAudioButton.enabled = enabled
-        self.takePictureButton.enabled = enabled
-        self.galleryButton.enabled = enabled
-        self.gridButton.enabled = enabled
     }
     
     // MARK: - Button Handlers

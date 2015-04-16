@@ -411,6 +411,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 UIView.animateWithDuration(0.3, animations: { () -> Void in
                     self.previewView.alpha = 1.0
+                }, completion: { (finished) -> Void in
+                    self.delegate?.cameraView(self, cameraAvailable: true)
+                    return
                 })
             })
         })
@@ -418,6 +421,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func removeObservers() {
         dispatch_async(self.sessionQueue, { () -> Void in
+            self.delegate?.cameraView(self, cameraAvailable: false)
             self.session.stopRunning()
             
             if (self.observersRegistered) {
