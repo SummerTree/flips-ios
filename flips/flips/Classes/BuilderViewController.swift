@@ -32,7 +32,13 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         self.loadBuilderWords()
         super.viewDidLoad()
     }
-    
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.composeBottomViewContainer?.updateGridButton()
+    }
+
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 

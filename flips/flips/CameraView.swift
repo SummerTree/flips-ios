@@ -411,10 +411,14 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             self.previewView.alpha = 1.0
+        }, completion: { (finished) -> Void in
+            self.delegate?.cameraView(self, cameraAvailable: true)
+            return
         })
     }
 
     func removeObservers() {
+        self.delegate?.cameraView(self, cameraAvailable: false)
         self.session.stopRunning()
         self.setCameraButtonsEnabled(enabled: false)
 

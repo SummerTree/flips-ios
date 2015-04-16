@@ -299,6 +299,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
 }
 
 
+// MARK: - ComposeTopViewContainerDelegate Protocol
+
 protocol ComposeTopViewContainerDelegate: class {
     
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, withSuccess success: Bool)
@@ -310,4 +312,3 @@ protocol ComposeTopViewContainerDelegate: class {
     func enableUserInteractionWithComposeView(enable: Bool)
     
 }
-
