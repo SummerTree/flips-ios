@@ -756,6 +756,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             confirmFlipViewController.delegate = self
             confirmFlipViewController.title = self.composeTitle
             self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+            self.composeBottomViewContainer.hideRecordingView()
         }
     }
     
