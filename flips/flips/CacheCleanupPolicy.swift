@@ -57,7 +57,7 @@ public class CacheCleanupPolicy {
                 var minTimestamp: Int = Int.max
                 var minIndex = 0
                 for i in 0..<sizesAndTimestampsArray.count {
-                    if (sizesAndTimestampsArray[i][0].1 < minTimestamp) {
+                    if (sizesAndTimestampsArray[i].count > 0 && sizesAndTimestampsArray[i][0].1 < minTimestamp) {
                         minTimestamp = sizesAndTimestampsArray[i][0].1
                         minIndex = i
                     }
