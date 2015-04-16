@@ -35,9 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         
-        //CoreDataHandler.sharedInstance.resetDatabase() // JUST FOR TESTS
         CoreDataHandler.sharedInstance.setupDatabase()
-        
     
         if (launchOptions != nil) {
             if let pushNotificationPayload = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {

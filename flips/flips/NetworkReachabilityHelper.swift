@@ -10,10 +10,9 @@
 // the license agreement.
 //
 
-import Foundation
+let NETWORK_REACHABILITY_CHANGED_NOTIFICATION_KEY: String = "network_reachability_notification"
 
 public class NetworkReachabilityHelper {
-    
     
     // MARK: - Singleton
     
@@ -27,21 +26,18 @@ public class NetworkReachabilityHelper {
     func startMonitoring() {
         AFNetworkReachabilityManager.sharedManager().startMonitoring()
         AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
-            
             let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-            
             switch(status) {
             case AFNetworkReachabilityStatus.ReachableViaWiFi:
                 println("Reachable via WiFi")
-                
             case AFNetworkReachabilityStatus.ReachableViaWWAN:
                 println("Reachable via WWAN 3G/4G")
-                
             case AFNetworkReachabilityStatus.NotReachable:
                 println("Not Reachable")
             default:
                 println("Default [status=\(status.rawValue)]")
             }
+            NSNotificationCenter.defaultCenter().postNotificationName(NETWORK_REACHABILITY_CHANGED_NOTIFICATION_KEY, object: nil)
         }
     }
     
