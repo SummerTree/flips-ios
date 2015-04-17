@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate {
+class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate, UIAlertViewDelegate {
     
     private let groupTitle: String = NSLocalizedString("Group Chat")
 
@@ -287,7 +287,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             self.flipMessageIdFromPushNotification = nil
             self.hideActivityIndicator()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                let alertView: UIAlertView = UIAlertView(title: "", message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView: UIAlertView = UIAlertView(title: "", message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: self, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
             })
         } else {
@@ -352,5 +352,12 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
         self.chatView.changeFlipWords(words)
+    }
+    
+    
+    // MARK: - UIAlertViewDelegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }
