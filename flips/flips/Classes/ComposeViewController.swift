@@ -276,6 +276,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             let flipWord = self.flipWords[self.highlightedWordIndex]
             
             if (flipWord.associatedFlipId != nil) {
+                self.composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
                 self.showFlipCreatedState(flipWord.associatedFlipId!)
             } else {
                 let flipDataSource = FlipDataSource()
@@ -425,7 +426,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - FlipMessageWordListViewDelegate
     
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSelectFlipWord flipWord: FlipText!) {
-        highlightedWordIndex = flipWord.position
+        self.highlightedWordIndex = flipWord.position
         
         // If the user moves to another word while we were showing the audio buttons, that Flip will be discarded.
         composeBottomViewContainer.hideRecordingView()
@@ -445,7 +446,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 composeBottomViewContainer.showCameraButtons()
             }
         case FlipState.AssociatedAndNoResourcesAvailable, FlipState.AssociatedAndResourcesAvailable:
-            self.showFlipCreatedState(flipWord.associatedFlipId!)
+            self.showContentForHighlightedWord(shouldReloadWords: false)
         }
     }
     
