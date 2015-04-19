@@ -96,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("token: \(token)")
         DeviceHelper.sharedInstance.saveDeviceToken(token)
         DeviceHelper.sharedInstance.saveDeviceTokenAsNsData(deviceToken)
-        PubNubService.sharedInstance.subscribeOnMyChannels()
+        PubNubService.sharedInstance.enablePushNotificationOnMyChannels()
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {

@@ -16,11 +16,12 @@ private let ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION = 0.25
 
 class ActivityIndicatorHelper {
     
-    class func showActivityIndicatorAtView(view: UIView, style: UIActivityIndicatorViewStyle) {
+    class func showActivityIndicatorAtView(view: UIView, style: UIActivityIndicatorViewStyle, andSize size: CGFloat = ACTIVITY_INDICATOR_SIZE) {
         let block = { () -> Void in
             var activityIndicator: UIActivityIndicatorView?
             for subview in view.subviews {
                 if (subview.tag == ACTIVITY_INDICATOR_TAG) {
+                    view.bringSubviewToFront(subview as UIView)
                     activityIndicator = subview as? UIActivityIndicatorView
                 }
             }
@@ -32,8 +33,8 @@ class ActivityIndicatorHelper {
                 
                 activityIndicator!.mas_makeConstraints { (make) -> Void in
                     make.center.equalTo()(view)
-                    make.width.equalTo()(ACTIVITY_INDICATOR_SIZE)
-                    make.height.equalTo()(ACTIVITY_INDICATOR_SIZE)
+                    make.width.equalTo()(size)
+                    make.height.equalTo()(size)
                 }
             }
             
@@ -53,8 +54,8 @@ class ActivityIndicatorHelper {
         }
     }
     
-    class func showActivityIndicatorAtView(view: UIView) {
-        showActivityIndicatorAtView(view, style: UIActivityIndicatorViewStyle.WhiteLarge)
+    class func showActivityIndicatorAtView(view: UIView, andSize size: CGFloat = ACTIVITY_INDICATOR_SIZE) {
+        showActivityIndicatorAtView(view, style: UIActivityIndicatorViewStyle.WhiteLarge, andSize: size)
     }
     
     class func hideActivityIndicatorAtView(view: UIView) {
@@ -72,8 +73,8 @@ class ActivityIndicatorHelper {
                 activityIndicator!.startAnimating()
                 UIView.animateWithDuration(ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
                     activityIndicator!.alpha = 0
-                    }, completion: { (finished) -> Void in
-                        activityIndicator!.stopAnimating()
+                }, completion: { (finished) -> Void in
+                    activityIndicator!.stopAnimating()
                 })
             }
         })

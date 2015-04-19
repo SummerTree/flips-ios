@@ -42,7 +42,7 @@ class RoomDataSource : BaseDataSource {
     
     private func fillRoom(room: Room, withJson json: JSON) {
         if (room.roomID != json[RoomJsonParams.ROOM_ID].stringValue) {
-            println("Possible error. Will change romom id from (\(room.roomID)) to (\(json[RoomJsonParams.ROOM_ID].stringValue))")
+            println("Possible error. Will change room id from (\(room.roomID)) to (\(json[RoomJsonParams.ROOM_ID].stringValue))")
         }
         
         room.name = json[RoomJsonParams.NAME].stringValue

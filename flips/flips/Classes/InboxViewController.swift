@@ -14,26 +14,24 @@ import Foundation
 
 let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
 
-class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UserDataSourceDelegate {
-    var userDataSource: UserDataSource? {
-        didSet {
-            if userDataSource != nil {
-                userDataSource?.delegate = self
-            }
-        }
-    }
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
     
     private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
     private var downloadingMessageFromNotificationRetries: Int = 0
     
-    private let animationDuration: NSTimeInterval = 0.25
+    private let ANIMATION_DURATION: NSTimeInterval = 0.25
     
     private var inboxView: InboxView!
-    private var syncView: SyncView!
+    private var syncView: SyncView?
     private var roomIds: NSMutableOrderedSet = NSMutableOrderedSet()
     
     private var roomIdToShow: String?
     private var flipMessageIdToShow: String?
+    
+    private var syncMessageHistoryBlock: (() -> Void)?
+    
+    private var shouldInformPubnubNotConnected: Bool = false
+    
     
     // MARK: - Initialization Methods
     
@@ -51,6 +49,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         NSNotificationCenter.defaultCenter().removeObserver(self, name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
     }
     
+    
     // MARK: - UIViewController overridden methods
 
     override func loadView() {
@@ -63,8 +62,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         inboxView.delegate = self
         inboxView.dataSource = self
         self.view = inboxView
-        
-        setupSyncView()
     }
     
     override func viewDidLoad() {
@@ -73,6 +70,19 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
+        
+        if (PubNubService.sharedInstance.isConnected()) {
+            let didShowSyncView: Bool = DeviceHelper.sharedInstance.didShowSyncView()
+            if (!didShowSyncView) {
+                self.setupSyncView()
+            } else {
+                PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                    self.refreshRooms()
+                })
+            }
+        } else {
+            self.shouldInformPubnubNotConnected = true
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,7 +92,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "messageHistoryReceivedNotificationReceived:", name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
 
-        syncView.hidden = true
+        syncView?.hidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -98,28 +108,27 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        if let userDataSource = self.userDataSource {
-            if (userDataSource.isDownloadingFlips == true) {
-                syncView.image = imageForView()
-                syncView.setDownloadCount(1, ofTotal: userDataSource.flipsDownloadCount.value)
-                syncView.alpha = 0
-                syncView.hidden = false
-                
-                UIView.animateWithDuration(animationDuration, animations: { () -> Void in
-                    self.syncView.alpha = 1
-                })
-            }
-        }
+
         self.refreshRooms()
         
-        if (self.flipMessageIdToShow != nil) {
-            if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-                let alertView: UIAlertView = UIAlertView(title: nil, message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+        if (PubNubService.sharedInstance.isConnected()) {
+            self.shouldInformPubnubNotConnected = false
+            self.syncMessageHistoryBlock?()
+            
+            if (self.flipMessageIdToShow != nil) {
+                if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                    let alertView: UIAlertView = UIAlertView(title: nil, message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                } else {
+                    self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+                    self.openRoomForPushNotificationIfMessageReceived()
+                }
+            }
+        } else {
+            if (self.shouldInformPubnubNotConnected) {
+                self.shouldInformPubnubNotConnected = false
+                let alertView = UIAlertView(title: "", message: NSLocalizedString("Unable to reach the server. You can still use the app while we try to reconnect."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
-            } else {
-                self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
-                self.openRoomForPushNotificationIfMessageReceived()
             }
         }
     }
@@ -192,16 +201,54 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func setupSyncView() {
         if let views = NSBundle.mainBundle().loadNibNamed("SyncView", owner: self, options: nil) {
             if let syncView = views[0] as? SyncView {
-                syncView.hidden = true
-                
                 self.syncView = syncView
+                self.syncView?.hidden = true
                 
-                view.addSubview(syncView)
-                
+                self.view.addSubview(self.syncView!)
                 syncView.mas_makeConstraints { (make) -> Void in
                     make.top.equalTo()(self.view)
                     make.trailing.equalTo()(self.view)
                     make.leading.equalTo()(self.view)
+                }
+                
+                self.syncMessageHistoryBlock = { () -> Void in
+                    self.syncView?.image = self.imageForView()
+                    self.syncView?.alpha = 0
+                    self.syncView?.hidden = false
+                    
+                    PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                        DeviceHelper.sharedInstance.setSyncViewShown(true)
+                        self.syncMessageHistoryBlock = nil
+                        
+                        self.refreshRooms()
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
+                                self.syncView?.alpha = 0
+                                return
+                            }, completion: { (finished: Bool) -> Void in
+                                self.syncView?.hidden = true
+                                return
+                            })
+                        })
+                        
+                        if (!success) {
+                            //  Retry at least once
+                            println("Inbox subscribe failed. Retrying")
+                            PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                                self.refreshRooms()
+                            })
+                        }
+                    }, progress: { (received: Int, total: Int) -> Void in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.syncView?.setDownloadCount(received, ofTotal: total)
+                            if (self.syncView?.alpha == 0) {
+                                UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
+                                    self.syncView?.alpha = 1
+                                    return
+                                })
+                            }
+                        })
+                    })
                 }
             }
         }
@@ -316,8 +363,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     func resyncNotificationReceived(notification: NSNotification) {
-        PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
-            self.userDataSource = userDataSource
+        PersistentManager.sharedInstance.syncUserData({ (success, flipError) -> Void in
+            self.syncMessageHistoryBlock?()
+            return
         })
     }
     
@@ -345,28 +393,5 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
         self.roomIds.removeObjectAtIndex(index)
-    }
-    
-    
-    // MARK: - UserDataSourceDelegate
-    
-    func userDataSource(userDataSource: UserDataSource, didDownloadFlip: Flip) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            // update sync counter
-            self.syncView.setDownloadCount(userDataSource.flipsDownloadCounter.value, ofTotal: userDataSource.flipsDownloadCount.value)
-        })
-    }
-    
-    func userDataSourceDidFinishFlipsDownload(userDataSource: UserDataSource) {
-        self.refreshRooms()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            // dismiss sync view
-            UIView.animateWithDuration(self.animationDuration, animations: { () -> Void in
-                self.syncView.alpha = 0
-            }, completion: { (done) -> Void in
-                self.syncView.hidden = true
-                self.syncView.alpha = 1
-            })
-        })
     }
 }
