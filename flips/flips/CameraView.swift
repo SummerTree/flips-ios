@@ -387,34 +387,38 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 
     func registerObservers() {
-        self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
-        self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
-        self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: RecordingContext)
-
-        if let deviceInput = self.videoDeviceInput {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
-        }
-
-        weak var weakSelf = self
-        self.runtimeErrorHandlingObserver = NSNotificationCenter.defaultCenter().addObserverForName(AVCaptureSessionRuntimeErrorNotification, object: self.session, queue: nil, usingBlock: { (notification) -> Void in
-            var strongSelf = weakSelf
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                // Manually restarting the session since it must have been stopped due to an error.
-                strongSelf?.session.startRunning()
-                return ()
+        if (deviceAuthorized) {
+            self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
+            self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
+            self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: RecordingContext)
+            
+            if let deviceInput = self.videoDeviceInput {
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
+            }
+            
+            weak var weakSelf = self
+            self.runtimeErrorHandlingObserver = NSNotificationCenter.defaultCenter().addObserverForName(AVCaptureSessionRuntimeErrorNotification, object: self.session, queue: nil, usingBlock: { (notification) -> Void in
+                var strongSelf = weakSelf
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    // Manually restarting the session since it must have been stopped due to an error.
+                    strongSelf?.session.startRunning()
+                    return ()
+                })
             })
-        })
-        self.session.startRunning()
-        self.setCameraButtonsEnabled()
-
-        self.observersRegistered = true
-
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            self.previewView.alpha = 1.0
-        }, completion: { (finished) -> Void in
-            self.delegate?.cameraView(self, cameraAvailable: true)
+            self.session.startRunning()
+            self.setCameraButtonsEnabled()
+            
+            self.observersRegistered = true
+            
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.previewView.alpha = 1.0
+                }, completion: { (finished) -> Void in
+                    self.delegate?.cameraView(self, cameraAvailable: true)
+                    return
+            })
+        } else {
             return
-        })
+        }
     }
 
     func removeObservers() {
