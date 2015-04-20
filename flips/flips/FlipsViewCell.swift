@@ -24,8 +24,11 @@ class FlipsViewCell : UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        self.backgroundColor = UIColor.whiteColor()
+        
         cellImageView = UIImageView()
         cellImageView.frame.size = CGSizeMake(FLIPS_CELL_WIDTH, FLIPS_CELL_HEIGHT)
+        cellImageView.image = UIImage(named: "Filter_Photo")
         self.addSubview(cellImageView);
         
         self.seletedOverlayView = SelectedFlipOverlayView(frame: CGRectMake(0, 0, FLIPS_CELL_WIDTH, FLIPS_CELL_WIDTH))
@@ -39,19 +42,26 @@ class FlipsViewCell : UICollectionViewCell {
     
     func setFlipId(flipID: String) {
         self.flipID = flipID
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             let flipDataSource = FlipDataSource()
             var flip = flipDataSource.retrieveFlipWithId(self.flipID)
             
-            ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
+            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
                 success: { (url: String!, localThumbnailPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.cellImageView.image = UIImage(contentsOfFile: localThumbnailPath)
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                        
                     })
                 },
                 failure: { (url: String!, error: FlipError) in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
                     println("Failed to get resource from cache, error: \(error)")
             })
+            
+            if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White, andSize: FLIPS_CELL_WIDTH / 2)
+            }
         })
     }
     
@@ -66,7 +76,8 @@ class FlipsViewCell : UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.cellImageView.image = UIImage()
+        self.cellImageView.image = UIImage(named: "Filter_Photo")
         self.isSelected = false
+        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
     }
 }

@@ -81,6 +81,7 @@ public class AuthenticationHelper: NSObject {
         FBSession.setActiveSession(nil)
         
         DeviceHelper.sharedInstance.setLastTimeUserSynchronizePrivateChannel(nil)
+        DeviceHelper.sharedInstance.setSyncViewShown(false)
         
         RemoteRequestManager.sharedInstance.cleanQueue()
         

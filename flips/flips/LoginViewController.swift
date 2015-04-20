@@ -78,13 +78,11 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             var authenticatedUser: User = user as User!
             AuthenticationHelper.sharedInstance.onLogin(authenticatedUser)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                PersistentManager.sharedInstance.syncUserData({ (success, FlipError, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, FlipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.hideActivityIndicator()
                         if (success) {
-                            var inboxViewController = InboxViewController()
-                            inboxViewController.userDataSource = userDataSource
-                            self.navigationController?.pushViewController(inboxViewController, animated: true)
+                            self.navigationController?.pushViewController(InboxViewController(), animated: true)
                         }
                     })
                 })
@@ -169,8 +167,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.onLogin(user as User)
-                
-                PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, flipError) -> Void in
                     self.hideActivityIndicator()
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if let authenticatedUser = User.loggedUser() {
@@ -178,9 +175,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                                 var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
                                 self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
                             } else {
-                                var inboxViewController = InboxViewController()
-                                inboxViewController.userDataSource = userDataSource
-                                self.navigationController?.pushViewController(inboxViewController, animated: true)
+                                self.navigationController?.pushViewController(InboxViewController(), animated: true)
                             }
                         } else {
                             self.hideActivityIndicator()
@@ -190,7 +185,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                     })
                 })
             },
-            failure: failureHandler)
+        failure: failureHandler)
     }
     
 }

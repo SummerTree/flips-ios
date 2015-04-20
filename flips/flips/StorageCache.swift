@@ -99,12 +99,12 @@ public class StorageCache {
         }
         
         if (self.downloadInProgressURLs[localPath] != nil) {
-            self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
+            self.downloadInProgressURLs[localPath]?.append((success: success, failure: failure, progress: progress))
             return CacheGetResponse.DOWNLOAD_WILL_START
         }
         
         self.downloadInProgressURLs[localPath] = [DownloadFinishedCallbacks]()
-        self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
+        self.downloadInProgressURLs[localPath]?.append(DownloadFinishedCallbacks(success: success, failure: failure, progress: progress))
         
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,

@@ -179,6 +179,8 @@
 		7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */; };
 		7AE3C6661A824C0700910CBC /* PersistentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE3C6651A824C0700910CBC /* PersistentManager.swift */; };
 		7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */; };
+		7AF3412C1AE5AE2800B40230 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
+		7AF3412D1AE5AE2900B40230 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
 		7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
 		7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */; };
@@ -2241,6 +2243,7 @@
 				BE245FA01AD2D95900859233 /* ComposeTopViewContainer.swift in Sources */,
 				BE245FA11AD2D95900859233 /* CacheJournal.swift in Sources */,
 				BE245FA21AD2D95900859233 /* TakePictureViewControllerDelegate.swift in Sources */,
+				7AF3412C1AE5AE2800B40230 /* AvatarCache.swift in Sources */,
 				BE245FA31AD2D95900859233 /* BorderedView.swift in Sources */,
 				7A777A571ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */,
 				BE245FA41AD2D95900859233 /* ChatTableViewCell.swift in Sources */,
@@ -2446,6 +2449,7 @@
 				BE24607A1AD2D9C600859233 /* ComposeTopViewContainer.swift in Sources */,
 				BE24607B1AD2D9C600859233 /* CacheJournal.swift in Sources */,
 				BE24607C1AD2D9C600859233 /* TakePictureViewControllerDelegate.swift in Sources */,
+				7AF3412D1AE5AE2900B40230 /* AvatarCache.swift in Sources */,
 				BE24607D1AD2D9C600859233 /* BorderedView.swift in Sources */,
 				7A777A581ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */,
 				BE24607E1AD2D9C600859233 /* ChatTableViewCell.swift in Sources */,
