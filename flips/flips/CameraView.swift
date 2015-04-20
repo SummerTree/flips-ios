@@ -405,7 +405,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             })
         })
         self.session.startRunning()
-        self.setCameraButtonsEnabled()
+        self.setCameraButtonsEnabled(enabled: deviceAuthorized)
 
         self.observersRegistered = true
 
