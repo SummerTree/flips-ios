@@ -23,6 +23,7 @@ struct UserJsonParams {
     static let PUBNUB_ID = "pubnubId"
     static let PHONE_NUMBER = "phoneNumber"
     static let IS_TEMPORARY = "isTemporary"
+    static let UPDATED_AT = "updatedAt"
 }
 
 
@@ -49,6 +50,7 @@ class UserDataSource : BaseDataSource {
         user.photoURL = json[UserJsonParams.PHOTO_URL].stringValue
         user.phoneNumber = json[UserJsonParams.PHONE_NUMBER].stringValue
         user.isTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
+        user.updateAt = NSDate(dateTimeString: json[UserJsonParams.UPDATED_AT].stringValue)
         
         if (json[UserJsonParams.BIRTHDAY].stringValue != "") {
             user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
@@ -74,7 +76,13 @@ class UserDataSource : BaseDataSource {
     
     func updateUser(user: User, withJson json: JSON, isLoggedUser: Bool = false) -> User {
         let userIsTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
+        let newUpdateTimestamp = NSDate(dateTimeString: json[UserJsonParams.UPDATED_AT].stringValue)
+        let currentUpdateTimestamp = user.updateAt!
         if (userIsTemporary) {
+            return user
+        }
+        if (currentUpdateTimestamp.compare(newUpdateTimestamp) == NSComparisonResult.OrderedDescending ||
+            currentUpdateTimestamp.compare(newUpdateTimestamp) == NSComparisonResult.OrderedSame) {
             return user
         }
         var userInContext = user.inContext(currentContext) as User
