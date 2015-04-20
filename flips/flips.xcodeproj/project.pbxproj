@@ -153,7 +153,6 @@
 		7AA711751A28D8B00082165A /* BuilderWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711741A28D8B00082165A /* BuilderWord.m */; };
 		7AA7117B1A28D8B10082165A /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
 		7AA711811A28D8B10082165A /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711801A28D8B10082165A /* Device.m */; };
-		7AA711841A28D8B10082165A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711831A28D8B10082165A /* User.m */; };
 		7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */; };
 		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
 		7AB1683B19E319DB004E2162 /* TakePictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683A19E319DB004E2162 /* TakePictureView.swift */; };
@@ -184,6 +183,9 @@
 		7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */; };
 		7AF3412C1AE5AE2800B40230 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
 		7AF3412D1AE5AE2900B40230 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
+		7AF341301AE5B00300B40230 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3412F1AE5B00300B40230 /* User.m */; };
+		7AF341311AE5B00300B40230 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3412F1AE5B00300B40230 /* User.m */; };
+		7AF341321AE5B00300B40230 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AF3412F1AE5B00300B40230 /* User.m */; };
 		7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DE519EFEC3300D0393F /* UserExtension.swift */; };
 		7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */; };
 		7AF82DFE19EFEC5800D0393F /* RoomDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */; };
@@ -220,7 +222,6 @@
 		BE245F981AD2D95900859233 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
 		BE245F991AD2D95900859233 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		BE245F9A1AD2D95900859233 /* MessagesTopViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */; };
-		BE245F9B1AD2D95900859233 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711831A28D8B10082165A /* User.m */; };
 		BE245F9C1AD2D95900859233 /* FlipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* FlipsView.swift */; };
 		BE245F9D1AD2D95900859233 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
 		BE245F9E1AD2D95900859233 /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
@@ -423,7 +424,6 @@
 		BE2460721AD2D9C600859233 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5741569E19D33F30006F0A2F /* NSDateExtension.swift */; };
 		BE2460731AD2D9C600859233 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FD4E7A19D064450024EBDB /* LoginViewController.swift */; };
 		BE2460741AD2D9C600859233 /* MessagesTopViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */; };
-		BE2460751AD2D9C600859233 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711831A28D8B10082165A /* User.m */; };
 		BE2460761AD2D9C600859233 /* FlipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A5C6D619FEBC3500E4CB2C /* FlipsView.swift */; };
 		BE2460771AD2D9C600859233 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
 		BE2460781AD2D9C600859233 /* ConfirmPictureViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD93F8F19E4B805009CC59A /* ConfirmPictureViewDelegate.swift */; };
@@ -794,8 +794,6 @@
 		7AA7117A1A28D8B10082165A /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		7AA7117F1A28D8B10082165A /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		7AA711801A28D8B10082165A /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
-		7AA711821A28D8B10082165A /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		7AA711831A28D8B10082165A /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionViewController.swift; sourceTree = "<group>"; };
 		7AB1683719E3196E004E2162 /* TakePictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureViewController.swift; path = Classes/TakePictureViewController.swift; sourceTree = "<group>"; };
 		7AB1683A19E319DB004E2162 /* TakePictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TakePictureView.swift; path = Classes/TakePictureView.swift; sourceTree = "<group>"; };
@@ -827,6 +825,8 @@
 		7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		7AE3C6651A824C0700910CBC /* PersistentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentManager.swift; sourceTree = "<group>"; };
 		7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingHelper.swift; sourceTree = "<group>"; };
+		7AF3412E1AE5B00300B40230 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		7AF3412F1AE5B00300B40230 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		7AF82DE519EFEC3300D0393F /* UserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserExtension.swift; path = Classes/UserExtension.swift; sourceTree = "<group>"; };
 		7AF82DFA19EFEC5800D0393F /* FlipMessageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageDataSource.swift; sourceTree = "<group>"; };
 		7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomDataSource.swift; sourceTree = "<group>"; };
@@ -1143,6 +1143,8 @@
 			children = (
 				7A2A7E1119EDBF9400033164 /* Extensions */,
 				7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */,
+				7AF3412E1AE5B00300B40230 /* User.h */,
+				7AF3412F1AE5B00300B40230 /* User.m */,
 				7ACC60491ACAD6500052076D /* DeletedFlipMessage.h */,
 				7ACC604A1ACAD6500052076D /* DeletedFlipMessage.m */,
 				7ACC60441AC97F090052076D /* ReadFlipMessage.h */,
@@ -1161,8 +1163,6 @@
 				7AA711801A28D8B10082165A /* Device.m */,
 				7AA711791A28D8B10082165A /* Room.h */,
 				7AA7117A1A28D8B10082165A /* Room.m */,
-				7AA711821A28D8B10082165A /* User.h */,
-				7AA711831A28D8B10082165A /* User.m */,
 				7A2A7E1E19EDBFB800033164 /* CoreDataHandler.swift */,
 			);
 			name = CoreData;
@@ -2026,6 +2026,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AF341301AE5B00300B40230 /* User.m in Sources */,
 				73192A891A8B9B660010C949 /* FlipsCache.swift in Sources */,
 				7AA7117B1A28D8B10082165A /* Room.m in Sources */,
 				A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */,
@@ -2034,7 +2035,6 @@
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
-				7AA711841A28D8B10082165A /* User.m in Sources */,
 				A2A5C6D719FEBC3500E4CB2C /* FlipsView.swift in Sources */,
 				7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
@@ -2233,6 +2233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AF341311AE5B00300B40230 /* User.m in Sources */,
 				BE245F931AD2D95900859233 /* FlipsCache.swift in Sources */,
 				BE245F941AD2D95900859233 /* Room.m in Sources */,
 				BE245F951AD2D95900859233 /* ForgotPasswordViewController.swift in Sources */,
@@ -2241,7 +2242,6 @@
 				BE245F981AD2D95900859233 /* NSDateExtension.swift in Sources */,
 				BE245F991AD2D95900859233 /* LoginViewController.swift in Sources */,
 				BE245F9A1AD2D95900859233 /* MessagesTopViewDelegate.swift in Sources */,
-				BE245F9B1AD2D95900859233 /* User.m in Sources */,
 				BE245F9C1AD2D95900859233 /* FlipsView.swift in Sources */,
 				BE245F9D1AD2D95900859233 /* JournalEntry.swift in Sources */,
 				BE245F9E1AD2D95900859233 /* ConfirmPictureViewDelegate.swift in Sources */,
@@ -2440,6 +2440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AF341321AE5B00300B40230 /* User.m in Sources */,
 				BE24606D1AD2D9C600859233 /* FlipsCache.swift in Sources */,
 				BE24606E1AD2D9C600859233 /* Room.m in Sources */,
 				BE24606F1AD2D9C600859233 /* ForgotPasswordViewController.swift in Sources */,
@@ -2448,7 +2449,6 @@
 				BE2460721AD2D9C600859233 /* NSDateExtension.swift in Sources */,
 				BE2460731AD2D9C600859233 /* LoginViewController.swift in Sources */,
 				BE2460741AD2D9C600859233 /* MessagesTopViewDelegate.swift in Sources */,
-				BE2460751AD2D9C600859233 /* User.m in Sources */,
 				BE2460761AD2D9C600859233 /* FlipsView.swift in Sources */,
 				BE2460771AD2D9C600859233 /* JournalEntry.swift in Sources */,
 				BE2460781AD2D9C600859233 /* ConfirmPictureViewDelegate.swift in Sources */,

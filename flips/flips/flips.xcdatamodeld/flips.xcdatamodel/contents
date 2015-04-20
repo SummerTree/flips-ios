@@ -80,6 +80,7 @@
         <attribute name="phoneNumber" attributeType="String" syncable="YES"/>
         <attribute name="photoURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pubnubID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updateAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="userID" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="adminRooms" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Room" inverseName="admin" inverseEntity="Room" syncable="YES"/>
@@ -99,6 +100,6 @@
         <element name="FlipMessage" positionX="-144" positionY="470" width="128" height="163"/>
         <element name="ReadFlipMessage" positionX="-1215" positionY="333" width="128" height="58"/>
         <element name="Room" positionX="-974" positionY="428" width="128" height="163"/>
-        <element name="User" positionX="-623" positionY="-54" width="128" height="313"/>
+        <element name="User" positionX="-623" positionY="-54" width="128" height="330"/>
     </elements>
 </model>
