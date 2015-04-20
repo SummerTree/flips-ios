@@ -28,15 +28,4 @@ extension UIImageView {
         self.layer.borderWidth = borderWidth
     }
     
-    func setImageWithURL(url: NSURL!, success: ((request: NSURLRequest!, response: NSHTTPURLResponse!, image: UIImage) -> Void)? = nil) {
-        if url != nil {
-            let urlRequest = NSURLRequest(URL: url)
-            self.setImageWithURLRequest(urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
-                self.image = image
-                success?(request: request, response: response, image: image)
-                }, nil)
-        } else {
-            self.cancelImageRequestOperation()
-        }
-    }
 }

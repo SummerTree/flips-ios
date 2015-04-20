@@ -96,19 +96,24 @@ class RoundImageView: UIView {
     }
     
     func reset() {
-        self.imageView.cancelImageRequestOperation()
         self.imageView.image = nil
     }
     
-    func setImageWithURL(url: NSURL!, success: ((request: NSURLRequest!, response: NSHTTPURLResponse!, image: UIImage) -> Void)? = nil) {
-        if url != nil {
-            let urlRequest = NSURLRequest(URL: url)
-            self.imageView.setImageWithURLRequest(urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
-                self.imageView.image = image
-                success?(request: request, response: response, image: image)
-                }, nil)
-        } else {
-            self.imageView.cancelImageRequestOperation()
+    func setAvatarWithURL(remoteURL: NSURL!, success: ((image: UIImage) -> Void)? = nil) {
+        if (remoteURL != nil) {
+            AvatarCache.sharedInstance.get(remoteURL,
+                success: { (url: String!, path: String!) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if let avatar = UIImage(contentsOfFile: path) {
+                            self.imageView.image = avatar
+                            success?(image: avatar)
+                        }
+                    })
+                }, failure: { (url: String!, error: FlipError) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        println("Could not get avatar from \(remoteURL.path).")
+                    })
+            })
         }
     }
 

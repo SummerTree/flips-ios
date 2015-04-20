@@ -332,23 +332,30 @@ class CustomNavigationBar : UIView {
         }
     }
     
-    func setAvatarImageURL(url: NSURL, success: ((UIImage) -> Void)? = nil) {
+    func setAvatarImageURL(remoteURL: NSURL, success: ((UIImage) -> Void)? = nil) {
+        if (avatarButton == nil && avatarImageView == nil) {
+            return
+        }
+        
         if (avatarButton != nil) {
             ActivityIndicatorHelper.showActivityIndicatorAtView(avatarButton, style: UIActivityIndicatorViewStyle.Gray)
-            let urlRequest = NSURLRequest(URL: url)
-            
-            avatarButton.setImageForState(.Normal, withURLRequest: urlRequest, placeholderImage: nil, success: { (request, response, image) -> Void in
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
-                
-                self.avatarButton.setAvatarImage(image, forStates: [.Normal, UIControlState.Highlighted])
-                success?(image)
-                
-                }, failure: { (error) -> Void in
+            AvatarCache.sharedInstance.get(remoteURL,
+                success: { (url: String!, path: String!) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
+                        
+                        if let avatar = UIImage(contentsOfFile: path) {
+                            self.avatarButton.setAvatarImage(avatar, forStates: [.Normal, UIControlState.Highlighted])
+                            success?(avatar)
+                        }
+                    })
+                }, failure: { (url: String!, error: FlipError) -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
+                    println("Could not get avatar from \(remoteURL.path).")
             })
-        } else if (avatarImageView != nil) {
+        } else {
             ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
-            avatarImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
+            avatarImageView.setAvatarWithURL(remoteURL, success: { (image) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarImageView)
                 })

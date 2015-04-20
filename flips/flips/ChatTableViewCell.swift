@@ -189,7 +189,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
         self.messageTextLabel.text = messagePhrase
         
-        self.avatarView.setImageWithURL(avatarURL)
+        self.avatarView.setAvatarWithURL(avatarURL)
         
         if (flipMessageSenderID == loggedUserID) {
             // Sent by the user

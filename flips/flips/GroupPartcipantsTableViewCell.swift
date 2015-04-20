@@ -78,7 +78,7 @@ class GroupPartcipantsTableViewCell: UITableViewCell {
             }
         } else {
             fullName = user.fullName()
-            self.avatarView.setImageWithURL(NSURL(string: user.photoURL))
+            self.avatarView.setAvatarWithURL(NSURL(string: user.photoURL))
         }
         
         self.nameLabel.text = fullName

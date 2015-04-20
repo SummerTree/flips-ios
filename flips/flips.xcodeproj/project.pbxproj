@@ -98,6 +98,7 @@
 		7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */; };
 		73192A891A8B9B660010C949 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
 		731BA3001AC4B294007F12D5 /* CacheCleanupPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */; };
+		731F38CD1AE44D4600171507 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
 		7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8071A89624F00446CD8 /* CacheJournal.swift */; };
 		7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
 		73D7279A1A83E7A1006DCC92 /* StorageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D727991A83E7A1006DCC92 /* StorageCache.swift */; };
@@ -731,6 +732,7 @@
 		7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailsCache.swift; sourceTree = "<group>"; };
 		73192A881A8B9B660010C949 /* FlipsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCache.swift; sourceTree = "<group>"; };
 		731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheCleanupPolicy.swift; sourceTree = "<group>"; };
+		731F38CC1AE44D4600171507 /* AvatarCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarCache.swift; sourceTree = "<group>"; };
 		7330F8071A89624F00446CD8 /* CacheJournal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheJournal.swift; sourceTree = "<group>"; };
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		73D727991A83E7A1006DCC92 /* StorageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageCache.swift; sourceTree = "<group>"; };
@@ -1455,6 +1457,7 @@
 				7330F8071A89624F00446CD8 /* CacheJournal.swift */,
 				7330F8091A89670300446CD8 /* JournalEntry.swift */,
 				73192A881A8B9B660010C949 /* FlipsCache.swift */,
+				731F38CC1AE44D4600171507 /* AvatarCache.swift */,
 				7AFB1E9A1AC3050E00C60D8E /* ThumbnailsDataSource.swift */,
 				7317F5CC1A954CA2006E00FD /* ThumbnailsCache.swift */,
 				731BA2FF1AC4B294007F12D5 /* CacheCleanupPolicy.swift */,
@@ -2032,6 +2035,7 @@
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
 				7AD93F9219E56D41009CC59A /* TakePictureViewControllerDelegate.swift in Sources */,
+				731F38CD1AE44D4600171507 /* AvatarCache.swift in Sources */,
 				072AD71C1A168CAC0011B212 /* BorderedView.swift in Sources */,
 				7A777A561ADD44210004BEB1 /* RemoteRequestManager.swift in Sources */,
 				5786B2CD19EEADD400021DD3 /* ChatTableViewCell.swift in Sources */,
