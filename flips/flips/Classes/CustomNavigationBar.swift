@@ -338,8 +338,7 @@ class CustomNavigationBar : UIView {
         }
         
         if (avatarButton != nil) {
-            ActivityIndicatorHelper.showActivityIndicatorAtView(avatarButton, style: UIActivityIndicatorViewStyle.Gray)
-            AvatarCache.sharedInstance.get(remoteURL,
+            let returnValue = AvatarCache.sharedInstance.get(remoteURL,
                 success: { (url: String!, path: String!) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
@@ -353,6 +352,10 @@ class CustomNavigationBar : UIView {
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
                     println("Could not get avatar from \(remoteURL.path).")
             })
+            
+            if (returnValue == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                ActivityIndicatorHelper.showActivityIndicatorAtView(avatarButton, style: UIActivityIndicatorViewStyle.Gray)
+            }
         } else {
             ActivityIndicatorHelper.showActivityIndicatorAtView(avatarImageView, style: UIActivityIndicatorViewStyle.Gray)
             avatarImageView.setAvatarWithURL(remoteURL, success: { (image) -> Void in

@@ -52,6 +52,8 @@ class RoundImageView: UIView {
     }
     
     var imageView: UIImageView!
+    
+    private var avatarURL: NSURL? = nil
 
     // MARK: - Public class methods
     
@@ -97,19 +99,28 @@ class RoundImageView: UIView {
     
     func reset() {
         self.imageView.image = nil
+        self.avatarURL = nil
     }
     
     func setAvatarWithURL(remoteURL: NSURL!, success: ((image: UIImage) -> Void)? = nil) {
         if (remoteURL != nil) {
+            self.avatarURL = remoteURL
             AvatarCache.sharedInstance.get(remoteURL,
                 success: { (url: String!, path: String!) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if (self.avatarURL == nil || self.avatarURL!.absoluteString != url) {
+                            self.avatarURL = nil
+                            return
+                        }
+                        
+                        self.avatarURL = nil
                         if let avatar = UIImage(contentsOfFile: path) {
                             self.imageView.image = avatar
                             success?(image: avatar)
                         }
                     })
                 }, failure: { (url: String!, error: FlipError) -> Void in
+                    self.avatarURL = nil
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         println("Could not get avatar from \(remoteURL.path).")
                     })
