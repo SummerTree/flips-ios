@@ -19,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let BUGSENSE_KEY = "2b57f78e"
     private let FLURRY_KEY = "7CCBCSMWJQ395RJKDP5Y"
     
+    private var isAppActive: Bool = false
+    
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -39,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         if (launchOptions != nil) {
             if let pushNotificationPayload = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                self.onNotificationReceived(application, withUserInfo: pushNotificationPayload)
+                self.onAppLaunchedFromNotification(application, withUserInfo: pushNotificationPayload)
             } else {
                 openSplashScreen()
             }
@@ -83,6 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
+        self.isAppActive = false
         if let loggedUser = User.loggedUser() {
             application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()
         }
@@ -111,9 +114,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    /*
+     * If the user opens your app from the system-displayed alert, the system may call this method again when your app is about 
+     * to enter the foreground so that you can update your user interface and display information pertaining to the notification.
+     */
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        self.incrementBadgeCounter()
-        self.onNotificationReceived(application, withUserInfo: userInfo)
+        // When user opens the app from a notification alert the aplication state is active, but not necessarily the app is foreground.
+        if (application.applicationState == UIApplicationState.Inactive) {
+            self.onAppLaunchedFromNotification(application, withUserInfo: userInfo)
+        } else {
+            self.incrementBadgeCounter()
+        }
         completionHandler(UIBackgroundFetchResult.NewData)
     }
     
@@ -138,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
     }
   
-    private func onNotificationReceived(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
+    private func onAppLaunchedFromNotification(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
         if let loggedUser = User.loggedUser() {
             if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
                 let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
@@ -150,6 +161,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
-
 }
