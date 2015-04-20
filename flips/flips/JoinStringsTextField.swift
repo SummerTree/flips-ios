@@ -10,12 +10,14 @@
 // the license agreement.
 //
 
+public let WORD_CHARACTER_PATTERN = "[\\w\']"
+
 class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     private let NUM_WORDS_LIMIT = 60
     
     private var joinedTextRanges : [NSRange] = [NSRange]()
-    private let wordCharRegex = NSRegularExpression(pattern: "\\w", options: nil, error: nil)!
+    private let wordCharRegex = NSRegularExpression(pattern: WORD_CHARACTER_PATTERN, options: nil, error: nil)!
     private var rangeThatWillChange: NSRange? = nil
     private let WHITESPACE: String = " "
     private let WHITESPACE_CHAR: Character = " "
