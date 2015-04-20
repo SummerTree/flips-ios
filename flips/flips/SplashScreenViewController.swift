@@ -84,18 +84,18 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
         activityIndicator.startAnimating()
         self.view.addSubview(activityIndicator)
         
+        self.showActivityIndicator(userInteractionEnabled: false)
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.onLogin(user as User)
-                
-                PersistentManager.sharedInstance.syncUserData({ (success, flipError, userDataSource) -> Void in
+                PersistentManager.sharedInstance.syncUserData({ (success, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         activityIndicator.stopAnimating()
                         if let authenticatedUser = User.loggedUser() {
                             if (!self.userHasDevice(authenticatedUser)) {
                                 self.openPhoneNumberController(authenticatedUser.userID)
                             } else {
-                                self.openInboxViewController(userDataSource)
+                                self.openInboxViewController()
                             }
                         } else {
                             var alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
@@ -112,10 +112,11 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     
     func splashScreenViewAttemptLogin() {
         if let loggedUser = User.loggedUser() {
+            self.showActivityIndicator(userInteractionEnabled: false)
             AuthenticationHelper.sharedInstance.onLogin(loggedUser)
-            PersistentManager.sharedInstance.syncUserData({ (success, error, userDataSource) -> Void in
+            PersistentManager.sharedInstance.syncUserData({ (success, error) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.openInboxViewController(userDataSource)
+                    self.openInboxViewController()
                 })
             })
         } else {
@@ -143,9 +144,8 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
         splashScreenViewAttemptLogin()
     }
     
-    private func openInboxViewController(userDataSource: UserDataSource) {
+    private func openInboxViewController() {
         var inboxViewController = InboxViewController(roomID: self.roomIdToShow, flipMessageID: self.flipMessageIdToShow)
-        inboxViewController.userDataSource = userDataSource
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     

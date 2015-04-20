@@ -25,24 +25,8 @@ struct UserJsonParams {
     static let IS_TEMPORARY = "isTemporary"
 }
 
-public typealias UserSyncFinished = (Bool, FlipError?) -> Void
-
-@objc protocol UserDataSourceDelegate: NSObjectProtocol {
-    optional func userDataSource(userDataSource: UserDataSource, didDownloadFlip: Flip)
-    optional func userDataSourceDidFinishFlipsDownload(userDataSource: UserDataSource)
-}
-
 
 class UserDataSource : BaseDataSource {
-    weak var delegate: UserDataSourceDelegate?
-    
-    var flipsDownloadCount = ThreadSafe(0)
-    var flipsDownloadCounter = ThreadSafe(0)
-    
-    var isDownloadingFlips: Bool {
-        return (flipsDownloadCount.value - flipsDownloadCounter.value) > 0
-    }
-    
     
     // MARK: - CoreData Creator Methods
     
@@ -125,56 +109,6 @@ class UserDataSource : BaseDataSource {
     
     func getUserById(id: String) -> User? {
         return User.findFirstByAttribute(UserAttributes.USER_ID, withValue: id, inContext: currentContext) as? User
-    }
-    
-    func downloadMyFlips(myFlips: [Flip]) {
-        let userService = UserService()
-        
-        self.flipsDownloadCounter.value = 1
-        self.flipsDownloadCount.value = 0
-
-        for myFlip in myFlips {
-            let flip = myFlip.inContext(currentContext) as Flip
-            if (flip.thumbnailURL != nil && flip.thumbnailURL != "") {
-                var hasThumbnailCached: Bool = ThumbnailsCache.sharedInstance.has(NSURL(string: flip.thumbnailURL)!)
-                if (!hasThumbnailCached) {
-                    self.flipsDownloadCount.value++
-                }
-            }
-        }
-
-        // Nothing to download
-        if (self.flipsDownloadCount.value == 0) {
-            self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
-            return
-        }
-
-        for myFlip in myFlips {
-            let flip = myFlip.inContext(currentContext) as Flip
-
-            let callback: () -> Void = {
-                if (self.isDownloadingFlips) {
-                    NSLog("Downloaded flips: \(self.flipsDownloadCounter.value) of \(self.flipsDownloadCount.value)")
-                    self.delegate?.userDataSource?(self, didDownloadFlip: flip)
-                    
-                    self.flipsDownloadCounter.value++
-                } else {
-                    NSLog("Downloads complete!")
-                    self.delegate?.userDataSourceDidFinishFlipsDownload?(self)
-                }
-            }
-
-            let cache = ThumbnailsCache.sharedInstance
-
-            cache.get(NSURL(string: flip.thumbnailURL)!,
-                success: { (url: String!, localPath: String!) in
-                    callback()
-                },
-                failure: { (url: String!, error: FlipError) in
-                    println("Error downloading data for my flip (\(flip.flipID))")
-                    callback()
-            })
-        }
     }
     
     // Users from the App that are my contacts

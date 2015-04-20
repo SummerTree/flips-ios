@@ -48,8 +48,6 @@ class SyncView: UIView {
     }
     
     func setDownloadCount(count: Int, ofTotal total: Int) {
-        downloadLabel.text = "Downloading \(count) of \(total)"
-        
         let progress: Float = total == 0 ? 0 : Float(count)/Float(total)
         progressView.setProgress(progress, animated: true)
     }

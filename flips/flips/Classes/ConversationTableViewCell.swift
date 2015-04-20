@@ -46,6 +46,7 @@ class ConversationTableViewCell : UITableViewCell {
         flipImageView = UIImageView()
         flipImageView.contentMode = UIViewContentMode.ScaleAspectFill
         flipImageView.clipsToBounds = true
+        flipImageView.image = UIImage(named: "Filter_Photo")
         
         userImageView = RoundImageView.avatarA3()
         
@@ -175,12 +176,16 @@ class ConversationTableViewCell : UITableViewCell {
         // All conversations should be sorted in the inbox by time stamp, with most recent at the top, and oldest at the bottom.
         var lastMessage: FlipMessage? = nil
         
-        let roomFlipMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
-        for (var i: Int = roomFlipMessages.count - 1; i >= 0; i--) {
-            if (!roomFlipMessages[i].removed.boolValue) {
-                lastMessage = roomFlipMessages[i]
-                break
+        if let roomFlipMessages: NSOrderedSet = room.valueForKey("flipMessages") as? NSOrderedSet {
+            for (var i: Int = roomFlipMessages.count - 1; i >= 0; i--) {
+                let flipMessage: FlipMessage = roomFlipMessages[i] as FlipMessage
+                if (!flipMessage.removed.boolValue) {
+                    lastMessage = flipMessage
+                    break
+                }
             }
+        } else {
+            println("\n\nCoreData problem: flipMessages value is nil\n\n")
         }
         
         // The preview still photo should reflect the first frame of the video of the most recent message in the conversation
