@@ -22,6 +22,9 @@ public class DeviceHelper: NSObject {
     
     private let LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL = "last_sync_user_date"
     
+    private let SYNC_VIEW_SHOWN: String = "sync_view_shown"
+    
+    
     // MARK: - Singleton
     
     public class var sharedInstance : DeviceHelper {
@@ -168,5 +171,15 @@ public class DeviceHelper: NSObject {
             userDefaults.removeObjectForKey(LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL)
         }
         userDefaults.synchronize()
+    }
+    
+    func didShowSyncView() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return userDefaults.boolForKey(SYNC_VIEW_SHOWN)
+    }
+    
+    func setSyncViewShown(value: Bool) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(value, forKey: SYNC_VIEW_SHOWN)
     }
 }

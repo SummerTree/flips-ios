@@ -414,15 +414,12 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         })
     }
     
-    func syncUserData(callback:(Bool, FlipError?, UserDataSource) -> Void) {
+    func syncUserData(callback:(Bool, FlipError?) -> Void) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let userService = UserService()
             let flipDataSource = FlipDataSource()
             
             var error: FlipError?
-            var myFlips = Array<Flip>()
-            
-            let userDataSource = UserDataSource()
             
             let group = dispatch_group_create()
             
@@ -434,11 +431,8 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     let myFlipsAsJSON = jsonResponse.array
                     
                     for myFlipJson in myFlipsAsJSON! {
-                        let flip = self.createFlipWithJson(myFlipJson)
-                        myFlips.append(flip)
+                        self.createFlipWithJson(myFlipJson)
                     }
-                    
-                    userDataSource.downloadMyFlips(myFlips)
                     
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
@@ -454,7 +448,6 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 roomService.getMyRooms({ (rooms) -> Void in
                     println("   getMyRooms - success")
-                    PubNubService.sharedInstance.subscribeOnMyChannels()
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
                     println("   getMyRooms - fail")
@@ -523,7 +516,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             
             if (error != nil) {
                 println("sync fail\n")
-                callback(false, error, userDataSource)
+                callback(false, error)
                 return
             }
             
@@ -531,7 +524,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                 NSNotificationCenter.defaultCenter().postNotificationName(USER_DATA_SYNCED_NOTIFICATION_NAME, object: nil, userInfo: nil)
             })
             
-            callback(true, nil, userDataSource)
+            callback(true, nil)
         })
     }
     

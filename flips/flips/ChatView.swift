@@ -51,6 +51,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     private var openingFromPushNotification: Bool!
     
+    private var isViewDisappearing: Bool = false
+    
     
     // MARK: - Required initializers
     
@@ -103,6 +105,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func viewWillDisappear() {
         self.indexPathToShow = nil
+        self.isViewDisappearing = true
         
         if (DeviceHelper.sharedInstance.systemVersion() < 8) {
             NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
@@ -343,14 +346,16 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                         self.tableView.alpha = 1
                     }, completion: { (finished) -> Void in
                         self.indexPathToShow = nil
-
-                        if (self.replyTextField.text != "") {
-                            self.hideReplyButtonAndShowTextField()
-                            self.replyTextField.becomeFirstResponder()
-                        }
-
-                        if (!self.openingFromPushNotification) {
-                            self.playVideoForVisibleCell()
+                        
+                        if (!self.isViewDisappearing) {
+                            if (self.replyTextField.text != "") {
+                                self.hideReplyButtonAndShowTextField()
+                                self.replyTextField.becomeFirstResponder()
+                            }
+                            
+                            if (!self.openingFromPushNotification) {
+                                self.playVideoForVisibleCell()
+                            }
                         }
                     })
                 }
