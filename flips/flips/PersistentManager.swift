@@ -420,9 +420,6 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             let flipDataSource = FlipDataSource()
             
             var error: FlipError?
-            var myFlips = Array<Flip>()
-            
-            let userDataSource = UserDataSource()
             
             let group = dispatch_group_create()
             
@@ -434,8 +431,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     let myFlipsAsJSON = jsonResponse.array
                     
                     for myFlipJson in myFlipsAsJSON! {
-                        let flip = self.createFlipWithJson(myFlipJson)
-                        myFlips.append(flip)
+                        self.createFlipWithJson(myFlipJson)
                     }
                     
                     dispatch_group_leave(group)
