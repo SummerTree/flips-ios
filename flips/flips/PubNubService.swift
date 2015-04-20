@@ -117,6 +117,9 @@ public class PubNubService: FlipsService, PNDelegate {
             for channel in myChannels {
                 if (!PubNub.isSubscribedOn(channel)) {
                     channelsToSubscribe.append(channel)
+                } else {
+                    // It load the history after subscribe. So, when we will not re-resubscribe, we need to get the history.
+                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: nil)
                 }
             }
             
@@ -253,7 +256,11 @@ public class PubNubService: FlipsService, PNDelegate {
             dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(90 * NSEC_PER_SEC)))
             NSLog("HISTORY FETCH ENDED - subscribedChannels.count(\(subscribedChannels.count)) - historiesReceived(\(historiesReceived))")
             
-            completion?(subscribedChannels.count == historiesReceived)
+            if (completion != nil) {
+                completion?(subscribedChannels.count == historiesReceived)
+            } else {
+                NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+            }
         })
     }
 

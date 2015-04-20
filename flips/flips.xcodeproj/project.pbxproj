@@ -137,6 +137,9 @@
 		7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */; };
 		7A8BFEDA1A09596700E7F2A3 /* ComposeBottomViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */; };
 		7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */; };
+		7A9240DF1AE5410E00E591B7 /* QueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */; };
+		7A9240E01AE5410E00E591B7 /* QueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */; };
+		7A9240E11AE5410E00E591B7 /* QueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */; };
 		7A9619DC19DB2976005E4343 /* FlipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619DB19DB2976005E4343 /* FlipsViewController.swift */; };
 		7A9619E119DB82EF005E4343 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */; };
 		7A9619E319DB85D4005E4343 /* UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */; };
@@ -771,6 +774,7 @@
 		7A8A964E19E2323300FB5515 /* MessagesTopViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesTopViewDelegate.swift; path = Classes/MessagesTopViewDelegate.swift; sourceTree = "<group>"; };
 		7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeBottomViewContainer.swift; sourceTree = "<group>"; };
 		7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeTopViewContainer.swift; sourceTree = "<group>"; };
+		7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueHelper.swift; sourceTree = "<group>"; };
 		7A9619DB19DB2976005E4343 /* FlipsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FlipsViewController.swift; path = Classes/FlipsViewController.swift; sourceTree = "<group>"; };
 		7A9619DF19DB82EF005E4343 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "Classes/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		7A9619E019DB82EF005E4343 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "Classes/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
@@ -1044,6 +1048,7 @@
 				7AF2BF0F1A37276E0030DDF2 /* OnboardingHelper.swift */,
 				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
 				BE22C9941AA6BEC00079298E /* TempFiles.swift */,
+				7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2047,6 +2052,7 @@
 				07B66B021A14340C00407A28 /* ContactExtensions.swift in Sources */,
 				705B3DD91A03B9DD00E0D3E9 /* PreviewView.swift in Sources */,
 				70B7696219E706B100CAA9A9 /* MessageReceiver.swift in Sources */,
+				7A9240DF1AE5410E00E591B7 /* QueueHelper.swift in Sources */,
 				7049A7A51A11238A001D8121 /* ChangeNumberInfoViewController.swift in Sources */,
 				7AFB1E9B1AC3050E00C60D8E /* ThumbnailsDataSource.swift in Sources */,
 				7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */,
@@ -2336,6 +2342,7 @@
 				BE245FFA1AD2D95900859233 /* FlipTextView.swift in Sources */,
 				BE245FFB1AD2D95900859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				BE245FFC1AD2D95900859233 /* OnboardingHelper.swift in Sources */,
+				7A9240E01AE5410E00E591B7 /* QueueHelper.swift in Sources */,
 				BE245FFD1AD2D95900859233 /* CustomNavigationBar.swift in Sources */,
 				BE245FFE1AD2D95900859233 /* TakePictureViewDelegate.swift in Sources */,
 				BE245FFF1AD2D95900859233 /* UIAlertViewExtensions.swift in Sources */,
@@ -2542,6 +2549,7 @@
 				BE2460D41AD2D9C600859233 /* FlipTextView.swift in Sources */,
 				BE2460D51AD2D9C600859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				BE2460D61AD2D9C600859233 /* OnboardingHelper.swift in Sources */,
+				7A9240E11AE5410E00E591B7 /* QueueHelper.swift in Sources */,
 				BE2460D71AD2D9C600859233 /* CustomNavigationBar.swift in Sources */,
 				BE2460D81AD2D9C600859233 /* TakePictureViewDelegate.swift in Sources */,
 				BE2460D91AD2D9C600859233 /* UIAlertViewExtensions.swift in Sources */,
