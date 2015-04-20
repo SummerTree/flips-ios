@@ -21,13 +21,11 @@ public class CacheJournal {
     private let entriesQueue: dispatch_queue_t
     
     var cacheSize: Int64 {
-        get {
-            var size: Int64 = 0
-            for entry in entries.value {
-                size += Int64(entry.size)
-            }
-            return size
+        var size: Int64 = 0
+        for entry in entries.value {
+            size += Int64(entry.size)
         }
+        return size
     }
     
     init(absolutePath: String) {

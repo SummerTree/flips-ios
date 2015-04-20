@@ -31,9 +31,7 @@ public class StorageCache {
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
     
     var sizeInBytes: Int64 {
-        get {
-            return self.cacheJournal.cacheSize
-        }
+        return self.cacheJournal.cacheSize
     }
     
     init(cacheID: String, cacheDirectoryName: String, scheduleCleanup: () -> Void) {

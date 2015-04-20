@@ -28,9 +28,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
     var numberOfLines: Int {
-        get {
-            return Int(self.contentSize.height/self.font.lineHeight)
-        }
+        return Int(self.contentSize.height/self.font.lineHeight)
     }
     
     override init() {
