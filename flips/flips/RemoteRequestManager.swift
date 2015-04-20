@@ -56,7 +56,9 @@ public class RemoteRequestManager: NSObject {
     // MARK: - Queue Handler
     
     func executeBlock(block: RemoteRequestBlock) {
-        println("RemoteRequestManager.addBlockToRetryQueue()")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            println("RemoteRequestManager.addBlockToRetryQueue()")
+        })
         block { (success: Bool) -> Void in
             if (!success) {
                 dispatch_async(self.privateQueue, { () -> Void in
@@ -72,7 +74,9 @@ public class RemoteRequestManager: NSObject {
     }
     
     func cleanQueue() {
-        println("RemoteRequestManager.cleanQueue()")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            println("RemoteRequestManager.cleanQueue()")
+        })
         dispatch_sync(self.privateQueue, { () -> Void in
             self.blocksQueue.removeAll(keepCapacity: false)
             self.isRunning = false
@@ -83,17 +87,23 @@ public class RemoteRequestManager: NSObject {
     // MARK: - Private Methods
     
     private func run(delay: Double = 0.0) {
-        println("RemoteRequestManager.run(\(delay))")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            println("RemoteRequestManager.run(\(delay))")
+        })
         self.isRunning = true
         let time = delay * Double(NSEC_PER_SEC)
         let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
         
         if (self.blocksQueue.count > 0) {
             dispatch_after(delay, self.privateQueue, { () -> Void in
-                println("   RemoteRequestManager - dispatched after delay")
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    println("   RemoteRequestManager - dispatched after delay")
+                })
                 for (key, block) in self.blocksQueue {
                     block(completionBlock: { (success: Bool) -> Void in
-                        println("   RemoteRequestManager - Queued block completion called with \(success)")
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            println("   RemoteRequestManager - Queued block completion called with \(success)")
+                        })
                         if (success) {
                             self.removeFromQueueBlockWithKey(key)
                         }
@@ -102,13 +112,17 @@ public class RemoteRequestManager: NSObject {
                 self.run(delay: self.RUN_INTERVAL)
             })
         } else {
-            println("RemoteRequestManager stopped")
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                println("RemoteRequestManager stopped")
+            })
             self.isRunning = false
         }
     }
     
     private func removeFromQueueBlockWithKey(key: Int) {
-        println("removeFromQueueBlockWithKey(\(key))")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            println("removeFromQueueBlockWithKey(\(key))")
+        })
         dispatch_async(self.privateQueue, { () -> Void in
             self.blocksQueue.removeValueForKey(key)
             return
@@ -119,7 +133,9 @@ public class RemoteRequestManager: NSObject {
     // MARK: - Notification Handlers
     
     func onNetworkReachabilityChangedNotificationReceived(notification: NSNotification) {
-        println("onNetworkReachabilityChangedNotificationReceived")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            println("onNetworkReachabilityChangedNotificationReceived")
+        })
         if (NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             if ((!self.isRunning) && (self.blocksQueue.count > 0)) {
                 self.run()

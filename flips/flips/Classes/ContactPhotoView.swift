@@ -39,10 +39,10 @@ class ContactPhotoView: RoundImageView {
         setup()
     }
         
-    override func setImageWithURL(url: NSURL!, success: ((request: NSURLRequest!, response: NSHTTPURLResponse!, image: UIImage) -> Void)? = nil) {
-        super.setImageWithURL(url) { (request, response, image) -> Void in
+    override func setAvatarWithURL(remoteURL: NSURL!, success: ((image: UIImage) -> Void)? = nil) {
+        super.setAvatarWithURL(remoteURL) { (image) -> Void in
             self.initialLabel.hidden = true
-            success?(request: request, response: response, image: image)
+            success?(image: image)
         }
     }
     

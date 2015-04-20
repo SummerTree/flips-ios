@@ -230,7 +230,7 @@ class ConversationTableViewCell : UITableViewCell {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if (originalRoomId == self.roomId) {
                     // The avatar to the left should reflect the sender (other than the current user) of the most recent message in the conversation
-                    self.userImageView.setImageWithURL(photoURL)
+                    self.userImageView.setAvatarWithURL(photoURL)
                     
                     self.participantsNamesLabel.text = roomName
                     
