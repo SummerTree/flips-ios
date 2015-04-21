@@ -101,6 +101,8 @@
 		731F38CD1AE44D4600171507 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
 		7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8071A89624F00446CD8 /* CacheJournal.swift */; };
 		7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
+		736F65D11AE5ACE800E4C4D3 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */; };
+		736F65D31AE5AD9600E4C4D3 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */; };
 		73D7279A1A83E7A1006DCC92 /* StorageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D727991A83E7A1006DCC92 /* StorageCache.swift */; };
 		7A03911C1A1CFD8300846BA1 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
 		7A07EB961AC07AC60002DE18 /* GroupParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07EB951AC07AC60002DE18 /* GroupParticipantsView.swift */; };
@@ -740,6 +742,8 @@
 		731F38CC1AE44D4600171507 /* AvatarCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvatarCache.swift; sourceTree = "<group>"; };
 		7330F8071A89624F00446CD8 /* CacheJournal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheJournal.swift; sourceTree = "<group>"; };
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
+		736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		73D727991A83E7A1006DCC92 /* StorageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageCache.swift; sourceTree = "<group>"; };
 		7A03911B1A1CFD8300846BA1 /* MessageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
 		7A07EB951AC07AC60002DE18 /* GroupParticipantsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupParticipantsView.swift; sourceTree = "<group>"; };
@@ -1061,6 +1065,7 @@
 				70736C361A0D5817004E55E4 /* UserProfile */,
 				7033584519E4160B0030CF11 /* SettingsView.swift */,
 				70ABC7E91A09376100A7085A /* SettingsTableViewCell.swift */,
+				736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1480,6 +1485,7 @@
 				7049A7A31A11237B001D8121 /* Change Number */,
 				70736C301A0D453F004E55E4 /* UserProfile */,
 				7A0D6CEE19D4963100E39A1B /* SettingsViewController.swift */,
+				736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -2136,9 +2142,11 @@
 				A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */,
+				736F65D31AE5AD9600E4C4D3 /* TutorialView.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
 				07CB53721A3E4A3C00853A78 /* UIAlertViewExtensions.swift in Sources */,
+				736F65D11AE5ACE800E4C4D3 /* TutorialViewController.swift in Sources */,
 				7A2A7E2419EDBFB800033164 /* CoreDataHandler.swift in Sources */,
 				70DAB3501A1381510044AEC1 /* UIViewExtensions.swift in Sources */,
 				57EECE4719DB50390066BEE7 /* VerificationCodeViewController.swift in Sources */,

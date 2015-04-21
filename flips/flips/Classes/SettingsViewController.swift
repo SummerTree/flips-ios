@@ -128,6 +128,10 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         })
     }
     
+    func settingsViewDidTapTutorialButton(settingsView: SettingsView) {
+        self.navigationController?.pushViewController(TutorialViewController(), animated: true)
+    }
+    
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
         var userFirstName: String? = nil
         var facebookUser = false
