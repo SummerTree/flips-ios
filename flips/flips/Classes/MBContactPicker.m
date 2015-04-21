@@ -282,7 +282,7 @@ static CGFloat const ROW_HEIGHT = 56.0;
         if (photoURLString) {
             NSURL *url = [NSURL URLWithString:photoURLString];
             if (url) {
-                [cell.photoView setImageWithURL:url success:nil];
+                [cell.photoView setAvatarWithURL:url success:nil];
             }
         }
 

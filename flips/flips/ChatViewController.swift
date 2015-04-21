@@ -100,7 +100,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             })
         }
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageContentDownloadedNotificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageReceivedNotification:", name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         self.chatView.delegate = self
         self.chatView.dataSource = self
@@ -158,6 +159,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         super.viewWillDisappear(animated)
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         self.chatView.viewWillDisappear()
         self.chatView.dataSource = nil
@@ -253,20 +255,24 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     // MARK: - Messages Notification Handler
     
-    func notificationReceived(notification: NSNotification) {
+    func onFlipMessageReceivedNotification(notification: NSNotification) {
         self.reloadFlipMessages()
         
         var scrollToReceivedMessage: Bool = false
         if (self.flipMessageIdFromPushNotification != nil) {
-            if let flipMessageIdReceived: String = notification.userInfo?[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as? String {
+            if let flipMessageIdReceived: String = notification.userInfo?[FLIP_MESSAGE_RECEIVED_NOTIFICATION_PARAM_MESSAGE_KEY] as? String {
                 if (flipMessageIdReceived == self.flipMessageIdFromPushNotification) {
                     scrollToReceivedMessage = true
                     self.flipMessageIdFromPushNotification = nil
                 }
             }
         }
-
+        
         self.refreshThreadView(scrollToReceivedMessage)
+    }
+    
+    func onFlipMessageContentDownloadedNotificationReceived(notification: NSNotification) {
+        self.reloadFlipMessages()
     }
     
     private func refreshThreadView(scrollToReceivedMessage: Bool) {

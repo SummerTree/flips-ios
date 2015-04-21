@@ -205,7 +205,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
             let contactId = self.contactsIdsWithFlipsAccount[indexPath.row]
             contact = contactDatasource.retrieveContactWithId(contactId)
-            cell.photoView.setImageWithURL(NSURL(string:contact.contactUser.photoURL))
+            cell.photoView.setAvatarWithURL(NSURL(string:contact.contactUser.photoURL))
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             let contactId = self.contactsIdsWithoutFlipsAccount[indexPath.row]
             contact = contactDatasource.retrieveContactWithId(contactId)

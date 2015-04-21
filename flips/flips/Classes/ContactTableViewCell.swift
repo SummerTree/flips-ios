@@ -31,7 +31,7 @@ class ContactTableViewCell: UITableViewCell {
             
             if let flipUser = contact.contactUser {
                 if (!flipUser.isTemporary.boolValue) {
-                    self.photoView.setImageWithURL(NSURL(string: flipUser.photoURL))
+                    self.photoView.setAvatarWithURL(NSURL(string: flipUser.photoURL))
                     if (contact.contactTitle != nil) {
                         self.nameLabel.text = "\(contact.contactTitle!) (\(flipUser.fullName()))"
                     } else {

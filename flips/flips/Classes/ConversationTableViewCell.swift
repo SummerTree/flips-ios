@@ -160,13 +160,14 @@ class ConversationTableViewCell : UITableViewCell {
     
     func refreshCell(shouldSetThumbnailAnimated: Bool = true) {
         let currentRoomId: String = self.roomId
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+
+        QueueHelper.dispatchAsyncWithNewContext { (newContext) -> Void in
             if (self.roomId == currentRoomId) {
-                let roomDataSource = RoomDataSource()
+                let roomDataSource = RoomDataSource(context: newContext)
                 var room = roomDataSource.retrieveRoomWithId(self.roomId)
                 self.layoutCell(room, shouldSetThumbnailAnimated: shouldSetThumbnailAnimated)
             }
-        })
+        }
     }
 
 
@@ -207,7 +208,6 @@ class ConversationTableViewCell : UITableViewCell {
             let originalRoomId: String = self.roomId
             
             flipMessage.messageThumbnail { (thumbnail: UIImage?) in
-
                 if ((originalRoomId == self.roomId) && (thumbnail != nil)) {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (originalRoomId != self.roomId) {
@@ -230,7 +230,7 @@ class ConversationTableViewCell : UITableViewCell {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if (originalRoomId == self.roomId) {
                     // The avatar to the left should reflect the sender (other than the current user) of the most recent message in the conversation
-                    self.userImageView.setImageWithURL(photoURL)
+                    self.userImageView.setAvatarWithURL(photoURL)
                     
                     self.participantsNamesLabel.text = roomName
                     

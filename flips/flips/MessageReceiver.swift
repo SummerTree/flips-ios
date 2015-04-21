@@ -28,6 +28,10 @@ let MESSAGE_FLIPS_INFO_TYPE = "2"
 let MESSAGE_READ_INFO_TYPE = "3"
 let MESSAGE_DELETED_INFO_TYPE = "4"
 
+let FLIP_MESSAGE_RECEIVED_NOTIFICATION: String = "flip_message_received_notification"
+let FLIP_MESSAGE_RECEIVED_NOTIFICATION_PARAM_MESSAGE_KEY: String = "flip_message_received_notification_param_message_key"
+
+
 public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     var flipMessagesWaiting: [String: Array<String>]
@@ -83,6 +87,8 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 println("Failed to get resource from cache, error: \(error)")
                 self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: error)
         })
+        
+        self.sendMessageReceiveNotificationForFlipMessageID(flipMessage.flipMessageID)
     }
     
     private func sendDownloadFinishedBroadcastForFlip(flip: Flip, flipMessageID: String, error: FlipError?) {
@@ -94,6 +100,12 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         }
         
         NSNotificationCenter.defaultCenter().postNotificationName(DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil, userInfo: userInfo)
+    }
+    
+    private func sendMessageReceiveNotificationForFlipMessageID(flipMessageID: String) {
+        var userInfo: Dictionary<String, String> = Dictionary<String, String>()
+        userInfo.updateValue(flipMessageID, forKey: FLIP_MESSAGE_RECEIVED_NOTIFICATION_PARAM_MESSAGE_KEY)
+        NSNotificationCenter.defaultCenter().postNotificationName(FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil, userInfo: userInfo)
     }
 
     private func onRoomReceived(messageJson: JSON) {
