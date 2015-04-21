@@ -79,6 +79,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - View Events
     
     func viewWillAppear() {
+        self.isViewDisappearing = false
         self.tableView.reloadData()
         
         if (DeviceHelper.sharedInstance.systemVersion() < 8) {

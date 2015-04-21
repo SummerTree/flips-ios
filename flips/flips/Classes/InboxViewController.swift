@@ -89,9 +89,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         super.viewWillAppear(animated)
         self.inboxView.viewWillAppear()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageContentDownloadedNotificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "messageHistoryReceivedNotificationReceived:", name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
-
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageReceivedNotification:", name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
+        
         syncView?.hidden = true
     }
     
@@ -100,6 +101,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         self.roomIdToShow = nil
         self.flipMessageIdToShow = nil
@@ -287,8 +289,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     // MARK: - Room Handlers
     
     private func refreshRooms() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            let roomDataSource = RoomDataSource()
+        QueueHelper.dispatchAsyncWithNewContext { (newContext) -> Void in
+            let roomDataSource = RoomDataSource(context: newContext)
             let rooms = roomDataSource.getMyRoomsOrderedByMostRecentMessage()
             
             var shouldReloadTableView: Bool = false
@@ -315,7 +317,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     self.inboxView.reloadData()
                 })
             }
-        })
+        }
     }
     
     private func openThreadViewControllerWithRoomID(roomID: String) {
@@ -334,32 +336,27 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func messageHistoryReceivedNotificationReceived(notification: NSNotification) {
         self.refreshRooms()
     }
-
-    func notificationReceived(notification: NSNotification) {
-        var userInfo: Dictionary = notification.userInfo!
-        var flipID: String = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
-        var receivedFlipMessageID: String = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as String
-        let flipDataSource: FlipDataSource = FlipDataSource()
-        if let flip = flipDataSource.retrieveFlipWithId(flipID) {
-            if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-                println("Thumbnail download failed for flip: \(flip.flipID)")
-            } else {
-                self.refreshRooms()
-            }
-        } else {
-            UIAlertView.showUnableToLoadFlip()
-        }
-        
-        if let roomID: String = self.roomIdToShow {
-            if let flipMessageID: String = self.flipMessageIdToShow {
-                if (flipMessageID == receivedFlipMessageID) {
-                    self.hideActivityIndicator()
-                    self.roomIdToShow = nil
-                    self.flipMessageIdToShow = nil
-                    self.openThreadViewControllerWithRoomID(roomID)
+    
+    func onFlipMessageReceivedNotification(notification: NSNotification) {
+        self.refreshRooms()
+        if let userInfo: Dictionary<String, String> = notification.userInfo as? Dictionary<String, String> {
+            var receivedFlipMessageID: String = userInfo[FLIP_MESSAGE_RECEIVED_NOTIFICATION_PARAM_MESSAGE_KEY]!
+            
+            if let roomID: String = self.roomIdToShow {
+                if let flipMessageID: String = self.flipMessageIdToShow {
+                    if (flipMessageID == receivedFlipMessageID) {
+                        self.hideActivityIndicator()
+                        self.roomIdToShow = nil
+                        self.flipMessageIdToShow = nil
+                        self.openThreadViewControllerWithRoomID(roomID)
+                    }
                 }
             }
         }
+    }
+
+    func onFlipMessageContentDownloadedNotificationReceived(notification: NSNotification) {
+        self.refreshRooms()
     }
     
     func resyncNotificationReceived(notification: NSNotification) {

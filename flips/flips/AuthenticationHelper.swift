@@ -92,6 +92,7 @@ public class AuthenticationHelper: NSObject {
         FlipsCache.sharedInstance.clear()
         ThumbnailsCache.sharedInstance.clear()
         BlurredThumbnailsCache.sharedInstance.clear()
+        AvatarCache.sharedInstance.clear()
 
         PubNub.disconnect()
         

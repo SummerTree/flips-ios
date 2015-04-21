@@ -118,19 +118,30 @@ class SettingsTableViewCell: UITableViewCell {
     }
     
     func setAvatarURL(url: String!) {
-        ActivityIndicatorHelper.showActivityIndicatorAtView(self.actionImageView, style: UIActivityIndicatorViewStyle.White)
         self.actionImageView.layer.cornerRadius = self.actionImageView.frame.size.width / 2
         self.actionImageView.layer.masksToBounds = true
-        self.actionImageView.setImageWithURL(NSURL(string: url), success: { (request, response, image) -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.actionImageView)
-                self.actionImageView.mas_updateConstraints({ (update) -> Void in
-                    update.removeExisting = true
-                    update.center.equalTo()(self.imageContainerView)
-                    update.width.equalTo()(self.actionImageView.frame.width)
-                    update.height.equalTo()(self.actionImageView.frame.height)
-                })
+        
+        let remoteURL = NSURL(string: url)
+        if (remoteURL != nil) {
+            let returnValue = AvatarCache.sharedInstance.get(remoteURL!,
+                success: { (url: String!, path: String!) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.actionImageView)
+                        self.actionImageView.image = UIImage(contentsOfFile: path)
+                        self.actionImageView.mas_updateConstraints({ (update) -> Void in
+                            update.removeExisting = true
+                            update.center.equalTo()(self.imageContainerView)
+                            update.width.equalTo()(self.actionImageView.frame.width)
+                            update.height.equalTo()(self.actionImageView.frame.height)
+                        })
+                    })
+                }, failure: { (url: String!, error: FlipError) -> Void in
+                    println("Could not get avatar from \(remoteURL!.path).")
             })
-        })
+            
+            if (returnValue == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                ActivityIndicatorHelper.showActivityIndicatorAtView(self.actionImageView, style: UIActivityIndicatorViewStyle.White)
+            }
+        }
     }
 }

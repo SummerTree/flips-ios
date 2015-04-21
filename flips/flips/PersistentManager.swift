@@ -37,17 +37,12 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         var room = roomDataSource.getRoomById(roomID)
         
         var isNewRoom: Bool = false
-        MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            let roomDataSourceInContext = RoomDataSource(context: context)
-            var roomInContext: Room
-            if (room == nil) {
+        if (room == nil) {
+            MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+                let roomDataSourceInContext = RoomDataSource(context: context)
+                room = roomDataSourceInContext.createRoomWithJson(json)
                 isNewRoom = true
-                roomInContext = roomDataSourceInContext.createRoomWithJson(json)
-            } else {
-                roomInContext = room!
             }
-            
-            room = roomInContext
         }
         
         var content = json[RoomJsonParams.PARTICIPANTS]

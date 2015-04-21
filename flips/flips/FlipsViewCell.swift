@@ -46,33 +46,21 @@ class FlipsViewCell : UICollectionViewCell {
             let flipDataSource = FlipDataSource()
             var flip = flipDataSource.retrieveFlipWithId(self.flipID)
             
-            if (flip.isPrivate.boolValue) {
-                let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
-                    success: { (url: String!, localThumbnailPath: String!) in
-                        let thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.cellImageView.image = thumbnail
-                            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                        })
-                    },
-                    failure: { (url: String!, error: FlipError) in
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                        println("Failed to get resource from cache, error: \(error)")
-                    })
-                
-                if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                    ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White, andSize: FLIPS_CELL_WIDTH / 2)
-                }
-            } else {
-                if (!flip.thumbnailURL.isEmpty) {
-                    let url = NSURL(string: flip.thumbnailURL)
+            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
+                success: { (url: String!, localThumbnailPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White)
-                        self.cellImageView.setImageWithURL(url, success: { (request, response, image) -> Void in
-                            ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                        })
+                        self.cellImageView.image = UIImage(contentsOfFile: localThumbnailPath)
+                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                        
                     })
-                }
+                },
+                failure: { (url: String!, error: FlipError) in
+                    ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                    println("Failed to get resource from cache, error: \(error)")
+            })
+            
+            if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+                ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White, andSize: FLIPS_CELL_WIDTH / 2)
             }
         })
     }
