@@ -16,7 +16,7 @@ let USER_DATA_SYNCED_NOTIFICATION_NAME: String = "user_data_synced_notification"
 
 class SettingsViewController : FlipsViewController, SettingsViewDelegate, TutorialViewControllerDelegate {
     
-    private let FLIPSBOYS_CHAT_TITLE: String = "FlipBoys"
+    private let FLIPSBOYS_CHAT_TITLE: String = "Team Flips"
     
     private var settingsView: SettingsView!
 
@@ -90,13 +90,13 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate, Tutori
     
     func settingsViewDidTapSendFeedback(settingsView: SettingsView) {
         let roomDataSource = RoomDataSource()
-        let flipboysRoom: Room? = roomDataSource.getFlipboysRoom()
+        let teamFlipsRoom: Room? = roomDataSource.getTeamFlipsRoom()
         
-        if let room = flipboysRoom {
+        if let room = teamFlipsRoom {
             var chatViewController = ChatViewController(room: room)
             self.navigationController?.pushViewController(chatViewController, animated: true)
         } else {
-            var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.FLIPBOYS_ROOM_NOT_FOUND, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.TEAMFLIPS_ROOM_NOT_FOUND, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
         }
     }

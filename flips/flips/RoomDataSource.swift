@@ -28,7 +28,7 @@ struct RoomAttributes {
 
 class RoomDataSource : BaseDataSource {
     
-    private let FLIPBOYS_USERNAME: String = "flipboys@flipsapp.com"
+    private let TEAMFLIPS_USERNAME: String = "teamflips@flipsapp.com"
     
     
     // MARK: - Creators
@@ -85,12 +85,12 @@ class RoomDataSource : BaseDataSource {
         return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true, inContext: currentContext) as [Room]
     }
     
-    func getFlipboysRoom() -> Room? {
+    func getTeamFlipsRoom() -> Room? {
         var rooms = getAllRooms()
         for room in rooms {
             var allParticipants = room.participants.allObjects as [User]
             for participant in allParticipants {
-                if (participant.username == FLIPBOYS_USERNAME) {
+                if (participant.username == TEAMFLIPS_USERNAME) {
                     return room
                 }
             }
