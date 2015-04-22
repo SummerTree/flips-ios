@@ -146,11 +146,20 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         var selectedTextRange = self.selectedTextRange
         var attributedString = NSMutableAttributedString(string: self.text)
         let textLength = (self.text as NSString).length
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: NSMakeRange(0, textLength))
-        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: NSMakeRange(0, textLength))
+        if (textLength <= 0) {
+            return
+        }
+        
+        let fullRange = NSMakeRange(0, textLength)
+        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: fullRange)
+        attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: fullRange)
         
         for joinedTextRange in joinedTextRanges {
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
+            if (NSIntersectionRange(fullRange, joinedTextRange).length == joinedTextRange.length) {
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
+            } else {
+                println("Invalid joined text range \(joinedTextRange) on text field with length \(textLength)")
+            }
         }
 
         self.attributedText = attributedString
