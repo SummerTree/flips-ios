@@ -250,7 +250,7 @@ public class PubNubService: FlipsService, PNDelegate {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                println("Load Messages Hisoty - SubscribeOnMyChannels PubNub identifier changed.")
+                println("Load Messages History - SubscribeOnMyChannels PubNub identifier changed.")
                 return
             }
             
