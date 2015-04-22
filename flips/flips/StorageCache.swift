@@ -234,10 +234,11 @@ public class StorageCache {
         dispatch_async(self.cacheQueue) {
             let leastRecentlyUsed = self.cacheJournal.getLRUEntries(count)
             let fileManager = NSFileManager.defaultManager()
-            for path in leastRecentlyUsed {
+            for fileName in leastRecentlyUsed {
                 var error: NSError? = nil
+                let path = self.cacheDirectoryPath.path!.stringByAppendingPathComponent(fileName)
                 if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(path). Error: \(error)")
+                    println("Could not remove file \(fileName). Error: \(error)")
                 }
             }
             
@@ -249,10 +250,11 @@ public class StorageCache {
         dispatch_async(self.cacheQueue) {
             let entries = self.cacheJournal.getEntries()
             let fileManager = NSFileManager.defaultManager()
-            for path in entries {
+            for fileName in entries {
                 var error: NSError? = nil
+                let path = self.cacheDirectoryPath.path!.stringByAppendingPathComponent(fileName)
                 if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(path). Error: \(error)")
+                    println("Could not remove file \(fileName). Error: \(error)")
                 }
             }
             

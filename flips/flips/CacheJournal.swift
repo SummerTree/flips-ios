@@ -51,7 +51,7 @@ public class CacheJournal {
         }
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-        var newEntry = JournalEntry(key: key, size: entrySize, timestamp: entryTimestamp)
+        var newEntry = JournalEntry(key: key.lastPathComponent, size: entrySize, timestamp: entryTimestamp)
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.value.append(newEntry)
         })
@@ -61,7 +61,7 @@ public class CacheJournal {
     func updateEntry(key: String) -> Void {
         dispatch_sync(self.entriesQueue, { () -> Void in
             for entry in self.entries.value {
-                if key == entry.key {
+                if key.lastPathComponent == entry.key {
                     entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
                     break
                 }
