@@ -85,8 +85,6 @@ public class AuthenticationHelper: NSObject {
         
         RemoteRequestManager.sharedInstance.cleanQueue()
         
-        PubNubService.sharedInstance.disablePushNotificationOnMyChannels()
-        
         CoreDataHandler.sharedInstance.resetDatabase()
         
         FlipsCache.sharedInstance.clear()
@@ -94,7 +92,7 @@ public class AuthenticationHelper: NSObject {
         BlurredThumbnailsCache.sharedInstance.clear()
         AvatarCache.sharedInstance.clear()
 
-        PubNub.disconnect()
+        PubNubService.sharedInstance.disconnect()
         
         self.resetTimestampForStockFlips()
         
