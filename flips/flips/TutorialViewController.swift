@@ -10,30 +10,50 @@
 // the license agreement.
 //
 
-class TutorialViewController : FlipsViewController, TutorialViewDelegate {
-    
-    private var tutorialView: TutorialView!
-    
-    override func loadView() {
-        tutorialView = TutorialView()
-        tutorialView.delegate = self
-        
-        self.view = tutorialView
+class TutorialViewController : UIPageViewController {
+
+    var viewDelegate: TutorialViewControllerDelegate?
+
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
     }
-    
+
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tutorialView.viewDidLoad()
+
+        self.view.backgroundColor = UIColor.flipOrangeBackground()
+
+        self.setupNavigationBar()
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tutorialView.viewWillAppear()
+
+    func setupNavigationBar() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.translucent = true
+
+        self.navigationItem.titleView = nil
+
+        var closeBarButton = UIBarButtonItem(title: "Close", style: .Plain, target: self, action: "closeButtonTapped")
+        closeBarButton.setTitleTextAttributes([NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)], forState: .Normal)
+        closeBarButton.tintColor = UIColor.whiteColor()
+        self.navigationItem.rightBarButtonItem = closeBarButton
+        self.navigationItem.hidesBackButton = true
     }
-    
-    // MARK: - TutorialViewDelegate
-    
-    func tutorialViewDidTapBackButton(tutorialView: TutorialView!) {
-        self.navigationController?.popViewControllerAnimated(true)
+
+    override func closeButtonTapped() {
+        self.viewDelegate?.tutorialViewControllerDidTapCloseButton(self);
     }
+
+}
+
+// MARK: - TutorialViewControllerDelegate Protocol
+
+protocol TutorialViewControllerDelegate: class {
+
+    func tutorialViewControllerDidTapCloseButton(viewController: TutorialViewController!)
+
 }

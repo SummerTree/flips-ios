@@ -14,12 +14,13 @@ import Foundation
 
 let USER_DATA_SYNCED_NOTIFICATION_NAME: String = "user_data_synced_notification"
 
-class SettingsViewController : FlipsViewController, SettingsViewDelegate {
+class SettingsViewController : FlipsViewController, SettingsViewDelegate, TutorialViewControllerDelegate {
     
     private let FLIPSBOYS_CHAT_TITLE: String = "FlipBoys"
     
     private var settingsView: SettingsView!
-    
+
+    private var tutorialPagesDataSource: TutorialPagesDataSource?
     
     // MARK: - Overridden Methods
     
@@ -129,7 +130,18 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     }
     
     func settingsViewDidTapTutorialButton(settingsView: SettingsView) {
-        self.navigationController?.pushViewController(TutorialViewController(), animated: true)
+        var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+
+        if (self.tutorialPagesDataSource == nil) {
+            self.tutorialPagesDataSource = TutorialPagesDataSource()
+        }
+        tutorialViewController.dataSource = self.tutorialPagesDataSource
+        tutorialViewController.viewDelegate = self
+
+        let initialViewControllers: Array<TutorialPageViewController> = [self.tutorialPagesDataSource!.viewControllerForPage(0)!]
+        tutorialViewController.setViewControllers(initialViewControllers, direction: .Forward, animated: false, completion: nil)
+
+        self.navigationController?.pushViewController(tutorialViewController, animated: true)
     }
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
@@ -163,5 +175,12 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     func userDataSyncedNotificationReceived(notification: NSNotification) {
         self.settingsView.updateUserProfileInfo()
     }
-    
+
+
+    // MARK: - TutorialViewControllerDelegate
+
+    func tutorialViewControllerDidTapCloseButton(viewController: TutorialViewController!) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+
 }

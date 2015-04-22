@@ -15,7 +15,7 @@ import UIKit
 
 extension UIColor {
     
-    convenience init(RRGGBB: UInt, alpha: CGFloat) {
+    convenience init(RRGGBB: UInt, alpha: CGFloat = 1.0) {
         self.init(
             red: CGFloat((RRGGBB & 0xFF0000) >> 16) / 255.0,
             green: CGFloat((RRGGBB & 0x00FF00) >> 8) / 255.0,
@@ -23,16 +23,6 @@ extension UIColor {
             alpha: alpha
         )
     }
-    
-    convenience init(RRGGBB: UInt) {
-        self.init(
-            red: CGFloat((RRGGBB & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((RRGGBB & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(RRGGBB & 0x0000FF) / 255.0,
-            alpha: 1.0
-        )
-    }
-    
     
     // MARK: Primary Colors
     class func flipOrange() -> UIColor {
