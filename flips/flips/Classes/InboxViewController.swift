@@ -220,38 +220,47 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     self.syncView?.alpha = 0
                     self.syncView?.hidden = false
                     
-                    PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
-                        DeviceHelper.sharedInstance.setSyncViewShown(true)
-                        self.syncMessageHistoryBlock = nil
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                        var group = dispatch_group_create()
+                        dispatch_group_enter(group)
                         
-                        self.refreshRooms()
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
-                                self.syncView?.alpha = 0
-                                return
-                            }, completion: { (finished: Bool) -> Void in
-                                self.syncView?.hidden = true
-                                return
-                            })
-                        })
-                        
-                        if (!success) {
-                            //  Retry at least once
-                            println("Inbox subscribe failed. Retrying")
-                            PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
-                                self.refreshRooms()
-                            })
-                        }
-                    }, progress: { (received: Int, total: Int) -> Void in
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.syncView?.setDownloadCount(received, ofTotal: total)
-                            if (self.syncView?.alpha == 0) {
+                        PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                            dispatch_group_leave(group)
+                            
+                            DeviceHelper.sharedInstance.setSyncViewShown(true)
+                            self.syncMessageHistoryBlock = nil
+                            
+                            self.refreshRooms()
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
-                                    self.syncView?.alpha = 1
+                                    self.syncView?.alpha = 0
+                                    return
+                                }, completion: { (finished: Bool) -> Void in
+                                    self.syncView?.hidden = true
                                     return
                                 })
+                            })
+                            
+                            if (!success) {
+                                //  Retry at least once
+                                println("Inbox subscribe failed. Retrying")
+                                PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                                    self.refreshRooms()
+                                })
                             }
+                        }, progress: { (received: Int, total: Int) -> Void in
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                self.syncView?.setDownloadCount(received, ofTotal: total)
+                                if (self.syncView?.alpha == 0) {
+                                    UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
+                                        self.syncView?.alpha = 1
+                                        return
+                                    })
+                                }
+                            })
                         })
+                        
+                        dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(120 * NSEC_PER_SEC)))
                     })
                 }
             }
