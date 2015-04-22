@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberInputPhoneViewDelegate {
+class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberInputPhoneViewDelegate, UIAlertViewDelegate {
     
     private var changeNumberInputPhoneView: ChangeNumberInputPhoneView!
     
@@ -66,8 +66,19 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
             let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         } else {
-            checkIfPhoneNumberExists(phone)
+            if (phone == User.loggedUser()!.formattedPhoneNumber()) {
+                let alertView = UIAlertView(title: NSLocalizedString("Change Number Error"), message: NSLocalizedString("You have entered the same number you currently have in use. No changes saved."), delegate: self, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            } else {
+                checkIfPhoneNumberExists(phone)
+            }
         }
+    }
+    
+    // MARK: - UIAlertViewDelegate functions
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        self.changeNumberInputPhoneView.clearPhoneNumberField()
     }
     
     // MARK: - Private functions
@@ -79,9 +90,8 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 let exists = response as Bool
                 if (exists as Bool) {
-                    let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.PHONE_NUMBER_ALREADY_EXISTS, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.PHONE_NUMBER_ALREADY_EXISTS, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
-                    self.changeNumberInputPhoneView.clearPhoneNumberField()
                 } else {
                     let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phoneNumber, userId: User.loggedUser()?.userID)
                     self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
