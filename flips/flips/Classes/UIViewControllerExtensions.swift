@@ -33,7 +33,7 @@ extension UIViewController {
         setupWhiteNavBarWithoutButtons(title)
         
         var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonTapped")
-        doneButton.tintColor = UIColor.orangeColor()
+        doneButton.tintColor = UIColor.flipOrange()
         self.navigationItem.rightBarButtonItem = doneButton
     }
     
