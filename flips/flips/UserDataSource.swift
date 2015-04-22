@@ -50,7 +50,7 @@ class UserDataSource : BaseDataSource {
         user.photoURL = json[UserJsonParams.PHOTO_URL].stringValue
         user.phoneNumber = json[UserJsonParams.PHONE_NUMBER].stringValue
         user.isTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
-        user.updateAt = NSDate(dateTimeString: json[UserJsonParams.UPDATED_AT].stringValue)
+        user.updatedAt = NSDate(dateTimeString: json[UserJsonParams.UPDATED_AT].stringValue)
         
         if (json[UserJsonParams.BIRTHDAY].stringValue != "") {
             user.birthday = NSDate(dateTimeString: json[UserJsonParams.BIRTHDAY].stringValue)
@@ -77,7 +77,7 @@ class UserDataSource : BaseDataSource {
     func updateUser(user: User, withJson json: JSON, isLoggedUser: Bool = false) -> User {
         let userIsTemporary = json[UserJsonParams.IS_TEMPORARY].boolValue
         let newUpdateTimestamp = NSDate(dateTimeString: json[UserJsonParams.UPDATED_AT].stringValue)
-        let currentUpdateTimestamp = user.updateAt!
+        let currentUpdateTimestamp = user.updatedAt!
         if (userIsTemporary) {
             return user
         }
