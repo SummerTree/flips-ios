@@ -119,10 +119,12 @@ public class PubNubService: FlipsService, PNDelegate {
                     channelsToSubscribe.append(channel)
                 } else {
                     // It load the history after subscribe. So, when we will not re-resubscribe, we need to get the history.
+                    println("   Already subscribed to channel \(channel.name). Retrieving history only.")
                     self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: nil)
                 }
             }
             
+            println("Subscribing to \(channelsToSubscribe.count) channels")
             PubNub.subscribeOn(channelsToSubscribe, withCompletionHandlingBlock: { (state, channels, error) -> Void in
                 println("Subscribing to channels completed")
                 if (error != nil) {
