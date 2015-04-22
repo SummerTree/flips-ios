@@ -75,8 +75,7 @@ extension UIViewController {
         backBarButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }
-    
-    
+
     // MARK: - Nav Button Actions
     
     func closeButtonTapped() {

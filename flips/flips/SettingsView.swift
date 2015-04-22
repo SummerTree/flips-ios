@@ -19,8 +19,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
     
-    private let NUMBER_OF_ROWS                      : Int = 7
-    private let NUMBER_OF_ACTION_ROWS               : Int = 6
+    private let NUMBER_OF_ROWS                      : Int = 8
+    private let NUMBER_OF_ACTION_ROWS               : Int = 7
     private let USER_PROFILE_CELL_POSITION          : Int = 0
     private let ABOUT_CELL_POSITION                 : Int = 1
     private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 2
@@ -28,7 +28,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private let SEND_FEEDBACK_CELL_POSITION         : Int = 4
     private let CHANGE_NUMBER_CELL_POSITION         : Int = 5
     private let IMPORT_CONTACTS_CELL_POSITION       : Int = 6
-    
+    private let TUTORIAL_CELL_POSITION              : Int = 7
+
     weak var delegate: SettingsViewDelegate?
     
     private var tableFooterView: UIView!
@@ -41,6 +42,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private var sendFeedbackCell: SettingsTableViewCell!
     private var changeNumberCell: SettingsTableViewCell!
     private var importContactsCell: SettingsTableViewCell!
+    private var tutorialCell: SettingsTableViewCell!
     
     override init() {
         super.init()
@@ -112,6 +114,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         self.createFeedbackCell()
         self.createChangeNumberCell()
         self.createImportContactsCell()
+        self.createTutorialCell()
     }
     
     private func makeConstraints() {
@@ -188,6 +191,9 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         case self.IMPORT_CONTACTS_CELL_POSITION:
             return self.importContactsCell
             
+        case self.TUTORIAL_CELL_POSITION:
+            return self.tutorialCell
+            
         default:
             println("Error creating row number: \(indexPath.row)")
             fatalError("Unknown row")
@@ -229,6 +235,9 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             
         case self.IMPORT_CONTACTS_CELL_POSITION:
             self.delegate?.settingsViewDidTapImportContacts(self)
+            
+        case self.TUTORIAL_CELL_POSITION:
+            self.delegate?.settingsViewDidTapTutorialButton(self)
             
         default:
             println("Error creating row number: \(indexPath.row)")
@@ -311,6 +320,13 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         }
     }
     
+    private func createTutorialCell() {
+        
+        if (self.tutorialCell == nil) {
+            self.tutorialCell = SettingsTableViewCell(image: UIImage(named: "TutorialCell"), labelText: NSLocalizedString("Play Tutorial", comment: "Play Tutorial"), detailLabel: nil)
+        }
+    }
+    
     
     // MARK: - Setters
     func updateUserProfileInfo() {
@@ -336,5 +352,6 @@ protocol SettingsViewDelegate: class {
     func settingsViewDidTapSendFeedback(settingsView: SettingsView)
     func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView)
     func settingsViewDidTapImportContacts(settingsView: SettingsView)
+    func settingsViewDidTapTutorialButton(settingsView: SettingsView)
     func settingsViewDidTapLogOutButton(settingsView: SettingsView)
 }

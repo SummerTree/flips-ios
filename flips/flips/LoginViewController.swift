@@ -16,13 +16,13 @@ private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error
 let NO_USER_IN_SESSION_ERROR = NSLocalizedString("No user in session", comment: "No user in session.")
 let NO_USER_IN_SESSION_MESSAGE = NSLocalizedString("Please try again or contact support.", comment: "Please try again or contact support.")
 
-class LoginViewController: FlipsViewController, LoginViewDelegate {
+class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewControllerDelegate {
     
     internal enum LoginMode {
         case ORDINARY_LOGIN
         case LOGIN_AGAIN_WITH_FACEBOOK
     }
-    
+
     var loginView: LoginView!
     var loginMode: LoginMode = .ORDINARY_LOGIN
     var userFirstName: String? = nil
@@ -52,6 +52,8 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         
         setupActivityIndicator()
         self.loginView.viewDidLoad()
+
+        self.showOnboarding()
     }
     
     
@@ -187,5 +189,24 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
             },
         failure: failureHandler)
     }
-    
+
+    private func showOnboarding() {
+        if (!OnboardingHelper.onboardingHasBeenShown()) {
+            var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+            tutorialViewController.viewDelegate = self
+
+            let navigationController = UINavigationController(rootViewController: tutorialViewController)
+            self.presentViewController(navigationController, animated: false, completion: nil)
+            
+            OnboardingHelper.setOnboardingHasShown()
+        }
+    }
+
+
+    // MARK: - TutorialViewControllerDelegate
+
+    func tutorialViewControllerDidTapCloseButton(viewController: TutorialViewController!) {
+        self.parentViewController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+
 }
