@@ -46,7 +46,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     
@@ -81,6 +81,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 })
             }
         } else {
+            // We don't need to show the Sync in this case. So, we need to mark it as seen.
+            DeviceHelper.sharedInstance.setSyncViewShown(true)
             self.shouldInformPubnubNotConnected = true
         }
     }
