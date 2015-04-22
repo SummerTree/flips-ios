@@ -13,6 +13,7 @@
 class TutorialViewController : UIPageViewController {
 
     var viewDelegate: TutorialViewControllerDelegate?
+    private var pagesDataSource: TutorialPagesDataSource?
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -26,6 +27,12 @@ class TutorialViewController : UIPageViewController {
         super.viewDidLoad()
 
         self.view.backgroundColor = UIColor.flipOrangeBackground()
+
+        self.pagesDataSource = TutorialPagesDataSource() // We need a strong reference to this guy
+        self.dataSource = self.pagesDataSource
+
+        let initialViewController = (self.dataSource! as TutorialPagesDataSource).viewControllerForPage(0)!
+        self.setViewControllers([initialViewController], direction: .Forward, animated: false, completion: nil)
 
         self.setupNavigationBar()
     }

@@ -20,8 +20,6 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate, Tutori
     
     private var settingsView: SettingsView!
 
-    private var tutorialPagesDataSource: TutorialPagesDataSource?
-    
     // MARK: - Overridden Methods
     
     override func loadView() {
@@ -131,15 +129,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate, Tutori
     
     func settingsViewDidTapTutorialButton(settingsView: SettingsView) {
         var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-
-        if (self.tutorialPagesDataSource == nil) {
-            self.tutorialPagesDataSource = TutorialPagesDataSource()
-        }
-        tutorialViewController.dataSource = self.tutorialPagesDataSource
         tutorialViewController.viewDelegate = self
-
-        let initialViewControllers: Array<TutorialPageViewController> = [self.tutorialPagesDataSource!.viewControllerForPage(0)!]
-        tutorialViewController.setViewControllers(initialViewControllers, direction: .Forward, animated: false, completion: nil)
 
         self.navigationController?.pushViewController(tutorialViewController, animated: true)
     }

@@ -23,8 +23,6 @@ class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewC
         case LOGIN_AGAIN_WITH_FACEBOOK
     }
 
-    private var tutorialPagesDataSource: TutorialPagesDataSource?
-
     var loginView: LoginView!
     var loginMode: LoginMode = .ORDINARY_LOGIN
     var userFirstName: String? = nil
@@ -195,15 +193,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewC
     private func showOnboarding() {
         if (!OnboardingHelper.onboardingHasBeenShown()) {
             var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-
-            if (self.tutorialPagesDataSource == nil) {
-                self.tutorialPagesDataSource = TutorialPagesDataSource()
-            }
-            tutorialViewController.dataSource = self.tutorialPagesDataSource
             tutorialViewController.viewDelegate = self
-
-            let initialViewControllers: Array<TutorialPageViewController> = [self.tutorialPagesDataSource!.viewControllerForPage(0)!]
-            tutorialViewController.setViewControllers(initialViewControllers, direction: .Forward, animated: false, completion: nil)
 
             let navigationController = UINavigationController(rootViewController: tutorialViewController)
             self.presentViewController(navigationController, animated: false, completion: nil)
