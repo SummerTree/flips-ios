@@ -64,31 +64,33 @@ public class MessageService {
     }
     
     func sendMessage(flipWords: [FlipText], roomID: String, completion: SendMessageCompletion) {
-        let flipDataSource = FlipDataSource()
-        let roomDataSource = RoomDataSource()
-        
-        var formattedFlips = Array<FormattedFlip>()
-        for flipWord in flipWords {
-            if let flipId: String = flipWord.associatedFlipId {
-                if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-                    var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipWord.text)
-                    formattedFlips.append(formattedFlip)
+        QueueHelper.dispatchAsyncWithNewContext { (newContext) -> Void in
+            let flipDataSource = FlipDataSource(context: newContext)
+            let roomDataSource = RoomDataSource(context: newContext)
+            
+            var formattedFlips = Array<FormattedFlip>()
+            for flipWord in flipWords {
+                if let flipId: String = flipWord.associatedFlipId {
+                    if let flip = flipDataSource.retrieveFlipWithId(flipId) {
+                        var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipWord.text)
+                        formattedFlips.append(formattedFlip)
+                    }
                 }
             }
-        }
-        
-        let room = roomDataSource.retrieveRoomWithId(roomID)
-        let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(formattedFlips, toRoom: room)
-        let messageJson = flipMessage.toJsonUsingFlipWords(flipWords)
-        
-        PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
-            if (!success) {
-                // We need to mark as removed the FlipMessage that wasn't sent.
-                PersistentManager.sharedInstance.markFlipMessageAsRemoved(flipMessage, completion: { (result) -> Void in
+            
+            let room = roomDataSource.retrieveRoomWithId(roomID)
+            let flipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(formattedFlips, toRoom: room)
+            let messageJson = flipMessage.toJsonUsingFlipWords(flipWords)
+            
+            PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
+                if (!success) {
+                    // We need to mark as removed the FlipMessage that wasn't sent.
+                    PersistentManager.sharedInstance.markFlipMessageAsRemoved(flipMessage, completion: { (result) -> Void in
+                        completion(success, roomID, nil)
+                    })
+                } else {
                     completion(success, roomID, nil)
-                })
-            } else {
-                completion(success, roomID, nil)
+                }
             }
         }
     }
