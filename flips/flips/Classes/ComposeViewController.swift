@@ -149,7 +149,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         if (self.shouldShowPreviewButton()) {
             var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview"), style: .Done, target: self, action: "previewButtonTapped:")
-            previewBarButton.tintColor = UIColor.orangeColor()
+            previewBarButton.tintColor = UIColor.flipOrange()
             self.navigationItem.rightBarButtonItem = previewBarButton
         }
         

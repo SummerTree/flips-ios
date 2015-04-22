@@ -69,7 +69,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         if (showPreviewButton) {
             var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
             previewBarButton.enabled = false
-            previewBarButton.tintColor = UIColor.orangeColor()
+            previewBarButton.tintColor = UIColor.flipOrange()
             self.navigationItem.rightBarButtonItem = previewBarButton
         }
         
