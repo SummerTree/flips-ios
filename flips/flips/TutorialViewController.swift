@@ -53,6 +53,9 @@ class TutorialViewController : UIPageViewController {
 
     override func closeButtonTapped() {
         self.viewDelegate?.tutorialViewControllerDidTapCloseButton(self);
+        
+        var currentPage = self.viewControllers.first as TutorialPageViewController
+        AnalyticsService.logOnboardingSkipped(currentPage.pageIndex)
     }
 
 }

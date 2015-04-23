@@ -66,7 +66,7 @@ class AnalyticsService {
         Flurry.logEvent("contactsImported", withParameters: ["numOfFriends": numOfFriends])
     }
     
-    class func logOnboardingSkipped(step: String) {
+    class func logOnboardingSkipped(step: Int) {
         Flurry.logEvent("onboardingSkipped", withParameters: ["step": step])
     }
     
