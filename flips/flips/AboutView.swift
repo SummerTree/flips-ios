@@ -77,7 +77,9 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         copyright.textAlignment = NSTextAlignment.Center
         self.logoContainer.addSubview(copyright)
         
-        webView = FlipsWebView(URL: "http://en.wikipedia.org/wiki/Copyright")
+        var HOST = AppSettings.currentSettings().serverURL()
+        
+        webView = FlipsWebView(URL: "\(HOST)/about")
         self.addSubview(webView)
     }
     

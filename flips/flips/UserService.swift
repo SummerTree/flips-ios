@@ -77,6 +77,15 @@ public class UserService: FlipsService {
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 var user = self.parseUserResponse(responseObject)
                 success(user)
+                
+                var source = ""
+                if (facebookId?.isEmpty == true) {
+                    source = "email"
+                } else {
+                    source = "facebook"
+                }
+                
+                AnalyticsService.logUserSignUp(source)
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
@@ -112,6 +121,8 @@ public class UserService: FlipsService {
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSigninResponse(responseObject)
                 success(user)
+
+                AnalyticsService.logUserSignIn("email")
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
@@ -144,6 +155,8 @@ public class UserService: FlipsService {
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                 let user = self.parseSigninResponse(responseObject)
                 success(user)
+                
+                AnalyticsService.logUserSignIn("facebook")
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.response != nil && operation.response.statusCode == 404) {
@@ -213,6 +226,8 @@ public class UserService: FlipsService {
                 success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                     var user = self.parseUserResponse(responseObject)
                     success(user)
+                    
+                    AnalyticsService.logProfileChanged()
                 },
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
@@ -450,36 +465,25 @@ public class UserService: FlipsService {
         }
 
         if let loggedUser = User.loggedUser() {
-            NSLog("IMPORT CONTACTS - BEGIN")
             ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelperContact>?) -> Void in
                 if (countElements(contacts!) == 0) {
-                    NSLog("IMPORT CONTACTS - ZERO TO IMPORT")
                     success(nil)
                     return
                 }
-
-                NSLog("IMPORT CONTACTS - %d RETRIEVED FROM THE DEVICE", contacts!.count)
 
                 var numbers = Array<String>()
                 for contact in contacts! {
                     numbers.append(contact.phoneNumber)
                 }
 
-                NSLog("IMPORT CONTACTS - ALL NUMBERS GATHERED AND FORMATTED")
-
                 var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 
                 var params: Dictionary<String, AnyObject> = [
                     RequestParams.PHONENUMBERS : numbers
                 ]
-                
-                NSLog("IMPORT CONTACTS - STARTING UPLOAD")
 
                 self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
                     var response:JSON = JSON(responseObject)
-
-                    NSLog("IMPORT CONTACTS - RESPONSE RECEIVED. %d MATCHES", response.count)
-
                     for (index, user) in response {
                         SwiftTryCatch.try({ () -> Void in
                             println("Trying to import: \(user)")
@@ -489,12 +493,10 @@ public class UserService: FlipsService {
                         }, finally: nil)
                     }
 
-                    NSLog("IMPORT CONTACTS - ALL IMPORTED")
-
                     success(nil)
+                    
+                    AnalyticsService.logContactsImported(response.count)
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
-                    NSLog("IMPORT CONTACTS - UPLOAD FAILED")
-
                     if (operation.responseObject != nil) {
                         var response = operation.responseObject as NSDictionary
                         failure(FlipError(error: response["error"] as String!, details: nil))
@@ -503,7 +505,6 @@ public class UserService: FlipsService {
                     }
                 })
             }, failure: { (error) -> Void in
-                NSLog("IMPORT CONTACTS - READ FROM DEVICE FAILED")
                 failure(FlipError(error: LocalizedString.CONTACTS_ACCESS_TITLE, details:LocalizedString.CONTACTS_ACCESS_MESSAGE))
             })
         }

@@ -274,11 +274,11 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         delegate?.composeTopViewContainer(self, cameraAvailable: available)
     }
     
-    func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool) {
+    func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool) {
         if (!success) {
             self.captureProgressBar.hidden = true
         }
-        delegate?.composeTopViewContainer(self, didFinishRecordingVideoAtUrl: videoURL, withSuccess: success)
+        delegate?.composeTopViewContainer(self, didFinishRecordingVideoAtUrl: videoURL, inLandscape: landscape, fromFrontCamera: frontCamera, withSuccess: success)
     }
     
     func cameraViewDidTapMicrophoneButton(cameraView: CameraView) {
@@ -303,7 +303,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
 
 protocol ComposeTopViewContainerDelegate: class {
     
-    func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, withSuccess success: Bool)
+    func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool)
     
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, cameraAvailable available: Bool)
     

@@ -262,10 +262,20 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     func playMovie() {
         self.videoPlayerView.play()
+        
+        let readFlipMessageDataSource = ReadFlipMessageDataSource()
+        let hasFlipMessagedMarkedAsRead = readFlipMessageDataSource.hasFlipMessageWithID(self.flipMessageID)
+        
+        AnalyticsService.logMessageViewed(!hasFlipMessagedMarkedAsRead)
     }
     
     func pauseMovie() {
         self.videoPlayerView.pause(fadeOutVolume: true)
+        
+        let readFlipMessageDataSource = ReadFlipMessageDataSource()
+        let hasFlipMessagedMarkedAsRead = readFlipMessageDataSource.hasFlipMessageWithID(self.flipMessageID)
+        
+        AnalyticsService.logMessagePaused(!hasFlipMessagedMarkedAsRead)
     }
     
     func stopMovie() {
