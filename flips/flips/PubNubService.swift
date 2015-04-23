@@ -22,6 +22,7 @@ public class PubNubService: FlipsService, PNDelegate {
     
     private let PUBNUB_ORIGIN = "pubsub.pubnub.com"
     private let PUBNUB_CIPHER_KEY = "FFC27DABA9708D16F9612E7AB37E81C26B76B2031946F6CF9458CD22419E6B22"
+    private let PUBNUB_NON_SUBSCRIPTION_REQUEST_TIMEOUT = 60000
     
     private let LOAD_HISTORY_NUMBER_OF_RETRIES: Int = 5
     
@@ -65,6 +66,7 @@ public class PubNubService: FlipsService, PNDelegate {
         pubnubConfiguration.useSecureConnection = true
         pubnubConfiguration.reduceSecurityLevelOnError = false
         pubnubConfiguration.ignoreSecureConnectionRequirement = false
+        pubnubConfiguration.nonSubscriptionRequestTimeout = NSTimeInterval(PUBNUB_NON_SUBSCRIPTION_REQUEST_TIMEOUT)
         
         PubNub.setConfiguration(pubnubConfiguration)
         PubNub.setDelegate(self)
