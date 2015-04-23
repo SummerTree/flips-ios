@@ -278,18 +278,19 @@ public class PubNubService: FlipsService, PNDelegate {
             for channelProtocol in subscribedChannels {
                 dispatch_group_enter(group)
 
-                var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
-                self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
-                    if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                        println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
-                    } else if (User.loggedUser() != nil) {
-                        if (success) {
-                            progress?(received: historiesReceived++, total: subscribedChannels.count)
+                if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
+                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
+                        if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                            println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
+                        } else if (User.loggedUser() != nil) {
+                            if (success) {
+                                progress?(received: historiesReceived++, total: subscribedChannels.count)
+                            }
                         }
-                    }
-                    println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
-                    dispatch_group_leave(group)
-                })
+                        println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
+                        dispatch_group_leave(group)
+                    })
+                }
             }
             
             dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(60 * NSEC_PER_SEC)))
