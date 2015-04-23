@@ -270,7 +270,6 @@ public class PubNubService: FlipsService, PNDelegate {
             }
             
             let subscribedChannels = list as Array<PNChannelProtocol>
-            var distpatchGroupExpired: Bool = false
             
             let group = dispatch_group_create()
             NSLog("FETCHING HISTORY FOR %d CHANNELS", subscribedChannels.count)
@@ -278,6 +277,7 @@ public class PubNubService: FlipsService, PNDelegate {
             var historiesReceived: Int = 0
             for channelProtocol in subscribedChannels {
                 dispatch_group_enter(group)
+
                 var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
                 self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
                     if (currentIdentifier != self.pubnubConnectionIdentifier) {
