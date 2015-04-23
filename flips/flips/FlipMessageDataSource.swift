@@ -153,10 +153,14 @@ class FlipMessageDataSource : BaseDataSource {
         flipMessageInContext.removed = true
         
         let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource(context: currentContext)
-        let flipMessageID: String = flipMessageInContext.flipMessageID
-        if (!deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)) {
-            let deletedFlipMessage: DeletedFlipMessage = deletedFlipMessageDataSource.createDeletedFlipMessageWithID(flipMessageID)
-            self.sendMessageForDeletedFlipMessage(deletedFlipMessage)
+        
+        if let flipMessageID: String = flipMessageInContext.flipMessageID {
+            if (!deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)) {
+                let deletedFlipMessage: DeletedFlipMessage = deletedFlipMessageDataSource.createDeletedFlipMessageWithID(flipMessageID)
+                self.sendMessageForDeletedFlipMessage(deletedFlipMessage)
+            }
+        } else {
+            println("FlipMessageDataSource.markFlipMessageAsRemoved - flipMessageID is nil.")
         }
     }
     
