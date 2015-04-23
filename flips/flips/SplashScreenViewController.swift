@@ -106,6 +106,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
             },
             failure: { (flipError) -> Void in
                 println("Error signing in with Facebook: \(flipError)")
+                AuthenticationHelper.sharedInstance.logout() // Make sure that app state is clean
                 self.openLoginViewController()
         })
     }
@@ -120,6 +121,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
                 })
             })
         } else {
+            AuthenticationHelper.sharedInstance.logout() // Make sure that app state is clean
             openLoginViewController()
         }
     }
