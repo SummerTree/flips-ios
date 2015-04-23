@@ -14,6 +14,7 @@ class TutorialViewController : UIPageViewController {
 
     var viewDelegate: TutorialViewControllerDelegate?
     private var pagesDataSource: TutorialPagesDataSource?
+    private var tintColor: UIColor? = nil
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -36,11 +37,18 @@ class TutorialViewController : UIPageViewController {
 
         self.setupNavigationBar()
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.tintColor = self.tintColor
+    }
 
     func setupNavigationBar() {
+        self.tintColor = self.navigationController?.navigationBar.tintColor
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.translucent = true
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
 
         self.navigationItem.titleView = nil
 
