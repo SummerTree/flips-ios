@@ -140,8 +140,6 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FLIP_VIEW_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
-        
         if (indexPath.section == 0 && indexPath.row == 0) {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ADD_FLIP_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
 

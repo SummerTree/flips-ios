@@ -15,7 +15,6 @@ private let FLIPS_CELL_HEIGHT: CGFloat = 83.5
 
 class FlipsViewCell : UICollectionViewCell {
     
-    private var flipID: String!
     private var cellImageView: UIImageView!
     private var seletedOverlayView: SelectedFlipOverlayView!
     
@@ -41,28 +40,24 @@ class FlipsViewCell : UICollectionViewCell {
     }
     
     func setFlipId(flipID: String) {
-        self.flipID = flipID
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            let flipDataSource = FlipDataSource()
-            var flip = flipDataSource.retrieveFlipWithId(self.flipID)
-            
-            let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
-                success: { (url: String!, localThumbnailPath: String!) in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.cellImageView.image = UIImage(contentsOfFile: localThumbnailPath)
-                        ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                        
-                    })
-                },
-                failure: { (url: String!, error: FlipError) in
+        let flipDataSource = FlipDataSource()
+        var flip = flipDataSource.retrieveFlipWithId(flipID)
+        
+        let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
+            success: { (url: String!, localThumbnailPath: String!) in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.cellImageView.image = UIImage(contentsOfFile: localThumbnailPath)
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                    println("Failed to get resource from cache, error: \(error)")
-            })
-            
-            if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
-                ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White, andSize: FLIPS_CELL_WIDTH / 2)
-            }
+                })
+            },
+            failure: { (url: String!, error: FlipError) in
+                ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
+                println("Failed to get resource from cache, error: \(error)")
         })
+        
+        if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
+            ActivityIndicatorHelper.showActivityIndicatorAtView(self.cellImageView, style: UIActivityIndicatorViewStyle.White, andSize: FLIPS_CELL_WIDTH / 2)
+        }
     }
     
     func setSelected(var selected: Bool) {
@@ -77,7 +72,7 @@ class FlipsViewCell : UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.cellImageView.image = UIImage(named: "Filter_Photo")
-        self.isSelected = false
+        self.setSelected(false)
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
     }
 }
