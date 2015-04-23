@@ -190,7 +190,7 @@ class ConversationTableViewCell : UITableViewCell {
         }
         
         // The preview still photo should reflect the first frame of the video of the most recent message in the conversation
-        if let flipMessage: FlipMessage = lastMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as? FlipMessage {
+        if let flipMessage: FlipMessage = lastMessage {
             let isMessageNotRead = flipMessage.notRead.boolValue
             let messagePhrase = flipMessage.messagePhrase()
             let photoURL = NSURL(string: flipMessage.from.photoURL)

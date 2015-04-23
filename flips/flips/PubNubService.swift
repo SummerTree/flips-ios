@@ -276,19 +276,22 @@ public class PubNubService: FlipsService, PNDelegate {
                         return
                     }
                     
-                    var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
-                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
-                        if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                            println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
-                        } else if (User.loggedUser() != nil) {
-                            if (success) {
-                                progress?(received: historiesReceived++, total: subscribedChannels.count)
+                    if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
+                        self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
+                            if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                                println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
+                            } else if (User.loggedUser() != nil) {
+                                if (success) {
+                                    progress?(received: historiesReceived++, total: subscribedChannels.count)
+                                }
                             }
-                        }
-                        println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
-                        
-                        dispatch_group_leave(group)
-                    })
+                            println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
+                            
+                            dispatch_group_leave(group)
+                        })
+                    } else {
+                        println("loadMessagesHistoryForChannel no channel \(channelProtocol.name).")
+                    }
                 })
             }
             
@@ -453,6 +456,8 @@ public class PubNubService: FlipsService, PNDelegate {
         let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
         let contentJson : JSON = JSON(self.dictionaryFromJSON(decryptedContentString))
         self.delegate?.pubnubClient(client, didReceiveMessage:contentJson, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
+        
+        AnalyticsService.logMessageReceived()
     }
     
     public func pubnubClient(client: PubNub!, didConnectToOrigin origin: String!) {

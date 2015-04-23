@@ -54,6 +54,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     var audioRecorder: AudioRecorderService?
     
+    // analytics state flags
+    private var fromVideo: Bool = false
+    private var fromPicture: Bool = false
+    private var fromFrontCamera: Bool = false
+    private var fromCameraRoll: Bool = false
+    private var fromAudio: Bool = false
+    private var inLandspace: Bool = false
+    
     // MARK: - Init Methods
     
     init(composeTitle: String) {
@@ -524,11 +532,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func composeBottomViewContainerDidTapTakePictureButton(composeBottomViewContainer: ComposeBottomViewContainer) {
-        composeTopViewContainer.capturePictureWithCompletion({ (image) -> Void in
+        composeTopViewContainer.capturePictureWithCompletion({ (image, fromFrontCamera, inLandscape) -> Void in
             if (image != nil) {
                 let receivedImage = image as UIImage!
                 self.highlightedWordCurrentAssociatedImage = receivedImage
                 let flipWord = self.flipWords[self.highlightedWordIndex]
+                
+                self.fromPicture = true
+                self.fromFrontCamera = fromFrontCamera
+                self.inLandspace = inLandscape
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.navigationItem.rightBarButtonItem?.enabled = false
@@ -678,7 +690,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - ComposeTopViewContainerDelegate
     
-    func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, withSuccess success: Bool) {
+    func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool) {
         if (success) {
             let flipWord = flipWords[highlightedWordIndex]
             let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
@@ -689,6 +701,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             var alertMessage = UIAlertView(title: NO_SPACE_VIDEO_ERROR_TITLE, message: NO_SPACE_VIDEO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
         }
+        
+        self.fromVideo = true
+        self.fromFrontCamera = frontCamera
+        self.inLandspace = landscape
     }
     
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, cameraAvailable available: Bool) {
@@ -722,6 +738,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)
         composeBottomViewContainer.showAudioRecordButton()
         self.dismissViewControllerAnimated(true, completion: nil)
+        
+        self.fromCameraRoll = true
     }
     
     // MARK: User Interaction Methods
@@ -760,6 +778,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
             self.composeBottomViewContainer.hideRecordingView()
         }
+        
+        self.fromAudio = true
     }
     
     func audioRecorderService(audioRecorderService: AudioRecorderService!, didRequestRecordPermission: Bool) {
@@ -776,10 +796,21 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if (success) {
             flipWord.associatedFlipId = flipID
             self.onFlipAssociated()
+            
+            AnalyticsService.logFlipCreated(self.fromVideo, fromPicture: self.fromPicture, fromBackCamera: (self.fromPicture && !self.fromFrontCamera), fromFrontCamera: self.fromFrontCamera, fromCameraRoll: self.fromCameraRoll, fromAudio: self.fromAudio, inLandscape: self.fromAudio)
         } else {
             self.composeTopViewContainer.showCameraWithWord(flipWord.text)
             self.composeBottomViewContainer.showCameraButtons()
+            
+            AnalyticsService.logFlipRejected(self.fromVideo, fromPicture: self.fromPicture, fromBackCamera: (self.fromPicture && !self.fromFrontCamera), fromFrontCamera: self.fromFrontCamera, fromCameraRoll: self.fromCameraRoll, fromAudio: self.fromAudio, inLandscape: self.fromAudio)
         }
+        
+        self.fromVideo = false
+        self.fromPicture = false
+        self.fromFrontCamera = false
+        self.fromCameraRoll = false
+        self.fromAudio = false
+        self.inLandspace = false
     }
     
     

@@ -111,73 +111,102 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     }
     
     func previewViewDidTapSendButton(previewView: PreviewView!) {
-        self.previewView.stopMovie()
-        self.showActivityIndicator()
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            var error: FlipError?
+        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+            let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            alertView.show()
+        } else {
+            self.previewView.stopMovie()
+            self.showActivityIndicator()
             
-            var group = dispatch_group_create()
-
-            let flipDataSource = FlipDataSource()
-            for flipWord in self.flipWords {
-                if (flipWord.associatedFlipId == nil) {
-                    dispatch_group_enter(group)
-                    PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
-                        flipWord.associatedFlipId = flip.flipID
-                        dispatch_group_leave(group)
-                    }, createFlipFailCompletion: { (flipError) -> Void in
-                        error = flipError
-                        flipWord.associatedFlipId = "-1"
-                        dispatch_group_leave(group)
-                    })
-                }
-            }
-            
-            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
-            
-            if (error != nil) {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.hideActivityIndicator()
-                    
-                    let message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error?.error)"
-                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                    alertView.show()
-                })
-            } else {
-                let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if (success) {
-                            self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
-                        } else {
-                            if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-                                self.hideActivityIndicator()
-                                let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                                alertView.show()
-                            } else if (!PubNubService.sharedInstance.isConnected()) {
-                                self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Reconnecting\nPlease Wait"))
-                            } else {
-                                self.hideActivityIndicator()
-                                var message = self.SEND_MESSAGE_ERROR_MESSAGE
-                                if (flipError != nil) {
-                                    message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
-                                }
-                                
-                                let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                                alertView.show()
-                            }
-                        }
-                    })
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                var error: FlipError?
+                
+                var group = dispatch_group_create()
+                
+                let flipDataSource = FlipDataSource()
+                for flipWord in self.flipWords {
+                    if (flipWord.associatedFlipId == nil) {
+                        dispatch_group_enter(group)
+                        PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
+                            flipWord.associatedFlipId = flip.flipID
+                            dispatch_group_leave(group)
+                        }, createFlipFailCompletion: { (flipError) -> Void in
+                            error = flipError
+                            flipWord.associatedFlipId = "-1"
+                            dispatch_group_leave(group)
+                        })
+                    }
                 }
                 
-                let messageService = MessageService.sharedInstance
-                if (self.roomID != nil) {
-                    messageService.sendMessage(self.flipWords, roomID: self.roomID!, completion: completionBlock)
+                dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+                
+                if (error != nil) {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.hideActivityIndicator()
+                        
+                        let message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error?.error)"
+                        let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                        alertView.show()
+                    })
                 } else {
-                    messageService.sendMessage(self.flipWords, toContacts: self.contactIDs!, completion: completionBlock)
+                    let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if (success) {
+                                self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
+                                
+                                // log message sent analytics
+                                let numOfWords = self.flipWords.count
+                                var numOfWordsAssigned = 0
+                                
+                                for word in self.flipWords {
+                                    if let associatedFlipId = word.associatedFlipId {
+                                        var flip = flipDataSource.retrieveFlipWithId(associatedFlipId)
+                                        if (!flip.backgroundURL.isEmpty) {
+                                            numOfWordsAssigned++
+                                        }
+                                    }
+                                }
+                                
+                                var isGroupRoom = false
+                                
+                                if let contacts = self.contactIDs {
+                                    isGroupRoom = self.contactIDs?.count > 1
+                                } else if let roomID = self.roomID {
+                                    let roomDataSource = RoomDataSource()
+                                    isGroupRoom = roomDataSource.retrieveRoomWithId(roomID).participants.count > 2
+                                }
+                                
+                                AnalyticsService.logMessageSent(numOfWords, percentWordsAssigned: (numOfWordsAssigned / numOfWords) * 100, group: isGroupRoom)
+                            } else {
+                                if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
+                                    self.hideActivityIndicator()
+                                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                    alertView.show()
+                                } else if (!PubNubService.sharedInstance.isConnected()) {
+                                    self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Reconnecting\nPlease Wait"))
+                                } else {
+                                    self.hideActivityIndicator()
+                                    var message = self.SEND_MESSAGE_ERROR_MESSAGE
+                                    if (flipError != nil) {
+                                        message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(flipError!.error)"
+                                    }
+                                    
+                                    let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                    alertView.show()
+                                }
+                            }
+                        })
+                    }
+                    
+                    let messageService = MessageService.sharedInstance
+                    if (self.roomID != nil) {
+                        messageService.sendMessage(self.flipWords, roomID: self.roomID!, completion: completionBlock)
+                    } else {
+                        messageService.sendMessage(self.flipWords, toContacts: self.contactIDs!, completion: completionBlock)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
     
     func previewViewMakeConstraintToNavigationBarBottom(container: UIView!) {

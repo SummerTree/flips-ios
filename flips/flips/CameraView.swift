@@ -17,7 +17,7 @@ let CapturingStillImageContext = UnsafeMutablePointer<()>()
 let RecordingContext = UnsafeMutablePointer<()>()
 let SessionRunningAndDeviceAuthorizedContext = UnsafeMutablePointer<()>()
 
-public typealias CapturePictureSuccess = (UIImage?) -> Void
+public typealias CapturePictureSuccess = (UIImage?, Bool, Bool) -> Void
 public typealias CapturePictureFail = (NSError?) -> Void
 
 class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
@@ -387,7 +387,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 
     func registerObservers() {
-        if (deviceAuthorized) {
+        if (deviceAuthorized && !observersRegistered) {
             self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
             self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
             self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: RecordingContext)
@@ -581,9 +581,11 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func capturePictureWithCompletion(success: CapturePictureSuccess, fail: CapturePictureFail) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
-            let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
-            videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
+            let videoOrientation = videoPreviewLayer.connection.videoOrientation
             
+            let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
+            videoConnection.videoOrientation = videoOrientation
+        
             videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
             
             CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
@@ -600,8 +602,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     } else {
                         image = image.cropSquareThumbnail()
                     }
-
-                    success(image)
+                    
+                    var isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
+                    success(image, self.isCameraFrontPositioned(), isLandscape)
                 } else {
                     fail(error)
                 }
@@ -680,6 +683,14 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func shouldAutorotate() -> Bool {
         return !self.lockInterfaceRotation
+    }
+    
+    func isCameraFrontPositioned() -> Bool {
+        if let currentVideoDevice = self.videoDeviceInput?.device {
+            return (currentVideoDevice.position == AVCaptureDevicePosition.Front)
+        } else {
+            return false
+        }
     }
     
     
@@ -825,11 +836,15 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     // MARK: - Finish Record Output Delegate
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+        let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+        let videoOrientation = videoPreviewLayer.connection.videoOrientation
+        var isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
+
         if (error != nil) {
             println("An error happen while recording a video: error [\(error)] and userinfo[\(error.userInfo)]")
-            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, withSuccess: false)
+            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, inLandscape: isLandscape, fromFrontCamera: self.isCameraFrontPositioned(), withSuccess: false)
         } else {
-            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, withSuccess: true)
+            self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, inLandscape: isLandscape, fromFrontCamera: self.isCameraFrontPositioned(), withSuccess: true)
         }
     }
 }
@@ -841,5 +856,5 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func cameraView(cameraView: CameraView, cameraAvailable available: Bool) // Take a picture button should be disabled
     optional func cameraViewDidTapMicrophoneButton(cameraView: CameraView)
-    optional func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, withSuccess success: Bool)
+    optional func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool)
 }

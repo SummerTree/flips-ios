@@ -338,6 +338,21 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             
             let chatViewController: ChatViewController = ChatViewController(room: room)
             self.navigationController?.pushViewController(chatViewController, animated: true)
+
+            // log thread viewed analytics
+            var hasUnreadMessages: Bool = false
+            
+            if let roomFlipMessages: NSOrderedSet = room.valueForKey("flipMessages") as? NSOrderedSet {
+                for (var i: Int = roomFlipMessages.count - 1; i >= 0; i--) {
+                    let flipMessage: FlipMessage = roomFlipMessages[i] as FlipMessage
+                    if (flipMessage.notRead.boolValue) {
+                        hasUnreadMessages = true
+                        break
+                    }
+                }
+            }
+
+            AnalyticsService.logThreadViewed(hasUnreadMessages)
         })
     }
     

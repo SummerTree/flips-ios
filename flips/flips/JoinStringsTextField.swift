@@ -140,6 +140,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         self.joinedTextRanges = newRanges
 
         self.updateColorOnJoinedTexts()
+        
+        AnalyticsService.logWordsJoined()
     }
     
     private func updateColorOnJoinedTexts() {
