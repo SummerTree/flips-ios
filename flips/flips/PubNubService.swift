@@ -25,6 +25,7 @@ public class PubNubService: FlipsService, PNDelegate {
     private let PUBNUB_NON_SUBSCRIPTION_REQUEST_TIMEOUT = 60000
     
     private let LOAD_HISTORY_NUMBER_OF_RETRIES: Int = 5
+    private let loadHistoryQueue: dispatch_queue_t = dispatch_queue_create("LoadHistoryQueue", nil)
     
     private var cryptoHelper: PNCryptoHelper
     
@@ -248,9 +249,16 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Message history
     
     func loadMessagesHistoryWithCompletion(completion: CompletionBlock? = nil, progress: ((received: Int, total: Int) -> Void)? = nil) {
+        if (User.loggedUser() == nil) {
+            println("Trying to get history for my channels but logged user is nil.")
+            return
+        }
+        
         let currentIdentifier: String? = self.pubnubConnectionIdentifier
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+        println("Will start to load history")
+        dispatch_async(self.loadHistoryQueue, { () -> Void in
+            println("   load history queue running")
             if (currentIdentifier != self.pubnubConnectionIdentifier) {
                 println("Load Messages History - SubscribeOnMyChannels PubNub identifier changed.")
                 return
@@ -271,48 +279,34 @@ public class PubNubService: FlipsService, PNDelegate {
             var historiesReceived: Int = 0
             for channelProtocol in subscribedChannels {
                 dispatch_group_enter(group)
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    if (User.loggedUser() == nil) {
-                        dispatch_group_leave(group)
-                        return
-                    }
-                    
-                    if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
-                        self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
-                            if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                                println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
-                            } else if (User.loggedUser() != nil) {
-                                if (success) {
-                                    progress?(received: historiesReceived++, total: subscribedChannels.count)
-                                }
+
+                if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
+                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
+                        if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                            println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
+                        } else if (User.loggedUser() != nil) {
+                            if (success) {
+                                progress?(received: historiesReceived++, total: subscribedChannels.count)
                             }
-                            println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
-                            
-                            dispatch_group_leave(group)
-                        })
-                    } else {
-                        println("loadMessagesHistoryForChannel no channel \(channelProtocol.name).")
-                    }
-                })
+                        }
+                        println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
+                        dispatch_group_leave(group)
+                    })
+                }
             }
             
-            dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(90 * NSEC_PER_SEC)))
+            dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(60 * NSEC_PER_SEC)))
             NSLog("HISTORY FETCH ENDED - subscribedChannels.count(\(subscribedChannels.count)) - historiesReceived(\(historiesReceived))")
             
             if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                println("SubscribeOnMyChannels finished PubNub identifier changed.")
-                return
-            }
-            
-            if (User.loggedUser() == nil) {
-                println("History fetch ended with user not logged.")
-                return
-            }
-            
-            if (completion != nil) {
+                println("   SubscribeOnMyChannels finished PubNub identifier changed.")
+            } else if (User.loggedUser() == nil) {
+                println("   History fetch ended with user not logged.")
+            } else if (completion != nil) {
+                println("   Calling load history completion")
                 completion?(subscribedChannels.count == historiesReceived)
             } else {
+                println("   Posting load history finished notification")
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
                 })
@@ -468,10 +462,6 @@ public class PubNubService: FlipsService, PNDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
         
         // If Inbox's sync view din't appear yet, we need to wait for it. Otherwise, sync won't work properly.
-        let didShowSyncView: Bool = DeviceHelper.sharedInstance.didShowSyncView()
-        if (didShowSyncView) {
-            self.subscribeOnMyChannels()
-        }
     }
     
     public func pubnubClient(client: PubNub!, didDisconnectFromOrigin origin: String!, withError error: PNError!) {

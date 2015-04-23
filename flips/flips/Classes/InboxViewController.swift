@@ -240,14 +240,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                                     return
                                 })
                             })
-                            
-                            if (!success) {
-                                //  Retry at least once
-                                println("Inbox subscribe failed. Retrying")
-                                PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
-                                    self.refreshRooms()
-                                })
-                            }
                         }, progress: { (received: Int, total: Int) -> Void in
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 self.syncView?.setDownloadCount(received, ofTotal: total)
