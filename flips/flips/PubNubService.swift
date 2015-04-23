@@ -156,6 +156,8 @@ public class PubNubService: FlipsService, PNDelegate {
                     println("SubscribeOnMyChannels PubNub identifier changed.")
                 }
             })
+            
+            self.enablePushNotificationOnMyChannels()
         }
     }
     
