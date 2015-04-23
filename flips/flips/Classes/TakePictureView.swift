@@ -136,7 +136,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     // MARK: - Button Handlers
     
     func takePictureButtonTapped() {
-        cameraView.capturePictureWithCompletion({ (image) -> Void in
+        cameraView.capturePictureWithCompletion({ (image, frontCamera, inLandspace) -> Void in
             if (image != nil) {
                 var receivedImage = image as UIImage!
                 

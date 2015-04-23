@@ -149,6 +149,30 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if (success) {
                             self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
+
+                            // log message sent analytics
+                            let numOfWords = self.flipWords.count
+                            var numOfWordsAssigned = 0
+                            
+                            for word in self.flipWords {
+                                if let associatedFlipId = word.associatedFlipId {
+                                    var flip = flipDataSource.retrieveFlipWithId(associatedFlipId)
+                                    if (!flip.backgroundURL.isEmpty) {
+                                        numOfWordsAssigned++
+                                    }
+                                }
+                            }
+                            
+                            var isGroupRoom = false
+                            
+                            if let contacts = self.contactIDs {
+                                isGroupRoom = self.contactIDs?.count > 1
+                            } else if let roomID = self.roomID {
+                                let roomDataSource = RoomDataSource()
+                                isGroupRoom = roomDataSource.retrieveRoomWithId(roomID).participants.count > 2
+                            }
+
+                            AnalyticsService.logMessageSent(numOfWords, percentWordsAssigned: (numOfWordsAssigned / numOfWords) * 100, group: isGroupRoom)
                         } else {
                             if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
                                 self.hideActivityIndicator()

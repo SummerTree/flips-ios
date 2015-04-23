@@ -174,6 +174,8 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             let contactId = self.contactsIdsWithoutFlipsAccount[indexPath.row]
             contact = contactDatasource.retrieveContactWithId(contactId)
+            
+            AnalyticsService.logUserSentInvite()
         }
 
         let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
