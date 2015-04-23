@@ -233,7 +233,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
             flipMessage = flipMessageDataSourceInContext.createFlipMessageWithId(messageId, andFormattedFlips: formattedFlips, toRoom: room)
         }
-        return flipMessage.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage
+        return flipMessage
     }
     
     func removeAllFlipMessagesFromRoomID(roomID: String, completion: CompletionBlock) {
