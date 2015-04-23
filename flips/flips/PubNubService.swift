@@ -453,6 +453,8 @@ public class PubNubService: FlipsService, PNDelegate {
         let decryptedContentString = self.decrypt(messageJSON[MESSAGE_DATA].stringValue)
         let contentJson : JSON = JSON(self.dictionaryFromJSON(decryptedContentString))
         self.delegate?.pubnubClient(client, didReceiveMessage:contentJson, atDate: pnMessage.receiveDate.date, fromChannelName: pnMessage.channel.name)
+        
+        AnalyticsService.logMessageReceived()
     }
     
     public func pubnubClient(client: PubNub!, didConnectToOrigin origin: String!) {

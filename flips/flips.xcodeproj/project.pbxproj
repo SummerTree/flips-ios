@@ -625,6 +625,9 @@
 		BE3A904D1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		BE3A904E1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		BE3A904F1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
+		BE820DE21AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
+		BE820DE31AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
+		BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22611251AB6FEC4004C875A /* ProgressBar.swift */; };
 		F28986991AE6C9D600E8DA05 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */; };
@@ -875,6 +878,7 @@
 		BE2E72071A98119400F237BE /* empty_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = empty_video.mov; sourceTree = "<group>"; };
 		BE3897A91AD43D5100471B88 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE3A904C1AD70DF300405EC8 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F22611251AB6FEC4004C875A /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
@@ -1447,6 +1451,7 @@
 				70FD4E7519D064450024EBDB /* AppDelegate.swift */,
 				BE3A904C1AD70DF300405EC8 /* AppSettings.swift */,
 				07CE2AB91A1E8FEC00CF1A70 /* LocalizedString.swift */,
+				BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */,
 				7AB1685519E32CB0004E2162 /* Camera */,
 				704E110A19D08E3C00D2BB88 /* Controller */,
 				704E110C19D08E7B00D2BB88 /* CoreData */,
@@ -2231,6 +2236,7 @@
 				7AF82E0319EFECDC00D0393F /* FlipDataSource.swift in Sources */,
 				7043DF381A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */,
+				BE820DE21AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */,
 				70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */,
 				7033584819E462A20030CF11 /* PubNubService.swift in Sources */,
@@ -2440,6 +2446,7 @@
 				BE2460331AD2D95900859233 /* FlipDataSource.swift in Sources */,
 				BE2460341AD2D95900859233 /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				BE2460351AD2D95900859233 /* AboutViewController.swift in Sources */,
+				BE820DE31AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				BE2460361AD2D95900859233 /* SplashScreenView.swift in Sources */,
 				BE2460371AD2D95900859233 /* SplashScreenViewController.swift in Sources */,
 				BE2460381AD2D95900859233 /* PubNubService.swift in Sources */,
@@ -2650,6 +2657,7 @@
 				BE24610D1AD2D9C600859233 /* FlipDataSource.swift in Sources */,
 				BE24610E1AD2D9C600859233 /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				BE24610F1AD2D9C600859233 /* AboutViewController.swift in Sources */,
+				BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				BE2461101AD2D9C600859233 /* SplashScreenView.swift in Sources */,
 				BE2461111AD2D9C600859233 /* SplashScreenViewController.swift in Sources */,
 				BE2461121AD2D9C600859233 /* PubNubService.swift in Sources */,
