@@ -14,13 +14,12 @@ import Foundation
 
 let USER_DATA_SYNCED_NOTIFICATION_NAME: String = "user_data_synced_notification"
 
-class SettingsViewController : FlipsViewController, SettingsViewDelegate {
+class SettingsViewController : FlipsViewController, SettingsViewDelegate, TutorialViewControllerDelegate {
     
     private let FLIPSBOYS_CHAT_TITLE: String = "FlipBoys"
     
     private var settingsView: SettingsView!
-    
-    
+
     // MARK: - Overridden Methods
     
     override func loadView() {
@@ -128,6 +127,13 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         })
     }
     
+    func settingsViewDidTapTutorialButton(settingsView: SettingsView) {
+        var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+        tutorialViewController.viewDelegate = self
+
+        self.navigationController?.pushViewController(tutorialViewController, animated: true)
+    }
+    
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
         var userFirstName: String? = nil
         var facebookUser = false
@@ -159,5 +165,12 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     func userDataSyncedNotificationReceived(notification: NSNotification) {
         self.settingsView.updateUserProfileInfo()
     }
-    
+
+
+    // MARK: - TutorialViewControllerDelegate
+
+    func tutorialViewControllerDidTapCloseButton(viewController: TutorialViewController!) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+
 }

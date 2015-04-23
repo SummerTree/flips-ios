@@ -27,12 +27,11 @@ public class StorageCache {
     private let scheduleCleanup: () -> Void
     private let cacheJournal: CacheJournal
     private let cacheQueue: dispatch_queue_t
+    private let downloadSyncQueue: dispatch_queue_t
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
     
     var sizeInBytes: Int64 {
-        get {
-            return self.cacheJournal.cacheSize
-        }
+        return self.cacheJournal.cacheSize
     }
     
     init(cacheID: String, cacheDirectoryName: String, scheduleCleanup: () -> Void) {
@@ -45,6 +44,7 @@ public class StorageCache {
         let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheID).cache")
         self.cacheJournal = CacheJournal(absolutePath: journalName)
         self.cacheQueue = dispatch_queue_create(cacheID, nil)
+        self.downloadSyncQueue = dispatch_queue_create("\(cacheID)DownloadQueue", nil)
         self.downloadInProgressURLs = Dictionary<String, [DownloadFinishedCallbacks]>()
         self.initCacheDirectory()
         self.cacheJournal.open()
@@ -98,13 +98,23 @@ public class StorageCache {
             return CacheGetResponse.DATA_IS_READY
         }
         
-        if (self.downloadInProgressURLs[localPath] != nil) {
-            self.downloadInProgressURLs[localPath]?.append((success: success, failure: failure, progress: progress))
-            return CacheGetResponse.DOWNLOAD_WILL_START
+        var downloadedAlreadyStarted = false
+        
+        dispatch_sync(self.downloadSyncQueue) {
+            if (self.downloadInProgressURLs[localPath] != nil) {
+                self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
+                downloadedAlreadyStarted = true
+            }
+            
+            if (!downloadedAlreadyStarted) {
+                self.downloadInProgressURLs[localPath] = [DownloadFinishedCallbacks]()
+                self.downloadInProgressURLs[localPath]!.append((success: success, failure: failure, progress: progress))
+            }
         }
         
-        self.downloadInProgressURLs[localPath] = [DownloadFinishedCallbacks]()
-        self.downloadInProgressURLs[localPath]?.append(DownloadFinishedCallbacks(success: success, failure: failure, progress: progress))
+        if (downloadedAlreadyStarted) {
+            return CacheGetResponse.DOWNLOAD_WILL_START
+        }
         
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,
@@ -116,29 +126,47 @@ public class StorageCache {
                     }
                 }
                 
-                if (self.downloadInProgressURLs[localPath] == nil) {
+                var callbacksArray: [DownloadFinishedCallbacks]? = nil
+                
+                dispatch_sync(self.downloadSyncQueue) {
+                    callbacksArray = self.downloadInProgressURLs[localPath]
+                    self.downloadInProgressURLs[localPath] = nil
+                }
+                
+                if (callbacksArray == nil) {
                     println("Local path (\(localPath)) has been downloaded but we already cleaned up its callbacks.")
                     return
                 }
                 
-                for callbacks in self.downloadInProgressURLs[localPath]! {
+                for callbacks in callbacksArray! {
                     if (success) {
                         callbacks.success?(remoteURL.absoluteString, localPath)
                     } else {
                         callbacks.failure?(remoteURL.absoluteString, FlipError(error: "Error downloading media file", details: nil))
                     }
                 }
-                
-                self.downloadInProgressURLs[localPath] = nil
             },
             progress: { (downloadProgress) -> Void in
-                if (self.downloadInProgressURLs[localPath] == nil) {
+                var callbacksAlreadyCleaned = false
+                var progressCallbacks = [CacheProgressCallback?]()
+                
+                dispatch_sync(self.downloadSyncQueue) {
+                    if (self.downloadInProgressURLs[localPath] == nil) {
+                        callbacksAlreadyCleaned = true
+                    } else {
+                        for callbacks in self.downloadInProgressURLs[localPath]! {
+                            progressCallbacks.append(callbacks.progress)
+                        }
+                    }
+                }
+                
+                if (callbacksAlreadyCleaned) {
                     println("Local path (\(localPath)) is being downloaded but we already cleaned up its callbacks.")
                     return
                 }
-
-                for callbacks in self.downloadInProgressURLs[localPath]! {
-                    callbacks.progress?(downloadProgress)
+                
+                for progress in progressCallbacks {
+                    progress?(downloadProgress)
                 }
             }
         )
@@ -206,10 +234,11 @@ public class StorageCache {
         dispatch_async(self.cacheQueue) {
             let leastRecentlyUsed = self.cacheJournal.getLRUEntries(count)
             let fileManager = NSFileManager.defaultManager()
-            for path in leastRecentlyUsed {
+            for fileName in leastRecentlyUsed {
                 var error: NSError? = nil
+                let path = self.cacheDirectoryPath.path!.stringByAppendingPathComponent(fileName)
                 if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(path). Error: \(error)")
+                    println("Could not remove file \(fileName). Error: \(error)")
                 }
             }
             
@@ -221,10 +250,11 @@ public class StorageCache {
         dispatch_async(self.cacheQueue) {
             let entries = self.cacheJournal.getEntries()
             let fileManager = NSFileManager.defaultManager()
-            for path in entries {
+            for fileName in entries {
                 var error: NSError? = nil
+                let path = self.cacheDirectoryPath.path!.stringByAppendingPathComponent(fileName)
                 if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(path). Error: \(error)")
+                    println("Could not remove file \(fileName). Error: \(error)")
                 }
             }
             

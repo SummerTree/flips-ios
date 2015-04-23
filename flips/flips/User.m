@@ -32,6 +32,7 @@
 @dynamic pubnubID;
 @dynamic userID;
 @dynamic username;
+@dynamic updatedAt;
 @dynamic adminRooms;
 @dynamic contacts;
 @dynamic device;

@@ -29,6 +29,7 @@
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSString * userID;
 @property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSDate * updatedAt;
 @property (nonatomic, retain) Room *adminRooms;
 @property (nonatomic, retain) NSSet *contacts;
 @property (nonatomic, retain) Device *device;

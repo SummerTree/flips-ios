@@ -34,7 +34,13 @@ extension FlipMessage {
         get {
             var flipsEntries: Array<FlipEntry> = Array<FlipEntry>()
             let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
-            return self.entries.sortedArrayUsingDescriptors([sortDescriptor]) as Array<FlipEntry>
+            let entries = self.entries
+
+            if (entries != nil) {
+                flipsEntries = entries.sortedArrayUsingDescriptors([sortDescriptor]) as Array<FlipEntry>
+            }
+
+            return flipsEntries
         }
     }
 

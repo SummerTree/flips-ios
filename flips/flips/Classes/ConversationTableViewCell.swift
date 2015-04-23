@@ -176,8 +176,8 @@ class ConversationTableViewCell : UITableViewCell {
     private func layoutCell(room: Room, shouldSetThumbnailAnimated: Bool = true) {
         // All conversations should be sorted in the inbox by time stamp, with most recent at the top, and oldest at the bottom.
         var lastMessage: FlipMessage? = nil
-        
-        if let roomFlipMessages: NSOrderedSet = room.valueForKey("flipMessages") as? NSOrderedSet {
+
+        if let roomFlipMessages = room.flipMessages {
             for (var i: Int = roomFlipMessages.count - 1; i >= 0; i--) {
                 let flipMessage: FlipMessage = roomFlipMessages[i] as FlipMessage
                 if (!flipMessage.removed.boolValue) {

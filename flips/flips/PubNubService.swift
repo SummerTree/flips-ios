@@ -31,6 +31,7 @@ public class PubNubService: FlipsService, PNDelegate {
     
     weak var delegate: PubNubServiceDelegate?
     
+    private var pubnubConnectionIdentifier: String? // It changes when you disconnect and reconnect
     
     // MARK: - Initialization Methods
     
@@ -82,6 +83,10 @@ public class PubNubService: FlipsService, PNDelegate {
     
     func connect() {
         if (!self.isConnected()) {
+            if (self.pubnubConnectionIdentifier == nil) {
+                self.pubnubConnectionIdentifier = NSUUID().UUIDString
+            }
+            
             PubNub.connectWithSuccessBlock({ (origin: String!) -> Void in
                 println("Successfully connected to PubNub")
                 self.onPubnubConnectedBlock?()
@@ -92,6 +97,12 @@ public class PubNubService: FlipsService, PNDelegate {
         }
     }
     
+    func disconnect() {
+        PubNub.disconnect()
+        self.disablePushNotificationOnMyChannels()
+        self.pubnubConnectionIdentifier = nil
+    }
+    
     func isConnected() -> Bool {
         return PubNub.sharedInstance().isConnected()
     }
@@ -100,6 +111,12 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Channel Subscription
 
     func subscribeOnMyChannels(completion: CompletionBlock? = nil, progress: ((received: Int, total: Int) -> Void)? = nil) {
+        if (User.loggedUser() == nil) {
+            println("Subscribe my channels. User not logged.")
+            return
+        }
+        
+        let currentIdentifier = self.pubnubConnectionIdentifier
         println("Subscribing to user's channels")
         if (!self.isConnected()) {
             println("Pubnub not connect. Saving block to run later.")
@@ -119,16 +136,22 @@ public class PubNubService: FlipsService, PNDelegate {
                     channelsToSubscribe.append(channel)
                 } else {
                     // It load the history after subscribe. So, when we will not re-resubscribe, we need to get the history.
+                    println("   Already subscribed to channel \(channel.name). Retrieving history only.")
                     self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: nil)
                 }
             }
             
+            println("Subscribing to \(channelsToSubscribe.count) channels")
             PubNub.subscribeOn(channelsToSubscribe, withCompletionHandlingBlock: { (state, channels, error) -> Void in
                 println("Subscribing to channels completed")
-                if (error != nil) {
-                    println("   Error subscribing to channels: \(error)")
+                if (currentIdentifier == self.pubnubConnectionIdentifier) {
+                    if (error != nil) {
+                        println("   Error subscribing to channels: \(error)")
+                    }
+                    self.loadMessagesHistoryWithCompletion(completion, progress: progress)
+                } else {
+                    println("SubscribeOnMyChannels PubNub identifier changed.")
                 }
-                self.loadMessagesHistoryWithCompletion(completion, progress: progress)
             })
         }
     }
@@ -223,7 +246,14 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Message history
     
     func loadMessagesHistoryWithCompletion(completion: CompletionBlock? = nil, progress: ((received: Int, total: Int) -> Void)? = nil) {
+        let currentIdentifier: String? = self.pubnubConnectionIdentifier
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                println("Load Messages History - SubscribeOnMyChannels PubNub identifier changed.")
+                return
+            }
+            
             let list = PubNub.sharedInstance().subscribedObjectsList()
             if (list == nil) {
                 println("Error: loadMessagesHistory - subscribed object list is nil.")
@@ -241,10 +271,19 @@ public class PubNubService: FlipsService, PNDelegate {
                 dispatch_group_enter(group)
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    if (User.loggedUser() == nil) {
+                        dispatch_group_leave(group)
+                        return
+                    }
+                    
                     var channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as PNChannel
                     self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
-                        if (success) {
-                            progress?(received: historiesReceived++, total: subscribedChannels.count)
+                        if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                            println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
+                        } else if (User.loggedUser() != nil) {
+                            if (success) {
+                                progress?(received: historiesReceived++, total: subscribedChannels.count)
+                            }
                         }
                         println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
                         
@@ -256,10 +295,22 @@ public class PubNubService: FlipsService, PNDelegate {
             dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(90 * NSEC_PER_SEC)))
             NSLog("HISTORY FETCH ENDED - subscribedChannels.count(\(subscribedChannels.count)) - historiesReceived(\(historiesReceived))")
             
+            if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                println("SubscribeOnMyChannels finished PubNub identifier changed.")
+                return
+            }
+            
+            if (User.loggedUser() == nil) {
+                println("History fetch ended with user not logged.")
+                return
+            }
+            
             if (completion != nil) {
                 completion?(subscribedChannels.count == historiesReceived)
             } else {
-                NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+                })
             }
         })
     }
@@ -282,10 +333,21 @@ public class PubNubService: FlipsService, PNDelegate {
             return
         }
         
+        let currentIdentifier: String? = self.pubnubConnectionIdentifier
         self.loadMessagesHistoryForChannelRetrying(self.LOAD_HISTORY_NUMBER_OF_RETRIES,
             channel: channel,
             lastMessageReceivedDate: lastMessageReceivedDate,
             success: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
+                if (User.loggedUser() == nil) {
+                    println("Load history for channel success. User not logged.")
+                    return
+                }
+                
+                if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                    println("Load history for channel success. Identifiers are different.")
+                    return
+                }
+                
                 if (error != nil) {
                     println("   Could not retrieve message history for channel \(channel.name). \(error.localizedDescription)")
                 } else {
@@ -293,38 +355,32 @@ public class PubNubService: FlipsService, PNDelegate {
                 }
                 loadMessagesHistoryCompletion?(error == nil)
             }, failure: { (error: NSError!) -> Void in
+                if (User.loggedUser() == nil) {
+                    println("Load history for channel failure. User not logged.")
+                    return
+                }
+                
+                if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                    println("Load history for channel failure. Identifiers are different.")
+                    return
+                }
+                
                 println("   Load Messages History failed with error: \(error)")
                 loadMessagesHistoryCompletion?(false)
             }, latestError: nil)
     }
     
     private func loadMessagesHistoryForChannelRetrying(numberOfRetries: Int, channel: PNChannel, lastMessageReceivedDate: NSDate?, success: PNClientHistoryLoadHandlingBlock, failure: FailureBlock, latestError: NSError?) {
-        if (numberOfRetries <= 0) {
+        let currentIdentifier: String? = self.pubnubConnectionIdentifier
+        if ((numberOfRetries <= 0) || (!self.isConnected())) {
             failure(latestError)
         } else {
             println("Requesting history for channel: \(channel.name)")
             if (lastMessageReceivedDate == nil) {
                 PubNub.requestFullHistoryForChannel(channel, includingTimeToken: true, withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
-                    if (error != nil) {
-                        println("   Loading Full History retrying - numberOfRetries(\(numberOfRetries))")
-                        self.loadMessagesHistoryForChannelRetrying(numberOfRetries - 1,
-                            channel: channel,
-                            lastMessageReceivedDate: lastMessageReceivedDate,
-                            success: success,
-                            failure: failure,
-                            latestError: error)
-                    } else {
-                        success(messages, channel, startDate, endDate, error)
-                    }
-                })
-            } else {
-                PubNub.requestHistoryForChannel(channel,
-                    from: PNDate(date: NSDate()), // From: now
-                    to: PNDate(date: lastMessageReceivedDate?.dateByAddingTimeInterval(1)), // To: imediatelly after last received message timestamp
-                    includingTimeToken: true,
-                    withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
+                    if (currentIdentifier == self.pubnubConnectionIdentifier) {
                         if (error != nil) {
-                            println("   Loading History retrying - numberOfRetries(\(numberOfRetries))")
+                            println("   Loading Full History retrying - numberOfRetries(\(numberOfRetries))")
                             self.loadMessagesHistoryForChannelRetrying(numberOfRetries - 1,
                                 channel: channel,
                                 lastMessageReceivedDate: lastMessageReceivedDate,
@@ -333,6 +389,27 @@ public class PubNubService: FlipsService, PNDelegate {
                                 latestError: error)
                         } else {
                             success(messages, channel, startDate, endDate, error)
+                        }
+                    }
+                })
+            } else {
+                PubNub.requestHistoryForChannel(channel,
+                    from: PNDate(date: NSDate()), // From: now
+                    to: PNDate(date: lastMessageReceivedDate?.dateByAddingTimeInterval(1)), // To: imediatelly after last received message timestamp
+                    includingTimeToken: true,
+                    withCompletionBlock: { (messages: [AnyObject]!, channel: PNChannel!, startDate: PNDate!, endDate: PNDate!, error: PNError!) -> Void in
+                        if (currentIdentifier == self.pubnubConnectionIdentifier) {
+                            if (error != nil) {
+                                println("   Loading History retrying - numberOfRetries(\(numberOfRetries))")
+                                self.loadMessagesHistoryForChannelRetrying(numberOfRetries - 1,
+                                    channel: channel,
+                                    lastMessageReceivedDate: lastMessageReceivedDate,
+                                    success: success,
+                                    failure: failure,
+                                    latestError: error)
+                            } else {
+                                success(messages, channel, startDate, endDate, error)
+                            }
                         }
                 })
             }
