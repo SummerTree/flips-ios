@@ -29,6 +29,7 @@ public class StorageCache {
     private let cacheQueue: dispatch_queue_t
     private let downloadSyncQueue: dispatch_queue_t
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
+    private var cacheWasCleared: ThreadSafe<Bool>
     
     var sizeInBytes: Int64 {
         return self.cacheJournal.cacheSize
@@ -46,6 +47,7 @@ public class StorageCache {
         self.cacheQueue = dispatch_queue_create(cacheID, nil)
         self.downloadSyncQueue = dispatch_queue_create("\(cacheID)DownloadQueue", nil)
         self.downloadInProgressURLs = Dictionary<String, [DownloadFinishedCallbacks]>()
+        self.cacheWasCleared = ThreadSafe<Bool>(false)
         self.initCacheDirectory()
         self.cacheJournal.open()
     }
@@ -87,6 +89,7 @@ public class StorageCache {
     :param: progress  A function that is called while the asset is being retrieved to indicate progress.
     */
     func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback? = nil) -> CacheGetResponse {
+        self.cacheWasCleared.value = false
         let localPath = self.createLocalPath(remoteURL)
         if (self.cacheHit(localPath)) {
             dispatch_async(self.cacheQueue) {
@@ -119,6 +122,10 @@ public class StorageCache {
         Downloader.sharedInstance.downloadTask(remoteURL,
             localURL: NSURL(fileURLWithPath: localPath)!,
             completion: { (success) -> Void in
+                if (self.cacheWasCleared.value) {
+                    return
+                }
+                
                 if (success) {
                     dispatch_async(self.cacheQueue) {
                         self.cacheJournal.insertNewEntry(localPath)
@@ -147,6 +154,10 @@ public class StorageCache {
                 }
             },
             progress: { (downloadProgress) -> Void in
+                if (self.cacheWasCleared.value) {
+                    return
+                }
+                
                 var callbacksAlreadyCleaned = false
                 var progressCallbacks = [CacheProgressCallback?]()
                 
@@ -186,6 +197,7 @@ public class StorageCache {
     :param: srcPath   The path where the asset is locally saved. The asset will be moved to the cache.
     */
     func put(remoteURL: NSURL, localPath srcPath: String) -> Void {
+        self.cacheWasCleared.value = false
         let toPath = self.createLocalPath(remoteURL)
         
         if (!self.cacheHit(toPath)) {
@@ -209,6 +221,7 @@ public class StorageCache {
     :param: data      The actual asset that is going to be inserted into the cache.
     */
     func put(remoteURL: NSURL, data: NSData) -> String {
+        self.cacheWasCleared.value = false
         let localPath = self.createLocalPath(remoteURL)
         
         if (!self.cacheHit(localPath)) {
@@ -260,6 +273,7 @@ public class StorageCache {
             
             self.cacheJournal.clear()
             self.downloadInProgressURLs.removeAll(keepCapacity: false)
+            self.cacheWasCleared.value = true
         }
     }
     
