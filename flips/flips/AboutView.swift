@@ -62,17 +62,13 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(NSCalendarUnit.CalendarUnitYear, fromDate: currentDate)
         
-        let version = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
-        
         let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as String
-        
-        let versionLabel = version == build ? "v\(version)" : "v\(version).\(build)"
         
         copyright = UILabel()
         copyright.numberOfLines = 3
         copyright.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         copyright.sizeToFit()
-        copyright.text = "Copyright © \(components.year) Flips.\nAll Rights Reserved.\n\(versionLabel)"
+        copyright.text = "Copyright © \(components.year) Flips.\nAll Rights Reserved.\nv\(build)"
         copyright.textColor = UIColor.whiteColor()
         copyright.textAlignment = NSTextAlignment.Center
         self.logoContainer.addSubview(copyright)
