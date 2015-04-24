@@ -101,8 +101,8 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     func disconnect() {
-        PubNub.disconnect()
         self.disablePushNotificationOnMyChannels()
+        PubNub.disconnect()
         self.pubnubConnectionIdentifier = nil
     }
     
