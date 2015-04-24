@@ -59,6 +59,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         
         if (isNewRoom) {
             let userDataSource = UserDataSource()
+            let admin = userDataSource.getUserById(json[RoomJsonParams.ADMIN_ID].stringValue)
             MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
                 let roomDataSourceInContext = RoomDataSource(context: context)
                 roomDataSourceInContext.associateRoom(room!, withAdmin: admin, andParticipants: participants)
