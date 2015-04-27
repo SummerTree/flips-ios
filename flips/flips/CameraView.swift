@@ -298,15 +298,10 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     private func initCamera() {
         self.session = AVCaptureSession()
-        
         self.previewView.session = session
-        
-        self.checkDeviceAuthorizationStatus()
-
         self.backgroundRecordingId = UIBackgroundTaskInvalid
 
         var error: NSError?
-
         var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front)
 
         if (videoDevice == nil) {
@@ -387,7 +382,12 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
 
     func registerObservers() {
-        if (deviceAuthorized && !observersRegistered) {
+        if (!deviceAuthorized) {
+            self.checkDeviceAuthorizationStatus()
+            return
+        }
+        
+        if (!observersRegistered) {
             self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
             self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
             self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: RecordingContext)
@@ -825,6 +825,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         case .Authorized:
             self.deviceAuthorized = true
             self.delegate?.cameraView(self, cameraAvailable: true)
+            self.registerObservers()
         default:
             self.deviceAuthorized = false
             self.delegate?.cameraView(self, cameraAvailable: false)
