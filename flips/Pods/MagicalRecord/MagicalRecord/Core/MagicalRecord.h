@@ -12,7 +12,13 @@
 // enable to use caches for the fetchedResultsControllers (iOS only)
 // #define STORE_USE_CACHE
 
-#define MR_ENABLE_ACTIVE_RECORD_LOGGING 0
+#ifndef MR_ENABLE_ACTIVE_RECORD_LOGGING
+    #ifdef DEBUG
+        #define MR_ENABLE_ACTIVE_RECORD_LOGGING 0
+    #else
+        #define MR_ENABLE_ACTIVE_RECORD_LOGGING 0
+    #endif
+#endif
 
 #if MR_ENABLE_ACTIVE_RECORD_LOGGING != 0
       // First, check if we can use Cocoalumberjack for logging
