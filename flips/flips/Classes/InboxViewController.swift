@@ -311,12 +311,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 // reload cells internally
                 self.inboxView.reloadCells()
             } else {
-                self.roomIds.removeAllObjects()
+                var ids: Array<String> = Array<String>()
                 for room in rooms {
-                    self.roomIds.addObject(room.roomID)
+                    ids.append(room.roomID)
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.roomIds.removeAllObjects()
+                    self.roomIds.addObjectsFromArray(ids)
                     self.inboxView.reloadData()
                 })
             }
