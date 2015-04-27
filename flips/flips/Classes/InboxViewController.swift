@@ -79,8 +79,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             DeviceHelper.sharedInstance.setSyncViewShown(true)
             self.shouldInformPubnubNotConnected = true
             
+            weak var weakSelf = self
             PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
-                self.refreshRooms()
+                println("   InboxViewController subscribeOnMyChannels completion called")
+                weakSelf?.refreshRooms()
             })
         }
     }
