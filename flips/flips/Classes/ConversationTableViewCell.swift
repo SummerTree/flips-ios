@@ -182,7 +182,7 @@ class ConversationTableViewCell : UITableViewCell {
         if (flipMessages.count > 0) {
             lastMessage = flipMessages.last!
         } else {
-            println("\n\nCoreData problem: flipMessages value is nil\n\n")
+            println("\n\nCoreData problem: flipMessages is empty for room(\(room.roomID))\n\n")
         }
         
         // The preview still photo should reflect the first frame of the video of the most recent message in the conversation
