@@ -86,10 +86,9 @@
 
 // PubNub
 #define COCOAPODS_POD_AVAILABLE_PubNub
-// This library does not follow semantic-versioning,
-// so we were not able to define version macros.
-// Please contact the author.
-// Version: 3.7.9.3.
+#define COCOAPODS_VERSION_MAJOR_PubNub 3
+#define COCOAPODS_VERSION_MINOR_PubNub 7
+#define COCOAPODS_VERSION_PATCH_PubNub 10
 
 // SplunkMint-iOS
 #define COCOAPODS_POD_AVAILABLE_SplunkMint_iOS
