@@ -150,10 +150,12 @@
 		7A9619EB19DC3C7D005E4343 /* SignUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */; };
 		7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9619EF19DC3F01005E4343 /* UserFormView.swift */; };
 		7A997DBC1A274F7400346817 /* BuilderWordDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */; };
+		7A9FFA421AEE7623002DE1FE /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9FFA411AEE7623002DE1FE /* Room.m */; };
+		7A9FFA431AEE7623002DE1FE /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9FFA411AEE7623002DE1FE /* Room.m */; };
+		7A9FFA441AEE7623002DE1FE /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A9FFA411AEE7623002DE1FE /* Room.m */; };
 		7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA3F93E1AB70DC500B562B9 /* DAKeyboardControl.m */; };
 		7AA711721A28D8AF0082165A /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711711A28D8AF0082165A /* Contact.m */; };
 		7AA711751A28D8B00082165A /* BuilderWord.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711741A28D8B00082165A /* BuilderWord.m */; };
-		7AA7117B1A28D8B10082165A /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
 		7AA711811A28D8B10082165A /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA711801A28D8B10082165A /* Device.m */; };
 		7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */; };
 		7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1683719E3196E004E2162 /* TakePictureViewController.swift */; };
@@ -217,7 +219,6 @@
 		A2D60FD319E45EFF001C92A0 /* NewPasswordViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D60FD019E45EFF001C92A0 /* NewPasswordViewDelegate.swift */; };
 		BE22C9951AA6BEC00079298E /* TempFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22C9941AA6BEC00079298E /* TempFiles.swift */; };
 		BE245F931AD2D95900859233 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
-		BE245F941AD2D95900859233 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
 		BE245F951AD2D95900859233 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		BE245F961AD2D95900859233 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
 		BE245F971AD2D95900859233 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
@@ -419,7 +420,6 @@
 		BE24605F1AD2D95900859233 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
 		BE2460611AD2D95900859233 /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
 		BE24606D1AD2D9C600859233 /* FlipsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73192A881A8B9B660010C949 /* FlipsCache.swift */; };
-		BE24606E1AD2D9C600859233 /* Room.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA7117A1A28D8B10082165A /* Room.m */; };
 		BE24606F1AD2D9C600859233 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9519DB24B900631FE0 /* ForgotPasswordViewController.swift */; };
 		BE2460701AD2D9C600859233 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
 		BE2460711AD2D9C600859233 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2124E9719DB268C00631FE0 /* ForgotPasswordView.swift */; };
@@ -799,14 +799,14 @@
 		7A9619EA19DC3C7D005E4343 /* SignUpViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewDelegate.swift; sourceTree = "<group>"; };
 		7A9619EF19DC3F01005E4343 /* UserFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserFormView.swift; path = Classes/UserFormView.swift; sourceTree = "<group>"; };
 		7A997DBB1A274F7400346817 /* BuilderWordDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderWordDataSource.swift; sourceTree = "<group>"; };
+		7A9FFA401AEE7623002DE1FE /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
+		7A9FFA411AEE7623002DE1FE /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		7AA3F93D1AB70DC500B562B9 /* DAKeyboardControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAKeyboardControl.h; path = DAKeyboardControl/DAKeyboardControl.h; sourceTree = "<group>"; };
 		7AA3F93E1AB70DC500B562B9 /* DAKeyboardControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DAKeyboardControl.m; path = DAKeyboardControl/DAKeyboardControl.m; sourceTree = "<group>"; };
 		7AA711701A28D8AF0082165A /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		7AA711711A28D8AF0082165A /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		7AA711731A28D8B00082165A /* BuilderWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuilderWord.h; sourceTree = "<group>"; };
 		7AA711741A28D8B00082165A /* BuilderWord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuilderWord.m; sourceTree = "<group>"; };
-		7AA711791A28D8B10082165A /* Room.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Room.h; sourceTree = "<group>"; };
-		7AA7117A1A28D8B10082165A /* Room.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Room.m; sourceTree = "<group>"; };
 		7AA7117F1A28D8B10082165A /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		7AA711801A28D8B10082165A /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
 		7AA95E201A14CD69004286D3 /* BuilderIntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderIntroductionViewController.swift; sourceTree = "<group>"; };
@@ -1163,6 +1163,8 @@
 			children = (
 				7A2A7E1119EDBF9400033164 /* Extensions */,
 				7AFE1F361AB8A67500E38673 /* flips.xcdatamodeld */,
+				7A9FFA401AEE7623002DE1FE /* Room.h */,
+				7A9FFA411AEE7623002DE1FE /* Room.m */,
 				7ACC60491ACAD6500052076D /* DeletedFlipMessage.h */,
 				7ACC604A1ACAD6500052076D /* DeletedFlipMessage.m */,
 				7ACC60441AC97F090052076D /* ReadFlipMessage.h */,
@@ -1179,8 +1181,6 @@
 				7AA711711A28D8AF0082165A /* Contact.m */,
 				7AA7117F1A28D8B10082165A /* Device.h */,
 				7AA711801A28D8B10082165A /* Device.m */,
-				7AA711791A28D8B10082165A /* Room.h */,
-				7AA7117A1A28D8B10082165A /* Room.m */,
 				7AF341381AE7C8A400B40230 /* User.h */,
 				7AF341391AE7C8A400B40230 /* User.m */,
 				7A2A7E1E19EDBFB800033164 /* CoreDataHandler.swift */,
@@ -2067,7 +2067,6 @@
 			files = (
 				7AF3413A1AE7C8A400B40230 /* User.m in Sources */,
 				73192A891A8B9B660010C949 /* FlipsCache.swift in Sources */,
-				7AA7117B1A28D8B10082165A /* Room.m in Sources */,
 				F28986A11AE6F81200E8DA05 /* TutorialPageViewController.swift in Sources */,
 				A2124E9619DB24B900631FE0 /* ForgotPasswordViewController.swift in Sources */,
 				7A03911C1A1CFD8300846BA1 /* MessageService.swift in Sources */,
@@ -2256,6 +2255,7 @@
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
 				70B560A519D996F000FE4C34 /* FlipsWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
+				7A9FFA421AEE7623002DE1FE /* Room.m in Sources */,
 				702ED0251A1520D500E91881 /* BuilderAddWordTableViewController.swift in Sources */,
 				7AD93FA919E6BBAA009CC59A /* CropOverlayView.swift in Sources */,
 				70057E9419DADF59004343ED /* DeviceHelper.swift in Sources */,
@@ -2279,7 +2279,6 @@
 			files = (
 				7AF3413B1AE7C8A400B40230 /* User.m in Sources */,
 				BE245F931AD2D95900859233 /* FlipsCache.swift in Sources */,
-				BE245F941AD2D95900859233 /* Room.m in Sources */,
 				BE245F951AD2D95900859233 /* ForgotPasswordViewController.swift in Sources */,
 				BE245F961AD2D95900859233 /* MessageService.swift in Sources */,
 				BE245F971AD2D95900859233 /* ForgotPasswordView.swift in Sources */,
@@ -2344,6 +2343,7 @@
 				BE245FCF1AD2D95900859233 /* UIImageViewExtensions.swift in Sources */,
 				BE245FD01AD2D95900859233 /* BuilderViewController.swift in Sources */,
 				BE245FD11AD2D95900859233 /* TermsOfUseViewController.swift in Sources */,
+				7A9FFA431AEE7623002DE1FE /* Room.m in Sources */,
 				BE245FD21AD2D95900859233 /* PlayerView.swift in Sources */,
 				BE245FD31AD2D95900859233 /* AppDelegate.swift in Sources */,
 				BE245FD41AD2D95900859233 /* PreviewViewController.swift in Sources */,
@@ -2490,7 +2490,6 @@
 			files = (
 				7AF3413C1AE7C8A400B40230 /* User.m in Sources */,
 				BE24606D1AD2D9C600859233 /* FlipsCache.swift in Sources */,
-				BE24606E1AD2D9C600859233 /* Room.m in Sources */,
 				BE24606F1AD2D9C600859233 /* ForgotPasswordViewController.swift in Sources */,
 				BE2460701AD2D9C600859233 /* MessageService.swift in Sources */,
 				BE2460711AD2D9C600859233 /* ForgotPasswordView.swift in Sources */,
@@ -2555,6 +2554,7 @@
 				BE2460A91AD2D9C600859233 /* UIImageViewExtensions.swift in Sources */,
 				BE2460AA1AD2D9C600859233 /* BuilderViewController.swift in Sources */,
 				BE2460AB1AD2D9C600859233 /* TermsOfUseViewController.swift in Sources */,
+				7A9FFA441AEE7623002DE1FE /* Room.m in Sources */,
 				BE2460AC1AD2D9C600859233 /* PlayerView.swift in Sources */,
 				BE2460AD1AD2D9C600859233 /* AppDelegate.swift in Sources */,
 				BE2460AE1AD2D9C600859233 /* PreviewViewController.swift in Sources */,

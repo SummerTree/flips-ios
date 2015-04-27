@@ -172,7 +172,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
     // MARK: - FlipMessage Methods
     
-    func createFlipMessageWithJson(json: JSON, receivedDate:NSDate, receivedAtChannel pubnubID: String) -> FlipMessage? {
+    func createFlipMessageWithJson(json: JSON, receivedDate:NSDate, receivedAtChannel pubnubID: String, isFromHistory: Bool) -> FlipMessage? {
         var flipMessage: FlipMessage?
         
         let userDataSource = UserDataSource()
@@ -213,8 +213,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     if (isMessageMarkedAsRead) {
                         flipMessage?.notRead = false
                     }
-                    
-                    flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user, formattedFlips: formattedFlips, andRoom: room)
+                    flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user, formattedFlips: formattedFlips, andRoom: room, isFromHistory: isFromHistory)
                 }
                 return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage?
             }

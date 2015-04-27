@@ -25,7 +25,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private var chatTitle: String!
     
     private var roomID: String!
-    private var flipMessages = NSMutableOrderedSet()
+    private var flipMessages: NSMutableOrderedSet!
     
     private var flipMessageIdFromPushNotification: String?
     
@@ -47,12 +47,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             self.groupParticipantsView = GroupParticipantsView(participants: room.participants.allObjects as Array<User> as [User])
         }
         
-        let roomMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
-        for flipMessage in roomMessages {
-            if (!flipMessage.removed.boolValue) {
-                self.flipMessages.addObject(flipMessage)
-            }
-        }
+        self.flipMessages = NSMutableOrderedSet(array: room.notRemovedFlipMessagesOrderedByReceivedAt())
     }
     
     
