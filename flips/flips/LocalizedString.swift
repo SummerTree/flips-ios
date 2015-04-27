@@ -20,7 +20,7 @@ struct LocalizedString {
     static let CONTACTS_ACCESS_TITLE = NSLocalizedString("Contacts")
     static let CONTACTS_ACCESS_MESSAGE = NSLocalizedString("Flips does not have access to your contacts. Please grant access under Settings > Privacy > Contacts.")
     static let ERROR = NSLocalizedString("Error", comment: "Error")
-    static let FLIPBOYS_ROOM_NOT_FOUND = NSLocalizedString("Feedback room not found", comment: "Feedback room not found")
+    static let TEAMFLIPS_ROOM_NOT_FOUND = NSLocalizedString("Feedback room not found", comment: "Feedback room not found")
     static let FORGOT_PASSWORD = NSLocalizedString("Forgot Password", comment: "Forgot Password")
     static let INCORRECT_VALIDATION_CODE = NSLocalizedString("Incorrect Validation Code. Please try again.", comment: "")
     static let MICROPHONE_ACCESS = NSLocalizedString("Microphone Access", comment: "Microphone access title")

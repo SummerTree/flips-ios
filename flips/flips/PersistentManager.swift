@@ -59,8 +59,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         
         if (isNewRoom) {
             let userDataSource = UserDataSource()
-            var admin = userDataSource.getUserById(json[RoomJsonParams.ADMIN_ID].stringValue)
-
+            let admin = userDataSource.getUserById(json[RoomJsonParams.ADMIN_ID].stringValue)
             MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
                 let roomDataSourceInContext = RoomDataSource(context: context)
                 roomDataSourceInContext.associateRoom(room!, withAdmin: admin, andParticipants: participants)
@@ -178,47 +177,47 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         
         let userDataSource = UserDataSource()
         let fromUserID = json[FlipMessageJsonParams.FROM_USER_ID].stringValue
-        let user = userDataSource.getUserById(fromUserID)
-        
-        let roomDataSource = RoomDataSource()
-        let room = roomDataSource.getRoomWithPubnubID(pubnubID) as Room!
-        
-        let content = json[MESSAGE_CONTENT]
-
-        var formattedFlips: [FormattedFlip] = Array<FormattedFlip>()
-        for (index: String, flipJson: JSON) in content {
-            let flip = self.createFlipWithJson(flipJson)
+        if let user = userDataSource.getUserById(fromUserID) {
+            let roomDataSource = RoomDataSource()
+            let room = roomDataSource.getRoomWithPubnubID(pubnubID) as Room!
             
-            var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
-            formattedFlips.append(formattedFlip)
-        }
-        
-        let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
-        let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource()
-        let isMessageDeleted: Bool = deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
-        
-        // Shouldn't add a message if it already was removed.
-        if (!isMessageDeleted) {
-            let readFlipMessageDataSource: ReadFlipMessageDataSource = ReadFlipMessageDataSource()
-            let isMessageMarkedAsRead: Bool = readFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
+            let content = json[MESSAGE_CONTENT]
             
-            let flipMessageDataSource = FlipMessageDataSource()
-            var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
-            if (entity != nil) {
-                return entity // if the user already has his message do not recreate it
+            var formattedFlips: [FormattedFlip] = Array<FormattedFlip>()
+            for (index: String, flipJson: JSON) in content {
+                let flip = self.createFlipWithJson(flipJson)
+                
+                var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
+                formattedFlips.append(formattedFlip)
             }
             
-            MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-                let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
-                flipMessage = flipMessageDataSourceInContext.createFlipMessageWithJson(json, receivedDate: receivedDate)
+            let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
+            let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource()
+            let isMessageDeleted: Bool = deletedFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
+            
+            // Shouldn't add a message if it already was removed.
+            if (!isMessageDeleted) {
+                let readFlipMessageDataSource: ReadFlipMessageDataSource = ReadFlipMessageDataSource()
+                let isMessageMarkedAsRead: Bool = readFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
                 
-                if (isMessageMarkedAsRead) {
-                    flipMessage?.notRead = false
+                let flipMessageDataSource = FlipMessageDataSource()
+                var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
+                if (entity != nil) {
+                    return entity // if the user already has his message do not recreate it
                 }
                 
-                flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user!, formattedFlips: formattedFlips, andRoom: room, isFromHistory: isFromHistory)
+                MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
+                    let flipMessageDataSourceInContext = FlipMessageDataSource(context: context)
+                    flipMessage = flipMessageDataSourceInContext.createFlipMessageWithJson(json, receivedDate: receivedDate)
+                    
+                    if (isMessageMarkedAsRead) {
+                        flipMessage?.notRead = false
+                    }
+                    flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user, formattedFlips: formattedFlips, andRoom: room, isFromHistory: isFromHistory)
+                }
+                return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage?
             }
-            return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage?
+            
         }
         
         return nil
