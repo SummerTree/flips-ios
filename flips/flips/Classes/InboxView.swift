@@ -197,8 +197,11 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             ActivityIndicatorHelper.showActivityIndicatorAtView(self)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 if let roomId = self.dataSource?.inboxView(self, roomAtIndex: indexPath.row) {
-                    self.dataSource?.inboxView(self, didRemoveRoomAtIndex: indexPath.row)
-                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.dataSource?.inboxView(self, didRemoveRoomAtIndex: indexPath.row)
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+                    })
+
                     let roomDataSource = RoomDataSource()
                     var room = roomDataSource.retrieveRoomWithId(roomId)
                     
@@ -206,10 +209,6 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
                         })
-                    })
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
                     })
                 }
             })
