@@ -12,9 +12,9 @@
 
 extension Room {
     
-    func numberOfUnreadMessages(inContext context: NSManagedObjectContext? = NSManagedObjectContext.MR_defaultContext()) -> Int {
+    func numberOfUnreadMessages() -> Int {
         var notReadMessagesCount = 0
-        let flipMessagesNotRemoved = self.flipMessagesNotRemoved(inContext: context)
+        let flipMessagesNotRemoved = self.flipMessagesNotRemoved()
         for (var i = 0; i < flipMessagesNotRemoved.count; i++) {
             let flipMessage = flipMessagesNotRemoved[i] as FlipMessage
             
@@ -26,23 +26,23 @@ extension Room {
         return notReadMessagesCount
     }
     
-    func oldestNotReadMessage(inContext context: NSManagedObjectContext) -> FlipMessage? {
-        let flipMessageDataSource = FlipMessageDataSource()
+    func oldestNotReadMessage() -> FlipMessage? {
+        let flipMessageDataSource = FlipMessageDataSource(context: self.managedObjectContext!)
         
         var oldestMessageNotRead = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(self.roomID)
         
         if (oldestMessageNotRead == nil) {
-            return self.flipMessagesNotRemoved(inContext: context).lastObject as? FlipMessage
+            return self.flipMessagesNotRemoved().lastObject as? FlipMessage
         }
         
         return oldestMessageNotRead
     }
     
-    func flipMessagesNotRemoved(inContext context: NSManagedObjectContext? = NSManagedObjectContext.MR_defaultContext()) -> NSOrderedSet {
+    func flipMessagesNotRemoved() -> NSOrderedSet {
         var notRemovedMessages = NSMutableOrderedSet()
         
         for (var i = 0; i < self.flipMessages.count; i++) {
-            if let flipMessage: FlipMessage = self.flipMessages[i].inContext(context) as? FlipMessage {
+            if let flipMessage: FlipMessage = self.flipMessages[i] as? FlipMessage {
                 if (!flipMessage.removed.boolValue) {
                     notRemovedMessages.addObject(flipMessage)
                 }
@@ -50,6 +50,12 @@ extension Room {
         }
         
         return notRemovedMessages
+    }
+    
+    func notRemovedFlipMessagesOrderedByReceivedAt() -> [FlipMessage] {
+        var sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: FlipMessageAttributes.RECEIVED_AT, ascending: true)
+        let orderedFlipMessage: [AnyObject] = self.flipMessagesNotRemoved().sortedArrayUsingDescriptors([sortDescriptor])
+        return orderedFlipMessage as [FlipMessage]
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {

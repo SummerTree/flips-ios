@@ -166,7 +166,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 
     // MARK: - New message
 
-    private func processFlipMessageJson(messageJson: JSON, atDate date: NSDate, fromChannelName: String) -> FlipMessage? {
+    private func processFlipMessageJson(messageJson: JSON, atDate date: NSDate, fromChannelName: String, fromHistory: Bool) -> FlipMessage? {
         if (messageJson[MESSAGE_TYPE] == nil) {
             println("Msg ignored")
             return nil
@@ -183,7 +183,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         case MESSAGE_ROOM_INFO_TYPE:
             self.onRoomReceived(messageJson)
         case MESSAGE_FLIPS_INFO_TYPE:
-            return PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName)
+            return PersistentManager.sharedInstance.createFlipMessageWithJson(messageJson, receivedDate: date, receivedAtChannel: fromChannelName, isFromHistory: fromHistory)
         case MESSAGE_READ_INFO_TYPE:
             // Returning the updated flipMessage, so, if it was updated, the app will refresh any screen that is showing the message or has it cached.
             return PersistentManager.sharedInstance.onMarkFlipMessageAsReadReceivedWithJson(messageJson)
@@ -202,7 +202,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
         println("\nMessage received:\n\(messageJson)\n")
 
-        let flipMessage = self.processFlipMessageJson(messageJson, atDate: date, fromChannelName: fromChannelName)
+        let flipMessage = self.processFlipMessageJson(messageJson, atDate: date, fromChannelName: fromChannelName, fromHistory: false)
 
         if (flipMessage != nil) {
             self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
@@ -211,9 +211,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 
     func pubnubClient(client: PubNub!, didReceiveMessageHistory messages: Array<HistoryMessage>, fromChannelName: String) {
         for hMessage in messages {
-            self.processFlipMessageJson(hMessage.message,
-                atDate: hMessage.receivedDate,
-                fromChannelName: fromChannelName)
+            self.processFlipMessageJson(hMessage.message, atDate: hMessage.receivedDate, fromChannelName: fromChannelName, fromHistory: true)
         }
     }
 

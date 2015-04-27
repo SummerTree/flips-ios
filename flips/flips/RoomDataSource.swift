@@ -120,13 +120,13 @@ class RoomDataSource : BaseDataSource {
         
         var myRooms = self.getMyRoomsWithMessages()
         return myRooms.sorted { (room, nextRoom) -> Bool in
-            let roomOldestMessage = room.oldestNotReadMessage(inContext: self.currentContext)
+            let roomOldestMessage = room.oldestNotReadMessage()
             var roomDate = roomOldestMessage?.createdAt
             if (roomDate == nil) {
                 roomDate = now
             }
             
-            let nextRoomOldestMessage = nextRoom.oldestNotReadMessage(inContext: self.currentContext)
+            let nextRoomOldestMessage = nextRoom.oldestNotReadMessage()
             var nextRoomDate = nextRoomOldestMessage?.createdAt
             if (nextRoomDate == nil) {
                 nextRoomDate = now
@@ -141,14 +141,14 @@ class RoomDataSource : BaseDataSource {
         
         var myRooms = self.getMyRoomsWithMessages()
         return myRooms.sorted { (room, nextRoom) -> Bool in
-            let roomMostRecentMessage = room.flipMessagesNotRemoved(inContext: self.currentContext).lastObject as? FlipMessage
-            var roomDate = roomMostRecentMessage?.createdAt
+            let roomMostRecentMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
+            var roomDate = roomMostRecentMessage?.receivedAt
             if (roomDate == nil) {
                 roomDate = now
             }
             
-            let nextRoomMostRecentMessage = nextRoom.flipMessagesNotRemoved(inContext: self.currentContext).lastObject as? FlipMessage
-            var nextRoomDate = nextRoomMostRecentMessage?.createdAt
+            let nextRoomMostRecentMessage = nextRoom.flipMessagesNotRemoved().lastObject as? FlipMessage
+            var nextRoomDate = nextRoomMostRecentMessage?.receivedAt
             if (nextRoomDate == nil) {
                 nextRoomDate = now
             }

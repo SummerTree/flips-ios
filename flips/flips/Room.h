@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSString * pubnubID;
 @property (nonatomic, retain) NSNumber * removed;
 @property (nonatomic, retain) NSString * roomID;
+@property (nonatomic, retain) NSDate * lastMessageFromHistoryReceivedAt;
 @property (nonatomic, retain) User *admin;
 @property (nonatomic, retain) NSOrderedSet *flipMessages;
 @property (nonatomic, retain) NSSet *participants;

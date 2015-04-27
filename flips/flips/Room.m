@@ -22,6 +22,7 @@
 @dynamic pubnubID;
 @dynamic removed;
 @dynamic roomID;
+@dynamic lastMessageFromHistoryReceivedAt;
 @dynamic admin;
 @dynamic flipMessages;
 @dynamic participants;

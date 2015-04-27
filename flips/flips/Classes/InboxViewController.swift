@@ -71,19 +71,17 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
         
-        if (PubNubService.sharedInstance.isConnected()) {
-            let didShowSyncView: Bool = DeviceHelper.sharedInstance.didShowSyncView()
-            if (!didShowSyncView) {
-                self.setupSyncView()
-            } else {
-                PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
-                    self.refreshRooms()
-                })
-            }
+        let didShowSyncView: Bool = DeviceHelper.sharedInstance.didShowSyncView()
+        if (PubNubService.sharedInstance.isConnected() && !didShowSyncView) {
+            self.setupSyncView()
         } else {
             // We don't need to show the Sync in this case. So, we need to mark it as seen.
             DeviceHelper.sharedInstance.setSyncViewShown(true)
             self.shouldInformPubnubNotConnected = true
+            
+            PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                self.refreshRooms()
+            })
         }
     }
     
