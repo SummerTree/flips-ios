@@ -213,7 +213,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         container.mas_makeConstraints { (make) -> Void in
-            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+            var topLayoutGuide: AnyObject = self.topLayoutGuide
             make.top.equalTo()(topLayoutGuide.mas_bottom)
         }
     }
