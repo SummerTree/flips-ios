@@ -25,7 +25,6 @@ public class PubNubService: FlipsService, PNDelegate {
     private let PUBNUB_NON_SUBSCRIPTION_REQUEST_TIMEOUT = 60000
     
     private let LOAD_HISTORY_NUMBER_OF_RETRIES: Int = 5
-    private let loadHistoryQueue: dispatch_queue_t = dispatch_queue_create("LoadHistoryQueue", nil)
     
     private var cryptoHelper: PNCryptoHelper
     
@@ -34,6 +33,7 @@ public class PubNubService: FlipsService, PNDelegate {
     weak var delegate: PubNubServiceDelegate?
     
     private var pubnubConnectionIdentifier: String? // It changes when you disconnect and reconnect
+
     
     // MARK: - Initialization Methods
     
@@ -258,7 +258,8 @@ public class PubNubService: FlipsService, PNDelegate {
         let currentIdentifier: String? = self.pubnubConnectionIdentifier
         
         println("Will start to load history")
-        dispatch_async(self.loadHistoryQueue, { () -> Void in
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
             println("   load history queue running")
             if (currentIdentifier != self.pubnubConnectionIdentifier) {
                 println("Load Messages History - SubscribeOnMyChannels PubNub identifier changed.")
@@ -279,9 +280,8 @@ public class PubNubService: FlipsService, PNDelegate {
             
             var historiesReceived: Int = 0
             for channelProtocol in subscribedChannels {
-                dispatch_group_enter(group)
-
                 if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
+                    dispatch_group_enter(group)
                     self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
                         if (currentIdentifier != self.pubnubConnectionIdentifier) {
                             println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
@@ -296,7 +296,7 @@ public class PubNubService: FlipsService, PNDelegate {
                 }
             }
             
-            dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, Int64(60 * NSEC_PER_SEC)))
+            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             NSLog("HISTORY FETCH ENDED - subscribedChannels.count(\(subscribedChannels.count)) - historiesReceived(\(historiesReceived))")
             
             if (currentIdentifier != self.pubnubConnectionIdentifier) {
