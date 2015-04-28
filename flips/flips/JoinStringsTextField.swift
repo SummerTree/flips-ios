@@ -18,7 +18,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     private var joinedTextRanges : [NSRange] = [NSRange]()
     private let wordCharRegex = NSRegularExpression(pattern: WORD_CHARACTER_PATTERN, options: nil, error: nil)!
-    private var rangeThatWillChange: NSRange? = nil
+    private var rangeThatWillChange: (range: NSRange, text: String)? = nil
     private let WHITESPACE: String = " "
     private let WHITESPACE_CHAR: Character = " "
     let DEFAULT_HEIGHT: CGFloat = 38.0
@@ -298,16 +298,21 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             self.text = self.text.stringByReplacingOccurrencesOfString("\n", withString: " ")
         }
         
-        if let range = self.rangeThatWillChange {
+        if let change = self.rangeThatWillChange {
+            let range = change.range
             var newRanges = [NSRange]()
             for (var i = 0; i < self.joinedTextRanges.count; ++i) {
-                let joinedRange = self.joinedTextRanges[i]
+                var joinedRange = self.joinedTextRanges[i]
+                if (range.location+range.length <= joinedRange.location) {
+                    joinedRange.location += (change.text as NSString).length-range.length
+                }
+                
                 if (range.length == 0) {
                     if (range.location < joinedRange.location || range.location >= joinedRange.location+joinedRange.length) {
                         newRanges.append(joinedRange)
                     }
                 } else {
-                    let intersection = NSIntersectionRange(range, joinedRange)
+                    let intersection = NSIntersectionRange(range, self.joinedTextRanges[i])
                     if (intersection.length == 0) {
                         newRanges.append(joinedRange)
                     }
@@ -338,7 +343,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             return false
         }
         
-        self.rangeThatWillChange = range
+        self.rangeThatWillChange = (range,text)
         return true
     }
     

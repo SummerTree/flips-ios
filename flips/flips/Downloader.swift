@@ -24,8 +24,8 @@ public class Downloader : NSObject {
     // MARK: - Singleton Implementation
     
     public class var sharedInstance : Downloader {
-    struct Static {
-        static let instance : Downloader = Downloader()
+        struct Static {
+            static let instance : Downloader = Downloader()
         }
         return Static.instance
     }
