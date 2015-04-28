@@ -1,5 +1,5 @@
 
-// Copyright 2014 ArcTouch, Inc.
+// Copyright 2015 ArcTouch, Inc.
 // All rights reserved.
 //
 // This file, its contents, concepts, methods, behavior, and operation
