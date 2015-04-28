@@ -35,6 +35,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         super.init(frame: CGRect.zeroRect, textContainer: nil)
         self.returnKeyType = .Next
         self.delegate = self
+        self.backgroundColor = UIColor.clearColor()
     }
     
     override init(frame: CGRect, textContainer: NSTextContainer!) {
