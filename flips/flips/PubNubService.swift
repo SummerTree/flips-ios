@@ -470,7 +470,9 @@ public class PubNubService: FlipsService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didDisconnectFromOrigin origin: String!, withError error: PNError!) {
         println("pubnubClient didDisconnectFromOrigin withError \(error)")
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        if let loggedUser: User = User.loggedUser() {
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        }
     }
     
     public func pubnubClient(client: PubNub!, connectionDidFailWithError error: PNError!) {
