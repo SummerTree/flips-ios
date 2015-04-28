@@ -53,4 +53,6 @@
 
 #import "DAKeyboardControl.h"
 
+#import "FlipsUINavigationController.h"
+
 #endif

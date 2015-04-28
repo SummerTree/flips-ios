@@ -195,7 +195,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewC
             var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
             tutorialViewController.viewDelegate = self
 
-            let navigationController = UINavigationController(rootViewController: tutorialViewController)
+            let navigationController = FlipsUINavigationController(rootViewController: tutorialViewController)
             self.presentViewController(navigationController, animated: false, completion: nil)
             
             OnboardingHelper.setOnboardingHasShown()

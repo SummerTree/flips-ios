@@ -101,8 +101,11 @@
 		731F38CD1AE44D4600171507 /* AvatarCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F38CC1AE44D4600171507 /* AvatarCache.swift */; };
 		7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8071A89624F00446CD8 /* CacheJournal.swift */; };
 		7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7330F8091A89670300446CD8 /* JournalEntry.swift */; };
+		736B01641AF041D10002329D /* FlipsUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */; };
+		736B01651AF041D10002329D /* FlipsUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */; };
 		736F65D11AE5ACE800E4C4D3 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */; };
 		736F65D31AE5AD9600E4C4D3 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */; };
+		73D63F201AF0323B000EC678 /* FlipsUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */; };
 		73D7279A1A83E7A1006DCC92 /* StorageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D727991A83E7A1006DCC92 /* StorageCache.swift */; };
 		7A03911C1A1CFD8300846BA1 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
 		7A07EB961AC07AC60002DE18 /* GroupParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07EB951AC07AC60002DE18 /* GroupParticipantsView.swift */; };
@@ -755,6 +758,8 @@
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		73D63F1E1AF031FD000EC678 /* FlipsUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipsUINavigationController.h; sourceTree = "<group>"; };
+		73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipsUINavigationController.m; sourceTree = "<group>"; };
 		73D727991A83E7A1006DCC92 /* StorageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageCache.swift; sourceTree = "<group>"; };
 		7A03911B1A1CFD8300846BA1 /* MessageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
 		7A07EB951AC07AC60002DE18 /* GroupParticipantsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupParticipantsView.swift; sourceTree = "<group>"; };
@@ -1237,6 +1242,8 @@
 				7AB7D3D31AC1927100DA8342 /* UITableViewCellExtensions.swift */,
 				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
 				70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */,
+				73D63F1E1AF031FD000EC678 /* FlipsUINavigationController.h */,
+				73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -2077,6 +2084,7 @@
 				A2A5C6D719FEBC3500E4CB2C /* FlipsView.swift in Sources */,
 				7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
+				73D63F201AF0323B000EC678 /* FlipsUINavigationController.m in Sources */,
 				07B66B311A147B5800407A28 /* MBContactModel.m in Sources */,
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
@@ -2374,6 +2382,7 @@
 				BE245FED1AD2D95900859233 /* ProgressBar.swift in Sources */,
 				BE245FEE1AD2D95900859233 /* PrivacyPolicyController.swift in Sources */,
 				BE245FEF1AD2D95900859233 /* RoomDataSource.swift in Sources */,
+				736B01641AF041D10002329D /* FlipsUINavigationController.m in Sources */,
 				BE245FF01AD2D95900859233 /* RoomService.swift in Sources */,
 				BE245FF11AD2D95900859233 /* PrivacyPolicyView.swift in Sources */,
 				BE245FF21AD2D95900859233 /* StorageCache.swift in Sources */,
@@ -2585,6 +2594,7 @@
 				BE2460C71AD2D9C600859233 /* ProgressBar.swift in Sources */,
 				BE2460C81AD2D9C600859233 /* PrivacyPolicyController.swift in Sources */,
 				BE2460C91AD2D9C600859233 /* RoomDataSource.swift in Sources */,
+				736B01651AF041D10002329D /* FlipsUINavigationController.m in Sources */,
 				BE2460CA1AD2D9C600859233 /* RoomService.swift in Sources */,
 				BE2460CB1AD2D9C600859233 /* PrivacyPolicyView.swift in Sources */,
 				BE2460CC1AD2D9C600859233 /* StorageCache.swift in Sources */,
