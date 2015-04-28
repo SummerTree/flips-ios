@@ -193,8 +193,7 @@ class PlayerView: UIView {
             
             if (!isLoadingStarted) {
                 // Retry after half second
-                let oneSecond = 0.5 * Double(NSEC_PER_SEC)
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
                 dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
                     var isLoadingStarted: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
                         self.play()
@@ -549,18 +548,13 @@ class PlayerView: UIView {
                         }
 
                         var thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
-                        
+
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (currentIdentifier != self.contentIdentifier) {
                                 return
                             }
 
                             self.thumbnailView.image = thumbnail
-                            self.thumbnailView.alpha = 0
-                            UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-                                self.thumbnailView.alpha = 1
-                            })
-                            self.thumbnailView.hidden = self.isPlaying
                         })
                     }, failure: { (url: String!, flipError: FlipError) -> Void in
                         println("Failed to get resource from cache, error: \(error)")
@@ -573,11 +567,6 @@ class PlayerView: UIView {
                     }
 
                     self.thumbnailView.image = UIImage(named: "Empty_Flip_Thumbnail")
-                    self.thumbnailView.alpha = 0
-                    UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-                        self.thumbnailView.alpha = 1
-                    })
-                    self.thumbnailView.hidden = self.isPlaying
                 })
             }
         }
