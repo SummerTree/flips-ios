@@ -52,9 +52,14 @@ public class ContactListHelperContact {
 
         if (authorizationStatus == ABAuthorizationStatus.Authorized) {
             success(self.retrieveContacts())
-
         } else if (authorizationStatus == ABAuthorizationStatus.NotDetermined) {
             let addressBook: ABAddressBook? = ABAddressBookCreateWithOptions(nil, nil)?.takeRetainedValue()
+            
+            if (addressBook == nil) {
+                failure(NSLocalizedString("Denied", comment: "Denied"))
+                return
+            }
+            
             ABAddressBookRequestAccessWithCompletion(addressBook) { (granted, error) -> Void in
                 if (!granted) {
                     failure(NSLocalizedString("Denied", comment: "Denied"))
