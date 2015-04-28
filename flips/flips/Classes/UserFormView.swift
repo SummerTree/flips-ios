@@ -23,6 +23,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     private let BIRTHDAY_FIELD_NUMBER_OF_CHARACTERS = 10
     private let BIRTHDAY_FIRST_SEPARATOR_POSITION = 2
     private let BIRTHDAY_SECOND_SEPARATOR_POSITION = 5
+    private let DATE_PICKER_DEFAULT_YEAR = 2000
     private let BIRTHDAY_MONTH_CHARACTER = NSLocalizedString("M", comment: "Month Abreviation")
     private let BIRTHDAY_DAY_CHARACTER = NSLocalizedString("D", comment: "Day Abreviation")
     private let BIRTHDAY_YEAR_CHARACTER = NSLocalizedString("Y", comment: "Year Abreviation")
@@ -86,6 +87,10 @@ class UserFormView : UIView, UITextFieldDelegate {
 		birthdayDatePicker = UIDatePicker()
 		birthdayDatePicker.datePickerMode = UIDatePickerMode.Date
 		birthdayDatePicker.maximumDate = NSDate()
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = NSDateComponents()
+        components.year = DATE_PICKER_DEFAULT_YEAR
+        birthdayDatePicker.date = calendar!.dateFromComponents(components)!
 		birthdayDatePicker.addTarget(self, action: "birthdaySelected:", forControlEvents: UIControlEvents.ValueChanged)
 		
 		birthdayTextField.inputView = birthdayDatePicker
