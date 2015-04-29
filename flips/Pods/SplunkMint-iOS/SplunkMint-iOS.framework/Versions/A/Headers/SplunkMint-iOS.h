@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 SLK. All rights reserved.
 //
 
-#import <SplunkMint-iOS/BugSenseBase.h>
 #import <SplunkMint-iOS/MintBase.h>
 
 #import <SplunkMint-iOS/TypeBlocks.h>
@@ -14,7 +13,6 @@
 #import <SplunkMint-iOS/NSDate+DateExtensions.h>
 #import <SplunkMint-iOS/NSString+Extensions.h>
 
-#import <SplunkMint-iOS/BugSense.h>
 #import <SplunkMint-iOS/Mint.h>
 
 #import <SplunkMint-iOS/EnumStringHelper.h>
@@ -52,13 +50,14 @@
 #import <SplunkMint-iOS/MintResponseResult.h>
 #import <SplunkMint-iOS/MintResult.h>
 #import <SplunkMint-iOS/MintTransaction.h>
-#import <SplunkMint-iOS/Transaction.h>
+#import <SplunkMint-iOS/SPLTransaction.h>
 #import <SplunkMint-iOS/TransactionResult.h>
 #import <SplunkMint-iOS/TransactionStartResult.h>
 #import <SplunkMint-iOS/TransactionStopResult.h>
 #import <SplunkMint-iOS/TrStart.h>
 #import <SplunkMint-iOS/TrStop.h>
 #import <SplunkMint-iOS/UnhandledCrashReportArgs.h>
+#import <SplunkMint-iOS/XamarinHelper.h>
 
 #import <SplunkMint-iOS/SPLJSONValueTransformer.h>
 #import <SplunkMint-iOS/SPLJSONKeyMapper.h>
@@ -69,7 +68,6 @@
 #import <SplunkMint-iOS/SPLJSONModelArray.h>
 
 #import <SplunkMint-iOS/MintLogger.h>
-
 #import <SplunkMint-iOS/ContentTypeDelegate.h>
 #import <SplunkMint-iOS/DeviceInfoDelegate.h>
 #import <SplunkMint-iOS/ExceptionManagerDelegate.h>

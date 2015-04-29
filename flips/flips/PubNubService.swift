@@ -478,6 +478,29 @@ public class PubNubService: FlipsService, PNDelegate {
     public func pubnubClient(client: PubNub!, connectionDidFailWithError error: PNError!) {
         println("pubnubClient connectionDidFailWithError \(error)")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        var dataList: LimitedExtraDataList = LimitedExtraDataList()
+        if (error != nil) {
+            dataList.addWithKey("description", andValue: "\(error.description)")
+            dataList.addWithKey("localizedDescription", andValue: "\(error.localizedDescription)")
+        }
+        
+        dataList.addWithKey("internetStatus", andValue: NetworkReachabilityHelper.sharedInstance.hasInternetConnection() ? "true" : "false")
+
+        if let loggedUser: User = User.loggedUser() {
+            Mint.sharedInstance().logEventAsyncWithTag("PubnubClientConnectionDidFail - user(\(loggedUser.userID))", limitedExtraDataList: dataList , completionBlock: { (logResult:MintLogResult!) -> Void in
+                let result = logResult.resultState.value == OKResultState.value ? "OK" : "Failed"
+                println("Log Event Result:\(result)")
+            })
+        }
+    }
+    
+    public func shouldReconnectPubNubClient(client: PubNub!) -> NSNumber! {
+        return true
+    }
+    
+    public func shouldResubscribeOnConnectionRestore() -> NSNumber! {
+        return true
     }
     
     

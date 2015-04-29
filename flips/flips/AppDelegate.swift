@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let BUGSENSE_KEY = "2b57f78e"
     private let FLURRY_KEY = "7CCBCSMWJQ395RJKDP5Y"
     
-    private var isAppActive: Bool = false
-    
     var window: UIWindow?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -85,7 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidEnterBackground(application: UIApplication) {
-        self.isAppActive = false
         if let loggedUser = User.loggedUser() {
             application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()
         }
