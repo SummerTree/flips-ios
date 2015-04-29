@@ -2,13 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Slide5-2.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Slide5-1.png"
+      "filename" : "Carousel_Slide5@2x.png"
     },
     {
       "idiom" : "universal",
