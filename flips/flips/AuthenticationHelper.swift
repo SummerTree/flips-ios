@@ -75,7 +75,9 @@ public class AuthenticationHelper: NSObject {
                 }
             }
         }
-
+        
+        PubNubService.sharedInstance.disconnect()
+        
         FBSession.activeSession().closeAndClearTokenInformation()
         FBSession.activeSession().close()
         FBSession.setActiveSession(nil)
@@ -92,8 +94,6 @@ public class AuthenticationHelper: NSObject {
         BlurredThumbnailsCache.sharedInstance.clear()
         AvatarCache.sharedInstance.clear()
 
-        PubNubService.sharedInstance.disconnect()
-        
         self.resetTimestampForStockFlips()
         
     }
