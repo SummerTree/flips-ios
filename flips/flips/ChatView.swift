@@ -82,9 +82,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.isViewDisappearing = false
         self.tableView.reloadData()
         
-        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
@@ -108,9 +106,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.indexPathToShow = nil
         self.isViewDisappearing = true
         
-        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        }
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         
         let visibleCells = tableView.visibleCells()
         for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
@@ -513,9 +509,11 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Keyboard handler
     
     func keyboardDidShow(notification: NSNotification) {
-        let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
-        keyboardHeight = keyboardFrame.height as CGFloat
+        if (DeviceHelper.sharedInstance.systemVersion() < 8) {
+            let info = notification.userInfo!
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            keyboardHeight = keyboardFrame.height as CGFloat
+        }
         handleReplyTextFieldSize()
     }
     
