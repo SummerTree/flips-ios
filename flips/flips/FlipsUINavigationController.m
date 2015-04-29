@@ -20,10 +20,16 @@
     }
     
     if (self.busyAnimating) {
+        NSLog(@"Not pushing a new view controller because we're already busy pushing another.");
         return;
     }
     
-    self.busyAnimating = YES;
+    if (self.delegate == self) {
+        self.busyAnimating = YES;
+    } else {
+        NSLog(@"FlipsUINavigationController was expecting to be its own delegate.");
+    }
+    
     [super pushViewController:viewController animated:animated];
 }
 
