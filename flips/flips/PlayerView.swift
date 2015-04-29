@@ -38,7 +38,6 @@ class PlayerView: UIView {
     private var playButtonView: UIImageView!
     private var retryButtonView: UIImageView!
     private var retryLabel: UILabel!
-    private var activityIndicator: UIActivityIndicatorView!
     private var progressBarView: ProgressBar!
 
     weak var delegate: PlayerViewDelegate?
@@ -164,9 +163,7 @@ class PlayerView: UIView {
                 if (currentIdentifier != self.contentIdentifier) {
                     return
                 }
-                
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-                
+
                 if let playerItem: FlipPlayerItem = player?.currentItem as? FlipPlayerItem {
                     if ((self.words != nil) && (self.words?.count > playerItem.order)) {
                         self.setWord(self.words![playerItem.order])
