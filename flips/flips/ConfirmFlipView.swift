@@ -61,37 +61,31 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         self.videoPlayerView.loadPlayerOnInit = true
         self.addSubview(self.videoPlayerView)
         
-        rejectButton = UIButton()
-        rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
-        rejectButton.backgroundColor = UIColor.flipOrange()
-        rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
-        self.addSubview(rejectButton)
+        self.rejectButton = UIButton()
+        self.rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
+        self.rejectButton.backgroundColor = UIColor.flipOrange()
+        self.rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(self.rejectButton)
         
-        acceptButton = UIButton()
-        acceptButton.setImage(UIImage(named: "Approve"), forState: UIControlState.Normal)
-        acceptButton.backgroundColor = UIColor.avacado()
-        acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
-        self.addSubview(acceptButton)
+        self.acceptButton = UIButton()
+        self.acceptButton.setImage(UIImage(named: "Approve"), forState: UIControlState.Normal)
+        self.acceptButton.backgroundColor = UIColor.avacado()
+        self.acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(self.acceptButton)
         
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
-        activityIndicator.backgroundColor = UIColor.blackColor()
-        activityIndicator.alpha = 0
-        activityIndicator.layer.cornerRadius = 8
-        activityIndicator.layer.masksToBounds = true
-        self.addSubview(activityIndicator)
-        
-        activityIndicator.mas_makeConstraints { (make) -> Void in
-            make.center.equalTo()(self)
-            make.width.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
-            make.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
-        }
+        self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+        self.activityIndicator.backgroundColor = UIColor.blackColor()
+        self.activityIndicator.alpha = 0
+        self.activityIndicator.layer.cornerRadius = 8
+        self.activityIndicator.layer.masksToBounds = true
+        self.addSubview(self.activityIndicator)
     }
 
     func makeConstraints() {
-        self.videoPlayerView.mas_makeConstraints { (make) -> Void in
+        self.videoPlayerView.mas_remakeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.right.equalTo()(self)
-            
+
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
                 make.height.equalTo()(self.LOW_RES_VIDEO_WIDTH + (2 * self.LOW_RES_VIDEO_MARGIN))
             } else {
@@ -101,22 +95,29 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         
         // asking help to delegate to align the container with navigation bar
         self.delegate?.confirmFlipViewMakeConstraintToNavigationBarBottom(videoPlayerView)
-        
-        rejectButton.mas_makeConstraints { (make) -> Void in
+
+        self.rejectButton.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.videoPlayerView.mas_bottom)
             make.left.equalTo()(self)
             make.right.equalTo()(self.mas_centerX)
             make.bottom.equalTo()(self)
         }
-        
-        acceptButton.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.rejectButton)
-            make.left.equalTo()(self.rejectButton.mas_right)
+
+        self.acceptButton.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.videoPlayerView.mas_bottom)
+            make.left.equalTo()(self.mas_centerX)
             make.right.equalTo()(self)
             make.bottom.equalTo()(self)
         }
+
+        self.activityIndicator.mas_makeConstraints { (make) -> Void in
+            make.center.equalTo()(self)
+            make.width.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+            make.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+        }
+
     }
-    
+
     
     // MARK: - Action buttons
     
