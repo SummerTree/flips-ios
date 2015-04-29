@@ -59,11 +59,14 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        if (FBSession.activeSession().state == FBSessionState.CreatedTokenLoaded) {
-            splashScreenViewAttemptLoginWithFacebook()
-        } else {
-            splashScreenViewAttemptLogin()
-        }
+        //Dispatching cause we need to wait until the SplashScreen is done being pushed before pushing another controller.
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            if (FBSession.activeSession().state == FBSessionState.CreatedTokenLoaded) {
+                self.splashScreenViewAttemptLoginWithFacebook()
+            } else {
+                self.splashScreenViewAttemptLogin()
+            }
+        })
     }
 
     override func viewDidLoad() {

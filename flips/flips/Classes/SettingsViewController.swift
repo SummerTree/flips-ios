@@ -112,7 +112,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate, Tutori
                 let userId = user.userID
                 SessionService.sharedInstance.checkSession(userId, { (success) -> Void in
                     let importContactViewController = ImportContactViewController()
-                    let navigationController = UINavigationController(rootViewController: importContactViewController)
+                    let navigationController = FlipsUINavigationController(rootViewController: importContactViewController)
                     self.presentViewController(navigationController, animated: true, completion: nil)
                 }, failure: { (error) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in

@@ -144,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func openSplashScreen(roomID: String? = nil, andFlipMessageID flipMessageID: String? = nil) {
         let splashScreenViewController = SplashScreenViewController(roomID: roomID, flipMessageID: flipMessageID)
-        let navigationViewControler = UINavigationController(rootViewController: splashScreenViewController)
+        let navigationViewControler = FlipsUINavigationController(rootViewController: splashScreenViewController)
         self.window?.rootViewController = navigationViewControler
         self.window?.makeKeyAndVisible()
     }

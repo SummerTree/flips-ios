@@ -262,7 +262,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {
         var settingsViewController = SettingsViewController()
-        var navigationController = UINavigationController(rootViewController: settingsViewController)
+        var navigationController = FlipsUINavigationController(rootViewController: settingsViewController)
         
         settingsViewController.modalPresentationStyle = UIModalPresentationStyle.FullScreen;
         self.presentViewController(navigationController, animated: true, completion: nil)
