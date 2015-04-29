@@ -306,6 +306,10 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
         return isVisible
     }
+
+    func playerViewShouldShowPlayButtonOnInitialState(playerView: PlayerView) -> Bool {
+        return true
+    }
     
     
     // MARK: - Memory Management
