@@ -284,7 +284,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             let flipWord = self.flipWords[self.highlightedWordIndex]
             
             if (flipWord.associatedFlipId != nil) {
-                self.composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text)
                 self.showFlipCreatedState(flipWord.associatedFlipId!)
             } else {
                 let flipDataSource = FlipDataSource()
