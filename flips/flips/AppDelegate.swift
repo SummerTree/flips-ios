@@ -72,8 +72,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(application: UIApplication) {
-        application.applicationIconBadgeNumber = 0
-        FBAppCall.handleDidBecomeActive()
+        self.checkSession(
+            {() -> Void in
+                application.applicationIconBadgeNumber = 0
+                FBAppCall.handleDidBecomeActive()
+            }, failureBlock: { (error) -> Void in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if let flipError: FlipError = error {
+                        let alertMessage = UIAlertView(title: flipError.error, message: flipError.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                        alertMessage.show()
+                    }
+                })
+            })
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -159,6 +169,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     NavigationHandler.sharedInstance.showThreadScreenForRoomId(roomId, andFlipMessageID: flipMessageId)
                 }
             }
+        }
+    }
+    
+    private func checkSession(successBlock: () -> (), failureBlock: (FlipError?) -> ()) {
+        if let user = User.loggedUser()? {
+            let userId = user.userID
+            SessionService.sharedInstance.checkSession(
+                userId,
+                success: { (success) -> Void in
+                    successBlock()
+                },
+                failure: { (error) -> Void in
+                    failureBlock(error?)
+                }
+            )
+        } else {
+            successBlock()
         }
     }
 }
