@@ -29,7 +29,7 @@ PODS:
   - MagicalRecord/Shorthand (2.2)
   - Masonry (0.5.3)
   - PubNub (3.7.10.6)
-  - SplunkMint-iOS (4.0.21)
+  - SplunkMint-iOS (4.1)
 
 DEPENDENCIES:
   - AFNetworking (= 2.4.1)
@@ -38,7 +38,7 @@ DEPENDENCIES:
   - MagicalRecord/Shorthand (= 2.2)
   - Masonry (= 0.5.3)
   - PubNub (= 3.7.10.6)
-  - SplunkMint-iOS (= 4.0.21)
+  - SplunkMint-iOS (= 4.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 41d45d2c14219af0fa5addf3cfd433a002c13c9f
@@ -48,6 +48,6 @@ SPEC CHECKSUMS:
   MagicalRecord: f8a56bb87ab6552f20c4bb8681a1958a197ea3cd
   Masonry: 9f515466afe48632562342a40a1c224071a1a022
   PubNub: be1486964b34b90fe58609472537411f5dca1559
-  SplunkMint-iOS: a385c3eaef53b32de639b2d31db753361917b380
+  SplunkMint-iOS: 514a7cfdc38cc9fadab99826a093c3615cd4a5d0
 
 COCOAPODS: 0.36.0

@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Transaction.h"
+#import "SPLTransaction.h"
 #import "MintAppEnvironment.h"
 #import "MintPerformance.h"
+#import "LimitedExtraDataList.h"
 
-@interface TrStart : Transaction
+@interface TrStart : SPLTransaction
 
 //@property (nonatomic, strong) NSNumber<Ignore>* slaInMilliseconds;
 
@@ -27,6 +28,8 @@
  *  @return A reference to the TrStart instance.
  */
 + (TrStart*) getInstanceWithTransactionName:(NSString*)transactionName appEnvironment:(MintAppEnvironment*)anAppEnvironment andPerformance:(MintPerformance*)aPerformance;
+
++ (TrStart*) getInstanceWithTransactionName:(NSString*)transactionName limitedExtraDataList:(LimitedExtraDataList*)extraDataList appEnvironment:(MintAppEnvironment*)anAppEnvironment andPerformance:(MintPerformance*)aPerformance;
 
 + (BOOL) isJSONTrStart:(NSString*)json;
 
