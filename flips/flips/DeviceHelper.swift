@@ -181,5 +181,6 @@ public class DeviceHelper: NSObject {
     func setSyncViewShown(value: Bool) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setBool(value, forKey: SYNC_VIEW_SHOWN)
+        userDefaults.synchronize()
     }
 }
