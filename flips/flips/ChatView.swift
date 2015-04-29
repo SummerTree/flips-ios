@@ -516,15 +516,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
         keyboardHeight = keyboardFrame.height as CGFloat
-        
-        var numberOfMessages = dataSource?.numberOfFlipMessages(self) as Int?
-        if (numberOfMessages == nil) {
-            numberOfMessages = 0
-        }
-
-        if (numberOfMessages > 0) {
-            handleReplyTextFieldSize()
-        }
+        handleReplyTextFieldSize()
     }
     
     func keyboardPanningToFrame(frame: CGRect) {
