@@ -170,6 +170,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.updateFlipWordsState()
             self.showContentForHighlightedWord()
         })
+        
+        self.shouldEnableUserInteraction(true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -181,8 +183,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         composeTopViewContainer?.viewWillAppear()
         composeTopViewContainer?.delegate = self
-        
-        self.shouldEnableUserInteraction(true)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -436,8 +436,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSelectFlipWord flipWord: FlipText!) {
         self.highlightedWordIndex = flipWord.position
         
-        // If the user moves to another word while we were showing the audio buttons, that Flip will be discarded.
-        composeBottomViewContainer.hideRecordingView()
         highlightedWordCurrentAssociatedImage = nil
         
         var status : FlipState = flipWord.state
@@ -518,6 +516,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
+        self.hideAudioRecordingView()
         let flipWord = flipWords[highlightedWordIndex]
         let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: self.highlightedWordCurrentAssociatedImage, flipAudio: nil)
         confirmFlipViewController.title = self.composeTitle
@@ -546,7 +545,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     self.navigationItem.rightBarButtonItem?.enabled = false
 
                     self.composeTopViewContainer.showImage(receivedImage, andText: flipWord.text)
-                    self.composeBottomViewContainer.showAudioRecordButton()
+                    self.showAudioRecordingView()
                 })
             } else {
                 println("Capturing picture problem. Image is nil")
@@ -630,6 +629,18 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 self.hideActivityIndicator()
             }
         })
+    }
+    
+    private func showAudioRecordingView() {
+        self.navigationItem.rightBarButtonItem?.enabled = false
+        self.flipMessageWordListView.setEnabled(false)
+        self.composeBottomViewContainer.showAudioRecordButton()
+    }
+    
+    private func hideAudioRecordingView() {
+        self.navigationItem.rightBarButtonItem?.enabled = true
+        self.flipMessageWordListView.setEnabled(true)
+        self.composeBottomViewContainer.hideRecordingView()
     }
     
     private func onFlipSelected(flipId: String) {
@@ -717,7 +728,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         let flipWord = flipWords[highlightedWordIndex]
         composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
-        composeBottomViewContainer.showAudioRecordButton()
+        self.showAudioRecordingView()
     }
     
     func enableUserInteractionWithComposeView(enable: Bool) {
@@ -736,7 +747,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.highlightedWordCurrentAssociatedImage = croppedImage
         
         composeTopViewContainer.showImage(self.highlightedWordCurrentAssociatedImage!, andText: flipWord.text)
-        composeBottomViewContainer.showAudioRecordButton()
+        self.showAudioRecordingView()
         self.dismissViewControllerAnimated(true, completion: nil)
         
         self.fromCameraRoll = true
@@ -776,7 +787,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             confirmFlipViewController.delegate = self
             confirmFlipViewController.title = self.composeTitle
             self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
-            self.composeBottomViewContainer.hideRecordingView()
+            self.hideAudioRecordingView()
         }
         
         self.fromAudio = true

@@ -27,6 +27,8 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     private var addWordButton: UIButton!
     
+    private var enabled: Bool = true
+    
     weak var delegate: FlipMessageWordListViewDelegate?
     
     weak var dataSource: FlipMessageWordListViewDataSource?
@@ -173,10 +175,19 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     func showPlusButton() {
         addWordButton.hidden = false
     }
+
+    func setEnabled(enabled: Bool) {
+        self.enabled = enabled
+        self.scrollView.scrollEnabled = enabled
+    }
     
     // MARK: - Word Gesture Handlers
     
     func flipWordTapped(gesture: UIGestureRecognizer) {
+        if (!self.enabled) {
+            return
+        }
+        
         let menuController = UIMenuController.sharedMenuController()
         menuController.setMenuVisible(false, animated: true)
         
@@ -294,7 +305,9 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
             scrollView.scrollEnabled = true
         }
         
-        self.delegate?.flipMessageWordListView(self, didSelectFlipWord: flipTextViewToBeCentered.flipText)
+        if (self.enabled) {
+            self.delegate?.flipMessageWordListView(self, didSelectFlipWord: flipTextViewToBeCentered.flipText)
+        }
     }
     
     private func centerScrollViewAtView(view: UIView, animated: Bool = true) {
