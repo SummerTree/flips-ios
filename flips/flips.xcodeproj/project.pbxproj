@@ -104,7 +104,6 @@
 		736B01641AF041D10002329D /* FlipsUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */; };
 		736B01651AF041D10002329D /* FlipsUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */; };
 		736F65D11AE5ACE800E4C4D3 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */; };
-		736F65D31AE5AD9600E4C4D3 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */; };
 		73D63F201AF0323B000EC678 /* FlipsUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */; };
 		73D7279A1A83E7A1006DCC92 /* StorageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D727991A83E7A1006DCC92 /* StorageCache.swift */; };
 		7A03911C1A1CFD8300846BA1 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A03911B1A1CFD8300846BA1 /* MessageService.swift */; };
@@ -633,6 +632,18 @@
 		BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
 		F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22611251AB6FEC4004C875A /* ProgressBar.swift */; };
+		F23E38221AF2E0B2003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
+		F23E38231AF2E0BF003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
+		F23E38241AF2E0C8003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
+		F24F5B661AF2CD7C0053DF35 /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F24F5B651AF2CD7C0053DF35 /* flips-tutorial.mp4 */; };
+		F24F5B671AF2CD7C0053DF35 /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F24F5B651AF2CD7C0053DF35 /* flips-tutorial.mp4 */; };
+		F24F5B681AF2CD7C0053DF35 /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F24F5B651AF2CD7C0053DF35 /* flips-tutorial.mp4 */; };
+		F24F5B6A1AF2CF830053DF35 /* TutorialPageImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24F5B691AF2CF830053DF35 /* TutorialPageImageViewController.swift */; };
+		F24F5B6B1AF2CF830053DF35 /* TutorialPageImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24F5B691AF2CF830053DF35 /* TutorialPageImageViewController.swift */; };
+		F24F5B6C1AF2CF830053DF35 /* TutorialPageImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24F5B691AF2CF830053DF35 /* TutorialPageImageViewController.swift */; };
+		F24F5B6E1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24F5B6D1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift */; };
+		F24F5B6F1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24F5B6D1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift */; };
+		F24F5B701AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24F5B6D1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift */; };
 		F28986991AE6C9D600E8DA05 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */; };
 		F289869A1AE6C9D700E8DA05 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */; };
 		F289869D1AE6F2D100E8DA05 /* TutorialPagesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F289869C1AE6F2D100E8DA05 /* TutorialPagesDataSource.swift */; };
@@ -757,7 +768,6 @@
 		7330F8071A89624F00446CD8 /* CacheJournal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheJournal.swift; sourceTree = "<group>"; };
 		7330F8091A89670300446CD8 /* JournalEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
-		736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		73D63F1E1AF031FD000EC678 /* FlipsUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipsUINavigationController.h; sourceTree = "<group>"; };
 		73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlipsUINavigationController.m; sourceTree = "<group>"; };
 		73D727991A83E7A1006DCC92 /* StorageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageCache.swift; sourceTree = "<group>"; };
@@ -887,6 +897,10 @@
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F22611251AB6FEC4004C875A /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F24F5B651AF2CD7C0053DF35 /* flips-tutorial.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "flips-tutorial.mp4"; sourceTree = "<group>"; };
+		F24F5B691AF2CF830053DF35 /* TutorialPageImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageImageViewController.swift; sourceTree = "<group>"; };
+		F24F5B6D1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageVideoViewController.swift; sourceTree = "<group>"; };
 		F289869C1AE6F2D100E8DA05 /* TutorialPagesDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPagesDataSource.swift; sourceTree = "<group>"; };
 		F28986A01AE6F81200E8DA05 /* TutorialPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialPageViewController.swift; sourceTree = "<group>"; };
 		F29324701A1583B700355A4D /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
@@ -903,6 +917,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F23E38231AF2E0BF003CAAC3 /* MediaPlayer.framework in Frameworks */,
 				7AB1685A19E32DE3004E2162 /* AVFoundation.framework in Frameworks */,
 				ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */,
 			);
@@ -912,6 +927,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F23E38221AF2E0B2003CAAC3 /* MediaPlayer.framework in Frameworks */,
 				BE2460581AD2D95900859233 /* AVFoundation.framework in Frameworks */,
 				BE2460591AD2D95900859233 /* libPods.a in Frameworks */,
 			);
@@ -921,6 +937,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F23E38241AF2E0C8003CAAC3 /* MediaPlayer.framework in Frameworks */,
 				BE2461321AD2D9C600859233 /* AVFoundation.framework in Frameworks */,
 				BE2461331AD2D9C600859233 /* libPods.a in Frameworks */,
 			);
@@ -1156,7 +1173,6 @@
 				7AB1683919E319C7004E2162 /* Take a Picture */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
 				5786B2CF19EEADD900021DD3 /* Thread Screen */,
-				F289869B1AE6CA0200E8DA05 /* Tutorial */,
 				57A3A6BC19D5E2E70043790E /* Verification */,
 				70B560A319D996B900FE4C34 /* Web View */,
 			);
@@ -1761,6 +1777,7 @@
 		BE2E72061A98119400F237BE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F24F5B651AF2CD7C0053DF35 /* flips-tutorial.mp4 */,
 				BE2E72071A98119400F237BE /* empty_video.mov */,
 			);
 			path = Resources;
@@ -1769,6 +1786,7 @@
 		EC5A81A5795A49A3B7523B70 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */,
 				7AB1685919E32DE3004E2162 /* AVFoundation.framework */,
 				57D2A0A019D3240E00FA729D /* Foundation.framework */,
 				C3E055BF9E4B434289F06FD3 /* libPods.a */,
@@ -1791,14 +1809,8 @@
 			children = (
 				736F65D01AE5ACE800E4C4D3 /* TutorialViewController.swift */,
 				F28986A01AE6F81200E8DA05 /* TutorialPageViewController.swift */,
-			);
-			name = Tutorial;
-			sourceTree = "<group>";
-		};
-		F289869B1AE6CA0200E8DA05 /* Tutorial */ = {
-			isa = PBXGroup;
-			children = (
-				736F65D21AE5AD9600E4C4D3 /* TutorialView.swift */,
+				F24F5B691AF2CF830053DF35 /* TutorialPageImageViewController.swift */,
+				F24F5B6D1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift */,
 			);
 			name = Tutorial;
 			sourceTree = "<group>";
@@ -1945,6 +1957,7 @@
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
+				F24F5B661AF2CD7C0053DF35 /* flips-tutorial.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1956,6 +1969,7 @@
 				BE24605C1AD2D95900859233 /* NewFlip.storyboard in Resources */,
 				BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */,
 				BE24605F1AD2D95900859233 /* Images.xcassets in Resources */,
+				F24F5B671AF2CD7C0053DF35 /* flips-tutorial.mp4 in Resources */,
 				BE2460611AD2D95900859233 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1968,6 +1982,7 @@
 				BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */,
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
 				BE2461391AD2D9C600859233 /* Images.xcassets in Resources */,
+				F24F5B681AF2CD7C0053DF35 /* flips-tutorial.mp4 in Resources */,
 				BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2081,6 +2096,7 @@
 				5741569F19D33F30006F0A2F /* NSDateExtension.swift in Sources */,
 				70FD4E7B19D064450024EBDB /* LoginViewController.swift in Sources */,
 				7A8A964F19E2323300FB5515 /* MessagesTopViewDelegate.swift in Sources */,
+				F24F5B6A1AF2CF830053DF35 /* TutorialPageImageViewController.swift in Sources */,
 				A2A5C6D719FEBC3500E4CB2C /* FlipsView.swift in Sources */,
 				7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
@@ -2123,6 +2139,7 @@
 				0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
 				7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */,
+				F24F5B6E1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
 				705EF07D19F9768A00D4CF74 /* ConfirmFlipViewController.swift in Sources */,
@@ -2183,7 +2200,6 @@
 				A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */,
-				736F65D31AE5AD9600E4C4D3 /* TutorialView.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
 				07CB53721A3E4A3C00853A78 /* UIAlertViewExtensions.swift in Sources */,
@@ -2294,6 +2310,7 @@
 				BE245F991AD2D95900859233 /* LoginViewController.swift in Sources */,
 				BE245F9A1AD2D95900859233 /* MessagesTopViewDelegate.swift in Sources */,
 				BE245F9C1AD2D95900859233 /* FlipsView.swift in Sources */,
+				F24F5B6B1AF2CF830053DF35 /* TutorialPageImageViewController.swift in Sources */,
 				BE245F9D1AD2D95900859233 /* JournalEntry.swift in Sources */,
 				BE245F9E1AD2D95900859233 /* ConfirmPictureViewDelegate.swift in Sources */,
 				BE245F9F1AD2D95900859233 /* MBContactModel.m in Sources */,
@@ -2336,6 +2353,7 @@
 				BE245FC01AD2D95900859233 /* flips.xcdatamodeld in Sources */,
 				BE245FC11AD2D95900859233 /* NotificationMessageView.swift in Sources */,
 				BE245FC21AD2D95900859233 /* ComposeViewController.swift in Sources */,
+				F24F5B6F1AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift in Sources */,
 				BE245FC31AD2D95900859233 /* ConfirmFlipViewController.swift in Sources */,
 				BE245FC41AD2D95900859233 /* InboxViewController.swift in Sources */,
 				BE245FC51AD2D95900859233 /* BuilderWord.m in Sources */,
@@ -2506,6 +2524,7 @@
 				BE2460731AD2D9C600859233 /* LoginViewController.swift in Sources */,
 				BE2460741AD2D9C600859233 /* MessagesTopViewDelegate.swift in Sources */,
 				BE2460761AD2D9C600859233 /* FlipsView.swift in Sources */,
+				F24F5B6C1AF2CF830053DF35 /* TutorialPageImageViewController.swift in Sources */,
 				BE2460771AD2D9C600859233 /* JournalEntry.swift in Sources */,
 				BE2460781AD2D9C600859233 /* ConfirmPictureViewDelegate.swift in Sources */,
 				BE2460791AD2D9C600859233 /* MBContactModel.m in Sources */,
@@ -2548,6 +2567,7 @@
 				BE24609A1AD2D9C600859233 /* flips.xcdatamodeld in Sources */,
 				BE24609B1AD2D9C600859233 /* NotificationMessageView.swift in Sources */,
 				BE24609C1AD2D9C600859233 /* ComposeViewController.swift in Sources */,
+				F24F5B701AF2CFDD0053DF35 /* TutorialPageVideoViewController.swift in Sources */,
 				BE24609D1AD2D9C600859233 /* ConfirmFlipViewController.swift in Sources */,
 				BE24609E1AD2D9C600859233 /* InboxViewController.swift in Sources */,
 				BE24609F1AD2D9C600859233 /* BuilderWord.m in Sources */,
