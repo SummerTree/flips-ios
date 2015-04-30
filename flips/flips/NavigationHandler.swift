@@ -75,27 +75,39 @@ public class NavigationHandler : NSObject {
         alertView.show()
     }
     
-    func showThreadScreenForRoomId(roomId: String, andFlipMessageID flipMessageID: String) {
+    func showThreadScreenForRoomId(roomId: String, andFlipMessageID flipMessageID: String?) {
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController: UIViewController = keyWindow.rootViewController {
                 if (rootViewController is UINavigationController) {
                     let rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
+                    let roomDataSource = RoomDataSource()
+                    let room = roomDataSource.getRoomById(roomId)
                     
                     let completionBlock: () -> Void = { () -> Void in
-                        var inboxViewController: UIViewController? = nil
-                        for viewController in rootNavigationViewController.childViewControllers {
-                            if (viewController is InboxViewController) {
-                                inboxViewController = viewController as? UIViewController
-                                rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
-                                break
-                            }
-                        }
+                        var inboxViewController: InboxViewController? = nil
                         
-                        if (inboxViewController != nil) {
-                            let roomDataSource = RoomDataSource()
-                            let room = roomDataSource.retrieveRoomWithId(roomId)
-                            let chatViewController: UIViewController = ChatViewController(room: room, andFlipMessageIdFromPushNotification: flipMessageID)
-                            rootNavigationViewController.pushViewController(chatViewController, animated: true)
+                        if (room != nil) {
+                            for viewController in rootNavigationViewController.childViewControllers {
+                                if (viewController is InboxViewController) {
+                                    inboxViewController = viewController as? InboxViewController
+                                    rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
+                                    break
+                                }
+                            }
+                            
+                            if (inboxViewController != nil) {
+                                let chatViewController: UIViewController = ChatViewController(room: room!, andFlipMessageIdFromPushNotification: flipMessageID)
+                                rootNavigationViewController.pushViewController(chatViewController, animated: true)
+                            }
+                        } else {
+                            for viewController in rootNavigationViewController.childViewControllers {
+                                if (viewController is InboxViewController) {
+                                    inboxViewController = viewController as? InboxViewController
+                                    inboxViewController?.prepareToLoadPushNotificationForRoomId(roomId, andFlipMessageId: nil)
+                                    rootNavigationViewController.popToViewController(inboxViewController!, animated: false)
+                                    break
+                                }
+                            }
                         }
                     }
                     
