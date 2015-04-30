@@ -18,7 +18,9 @@ class PlayerView: UIView {
     let BUTTONS_ALPHA: CGFloat = 0.6
     let PROGRESS_BAR_PADDING: CGFloat = 30
     let PROGRESS_BAR_HEIGHT: CGFloat = 10
-    
+    let RETRY_LABEL_PADDING: CGFloat = 10
+    let RETRY_LABEL_CORNER_RADIUS: CGFloat = 10
+
     var isPlaying = false
     var loadPlayerOnInit = false
     var playInLoop = false
@@ -36,7 +38,7 @@ class PlayerView: UIView {
     private var wordLabel: UILabel!
     private var thumbnailView: UIImageView!
     private var playButtonView: UIImageView!
-    private var retryButtonView: UIImageView!
+//    private var retryButtonView: UIImageView!
     private var retryLabel: UILabel!
     private var progressBarView: ProgressBar!
 
@@ -332,7 +334,7 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 1.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 0.0
-        self.retryButtonView.alpha = self.BUTTONS_ALPHA
+//        self.retryButtonView.alpha = self.BUTTONS_ALPHA
         self.retryLabel.alpha = 1.0
     }
 
@@ -340,7 +342,7 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 1.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 1.0
-        self.retryButtonView.alpha = 0.0
+//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -348,7 +350,7 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 0.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 0.0
-        self.retryButtonView.alpha = 0.0
+//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -357,7 +359,7 @@ class PlayerView: UIView {
         self.playButtonView.alpha = self.BUTTONS_ALPHA
         self.progressBarView.alpha = 0.0
         self.progressBarView.progress = 0.0
-        self.retryButtonView.alpha = 0.0
+//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -373,7 +375,7 @@ class PlayerView: UIView {
 
         self.progressBarView.alpha = 0.0
         self.progressBarView.progress = 0.0
-        self.retryButtonView.alpha = 0.0
+//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -724,10 +726,10 @@ class PlayerView: UIView {
         self.playButtonView.image = UIImage(named: "PlayButton")
         self.addSubview(self.playButtonView)
 
-        self.retryButtonView = UIImageView()
-        self.retryButtonView.contentMode = UIViewContentMode.Center
-        self.retryButtonView.image = UIImage(named: "RetryButton")
-        self.addSubview(self.retryButtonView)
+//        self.retryButtonView = UIImageView()
+//        self.retryButtonView.contentMode = UIViewContentMode.Center
+//        self.retryButtonView.image = UIImage(named: "RetryButton")
+//        self.addSubview(self.retryButtonView)
 
         self.retryLabel = UILabel()
         self.retryLabel.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: BUTTONS_ALPHA)
@@ -736,6 +738,8 @@ class PlayerView: UIView {
         self.retryLabel.textAlignment = NSTextAlignment.Center
         self.retryLabel.text = LocalizedString.DOWNLOAD_FAILED_RETRY
         self.retryLabel.sizeToFit()
+        self.retryLabel.layer.cornerRadius = self.RETRY_LABEL_CORNER_RADIUS
+        self.retryLabel.clipsToBounds = true
         self.addSubview(self.retryLabel)
 
         self.progressBarView = ProgressBar()
@@ -768,14 +772,16 @@ class PlayerView: UIView {
             make.center.equalTo()(self.thumbnailView)
         })
         
-        self.retryButtonView.mas_makeConstraints({ (make) -> Void in
-            make.centerX.equalTo()(self.thumbnailView)
-            make.centerY.equalTo()(self.thumbnailView)
-        })
+//        self.retryButtonView.mas_makeConstraints({ (make) -> Void in
+//            make.centerX.equalTo()(self.thumbnailView)
+//            make.centerY.equalTo()(self.thumbnailView)
+//        })
 
         self.retryLabel.mas_makeConstraints({ (make) -> Void in
-            make.top.equalTo()(self.retryButtonView.mas_bottom)
-            make.centerX.equalTo()(self.thumbnailView)
+            make.center.equalTo()(self.thumbnailView)
+            make.width.equalTo()(self.retryLabel.frame.width + (self.RETRY_LABEL_PADDING * 2))
+            make.height.equalTo()(self.retryLabel.frame.height + (self.RETRY_LABEL_PADDING * 2))
+            return
         })
 
         self.progressBarView.mas_makeConstraints({ (make) -> Void in
