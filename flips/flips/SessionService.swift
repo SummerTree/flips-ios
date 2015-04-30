@@ -26,12 +26,7 @@ public class SessionService: FlipsService {
         
     // MARK: - Check user session
     
-    func checkSession(userId: String, success: SessionServiceSuccessResponse, failure: SessionServiceFailureResponse) {
-        if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
-            failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
-            return
-        }
-        
+    func checkSession(userId: String, success: SessionServiceSuccessResponse, failure: SessionServiceFailureResponse) {        
         let checkSessionURL = SESSION_URL.stringByReplacingOccurrencesOfString("{{user_id}}", withString: userId, options: NSStringCompareOptions.LiteralSearch, range: nil)
         let url = HOST + checkSessionURL
         
