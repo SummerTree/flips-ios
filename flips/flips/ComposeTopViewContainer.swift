@@ -13,7 +13,7 @@
 class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     private let ANIMATION_TRANSITON_DURATION: NSTimeInterval = 0.3
-    private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = 5.0
+    private let AUDIO_RECORDING_PROGRESS_BAR_HEIGHT: CGFloat = UIScreen.mainScreen().bounds.size.height * 0.01 // roughly 1% of screen height
     
     private var filterImageView: UIImageView!
     private var cameraPreview: CameraView!
