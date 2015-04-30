@@ -216,7 +216,6 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     }
     
     private func showRecordingView() {
-        self.hideFlipCreatedMessage()
         self.captureAudioButton.hidden = false
         self.cancelCaptureAudioButton.hidden = false
         self.takePictureButton.hidden = true
@@ -262,7 +261,6 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     
     func cancelCaptureAudioButtonTapped(sender: UIButton!) {
         self.delegate?.composeBottomViewContainerDidTapSkipAudioButton(self)
-        self.hideRecordingView()
     }
     
     func shutterButtonLongPressAction(gesture: UILongPressGestureRecognizer) {
