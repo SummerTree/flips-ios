@@ -278,8 +278,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             return
         }
 
-        self.showActivityIndicator()
-
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             let flipWord = self.flipWords[self.highlightedWordIndex]
             
@@ -304,8 +302,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             } else {
                 self.flipMessageWordListView.updateWordState()
             }
-
-            self.hideActivityIndicator()
         })
     }
 
@@ -593,24 +589,19 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func composeBottomViewContainer(composeBottomViewContainer: ComposeBottomViewContainer, didTapAtFlipWithId flipId: String) {
-        self.showActivityIndicator()
-
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let flipDataSource = FlipDataSource()
             if let selectedFlip = flipDataSource.retrieveFlipWithId(flipId) {
                 if (selectedFlip.isPrivate.boolValue) {
                     self.onFlipSelected(flipId)
-                    self.hideActivityIndicator()
                 } else {
                     let flipWord = self.flipWords[self.highlightedWordIndex]
                     if (flipWord.associatedFlipId == nil) {
                         let flipsCache = FlipsCache.sharedInstance
                         flipsCache.get(NSURL(string: selectedFlip.backgroundURL)!,
                             success: { (url: String!, localPath: String!) in
-                                self.hideActivityIndicator()
                                 self.onFlipSelected(flipId)
                             }, failure: { (url: String!, error: FlipError) in
-                                self.hideActivityIndicator()
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     println("Downloading stock flip(id: \(flipId)) error: \(error)")
                                     let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
@@ -621,12 +612,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                         )
                     } else {
                         self.onFlipSelected(flipId)
-                        self.hideActivityIndicator()
                     }
                 }
             } else {
                 UIAlertView.showUnableToLoadFlip()
-                self.hideActivityIndicator()
             }
         })
     }

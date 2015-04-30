@@ -38,7 +38,6 @@ class PlayerView: UIView {
     private var playButtonView: UIImageView!
     private var retryButtonView: UIImageView!
     private var retryLabel: UILabel!
-    private var activityIndicator: UIActivityIndicatorView!
     private var progressBarView: ProgressBar!
 
     weak var delegate: PlayerViewDelegate?
@@ -164,9 +163,7 @@ class PlayerView: UIView {
                 if (currentIdentifier != self.contentIdentifier) {
                     return
                 }
-                
-                ActivityIndicatorHelper.hideActivityIndicatorAtView(self)
-                
+
                 if let playerItem: FlipPlayerItem = player?.currentItem as? FlipPlayerItem {
                     if ((self.words != nil) && (self.words?.count > playerItem.order)) {
                         self.setWord(self.words![playerItem.order])
@@ -284,18 +281,13 @@ class PlayerView: UIView {
                                 
                                 self.thumbnailView.image = thumbnail
                                 
-                                UIView.animateWithDuration(self.BUTTONS_FADE_IN_OUT_ANIMATION_DURATION, animations: { () -> Void in
-                                    self.thumbnailView.alpha = 1
-                                    return
-                                }, completion: { (finished: Bool) -> Void in
-                                    completionBlock?()
-                                    return
-                                })
+                                completionBlock?()
                             })
                         }, failure: { (url: String!, flipError: FlipError) -> Void in
                             println("Failed to get resource from cache, error: \(error)")
                             completionBlock?()
                         })
+
                         return
                     }
                 }
@@ -371,7 +363,14 @@ class PlayerView: UIView {
 
     private func initialViewState() {
         self.thumbnailView.alpha = 1.0
-        self.playButtonView.alpha = self.BUTTONS_ALPHA
+
+        self.playButtonView.alpha = 0.0
+        if let shouldShowPlayButton = self.delegate?.playerViewShouldShowPlayButtonOnInitialState(self) {
+            if (shouldShowPlayButton) {
+                self.playButtonView.alpha = self.BUTTONS_ALPHA
+            }
+        }
+
         self.progressBarView.alpha = 0.0
         self.progressBarView.progress = 0.0
         self.retryButtonView.alpha = 0.0
@@ -502,6 +501,32 @@ class PlayerView: UIView {
         self.playerItems.sort { (itemOne: FlipPlayerItem, itemTwo: FlipPlayerItem) -> Bool in
             return itemOne.order < itemTwo.order
         }
+    }
+
+    func isSetupWithFlips(flips: Array<Flip>, andFormattedWords formattedWords: Array<String>? = nil) -> Bool {
+        if (flips.count != self.flips.count) {
+            return false
+        }
+
+        for (var i = 0; i < flips.count; i++) {
+            if (flips[i].flipID! != self.flips[i].flipID!) {
+                return false
+            }
+        }
+
+        if (formattedWords != nil) {
+            if (formattedWords?.count != self.words?.count) {
+                return false
+            }
+
+            for (var i = 0; i < formattedWords!.count; i++) {
+                if (formattedWords![i] != self.words![i]) {
+                    return false
+                }
+            }
+        }
+
+        return true
     }
 
     func setupPlayerWithFlips(flips: Array<Flip>, andFormattedWords formattedWords: Array<String>? = nil, blurringThumbnail: Bool = false) {
@@ -787,9 +812,13 @@ class PlayerView: UIView {
 
 }
 
+
+// MARK: - PlayerViewDelegate Protocol
+
 protocol PlayerViewDelegate: class {
     
     func playerViewDidFinishPlayback(playerView: PlayerView)
     func playerViewIsVisible(playerView: PlayerView) -> Bool
+    func playerViewShouldShowPlayButtonOnInitialState(playerView: PlayerView) -> Bool
     
 }
