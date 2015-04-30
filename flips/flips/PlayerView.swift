@@ -38,7 +38,6 @@ class PlayerView: UIView {
     private var wordLabel: UILabel!
     private var thumbnailView: UIImageView!
     private var playButtonView: UIImageView!
-//    private var retryButtonView: UIImageView!
     private var retryLabel: UILabel!
     private var progressBarView: ProgressBar!
 
@@ -334,7 +333,6 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 1.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 0.0
-//        self.retryButtonView.alpha = self.BUTTONS_ALPHA
         self.retryLabel.alpha = 1.0
     }
 
@@ -342,7 +340,6 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 1.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 1.0
-//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -350,7 +347,6 @@ class PlayerView: UIView {
         self.thumbnailView.alpha = 0.0
         self.playButtonView.alpha = 0.0
         self.progressBarView.alpha = 0.0
-//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -359,7 +355,6 @@ class PlayerView: UIView {
         self.playButtonView.alpha = self.BUTTONS_ALPHA
         self.progressBarView.alpha = 0.0
         self.progressBarView.progress = 0.0
-//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -375,7 +370,6 @@ class PlayerView: UIView {
 
         self.progressBarView.alpha = 0.0
         self.progressBarView.progress = 0.0
-//        self.retryButtonView.alpha = 0.0
         self.retryLabel.alpha = 0.0
     }
 
@@ -726,11 +720,6 @@ class PlayerView: UIView {
         self.playButtonView.image = UIImage(named: "PlayButton")
         self.addSubview(self.playButtonView)
 
-//        self.retryButtonView = UIImageView()
-//        self.retryButtonView.contentMode = UIViewContentMode.Center
-//        self.retryButtonView.image = UIImage(named: "RetryButton")
-//        self.addSubview(self.retryButtonView)
-
         self.retryLabel = UILabel()
         self.retryLabel.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: BUTTONS_ALPHA)
         self.retryLabel.textColor = UIColor.whiteColor()
@@ -771,11 +760,6 @@ class PlayerView: UIView {
             make.height.equalTo()(self.thumbnailView)
             make.center.equalTo()(self.thumbnailView)
         })
-        
-//        self.retryButtonView.mas_makeConstraints({ (make) -> Void in
-//            make.centerX.equalTo()(self.thumbnailView)
-//            make.centerY.equalTo()(self.thumbnailView)
-//        })
 
         self.retryLabel.mas_makeConstraints({ (make) -> Void in
             make.center.equalTo()(self.thumbnailView)
