@@ -201,18 +201,18 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier(CONTACT_TABLE_VIEW_IDENTIFIER) as ContactTableViewCell
         
-        let contectDataSource = ContactDataSource()
+        let contactDataSource = ContactDataSource()
         var contact: Contact!
         
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
             let contactId = self.contactsIdsWithFlipsAccount[indexPath.row]
-            if let contact = contectDataSource.getContactById(contactId) {
+            if let contact = contactDataSource.getContactById(contactId) {
                 cell.photoView.setAvatarWithURL(NSURL(string:contact.contactUser.photoURL))
                 cell.contact = contact
             }
         } else if (indexPath.section == EVERYONE_ELSE_SECTION) {
             let contactId = self.contactsIdsWithoutFlipsAccount[indexPath.row]
-            if let contact = contectDataSource.getContactById(contactId) {
+            if let contact = contactDataSource.getContactById(contactId) {
                 cell.contact = contact
             }
         }
