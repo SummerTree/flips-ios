@@ -105,6 +105,18 @@ extension String {
         return "\(self[2..<5])-\(self[5..<8])-\(self[8...11])"
     }
     
+    static func stringFromValue(value: AnyObject?) -> String? {
+        if let stringValue: String = value as? String {
+            return stringValue
+        }
+        
+        if let stringValue: String = value?.stringValue {
+            return stringValue
+        }
+        
+        return nil
+    }
+    
 }
 
 extension NSString {

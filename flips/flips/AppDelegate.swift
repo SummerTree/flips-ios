@@ -132,12 +132,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             self.incrementBadgeCounter()
         }
-        completionHandler(UIBackgroundFetchResult.NewData)
+        completionHandler(UIBackgroundFetchResult.NoData)
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         println(error.description)
     }
+    
     
     // MARK: - Badge functions
     
@@ -146,6 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().applicationIconBadgeNumber = newValue
         return newValue
     }
+    
     
     // MARK: - private functions
     
@@ -158,8 +160,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
     private func onAppLaunchedFromNotification(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
         if let loggedUser = User.loggedUser() {
-            if let roomId = (userInfo[NOTIFICATION_ROOM_KEY] as? String) {
-                let flipMessageId: String = userInfo[NOTIFICATION_FLIP_MESSAGE_KEY] as String
+            if let roomId: String = String.stringFromValue(userInfo[NOTIFICATION_ROOM_KEY]) {
+                let flipMessageId: String? = String.stringFromValue(userInfo[NOTIFICATION_FLIP_MESSAGE_KEY])
                 if (UIApplication.sharedApplication().keyWindow == nil)  {
                     self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
                 } else if (application.applicationState != UIApplicationState.Active) {

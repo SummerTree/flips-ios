@@ -82,7 +82,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             weak var weakSelf = self
             PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
                 println("   InboxViewController subscribeOnMyChannels completion called")
-                weakSelf?.refreshRooms()
+                if (weakSelf?.roomIdToShow != nil) {
+                    weakSelf?.openRoomForPushNotificationIfMessageReceived()
+                } else {
+                    weakSelf?.refreshRooms()
+                }
             })
         }
     }
@@ -119,7 +123,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             self.shouldInformPubnubNotConnected = false
             self.syncMessageHistoryBlock?()
             
-            if (self.flipMessageIdToShow != nil) {
+            if (self.roomIdToShow != nil) {
                 if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
                     let alertView: UIAlertView = UIAlertView(title: nil, message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
@@ -148,22 +152,27 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             })
         } else {
             if let roomID = self.roomIdToShow {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                QueueHelper.dispatchAsyncWithNewContext({ (newContext) -> Void in
                     var flipMessageAlreadyReceived = false
+                    let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource(context: newContext)
                     if let flipMessageID: String = self.flipMessageIdToShow {
-                        let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
                         if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
                             flipMessageAlreadyReceived = true
                         }
-                    }
-                    
-                    if (flipMessageAlreadyReceived) {
+                        
+                        if (flipMessageAlreadyReceived) {
+                            self.openThreadViewControllerWithRoomID(roomID)
+                            self.hideActivityIndicator()
+                            self.roomIdToShow = nil
+                            self.flipMessageIdToShow = nil
+                        } else {
+                            self.retryToOpenRoomForPushNotification()
+                        }
+                    } else if (flipMessageDataSource.flipMessagesForRoomID(roomID).count > 0) {
                         self.openThreadViewControllerWithRoomID(roomID)
                         self.hideActivityIndicator()
                         self.roomIdToShow = nil
                         self.flipMessageIdToShow = nil
-                    } else {
-                        self.retryToOpenRoomForPushNotification()
                     }
                 })
             }
@@ -361,6 +370,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                         self.flipMessageIdToShow = nil
                         self.openThreadViewControllerWithRoomID(roomID)
                     }
+                } else {
+                    self.hideActivityIndicator()
+                    self.roomIdToShow = nil
+                    self.flipMessageIdToShow = nil
+                    self.openThreadViewControllerWithRoomID(roomID)
                 }
             }
         }
@@ -401,5 +415,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {
         self.roomIds.removeObjectAtIndex(index)
+    }
+    
+    
+    // MARK: - Push Notification Methods
+    
+    func prepareToLoadPushNotificationForRoomId(roomId: String, andFlipMessageId flipMessageId: String?) {
+        self.roomIdToShow = roomId
+        self.flipMessageIdToShow = flipMessageId
+        self.showActivityIndicator(userInteractionEnabled: true)
     }
 }

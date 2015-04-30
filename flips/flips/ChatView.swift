@@ -94,7 +94,13 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         self.replyTextField.setupMenu()
         
-        self.tableView.alpha = 0
+        // ChatView only appears with 0 messages when opened from notification
+        if (self.dataSource?.numberOfFlipMessages(self) == 0) {
+            self.tableView.alpha = 1
+        } else {
+            self.tableView.alpha = 0
+        }
+
         self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
     }
     
