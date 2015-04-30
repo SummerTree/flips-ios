@@ -53,7 +53,10 @@ class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewC
         setupActivityIndicator()
         self.loginView.viewDidLoad()
 
-        self.showOnboarding()
+        //Dispatching cause we need to wait until the Login Screen is done being pushed before pushing another controller.
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.showOnboarding()
+        })
     }
     
     
