@@ -19,13 +19,15 @@
         self.delegate = self;
     }
     
-    if (self.busyAnimating) {
+    NSTimeInterval oneSecondAgo = [[[NSDate date] dateByAddingTimeInterval:-1] timeIntervalSince1970];
+    if (self.busyAnimating && self.lastAnimationTime > oneSecondAgo) {
         NSLog(@"Not pushing a new view controller because we're already busy pushing another.");
         return;
     }
     
     if (self.delegate == self) {
         self.busyAnimating = YES;
+        self.lastAnimationTime = [[NSDate date] timeIntervalSince1970];
     } else {
         NSLog(@"FlipsUINavigationController was expecting to be its own delegate.");
     }
@@ -35,6 +37,7 @@
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     self.busyAnimating = NO;
+    self.lastAnimationTime = [[NSDate date] timeIntervalSince1970];
 }
 
 @end

@@ -15,5 +15,6 @@
 @interface FlipsUINavigationController : UINavigationController <UINavigationControllerDelegate>
 
 @property (nonatomic) BOOL busyAnimating;
+@property (nonatomic) NSTimeInterval lastAnimationTime;
 
 @end
