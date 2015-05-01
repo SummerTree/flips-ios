@@ -188,6 +188,10 @@ struct ContactAttributes {
         contact.contactUser = user
     }
     
+    func getContactById(id: String) -> Contact? {
+        return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id, inContext: currentContext) as? Contact
+    }
+    
     
     // MARK: - Private Methods
     
@@ -204,10 +208,6 @@ struct ContactAttributes {
         return ++currentID
     }
     
-    private func getContactById(id: String) -> Contact? {
-        return Contact.findFirstByAttribute(ContactAttributes.CONTACT_ID, withValue: id, inContext: currentContext) as? Contact
-    }
-
     func fetchContactByPhoneNumber(phoneNumber: String) -> Contact? {
         let predicate = NSPredicate(format: "%K = %@", ContactAttributes.PHONE_NUMBER, phoneNumber)
         return Contact.findFirstWithPredicate(predicate, inContext: currentContext) as? Contact
