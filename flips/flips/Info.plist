@@ -24,7 +24,7 @@
 			<key>PubNubSubscribeKey</key>
 			<string>sub-c-bec9fd6e-719f-11e4-94ac-02ee2ddab7fe</string>
 			<key>ServerURL</key>
-			<string>http://flips-qa.elasticbeanstalk.com</string>
+			<string>https://api.flipsapp.com</string>
 		</dict>
 		<key>QA</key>
 		<dict>
