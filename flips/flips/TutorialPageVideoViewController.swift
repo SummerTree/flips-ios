@@ -24,6 +24,8 @@ class TutorialPageVideoViewController : TutorialPageViewController {
         self.videoPlayer = MPMoviePlayerController(contentURL: self.videoURL())
         self.videoPlayer.allowsAirPlay = false
         self.videoPlayer.controlStyle = MPMovieControlStyle.None
+        self.videoPlayer.backgroundView.backgroundColor = self.view.backgroundColor
+        self.videoPlayer.view.backgroundColor = self.view.backgroundColor
         self.view.addSubview(self.videoPlayer.view)
 
         self.videoPlayer.view.mas_makeConstraints({ (make) -> Void in
