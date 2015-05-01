@@ -148,7 +148,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyButton.backgroundColor = UIColor.whiteColor()
         replyButton.contentEdgeInsets = UIEdgeInsetsMake(REPLY_VIEW_OFFSET / 2, REPLY_VIEW_OFFSET * 2, REPLY_VIEW_OFFSET / 2, REPLY_VIEW_OFFSET * 2)
         replyButton.addTarget(self, action: "didTapReplyButton", forControlEvents: UIControlEvents.TouchUpInside)
-        replyButton.setImage(UIImage(named: "Reply"), forState: UIControlState.Normal)
+        replyButton.setTitle(NSLocalizedString("Reply"), forState: .Normal)
+        replyButton.setTitleColor(UIColor.flipOrange(), forState: .Normal)
         replyButton.sizeToFit()
         replyView.addSubview(replyButton)
         
