@@ -13,16 +13,25 @@
 
 class TutorialPagesDataSource : NSObject, UIPageViewControllerDataSource {
 
-    private var pageImages: Array<String> = ["Slide1.png", "Slide2.png", "Slide3.png", "Slide4.png", "Slide5.png", "Slide6.png"]
+    private var pageAssets: Array<String> = ["flips-tutorial.mp4", "Slide1.png", "Slide2.png", "Slide3.png", "Slide4.png", "Slide5.png", "Slide6.png"]
 
     func viewControllerForPage(page: Int) -> TutorialPageViewController? {
-        if (page < 0 || page >= pageImages.count) {
+        if (page < 0 || page >= pageAssets.count) {
             return nil
         }
 
-        var pageViewController = TutorialPageViewController()
-        pageViewController.pageIndex = page
-        pageViewController.pageImage = self.pageImages[page]
+        let asset = self.pageAssets[page]
+        var pageViewController: TutorialPageViewController?
+
+        if (asset.pathExtension == "mp4") {
+            pageViewController = TutorialPageVideoViewController()
+            (pageViewController! as TutorialPageVideoViewController).pageVideo = asset
+        } else {
+            pageViewController = TutorialPageImageViewController()
+            (pageViewController! as TutorialPageImageViewController).pageImage = asset
+        }
+
+        pageViewController!.pageIndex = page
 
         return pageViewController
     }
@@ -46,7 +55,7 @@ class TutorialPagesDataSource : NSObject, UIPageViewControllerDataSource {
     }
 
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
-        return pageImages.count
+        return pageAssets.count
     }
 
     func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
