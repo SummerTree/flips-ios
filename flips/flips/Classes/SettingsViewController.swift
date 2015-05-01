@@ -10,11 +10,9 @@
 // the license agreement.
 //
 
-import Foundation
-
 let USER_DATA_SYNCED_NOTIFICATION_NAME: String = "user_data_synced_notification"
 
-class SettingsViewController : FlipsViewController, SettingsViewDelegate, TutorialViewControllerDelegate {
+class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     
     private let FLIPSBOYS_CHAT_TITLE: String = "Team Flips"
     
@@ -128,10 +126,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate, Tutori
     }
     
     func settingsViewDidTapTutorialButton(settingsView: SettingsView) {
-        var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-        tutorialViewController.viewDelegate = self
-
-        self.navigationController?.pushViewController(tutorialViewController, animated: true)
+        OnboardingHelper.presentOnboardingAtViewController(self)
     }
     
     func settingsViewDidTapLogOutButton(settingsView: SettingsView) {
@@ -164,13 +159,6 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate, Tutori
     
     func userDataSyncedNotificationReceived(notification: NSNotification) {
         self.settingsView.updateUserProfileInfo()
-    }
-
-
-    // MARK: - TutorialViewControllerDelegate
-
-    func tutorialViewControllerDidTapCloseButton(viewController: TutorialViewController!) {
-        self.navigationController?.popViewControllerAnimated(true)
     }
 
 }

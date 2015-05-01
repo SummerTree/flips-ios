@@ -89,6 +89,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 }
             })
         }
+
+        self.showOnboarding()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -210,7 +212,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         return image
     }
-    
+
+    private func showOnboarding() {
+        if (!OnboardingHelper.onboardingHasBeenShown()) {
+            OnboardingHelper.presentOnboardingAtViewController(self)
+            OnboardingHelper.setOnboardingHasShown()
+        }
+    }
+
     func setupSyncView() {
         if let views = NSBundle.mainBundle().loadNibNamed("SyncView", owner: self, options: nil) {
             if let syncView = views[0] as? SyncView {

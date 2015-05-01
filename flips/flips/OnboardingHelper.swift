@@ -12,6 +12,8 @@
 
 private let ONBORDING_HAS_BEEN_SHOWN_KEY = "onboardingHasBeenShown"
 
+import MediaPlayer
+
 class OnboardingHelper: NSObject {
     
     class func onboardingHasBeenShown() -> Bool {
@@ -27,5 +29,12 @@ class OnboardingHelper: NSObject {
         userDefaults.setValue(true, forKey: ONBORDING_HAS_BEEN_SHOWN_KEY)
         userDefaults.synchronize()
     }
-    
+
+    class func presentOnboardingAtViewController(viewController: UIViewController) {
+        let videoURL = NSBundle.mainBundle().URLForResource("flips-tutorial", withExtension: "mp4")
+        var tutorialViewController = MPMoviePlayerViewController(contentURL: videoURL);
+        tutorialViewController.moviePlayer.shouldAutoplay = true
+
+        viewController.presentViewController(tutorialViewController, animated: true, completion: nil)
+    }
 }
