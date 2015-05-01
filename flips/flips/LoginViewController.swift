@@ -16,7 +16,7 @@ private let LOGIN_ERROR = NSLocalizedString("Login Error", comment: "Login Error
 let NO_USER_IN_SESSION_ERROR = NSLocalizedString("No user in session", comment: "No user in session.")
 let NO_USER_IN_SESSION_MESSAGE = NSLocalizedString("Please try again or contact support.", comment: "Please try again or contact support.")
 
-class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewControllerDelegate {
+class LoginViewController: FlipsViewController, LoginViewDelegate {
     
     internal enum LoginMode {
         case ORDINARY_LOGIN
@@ -52,11 +52,6 @@ class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewC
         
         setupActivityIndicator()
         self.loginView.viewDidLoad()
-
-        //Dispatching cause we need to wait until the Login Screen is done being pushed before pushing another controller.
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.showOnboarding()
-        })
     }
     
     
@@ -191,25 +186,6 @@ class LoginViewController: FlipsViewController, LoginViewDelegate, TutorialViewC
                 })
             },
         failure: failureHandler)
-    }
-
-    private func showOnboarding() {
-        if (!OnboardingHelper.onboardingHasBeenShown()) {
-            var tutorialViewController = TutorialViewController(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
-            tutorialViewController.viewDelegate = self
-
-            let navigationController = FlipsUINavigationController(rootViewController: tutorialViewController)
-            self.presentViewController(navigationController, animated: false, completion: nil)
-            
-            OnboardingHelper.setOnboardingHasShown()
-        }
-    }
-
-
-    // MARK: - TutorialViewControllerDelegate
-
-    func tutorialViewControllerDidTapCloseButton(viewController: TutorialViewController!) {
-        self.parentViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
 
 }
