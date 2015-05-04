@@ -630,13 +630,13 @@
 		BE820DE31AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
 		BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
+		F22184351AF83CBA0000220B /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F22184341AF83CBA0000220B /* flips-tutorial.mp4 */; };
+		F22184361AF83CBA0000220B /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F22184341AF83CBA0000220B /* flips-tutorial.mp4 */; };
+		F22184371AF83CBA0000220B /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F22184341AF83CBA0000220B /* flips-tutorial.mp4 */; };
 		F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22611251AB6FEC4004C875A /* ProgressBar.swift */; };
 		F23E38221AF2E0B2003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
 		F23E38231AF2E0BF003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
 		F23E38241AF2E0C8003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
-		F2735EF91AF3F8A3005BAD13 /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2735EF81AF3F8A3005BAD13 /* flips-tutorial.mp4 */; };
-		F2735EFA1AF3F8A3005BAD13 /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2735EF81AF3F8A3005BAD13 /* flips-tutorial.mp4 */; };
-		F2735EFB1AF3F8A3005BAD13 /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F2735EF81AF3F8A3005BAD13 /* flips-tutorial.mp4 */; };
 		F29324711A1583B700355A4D /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324701A1583B700355A4D /* PlayerView.swift */; };
 		F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29324741A19A36700355A4D /* FlipPlayerItem.swift */; };
 		F2BF59811A0166CF00C44CC6 /* VideoComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BF59801A0166CF00C44CC6 /* VideoComposer.m */; };
@@ -880,9 +880,9 @@
 		BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		F22184341AF83CBA0000220B /* flips-tutorial.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "flips-tutorial.mp4"; sourceTree = "<group>"; };
 		F22611251AB6FEC4004C875A /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		F2735EF81AF3F8A3005BAD13 /* flips-tutorial.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "flips-tutorial.mp4"; sourceTree = "<group>"; };
 		F29324701A1583B700355A4D /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		F29324741A19A36700355A4D /* FlipPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipPlayerItem.swift; sourceTree = "<group>"; };
 		F2BF597F1A0166CF00C44CC6 /* VideoComposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoComposer.h; sourceTree = "<group>"; };
@@ -1755,7 +1755,7 @@
 		BE2E72061A98119400F237BE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F2735EF81AF3F8A3005BAD13 /* flips-tutorial.mp4 */,
+				F22184341AF83CBA0000220B /* flips-tutorial.mp4 */,
 				BE2E72071A98119400F237BE /* empty_video.mov */,
 			);
 			path = Resources;
@@ -1924,7 +1924,7 @@
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
-				F2735EF91AF3F8A3005BAD13 /* flips-tutorial.mp4 in Resources */,
+				F22184351AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1936,7 +1936,7 @@
 				BE24605C1AD2D95900859233 /* NewFlip.storyboard in Resources */,
 				BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */,
 				BE24605F1AD2D95900859233 /* Images.xcassets in Resources */,
-				F2735EFA1AF3F8A3005BAD13 /* flips-tutorial.mp4 in Resources */,
+				F22184361AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE2460611AD2D95900859233 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1949,7 +1949,7 @@
 				BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */,
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
 				BE2461391AD2D9C600859233 /* Images.xcassets in Resources */,
-				F2735EFB1AF3F8A3005BAD13 /* flips-tutorial.mp4 in Resources */,
+				F22184371AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
