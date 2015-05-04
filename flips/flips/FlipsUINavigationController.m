@@ -12,7 +12,9 @@
 
 #import "FlipsUINavigationController.h"
 
-@implementation FlipsUINavigationController
+@implementation FlipsUINavigationController {
+    UIViewController *_poppedViewController;
+}
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
     if (self.delegate == nil) {
@@ -38,6 +40,24 @@
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     self.busyAnimating = NO;
     self.lastAnimationTime = [[NSDate date] timeIntervalSince1970];
+    
+    if (viewController != _poppedViewController) {
+        _poppedViewController = nil;
+    }
+}
+
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated {
+    if (self.delegate == nil) {
+        self.delegate = self;
+    }
+    
+    if (_poppedViewController) {
+        NSLog(@"Not poping because we're already busy popping it.");
+        return nil;
+    }
+    
+    _poppedViewController = self.topViewController;
+    return [super popViewControllerAnimated:animated];
 }
 
 @end
