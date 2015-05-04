@@ -242,6 +242,9 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
 
         if (self.indexPathToShow != nil) {
             self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: scrollAnimated)
+            if (self.indexPathToShow!.row == 0) {
+                self.playVideoForVisibleCell()
+            }
         }
     }
 
