@@ -18,7 +18,7 @@ public typealias UserServiceFailureResponse = (FlipError?) -> Void
 public typealias UserServiceMyFlipsSuccessResponse = (JSON) -> Void
 public typealias UserServiceMyFlipsFailResponse = (FlipError?) -> Void
 
-public let FLIP_BOYS_USER_ID: String = "850"
+public let FLIP_BOYS_USER_ID: String = "1"
 
 public class UserService: FlipsService {
     
