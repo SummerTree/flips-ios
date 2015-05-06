@@ -80,20 +80,11 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     }
     
     func splashScreenViewAttemptLoginWithFacebook() {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        activityIndicator.color = .plum()
-        activityIndicator.center = self.view.center
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.startAnimating()
-        self.view.addSubview(activityIndicator)
-        
-        self.showActivityIndicator(userInteractionEnabled: false)
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
                 AuthenticationHelper.sharedInstance.onLogin(user as User)
                 PersistentManager.sharedInstance.syncUserData({ (success, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        activityIndicator.stopAnimating()
                         if let authenticatedUser = User.loggedUser() {
                             if (!self.userHasDevice(authenticatedUser)) {
                                 self.openPhoneNumberController(authenticatedUser.userID)
@@ -116,7 +107,6 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     
     func splashScreenViewAttemptLogin() {
         if let loggedUser = User.loggedUser() {
-            self.showActivityIndicator(userInteractionEnabled: false)
             AuthenticationHelper.sharedInstance.onLogin(loggedUser)
             PersistentManager.sharedInstance.syncUserData({ (success, error) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
