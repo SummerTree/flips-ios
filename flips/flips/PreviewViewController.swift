@@ -144,7 +144,11 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.hideActivityIndicator()
                         
-                        let message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error?.error)"
+                        var message = self.SEND_MESSAGE_ERROR_MESSAGE
+                        if (error != nil) {
+                            message = "\(self.SEND_MESSAGE_ERROR_MESSAGE)\n\(error!.error)"
+                        }
+
                         let alertView = UIAlertView(title: self.SEND_MESSAGE_ERROR_TITLE, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                         alertView.show()
                     })

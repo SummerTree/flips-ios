@@ -47,13 +47,19 @@ class BuilderIntroductionViewController : UIViewController {
     
     convenience init(viewBackground: UIImage!) {
         self.init()
-        self.backgroundImage = applyBlur(viewBackground)
-        addSubviews()
-        makeConstraints()
+        self.backgroundImage = viewBackground
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.addSubviews()
+        self.makeConstraints()
     }
     
     func addSubviews() {
-        self.blurredImageView = UIImageView(image: self.backgroundImage)
+        let blurredImage: UIImage = self.applyBlur(self.backgroundImage)
+        self.blurredImageView = UIImageView(image: blurredImage)
         self.view.addSubview(blurredImageView)
         
         self.contentTopContainer = UIView()
@@ -187,7 +193,7 @@ class BuilderIntroductionViewController : UIViewController {
     // MARK: - Image Helper Methods
     
     func applyBlur(image: UIImage) -> UIImage {
-        return image.applyBlurWithRadius(10, tintColor: UIColor(white: 255, alpha: 0.5), saturationDeltaFactor: 1.5, maskImage: nil)
+        return image.applyBlurWithRadius(30, tintColor: UIColor(white: 200, alpha: 0.7), saturationDeltaFactor: 1.8, maskImage: nil)
     }
 }
 
