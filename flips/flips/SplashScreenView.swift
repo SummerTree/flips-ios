@@ -18,9 +18,12 @@ class SplashScreenView: UIView {
     private let MARGIN_LEFT:CGFloat = 40.0
     private let FLIPS_WORD_LOGO_MARGIN_TOP: CGFloat = 15.0
     
+    private let ACTIVITY_INDICATOR_SIZE: CGFloat = 25.0
+    
     private var logoView: UIView!
     private var bubbleChatImageView: UIImageView!
     private var flipsWordImageView: UIImageView!
+    private var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Required inits
     
@@ -40,7 +43,6 @@ class SplashScreenView: UIView {
     }
     
     func addSubviews() {
-        
         logoView = UIView()
         self.addSubview(logoView)
         
@@ -53,10 +55,15 @@ class SplashScreenView: UIView {
         flipsWordImageView.sizeToFit()
         flipsWordImageView.contentMode = UIViewContentMode.Center
         logoView.addSubview(flipsWordImageView)
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        activityIndicator.color = UIColor.whiteColor()
+        activityIndicator.hidesWhenStopped = false
+        activityIndicator.startAnimating()
+        self.addSubview(activityIndicator)
     }
     
     func makeConstraints() {
-        
         logoView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.centerY.equalTo()(self)
@@ -82,7 +89,12 @@ class SplashScreenView: UIView {
             make.bottom.equalTo()(self.logoView)
             make.height.equalTo()(self.flipsWordImageView.frame.height)
         }
-
+        
+        activityIndicator.mas_makeConstraints { (make: MASConstraintMaker!) -> Void in
+            make.centerX.equalTo()(self)
+            make.top.equalTo()(self.logoView.mas_bottom).with().offset()(self.ACTIVITY_INDICATOR_SIZE)
+            make.width.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+            make.height.equalTo()(self.ACTIVITY_INDICATOR_SIZE)
+        }
     }
-
 }
