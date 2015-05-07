@@ -278,25 +278,34 @@ public class PubNubService: FlipsService, PNDelegate {
             let group = dispatch_group_create()
             NSLog("FETCHING HISTORY FOR %d CHANNELS", subscribedChannels.count)
             
+            // The idea here is to put the dispatch_group inside of the for statement, so we will only load one history per time and we will be able to interrupt it when the user logout.
+            
             var historiesReceived: Int = 0
             for channelProtocol in subscribedChannels {
                 if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
-                    dispatch_group_enter(group)
-                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
-                        if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                            println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
-                        } else if (User.loggedUser() != nil) {
-                            if (success) {
-                                progress?(received: historiesReceived++, total: subscribedChannels.count)
-                            }
-                        }
-                        println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
-                        dispatch_group_leave(group)
-                    })
+                    if let loggedUser: User = User.loggedUser() {
+                        dispatch_group_enter(group)
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
+                            self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
+                                if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                                    println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
+                                } else if (User.loggedUser() != nil) {
+                                    if (success) {
+                                        progress?(received: historiesReceived++, total: subscribedChannels.count)
+                                    }
+                                }
+                                println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
+                                dispatch_group_leave(group)
+                            })
+                        })
+                        dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
+                    } else {
+                        println("   User not logged. Load history interrupted.")
+                        break
+                    }
                 }
             }
             
-            dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             NSLog("HISTORY FETCH ENDED - subscribedChannels.count(\(subscribedChannels.count)) - historiesReceived(\(historiesReceived))")
             
             if (currentIdentifier != self.pubnubConnectionIdentifier) {

@@ -26,10 +26,9 @@ struct RoomAttributes {
     static let PUBNUB_ID = "pubnubID"
 }
 
+let TEAMFLIPS_USERNAME: String = "teamflips@flipsapp.com"
+
 class RoomDataSource : BaseDataSource {
-    
-    private let TEAMFLIPS_USERNAME: String = "teamflips@flipsapp.com"
-    
     
     // MARK: - Creators
     

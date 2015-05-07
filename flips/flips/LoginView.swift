@@ -66,10 +66,8 @@ class LoginView : UIView, UITextFieldDelegate {
     private var andWord: UILabel!
     private var privacyPolicy: UIButton!
     private var isInitialized = false
-    
-    private var spaceBetweenTopAndFlips: UIView!
+
     private var spaceBetweenFlipsAndCredentials: UIView!
-    private var spaceBetweenCredentialsAndFacebook: UIView!
     private var spaceBetweenFacebookAndSignUp: UIView!
     private var spaceBetweenSignUpAndAcceptance: UIView!
     private var spaceBetweenEmailFieldAndSeparator: UIView!
@@ -181,10 +179,6 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func addSubviews() {
-        
-        spaceBetweenTopAndFlips = UIView()
-        self.addSubview(spaceBetweenTopAndFlips)
-        
         logoView = UIView()
         self.addSubview(logoView)
         
@@ -203,9 +197,6 @@ class LoginView : UIView, UITextFieldDelegate {
         
         credentialsView = UIView()
         self.addSubview(credentialsView)
-        
-        spaceBetweenCredentialsAndFacebook = UIView()
-        self.addSubview(spaceBetweenCredentialsAndFacebook)
         
         emailImageView = UIImageView(image: UIImage(named: "Mail"));
         emailImageView.contentMode = .Center
@@ -359,24 +350,16 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func updateBubbleChatConstraints() {
         logoView.mas_updateConstraints { (make) -> Void in
-            make.removeExisting = true
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self.spaceBetweenTopAndFlips.mas_bottom)
-            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
+            let quarterHeight = self.bounds.size.height / 4 // centered on the top half of the screen
+            make.centerY.equalTo()(self).offset()(-quarterHeight)
         }
     }
     
     func makeConstraints() {
-        
-        spaceBetweenTopAndFlips.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(self)
-            make.top.equalTo()(self)
-            make.left.equalTo()(self).with().offset()(self.MARGIN_LEFT)
-            make.right.equalTo()(self).with().offset()(-self.MARGIN_RIGHT)
-            make.height.greaterThanOrEqualTo()(self.MARGIN_TOP)
-        }
-        
+
+        // Logo
+
         logoView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.centerY.equalTo()(self)
@@ -390,37 +373,38 @@ class LoginView : UIView, UITextFieldDelegate {
             make.centerX.equalTo()(self.logoView)
             make.top.equalTo()(self.logoView)
             make.height.equalTo()(self.bubbleChatImageView.frame.size.height)
-            make.left.equalTo()(self.logoView)
-            make.right.equalTo()(self.logoView)
+            make.width.equalTo()(self.bubbleChatImageView.frame.size.width)
         }
         
         flipsWordImageView.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self.logoView)
             make.top.equalTo()(self.bubbleChatImageView.mas_bottom).with().offset()(self.FLIPS_WORD_LOGO_MARGIN_TOP)
-            make.left.equalTo()(self.logoView)
-            make.right.equalTo()(self.logoView)
-            make.bottom.equalTo()(self.logoView)
             make.height.equalTo()(self.flipsWordImageView.frame.height)
+            make.width.equalTo()(self.flipsWordImageView.frame.width)
         }
         
         spaceBetweenFlipsAndCredentials.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.logoView.mas_bottom)
-            make.bottom.equalTo()(self.credentialsView.mas_top)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.greaterThanOrEqualTo()(self.MINIMAL_SPACER_HEIGHT)
         }
+
+
+        // Forgot Password
         
         forgotPasswordButton.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
             make.bottom.equalTo()(self.credentialsView.mas_top).with().offset()(-self.FORGOT_PASSWORD_MARGIN_BOTTOM)
         }
-        
+
+
+        // Credentials
+
         credentialsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.bubbleChatImageView)
-            make.right.equalTo()(self.bubbleChatImageView)
-            make.top.equalTo()(self.spaceBetweenFlipsAndCredentials.mas_bottom)
-            make.bottom.equalTo()(self.passwordTextField)
+            make.left.equalTo()(self.logoView)
+            make.right.equalTo()(self.logoView)
+            make.top.equalTo()(self.mas_centerY)
         }
         
         emailImageView.mas_makeConstraints { (make) -> Void in
@@ -433,8 +417,7 @@ class LoginView : UIView, UITextFieldDelegate {
         emailTextField.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.credentialsView)
             make.left.equalTo()(self.emailImageView.mas_right).with().offset()(self.EMAIL_MARGIN_LEFT)
-            make.right.equalTo()(self.bubbleChatImageView.mas_right)
-            make.bottom.equalTo()(self.spaceBetweenEmailFieldAndSeparator.mas_top)
+            make.right.equalTo()(self.credentialsView)
         }
         
         spaceBetweenEmailFieldAndSeparator.mas_makeConstraints { (make) -> Void in
@@ -471,23 +454,19 @@ class LoginView : UIView, UITextFieldDelegate {
             make.right.equalTo()(self.credentialsView)
             make.bottom.equalTo()(self.credentialsView)
         }
-        
-        spaceBetweenCredentialsAndFacebook.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(self.credentialsView.mas_bottom)
-            make.left.equalTo()(self.spaceBetweenFlipsAndCredentials)
-            make.right.equalTo()(self.spaceBetweenFlipsAndCredentials)
-            make.height.equalTo()(self.spaceBetweenFlipsAndCredentials)
-        }
+
+
+        // Buttons
 
         facebookButton.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(self)
-            make.top.equalTo()(self.spaceBetweenCredentialsAndFacebook.mas_bottom)
+            return
         }
 
         spaceBetweenFacebookAndSignUp.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.facebookButton.mas_bottom)
-            make.left.equalTo()(self.spaceBetweenFlipsAndCredentials)
-            make.right.equalTo()(self.spaceBetweenFlipsAndCredentials)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
             make.height.equalTo()(self.spaceBetweenSignUpAndAcceptance)
         }
 
@@ -496,11 +475,14 @@ class LoginView : UIView, UITextFieldDelegate {
             make.top.equalTo()(self.spaceBetweenFacebookAndSignUp.mas_bottom)
         }
 
+
+        // Footer
+
         spaceBetweenSignUpAndAcceptance.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.signupButton.mas_bottom)
             make.bottom.equalTo()(self.acceptanceView.mas_top)
-            make.left.equalTo()(self.spaceBetweenFlipsAndCredentials)
-            make.right.equalTo()(self.spaceBetweenFlipsAndCredentials)
+            make.left.equalTo()(self)
+            make.right.equalTo()(self)
             make.height.equalTo()(self.SIGNUP_MARGIN_BOTTOM)
         }
         
@@ -678,20 +660,28 @@ class LoginView : UIView, UITextFieldDelegate {
                 // positioning credentials above keyboard
                 let credentialsFinalPosition = keyboardTop - self.credentialsView.frame.height - self.KEYBOARD_MARGIN_TOP
                 self.credentialsView.frame.origin.y = credentialsFinalPosition
-                
+
+
                 if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone5S()) {
                     // positioning Flips word below the top of the screen with a defined offset
                     self.bubbleChatImageView.frame.origin.y = self.BUBBLECHAT_IMAGE_ORIGINAL_OFFSET-self.BUBBLECHAT_IMAGE_ANIMATION_OFFSET
                     self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_LOGO_SMALL_SCREEN_POSITION
+
+                    let flipsWordImageViewBottom = self.flipsWordImageView.frame.origin.y + self.flipsWordImageView.frame.height - self.FLIPS_WORD_LOGO_MARGIN_TOP
+                    let forgotPasswordDesirableCenter = (self.credentialsView.frame.origin.y + flipsWordImageViewBottom) / 2
+
+                    // positioning forgot password button between credentials and Flips word
+                    self.forgotPasswordButton.frame.origin.y = forgotPasswordDesirableCenter
                 } else {
                     self.flipsWordImageView.frame.origin.y = self.FLIPS_WORD_ORIGINAL_OFFSET
+
+                    let flipsWordImageViewBottom = self.flipsWordImageView.frame.origin.y + self.flipsWordImageView.frame.height + self.FLIPS_WORD_LOGO_MARGIN_TOP
+                    let forgotPasswordDesirableCenter = flipsWordImageViewBottom + ((self.credentialsView.frame.origin.y - flipsWordImageViewBottom) / 2)
+
+                    // positioning forgot password button between credentials and Flips word
+                    self.forgotPasswordButton.frame.origin.y = forgotPasswordDesirableCenter
                 }
-                
-                let flipsWordImageViewBottom = self.flipsWordImageView.frame.origin.y + self.flipsWordImageView.frame.height + self.FLIPS_WORD_LOGO_MARGIN_TOP
-                
-                let forgotPasswordDesirableCenter = (self.credentialsView.frame.origin.y + flipsWordImageViewBottom) / 2
-                // positioning forgot password button between credentials and Flips word
-                self.forgotPasswordButton.center.y = forgotPasswordDesirableCenter
+
             } else {
                 self.forgotPasswordButton.alpha = 0.0
                 
