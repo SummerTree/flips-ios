@@ -1108,6 +1108,8 @@
 		704E110A19D08E3C00D2BB88 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				73D63F1E1AF031FD000EC678 /* FlipsUINavigationController.h */,
+				73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */,
 				7A0D6CED19D4961C00E39A1B /* Builder */,
 				7A11791E19DA07B60086A66B /* Compose */,
 				705EF07B19F9767800D4CF74 /* Confirm Flip */,
@@ -1237,8 +1239,6 @@
 				7AB7D3D31AC1927100DA8342 /* UITableViewCellExtensions.swift */,
 				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
 				70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */,
-				73D63F1E1AF031FD000EC678 /* FlipsUINavigationController.h */,
-				73D63F1F1AF0323B000EC678 /* FlipsUINavigationController.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";

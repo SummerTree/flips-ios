@@ -21,8 +21,7 @@
         self.delegate = self;
     }
     
-    NSTimeInterval oneSecondAgo = [[[NSDate date] dateByAddingTimeInterval:-1] timeIntervalSince1970];
-    if (self.busyAnimating && self.lastAnimationTime > oneSecondAgo) {
+    if ([self isBusyAnimatingTransition]) {
         NSLog(@"Not pushing a new view controller because we're already busy pushing another.");
         return;
     }
@@ -51,13 +50,25 @@
         self.delegate = self;
     }
     
-    if (_poppedViewController) {
-        NSLog(@"Not poping because we're already busy popping it.");
+    if ([self isBusyAnimatingTransition]) {
+        NSLog(@"Not popping a new view controller because we're busy animating.");
         return nil;
     }
-    
+
+    if (self.delegate == self) {
+        self.busyAnimating = YES;
+        self.lastAnimationTime = [[NSDate date] timeIntervalSince1970];
+    } else {
+        NSLog(@"FlipsUINavigationController was expecting to be its own delegate.");
+    }
+
     _poppedViewController = self.topViewController;
     return [super popViewControllerAnimated:animated];
+}
+
+- (BOOL)isBusyAnimatingTransition {
+    NSTimeInterval oneSecondAgo = [[[NSDate date] dateByAddingTimeInterval:-1] timeIntervalSince1970];
+    return self.busyAnimating && self.lastAnimationTime > oneSecondAgo;
 }
 
 @end
