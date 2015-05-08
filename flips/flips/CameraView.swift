@@ -367,9 +367,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.session.addOutput(movieOutput)
             var connection = movieOutput.connectionWithMediaType(AVMediaTypeVideo)
 
-            if (connection.videoStabilizationEnabled) {
-                connection.enablesVideoStabilizationWhenAvailable = true
-            }
             self.movieFileOutput = movieOutput
         }
 

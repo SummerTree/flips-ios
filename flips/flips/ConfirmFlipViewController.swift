@@ -46,12 +46,14 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         })
     }
     
-    private func onVideoCreated(flipVideoURL: NSURL, thumbnailURL: NSURL) {
+    private func onVideoCreated(flipVideoURL: NSURL?, thumbnailURL: NSURL?) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.confirmFlipView.hideActivityIndicator()
             self.flipVideoURL = flipVideoURL
             self.flipThumbnailURL = thumbnailURL
-            self.confirmFlipView.setupPlayerWithWord(self.flipWord, videoURL: flipVideoURL)
+            if (flipVideoURL != nil) {
+                self.confirmFlipView.setupPlayerWithWord(self.flipWord, videoURL: flipVideoURL!)
+            }
         })
     }
     
