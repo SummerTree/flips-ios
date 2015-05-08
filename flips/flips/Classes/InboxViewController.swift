@@ -17,6 +17,9 @@ let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
     
     private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
+    
+    private let LOAD_HISTORY_FAIL_MESSAGE: String = NSLocalizedString("Flips is having trouble fetching your message history.\nYou may continue using the app, and we’ll keep trying in the background.")
+    
     private var downloadingMessageFromNotificationRetries: Int = 0
     
     private let ANIMATION_DURATION: NSTimeInterval = 0.25
@@ -31,6 +34,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     private var syncMessageHistoryBlock: (() -> Void)?
     
     private var shouldInformPubnubNotConnected: Bool = false
+    private var syncFinishedNotificationReceived: Bool = false
     
     
     // MARK: - Initialization Methods
@@ -102,6 +106,16 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageReceivedNotification:", name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         syncView?.hidden = true
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
+            if (!PubNubService.sharedInstance.isConnected()) {
+                println("Inbox appeared with PubNub disconnected. Calling connect again.")
+                Mint.sharedInstance().logEventAsyncWithTag("inbox_pubnub_not_connected-reconnecting", completionBlock: { (result: MintLogResult!) -> Void in
+                    return
+                })
+                PubNubService.sharedInstance.connect()
+            }
+        })
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -237,11 +251,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     self.syncView?.image = self.imageForView()
                     self.syncView?.alpha = 0
                     self.syncView?.hidden = false
+
+                    DeviceHelper.sharedInstance.setSyncViewShown(true)
+                    self.syncMessageHistoryBlock = nil
                     
                     PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
-                        DeviceHelper.sharedInstance.setSyncViewShown(true)
-                        self.syncMessageHistoryBlock = nil
-                        
                         self.refreshRooms()
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
@@ -364,6 +378,24 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
 
     func messageHistoryReceivedNotificationReceived(notification: NSNotification) {
         self.refreshRooms()
+        
+        if let view: UIView = self.syncView {
+            if (!self.view.hidden && !self.syncFinishedNotificationReceived) {
+                self.syncFinishedNotificationReceived = true
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
+                        view.alpha = 0
+                        return
+                    }, completion: { (finished: Bool) -> Void in
+                        view.hidden = true
+                        return
+                    })
+                    
+                    let alertView: UIAlertView = UIAlertView(title: "", message: self.LOAD_HISTORY_FAIL_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                })
+            }
+        }
     }
     
     func onFlipMessageReceivedNotification(notification: NSNotification) {

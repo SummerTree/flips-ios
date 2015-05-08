@@ -34,6 +34,8 @@ public class PubNubService: FlipsService, PNDelegate {
     
     private var pubnubConnectionIdentifier: String? // It changes when you disconnect and reconnect
 
+    private var isLoadingHistory: Bool = false
+    private var didLoadHistorySuccessfully: Bool = false
     
     // MARK: - Initialization Methods
     
@@ -99,6 +101,9 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     func disconnect() {
+        PubNub.unsubscribeFrom(PubNub.subscribedObjectsList(), withCompletionHandlingBlock: { (channels: [AnyObject]!, error: PNError!) -> Void in
+            println("PubNub unsubscribed from \(channels.count) channels with error: \(error)")
+        })
         self.disablePushNotificationOnMyChannels()
         PubNub.disconnect()
         self.pubnubConnectionIdentifier = nil
@@ -137,24 +142,26 @@ public class PubNubService: FlipsService, PNDelegate {
                 if (!PubNub.isSubscribedOn(channel)) {
                     channelsToSubscribe.append(channel)
                 } else {
-                    // It load the history after subscribe. So, when we will not re-resubscribe, we need to get the history.
-                    println("   Already subscribed to channel \(channel.name). Retrieving history only.")
-                    self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: nil)
+                    println("   Already subscribed to channel \(channel.name).")
                 }
             }
             
-            println("Subscribing to \(channelsToSubscribe.count) channels")
-            PubNub.subscribeOn(channelsToSubscribe, withCompletionHandlingBlock: { (state, channels, error) -> Void in
-                println("Subscribing to channels completed")
-                if (currentIdentifier == self.pubnubConnectionIdentifier) {
-                    if (error != nil) {
-                        println("   Error subscribing to channels: \(error)")
+            if (channelsToSubscribe.count == 0) {
+                self.loadMessagesHistoryWithCompletion(completion, progress: progress)
+            } else {
+                println("Subscribing to \(channelsToSubscribe.count) channels")
+                PubNub.subscribeOn(channelsToSubscribe, withCompletionHandlingBlock: { (state, channels, error) -> Void in
+                    println("Subscribing to channels completed")
+                    if (currentIdentifier == self.pubnubConnectionIdentifier) {
+                        if (error != nil) {
+                            println("   Error subscribing to channels: \(error)")
+                        }
+                        self.loadMessagesHistoryWithCompletion(completion, progress: progress)
+                    } else {
+                        println("SubscribeOnMyChannels PubNub identifier changed.")
                     }
-                    self.loadMessagesHistoryWithCompletion(completion, progress: progress)
-                } else {
-                    println("SubscribeOnMyChannels PubNub identifier changed.")
-                }
-            })
+                })
+            }
             
             self.enablePushNotificationOnMyChannels()
         }
@@ -259,8 +266,31 @@ public class PubNubService: FlipsService, PNDelegate {
         
         println("Will start to load history")
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            println("   load history queue running")
+        // Expire block - if the load didn't finish in 1:30 minutes, we will call the completion block or post the did fetch notification to do not let the user blocked.
+        let time = 90 * Double(NSEC_PER_SEC)
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
+        dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) { () -> Void in
+            if (self.isLoadingHistory) {
+                if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                    println("\nHistory fetch expired PubNub identifier changed.")
+                    return
+                } else if (User.loggedUser() == nil) {
+                    println("\nHistory fetch expired with user not logged.")
+                    return
+                } else if (completion != nil) {
+                    println("\nCalling load history completion expired")
+                    completion?(false)
+                } else {
+                    println("\nPosting load history expired notification")
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+                    })
+                }
+                self.isLoadingHistory = false
+            }
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
             if (currentIdentifier != self.pubnubConnectionIdentifier) {
                 println("Load Messages History - SubscribeOnMyChannels PubNub identifier changed.")
                 return
@@ -274,6 +304,8 @@ public class PubNubService: FlipsService, PNDelegate {
             }
             
             let subscribedChannels = list as Array<PNChannelProtocol>
+            
+            self.isLoadingHistory = true
             
             let group = dispatch_group_create()
             NSLog("FETCHING HISTORY FOR %d CHANNELS", subscribedChannels.count)
@@ -291,10 +323,11 @@ public class PubNubService: FlipsService, PNDelegate {
                                     println("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
                                 } else if (User.loggedUser() != nil) {
                                     if (success) {
-                                        progress?(received: historiesReceived++, total: subscribedChannels.count)
+                                        historiesReceived++
+                                        progress?(received: historiesReceived, total: subscribedChannels.count)
                                     }
                                 }
-                                println("loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
+                                println("   loadMessagesHistoryForChannel: success(\(success)) historiesReceived(\(historiesReceived))")
                                 dispatch_group_leave(group)
                             })
                         })
@@ -308,18 +341,27 @@ public class PubNubService: FlipsService, PNDelegate {
             
             NSLog("HISTORY FETCH ENDED - subscribedChannels.count(\(subscribedChannels.count)) - historiesReceived(\(historiesReceived))")
             
-            if (currentIdentifier != self.pubnubConnectionIdentifier) {
-                println("   SubscribeOnMyChannels finished PubNub identifier changed.")
-            } else if (User.loggedUser() == nil) {
-                println("   History fetch ended with user not logged.")
-            } else if (completion != nil) {
-                println("   Calling load history completion")
-                completion?(subscribedChannels.count == historiesReceived)
+            // Checking if the expire block wasn't called
+            if (self.isLoadingHistory) {
+                if (currentIdentifier != self.pubnubConnectionIdentifier) {
+                    println("   SubscribeOnMyChannels finished PubNub identifier changed.")
+                    return
+                } else if (User.loggedUser() == nil) {
+                    println("   History fetch ended with user not logged.")
+                    return
+                } else if (completion != nil) {
+                    println("   Calling load history completion")
+                    completion?(subscribedChannels.count == historiesReceived)
+                } else {
+                    println("   Posting load history finished notification")
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+                    })
+                }
+                self.isLoadingHistory = false
+                self.didLoadHistorySuccessfully = (subscribedChannels.count == historiesReceived)
             } else {
-                println("   Posting load history finished notification")
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
-                })
+                self.didLoadHistorySuccessfully = (subscribedChannels.count == historiesReceived)
             }
         })
     }
@@ -474,6 +516,13 @@ public class PubNubService: FlipsService, PNDelegate {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
         
+        if (self.isLoadingHistory) {
+            // For some reason sometimes PubNub is not resuming the requests. So, do not let user blocked waiting for the sync, we need to dismiss the sync view.
+            NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+        } else if (!self.didLoadHistorySuccessfully) {
+            self.loadMessagesHistoryWithCompletion(nil, nil)
+        }
+        
         self.onPubnubConnectedBlock?()
     }
     
@@ -481,6 +530,11 @@ public class PubNubService: FlipsService, PNDelegate {
         println("pubnubClient didDisconnectFromOrigin withError \(error)")
         if let loggedUser: User = User.loggedUser() {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        }
+        
+        if (self.isLoadingHistory) {
+            // For some reason sometimes PubNub is not resuming the requests. So, do not let user blocked waiting for the sync, we need to dismiss the sync view.
+            NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
         }
     }
     
