@@ -121,34 +121,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         }
     }
 
-    private func checkForPermissionToCaptureMedia() -> Bool {
-        switch AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) {
-        case .NotDetermined:
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: nil)
-            navigationController?.popViewControllerAnimated(true)
-            return false
-        case .Authorized:
-            return true
-        default:
-            var title = NSLocalizedString("Flips")
-            var message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings")
-            UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
-            
-            navigationController?.popViewControllerAnimated(true)
-            
-            return false
-        }
-    }
-    
     
     // MARK: - Overridden Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if (!self.checkForPermissionToCaptureMedia()) {
-            return
-        }
         
         self.view.backgroundColor = UIColor.whiteColor()
         
@@ -170,7 +147,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.updateFlipWordsState()
             self.showContentForHighlightedWord()
         })
-        
+
         self.shouldEnableUserInteraction(true)
     }
     
