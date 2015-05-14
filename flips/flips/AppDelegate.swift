@@ -74,6 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FBAppCall.handleDidBecomeActive()
         self.checkSession()
     }
+    
+    func applicationWillEnterForeground(application: UIApplication) {
+        PubNubService.sharedInstance.reloadHistory()
+    }
 
     func applicationWillTerminate(application: UIApplication) {
         MagicalRecord.cleanUp()
