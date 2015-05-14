@@ -256,6 +256,12 @@ public class PubNubService: FlipsService, PNDelegate {
 
     // MARK: - Message history
     
+    func reloadHistory() {
+        if (!self.isLoadingHistory) {
+            loadMessagesHistoryWithCompletion(completion: nil, progress: nil)
+        }
+    }
+    
     func loadMessagesHistoryWithCompletion(completion: CompletionBlock? = nil, progress: ((received: Int, total: Int) -> Void)? = nil) {
         if (User.loggedUser() == nil) {
             println("Trying to get history for my channels but logged user is nil.")
