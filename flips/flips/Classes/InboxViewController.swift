@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-import Foundation
+import MediaPlayer
 
 let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
 
@@ -35,6 +35,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     private var shouldInformPubnubNotConnected: Bool = false
     private var syncFinishedNotificationReceived: Bool = false
+    
+    private var onboardingPlayer: MPMoviePlayerController?
     
     
     // MARK: - Initialization Methods
@@ -227,13 +229,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         return image
     }
 
-    private func showOnboarding() {
-        if (!OnboardingHelper.onboardingHasBeenShown()) {
-            OnboardingHelper.presentOnboardingAtViewController(self)
-            OnboardingHelper.setOnboardingHasShown()
-        }
-    }
-
     func setupSyncView() {
         if let views = NSBundle.mainBundle().loadNibNamed("SyncView", owner: self, options: nil) {
             if let syncView = views[0] as? SyncView {
@@ -280,6 +275,38 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 }
             }
         }
+    }
+    
+    
+    // MARK: - Onboarding Handlers
+    
+    private func showOnboarding() {
+        if (!OnboardingHelper.onboardingHasBeenShown()) {
+            self.onboardingPlayer = OnboardingHelper.presentOnboardingAtViewController(self)
+            OnboardingHelper.setOnboardingHasShown()
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "onboardingDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
+        }
+    }
+    
+    func onboardingDidFinish(notification: NSNotification) {
+        if let reason = notification.userInfo?[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as? NSNumber {
+            if let reasonValue = MPMovieFinishReason(rawValue: reason.integerValue) {
+                switch reasonValue {
+                case .UserExited:
+                    var secondsWatched: String = ""
+                    if let player = self.onboardingPlayer {
+                        secondsWatched = "\(player.currentPlaybackTime)"
+                    }
+                    AnalyticsService.logOnboardingClosed(secondsWatched)
+                default:
+                    println("Another event happened")
+                }
+            }
+        }
+        
+        self.onboardingPlayer = nil
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
     }
     
     

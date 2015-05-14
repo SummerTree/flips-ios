@@ -30,11 +30,12 @@ class OnboardingHelper: NSObject {
         userDefaults.synchronize()
     }
 
-    class func presentOnboardingAtViewController(viewController: UIViewController) {
+    class func presentOnboardingAtViewController(viewController: UIViewController) -> MPMoviePlayerController {
         let videoURL = NSBundle.mainBundle().URLForResource("flips-tutorial", withExtension: "mp4")
         var tutorialViewController = MPMoviePlayerViewController(contentURL: videoURL);
         tutorialViewController.moviePlayer.shouldAutoplay = true
 
         viewController.presentViewController(tutorialViewController, animated: true, completion: nil)
+        return tutorialViewController.moviePlayer
     }
 }
