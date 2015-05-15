@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    private var currentBadgeCount: Int = 0
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         NetworkReachabilityHelper.sharedInstance.startMonitoring()
@@ -89,7 +91,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidEnterBackground(application: UIApplication) {
         if let loggedUser = User.loggedUser() {
-            application.applicationIconBadgeNumber = loggedUser.countUnreadMessages()
+            currentBadgeCount = loggedUser.countUnreadMessages()
+            application.applicationIconBadgeNumber = currentBadgeCount
         }
     }
     
@@ -123,6 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         // When user opens the app from a notification alert the aplication state is active, but not necessarily the app is foreground.
         if (application.applicationState == UIApplicationState.Inactive) {
+            
             self.onAppLaunchedFromNotification(application, withUserInfo: userInfo)
         } else {
             self.incrementBadgeCounter()
@@ -137,10 +141,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Badge functions
     
-    func incrementBadgeCounter() -> Int {
-        var newValue = UIApplication.sharedApplication().applicationIconBadgeNumber + 1
-        UIApplication.sharedApplication().applicationIconBadgeNumber = newValue
-        return newValue
+    func incrementBadgeCounter() {
+        self.currentBadgeCount++
+        UIApplication.sharedApplication().applicationIconBadgeNumber = self.currentBadgeCount
     }
     
     

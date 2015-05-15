@@ -269,6 +269,10 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                 readFlipMessageJSON = readFlipMessage.toJSON()
             }
         }, completion: { (success: Bool, error: NSError!) -> Void in
+            if let loggedUser = User.loggedUser() {
+                UIApplication.sharedApplication().applicationIconBadgeNumber = loggedUser.countUnreadMessages()
+            }
+            
             if (success) {
                 if (readFlipMessageJSON != nil) {
                     if let loggedUser: User = User.loggedUser() {
