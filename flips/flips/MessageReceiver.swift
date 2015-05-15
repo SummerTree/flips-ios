@@ -61,14 +61,11 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         println("New Message Received")
         println("   From: \(flipMessage.from.firstName)")
         println("   Sent at: \(flipMessage.createdAt)")
-        
-        var isTemporary = true
-        if let loggedUser = User.loggedUser() {
-            if (loggedUser.userID == flipMessage.from.userID) {
-                isTemporary = false
-            }
-        }
 
+        if let loggedUser = User.loggedUser() {
+            UIApplication.sharedApplication().applicationIconBadgeNumber = loggedUser.countUnreadMessages()
+        }
+        
         flipMessagesWaiting[flipMessage.flipMessageID] = Array<String>()
 
         // Download the thumbnail only for the first flip of the message

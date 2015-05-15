@@ -136,6 +136,7 @@ extension FlipMessage {
         notificationDictionary.updateValue(notificationMessage, forKey: NOTIFICATION_ALERT_KEY)
         notificationDictionary.updateValue(NOTIFICATION_SOUND_FILE, forKey: NOTIFICATION_SOUND_KEY)
         notificationDictionary.updateValue(1, forKey: NOTIFICATION_CONTENT_KEY)
+        notificationDictionary.updateValue(1, forKey: "badge")
         
         var notificationApsDictionary = Dictionary<String, AnyObject>()
         notificationApsDictionary.updateValue(notificationDictionary, forKey: NOTIFICATION_KEY)
