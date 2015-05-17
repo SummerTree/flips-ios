@@ -296,7 +296,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 case .UserExited:
                     var secondsWatched: String = ""
                     if let player = self.onboardingPlayer {
-                        secondsWatched = "\(player.currentPlaybackTime)"
+                        secondsWatched = "\(Int(player.currentPlaybackTime))"
                     }
                     AnalyticsService.logOnboardingClosed(secondsWatched)
                 default:
