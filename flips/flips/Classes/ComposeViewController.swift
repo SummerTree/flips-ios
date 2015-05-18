@@ -376,7 +376,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_FLIP_SELECTED_INDEX) {
             if (self.shouldShowPreviewButton()) {
-                self.openPreview()
+                let oneSecond = 0.5 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                    self.openPreview()
+                }
             } else {
                 self.composeBottomViewContainer.showAllFlipCreateMessage()
             }
