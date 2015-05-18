@@ -34,31 +34,22 @@ public class GalleryAssetsHelper {
             if group != nil {
                 group!.setAssetsFilter(ALAssetsFilter.allPhotos())
                 if group!.numberOfAssets() > 0 {
-                    group!.enumerateAssetsAtIndexes(NSIndexSet(index: group!.numberOfAssets()-1), options: NSEnumerationOptions.Concurrent, usingBlock: { (result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-                        if result != nil {
-                            var assetRep: ALAssetRepresentation = result.defaultRepresentation()
-       
-                            var iref = assetRep.fullScreenImage().takeUnretainedValue()
-                            lastImage = UIImage(CGImage: iref)?.cropSquareImage(self.GALLERY_BUTTON_IMAGE_SIZE)
-                            button.setImage(lastImage, forState: .Normal)
-                        } else {
-                            if lastImage == nil {
-                                button.setImage(self.FILTER_PHOTO_IMAGE, forState: .Normal)
-                            }
-                        }
-                    })
+                    let posterImage = group!.posterImage().takeRetainedValue()
+                    lastImage = UIImage(CGImage: posterImage)?.cropSquareImage(self.GALLERY_BUTTON_IMAGE_SIZE)
+                    button.setImage(lastImage, forState: .Normal)
                 } else {
                     button.setImage(self.FILTER_PHOTO_IMAGE, forState: .Normal)
                 }
             } else {
                 if lastImage == nil {
                     button.setImage(self.FILTER_PHOTO_IMAGE, forState: .Normal)
-                }            }
-            }, failureBlock: { (error: NSError!) -> Void in
-                if lastImage == nil {
-                    button.setImage(self.FILTER_PHOTO_IMAGE, forState: .Normal)
                 }
-                println(error)
+            }
+        }, failureBlock: { (error: NSError!) -> Void in
+            if lastImage == nil {
+                button.setImage(self.FILTER_PHOTO_IMAGE, forState: .Normal)
+            }
+            println(error)
         })
     }
 }
