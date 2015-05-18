@@ -243,7 +243,15 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         if (self.indexPathToShow != nil) {
             self.tableView.scrollToRowAtIndexPath(self.indexPathToShow!, atScrollPosition: UITableViewScrollPosition.Top, animated: scrollAnimated)
             if (self.indexPathToShow!.row == 0) {
-                self.playVideoForVisibleCell()
+                UIView.animateWithDuration(0.25, animations: { () -> Void in
+                    self.tableView.alpha = 1
+                }, completion: { (finished) -> Void in
+                    let time = 1 * Double(NSEC_PER_SEC)
+                    let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
+                    dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                        self.playVideoForVisibleCell()
+                    }
+                })
             }
         }
     }
