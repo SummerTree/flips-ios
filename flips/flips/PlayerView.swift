@@ -170,18 +170,26 @@ class PlayerView: UIView {
                         self.setWord(self.words![playerItem.order])
                     }
                     
-                    self.fadeToPlayingState({ () -> Void in
-                        if (currentIdentifier != self.contentIdentifier) {
-                            return
-                        }
-                        
-                        // Since it needs to wait the animation, the user can press back button, so it won't exist.
-                        if (player != nil) {
+                    if (player != nil) {
+                        if (player!.status == AVPlayerStatus.ReadyToPlay) {
+                            self.fadeToPlayingState(completion: { () -> Void in
+                                
+                                // Since it needs to wait the animation, the user can press back button, so it won't exist.
+                                if (currentIdentifier != self.contentIdentifier) {
+                                    return
+                                }
+                                
+                                self.isPlaying = true
+                                player!.volume = 1.0
+                                player!.play()
+                            })
+                        } else {
+                            player!.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.New, context: nil)
                             self.isPlaying = true
                             player!.volume = 1.0
                             player!.play()
                         }
-                    })
+                    }
                 }
             }
         } else {
@@ -198,6 +206,17 @@ class PlayerView: UIView {
                     })
                 })
             }
+        }
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if let player = self.player() {
+            if (object as AVQueuePlayer == player && keyPath == "status") {
+                if (player.status == AVPlayerStatus.ReadyToPlay) {
+                    self.fadeToPlayingState(completion: nil)
+                }
+            }
+            player.removeObserver(self, forKeyPath: "status")
         }
     }
     
@@ -793,6 +812,14 @@ class PlayerView: UIView {
         self.flipsDownloadProgress.removeAll()
 
         if let player = self.player() {
+            SwiftTryCatch.try({ () -> Void in
+                player.removeObserver(self, forKeyPath: "status")
+            }, catch: { (exception: NSException!) -> Void in
+                return // Do nothing
+            }, finally: { () -> Void in
+                return
+            })
+            
             player.removeAllItems()
         }
 
