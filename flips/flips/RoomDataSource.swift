@@ -60,7 +60,9 @@ class RoomDataSource : BaseDataSource {
             roomInContext.addParticipantsObject(user.inContext(currentContext) as User)
         }
 
-        roomInContext.admin = admin?.inContext(currentContext) as User
+        if (admin != nil) {
+            roomInContext.admin = admin!.inContext(currentContext) as User
+        }
     }
     
     
