@@ -146,7 +146,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     let alertView: UIAlertView = UIAlertView(title: nil, message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 } else {
-                    self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
                     self.openRoomForPushNotificationIfMessageReceived()
                 }
             }
@@ -491,6 +490,5 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func prepareToLoadPushNotificationForRoomId(roomId: String, andFlipMessageId flipMessageId: String?) {
         self.roomIdToShow = roomId
         self.flipMessageIdToShow = flipMessageId
-        self.showActivityIndicator(userInteractionEnabled: true)
     }
 }
