@@ -24,6 +24,7 @@ public class FlipsCache {
     
     init() {
         self.cache = StorageCache(cacheID: "allFlipsStorageCache", cacheDirectoryName: "flips_cache", scheduleCleanup: CacheCleanupPolicy.sharedInstance.scheduleCleanup)
+        self.cache.numberOfRetries = 0
         CacheCleanupPolicy.sharedInstance.register(self.cache)
     }
     
