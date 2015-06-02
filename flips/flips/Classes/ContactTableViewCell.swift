@@ -18,12 +18,12 @@ class ContactTableViewCell: UITableViewCell {
     let LOW_PRIORITY: UILayoutPriority = 1
     let HIGH_PRIORITY: UILayoutPriority = 751
     
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var nameLabelEqualHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var numberLabel: UILabel!
-    @IBOutlet weak var photoView: ContactPhotoView!
-    @IBOutlet weak var labelView: UIView!
-    
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var nameLabelEqualHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var numberLabel: UILabel!
+    @IBOutlet var photoView: ContactPhotoView!
+    @IBOutlet var labelView: UIView!
+
     var contact: Contact! {
         didSet {
             self.nameLabel.text = contact.contactTitle
