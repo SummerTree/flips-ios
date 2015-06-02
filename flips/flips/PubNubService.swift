@@ -101,10 +101,10 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     func disconnect() {
+        self.disablePushNotificationOnMyChannels()
         PubNub.unsubscribeFrom(PubNub.subscribedObjectsList(), withCompletionHandlingBlock: { (channels: [AnyObject]!, error: PNError!) -> Void in
             println("PubNub unsubscribed from \(channels.count) channels with error: \(error)")
         })
-        self.disablePushNotificationOnMyChannels()
         PubNub.disconnect()
         self.pubnubConnectionIdentifier = nil
     }
@@ -168,11 +168,17 @@ public class PubNubService: FlipsService, PNDelegate {
     }
     
     func enablePushNotificationOnMyChannels() {
-        if let myChannels: [PNChannel] = self.channelsForMyRooms() {
-            let token = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData()
-            PubNub.enablePushNotificationsOnChannels(myChannels, withDevicePushToken: token) { (channels, pnError) -> Void in
-                println("Result of enablePushNotificationOnChannels: channels=[\(channels)], with error: \(pnError)")
-            }
+        if let token: NSData = DeviceHelper.sharedInstance.retrieveDeviceTokenAsNSData() {
+            PubNub.removeAllPushNotificationsForDevicePushToken(token, withCompletionHandlingBlock: { (error: PNError?) -> Void in
+                if (error != nil) {
+                    println("Push notification removed with error: \(error?.description)")
+                }
+                if let myChannels: [PNChannel] = self.channelsForMyRooms() {
+                    PubNub.enablePushNotificationsOnChannels(myChannels, withDevicePushToken: token) { (channels, pnError) -> Void in
+                        println("Result of enablePushNotificationOnChannels: channels=[\(channels)], with error: \(pnError)")
+                    }
+                }
+            })
         }
     }
     
