@@ -19,8 +19,6 @@ public class Downloader : NSObject {
     
     let TIME_OUT_INTERVAL: NSTimeInterval = 60 //seconds
     
-    private let NUMBER_OF_RETRIES: Int = 3
-    
     // MARK: - Singleton Implementation
     
     public class var sharedInstance : Downloader {
@@ -32,13 +30,13 @@ public class Downloader : NSObject {
     
     // MARK: - Download Public Methods
 
-    func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil) {
+    func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil, numberOfRetries: Int? = 3) {
         
         let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
         let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
         let tempURL = NSURL(fileURLWithPath: tempPath)!
 
-        self.downloadTaskRetryingNumberOfTimes(NUMBER_OF_RETRIES, url: url, localURL: tempURL, success: { (responseObject) -> Void in
+        self.downloadTaskRetryingNumberOfTimes(numberOfRetries!, url: url, localURL: tempURL, success: { (responseObject) -> Void in
             var error: NSError? = nil
             let fileManager = NSFileManager.defaultManager()
             fileManager.moveItemAtURL(tempURL, toURL: localURL, error: &error)
@@ -53,7 +51,7 @@ public class Downloader : NSObject {
     }
     
     private func downloadTaskRetryingNumberOfTimes(numberOfRetries: Int, url: NSURL, localURL: NSURL, success: (AnyObject?) -> Void, failure: (NSError?) -> Void, progress: ((Float) -> Void)? = nil, latestError: NSError?) {
-        if (numberOfRetries <= 0) {
+        if (latestError != nil && numberOfRetries <= 0) {
             failure(latestError)
         } else {
             let request = NSMutableURLRequest(URL: url)
@@ -68,7 +66,12 @@ public class Downloader : NSObject {
                 println("Download failed - retries remaining: \(numberOfRetries - 1)")
                 let fileManager = NSFileManager.defaultManager()
                 fileManager.removeItemAtURL(localURL, error: nil)
-                self.downloadTaskRetryingNumberOfTimes(numberOfRetries - 1, url: url, localURL: localURL, success: success, failure: failure, progress: progress, latestError: error)
+
+                if (numberOfRetries > 0) {
+                    self.downloadTaskRetryingNumberOfTimes(numberOfRetries - 1, url: url, localURL: localURL, success: success, failure: failure, progress: progress, latestError: error)
+                } else {
+                    failure(error)
+                }
             })
             
             if (progress != nil) {

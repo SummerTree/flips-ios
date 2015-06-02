@@ -30,7 +30,9 @@ public class StorageCache {
     private let downloadSyncQueue: dispatch_queue_t
     private var downloadInProgressURLs: Dictionary<String, [DownloadFinishedCallbacks]>
     private var cacheWasCleared: ThreadSafe<Bool>
-    
+
+    var numberOfRetries: Int = 3
+
     var sizeInBytes: Int64 {
         return self.cacheJournal.cacheSize
     }
@@ -100,7 +102,7 @@ public class StorageCache {
             }
             return CacheGetResponse.DATA_IS_READY
         }
-        
+
         var downloadedAlreadyStarted = false
         
         dispatch_sync(self.downloadSyncQueue) {
@@ -179,7 +181,8 @@ public class StorageCache {
                 for progress in progressCallbacks {
                     progress?(downloadProgress)
                 }
-            }
+            },
+            numberOfRetries: self.numberOfRetries
         )
         
         return CacheGetResponse.DOWNLOAD_WILL_START
