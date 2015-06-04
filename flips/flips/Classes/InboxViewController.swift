@@ -490,5 +490,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func prepareToLoadPushNotificationForRoomId(roomId: String, andFlipMessageId flipMessageId: String?) {
         self.roomIdToShow = roomId
         self.flipMessageIdToShow = flipMessageId
+        self.showActivityIndicator(userInteractionEnabled: true)
     }
 }
