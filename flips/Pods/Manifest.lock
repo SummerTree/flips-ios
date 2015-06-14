@@ -20,15 +20,20 @@ PODS:
   - AFNetworking/UIKit (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Bolts (1.1.4)
+  - Bolts (1.2.0):
+    - Bolts/AppLinks (= 1.2.0)
+    - Bolts/Tasks (= 1.2.0)
+  - Bolts/AppLinks (1.2.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.2.0)
   - Facebook-iOS-SDK (3.19.0):
     - Bolts (~> 1.0)
-  - FlurrySDK (5.4.0):
-    - FlurrySDK/FlurrySDK (= 5.4.0)
-  - FlurrySDK/FlurrySDK (5.4.0)
+  - FlurrySDK (6.5.0):
+    - FlurrySDK/FlurrySDK (= 6.5.0)
+  - FlurrySDK/FlurrySDK (6.5.0)
   - MagicalRecord/Shorthand (2.2)
   - Masonry (0.5.3)
-  - PubNub (3.7.10.6)
+  - PubNub (3.7.11)
   - SplunkMint-iOS (4.1)
 
 DEPENDENCIES:
@@ -37,17 +42,17 @@ DEPENDENCIES:
   - FlurrySDK
   - MagicalRecord/Shorthand (= 2.2)
   - Masonry (= 0.5.3)
-  - PubNub (= 3.7.10.6)
+  - PubNub (= 3.7.11)
   - SplunkMint-iOS (= 4.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 41d45d2c14219af0fa5addf3cfd433a002c13c9f
-  Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
+  Bolts: d176cb1e0012175589e389a9db49b85e27787576
   Facebook-iOS-SDK: 2a2f22be64360c46eb76002654aba69c0ea06f5a
-  FlurrySDK: 7f929b68dea38ce735979fb039229f62c0b697b5
+  FlurrySDK: 7e749c1bd22f4fb0a863663e38c58bc841980b25
   MagicalRecord: f8a56bb87ab6552f20c4bb8681a1958a197ea3cd
   Masonry: 9f515466afe48632562342a40a1c224071a1a022
-  PubNub: be1486964b34b90fe58609472537411f5dca1559
+  PubNub: a2fbe9e35c0e2797f5ce4945dcd529ea7216befa
   SplunkMint-iOS: 514a7cfdc38cc9fadab99826a093c3615cd4a5d0
 
-COCOAPODS: 0.36.0
+COCOAPODS: 0.37.2

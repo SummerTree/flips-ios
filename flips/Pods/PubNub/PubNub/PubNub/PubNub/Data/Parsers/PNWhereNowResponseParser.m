@@ -9,8 +9,8 @@
 #import "PNWhereNowResponseParser+Protected.h"
 #import "PNResponse+Protected.h"
 #import "PNWhereNow+Protected.h"
+#import "PNChannel+Protected.h"
 #import "PNChannel.h"
-
 
 // ARC check
 #if !__has_feature(objc_arc)
@@ -26,7 +26,7 @@
 
 #pragma mark - Class methods
 
-+ (id)parserForResponse:(PNResponse *)response {
++ (id)parserForResponse:(PNResponse *)__unused response {
 
     NSAssert1(0, @"%s SHOULD BE CALLED ONLY FROM PARENT CLASS", __PRETTY_FUNCTION__);
 

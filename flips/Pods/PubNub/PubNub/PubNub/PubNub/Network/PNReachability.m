@@ -355,9 +355,13 @@ void PNReachabilityCallback(SCNetworkReachabilityRef reachability __unused, SCNe
     }
 }
 
-void reachabilityContextInformationReleaseCallBack( const void *info ) {
+static void reachabilityContextInformationReleaseCallBack(const void *info);
+void reachabilityContextInformationReleaseCallBack(const void *info) {
     
-    CFRelease(info);
+    if (info) {
+        
+        CFRelease(info);
+    }
 }
 
 - (void)startServiceReachabilityMonitoring {
@@ -386,7 +390,8 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
             if (SCNetworkReachabilitySetCallback(self.serviceReachability, PNReachabilityCallback, &context)) {
 
                 // Schedule service reachability monitoring on private queue
-                SCNetworkReachabilitySetDispatchQueue(self.serviceReachability, [self pn_privateQueue]);
+//                SCNetworkReachabilitySetDispatchQueue(self.serviceReachability, [self pn_privateQueue]);
+                    SCNetworkReachabilitySetDispatchQueue(self.serviceReachability, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
             }
 
 
@@ -476,7 +481,7 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
     [self stopOriginLookup:NO];
 }
 
-- (void)stopOriginLookup:(BOOL)forRelaunch {
+- (void)stopOriginLookup:(BOOL)__unused forRelaunch {
     
     [self pn_dispatchBlock:^{
         
@@ -495,11 +500,14 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
         
         self.restartReachabilityOnLookupComplete = NO;
 
-        // Check whether reachability instance crated before destroy it
+        // Check whether reachability instance created before destroy it
         if (self.serviceReachability) {
 
             SCNetworkReachabilitySetDispatchQueue(self.serviceReachability, NULL);
-            CFRelease(_serviceReachability);
+            if (_serviceReachability) {
+                
+                CFRelease(_serviceReachability);
+            }
             _serviceReachability = NULL;
 
             [PNLogger logReachabilityMessageFrom:self withParametersFromBlock:^NSArray *{
@@ -507,8 +515,12 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
                 return @[PNLoggerSymbols.reachability.stopReachabilityObservation];
             }];
         }
-
-        [self startServiceReachabilityMonitoring:NO];
+        
+        // wait a delay to give reachability some time to destroy
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self startServiceReachabilityMonitoring:NO];
+        });
     }];
 }
 
@@ -520,7 +532,10 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
         if (self.serviceReachability) {
 
             SCNetworkReachabilityUnscheduleFromRunLoop(self.serviceReachability, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-            CFRelease(_serviceReachability);
+            if (_serviceReachability) {
+                
+                CFRelease(_serviceReachability);
+            }
             _serviceReachability = NULL;
 
             [PNLogger logReachabilityMessageFrom:self withParametersFromBlock:^NSArray *{
@@ -885,21 +900,28 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
 
 - (SCNetworkConnectionFlags)synchronousStatusFlags {
     
-    SCNetworkConnectionFlags reachabilityFlags;
+    SCNetworkConnectionFlags reachabilityFlags = 0;
     
     // Fetch cellular data reachability status
     SCNetworkReachabilityRef internetReachability = [PNReachability newReachabilityForWiFi:NO];
-    SCNetworkReachabilityGetFlags(internetReachability, &reachabilityFlags);
+    
+    if (internetReachability) {
+        SCNetworkReachabilityGetFlags(internetReachability, &reachabilityFlags);
+        CFRelease(internetReachability);
+    }
+    
     PNReachabilityStatus reachabilityStatus = PNReachabilityStatusForFlags(reachabilityFlags);
     if (reachabilityStatus == PNReachabilityStatusUnknown || reachabilityStatus == PNReachabilityStatusNotReachable) {
         
         // Fetch WiFi reachability status
         SCNetworkReachabilityRef wifiReachability = [PNReachability newReachabilityForWiFi:YES];
-        SCNetworkReachabilityGetFlags(wifiReachability, &reachabilityFlags);
-        CFRelease(wifiReachability);
+        
+        if (wifiReachability) {
+            
+            SCNetworkReachabilityGetFlags(wifiReachability, &reachabilityFlags);
+            CFRelease(wifiReachability);
+        }
     }
-    
-    CFRelease(internetReachability);
     
     
     return reachabilityFlags;
@@ -1050,13 +1072,8 @@ void reachabilityContextInformationReleaseCallBack( const void *info ) {
             currentNetworkAddress = @"'not assigned'";
         }
 
-        // In case if reachability report that connection is available (not on cellular) we should launch additional lookup service which will
-        // allow to check network state for sure
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-        BOOL shouldSuspectWrongState = updatedStatus != PNReachabilityStatusReachableViaCellular;
-#else
+        // Allow to run look up timer even when we use Cellular data in this case
         BOOL shouldSuspectWrongState = YES;
-#endif
 
         if (![self isServiceAvailableForStatus:updatedStatus] ||
             ([self isServiceAvailableForStatus:self.status] && [self isServiceAvailableForStatus:updatedStatus])) {
