@@ -95,12 +95,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 }
             })
         }
-
-        self.showOnboarding()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         self.inboxView.viewWillAppear()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageContentDownloadedNotificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
@@ -134,7 +133,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-
+        
+        self.showOnboarding()
+        
         self.refreshRooms()
         
         if (PubNubService.sharedInstance.isConnected()) {
