@@ -23,7 +23,7 @@ class CustomBadgeView : UIView {
     
     //MARK: - Initialization Methods
     
-    convenience override init() {
+    convenience init() {
         self.init(frame: CGRect.zeroRect)
     }
     

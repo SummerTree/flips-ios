@@ -35,8 +35,8 @@ class SplashScreenView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override init() {
-        super.init()
+    convenience init() {
+        self.init()
         self.backgroundColor = UIColor.flipOrangeBackground()
         self.addSubviews()
         self.makeConstraints()

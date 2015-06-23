@@ -143,7 +143,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func reloadCells() {
-        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells() as [ConversationTableViewCell] {
+        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells() as! [ConversationTableViewCell] {
             cell.refreshCell(shouldSetThumbnailAnimated: false)
         }
     }
@@ -152,7 +152,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     // MARK: - UITableViewDataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ConversationTableViewCell
+        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! ConversationTableViewCell
         
         if let roomId = dataSource?.inboxView(self, roomAtIndex: indexPath.row) {
             cell.setRoomId(roomId)

@@ -19,8 +19,8 @@ class FlipsWebView: UIView, UIWebViewDelegate {
     
     var url: String!
     
-    init(URL: String) {
-        super.init()
+    convenience init(URL: String) {
+        self.init()
         self.url = URL
         self.addSubviews()
         self.makeConstraints()
@@ -73,7 +73,7 @@ class FlipsWebView: UIView, UIWebViewDelegate {
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         if (navigationType == UIWebViewNavigationType.LinkClicked) {
-            UIApplication.sharedApplication().openURL(request.URL)
+            UIApplication.sharedApplication().openURL(request.URL!)
             return false
         }
         return true

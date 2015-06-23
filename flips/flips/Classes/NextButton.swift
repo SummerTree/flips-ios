@@ -13,8 +13,9 @@
 import Foundation
 
 class NextButton: UIButton {
-    override init() {
-        super.init(frame: CGRectZero)
+
+    convenience init() {
+        self.init()
         setup()
     }
     

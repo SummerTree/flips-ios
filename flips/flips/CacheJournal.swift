@@ -70,8 +70,8 @@ public class CacheJournal {
         self.persistJournal()
     }
     
-    func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> Slice<(UInt64,Int)> {
-        var entriesSlice: Slice<(UInt64,Int)>!
+    func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> ArraySlice<(UInt64,Int)> {
+        var entriesSlice: ArraySlice<(UInt64,Int)>!
         
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.value.sort({ $0.timestamp < $1.timestamp })
@@ -90,7 +90,7 @@ public class CacheJournal {
             }
             
             if (upperLimit <= 0) {
-                entriesSlice = Slice<(UInt64,Int)>()
+                entriesSlice = ArraySlice<(UInt64,Int)>()
             } else {
                 entriesSlice = self.entries.value[0..<upperLimit].map { ($0.size, $0.timestamp) }
             }
@@ -98,12 +98,12 @@ public class CacheJournal {
         return entriesSlice
     }
     
-    func getLRUEntries(count: Int) -> Slice<String> {
+    func getLRUEntries(count: Int) -> ArraySlice<String> {
         if (count <= 0) {
-            return Slice<String>()
+            return ArraySlice<String>()
         }
         
-        var entriesSlice: Slice<String>!
+        var entriesSlice: ArraySlice<String>!
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.value.sort({ $0.timestamp < $1.timestamp })
 
@@ -111,7 +111,7 @@ public class CacheJournal {
                 entriesSlice = self.entries.value[0..<count].map { $0.key }
             } else {
                 println("Failed to get all LRU entries from cache journal, expected \(count), found \(self.entries.value.count)")
-                entriesSlice = Slice<String>()
+                entriesSlice = ArraySlice<String>()
             }
         })
         
@@ -172,7 +172,7 @@ public class CacheJournal {
             let newContent = "".join(self.entries.value.map { $0.toString(self.SEP, eol: self.EOL) })
             if let outputStream = NSOutputStream(toFileAtPath: self.path, append: false) {
                 outputStream.open()
-                outputStream.write(newContent, maxLength: countElements(newContent))
+                outputStream.write(newContent, maxLength: count(newContent))
                 outputStream.close()
             } else {
                 println("Failed to persist cache journal to file \(self.path)")

@@ -39,8 +39,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     var keyboardHeight: CGFloat = 0.0
     
-    override init() {
-        super.init()
+    convenience init() {
+        self.init(frame: CGRectZero)
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()
@@ -187,7 +187,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text
-        let length = countElements(text)
+        let length = count(text)
         var shouldReplace = true
         
         if (string != "") {
@@ -213,7 +213,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     }
     
     func mobileNumberFieldDidChange(textField: UITextField) {
-        if (countElements(textField.text) == 12) {
+        if (count(textField.text) == 12) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
         }
@@ -228,7 +228,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func keyboardWillShow(notification: NSNotification) {
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         keyboardHeight = keyboardFrame.height
         self.makeConstraints()
     }

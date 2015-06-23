@@ -19,12 +19,12 @@ class BaseDataSource: NSObject {
     let currentContext: NSManagedObjectContext!
     
     override init() {
-        super.init()
         currentContext = NSManagedObjectContext.MR_defaultContext()
+        super.init()
     }
     
     init(context: NSManagedObjectContext) {
-        super.init()
         currentContext = context
+        super.init()
     }
 }

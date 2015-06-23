@@ -25,8 +25,8 @@ class ChangeNumberInfoView: UIView {
     private var descriptionLabel:           UILabel!
     private var nextButton:                 UIButton!
     
-    override init() {
-        super.init()
+    convenience init() {
+        self.init()
         
         addSubviews()
         makeConstraints()

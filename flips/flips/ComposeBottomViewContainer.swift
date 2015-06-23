@@ -39,9 +39,8 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     }
     
     
-    override init() {
-        super.init(frame: CGRect.zeroRect)
-        
+    convenience init() {
+        self.init()
         self.addSubviews()
         self.addConstraints()
     }

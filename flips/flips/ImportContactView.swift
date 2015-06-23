@@ -17,8 +17,8 @@ class ImportContactView: UIView {
     
     // MARK: - Required initializers
     
-    override init() {
-        super.init()
+    convenience init() {
+        self.init()
     }
     
     override init(frame: CGRect) {

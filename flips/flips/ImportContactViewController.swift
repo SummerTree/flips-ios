@@ -17,8 +17,8 @@ class ImportContactViewController: UIViewController {
     private var alreadyExecuted: Bool = false
     private var importContactView: ImportContactView!
 
-    override init() {
-        super.init()
+    convenience init() {
+        self.init()
         
         self.importContactView = ImportContactView()
     }

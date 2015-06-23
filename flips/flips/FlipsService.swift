@@ -27,7 +27,7 @@ public class FlipsService : NSObject {
     
     var APP_VERSION: String {
         let infoPlist: NSDictionary = NSBundle.mainBundle().infoDictionary!
-        return infoPlist["CFBundleShortVersionString"] as String
+        return infoPlist["CFBundleShortVersionString"] as! String
     }
 
     private let BACKEND_TIMED_OUT_MESSAGE: String = "The request timed out."

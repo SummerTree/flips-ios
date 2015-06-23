@@ -86,8 +86,8 @@ class LoginView : UIView, UITextFieldDelegate {
     
     weak var delegate: LoginViewDelegate?
     
-    override init() {
-        super.init()
+    convenience init() {
+        self.init()
         
         self.animator = UIDynamicAnimator(referenceView: self)
         self.backgroundColor = UIColor.flipOrange()

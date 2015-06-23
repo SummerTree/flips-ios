@@ -34,7 +34,7 @@ class FlipMessageDataSource : BaseDataSource {
         let fromUserID = json[FlipMessageJsonParams.FROM_USER_ID].stringValue
         let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         
-        var entity = FlipMessage.createInContext(currentContext) as FlipMessage
+        var entity = FlipMessage.createInContext(currentContext) as! FlipMessage
         entity.flipMessageID = flipMessageID
         entity.createdAt = NSDate(dateTimeString: json[FlipMessageJsonParams.SENT_AT].stringValue)
         entity.receivedAt = receivedDate
@@ -74,8 +74,8 @@ class FlipMessageDataSource : BaseDataSource {
     }
     
     func associateFlipMessage(flipMessage: FlipMessage, withUser user: User, formattedFlips: [FormattedFlip], andRoom room: Room, isFromHistory: Bool) {
-        let flipMessageInContext = flipMessage.inContext(currentContext) as FlipMessage
-        let userInContext = user.inContext(currentContext) as User
+        let flipMessageInContext = flipMessage.inContext(currentContext) as! FlipMessage
+        let userInContext = user.inContext(currentContext) as! User
         
         flipMessageInContext.from = userInContext
         
@@ -89,7 +89,7 @@ class FlipMessageDataSource : BaseDataSource {
             flipMessageInContext.addFlip(formattedFlip, inContext: currentContext)
         }
         
-        let roomInContext = room.inContext(currentContext) as Room
+        let roomInContext = room.inContext(currentContext) as! Room
         flipMessageInContext.room = roomInContext
         if ((roomInContext.lastMessageReceivedAt == nil) ||
             (roomInContext.lastMessageReceivedAt.compare(flipMessageInContext.receivedAt) == NSComparisonResult.OrderedAscending)) {
@@ -104,10 +104,10 @@ class FlipMessageDataSource : BaseDataSource {
     }
     
     func createFlipMessageWithId(flipMessageID: String, andFormattedFlips formattedFlips: [FormattedFlip], toRoom room: Room) -> FlipMessage {
-        var entity = FlipMessage.createInContext(currentContext) as FlipMessage
+        var entity = FlipMessage.createInContext(currentContext) as! FlipMessage
         entity.flipMessageID = flipMessageID
-        entity.room = room.inContext(currentContext) as Room
-        entity.from = User.loggedUser()?.inContext(currentContext) as User
+        entity.room = room.inContext(currentContext) as! Room
+        entity.from = User.loggedUser()?.inContext(currentContext) as! User
         entity.createdAt = NSDate()
         entity.notRead = false
         entity.receivedAt = NSDate()
@@ -119,7 +119,7 @@ class FlipMessageDataSource : BaseDataSource {
     }
     
     func nextFlipMessageID() -> String {
-        let loggedUser = User.loggedUser()?.inContext(currentContext) as User!
+        let loggedUser = User.loggedUser()?.inContext(currentContext) as! User!
         let timestamp = NSDate.timeIntervalSinceReferenceDate()
         let newMessageId = "\(loggedUser!.userID):\(timestamp)"
 
@@ -128,13 +128,13 @@ class FlipMessageDataSource : BaseDataSource {
     
     func oldestNotReadFlipMessageForRoomId(roomID: String) -> FlipMessage? {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.NOT_READ) == true) AND (\(FlipMessageAttributes.REMOVED) == false))")
-        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
+        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as! [FlipMessage]
         return result.first
     }
     
     func newestNotReadFlipMessageForRoomId(roomID: String) -> FlipMessage? {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.NOT_READ) == true) AND (\(FlipMessageAttributes.REMOVED) == false))")
-        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
+        var result = FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.CREATED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as! [FlipMessage]
         return result.last
     }
     
@@ -144,7 +144,7 @@ class FlipMessageDataSource : BaseDataSource {
         let roomDataSource = RoomDataSource(context: currentContext)
         let room = roomDataSource.retrieveRoomWithId(roomID)
         for (var i = 0; i < room.flipMessages.count; i++) {
-            let flipMessage = room.flipMessages.objectAtIndex(i).inContext(currentContext) as FlipMessage
+            let flipMessage = room.flipMessages.objectAtIndex(i).inContext(currentContext) as! FlipMessage
             flipMessage.removed = true
             
             let flipMessageID: String = flipMessage.flipMessageID
@@ -156,7 +156,7 @@ class FlipMessageDataSource : BaseDataSource {
     }
     
     func markFlipMessageAsRemoved(flipMessage: FlipMessage) {
-        let flipMessageInContext: FlipMessage = flipMessage.inContext(currentContext) as FlipMessage
+        let flipMessageInContext: FlipMessage = flipMessage.inContext(currentContext) as! FlipMessage
         flipMessageInContext.removed = true
         
         let deletedFlipMessageDataSource: DeletedFlipMessageDataSource = DeletedFlipMessageDataSource(context: currentContext)
@@ -182,7 +182,7 @@ class FlipMessageDataSource : BaseDataSource {
     
     func flipMessagesForRoomID(roomID: String) -> [FlipMessage] {
         var predicate = NSPredicate(format: "((\(FlipMessageAttributes.ROOM).roomID == \(roomID)) AND (\(FlipMessageAttributes.REMOVED) == false))")
-        return FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.RECEIVED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as [FlipMessage]
+        return FlipMessage.MR_findAllSortedBy(FlipMessageAttributes.RECEIVED_AT, ascending: true, withPredicate: predicate, inContext: currentContext) as! [FlipMessage]
     }
     
     func getFlipMessageById(flipMessageID: String) -> FlipMessage? {

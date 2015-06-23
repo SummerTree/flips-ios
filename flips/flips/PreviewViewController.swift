@@ -223,7 +223,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.LightContent
     }
 }
 

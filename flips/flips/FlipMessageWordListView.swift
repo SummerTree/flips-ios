@@ -36,8 +36,8 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     // MARK: - Initializers
     
-    override init() {
-        super.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init()
         self.flipTextViews = Array<FlipTextView>()
         
         clipsToBounds = true
@@ -193,17 +193,17 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         self.centerScrollViewAtView(gesture.view!)
         
-        let flipText = (gesture.view! as FlipTextView).flipText
+        let flipText = (gesture.view! as! FlipTextView).flipText
         delegate?.flipMessageWordListView(self, didSelectFlipWord: flipText)
     }
     
     func flipWordLongPressed(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
-            let flipTextView = gesture.view! as FlipTextView
+            let flipTextView = gesture.view! as! FlipTextView
             var arrayOfWords : [String] = FlipStringsUtil.splitFlipString(flipTextView.flipText.text)
             if (arrayOfWords.count > 1) {
                 gesture.view?.alpha = 0.5
-                self.showSplitMenuAtView(gesture.view! as FlipTextView)
+                self.showSplitMenuAtView(gesture.view! as! FlipTextView)
             }
         } else if (gesture.state == UIGestureRecognizerState.Ended) {
             gesture.view?.alpha = 1
@@ -240,7 +240,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         menuController.setTargetRect(selectionRect, inView: self)
         
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: NSSelectorFromString("splitText"))
-        menuController.menuItems = NSArray(array: [lookupMenu])
+        menuController.menuItems = NSArray(array: [lookupMenu]) as [AnyObject]
         
         menuController.update();
         

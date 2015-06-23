@@ -115,7 +115,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         
         let visibleCells = tableView.visibleCells()
-        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+        for cell : ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             cell.stopMovie()
             cell.releaseResources()
         }
@@ -285,7 +285,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Table view data source
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: ChatTableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell?
+        var cell: ChatTableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! ChatTableViewCell?
         if (cell == nil) {
             cell = ChatTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: CELL_IDENTIFIER)
         }
@@ -330,7 +330,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Cell Auxiliary Methods
     
     private func getPrototypeCell() -> ChatTableViewCell {
-        return (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ChatTableViewCell)
+        return (self.tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! ChatTableViewCell)
     }
     
     private func configureCell(cell: ChatTableViewCell, atIndexPath indexPath: NSIndexPath) {
@@ -383,7 +383,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let visibleCells: [AnyObject] = self.tableView.visibleCells()
-        for cell: ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+        for cell: ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             if !self.isCell(cell, totallyVisibleOnView: self) {
                 if cell.isPlayingFlip() {
                     cell.stopMovie()
@@ -409,7 +409,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     private func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
-        var videoContainerView: UIView = cell.subviews[0] as UIView // Gets video container view from cell
+        var videoContainerView: UIView = cell.subviews[0] as! UIView // Gets video container view from cell
         var convertedVideoContainerViewFrame: CGRect = cell.convertRect(videoContainerView.frame, toView:view)
         if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
             return true
@@ -443,7 +443,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
 
     private func playVideoForVisibleCell() {
         let visibleCells = self.tableView.visibleCells()
-        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+        for cell : ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             if (self.isCell(cell, totallyVisibleOnView: self)) {
                 var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
                 if (indexPath == nil) {
@@ -494,7 +494,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         hideReplyButtonAndShowTextField()
         
         let visibleCells: [AnyObject] = tableView.visibleCells()
-        for cell: ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+        for cell: ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             cell.stopMovie()
         }
         
@@ -529,7 +529,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func keyboardDidShow(notification: NSNotification) {
         if (DeviceHelper.sharedInstance.systemVersion() < 8) {
             let info = notification.userInfo!
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
             keyboardHeight = keyboardFrame.height as CGFloat
         }
         handleReplyTextFieldSize()
@@ -570,7 +570,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool {
         let visibleCells = tableView.visibleCells()
-        for cell : ChatTableViewCell in visibleCells as [ChatTableViewCell] {
+        for cell : ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             if (cell == chatTableViewCell) {
                 return true
             }

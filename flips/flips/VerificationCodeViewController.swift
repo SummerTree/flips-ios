@@ -28,7 +28,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         self.phoneNumber = phoneNumber
         self.userId = userId
         
-        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()?
+        let token = DeviceHelper.sharedInstance.retrieveDeviceToken()
         
         createDeviceForUser(userId, phoneNumber: phoneNumber.intlPhoneNumber, platform: PLATFORM, token: token)
     }
@@ -109,12 +109,12 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                     println("Error verifying device")
                     return ()
                 }
-                var deviceEntity = device as Device
+                var deviceEntity = device as! Device
 
                 PersistentManager.sharedInstance.defineAsLoggedUserSync(deviceEntity.user)
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    let verificationCodeView = self.view as VerificationCodeView
+                    let verificationCodeView = self.view as! VerificationCodeView
                     verificationCodeView.resetVerificationCodeField()
                     
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
@@ -128,7 +128,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                     if (flipError!.error == self.VERIFICATION_CODE_DID_NOT_MATCH || flipError!.error == self.RESENT_SMS_MESSAGE) {
-                        let verificationCodeView = self.view as VerificationCodeView
+                        let verificationCodeView = self.view as! VerificationCodeView
                         verificationCodeView.didEnterWrongVerificationCode()
                     } else if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
                         self.hideActivityIndicator()
@@ -136,7 +136,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         alertView.show()
                     } else {
                         println("Device code verification error: " + flipError!.error!)
-                        let verificationCodeView = self.view as VerificationCodeView
+                        let verificationCodeView = self.view as! VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()
                         verificationCodeView.focusKeyboardOnCodeField()
                     }

@@ -32,7 +32,7 @@ class UserDataSource : BaseDataSource {
     // MARK: - CoreData Creator Methods
     
     private func createEntityWithJson(json: JSON) -> User {
-        var entity: User! = User.MR_createInContext(currentContext) as User
+        var entity: User! = User.MR_createInContext(currentContext) as! User
         self.fillUser(entity, withJsonData: json)
         return entity
     }
@@ -85,13 +85,13 @@ class UserDataSource : BaseDataSource {
             currentUpdateTimestamp.compare(newUpdateTimestamp) == NSComparisonResult.OrderedSame) {
             return user
         }
-        var userInContext = user.inContext(currentContext) as User
+        var userInContext = user.inContext(currentContext) as! User
         self.fillUser(userInContext, withJsonData: json)
         return userInContext
     }
     
     func associateUser(user: User, withDeviceInJson json: JSON) {
-        var userInContext = user.inContext(currentContext) as User
+        var userInContext = user.inContext(currentContext) as! User
         // local user doesn't have device
         if (userInContext.device == nil) {
             
@@ -106,10 +106,10 @@ class UserDataSource : BaseDataSource {
     
     func associateUser(user: User, withContacts contacts: [Contact]) {
         let contactDataSource = ContactDataSource(context: currentContext)
-        var userInContext = user.inContext(currentContext) as User
+        var userInContext = user.inContext(currentContext) as! User
         
         for contact in contacts {
-            var contactInContext = contact.inContext(currentContext) as Contact
+            var contactInContext = contact.inContext(currentContext) as! Contact
             contactDataSource.setContactUserAndUpdateContact(userInContext, contact: contactInContext)
             userInContext.addContactsObject(contactInContext)
         }
@@ -123,6 +123,6 @@ class UserDataSource : BaseDataSource {
     func getMyUserContacts() -> [User] {
         var predicate = NSPredicate(format: "((\(UserAttributes.ME) == false) AND (\(UserAttributes.CONTACTS).@count > 0))")
         var result = User.MR_findAllSortedBy("\(UserAttributes.FIRST_NAME)", ascending: true, withPredicate: predicate, inContext: currentContext)
-        return result as [User]
+        return result as! [User]
     }
 }

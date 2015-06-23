@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         if (launchOptions != nil) {
             if let pushNotificationPayload = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                self.onAppLaunchedFromNotification(application, withUserInfo: pushNotificationPayload)
+                self.onAppLaunchedFromNotification(application, withUserInfo: pushNotificationPayload as [NSObject : AnyObject])
             } else {
                 openSplashScreen()
             }
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true;
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
     }
     
@@ -170,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func checkSession() {
-        if let user = User.loggedUser()? {
+        if let user = User.loggedUser() {
             let userId = user.userID
             SessionService.sharedInstance.checkSession(
                 userId,

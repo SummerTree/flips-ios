@@ -37,9 +37,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     // MARK: - Initialization Methods
     
-    override init() {
-        super.init(frame: CGRect.zeroRect)
-        
+    convenience init() {
+        self.init()
         self.addSubviews()
         self.addConstraints()
     }
@@ -268,7 +267,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     }
     
     func capturePictureWithCompletion(success: CapturePictureSuccess, fail: CapturePictureFail) {
-        cameraPreview.capturePictureWithCompletion(success, fail)
+        cameraPreview.capturePictureWithCompletion(success, fail: fail)
     }
     
     

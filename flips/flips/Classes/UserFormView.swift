@@ -37,8 +37,8 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     //MARK: - Initialization Methods
     
-    convenience override init() {
-        self.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init(frame: CGRectZero)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -99,7 +99,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
 	
 	func birthdaySelected(sender : AnyObject?) {
-		let picker = birthdayTextField.inputView as UIDatePicker
+		let picker = birthdayTextField.inputView as! UIDatePicker
 		var dateFormatter = NSDateFormatter()
 		dateFormatter.dateFormat = "MM/dd/yyyy"
 		birthdayTextField.text = dateFormatter.stringFromDate(picker.date)
@@ -265,7 +265,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             shouldChangeTextFieldText = false
             
             var stringWithDigitsOnly = birthdayTextField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
-            var numberOfDigitsProvided = countElements(stringWithDigitsOnly)
+            var numberOfDigitsProvided = count(stringWithDigitsOnly)
             
             if (string == "" ) {
                 if (numberOfDigitsProvided > 0) {
@@ -280,7 +280,7 @@ class UserFormView : UIView, UITextFieldDelegate {
                 textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
             }
             
-            if (countElements(stringWithDigitsOnly) == 8) {
+            if (count(stringWithDigitsOnly) == 8) {
                 self.validateFields()
             }
         }

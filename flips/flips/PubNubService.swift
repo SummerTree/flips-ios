@@ -129,7 +129,7 @@ public class PubNubService: FlipsService, PNDelegate {
             self.onPubnubConnectedBlock = { () -> Void in
                 println("onPubnubConnectedBlock called")
                 self.onPubnubConnectedBlock = nil
-                self.subscribeOnMyChannels(completion, progress: progress)
+                self.subscribeOnMyChannels(completion: completion, progress: progress)
             }
             return
         }
@@ -147,7 +147,7 @@ public class PubNubService: FlipsService, PNDelegate {
             }
             
             if (channelsToSubscribe.count == 0) {
-                self.loadMessagesHistoryWithCompletion(completion, progress: progress)
+                self.loadMessagesHistoryWithCompletion(completion: completion, progress: progress)
             } else {
                 println("Subscribing to \(channelsToSubscribe.count) channels")
                 PubNub.subscribeOn(channelsToSubscribe, withCompletionHandlingBlock: { (state, channels, error) -> Void in
@@ -156,7 +156,7 @@ public class PubNubService: FlipsService, PNDelegate {
                         if (error != nil) {
                             println("   Error subscribing to channels: \(error)")
                         }
-                        self.loadMessagesHistoryWithCompletion(completion, progress: progress)
+                        self.loadMessagesHistoryWithCompletion(completion: completion, progress: progress)
                     } else {
                         println("SubscribeOnMyChannels PubNub identifier changed.")
                     }
@@ -186,21 +186,21 @@ public class PubNubService: FlipsService, PNDelegate {
         var channels: [PNChannel]?
         if let loggedUser = User.loggedUser() {
             channels = [PNChannel]()
-            var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as PNChannel
+            var ownChannel: PNChannel = PNChannel.channelWithName(loggedUser.pubnubID) as! PNChannel
             
             channels?.append(ownChannel)
             
             let roomDataSource = RoomDataSource()
             var rooms = roomDataSource.getAllRooms() // We need to subscribe even in rooms without messages
             for room in rooms {
-                channels?.append(PNChannel.channelWithName(room.pubnubID) as PNChannel)
+                channels?.append(PNChannel.channelWithName(room.pubnubID) as! PNChannel)
             }
         }
         return channels
     }
     
     func subscribeToChannelID(pubnubID: String) {
-        var channel: PNChannel = PNChannel.channelWithName(pubnubID) as PNChannel
+        var channel: PNChannel = PNChannel.channelWithName(pubnubID) as! PNChannel
         self.subscribeToChannel(channel)
     }
 
@@ -315,7 +315,7 @@ public class PubNubService: FlipsService, PNDelegate {
                 return
             }
             
-            let subscribedChannels = list as Array<PNChannelProtocol>
+            let subscribedChannels = list as! Array<PNChannelProtocol>
             
             self.isLoadingHistory = true
             
@@ -532,7 +532,7 @@ public class PubNubService: FlipsService, PNDelegate {
             // For some reason sometimes PubNub is not resuming the requests. So, do not let user blocked waiting for the sync, we need to dismiss the sync view.
             NSNotificationCenter.defaultCenter().postNotificationName(PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
         } else if (!self.didLoadHistorySuccessfully) {
-            self.loadMessagesHistoryWithCompletion(nil, nil)
+            self.loadMessagesHistoryWithCompletion(completion: nil, progress: nil)
         }
         
         self.onPubnubConnectedBlock?()
@@ -594,7 +594,7 @@ public class PubNubService: FlipsService, PNDelegate {
     // MARK: - Send Messages Methods
     
     func sendMessage(message: Dictionary<String, AnyObject>, pubnubID: String, completion: CompletionBlock?) {
-        let channel = PNChannel.channelWithName(pubnubID) as PNChannel
+        let channel = PNChannel.channelWithName(pubnubID) as! PNChannel
 
         var encryptedMessage = message
         encryptedMessage.updateValue(self.encrypt(JSON(message[MESSAGE_DATA]!).rawString()), forKey: MESSAGE_DATA)

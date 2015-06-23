@@ -39,7 +39,7 @@ class NewFlipViewController: FlipsViewController,
     
     class func instantiateNavigationController(contact: Contact? = nil) -> UINavigationController {
         let storyboard = UIStoryboard(name: STORYBOARD, bundle: nil)
-        let navigationController = storyboard.instantiateInitialViewController() as UINavigationController
+        let navigationController = storyboard.instantiateInitialViewController() as! UINavigationController
 
         if (contact != nil) {
             if let viewController = navigationController.topViewController as? NewFlipViewController {
@@ -112,7 +112,7 @@ class NewFlipViewController: FlipsViewController,
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.LightContent
     }
     
     override func updateViewConstraints() {
@@ -198,8 +198,8 @@ class NewFlipViewController: FlipsViewController,
     
     func keyboardWillShow(notification: NSNotification) {
         if let info = notification.userInfo {
-            let kbFrame = info[UIKeyboardFrameEndUserInfoKey] as NSValue
-            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            let kbFrame = info[UIKeyboardFrameEndUserInfoKey] as! NSValue
+            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
             let keyboardFrame = kbFrame.CGRectValue()
             let height = CGRectGetHeight(keyboardFrame)
 
@@ -210,7 +210,7 @@ class NewFlipViewController: FlipsViewController,
     
     func keyboardWillBeHidden(notification: NSNotification) {
         if let info = notification.userInfo {
-            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
             
             self.bottomConstraint.constant = 0
             self.view.animateConstraintWithDuration(animationDuration)

@@ -16,7 +16,7 @@ extension Room {
         var notReadMessagesCount = 0
         let flipMessagesNotRemoved = self.flipMessagesNotRemoved()
         for (var i = 0; i < flipMessagesNotRemoved.count; i++) {
-            let flipMessage = flipMessagesNotRemoved[i] as FlipMessage
+            let flipMessage = flipMessagesNotRemoved[i] as! FlipMessage
             
             if (flipMessage.notRead.boolValue) {
                 notReadMessagesCount++
@@ -55,7 +55,7 @@ extension Room {
     func notRemovedFlipMessagesOrderedByReceivedAt() -> [FlipMessage] {
         var sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: FlipMessageAttributes.RECEIVED_AT, ascending: true)
         let orderedFlipMessage: [AnyObject] = self.flipMessagesNotRemoved().sortedArrayUsingDescriptors([sortDescriptor])
-        return orderedFlipMessage as [FlipMessage]
+        return orderedFlipMessage as! [FlipMessage]
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {

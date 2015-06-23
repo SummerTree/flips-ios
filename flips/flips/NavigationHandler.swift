@@ -30,7 +30,7 @@ public class NavigationHandler : NSObject {
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController = keyWindow.rootViewController {
                 if rootViewController is UINavigationController {
-                    var rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
+                    var rootNavigationViewController: UINavigationController = rootViewController as! UINavigationController
                     rootNavigationViewController.popToRootViewControllerAnimated(true)
                     
                     let completionBlock: () -> Void = { () -> Void in
@@ -39,11 +39,11 @@ public class NavigationHandler : NSObject {
                         }
                         
                         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                            let responseCode : Int = notification.userInfo![FlipsServiceResponseCode.RESPONSE_CODE_KEY] as Int
+                            let responseCode : Int = notification.userInfo![FlipsServiceResponseCode.RESPONSE_CODE_KEY] as! Int
                             self.showAlertView(responseCode)
                             
                             if (rootNavigationViewController.viewControllers[0] is SplashScreenViewController) {
-                                let splashViewController = rootNavigationViewController.viewControllers[0] as SplashScreenViewController
+                                let splashViewController = rootNavigationViewController.viewControllers[0] as! SplashScreenViewController
                                 splashViewController.openLoginViewController()
                             }
                         }
@@ -83,7 +83,7 @@ public class NavigationHandler : NSObject {
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController: UIViewController = keyWindow.rootViewController {
                 if (rootViewController is UINavigationController) {
-                    let rootNavigationViewController: UINavigationController = rootViewController as UINavigationController
+                    let rootNavigationViewController: UINavigationController = rootViewController as! UINavigationController
                     let roomDataSource = RoomDataSource()
                     let room = roomDataSource.getRoomById(roomId)
                     

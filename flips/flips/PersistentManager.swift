@@ -136,7 +136,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             }
             self.associateFlip(flip!, withOwnerInJson: json)
             
-            return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as Flip
+            return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as! Flip
         }
     }
 
@@ -152,7 +152,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     flipDataSource.associateFlip(flip, withOwner: loggedUser)
                 })
                 
-                var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+                var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as! Flip
                 
                 if (videoURL != nil) {
                     FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.path!)
@@ -215,7 +215,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     }
                     flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user, formattedFlips: formattedFlips, andRoom: room, isFromHistory: isFromHistory)
                 }
-                return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as FlipMessage?
+                return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as! FlipMessage?
             }
             
         }
@@ -361,7 +361,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         
         if (!isLoggedUser) {
             let contactDataSource = ContactDataSource()
-            var userInContext = user!.inThreadContext() as User
+            var userInContext = user!.inThreadContext() as! User
             
             let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
             
@@ -382,12 +382,12 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             }
         }
         
-        return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID, error: nil) as User
+        return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID, error: nil) as! User
     }
     
     func defineAsLoggedUser(user: User) {
         MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            var userInContext = user.inContext(context) as User
+            var userInContext = user.inContext(context) as! User
             userInContext.me = true
             AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
@@ -395,7 +395,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     func defineAsLoggedUserSync(user: User) {
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            var userInContext = user.inContext(context) as User
+            var userInContext = user.inContext(context) as! User
             userInContext.me = true
             AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
@@ -403,9 +403,9 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     private func associateUser(user: User, withContacts contacts:[Contact]) {
         MagicalRecord.saveWithBlockAndWait({ (context: NSManagedObjectContext!) -> Void in
-            let userInContext: User = user.inContext(context) as User
+            let userInContext: User = user.inContext(context) as! User
             for contact in contacts {
-                let contactInContext = contact.inContext(context) as Contact
+                let contactInContext = contact.inContext(context) as! Contact
                 userInContext.addContactsObject(contactInContext)
                 contactInContext.contactUser = userInContext
             }
@@ -483,7 +483,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             
             // sync stock flips
             let flipService = FlipService()
-            let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?
+            let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as! NSDate?
             dispatch_group_enter(group)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 flipService.stockFlips(timestamp,
@@ -565,7 +565,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             if (contact == nil) {
                 contactInContext = contactDataSourceInContext.createContactWith(contactID, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType, andContactUser: contactUser)
             } else {
-                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
+                contactInContext = contactDataSourceInContext.updateContact(contact?.inContext(context) as! Contact, withFirstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
             }
             
             contact = contactInContext
@@ -589,7 +589,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             
             deviceDataSource.associateDevice(device, withUser: user!)
         }
-        return device.inContext(NSManagedObjectContext.MR_defaultContext()) as Device
+        return device.inContext(NSManagedObjectContext.MR_defaultContext()) as! Device
     }
     
     

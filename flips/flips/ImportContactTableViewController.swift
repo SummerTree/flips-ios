@@ -29,7 +29,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
     private var contactsOnFlipsHeaderView: UIView!
     private var everyoneElseHeaderView: UIView!
 
-    override init() {
+    init() {
         super.init(style: UITableViewStyle.Plain)
         let contactDataSource = ContactDataSource()
         self.contactsIdsWithoutFlipsAccount = contactDataSource.getMyContactsIdsWithoutFlipsAccount()
@@ -181,7 +181,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         }
 
         let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
-        var newFlipViewController = navigationController.topViewController as NewFlipViewController
+        var newFlipViewController = navigationController.topViewController as! NewFlipViewController
         newFlipViewController.delegate = self
         self.presentViewController(navigationController, animated: true, completion: nil)
     }

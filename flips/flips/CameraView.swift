@@ -332,7 +332,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 // Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView can only be manipulated on main thread.
                 // Note: As an exception to the above rule, it is not necessary to serialize video orientation changes on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
 
-                var previewViewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+                var previewViewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
                 previewViewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 previewViewLayer.connection.videoOrientation = self.currentInterfaceOrientation
 
@@ -577,7 +577,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func capturePictureWithCompletion(success: CapturePictureSuccess, fail: CapturePictureFail) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+            let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
             let videoOrientation = videoPreviewLayer.connection.videoOrientation
             
             let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
@@ -610,7 +610,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     func captureVideo() {
-        let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+        let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
         let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
         videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
         
@@ -650,7 +650,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     func focusAndExposeTap(gestureRecognizer: UIGestureRecognizer) {
-        let layer = self.previewView.layer as AVCaptureVideoPreviewLayer
+        let layer = self.previewView.layer as! AVCaptureVideoPreviewLayer
         let devicePoint = layer.captureDevicePointOfInterestForPoint(gestureRecognizer.locationInView(gestureRecognizer.view))
         self.focusWithMode(AVCaptureFocusMode.AutoFocus, exposesWithMode: AVCaptureExposureMode.AutoExpose, atDevicePoint: devicePoint, monitorSubjectAreaChange: true)
     }
@@ -741,7 +741,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         var devices = AVCaptureDevice.devicesWithMediaType(mediaType)
         var captureDevice: AVCaptureDevice! = devices.first as? AVCaptureDevice
         
-        for device in devices as [AVCaptureDevice]! {
+        for device in devices as! [AVCaptureDevice]! {
             if (device.position == position) {
                 captureDevice = device
                 break
@@ -779,7 +779,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
             self.session.beginConfiguration()
             self.session.removeInput(self.videoDeviceInput)
-            if (self.session.canAddInput(deviceInput as AVCaptureInput)) {
+            if (self.session.canAddInput(deviceInput as! AVCaptureInput)) {
                 NSNotificationCenter.defaultCenter().removeObserver(self, name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: currentVideoDevice)
 
                 CameraView.setFlashMode(self.flashMode, forDevice: videoDevice)
@@ -834,7 +834,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     // MARK: - Finish Record Output Delegate
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
-        let videoPreviewLayer = self.previewView.layer as AVCaptureVideoPreviewLayer
+        let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
         let videoOrientation = videoPreviewLayer.connection.videoOrientation
         var isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
 

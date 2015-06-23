@@ -21,7 +21,7 @@ class ActivityIndicatorHelper {
             var activityIndicator: UIActivityIndicatorView?
             for subview in view.subviews {
                 if (subview.tag == ACTIVITY_INDICATOR_TAG) {
-                    view.bringSubviewToFront(subview as UIView)
+                    view.bringSubviewToFront(subview as! UIView)
                     activityIndicator = subview as? UIActivityIndicatorView
                 }
             }

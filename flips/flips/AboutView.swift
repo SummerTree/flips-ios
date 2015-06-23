@@ -28,9 +28,8 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     private var copyright: UILabel!
     private var webView: FlipsWebView!
     
-    override init() {
-        super.init()
-        
+    convenience init() {
+        self.init()
         self.addSubviews()
     }
     
@@ -62,7 +61,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(NSCalendarUnit.CalendarUnitYear, fromDate: currentDate)
         
-        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as String
+        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as! String
         
         copyright = UILabel()
         copyright.numberOfLines = 3

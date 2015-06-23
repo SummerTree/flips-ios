@@ -49,10 +49,10 @@ extension FlipMessage {
     func addFlip(formatedFlip: FormattedFlip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
-        var entry: FlipEntry! = FlipEntry.createInContext(context) as FlipEntry
+        var entry: FlipEntry! = FlipEntry.createInContext(context) as! FlipEntry
         entry.order = nextEntryOrder
         entry.formattedWord = formatedFlip.word
-        entry.flip = formatedFlip.flip.inContext(context) as Flip
+        entry.flip = formatedFlip.flip.inContext(context) as! Flip
         entry.message = self
 
         self.addEntriesObject(entry)

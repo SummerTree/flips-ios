@@ -56,9 +56,9 @@ class ContactTableViewCell: UITableViewCell {
         self.photoView.borderColor = .lightGreyD8()
     }
     
-    func layoutMargins() -> UIEdgeInsets {
-        return UIEdgeInsetsZero
-    }
+//    func layoutMargins() -> UIEdgeInsets {
+//        return UIEdgeInsetsZero
+//    }
     
     func hideNumberLabel() {
         self.numberLabel?.hidden = true

@@ -31,8 +31,8 @@ class ChatLabel: UILabel {
         super.init(coder: aDecoder)
     }
     
-    override init() {
-        super.init(frame: CGRectZero)
+    convenience init() {
+        self.init(frame:CGRectZero)
     }
     
     override init(frame: CGRect) {

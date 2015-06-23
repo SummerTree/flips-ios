@@ -47,8 +47,8 @@ class PlayerView: UIView {
     
     // MARK: - Initializers
 
-    override init() {
-        super.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init()
         self.addSubviews()
         self.makeConstraints()
 
@@ -77,7 +77,7 @@ class PlayerView: UIView {
     // MARK: - Accessors
 
     private func player() -> AVQueuePlayer? {
-        let layer = self.layer as AVPlayerLayer
+        let layer = self.layer as! AVPlayerLayer
         if let player = layer.player {
             return player as? AVQueuePlayer
         }
@@ -85,7 +85,7 @@ class PlayerView: UIView {
     }
 
     private func setPlayer(player: AVPlayer?) {
-        let layer = self.layer as AVPlayerLayer
+        let layer = self.layer as! AVPlayerLayer
         layer.player = player
     }
 
@@ -211,7 +211,7 @@ class PlayerView: UIView {
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if let player = self.player() {
-            if (object as AVQueuePlayer == player && keyPath == "status") {
+            if (object as! AVQueuePlayer == player && keyPath == "status") {
                 if (player.status == AVPlayerStatus.ReadyToPlay) {
                     self.fadeToPlayingState(completion: nil)
                 }
@@ -656,7 +656,7 @@ class PlayerView: UIView {
         let currentContentIdentifier = self.contentIdentifier
         
         if let player = self.player() {
-            let currentItem = player.currentItem as FlipPlayerItem
+            let currentItem = player.currentItem as! FlipPlayerItem
             
             if (self.playerItems.count == 1) {
                 player.seekToTime(kCMTimeZero)
@@ -698,7 +698,7 @@ class PlayerView: UIView {
     }
 
     func hasPlayer() -> Bool {
-        let layer = self.layer as AVPlayerLayer
+        let layer = self.layer as! AVPlayerLayer
         return layer.player != nil
     }
 
@@ -823,7 +823,7 @@ class PlayerView: UIView {
             player.removeAllItems()
         }
 
-        let layer = self.layer as AVPlayerLayer
+        let layer = self.layer as! AVPlayerLayer
         layer.player = nil
     }
 

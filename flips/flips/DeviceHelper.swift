@@ -109,24 +109,24 @@ public class DeviceHelper: NSObject {
     
     func retrieveDeviceToken() -> String? {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.valueForKey(DEVICE_TOKEN) as String?
+        return userDefaults.valueForKey(DEVICE_TOKEN) as! String?
     }
     
     func retrieveDeviceTokenAsNSData() -> NSData? {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.valueForKey(DEVICE_TOKEN_NSDATA) as NSData?
+        return userDefaults.valueForKey(DEVICE_TOKEN_NSDATA) as! NSData?
     }
     
     func retrieveDeviceId() -> String? {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.valueForKey(DEVICE_ID) as String?
+        return userDefaults.valueForKey(DEVICE_ID) as! String?
     }
     
     func setBuilderIntroductionShown() {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         let userId = User.loggedUser()?.userID
 
-        var onboardingSeenArray = userDefaults.objectForKey(BUILDER_ONBOARDING_SEEN_KEY) as Array<String>?
+        var onboardingSeenArray = userDefaults.objectForKey(BUILDER_ONBOARDING_SEEN_KEY) as! Array<String>?
 
         if (onboardingSeenArray == nil) {
             onboardingSeenArray = Array<String>()
@@ -144,7 +144,7 @@ public class DeviceHelper: NSObject {
         let userId = User.loggedUser()?.userID
 
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        let onboardingSeenArray = userDefaults.objectForKey(BUILDER_ONBOARDING_SEEN_KEY) as Array<String>?
+        let onboardingSeenArray = userDefaults.objectForKey(BUILDER_ONBOARDING_SEEN_KEY) as! Array<String>?
 
         if (onboardingSeenArray == nil) {
             return false
@@ -159,7 +159,7 @@ public class DeviceHelper: NSObject {
     
     func lastTimeUserSynchronizedPrivateChannel() -> NSDate? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.objectForKey(LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL) as NSDate?
+        return userDefaults.objectForKey(LAST_DATE_USER_SYNCHRONIZED_PRIVATE_CHANNEL) as! NSDate?
     }
     
     func setLastTimeUserSynchronizePrivateChannel(date: NSDate?) {

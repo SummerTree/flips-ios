@@ -61,7 +61,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         tableView.mas_makeConstraints { (make) -> Void in
-            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
             make.top.equalTo()(topLayoutGuide.mas_bottom)
         }
     }
@@ -106,9 +106,9 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     
     func settingsViewDidTapImportContacts(settingsView: SettingsView) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            if let user = User.loggedUser()? {
+            if let user = User.loggedUser() {
                 let userId = user.userID
-                SessionService.sharedInstance.checkSession(userId, { (success) -> Void in
+                SessionService.sharedInstance.checkSession(userId, success: { (success) -> Void in
                     let importContactViewController = ImportContactViewController()
                     let navigationController = FlipsUINavigationController(rootViewController: importContactViewController)
                     self.presentViewController(navigationController, animated: true, completion: nil)
@@ -140,7 +140,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         
         AuthenticationHelper.sharedInstance.logout()
         
-        var navigationController: UINavigationController = self.presentingViewController as UINavigationController
+        var navigationController: UINavigationController = self.presentingViewController as! UINavigationController
         navigationController.popToRootViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion:nil)
         
@@ -154,7 +154,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.LightContent
     }
     
     func userDataSyncedNotificationReceived(notification: NSNotification) {

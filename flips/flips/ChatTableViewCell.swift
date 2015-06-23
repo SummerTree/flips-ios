@@ -151,10 +151,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Getter/Setter
     
-    func setBounds(bounds: CGRect) {
-        self.contentView.frame = self.bounds
+    override public var bounds: CGRect {
+        didSet{
+            self.contentView.frame = self.bounds
+        }
     }
-    
     
     // MARK: - Set FlipMessage
     

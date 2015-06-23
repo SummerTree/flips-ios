@@ -110,7 +110,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                     alertView.show()
                 })
             } else {
-                let flipMessagesArray: [FlipMessage] = self.flipMessages.array as [FlipMessage]
+                let flipMessagesArray: [FlipMessage] = self.flipMessages.array as! [FlipMessage]
                 var alreadyReceivedMessage: Bool = false
                 for flipMessage in flipMessagesArray {
                     if (flipMessage.flipMessageID == flipMessageID) {
@@ -238,7 +238,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     func chatView(chatView: ChatView, flipMessageAtIndex index: Int) -> FlipMessage {
-        return self.flipMessages.objectAtIndex(index) as FlipMessage
+        return self.flipMessages.objectAtIndex(index) as! FlipMessage
     }
     
     func chatView(chatView: ChatView, shouldAutoPlayFlipMessageAtIndex index: Int) -> Bool {

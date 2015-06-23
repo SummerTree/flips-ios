@@ -41,7 +41,7 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
                 }
             }
             
-            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.BlackOpaque, animated: false)
+            UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
             self.setNeedsStatusBarAppearanceUpdate()
             self.navigationController?.setNavigationBarHidden(true, animated: true)
             updateUserProfileView.setUser(loggedUser)

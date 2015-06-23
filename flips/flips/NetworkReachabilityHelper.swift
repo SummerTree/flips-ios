@@ -26,7 +26,7 @@ public class NetworkReachabilityHelper {
     func startMonitoring() {
         AFNetworkReachabilityManager.sharedManager().startMonitoring()
         AFNetworkReachabilityManager.sharedManager().setReachabilityStatusChangeBlock { (status) -> Void in
-            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+            let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             switch(status) {
             case AFNetworkReachabilityStatus.ReachableViaWiFi:
                 println("Reachable via WiFi")

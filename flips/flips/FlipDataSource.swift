@@ -40,7 +40,7 @@ class FlipDataSource : BaseDataSource {
     
     private func createEntityWithJson(json: JSON) -> Flip {
         var entity: Flip!
-        entity = Flip.createInContext(currentContext) as Flip
+        entity = Flip.createInContext(currentContext) as! Flip
         self.fillFlip(entity, withJsonData: json)
         
         return entity
@@ -72,8 +72,8 @@ class FlipDataSource : BaseDataSource {
     }
     
     func associateFlip(flip: Flip, withOwner owner: User) {
-        var flipInContext = flip.inContext(currentContext) as Flip
-        var ownerInContext = owner.inContext(currentContext) as User
+        var flipInContext = flip.inContext(currentContext) as! Flip
+        var ownerInContext = owner.inContext(currentContext) as! User
         flipInContext.owner = ownerInContext
     }
     
@@ -83,7 +83,7 @@ class FlipDataSource : BaseDataSource {
     
     // This flip is never uploaded to the server and never saved in database. It is used only via Pubnub
     func createEmptyFlipWithWord(word: String) -> Flip {
-        var flip: Flip! = Flip.createInContext(currentContext) as Flip
+        var flip: Flip! = Flip.createInContext(currentContext) as! Flip
         flip.word = word
         return flip
     }
@@ -93,7 +93,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getFlipById(id: String) -> Flip? {
-        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id, inContext: currentContext) as Flip?
+        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id, inContext: currentContext) as! Flip?
     }
 
     func getMyFlips() -> [Flip] {
@@ -103,7 +103,7 @@ class FlipDataSource : BaseDataSource {
             myFlips = Flip.findAllSortedBy(FlipAttributes.FLIP_ID,
                 ascending: true,
                 withPredicate: predicate,
-                inContext: currentContext) as [Flip]
+                inContext: currentContext) as! [Flip]
         } else {
             myFlips = []
         }
@@ -114,7 +114,7 @@ class FlipDataSource : BaseDataSource {
         var myFlips : [Flip]
         if let loggedUser = User.loggedUser() {
             let predicate = NSPredicate(format: "((\(FlipAttributes.FLIP_OWNER).userID == %@) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", loggedUser.userID, word)
-            myFlips = Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+            myFlips = Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as! [Flip]
         } else {
             myFlips = []
         }
@@ -146,7 +146,7 @@ class FlipDataSource : BaseDataSource {
     
     func getStockFlipsForWord(word: String) -> [Flip] {
         let predicate = NSPredicate(format: "((\(FlipAttributes.IS_PRIVATE) == false) and (\(FlipAttributes.WORD) ==[cd] %@) and (\(FlipAttributes.BACKGROUND_URL)  MATCHES '.{1,}'))", word)
-        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as [Flip]
+        return Flip.findAllSortedBy(FlipAttributes.FLIP_ID, ascending: false, withPredicate: predicate, inContext: currentContext) as! [Flip]
     }
     
     func getStockFlipsIdsForWords(words: [String]) -> Dictionary<String, [String]> {

@@ -33,7 +33,7 @@ class RoomDataSource : BaseDataSource {
     // MARK: - Creators
     
     private func createEntityWithJson(json: JSON) -> Room {
-        var entity: Room! = Room.createInContext(currentContext) as Room
+        var entity: Room! = Room.createInContext(currentContext) as! Room
         self.fillRoom(entity, withJson: json)
         
         return entity
@@ -54,14 +54,14 @@ class RoomDataSource : BaseDataSource {
     }
     
     func associateRoom(room: Room, withAdmin admin: User?, andParticipants participants: [User]) {
-        var roomInContext = room.inContext(currentContext) as Room
+        var roomInContext = room.inContext(currentContext) as! Room
 
         for user in participants {
-            roomInContext.addParticipantsObject(user.inContext(currentContext) as User)
+            roomInContext.addParticipantsObject(user.inContext(currentContext) as! User)
         }
 
         if (admin != nil) {
-            roomInContext.admin = admin!.inContext(currentContext) as User
+            roomInContext.admin = admin!.inContext(currentContext) as! User
         }
     }
     
@@ -83,7 +83,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getAllRooms() -> [Room] {
-        return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true, inContext: currentContext) as [Room]
+        return Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: true, inContext: currentContext) as! [Room]
     }
     
     func getTeamFlipsRoom() -> Room? {
@@ -101,10 +101,10 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getMyRoomsWithMessages() -> [Room] {
-        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as [Room]
+        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as! [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
-            let roomFlipMessages: [FlipMessage] = room.flipMessages.array as [FlipMessage]
+            let roomFlipMessages: [FlipMessage] = room.flipMessages.array as! [FlipMessage]
             for flipMessage : FlipMessage in roomFlipMessages {
                 if (!flipMessage.removed.boolValue) {
                     roomsWithMessages.append(room)

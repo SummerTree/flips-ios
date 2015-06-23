@@ -38,8 +38,8 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     weak var delegate: FlipsViewDelegate?
     weak var dataSource: FlipsViewDataSource?
     
-    override init() {
-        super.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init(frame:CGRectZero)
         addSubviews()
     }
     
@@ -141,7 +141,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if (indexPath.section == 0 && indexPath.row == 0) {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ADD_FLIP_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ADD_FLIP_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as! FlipsViewCell
 
             if (self.addFlipButton.superview == nil) {
                 cell.addSubview(addFlipButton)
@@ -149,7 +149,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
 
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FLIP_VIEW_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as FlipsViewCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FLIP_VIEW_CELL_REUSE_IDENTIFIER, forIndexPath: indexPath) as! FlipsViewCell
 
             let numberOfFlips = self.getNumberOfFlips()
             
@@ -181,7 +181,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         let reusableView: FlipsHeaderView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader,
             withReuseIdentifier: FLIP_VIEW_HEADER_REUSE_IDENTIFIER,
-            forIndexPath: indexPath) as FlipsHeaderView
+            forIndexPath: indexPath) as! FlipsHeaderView
         
         if (kind == UICollectionElementKindSectionHeader) {
             let numberOfFlips = self.getNumberOfFlips()
@@ -203,7 +203,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     // MARK: - UICollectionViewDelegate
     
-    func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let numberOfFlips = self.getNumberOfFlips()
         
         if (indexPath.section == 1) {
