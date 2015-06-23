@@ -123,7 +123,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
         let userInfo: Dictionary = notification.userInfo!
         let facebookUserLoggedOut = userInfo[LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY] as! Bool
         loginMode = facebookUserLoggedOut ? .LOGIN_AGAIN_WITH_FACEBOOK : .ORDINARY_LOGIN
-        userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as String) : nil
+        userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as! String) : nil
     }
     
     func openLoginViewController() {

@@ -61,7 +61,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(NSCalendarUnit.CalendarUnitYear, fromDate: currentDate)
         
-        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as! String
+        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as! String) as! String
         
         copyright = UILabel()
         copyright.numberOfLines = 3

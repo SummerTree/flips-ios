@@ -786,7 +786,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
                 NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: videoDevice)
 
-                self.videoDeviceInput = deviceInput as AVCaptureDeviceInput
+                self.videoDeviceInput = deviceInput as? AVCaptureDeviceInput
                 self.session.addInput(self.videoDeviceInput)
             } else {
                 self.session.addInput(self.videoDeviceInput)

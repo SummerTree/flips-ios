@@ -69,7 +69,9 @@ extension Room {
         let nameDescriptor = NSSortDescriptor(key: "firstName", ascending: true)
         let lastNameDescriptor = NSSortDescriptor(key: "firstName", ascending: true)
         let phoneNumberDescriptor = NSSortDescriptor(key: "phoneNumber", ascending: true)
-        var sortedParticipants = self.participants.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
+        
+        
+        var sortedParticipants = [self.participants].sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
         for participant in sortedParticipants {
             if let loggedUser = User.loggedUser() {
@@ -77,14 +79,14 @@ extension Room {
                     var userFirstName = participant.firstName
                     if (participant.isTemporary!.boolValue) {
                         if let phoneNumber = participant.phoneNumber {
-                            userFirstName = (participant as User).formattedPhoneNumber()
+                            userFirstName = (participant as! User).formattedPhoneNumber()
                         }
                         
                         if let contacts = participant.contacts {
                             if (contacts.count > 0) {
-                                var contact: Contact = contacts.allObjects[0] as Contact
+                                var contact: Contact = contacts.allObject[0] as Contact
                                 
-                                for userContact in contacts.allObjects {
+                                for userContact in contacts {
                                     if (!hasTemporaryName(userContact.firstName)) {
                                         contact = userContact as Contact
                                     }

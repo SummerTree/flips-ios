@@ -39,7 +39,7 @@ extension FlipMessage {
             let entries = self.entries
 
             if (entries != nil) {
-                flipsEntries = entries.sortedArrayUsingDescriptors([sortDescriptor]) as Array<FlipEntry>
+                flipsEntries = [self.entries].sortedArrayUsingDescriptors([sortDescriptor]) as! Array<FlipEntry>
             }
 
             return flipsEntries

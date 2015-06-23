@@ -89,7 +89,7 @@ class RoomDataSource : BaseDataSource {
     func getTeamFlipsRoom() -> Room? {
         var rooms = getAllRooms()
         for room in rooms {
-            var allParticipants = room.participants.allObjects as [User]
+            var allParticipants = Array(room.participants)
             for participant in allParticipants {
                 if (participant.username == TEAMFLIPS_USERNAME) {
                     return room

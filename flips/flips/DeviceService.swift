@@ -27,7 +27,7 @@ public class DeviceService: FlipsService {
         return Static.instance
     }
     
-    
+
     // MARK: - Create Device
     
     func createDevice(userId: String, phoneNumber: String, platform: String, uuid: String?, success: DeviceServiceSuccessResponse, failure: DeviceServiceFailureResponse) {
@@ -56,7 +56,7 @@ public class DeviceService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as! NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as! String!, details: response["details"] as! String?))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details: nil))
                 }
@@ -98,7 +98,7 @@ public class DeviceService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as! NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
+                    failure(FlipError(error: response["error"] as! String!, details: response["details"] as! String?))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details: nil))
                 }
