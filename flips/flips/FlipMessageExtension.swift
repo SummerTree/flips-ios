@@ -68,7 +68,7 @@ extension FlipMessage {
         return " ".join(words)
     }
     
-    func messageThumbnail(success: ((UIImage?) -> Void)? = nil) -> Void {
+    func messageThumbnail(success: ((UIImage?) -> Void)? = nil) {
         if let firstEntry: FlipEntry = self.flipsEntries.first {
             if let firstFlip: Flip = firstEntry.flip {
                 if (firstFlip.thumbnailURL == nil || firstFlip.thumbnailURL == "") {

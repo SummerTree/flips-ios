@@ -41,12 +41,12 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     // MARK: - Initialization Methods
     
-    convenience init(roomID: String? = nil, flipMessageID: String? = nil) {
-        self.init()
+    init(roomID: String? = nil, flipMessageID: String? = nil) {
+        super.init(nibName: nil, bundle: nil)
         self.roomIdToShow = roomID
         self.flipMessageIdToShow = flipMessageID
     }
-
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

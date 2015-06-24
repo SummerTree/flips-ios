@@ -33,12 +33,23 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         self.addSubviews()
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubviews();
+    }
+    
     func viewDidLoad() {
         self.makeConstraints()
         webView.viewDidLoad()
     }
 
-    func addSubviews() {
+    // MARK: - Required inits
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addSubviews() {
         
         self.backgroundColor = UIColor.flipOrange()
         
@@ -143,15 +154,8 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     }
     
     
-    // MARK: - Required inits
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
 }
 
 protocol AboutViewDelegate: class {
