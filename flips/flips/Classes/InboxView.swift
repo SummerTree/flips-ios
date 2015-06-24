@@ -176,7 +176,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         let roomID: String = dataSource!.inboxView(self, roomAtIndex: indexPath.row)
         let roomDataSource: RoomDataSource = RoomDataSource()
         if let room: Room = roomDataSource.getRoomById(roomID) {
-            let participants: [User] = room.participants.first as! [User]
+
+            let participants: [User] = Array(room.participants) as! [User]
             if (participants.count == 2) {
                 for participant in participants {
                     if (participant.username == TEAMFLIPS_USERNAME) {

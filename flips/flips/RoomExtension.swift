@@ -73,20 +73,20 @@ extension Room {
         
         var sortedParticipants = [self.participants].sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
-        for participant in sortedParticipants {
+        for participant: User in sortedParticipants as! [User] {
             if let loggedUser = User.loggedUser() {
                 if (participant.userID != loggedUser.userID) {
                     var userFirstName = participant.firstName
                     if (participant.isTemporary!.boolValue) {
                         if let phoneNumber = participant.phoneNumber {
-                            userFirstName = (participant as! User).formattedPhoneNumber()
+                            userFirstName = participant.formattedPhoneNumber()
                         }
                         
-                        if let contacts = participant.contacts {
+                        if let contacts = Array(participant.contacts) as? [Contact] {
                             if (contacts.count > 0) {
-                                var contact: Contact = contacts.allObject[0] as Contact
+                                var contact: Contact = contacts[0]
                                 
-                                for userContact in contacts {
+                                for userContact: Contact in contacts {
                                     if (!hasTemporaryName(userContact.firstName)) {
                                         contact = userContact as Contact
                                     }

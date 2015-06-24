@@ -90,7 +90,7 @@ class RoomDataSource : BaseDataSource {
         var rooms = getAllRooms()
         for room in rooms {
             var allParticipants = Array(room.participants)
-            for participant in allParticipants {
+            for participant : User in allParticipants as! [User] {
                 if (participant.username == TEAMFLIPS_USERNAME) {
                     return room
                 }
@@ -168,14 +168,15 @@ class RoomDataSource : BaseDataSource {
         
         var roomFound: Room? = nil
         for room in rooms {
+
             var allParticipants = Array(room.participants) as! [User]
-            
+
             if (allParticipants.count != userIDs.count+1) {
                 continue
             }
             
             var sameParticipants = true
-            for participant in allParticipants {
+            for participant: User in allParticipants as! [User] {
                 if (find(userIDs, participant.userID) == nil && participant.userID != loggedUserID) {
                     sameParticipants = false
                     break

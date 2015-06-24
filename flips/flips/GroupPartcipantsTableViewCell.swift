@@ -67,7 +67,7 @@ class GroupPartcipantsTableViewCell: UITableViewCell {
         var fullName: String = ""
         if (user.isTemporary.boolValue) {
             if (user.contacts.count > 0) {
-                if let contact: Contact = user.contacts.allObjects[0] as? Contact {
+                if let contact: Contact = user.contacts.first as? Contact {
                     fullName = contact.contactTitle!
                     self.avatarView.initials = contact.contactInitials
                 }

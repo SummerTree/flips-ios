@@ -44,7 +44,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
 
         if (room.participants.count > 2) {
             self.chatTitle = groupTitle
-            self.groupParticipantsView = GroupParticipantsView(participants: room.participants.allObjects as Array<User> as [User])
+            self.groupParticipantsView = GroupParticipantsView(participants: Array(room.participants) as! [User])
         }
         
         self.flipMessages = NSMutableOrderedSet(array: room.notRemovedFlipMessagesOrderedByReceivedAt())
@@ -166,7 +166,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.Default
     }
     
     
