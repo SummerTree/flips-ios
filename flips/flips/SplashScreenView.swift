@@ -29,17 +29,14 @@ class SplashScreenView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.backgroundColor = backgroundColor
+        self.addSubviews()
+        self.makeConstraints()
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    convenience init() {
-        self.init()
-        self.backgroundColor = UIColor.flipOrangeBackground()
-        self.addSubviews()
-        self.makeConstraints()
     }
     
     func addSubviews() {
