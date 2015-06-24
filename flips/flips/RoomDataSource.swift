@@ -168,7 +168,7 @@ class RoomDataSource : BaseDataSource {
         
         var roomFound: Room? = nil
         for room in rooms {
-            var allParticipants = room.participants.allObjects as [User]
+            var allParticipants = Array(room.participants) as! [User]
             
             if (allParticipants.count != userIDs.count+1) {
                 continue
