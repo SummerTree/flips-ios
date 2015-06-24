@@ -71,7 +71,15 @@ extension Room {
         let phoneNumberDescriptor = NSSortDescriptor(key: "phoneNumber", ascending: true)
         
         
-        var sortedParticipants = [self.participants].sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
+        //change names vars
+        let entries: NSMutableArray = NSMutableArray()
+        if let testeEntries = self.participants as? Set<User> {
+            for entrie: User in testeEntries {
+                entries.addObject(entrie)
+            }
+        }
+
+        var sortedParticipants = entries.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
         for participant: User in sortedParticipants as! [User] {
             if let loggedUser = User.loggedUser() {

@@ -172,7 +172,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         var flips: Array<Flip> = Array<Flip>()
         var formattedWords: Array<String> = Array<String>()
         
-        for flipEntry: FlipEntry in flipMessage.flipsEntries {
+        for flipEntry: FlipEntry in flipMessage.flipsEntries! {
             flips.append(flipEntry.flip)
             formattedWords.append(flipEntry.formattedWord)
         }

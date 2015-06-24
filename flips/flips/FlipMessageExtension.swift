@@ -32,16 +32,20 @@ public struct FormattedFlip {
 
 extension FlipMessage {
 
-    var flipsEntries: Array<FlipEntry> {
+    var flipsEntries: Array<FlipEntry>? {
         get {
             var flipsEntries: Array<FlipEntry> = Array<FlipEntry>()
             let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
-            let entries = self.entries
-
-            if (entries != nil) {
-                flipsEntries = [self.entries].sortedArrayUsingDescriptors([sortDescriptor]) as! Array<FlipEntry>
+ 
+            let entries: NSMutableArray = NSMutableArray()
+            
+            if let testeEntries = self.entries as? Set<FlipEntry> {
+                for entrie: FlipEntry in testeEntries {
+                    entries.addObject(entrie)
+                }
             }
-
+            
+            flipsEntries = entries.sortedArrayUsingDescriptors([sortDescriptor]) as! Array<FlipEntry>
             return flipsEntries
         }
     }
@@ -49,17 +53,17 @@ extension FlipMessage {
     func addFlip(formatedFlip: FormattedFlip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
-        var entry: FlipEntry! = FlipEntry.createInContext(context) as! FlipEntry
+        var entry: FlipEntry! = FlipEntry.createInContext(context) as? FlipEntry
         entry.order = nextEntryOrder
         entry.formattedWord = formatedFlip.word
-        entry.flip = formatedFlip.flip.inContext(context) as! Flip
+        entry.flip = formatedFlip.flip.inContext(context) as? Flip
         entry.message = self
 
         self.addEntriesObject(entry)
     }
     
     func messagePhrase() -> String {
-        let flipsEntries = self.flipsEntries
+        let flipsEntries: [FlipEntry] = self.flipsEntries!
         let words = flipsEntries.map {
             (var flipEntry) -> String in
             return flipEntry.formattedWord
@@ -69,7 +73,7 @@ extension FlipMessage {
     }
     
     func messageThumbnail(success: ((UIImage?) -> Void)? = nil) {
-        if let firstEntry: FlipEntry = self.flipsEntries.first {
+        if let firstEntry: FlipEntry = self.flipsEntries!.first {
             if let firstFlip: Flip = firstEntry.flip {
                 if (firstFlip.thumbnailURL == nil || firstFlip.thumbnailURL == "") {
                     success?(UIImage.emptyFlipImage())
@@ -115,8 +119,8 @@ extension FlipMessage {
         
         var flipsDictionary = Array<Dictionary<String, String>>()
         let flipsEntries = self.flipsEntries
-        for (var i = 0; i < flipsEntries.count; i++) {
-            let flip: Flip = flipsEntries[i].flip
+        for (var i = 0; i < flipsEntries!.count; i++) {
+            let flip: Flip = flipsEntries![i].flip
             let flipWord: FlipText = flipWords[i]
             
             var dic = Dictionary<String, String>()

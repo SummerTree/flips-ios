@@ -28,14 +28,18 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     private var copyright: UILabel!
     private var webView: FlipsWebView!
     
-    convenience init() {
-        self.init()
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews();
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func viewDidLoad() {
@@ -44,11 +48,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     }
 
     // MARK: - Required inits
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     private func addSubviews() {
         
         self.backgroundColor = UIColor.flipOrange()
