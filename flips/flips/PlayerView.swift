@@ -47,8 +47,8 @@ class PlayerView: UIView {
     
     // MARK: - Initializers
 
-    convenience init() {
-        self.init()
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
         self.makeConstraints()
 

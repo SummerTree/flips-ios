@@ -36,8 +36,8 @@ class ProgressBar: UIView {
 
     private var progressFill: UIView!
 
-    convenience init() {
-        self.init()
+    init() {
+        super.init(frame: CGRectZero)
 
         self.addSubviews()
         self.makeConstraints()

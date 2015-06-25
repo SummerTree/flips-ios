@@ -25,9 +25,8 @@ class ChangeNumberInfoView: UIView {
     private var descriptionLabel:           UILabel!
     private var nextButton:                 UIButton!
     
-    convenience init() {
-        self.init()
-        
+    init() {
+        super.init(frame: CGRectZero)
         addSubviews()
         makeConstraints()
     }

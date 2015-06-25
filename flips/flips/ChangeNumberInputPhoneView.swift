@@ -30,9 +30,8 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     private var newNumberImageView:     UIImageView!
     private var keyboardView:           UIView!
     
-    convenience init() {
-        self.init()
-        
+    init() {
+        super.init(frame: CGRectZero)
         addSubviews()
     }
     

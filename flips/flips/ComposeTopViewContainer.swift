@@ -37,8 +37,8 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     
     // MARK: - Initialization Methods
     
-    convenience init() {
-        self.init()
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
         self.addConstraints()
     }

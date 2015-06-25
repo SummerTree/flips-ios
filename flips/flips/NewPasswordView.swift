@@ -40,8 +40,9 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     var keyboardFillerView: UIView!
     var keyboardHeight: CGFloat = 0.0
     
-    convenience init() {
-        self.init()
+    init() {
+        super.init(frame: CGRectZero)
+        
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.updateConstraints()

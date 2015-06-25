@@ -27,8 +27,8 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
     private var acceptButton: UIButton!
     private var activityIndicator: UIActivityIndicatorView!
 
-    convenience init() {
-        self.init()
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
     }
     
