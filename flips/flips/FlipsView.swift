@@ -38,8 +38,8 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     weak var delegate: FlipsViewDelegate?
     weak var dataSource: FlipsViewDataSource?
     
-    convenience init() {
-        self.init(frame:CGRectZero)
+    init() {
+        super.init(frame:CGRectZero)
         addSubviews()
     }
     

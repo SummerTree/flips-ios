@@ -28,8 +28,8 @@ class FlipsViewController : UIViewController {
     
     // MARK: - Init methods
     
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    init() {
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init(coder: NSCoder) {

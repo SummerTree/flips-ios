@@ -38,7 +38,6 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
         self.init(frame: CGRectZero)
     }
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         

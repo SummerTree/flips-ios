@@ -38,7 +38,6 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         }
     }
     
-    
     init() {
         super.init(frame: CGRectZero)
         self.addSubviews()

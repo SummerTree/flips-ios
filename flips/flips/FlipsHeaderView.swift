@@ -15,8 +15,8 @@ class FlipsHeaderView : UICollectionReusableView {
     
     var label: UILabel!
     
-    convenience init() {
-        self.init(frame:CGRectZero)
+    init() {
+        super.init(frame:CGRectZero)
         self.addSubviews()
     }
     

@@ -39,8 +39,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     var keyboardHeight: CGFloat = 0.0
     
-    convenience init() {
-        self.init(frame: CGRectZero)
+    init() {
+        super.init(frame: CGRectZero)
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()

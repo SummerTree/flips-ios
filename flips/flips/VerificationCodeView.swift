@@ -52,8 +52,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     private var wrongVerificationCodeCounter = 0
     
-    convenience init(phoneNumber : String!) {
-        self.init()
+    init(phoneNumber : String!) {
+        super.init(frame: CGRectZero)
         self.phoneNumber = phoneNumber
         self.backgroundColor = self.defineBackgroundColor()
         self.addSubviews()

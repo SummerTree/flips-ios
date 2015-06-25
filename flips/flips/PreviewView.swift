@@ -24,9 +24,8 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     private var videoPlayerView: PlayerView!
     private var sendButton: UIButton!
     
-    convenience init() {
-        self.init(frame: CGRectZero)
-        
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
     }
     
