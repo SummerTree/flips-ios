@@ -26,13 +26,13 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     
     weak var delegate: BuilderAddWordTableViewControllerDelegate?
     
-    convenience init() {
-        self.init()
+    init() {
+        super.init(nibName: nil, bundle: nil)
         self.view.backgroundColor = UIColor.whiteColor()
     }
     
-    convenience init(words: [String]) {
-        self.init()
+    init(words: [String]) {
+        super.init(nibName: nil, bundle: nil)
         self.words = words
     }
     
