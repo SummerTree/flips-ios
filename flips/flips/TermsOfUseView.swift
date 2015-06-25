@@ -16,8 +16,8 @@ class TermsOfUseView: FlipsWebView {
     
     let TERMS_OF_USE_URL = "http://www.flipsapp.com/terms.html"
     
-    convenience init() {
-        self.init(URL: "http://www.flipsapp.com/terms.html")
+    init() {
+        super.init(URL: TERMS_OF_USE_URL)
     }
     
     

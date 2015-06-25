@@ -19,8 +19,8 @@ class FlipsWebView: UIView, UIWebViewDelegate {
     
     var url: String!
     
-    convenience init(URL: String) {
-        self.init()
+     init(URL: String) {
+        super.init(frame: CGRectZero)
         self.url = URL
         self.addSubviews()
         self.makeConstraints()
