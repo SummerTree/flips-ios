@@ -75,7 +75,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 return
             }
             
-            var authenticatedUser: User = user as! User!
+            var authenticatedUser: User = user as! User
             AuthenticationHelper.sharedInstance.onLogin(authenticatedUser)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 PersistentManager.sharedInstance.syncUserData({ (success, FlipError) -> Void in
@@ -160,6 +160,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         self.loginMode = loginMode
         self.userFirstName = userFirstName
     }
+    
     
     // MARK: - Private methods
     

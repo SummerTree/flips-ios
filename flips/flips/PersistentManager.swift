@@ -215,7 +215,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     }
                     flipMessageDataSourceInContext.associateFlipMessage(flipMessage!, withUser: user, formattedFlips: formattedFlips, andRoom: room, isFromHistory: isFromHistory)
                 }
-                return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as! FlipMessage?
+                return flipMessage?.inContext(NSManagedObjectContext.MR_defaultContext()) as? FlipMessage
             }
             
         }
@@ -483,7 +483,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             
             // sync stock flips
             let flipService = FlipService()
-            let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as! NSDate?
+            let timestamp = NSUserDefaults.standardUserDefaults().valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as? NSDate
             dispatch_group_enter(group)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 flipService.stockFlips(timestamp,

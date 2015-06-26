@@ -167,7 +167,7 @@ public class FlipService: FlipsService {
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
                         let response = operation.responseObject as! NSDictionary
-                        uploadFlipFailCallBack(FlipError(error: response["error"] as! String!, details: nil))
+                        uploadFlipFailCallBack(FlipError(error: response["error"] as? String, details: nil))
                     } else {
                         uploadFlipFailCallBack(FlipError(error: error.localizedDescription, details:nil))
                     }

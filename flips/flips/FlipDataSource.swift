@@ -93,7 +93,7 @@ class FlipDataSource : BaseDataSource {
     }
     
     func getFlipById(id: String) -> Flip? {
-        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id, inContext: currentContext) as! Flip?
+        return Flip.findFirstByAttribute(FlipAttributes.FLIP_ID, withValue: id, inContext: currentContext) as? Flip
     }
 
     func getMyFlips() -> [Flip] {
