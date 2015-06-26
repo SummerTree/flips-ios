@@ -71,11 +71,6 @@ extension UIImage {
         
         var bitmapInfo = self.normalizeBitmapInfo(CGImageGetBitmapInfo(self.CGImage))
         
-        
-        //CGBitmapContextCreate(data: UnsafeMutablePointer<Void>, width: Int, height: Int, 
-        // bitsPerComponent: Int, bytesPerRow: Int, 
-        //space: CGColorSpace!, 
-        //bitmapInfo: CGBitmapInfo)
         var ctx:CGContextRef = CGBitmapContextCreate(nil, Int(squareSize), Int(squareSize),
             CGImageGetBitsPerComponent(self.CGImage), 0,
             CGImageGetColorSpace(self.CGImage),

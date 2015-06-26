@@ -31,8 +31,8 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
         self.view.backgroundColor = UIColor.whiteColor()
     }
     
-    init(words: [String]) {
-        super.init(nibName: nil, bundle: nil)
+    convenience init(words: [String]) {
+        self.init()
         self.words = words
     }
     

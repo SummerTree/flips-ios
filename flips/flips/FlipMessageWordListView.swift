@@ -193,7 +193,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         self.centerScrollViewAtView(gesture.view!)
         
-        let flipText = (gesture.view! as! FlipTextView).flipText
+        let flipText = (gesture.view as! FlipTextView).flipText
         delegate?.flipMessageWordListView(self, didSelectFlipWord: flipText)
     }
     

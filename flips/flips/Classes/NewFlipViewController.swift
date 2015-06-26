@@ -112,7 +112,7 @@ class NewFlipViewController: FlipsViewController,
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+        return UIStatusBarStyle.Default
     }
     
     override func updateViewConstraints() {

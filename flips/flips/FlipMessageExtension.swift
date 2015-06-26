@@ -34,19 +34,15 @@ extension FlipMessage {
 
     var flipsEntries: Array<FlipEntry>? {
         get {
-            var flipsEntries: Array<FlipEntry> = Array<FlipEntry>()
             let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
- 
-            let entries: NSMutableArray = NSMutableArray()
-            
+            let flipsEntries: NSMutableArray = NSMutableArray()
             if let testeEntries = self.entries as? Set<FlipEntry> {
                 for entrie: FlipEntry in testeEntries {
-                    entries.addObject(entrie)
+                    flipsEntries.addObject(entrie)
                 }
             }
             
-            flipsEntries = entries.sortedArrayUsingDescriptors([sortDescriptor]) as! Array<FlipEntry>
-            return flipsEntries
+            return flipsEntries.sortedArrayUsingDescriptors([sortDescriptor]) as? Array<FlipEntry>
         }
     }
 

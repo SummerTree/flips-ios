@@ -35,7 +35,7 @@ class FlipsChatWebViewController: FlipsViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
     }
     
     override func viewDidLoad() {

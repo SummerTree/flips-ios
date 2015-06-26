@@ -181,9 +181,6 @@ class ConversationTableViewCell : UITableViewCell {
         let flipMessages: [FlipMessage] = room.notRemovedFlipMessagesOrderedByReceivedAt()
         if (flipMessages.count > 0) {
             lastMessage = flipMessages.last!
-//            for m : FlipMessage in flipMessages  {
-//                println("\n\nMessage: \(m.flipMessageID)")
-//            }
         } else {
             println("\n\nCoreData problem: flipMessages is empty for room(\(room.roomID))\n\n")
         }

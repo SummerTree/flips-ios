@@ -154,7 +154,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+        return UIStatusBarStyle.Default
     }
     
     func userDataSyncedNotificationReceived(notification: NSNotification) {
