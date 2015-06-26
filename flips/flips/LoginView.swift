@@ -94,6 +94,7 @@ class LoginView : UIView, UITextFieldDelegate {
         self.makeConstraints()
     }
     
+    
     // MARK: - Required methods
     
     required init(coder aDecoder: NSCoder) {
