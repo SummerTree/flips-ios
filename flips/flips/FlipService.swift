@@ -80,7 +80,7 @@ public class FlipService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as! NSDictionary
-                    failure(FlipError(error: response["error"] as? String, details: nil))
+                    failure(FlipError(error: response["error"] as! String!, details: nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details: nil))
                 }
@@ -135,7 +135,7 @@ public class FlipService: FlipsService {
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
                     let response = operation.responseObject as! NSDictionary
-                    failCallback(FlipError(error: response["error"] as? String, details: nil))
+                    failCallback(FlipError(error: response["error"] as! String!, details: nil))
                 } else {
                     failCallback(FlipError(error: error.localizedDescription, details: nil))
                 }

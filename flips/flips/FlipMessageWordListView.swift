@@ -199,11 +199,11 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     func flipWordLongPressed(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
-            let flipTextView = gesture.view as! FlipTextView
+            let flipTextView = gesture.view! as! FlipTextView
             var arrayOfWords : [String] = FlipStringsUtil.splitFlipString(flipTextView.flipText.text)
             if (arrayOfWords.count > 1) {
                 gesture.view?.alpha = 0.5
-                self.showSplitMenuAtView(gesture.view as! FlipTextView)
+                self.showSplitMenuAtView(gesture.view! as! FlipTextView)
             }
         } else if (gesture.state == UIGestureRecognizerState.Ended) {
             gesture.view?.alpha = 1
