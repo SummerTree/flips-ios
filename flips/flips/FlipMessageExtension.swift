@@ -32,12 +32,12 @@ public struct FormattedFlip {
 
 extension FlipMessage {
 
-    var flipsEntries: Array<FlipEntry>? {
+    var flipsEntries: Array<FlipEntry> {
         get {
             let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
             let flipsEntries: NSMutableArray = NSMutableArray()
-            if let testeEntries = self.entries as? Set<FlipEntry> {
-                for entrie: FlipEntry in testeEntries {
+            if let entries = self.entries as? Set<FlipEntry> {
+                for entrie: FlipEntry in entries {
                     flipsEntries.addObject(entrie)
                 }
             }
