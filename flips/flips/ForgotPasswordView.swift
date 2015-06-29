@@ -37,8 +37,8 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     var keyboardFillerView: UIView!
     var keyboardHeight: CGFloat = 0.0
     
-    override init() {
-        super.init()
+    init() {
+        super.init(frame: CGRectZero)
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
     }
@@ -163,7 +163,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text
-        let length = countElements(text)
+        let length = count(text)
         var shouldReplace = true
         
         if (string != "") {
@@ -189,7 +189,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     }
     
     func mobileNumberFieldDidChange(textField: UITextField) {
-        if (countElements(textField.text) == 12) {
+        if (count(textField.text) == 12) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(self)
         }
@@ -204,7 +204,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     func keyboardWillShow(notification: NSNotification) {
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         keyboardHeight = keyboardFrame.height
         self.makeConstraints()
     }

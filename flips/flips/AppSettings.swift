@@ -28,8 +28,8 @@ class AppSettings {
     private var envSettings: NSDictionary
     
     init(env: String) {
-        let appSettings = NSBundle.mainBundle().infoDictionary!["AppSettings"] as NSDictionary
-        envSettings = appSettings[env] as NSDictionary
+        let appSettings = NSBundle.mainBundle().infoDictionary!["AppSettings"] as! NSDictionary
+        envSettings = appSettings[env] as! NSDictionary
     }
     
     convenience init() {
@@ -47,19 +47,19 @@ class AppSettings {
     }
     
     func serverURL() -> String {
-        return envSettings["ServerURL"] as String
+        return envSettings["ServerURL"] as! String
     }
 
     func pubNubPublishKey() -> String {
-        return envSettings["PubNubPublishKey"] as String
+        return envSettings["PubNubPublishKey"] as! String
     }
     
     func pubNubSubscribeKey() -> String {
-        return envSettings["PubNubSubscribeKey"] as String
+        return envSettings["PubNubSubscribeKey"] as! String
     }
     
     func pubNubSecretKey() -> String {
-        return envSettings["PubNubSecretKey"] as String
+        return envSettings["PubNubSecretKey"] as! String
     }
     
 }

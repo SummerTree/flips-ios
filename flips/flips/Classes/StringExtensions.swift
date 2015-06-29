@@ -15,7 +15,7 @@ extension String {
     func stringByRemovingStringsIn(array: NSArray) -> String {
         var newString = self
         for stringToDelete in array {
-            newString = newString.stringByReplacingOccurrencesOfString(stringToDelete as String, withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            newString = newString.stringByReplacingOccurrencesOfString(stringToDelete as! String, withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
         }
         return newString
     }
@@ -23,13 +23,13 @@ extension String {
     func isValidEmail() -> Bool {
         var emailRegex = "(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         
-        var emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegex)!
+        var emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         return emailTest.evaluateWithObject(self.lowercaseString)
     }
     
     func isValidPassword() -> Bool {
         var passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$"
-        var passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegex)!
+        var passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
         return passwordTest.evaluateWithObject(self)
     }
     
@@ -64,7 +64,7 @@ extension String {
 
         result.destroy()
         
-        return String(format: hash)
+        return String(format: hash as String)
     }
 
     func hasPathExtension(extensions: Array<String>) -> Bool {
@@ -98,7 +98,7 @@ extension String {
     }
     
     func toFormattedPhoneNumber() -> String {
-        if (countElements(self) != 12) {
+        if (count(self) != 12) {
             return self
         }
         

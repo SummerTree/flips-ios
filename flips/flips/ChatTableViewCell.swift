@@ -151,10 +151,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Getter/Setter
     
-    func setBounds(bounds: CGRect) {
-        self.contentView.frame = self.bounds
+    override public var bounds: CGRect {
+        didSet{
+            self.contentView.frame = self.bounds
+        }
     }
-    
     
     // MARK: - Set FlipMessage
     
@@ -171,7 +172,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         var flips: Array<Flip> = Array<Flip>()
         var formattedWords: Array<String> = Array<String>()
         
-        for flipEntry: FlipEntry in flipMessage.flipsEntries {
+        for flipEntry: FlipEntry in flipMessage.flipsEntries! {
             flips.append(flipEntry.flip)
             formattedWords.append(flipEntry.formattedWord)
         }

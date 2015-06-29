@@ -37,8 +37,8 @@ public class SessionService: FlipsService {
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: nil))
+                    let response = operation.responseObject as! NSDictionary
+                    failure(FlipError(error: response["error"] as? String, details: nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details: nil))
                 }

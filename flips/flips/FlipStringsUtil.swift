@@ -29,13 +29,13 @@ class FlipStringsUtil {
                 currentCharType = FlipCharType.WHITESPACE
             } else {
                 let str = String(char)
-                let range = NSRange(location: 0, length: countElements(str))
+                let range = NSRange(location: 0, length: count(str))
                 let isWordChar = wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) > 0
                 currentCharType = isWordChar ? FlipCharType.WORD : FlipCharType.SPECIAL
             }
             
             if (currentCharType == FlipCharType.WHITESPACE || currentCharType != lastCharType) {
-                if (countElements(newWord) > 0) {
+                if (count(newWord) > 0) {
                     arrayOfFlips.append(newWord)
                     newWord = ""
                 }
@@ -49,7 +49,7 @@ class FlipStringsUtil {
             lastCharType = currentCharType
         }
         
-        if (countElements(newWord) > 0) {
+        if (count(newWord) > 0) {
             arrayOfFlips.append(newWord)
         }
         

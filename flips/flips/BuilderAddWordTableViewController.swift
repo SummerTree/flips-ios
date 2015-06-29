@@ -26,8 +26,8 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     
     weak var delegate: BuilderAddWordTableViewControllerDelegate?
     
-    override init() {
-        super.init()
+    init() {
+        super.init(nibName: nil, bundle: nil)
         self.view.backgroundColor = UIColor.whiteColor()
     }
     
@@ -107,7 +107,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as UITableViewCell?
+        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as? UITableViewCell
         if (cell == nil) {
             cell = UITableViewCell(style:.Default, reuseIdentifier: CELL_IDENTIFIER)
         }
@@ -138,7 +138,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     func addWord() -> Bool {
         let word = self.newWordTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 
-        if (countElements(word) > 0) {
+        if (count(word) > 0) {
             let result = PersistentManager.sharedInstance.addBuilderWord(word, fromServer: false)
 
             if (result) {

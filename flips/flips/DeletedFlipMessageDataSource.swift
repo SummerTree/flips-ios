@@ -19,14 +19,14 @@ class DeletedFlipMessageDataSource: BaseDataSource {
     private let FLIP_MESSAGE_ID: String = "flipMessageID"
     
     func createDeletedFlipMessageWithID(flipMessageID: String) -> DeletedFlipMessage {
-        var entity = DeletedFlipMessage.createInContext(currentContext) as DeletedFlipMessage
+        var entity = DeletedFlipMessage.createInContext(currentContext) as! DeletedFlipMessage
         entity.flipMessageID = flipMessageID
         
         return entity
     }
     
     func createDeletedFlipMessageWithJSON(json: JSON) -> DeletedFlipMessage {
-        var entity = DeletedFlipMessage.createInContext(currentContext) as DeletedFlipMessage
+        var entity = DeletedFlipMessage.createInContext(currentContext) as! DeletedFlipMessage
         
         let flipMessageID: String = json[DeletedFlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         entity.flipMessageID = flipMessageID

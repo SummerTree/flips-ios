@@ -79,7 +79,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
                 facebookId: self.facebookId,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
-                    var userEntity = user as User
+                    var userEntity = user as! User
                     var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: userEntity.userID)
                     self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
                     self.hideActivityIndicator()

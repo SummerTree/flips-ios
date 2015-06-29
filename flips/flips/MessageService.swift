@@ -57,7 +57,7 @@ public class MessageService {
             return
         }
         
-        let roomInContext = room.inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        let roomInContext = room.inContext(NSManagedObjectContext.MR_defaultContext()) as! Room
         PubNubService.sharedInstance.subscribeToChannelID(roomInContext.pubnubID)
         
         self.sendMessage(flipWords, roomID: roomInContext.roomID, completion: completion)
@@ -80,13 +80,13 @@ public class MessageService {
             
             let room = roomDataSource.retrieveRoomWithId(roomID)
             let newFlipMessage = PersistentManager.sharedInstance.createFlipMessageWithFlips(formattedFlips, toRoom: room)
-            let flipMessage = newFlipMessage.inContext(newContext) as FlipMessage
+            let flipMessage = newFlipMessage.inContext(newContext) as! FlipMessage
             let messageJson = flipMessage.toJsonUsingFlipWords(flipWords)
             
             PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
                 if (!success) {
                     QueueHelper.dispatchAsyncWithNewContext { (newContext) -> Void in
-                        var flipMessageInNewContext: FlipMessage = flipMessage.inContext(newContext) as FlipMessage
+                        var flipMessageInNewContext: FlipMessage = flipMessage.inContext(newContext) as! FlipMessage
 
                         // We need to mark as removed the FlipMessage that wasn't sent.
                         PersistentManager.sharedInstance.markFlipMessageAsRemoved(flipMessageInNewContext, completion: { (result) -> Void in

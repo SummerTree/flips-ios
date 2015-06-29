@@ -44,7 +44,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
 
         if (room.participants.count > 2) {
             self.chatTitle = groupTitle
-            self.groupParticipantsView = GroupParticipantsView(participants: room.participants.allObjects as Array<User> as [User])
+            self.groupParticipantsView = GroupParticipantsView(participants: Array(room.participants) as! [User])
         }
         
         self.flipMessages = NSMutableOrderedSet(array: room.notRemovedFlipMessagesOrderedByReceivedAt())
@@ -110,7 +110,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                     alertView.show()
                 })
             } else {
-                let flipMessagesArray: [FlipMessage] = self.flipMessages.array as [FlipMessage]
+                let flipMessagesArray: [FlipMessage] = self.flipMessages.array as! [FlipMessage]
                 var alreadyReceivedMessage: Bool = false
                 for flipMessage in flipMessagesArray {
                     if (flipMessage.flipMessageID == flipMessageID) {
@@ -166,7 +166,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.Default
     }
     
     
@@ -238,7 +238,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     func chatView(chatView: ChatView, flipMessageAtIndex index: Int) -> FlipMessage {
-        return self.flipMessages.objectAtIndex(index) as FlipMessage
+        return self.flipMessages.objectAtIndex(index) as! FlipMessage
     }
     
     func chatView(chatView: ChatView, shouldAutoPlayFlipMessageAtIndex index: Int) -> Bool {

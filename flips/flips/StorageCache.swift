@@ -40,7 +40,7 @@ public class StorageCache {
     init(cacheID: String, cacheDirectoryName: String, scheduleCleanup: () -> Void) {
         self.scheduleCleanup = scheduleCleanup
         let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
-        let applicationSupportDirPath = paths.first! as String
+        let applicationSupportDirPath = paths.first! as! String
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
         let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
         self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)!
@@ -238,8 +238,8 @@ public class StorageCache {
         return localPath
     }
     
-    func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> Slice<(UInt64,Int)> {
-        var slice: Slice<(UInt64,Int)>!
+    func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> ArraySlice<(UInt64,Int)> {
+        var slice: ArraySlice<(UInt64,Int)>!
         dispatch_sync(self.cacheQueue) {
             slice = self.cacheJournal.getLRUSizesAndTimestamps(sizeInBytes)
         }

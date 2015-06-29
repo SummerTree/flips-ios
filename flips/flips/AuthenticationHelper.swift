@@ -50,7 +50,7 @@ public class AuthenticationHelper: NSObject {
     
     func saveLastTimestampForStockFlip(timestamp: NSDate) {
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as NSDate?) {
+        if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as? NSDate) {
             if (lastTimestamp.compare(timestamp) == NSComparisonResult.OrderedAscending) {
                 userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
             }
@@ -64,7 +64,7 @@ public class AuthenticationHelper: NSObject {
     func retrieveAuthenticatedUsernameIfExists() -> String? {
         var loggedUserInfo = User.isUserLoggedIn()
         var userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.valueForKey(LOGIN_USERNAME_KEY) as String?
+        return userDefaults.valueForKey(LOGIN_USERNAME_KEY) as? String
     }
     
     func logout() {

@@ -36,7 +36,7 @@ class ProgressBar: UIView {
 
     private var progressFill: UIView!
 
-    override init() {
+    init() {
         super.init(frame: CGRectZero)
 
         self.addSubviews()

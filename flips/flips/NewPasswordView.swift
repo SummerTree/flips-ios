@@ -40,8 +40,9 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     var keyboardFillerView: UIView!
     var keyboardHeight: CGFloat = 0.0
     
-    override init() {
-        super.init()
+    init() {
+        super.init(frame: CGRectZero)
+        
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.updateConstraints()
@@ -186,7 +187,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     // MARK: - Notifications
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
             self.keyboardHeight = keyboardFrame.height
             self.updateConstraints()
         }
@@ -207,7 +208,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     // Requirement: 8+ characters, Mixed case, at least 1 number
     // Specific messages not being used for now
     func verifyPassword(password: String) -> (isValid: Bool, message: String) {
-        if countElements(password) < 8 {
+        if count(password) < 8 {
             return (false, "Password must have at least 8 characters.");
         }
         
@@ -225,6 +226,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     
     // MARK: - CustomNavigationBarDelegate Methods
+    
     func customNavigationBarDidTapLeftButton(navBar : CustomNavigationBar) {
         self.delegate?.newPasswordViewDidTapBackButton(self)
     }
@@ -244,6 +246,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     
     // MARK: - Required methods
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

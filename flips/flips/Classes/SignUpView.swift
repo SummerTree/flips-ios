@@ -22,8 +22,8 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     // MARK: - Initialization Methods
     
-    convenience override init() {
-        self.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init(frame:CGRectZero)
     }
     
     override init(frame: CGRect) {
@@ -296,7 +296,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     }
     
     func setUserPictureURL(url: NSURL, success: ((UIImage) -> Void)? = nil) {
-        self.navigationBar.setAvatarImageURL(url, success)
+        self.navigationBar.setAvatarImageURL(url, success: success)
     }
     
     func setUserData(userData: JSON!) {

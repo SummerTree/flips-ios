@@ -25,7 +25,7 @@ private let PERIOD = "."
     
     class func formatUsingUSInternational(phoneNumber: String) -> String {
         let phone = cleanFormattedPhoneNumber(phoneNumber)
-        let phoneNumberLength = countElements(phone)
+        let phoneNumberLength = count(phone)
         
         if (phoneNumberLength >= 2) {
             let countryCode = phone[0...1]
@@ -49,7 +49,7 @@ private let PERIOD = "."
     
     class func formatUsingUSInternationalStrict(phoneNumber: String) -> String? {
         let phone = cleanFormattedPhoneNumber(phoneNumber)
-        let phoneNumberLength = countElements(phone)
+        let phoneNumberLength = count(phone)
         
         if (phoneNumberLength == 10) {
             return "+1\(phone)"

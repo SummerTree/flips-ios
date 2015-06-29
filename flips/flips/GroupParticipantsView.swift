@@ -68,7 +68,7 @@ class GroupParticipantsView: UIView, UITableViewDelegate, UITableViewDataSource 
     // MARK: - TableViewDataSource Methods
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: GroupPartcipantsTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as GroupPartcipantsTableViewCell
+        var cell: GroupPartcipantsTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as! GroupPartcipantsTableViewCell
         
         let user = self.participants[indexPath.row]
         cell.configureCellWithUser(user)

@@ -94,7 +94,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.Default
     }
     
     
@@ -119,7 +119,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.confirmFlipView.showActivityIndicator()
 
         var createFlipSuccessBlock : CreateFlipSuccessCompletion = { (flip) -> Void in
-            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as Flip
+            let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as! Flip
             self.navigationController?.popViewControllerAnimated(false)
             self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flipID: flipInContext.flipID)
             self.confirmFlipView.hideActivityIndicator()
@@ -127,8 +127,8 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         
         var createFlipFailBlock : CreateFlipFailureCompletion = { (error) -> Void in
             if let flipError = error {
-                let errorTitle = flipError.error?
-                let errorMessage = flipError.details?
+                let errorTitle = flipError.error
+                let errorMessage = flipError.details
                 self.confirmFlipView.hideActivityIndicator()
 
                 self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)

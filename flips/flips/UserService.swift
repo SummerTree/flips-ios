@@ -87,9 +87,9 @@ public class UserService: FlipsService {
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    let errorMessage: String? = response["error"] as String?
-                    let errorDetail: String? = response["details"] as String?
+                    let response = operation.responseObject as! NSDictionary
+                    let errorMessage: String? = response["error"] as! String?
+                    let errorDetail: String? = response["details"] as! String?
                     failure(FlipError(error: errorMessage, details: errorDetail))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
@@ -124,8 +124,8 @@ public class UserService: FlipsService {
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details:nil))
+                    let response = operation.responseObject as! NSDictionary
+                    failure(FlipError(error: response["error"] as! String!, details:nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
                 }
@@ -167,7 +167,7 @@ public class UserService: FlipsService {
                 }
                 
                 if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
+                    let response = operation.responseObject as! NSDictionary
                     var errorText: String = ""
                     var detailsText: String = ""
                     
@@ -229,8 +229,8 @@ public class UserService: FlipsService {
                 },
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details: nil))
+                        let response = operation.responseObject as! NSDictionary
+                        failure(FlipError(error: response["error"] as! String!, details: nil))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details: nil))
                     }
@@ -270,8 +270,8 @@ public class UserService: FlipsService {
                 if ((response != nil) && (response.statusCode == 404)) {
                     failure(nil)
                 } else if (operation.responseObject != nil) {
-                    let responseObject = operation.responseObject as NSDictionary
-                    failure(FlipError(error: responseObject["error"] as String!, details: responseObject["details"] as? String))
+                    let responseObject = operation.responseObject as! NSDictionary
+                    failure(FlipError(error: responseObject["error"] as! String!, details: responseObject["details"] as? String))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details:nil))
                 }
@@ -312,8 +312,8 @@ public class UserService: FlipsService {
                 },
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details: response["details"] as String?))
+                        let response = operation.responseObject as! NSDictionary
+                        failure(FlipError(error: response["error"] as! String!, details: response["details"] as! String?))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details:nil))
                     }
@@ -348,8 +348,8 @@ public class UserService: FlipsService {
                 },
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details: nil))
+                        let response = operation.responseObject as! NSDictionary
+                        failure(FlipError(error: response["error"] as! String!, details: nil))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details: nil))
                     }
@@ -372,7 +372,7 @@ public class UserService: FlipsService {
         }
         
         if let loggedUser = User.loggedUser() {
-            let permissions: [String] = FBSession.activeSession().permissions as [String]
+            let permissions: [String] = FBSession.activeSession().permissions as! [String]
             if (!contains(permissions, "user_friends")) {
                 failure(FlipError(error: "user_friends permission not allowed.", details:nil))
                 return
@@ -385,7 +385,7 @@ public class UserService: FlipsService {
                     return
                 }
                 
-                let resultDictionary: NSDictionary = result as NSDictionary
+                let resultDictionary: NSDictionary = result as! NSDictionary
                 let usersJSON = JSON(resultDictionary.objectForKey("data")!)
                 
                 if let users = usersJSON.array {
@@ -419,8 +419,8 @@ public class UserService: FlipsService {
                         success(nil)
                         }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                             if (operation.responseObject != nil) {
-                                var response = operation.responseObject as NSDictionary
-                                failure(FlipError(error: response["error"] as String!, details : nil))
+                                var response = operation.responseObject as! NSDictionary
+                                failure(FlipError(error: response["error"] as! String!, details : nil))
                             } else {
                                 failure(FlipError(error: error.localizedDescription, details : nil))
                             }
@@ -450,7 +450,7 @@ public class UserService: FlipsService {
                 return
             }
             
-            success(JSON(result! as NSDictionary))
+            success(JSON(result! as! NSDictionary))
         }
     }
 
@@ -464,7 +464,7 @@ public class UserService: FlipsService {
 
         if let loggedUser = User.loggedUser() {
             ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelperContact>?) -> Void in
-                if (countElements(contacts!) == 0) {
+                if (count(contacts!) == 0) {
                     success(nil)
                     return
                 }
@@ -496,8 +496,8 @@ public class UserService: FlipsService {
                     AnalyticsService.logContactsImported(response.count)
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        var response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details: nil))
+                        var response = operation.responseObject as! NSDictionary
+                        failure(FlipError(error: response["error"] as! String!, details: nil))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details: nil))
                     }
@@ -526,8 +526,8 @@ public class UserService: FlipsService {
                 },
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
-                        failCompletion(FlipError(error: response["error"] as String!, details: nil))
+                        let response = operation.responseObject as! NSDictionary
+                        failCompletion(FlipError(error: response["error"] as! String!, details: nil))
                     } else {
                         failCompletion(FlipError(error: error.localizedDescription, details: nil))
                     }
@@ -551,8 +551,8 @@ public class UserService: FlipsService {
             },
             failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                 if (operation.responseObject != nil) {
-                    let response = operation.responseObject as NSDictionary
-                    failure(FlipError(error: response["error"] as String!, details: nil))
+                    let response = operation.responseObject as! NSDictionary
+                    failure(FlipError(error: response["error"] as! String!, details: nil))
                 } else {
                     failure(FlipError(error: error.localizedDescription, details: nil))
                 }
@@ -583,8 +583,8 @@ public class UserService: FlipsService {
                 },
                 failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        let response = operation.responseObject as NSDictionary
-                        failure(FlipError(error: response["error"] as String!, details: nil))
+                        let response = operation.responseObject as! NSDictionary
+                        failure(FlipError(error: response["error"] as! String!, details: nil))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details: nil))
                     }

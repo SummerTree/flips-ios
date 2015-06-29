@@ -69,7 +69,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         flipMessagesWaiting[flipMessage.flipMessageID] = Array<String>()
 
         // Download the thumbnail only for the first flip of the message
-        let firstEntry = flipMessage.flipsEntries.first! as FlipEntry
+        let firstEntry = flipMessage.flipsEntries!.first! as FlipEntry
         let firstFlip = firstEntry.flip
         flipMessagesWaiting[flipMessage.flipMessageID]?.append(firstFlip.flipID)
 
@@ -106,7 +106,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     }
 
     private func onRoomReceived(messageJson: JSON) {
-        let room = PersistentManager.sharedInstance.createRoomWithJson(messageJson[MESSAGE_CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as Room
+        let room = PersistentManager.sharedInstance.createRoomWithJson(messageJson[MESSAGE_CONTENT]).inContext(NSManagedObjectContext.MR_defaultContext()) as! Room
         PubNubService.sharedInstance.subscribeToChannelID(room.pubnubID)
     }
 
@@ -115,8 +115,8 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     
     func notificationReceived(notification: NSNotification) {
         let userInfo: Dictionary = notification.userInfo!
-        let flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as String
-        let flipMessageID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as String
+        let flipID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY] as! String
+        let flipMessageID = userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY] as! String
         
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipID) {
@@ -202,7 +202,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let flipMessage = self.processFlipMessageJson(messageJson, atDate: date, fromChannelName: fromChannelName, fromHistory: false)
 
         if (flipMessage != nil) {
-            self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as FlipMessage)
+            self.onMessageReceived(flipMessage!.inContext(NSManagedObjectContext.contextForCurrentThread()) as! FlipMessage)
         }
     }
 

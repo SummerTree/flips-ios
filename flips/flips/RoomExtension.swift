@@ -16,7 +16,7 @@ extension Room {
         var notReadMessagesCount = 0
         let flipMessagesNotRemoved = self.flipMessagesNotRemoved()
         for (var i = 0; i < flipMessagesNotRemoved.count; i++) {
-            let flipMessage = flipMessagesNotRemoved[i] as FlipMessage
+            let flipMessage = flipMessagesNotRemoved[i] as! FlipMessage
             
             if (flipMessage.notRead.boolValue) {
                 notReadMessagesCount++
@@ -55,7 +55,7 @@ extension Room {
     func notRemovedFlipMessagesOrderedByReceivedAt() -> [FlipMessage] {
         var sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: FlipMessageAttributes.RECEIVED_AT, ascending: true)
         let orderedFlipMessage: [AnyObject] = self.flipMessagesNotRemoved().sortedArrayUsingDescriptors([sortDescriptor])
-        return orderedFlipMessage as [FlipMessage]
+        return orderedFlipMessage as! [FlipMessage]
     }
     
     func markAllMessagesAsRemoved(completion: CompletionBlock) {
@@ -69,22 +69,32 @@ extension Room {
         let nameDescriptor = NSSortDescriptor(key: "firstName", ascending: true)
         let lastNameDescriptor = NSSortDescriptor(key: "firstName", ascending: true)
         let phoneNumberDescriptor = NSSortDescriptor(key: "phoneNumber", ascending: true)
-        var sortedParticipants = self.participants.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
-        for participant in sortedParticipants {
+        
+        //change names vars
+        let entries: NSMutableArray = NSMutableArray()
+        if let testeEntries = self.participants as? Set<User> {
+            for entrie: User in testeEntries {
+                entries.addObject(entrie)
+            }
+        }
+
+        var sortedParticipants = entries.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
+        
+        for participant: User in sortedParticipants as! [User] {
             if let loggedUser = User.loggedUser() {
                 if (participant.userID != loggedUser.userID) {
                     var userFirstName = participant.firstName
                     if (participant.isTemporary!.boolValue) {
                         if let phoneNumber = participant.phoneNumber {
-                            userFirstName = (participant as User).formattedPhoneNumber()
+                            userFirstName = participant.formattedPhoneNumber()
                         }
                         
-                        if let contacts = participant.contacts {
+                        if let contacts = Array(participant.contacts) as? [Contact] {
                             if (contacts.count > 0) {
-                                var contact: Contact = contacts.allObjects[0] as Contact
+                                var contact: Contact = contacts[0]
                                 
-                                for userContact in contacts.allObjects {
+                                for userContact: Contact in contacts {
                                     if (!hasTemporaryName(userContact.firstName)) {
                                         contact = userContact as Contact
                                     }

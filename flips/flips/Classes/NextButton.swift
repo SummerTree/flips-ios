@@ -13,7 +13,8 @@
 import Foundation
 
 class NextButton: UIButton {
-    override init() {
+
+    init() {
         super.init(frame: CGRectZero)
         setup()
     }

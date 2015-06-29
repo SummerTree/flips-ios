@@ -17,9 +17,8 @@ class ImportContactViewController: UIViewController {
     private var alreadyExecuted: Bool = false
     private var importContactView: ImportContactView!
 
-    override init() {
-        super.init()
-        
+    init() {
+        super.init(nibName: nil, bundle: nil)
         self.importContactView = ImportContactView()
     }
 

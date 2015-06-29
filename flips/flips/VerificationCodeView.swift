@@ -53,7 +53,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     private var wrongVerificationCodeCounter = 0
     
     init(phoneNumber : String!) {
-        super.init()
+        super.init(frame: CGRectZero)
         self.phoneNumber = phoneNumber
         self.backgroundColor = self.defineBackgroundColor()
         self.addSubviews()
@@ -269,8 +269,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let textFieldLength = countElements(textField.text)
-        let replacementStringLength = countElements(string)
+        let textFieldLength = count(textField.text)
+        let replacementStringLength = count(string)
         if (replacementStringLength == 0) { //backspace
             if (textField == codeField3) {
                 codeField3.text = ""
@@ -354,7 +354,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     func codeFieldDidChange(textField: UITextField) {
         let verificationCode = codeField0.text + codeField1.text + codeField2.text + codeField3.text
         let stringWithDigitsOnly = verificationCode.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
-        let numberOfDigitsProvided = countElements(stringWithDigitsOnly)
+        let numberOfDigitsProvided = count(stringWithDigitsOnly)
         if (numberOfDigitsProvided == 4) {
             self.didFinishTypingVerificationCode(verificationCode)
         }
@@ -417,7 +417,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func keyboardOnScreen(notification: NSNotification) {
         if let info = notification.userInfo {
-            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
             keyboardHeight = keyboardFrame.height
             updateConstraints()
         }

@@ -28,7 +28,7 @@ class FlipsViewController : UIViewController {
     
     // MARK: - Init methods
     
-    override init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -160,6 +160,6 @@ class FlipsViewController : UIViewController {
             return nil
         }
         
-        return self.navigationController?.viewControllers![numberOfViewControllers! - 2] as UIViewController!
+        return self.navigationController?.viewControllers![numberOfViewControllers! - 2] as! UIViewController!
     }
 }

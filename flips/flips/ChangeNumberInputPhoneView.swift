@@ -30,9 +30,8 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     private var newNumberImageView:     UIImageView!
     private var keyboardView:           UIView!
     
-    override init() {
-        super.init()
-        
+    init() {
+        super.init(frame: CGRectZero)
         addSubviews()
     }
     
@@ -177,7 +176,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     
     func keyboardWillShow(notification: NSNotification) {
         let info = notification.userInfo!
-        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         keyboardHeight = keyboardFrame.height
         self.makeConstraints()
     }
@@ -190,7 +189,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         replacementString string: String) -> Bool {
         
         let text = textField.text
-        let length = countElements(text)
+        let length = count(text)
         var shouldReplace = true
         
         if (string != "") {
@@ -216,7 +215,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     }
     
     func newNumberFieldDidChange(textField: UITextField) {
-        if (countElements(textField.text) == 12) {
+        if (count(textField.text) == 12) {
             self.finishTypingMobileNumber(textField)
         }
     }

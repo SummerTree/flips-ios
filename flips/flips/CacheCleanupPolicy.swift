@@ -44,7 +44,7 @@ public class CacheCleanupPolicy {
             var sizeToRemove = -freeSize
             var entryCount = 0
             
-            var sizesAndTimestampsArray = [Slice<(UInt64,Int)>]()
+            var sizesAndTimestampsArray = [ArraySlice<(UInt64,Int)>]()
             for i in 0..<self.caches.count {
                 let sizesAndTimestamps = self.caches[i].getLRUSizesAndTimestamps(sizeToRemove)
                 entryCount += sizesAndTimestamps.count
@@ -90,7 +90,7 @@ public class CacheCleanupPolicy {
         var freeSpace: Int64 = 0
         var error: NSError?
         var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        if let attributes = NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last as String, error: &error) {
+        if let attributes = NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last as! String, error: &error) {
             if let freeFileSystemSizeInBytes = attributes[NSFileSystemFreeSize] as? NSNumber {
                 return freeFileSystemSizeInBytes.longLongValue
             }

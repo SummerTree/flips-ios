@@ -82,7 +82,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     func splashScreenViewAttemptLoginWithFacebook() {
         UserService.sharedInstance.signInWithFacebookToken(FBSession.activeSession().accessTokenData.accessToken,
             success: { (user) -> Void in
-                AuthenticationHelper.sharedInstance.onLogin(user as User)
+                AuthenticationHelper.sharedInstance.onLogin(user as! User)
                 PersistentManager.sharedInstance.syncUserData({ (success, flipError) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if let authenticatedUser = User.loggedUser() {
@@ -121,9 +121,9 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     
     func logoutNotificationReceived(notification: NSNotification) {
         let userInfo: Dictionary = notification.userInfo!
-        let facebookUserLoggedOut = userInfo[LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY] as Bool
+        let facebookUserLoggedOut = userInfo[LOGOUT_NOTIFICATION_PARAM_FACEBOOK_USER_KEY] as! Bool
         loginMode = facebookUserLoggedOut ? .LOGIN_AGAIN_WITH_FACEBOOK : .ORDINARY_LOGIN
-        userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as String) : nil
+        userFirstName = facebookUserLoggedOut ? (userInfo[LOGOUT_NOTIFICATION_PARAM_FIRST_NAME_KEY] as! String) : nil
     }
     
     func openLoginViewController() {
@@ -151,7 +151,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     
     private func userHasDevice(user: User) -> Bool {
         var userHasPhone = user.phoneNumber != nil
-        var phoneNumberLength = countElements(user.phoneNumber)
+        var phoneNumberLength = count(user.phoneNumber)
         var isDeviceVerified: Bool = false
         
         if let isVerified = user.device.isVerified {

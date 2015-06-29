@@ -170,7 +170,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.BlackOpaque
+        return UIStatusBarStyle.Default
     }
     
     
@@ -197,7 +197,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     private func addConstraints() {
-        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
         
         composeTopViewContainer.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.view)
@@ -707,10 +707,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     // MARK: - Gallery control
     
     func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: false)
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
     }
     
-    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
         let flipWord = self.flipWords[self.highlightedWordIndex]
         let croppedImage = image.cropSquareThumbnail()
         self.highlightedWordCurrentAssociatedImage = croppedImage

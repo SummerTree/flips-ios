@@ -24,7 +24,7 @@ struct ContactAttributes {
     // MARK: - CoreData Creator Methods
     
     private func createEntityWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
-        var entity: Contact! = Contact.createInContext(currentContext) as Contact
+        var entity: Contact! = Contact.createInContext(currentContext) as! Contact
 
         entity.createdAt = NSDate()
         self.fillContact(entity, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
@@ -48,7 +48,7 @@ struct ContactAttributes {
         contact.contactID = contactID
         
         if (contactUser != nil) {
-            let contactUserInContext = contactUser?.inContext(currentContext) as User
+            let contactUserInContext = contactUser?.inContext(currentContext) as! User
             contact.contactUser = contactUserInContext
             contactUserInContext.addContactsObject(contact)
         }
@@ -57,7 +57,7 @@ struct ContactAttributes {
     }
     
     func updateContact(contact: Contact, withFirstName firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
-        let contactInContext = contact.inContext(currentContext) as Contact
+        let contactInContext = contact.inContext(currentContext) as! Contact
         self.fillContact(contactInContext, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
         return contactInContext
     }
@@ -136,11 +136,11 @@ struct ContactAttributes {
     }
 
     func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [Contact] {
-        if (countElements(phoneNumber) == 0) {
+        if (count(phoneNumber) == 0) {
             return [Contact]()
         }
         
-        let contacts = Contact.findAll() as [Contact]
+        let contacts = Contact.findAll() as! [Contact]
         let cleannedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(phoneNumber)
         
         var contactsWithSamePhoneNumber = Array<Contact>()
@@ -160,8 +160,8 @@ struct ContactAttributes {
             
             let usersFirst = contacts.sortedArrayUsingComparator { (contact1, contact2) -> NSComparisonResult in
                 
-                let contact1: Contact = contact1 as Contact
-                let contact2: Contact = contact2 as Contact
+                let contact1: Contact = contact1 as! Contact
+                let contact2: Contact = contact2 as! Contact
                 
                 if (contact1.contactUser == nil && contact2.contactUser == nil) {
                     return NSComparisonResult.OrderedSame
@@ -178,7 +178,7 @@ struct ContactAttributes {
                 return NSComparisonResult.OrderedDescending
             }
             
-            return usersFirst as [Contact]
+            return usersFirst as! [Contact]
         } else {
             return Array<Contact>()
         }

@@ -44,9 +44,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private var importContactsCell: SettingsTableViewCell!
     private var tutorialCell: SettingsTableViewCell!
     
-    override init() {
-        super.init()
-        
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)

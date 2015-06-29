@@ -86,13 +86,23 @@ class LoginView : UIView, UITextFieldDelegate {
     
     weak var delegate: LoginViewDelegate?
     
-    override init() {
-        super.init()
-        
+    init() {
+        super.init(frame: CGRectZero)
         self.animator = UIDynamicAnimator(referenceView: self)
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()
+    }
+    
+    
+    // MARK: - Required methods
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     func viewDidAppear() {
@@ -696,17 +706,6 @@ class LoginView : UIView, UITextFieldDelegate {
         })
     }
 
-    
-    // MARK: - Required methods
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    
     // MARK: - Private methods
     
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {

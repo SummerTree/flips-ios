@@ -28,8 +28,8 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
     
     // MARK: - Initialization Methods
     
-    convenience override init() {
-        self.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init(frame: CGRectZero)
     }
     
     override init(frame: CGRect) {

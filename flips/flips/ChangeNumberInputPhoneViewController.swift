@@ -52,7 +52,7 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
     // MARK: - ChangeNumberInputPhoneViewDelegate
     
     func makeConstraintToNavigationBarBottom(view: UIView!) {
-        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as UIView
+        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
         
         view.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(topLayoutGuide.mas_bottom)
@@ -88,7 +88,7 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
         UserService.sharedInstance.phoneNumberExists(phoneNumber,
             success: { (response) in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
-                let exists = response as Bool
+                let exists = response as! Bool
                 if (exists as Bool) {
                     let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.PHONE_NUMBER_ALREADY_EXISTS, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()

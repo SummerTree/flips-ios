@@ -31,8 +31,8 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return Int(self.contentSize.height/self.font.lineHeight)
     }
     
-    override init() {
-        super.init(frame: CGRect.zeroRect, textContainer: nil)
+    convenience init() {
+        self.init(frame: CGRect.zeroRect, textContainer: nil)
         self.returnKeyType = .Next
         self.delegate = self
         self.backgroundColor = UIColor.clearColor()
@@ -52,7 +52,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func setupMenu() {
         let menuController = UIMenuController.sharedMenuController()
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
-        menuController.menuItems = NSArray(array: [lookupMenu])
+        menuController.menuItems = NSArray(array: [lookupMenu]) as [AnyObject]
         menuController.update()
         menuController.setMenuVisible(true, animated: true)
     }
@@ -110,7 +110,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         let firstCharIsSpecial = isSpecialCharacter(string[rangeInit].0)
         for (var i = rangeInit-1; i >= 0; --i) {
-            if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) ^ firstCharIsSpecial) {
+            if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) != firstCharIsSpecial) {
                 break
             }
             --rangeInit
@@ -119,7 +119,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         let lastCharIsSpecial = isSpecialCharacter(string[rangeEnd-1].0)
         for (var i = rangeEnd; i < string.count; ++i) {
-            if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) ^ lastCharIsSpecial) {
+            if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) != lastCharIsSpecial) {
                 break
             }
             ++rangeEnd
@@ -183,7 +183,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             
             let partOfRange = isPartOfJoinedTextRanges(index)
             if (partOfRange.isPart) {
-                if (countElements(word) > 0) {
+                if (count(word) > 0) {
                     words.append(word)
                     word = ""
                 }
@@ -191,7 +191,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 index = partOfRange.range!.location+partOfRange.range!.length
             } else {
                 let i = index++
-                if (countElements(word) > 0 && (textArray[i] == WHITESPACE_CHAR || (isSpecialCharacter(Array(word)[0]) ^ isSpecialCharacter(textArray[i])))) {
+                if (count(word) > 0 && (textArray[i] == WHITESPACE_CHAR || (isSpecialCharacter(Array(word)[0]) != isSpecialCharacter(textArray[i])))) {
                     words.append(word)
                     word = ""
                 }

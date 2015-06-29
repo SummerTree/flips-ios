@@ -143,7 +143,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func reloadCells() {
-        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells() as [ConversationTableViewCell] {
+        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells() as! [ConversationTableViewCell] {
             cell.refreshCell(shouldSetThumbnailAnimated: false)
         }
     }
@@ -152,7 +152,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     // MARK: - UITableViewDataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as ConversationTableViewCell
+        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! ConversationTableViewCell
         
         if let roomId = dataSource?.inboxView(self, roomAtIndex: indexPath.row) {
             cell.setRoomId(roomId)
@@ -176,7 +176,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         let roomID: String = dataSource!.inboxView(self, roomAtIndex: indexPath.row)
         let roomDataSource: RoomDataSource = RoomDataSource()
         if let room: Room = roomDataSource.getRoomById(roomID) {
-            let participants: [User] = room.participants.allObjects as [User]
+
+            let participants: [User] = Array(room.participants) as! [User]
             if (participants.count == 2) {
                 for participant in participants {
                     if (participant.username == TEAMFLIPS_USERNAME) {

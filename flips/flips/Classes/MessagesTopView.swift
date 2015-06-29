@@ -34,8 +34,8 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: - Initialization Methods
     
-    convenience override init() {
-        self.init(frame: CGRect.zeroRect)
+    convenience init() {
+        self.init(frame: CGRectZero)
     }
     
     override init(frame: CGRect) {
@@ -107,7 +107,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:MessagesTopViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as MessagesTopViewCell
+        var cell:MessagesTopViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! MessagesTopViewCell
         cell.setAttributedMessage(Array(messages.values)[indexPath.row])
         return cell;
     }

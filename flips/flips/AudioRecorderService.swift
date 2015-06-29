@@ -40,7 +40,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         ]
         
         var error: NSError?
-        recorder = AVAudioRecorder(URL: soundFileURL!, settings: recordSettings, error: &error)
+        recorder = AVAudioRecorder(URL: soundFileURL!, settings: recordSettings as [NSObject : AnyObject], error: &error)
         if let e = error {
             println(e.localizedDescription)
         } else {

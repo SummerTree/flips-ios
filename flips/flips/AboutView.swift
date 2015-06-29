@@ -28,10 +28,18 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     private var copyright: UILabel!
     private var webView: FlipsWebView!
     
-    override init() {
-        super.init()
-        
+    init() {
+        super.init(frame: CGRectZero)
         self.addSubviews()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubviews();
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func viewDidLoad() {
@@ -39,7 +47,9 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         webView.viewDidLoad()
     }
 
-    func addSubviews() {
+    // MARK: - Required inits
+
+    private func addSubviews() {
         
         self.backgroundColor = UIColor.flipOrange()
         
@@ -62,7 +72,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(NSCalendarUnit.CalendarUnitYear, fromDate: currentDate)
         
-        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as String
+        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as! String) as! String
         
         copyright = UILabel()
         copyright.numberOfLines = 3
@@ -144,15 +154,8 @@ class AboutView: UIView, CustomNavigationBarDelegate {
     }
     
     
-    // MARK: - Required inits
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
 }
 
 protocol AboutViewDelegate: class {

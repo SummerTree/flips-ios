@@ -42,11 +42,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     // MARK: - Initialization Methods
     
     init(roomID: String? = nil, flipMessageID: String? = nil) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.roomIdToShow = roomID
         self.flipMessageIdToShow = flipMessageID
     }
-
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -86,7 +86,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             self.shouldInformPubnubNotConnected = true
             
             weak var weakSelf = self
-            PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+            PubNubService.sharedInstance.subscribeOnMyChannels(completion: { (success: Bool) -> Void in
                 println("   InboxViewController subscribeOnMyChannels completion called")
                 if (weakSelf?.roomIdToShow != nil) {
                     weakSelf?.openRoomForPushNotificationIfMessageReceived()
@@ -251,7 +251,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     DeviceHelper.sharedInstance.setSyncViewShown(true)
                     self.syncMessageHistoryBlock = nil
                     
-                    PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                    PubNubService.sharedInstance.subscribeOnMyChannels(completion: { (success: Bool) -> Void in
                         self.refreshRooms()
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
@@ -315,7 +315,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
         var newFlipViewNavigationController = NewFlipViewController.instantiateNavigationController()
-        var viewController = newFlipViewNavigationController.topViewController as NewFlipViewController
+        var viewController = newFlipViewNavigationController.topViewController as! NewFlipViewController
         viewController.delegate = self
         self.navigationController?.presentViewController(newFlipViewNavigationController, animated: true, completion: nil)
     }
@@ -335,7 +335,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     func inboxView(inboxView : InboxView, didTapAtItemAtIndex index: Int) {
         var roomID: String!
-        roomID = self.roomIds.objectAtIndex(index) as String
+        roomID = self.roomIds.objectAtIndex(index) as! String
         self.openThreadViewControllerWithRoomID(roomID)
     }
     
@@ -352,7 +352,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 shouldReloadTableView = true
             } else {
                 for (var i: Int = 0; i < rooms.count; i++) {
-                    if (self.roomIds[i] as NSString != rooms[i].roomID) {
+                    if (self.roomIds[i] as? NSString != rooms[i].roomID) {
                         shouldReloadTableView = true
                     }
                 }
@@ -389,7 +389,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             
             if let roomFlipMessages: NSOrderedSet = room.valueForKey("flipMessages") as? NSOrderedSet {
                 for (var i: Int = roomFlipMessages.count - 1; i >= 0; i--) {
-                    let flipMessage: FlipMessage = roomFlipMessages[i] as FlipMessage
+                    let flipMessage: FlipMessage = roomFlipMessages[i] as! FlipMessage
                     if (flipMessage.notRead.boolValue) {
                         hasUnreadMessages = true
                         break
@@ -479,7 +479,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     func inboxView(inboxView: InboxView, roomAtIndex index: Int) -> String {
-        return self.roomIds.objectAtIndex(index) as String
+        return self.roomIds.objectAtIndex(index) as! String
     }
     
     func inboxView(inboxView: InboxView, didRemoveRoomAtIndex index: Int) {

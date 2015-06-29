@@ -28,7 +28,7 @@ class BuilderWordDataSource: BaseDataSource {
             var predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
             var existingWord = BuilderWord.findAllWithPredicate(predicate, inContext: currentContext)
             if (existingWord.count == 0) {
-                var builderWord = BuilderWord.createInContext(currentContext) as BuilderWord
+                var builderWord = BuilderWord.createInContext(currentContext) as! BuilderWord
                 builderWord.word = word
                 builderWord.fromServer = fromServer
                 builderWord.addedAt = NSDate()
@@ -44,7 +44,7 @@ class BuilderWordDataSource: BaseDataSource {
         if (existingWord.count > 0) {
             result = false // DO NOT DUPLICATE
         } else {
-            var builderWord = BuilderWord.createInContext(currentContext) as BuilderWord
+            var builderWord = BuilderWord.createInContext(currentContext) as! BuilderWord
             builderWord.word = word
             builderWord.fromServer = fromServer
             builderWord.addedAt = NSDate()
@@ -55,7 +55,7 @@ class BuilderWordDataSource: BaseDataSource {
     }
     
     func getWords() -> [BuilderWord] {
-        return BuilderWord.findAllSortedBy(BuilderWordAttributes.ADDED_AT, ascending: false, inContext: currentContext) as [BuilderWord]
+        return BuilderWord.findAllSortedBy(BuilderWordAttributes.ADDED_AT, ascending: false, inContext: currentContext) as! [BuilderWord]
     }
     
     func removeBuilderWordWithWord(word: String) {
