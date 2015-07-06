@@ -418,9 +418,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                         view.hidden = true
                         return
                     })
-                    
-                    let alertView: UIAlertView = UIAlertView(title: "", message: self.LOAD_HISTORY_FAIL_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                    alertView.show()
                 })
             }
         }
