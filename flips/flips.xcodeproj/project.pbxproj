@@ -33,6 +33,17 @@
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
+		4041EA4B1B47146F00F36BFE /* TwilioMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */; };
+		4041EA4C1B47146F00F36BFE /* TwilioMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */; };
+		406378651B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		406378661B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		406378671B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
+		40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
+		40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
+		40F044001B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
+		40F044011B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
+		40F044021B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
@@ -622,6 +633,7 @@
 		BE2461391AD2D9C600859233 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
 		BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
 		BE2E72081A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
+		BE3897AA1AD43D5100471B88 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE3897A91AD43D5100471B88 /* Info.plist */; };
 		BE3A904D1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		BE3A904E1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		BE3A904F1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
@@ -677,6 +689,10 @@
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
 		07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSErrorExtensions.swift; path = Classes/NSErrorExtensions.swift; sourceTree = "<group>"; };
 		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
+		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
+		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
+		40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposerExternal.swift; sourceTree = "<group>"; };
+		40F043FF1B3CE70300AF3B73 /* MovieExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieExport.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -976,9 +992,18 @@
 			name = "New Flip";
 			sourceTree = "<group>";
 		};
+		4041EA491B47144200F36BFE /* Twilio */ = {
+			isa = PBXGroup;
+			children = (
+				4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */,
+			);
+			name = Twilio;
+			sourceTree = "<group>";
+		};
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4041EA491B47144200F36BFE /* Twilio */,
 				7A777A541ADD43F40004BEB1 /* Remote Request Manager */,
 				73D727981A83E728006DCC92 /* Caching */,
 				5707185719D19D580069064F /* Backend */,
@@ -1068,6 +1093,8 @@
 				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
 				BE22C9941AA6BEC00079298E /* TempFiles.swift */,
 				7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */,
+				40F043FF1B3CE70300AF3B73 /* MovieExport.swift */,
+				40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1316,6 +1343,7 @@
 				7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */,
 				7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */,
 				A2392BF819EEE7C70037B0C0 /* FlipTextView.swift */,
+				406378641B309DF30086AA59 /* FlipsSendButton.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -1875,9 +1903,10 @@
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0600;
 				TargetAttributes = {
 					70FD4E6F19D064450024EBDB = {
+						DevelopmentTeam = Q2H5Y569K8;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1885,11 +1914,15 @@
 						};
 					};
 					BE245F901AD2D95900859233 = {
+						DevelopmentTeam = Q2H5Y569K8;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 						};
+					};
+					BE24606A1AD2D9C600859233 = {
+						DevelopmentTeam = Q2H5Y569K8;
 					};
 				};
 			};
@@ -1919,6 +1952,7 @@
 			files = (
 				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
+				BE3897AA1AD43D5100471B88 /* Info.plist in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
@@ -2101,6 +2135,7 @@
 				7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */,
 				0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
+				40F044001B3CE70300AF3B73 /* MovieExport.swift in Sources */,
 				7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
@@ -2119,6 +2154,7 @@
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
+				406378651B309DF30086AA59 /* FlipsSendButton.swift in Sources */,
 				F29324711A1583B700355A4D /* PlayerView.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */,
@@ -2163,6 +2199,7 @@
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
+				40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
 				07CB53721A3E4A3C00853A78 /* UIAlertViewExtensions.swift in Sources */,
 				7A2A7E2419EDBFB800033164 /* CoreDataHandler.swift in Sources */,
@@ -2209,6 +2246,7 @@
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
 				7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */,
 				7AFB1E991AC2FA0700C60D8E /* BlurredThumbnailsCache.swift in Sources */,
+				4041EA4B1B47146F00F36BFE /* TwilioMessaging.swift in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7AA711721A28D8AF0082165A /* Contact.m in Sources */,
@@ -2310,6 +2348,7 @@
 				BE245FBF1AD2D95900859233 /* CustomNavigationBarDelegate.swift in Sources */,
 				BE245FC01AD2D95900859233 /* flips.xcdatamodeld in Sources */,
 				BE245FC11AD2D95900859233 /* NotificationMessageView.swift in Sources */,
+				40F044011B3CE70300AF3B73 /* MovieExport.swift in Sources */,
 				BE245FC21AD2D95900859233 /* ComposeViewController.swift in Sources */,
 				BE245FC31AD2D95900859233 /* ConfirmFlipViewController.swift in Sources */,
 				BE245FC41AD2D95900859233 /* InboxViewController.swift in Sources */,
@@ -2328,6 +2367,7 @@
 				BE245FD11AD2D95900859233 /* TermsOfUseViewController.swift in Sources */,
 				7A9FFA431AEE7623002DE1FE /* Room.m in Sources */,
 				BE245FD21AD2D95900859233 /* PlayerView.swift in Sources */,
+				406378661B309DF30086AA59 /* FlipsSendButton.swift in Sources */,
 				BE245FD31AD2D95900859233 /* AppDelegate.swift in Sources */,
 				BE245FD41AD2D95900859233 /* PreviewViewController.swift in Sources */,
 				BE245FD51AD2D95900859233 /* ContactDataSource.swift in Sources */,
@@ -2372,6 +2412,7 @@
 				BE245FFB1AD2D95900859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				BE245FFC1AD2D95900859233 /* OnboardingHelper.swift in Sources */,
 				7A9240E01AE5410E00E591B7 /* QueueHelper.swift in Sources */,
+				40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
 				BE245FFD1AD2D95900859233 /* CustomNavigationBar.swift in Sources */,
 				BE245FFE1AD2D95900859233 /* TakePictureViewDelegate.swift in Sources */,
 				BE245FFF1AD2D95900859233 /* UIAlertViewExtensions.swift in Sources */,
@@ -2418,6 +2459,7 @@
 				BE2460281AD2D95900859233 /* UIColorExtensions.swift in Sources */,
 				BE2460291AD2D95900859233 /* TakePictureViewController.swift in Sources */,
 				BE24602A1AD2D95900859233 /* DAKeyboardControl.m in Sources */,
+				4041EA4C1B47146F00F36BFE /* TwilioMessaging.swift in Sources */,
 				BE24602B1AD2D95900859233 /* BlurredThumbnailsCache.swift in Sources */,
 				BE24602C1AD2D95900859233 /* NewPasswordViewController.swift in Sources */,
 				BE24602D1AD2D95900859233 /* UserFormView.swift in Sources */,
@@ -2519,6 +2561,7 @@
 				BE2460991AD2D9C600859233 /* CustomNavigationBarDelegate.swift in Sources */,
 				BE24609A1AD2D9C600859233 /* flips.xcdatamodeld in Sources */,
 				BE24609B1AD2D9C600859233 /* NotificationMessageView.swift in Sources */,
+				40F044021B3CE70300AF3B73 /* MovieExport.swift in Sources */,
 				BE24609C1AD2D9C600859233 /* ComposeViewController.swift in Sources */,
 				BE24609D1AD2D9C600859233 /* ConfirmFlipViewController.swift in Sources */,
 				BE24609E1AD2D9C600859233 /* InboxViewController.swift in Sources */,
@@ -2537,6 +2580,7 @@
 				BE2460AB1AD2D9C600859233 /* TermsOfUseViewController.swift in Sources */,
 				7A9FFA441AEE7623002DE1FE /* Room.m in Sources */,
 				BE2460AC1AD2D9C600859233 /* PlayerView.swift in Sources */,
+				406378671B309DF30086AA59 /* FlipsSendButton.swift in Sources */,
 				BE2460AD1AD2D9C600859233 /* AppDelegate.swift in Sources */,
 				BE2460AE1AD2D9C600859233 /* PreviewViewController.swift in Sources */,
 				BE2460AF1AD2D9C600859233 /* ContactDataSource.swift in Sources */,
@@ -2581,6 +2625,7 @@
 				BE2460D51AD2D9C600859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
 				BE2460D61AD2D9C600859233 /* OnboardingHelper.swift in Sources */,
 				7A9240E11AE5410E00E591B7 /* QueueHelper.swift in Sources */,
+				40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
 				BE2460D71AD2D9C600859233 /* CustomNavigationBar.swift in Sources */,
 				BE2460D81AD2D9C600859233 /* TakePictureViewDelegate.swift in Sources */,
 				BE2460D91AD2D9C600859233 /* UIAlertViewExtensions.swift in Sources */,
@@ -2818,6 +2863,7 @@
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -2840,6 +2886,7 @@
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -2851,7 +2898,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -2862,6 +2909,7 @@
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Distribution;
 		};
@@ -2917,7 +2965,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Flips, LLC (Q2H5Y569K8)";
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

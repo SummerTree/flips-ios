@@ -126,6 +126,26 @@ class RoundImageView: UIView {
         }
     }
     
+    func setAvatarWithLocalImage(named: String!) {
+        if (named != nil) {
+            self.imageView.image = UIImage(named: named)
+        }
+    }
+    
+    func setTapSelector(selectorMethod: Selector, targetObject: AnyObject!) {
+        var gestRecog = UITapGestureRecognizer(target: targetObject, action: selectorMethod)
+        gestRecog.numberOfTouchesRequired = 1
+        gestRecog.numberOfTapsRequired = 1
+        
+        self.imageView.addGestureRecognizer(gestRecog)
+        self.imageView.userInteractionEnabled = true
+    }
+    
+    func setBlankWhiteImage() {
+        var imageSize = self.imageView.frame
+        self.imageView.image = UIImage.imageWithColor(UIColor.whiteColor(), size: imageSize.size)
+    }
+
     private func validateLastRequestTime(thisTime: NSTimeInterval) -> Bool {
         var validated = true
         

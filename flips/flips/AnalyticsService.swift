@@ -26,6 +26,18 @@ class AnalyticsService {
         Flurry.logEvent("messageSent", withParameters: ["numOfFlips": numOfFlips, "percentWordsAssigned": percentWordsAssigned, "group": group])
     }
     
+    class func logMMSSent() {
+        Flurry.logEvent("messageSentMMS")
+    }
+    
+    class func logMMSFailed() {
+        Flurry.logEvent("messageFailedMMS")
+    }
+    
+    class func logMMSCancelled() {
+        Flurry.logEvent("messageCancelledMMS")
+    }
+    
     class func logMessageReceived() {
         Flurry.logEvent("messageReceived")
     }

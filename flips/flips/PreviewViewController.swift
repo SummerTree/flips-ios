@@ -17,20 +17,84 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
     private var previewView: PreviewView!
     private var flipWords: [FlipText]!
     private var roomID: String?
+    
     private var contactIDs: [String]?
+    
+    var fullContacts : [Contact]?
+    var messageComposer : MessageComposerExternal?
+    
+    internal var sendOptions : [FlipsSendButtonOption] = []
     
     weak var delegate: PreviewViewControllerDelegate?
     
-    convenience init(flipWords: [FlipText], roomID: String) {
-        self.init()
+    // The reason for two of essentially the same
+    // variable answers is a timing issue - we must
+    // check for this before the message is sent. 
+    // Otherwise, the contact ID will have been 
+    // invited to Flips, and will not be a Non Flips
+    // member anymore
+    
+    private var foundNonFlipsUsers : Bool = false
+    private var didFindNonFlipsUsers : Bool {
+        get {
+            var nonFlipsUserFound = false
+            if let fContacts = self.fullContacts {
+                for contact : Contact in fContacts {
+                    if contact.contactUser == nil {
+                        nonFlipsUserFound = true
+                    }
+                }
+            }
+            return nonFlipsUserFound
+        }
+    }
+    
+    private var phoneNumbers : [String] {
+        get {
+            var numbers : [String] = []
+            for contact : Contact in self.fullContacts! {
+                numbers += [contact.phoneNumber!]
+            }
+            return numbers
+        }
+    }
+    
+    private var flipWordStrings : [String] {
+        get {
+            var strings : [String] = []
+            for flipWord : FlipText in self.flipWords! {
+                strings += [flipWord.text!]
+            }
+            return strings
+        }
+    }
+    
+    convenience init(sendOptions: [FlipsSendButtonOption], flipWords: [FlipText], roomID: String) {
+        self.init(flipWords: flipWords, roomID: roomID)
+        self.sendOptions = sendOptions
+    }
+    
+    init(flipWords: [FlipText], roomID: String) {
+        super.init(nibName: nil, bundle: nil)
+        
         self.flipWords = flipWords
         self.roomID = roomID
     }
     
-    convenience init(flipWords: [FlipText], contactIDs: [String]) {
-        self.init()
+    convenience init(sendOptions: [FlipsSendButtonOption], flipWords: [FlipText], contactIDs: [String]) {
+        self.init(flipWords: flipWords, contactIDs: contactIDs)
+        self.sendOptions = sendOptions
+    }
+    
+    init(flipWords: [FlipText], contactIDs: [String]) {
+        super.init(nibName: nil, bundle: nil)
+        
         self.flipWords = flipWords
         self.contactIDs = contactIDs
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func loadView() {
@@ -156,7 +220,28 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                     let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (success) {
-                                self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!)
+                                
+                                if self.sendOptions.count > 0 {
+                                    
+                                    // Export Movie
+                                    var movieExport = MovieExport.sharedInstance
+                                    movieExport.exportFlipForMMS(self.previewView.retrievePlayerItems(), words: self.flipWordStrings,
+                                        completion: { (url: NSURL?, error: FlipError?) -> Void in
+                                            
+                                            //Attach movie to native text message
+                                            self.messageComposer = MessageComposerExternal()
+                                            self.messageComposer!.videoUrl = url
+                                            self.messageComposer!.contacts = self.phoneNumbers
+                                            self.messageComposer!.containsNonFlipsUsers = self.foundNonFlipsUsers
+                                            
+                                            self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!, withExternal: self.messageComposer)
+                                        }
+                                    )
+                                    
+                                }
+                                else {
+                                    self.delegate?.previewViewController(self, didSendMessageToRoom: roomID!, withExternal: self.messageComposer)
+                                }
                                 
                                 // log message sent analytics
                                 let numOfWords = self.flipWords.count
@@ -202,6 +287,8 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                         })
                     }
                     
+                    self.foundNonFlipsUsers = self.didFindNonFlipsUsers
+                    
                     let messageService = MessageService.sharedInstance
                     if (self.roomID != nil) {
                         messageService.sendMessage(self.flipWords, roomID: self.roomID!, completion: completionBlock)
@@ -229,6 +316,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
 
 protocol PreviewViewControllerDelegate: class {
     
-    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String)
+    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?)
     
 }

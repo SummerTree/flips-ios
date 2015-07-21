@@ -176,7 +176,7 @@ class RoomDataSource : BaseDataSource {
             }
             
             var sameParticipants = true
-            for participant: User in allParticipants as! [User] {
+            for participant: User in allParticipants as [User] {
                 if (find(userIDs, participant.userID) == nil && participant.userID != loggedUserID) {
                     sameParticipants = false
                     break

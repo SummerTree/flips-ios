@@ -44,11 +44,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private var stockFlipsDictionary: Dictionary<String, [String]>!
     
     weak private var highlightedWordCurrentAssociatedImage: UIImage?
-    
-    private var contactIDs: [String]?
+
     private var roomID: String?
+    private var contactIDs: [String]?
+    
+    var fullContacts : [Contact]?
     
     internal var words: [String]!
+    internal var sendOptions : [FlipsSendButtonOption] = []
     
     weak var delegate: ComposeViewControllerDelegate?
     
@@ -80,6 +83,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.highlightedWordIndex = 0
     }
     
+    convenience init(sendOptions: [FlipsSendButtonOption], contacts: [Contact], words: [String]) {
+        self.init(contacts: contacts, words: words)
+        self.sendOptions = sendOptions
+    }
+    
     convenience init(contacts: [Contact], words: [String]) {
         var title = GROUP_CHAT
         
@@ -100,6 +108,11 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     convenience init(roomID: String, composeTitle: String, words: [String]) {
         self.init(composeTitle: composeTitle, words: words)
         self.roomID = roomID
+    }
+    
+    convenience init(sendOptions: [FlipsSendButtonOption], roomID: String, composeTitle: String, words: [String]) {
+        self.init(roomID: roomID, composeTitle: composeTitle, words: words)
+        self.sendOptions = sendOptions
     }
     
     required init(coder: NSCoder) {
@@ -237,12 +250,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     private func openPreview() {
         var previewViewController: PreviewViewController
         if (contactIDs != nil) {
-            previewViewController = PreviewViewController(flipWords: self.flipWords, contactIDs: self.contactIDs!)
+            previewViewController = PreviewViewController(sendOptions: sendOptions, flipWords: self.flipWords, contactIDs: self.contactIDs!)
         } else {
-            previewViewController = PreviewViewController(flipWords: self.flipWords, roomID: self.roomID!)
+            previewViewController = PreviewViewController(sendOptions: sendOptions, flipWords: self.flipWords, roomID: self.roomID!)
         }
         
         previewViewController.delegate = self
+        previewViewController.fullContacts = self.fullContacts
         self.navigationController?.pushViewController(previewViewController, animated: true)
     }
     
@@ -708,6 +722,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
+        viewController.navigationItem.title = "\(self.flipWords[self.highlightedWordIndex].text)"
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!)  {
@@ -811,14 +826,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     // MARK: - PreviewViewControllerDelegate
     
-    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String) {
-        delegate?.composeViewController(self, didSendMessageToRoom: roomID)
+    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
+        delegate?.composeViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
     }
 }
 
 @objc protocol ComposeViewControllerDelegate {
     
-    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String)
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?)
     
     optional func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String])
     

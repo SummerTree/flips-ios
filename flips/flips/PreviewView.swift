@@ -26,6 +26,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     
     init() {
         super.init(frame: CGRectZero)
+        
         self.addSubviews()
     }
     
@@ -109,6 +110,11 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
     
     func stopMovie() {
         self.pauseMovie()
+    }
+    
+    //MARK: - Retrieve Player Assets
+    func retrievePlayerItems() -> [FlipPlayerItem] {
+        return self.videoPlayerView.loadedPlayerItems
     }
 
     // MARK: - Nav Bar Delegate

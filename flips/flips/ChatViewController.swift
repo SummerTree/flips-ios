@@ -29,6 +29,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     private var flipMessageIdFromPushNotification: String?
     
+    private var messageExternal : MessageComposerExternal?
+    
 
     // MARK: - Initializers
     
@@ -36,7 +38,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(room: Room, andFlipMessageIdFromPushNotification flipMessageID: String? = nil) {
+    init(room: Room, andFlipMessageIdFromPushNotification flipMessageID: String? = nil,
+                     andWithExternalMessageComposer messageComposer: MessageComposerExternal? = nil) {
+        
         super.init(nibName: nil, bundle: nil)
         self.chatTitle = room.roomName()
         self.roomID = room.roomID
@@ -44,10 +48,11 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
 
         if (room.participants.count > 2) {
             self.chatTitle = groupTitle
-            self.groupParticipantsView = GroupParticipantsView(participants: Array(room.participants) as! [User])
+            self.groupParticipantsView = GroupParticipantsView(participants: Array(room.participants) as! Array<User> as [User])
         }
         
         self.flipMessages = NSMutableOrderedSet(array: room.notRemovedFlipMessagesOrderedByReceivedAt())
+        self.messageExternal = messageComposer
     }
     
     
@@ -63,6 +68,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         
         self.chatView = ChatView(showOnboarding: false, isOpeningFromPushNotification: isOpeningFromNotification) // Onboarding is disabled for now.
         self.chatView.delegate = self
+        self.chatView.parentViewController = self
         self.view = self.chatView
         
         self.setupWhiteNavBarWithBackButton(self.chatTitle)
@@ -138,6 +144,15 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         })
         self.groupParticipantsView?.updateConstraintsIfNeeded()
         self.groupParticipantsView?.layoutIfNeeded()
+        
+        if let messageExt = self.messageExternal {
+            if !messageExt.messagePresented {
+                var mmsViewController = messageExt.configuredMessageComposeViewController()
+                self.presentViewController(mmsViewController, animated: true, completion: nil)
+                
+                messageExt.messagePresented = true
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -335,7 +350,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     // MARK: - ComposeViewControllerDelegate
     
-    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
+        
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             self.reloadFlipMessages()

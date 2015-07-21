@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="U1q-SQ-Elq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="U1q-SQ-Elq">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -33,6 +34,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Okg-Xy-YC9" userLabel="Button View">
+                                <rect key="frame" x="0.0" y="120" width="600" height="95"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="95" id="bSA-Em-ODC"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jaq-uX-Oxx" userLabel="ContactPicker" customClass="MBContactPicker">
                                 <rect key="frame" x="0.0" y="64" width="600" height="56"/>
                                 <constraints>
@@ -77,17 +84,21 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="jaq-uX-Oxx" secondAttribute="trailing" id="BNK-4Z-jJA"/>
+                            <constraint firstItem="Okg-Xy-YC9" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leadingMargin" constant="-16" id="CMj-lW-TCP"/>
                             <constraint firstAttribute="trailing" secondItem="Q7T-V3-eBo" secondAttribute="trailing" id="DA7-5k-LEx"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="KvQ-Zv-xiL"/>
                             <constraint firstItem="ffq-6Z-ir5" firstAttribute="top" secondItem="Q7T-V3-eBo" secondAttribute="bottom" id="RsM-4p-7hb"/>
                             <constraint firstItem="Q7T-V3-eBo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="Y1h-Qd-Wmb"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="top" secondItem="oZS-Za-EsS" secondAttribute="bottom" id="dQa-Gy-ZlE"/>
                             <constraint firstItem="Q7T-V3-eBo" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="kJ8-TE-GA9"/>
+                            <constraint firstItem="Okg-Xy-YC9" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="nzc-sw-ZMz"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Okg-Xy-YC9" secondAttribute="trailing" constant="-16" id="thx-7S-abC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WXn-i6-iJN"/>
                     <connections>
                         <outlet property="bottomConstraint" destination="RsM-4p-7hb" id="n7e-yF-21r"/>
+                        <outlet property="buttonPanelView" destination="Okg-Xy-YC9" id="J6u-Fg-NlQ"/>
                         <outlet property="contactPicker" destination="jaq-uX-Oxx" id="AZ6-7N-0aR"/>
                         <outlet property="contactPickerHeightConstraint" destination="xKP-Wf-aH5" id="DBV-PA-t02"/>
                         <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
@@ -98,7 +109,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xjk-R7-ENW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="746" y="403"/>
+            <point key="canvasLocation" x="693" y="403"/>
         </scene>
     </scenes>
 </document>

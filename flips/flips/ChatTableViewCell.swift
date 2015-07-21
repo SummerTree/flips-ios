@@ -22,7 +22,12 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     private let MESSAGE_DATE_LABEL_TOP_MARGIN: CGFloat = 14.0
     private let MESSAGE_TEXT_LABEL_MINIMUM_BOTTOM_MARGIN: CGFloat = 8
-    private let MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN: CGFloat = 20
+    private let MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN: CGFloat = 75
+    
+    private let SHARE_BUTTON_HORIZONTAL_MARGIN: CGFloat = 15
+    private let SHARE_BUTTON_VERTICAL_MARGIN: CGFloat = 15
+    private let SHARE_BUTTON_WIDTH: CGFloat = 20
+    private let SHARE_BUTTON_HEIGHT: CGFloat = 30
 
     // MARK: - Instance variables
     
@@ -34,10 +39,16 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     private var messageDateLabel : ChatLabel!
     private var messageTextLabel : ChatLabel!
     private var messageContainerView : UIView!
+    private var shareButton : UIButton!
+    private var shareImageButton : RoundImageView!
+    private var shareActivityIndicator : UIActivityIndicatorView!
     
     private var isPlaying = false
     
     weak var delegate: ChatTableViewCellDelegate?
+    
+    var parentViewController : UIViewController?
+    var messageComposer : MessageComposerExternal?
 
 
     // MARK: - Required initializers
@@ -92,6 +103,22 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         messageTextLabel.setContentCompressionResistancePriority(751, forAxis: UILayoutConstraintAxis.Vertical)
         messageContainerView.addSubview(messageTextLabel)
+        
+        shareButton = UIButton.buttonWithType(.Custom) as! UIButton
+        shareButton.setImage(UIImage(named: "Share"), forState: .Normal)
+        shareButton.addTarget(self, action: "shareFlip", forControlEvents: .TouchUpInside)
+        shareButton.hidden = true
+        messageContainerView.addSubview(shareButton)
+        
+        shareImageButton = RoundImageView.avatarA3()
+        shareImageButton.hidden = true
+        shareImageButton.setAvatarWithLocalImage("ShareFlip_White")
+        shareImageButton.setTapSelector("shareFlip", targetObject: self)
+        self.contentView.addSubview(shareImageButton)
+        
+        shareActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        shareActivityIndicator.hidden = true
+        self.contentView.addSubview(shareActivityIndicator)
     }
     
     func addConstraints() {
@@ -140,6 +167,27 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
             make.width.equalTo()(self.contentView.mas_width).with().offset()(-self.MESSAGE_TEXT_LABEL_HORIZONTAL_MARGIN)
         }
         
+        shareButton.mas_updateConstraints { (make) -> Void in
+            make.leading.equalTo()(self).with().offset()(self.SHARE_BUTTON_HORIZONTAL_MARGIN)
+            make.top.equalTo()(self.messageContainerView.mas_top).with().offset()(self.SHARE_BUTTON_VERTICAL_MARGIN)
+            make.width.equalTo()(self.SHARE_BUTTON_WIDTH)
+            make.height.equalTo()(self.SHARE_BUTTON_HEIGHT)
+        }
+        
+        shareImageButton.mas_updateConstraints { (make) -> Void in
+            make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
+            make.width.equalTo()(self.shareImageButton.frame.size.width)
+            make.height.equalTo()(self.shareImageButton.frame.size.height)
+        }
+        
+        shareActivityIndicator.mas_updateConstraints { (make) -> Void in
+            make.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+            make.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
+            make.width.equalTo()(self.shareImageButton.frame.size.width)
+            make.height.equalTo()(self.shareImageButton.frame.size.height)
+        }
+        
         self.contentView.mas_updateConstraints { (make) -> Void in
             make.top.equalTo()(self.mas_top)
             make.leading.equalTo()(self.mas_leading)
@@ -151,8 +199,8 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     // MARK: - Getter/Setter
     
-    override public var bounds: CGRect {
-        didSet{
+    override public var bounds : CGRect {
+        didSet {
             self.contentView.frame = self.bounds
         }
     }
@@ -172,9 +220,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         var flips: Array<Flip> = Array<Flip>()
         var formattedWords: Array<String> = Array<String>()
         
-        for flipEntry: FlipEntry in flipMessage.flipsEntries! {
-            flips.append(flipEntry.flip)
-            formattedWords.append(flipEntry.formattedWord)
+        if let flipEntries = flipMessage.flipsEntries {
+            for flipEntry: FlipEntry in flipEntries {
+                flips.append(flipEntry.flip)
+                formattedWords.append(flipEntry.formattedWord)
+            }
         }
 
         self.videoPlayerView.setupPlayerWithFlips(flips, andFormattedWords: formattedWords, blurringThumbnail: isMessagedNotRead)
@@ -199,6 +249,15 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 update.width.equalTo()(self.avatarView.frame.size.width)
                 update.height.equalTo()(self.avatarView.frame.size.height)
             })
+            shareImageButton.hidden = false
+            self.shareImageButton.mas_updateConstraints({ (update) -> Void in
+                update.removeExisting = true
+                update.leading.equalTo()(self).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
+                update.centerY.equalTo()(self.videoPlayerContainerView.mas_bottom)
+                update.width.equalTo()(self.shareImageButton.frame.size.width)
+                update.height.equalTo()(self.shareImageButton.frame.size.height)
+            })
+
         } else {
             // Received by the user
             self.avatarView.mas_updateConstraints({ (update) -> Void in
@@ -208,6 +267,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                 update.width.equalTo()(self.avatarView.frame.size.width)
                 update.height.equalTo()(self.avatarView.frame.size.height)
             })
+            shareImageButton.hidden = true
         }
         self.avatarView.hidden = false
     }
@@ -245,6 +305,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         self.videoPlayerView.releaseResources()
         self.messageTextLabel.text = " "
         self.avatarView.hidden = true
+        self.shareButton.hidden = true
     }
 
     public override func layoutSubviews() {
@@ -317,6 +378,67 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     func releaseResources() {
         self.videoPlayerView.releaseResources()
+    }
+    
+    // MARK: - Share Flip
+    
+    func shareFlip() {
+
+        self.shareImageButton.setBlankWhiteImage()
+        self.shareActivityIndicator.hidden = false
+        self.shareActivityIndicator.startAnimating()
+        
+        if self.videoPlayerView.loadedPlayerItems.count == 0 {
+            self.videoPlayerView.loadFlipsResourcesForPlayback({ () -> Void in
+                NSThread.sleepForTimeInterval(1)
+                self.shareFlip()
+            })
+        }
+        else {
+            
+            var movieExport = MovieExport()
+            movieExport.exportFlipForMMS(self.videoPlayerView.loadedPlayerItems, words: self.videoPlayerView.flipWordsStrings,
+                completion: { (url: NSURL?, error: FlipError?) -> Void in
+                    
+                    if error != nil {
+                        self.stopSharingFlip("Error exporting Flip. \(error?.details)")
+                    }
+                    else {
+                        if let videoUrl = url {
+                            //Attach movie to native text message
+                            self.messageComposer = MessageComposerExternal()
+                            self.messageComposer!.videoUrl = videoUrl
+                            self.messageComposer!.containsNonFlipsUsers = false
+                            
+                            var messageComposerVC = self.messageComposer!.configuredMessageComposeViewController()
+                            if let parentVC = self.parentViewController {
+                                parentVC.presentViewController(messageComposerVC, animated: true, completion: nil)
+                            }
+                        }
+                        else {
+                            self.stopSharingFlip("Video Url is empty.")
+                        }
+                    }
+                    
+                    let oneSecond = 1 * Double(NSEC_PER_SEC)
+                    let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                    dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                        self.shareActivityIndicator.hidden = true
+                        self.shareActivityIndicator.stopAnimating()
+                        self.shareImageButton.setAvatarWithLocalImage("ShareFlip_White")
+                    }
+                }
+            )
+        }
+
+        
+    }
+    
+    private func stopSharingFlip(message: String) {
+        println(message)
+        self.shareButton.hidden = false
+        self.shareActivityIndicator.hidden = true
+        self.shareActivityIndicator.stopAnimating()
     }
 }
 

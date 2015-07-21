@@ -460,11 +460,14 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     // MARK: - NewFlipViewControllerDelegate
     
-    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String) {
+    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
+        
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             let roomDataSource = RoomDataSource()
             let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
+            
+            var chatVC = ChatViewController(room: room, andFlipMessageIdFromPushNotification: nil, andWithExternalMessageComposer: messageComposer)
+            self.navigationController?.pushViewController(chatVC, animated: true)
         })
     }
     

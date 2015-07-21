@@ -229,7 +229,8 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
     
     // MARK: - NewFlipViewControllerDelegate
     
-    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String) {
+    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal? = nil) {
+        
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             let roomDataSource = RoomDataSource()
             let room = roomDataSource.retrieveRoomWithId(roomID)

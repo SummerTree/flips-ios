@@ -13,7 +13,7 @@
 import Foundation
 
 class NextButton: UIButton {
-
+    
     init() {
         super.init(frame: CGRectZero)
         setup()
@@ -27,7 +27,7 @@ class NextButton: UIButton {
     func setup() {
         titleLabel?.font = .avenirNextDemiBold(UIFont.HeadingSize.h4)
         setTitle(NSLocalizedString("Next", comment: "Next"), forState: .Normal)
-        setTitleColor(UIColor.darkGray(), forState: .Normal)
-        setTitleColor(UIColor.mediumGray(), forState: .Disabled)
+        setTitleColor(UIColor.flipOrange(), forState: .Normal)
+        setTitleColor(UIColor.lightGrayColor(), forState: .Disabled)
     }
 }
