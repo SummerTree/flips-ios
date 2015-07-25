@@ -594,7 +594,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     var image = UIImage(data: imageData)!
         
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
-                        image = UIImage(CGImage: image.CGImage, scale: 1.0, orientation: UIImageOrientation.Right)!
+                        image = UIImage(CGImage: image.CGImage, scale: 1.0, orientation: UIImageOrientation.LeftMirrored)!
                         image = image.cropSquareThumbnail()
                     } else {
                         image = image.cropSquareThumbnail()

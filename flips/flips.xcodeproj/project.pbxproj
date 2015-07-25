@@ -33,11 +33,15 @@
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
-		4041EA4B1B47146F00F36BFE /* TwilioMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */; };
-		4041EA4C1B47146F00F36BFE /* TwilioMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */; };
 		406378651B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
 		406378661B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
 		406378671B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		40900BA61B62C3460043E495 /* DraftingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BA51B62C3460043E495 /* DraftingTable.swift */; };
+		40900BA71B62C3460043E495 /* DraftingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BA51B62C3460043E495 /* DraftingTable.swift */; };
+		40900BA81B62C3460043E495 /* DraftingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BA51B62C3460043E495 /* DraftingTable.swift */; };
+		40900BAB1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
+		40900BAC1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
+		40900BAD1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
 		40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
 		40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
 		40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
@@ -691,6 +695,8 @@
 		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
 		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
 		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
+		40900BA51B62C3460043E495 /* DraftingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraftingTable.swift; sourceTree = "<group>"; };
+		40900BAA1B62C37D0043E495 /* FlipBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipBook.swift; sourceTree = "<group>"; };
 		40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposerExternal.swift; sourceTree = "<group>"; };
 		40F043FF1B3CE70300AF3B73 /* MovieExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieExport.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
@@ -998,6 +1004,15 @@
 				4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */,
 			);
 			name = Twilio;
+			sourceTree = "<group>";
+		};
+		40900BA91B62C3570043E495 /* DraftingTable */ = {
+			isa = PBXGroup;
+			children = (
+				40900BA51B62C3460043E495 /* DraftingTable.swift */,
+				40900BAA1B62C37D0043E495 /* FlipBook.swift */,
+			);
+			name = DraftingTable;
 			sourceTree = "<group>";
 		};
 		5707185619D19D180069064F /* Services */ = {
@@ -1484,6 +1499,7 @@
 				7AB1685519E32CB0004E2162 /* Camera */,
 				704E110A19D08E3C00D2BB88 /* Controller */,
 				704E110C19D08E7B00D2BB88 /* CoreData */,
+				40900BA91B62C3570043E495 /* DraftingTable */,
 				7A2A7E4219EEF2AD00033164 /* Data Sources */,
 				704E111519D0ACAF00D2BB88 /* Extensions */,
 				70057E9219DADEB5004343ED /* Helpers */,
@@ -2246,7 +2262,6 @@
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
 				7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */,
 				7AFB1E991AC2FA0700C60D8E /* BlurredThumbnailsCache.swift in Sources */,
-				4041EA4B1B47146F00F36BFE /* TwilioMessaging.swift in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7AA711721A28D8AF0082165A /* Contact.m in Sources */,
@@ -2275,6 +2290,7 @@
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
+				40900BA61B62C3460043E495 /* DraftingTable.swift in Sources */,
 				70B560A519D996F000FE4C34 /* FlipsWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
 				7A9FFA421AEE7623002DE1FE /* Room.m in Sources */,
@@ -2292,6 +2308,7 @@
 				5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */,
 				7A7937A11A3085E500136144 /* FlipsHeaderView.swift in Sources */,
 				7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */,
+				40900BAB1B62C37D0043E495 /* FlipBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2459,7 +2476,6 @@
 				BE2460281AD2D95900859233 /* UIColorExtensions.swift in Sources */,
 				BE2460291AD2D95900859233 /* TakePictureViewController.swift in Sources */,
 				BE24602A1AD2D95900859233 /* DAKeyboardControl.m in Sources */,
-				4041EA4C1B47146F00F36BFE /* TwilioMessaging.swift in Sources */,
 				BE24602B1AD2D95900859233 /* BlurredThumbnailsCache.swift in Sources */,
 				BE24602C1AD2D95900859233 /* NewPasswordViewController.swift in Sources */,
 				BE24602D1AD2D95900859233 /* UserFormView.swift in Sources */,
@@ -2488,6 +2504,7 @@
 				BE2460431AD2D95900859233 /* FlipMessageWordListView.swift in Sources */,
 				BE2460441AD2D95900859233 /* PhoneNumberViewController.swift in Sources */,
 				BE2460451AD2D95900859233 /* SettingsViewController.swift in Sources */,
+				40900BA71B62C3460043E495 /* DraftingTable.swift in Sources */,
 				BE2460461AD2D95900859233 /* StringExtensions.swift in Sources */,
 				BE2460471AD2D95900859233 /* FlipsWebView.swift in Sources */,
 				BE2460481AD2D95900859233 /* SignUpView.swift in Sources */,
@@ -2505,6 +2522,7 @@
 				BE2460541AD2D95900859233 /* ChatViewController.swift in Sources */,
 				BE2460551AD2D95900859233 /* FlipsHeaderView.swift in Sources */,
 				BE2460561AD2D95900859233 /* ConversationTableViewCell.swift in Sources */,
+				40900BAC1B62C37D0043E495 /* FlipBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2671,6 +2689,7 @@
 				BE2461011AD2D9C600859233 /* FlipPlayerItem.swift in Sources */,
 				BE2461021AD2D9C600859233 /* UIColorExtensions.swift in Sources */,
 				BE2461031AD2D9C600859233 /* TakePictureViewController.swift in Sources */,
+				40900BA81B62C3460043E495 /* DraftingTable.swift in Sources */,
 				BE2461041AD2D9C600859233 /* DAKeyboardControl.m in Sources */,
 				BE2461051AD2D9C600859233 /* BlurredThumbnailsCache.swift in Sources */,
 				BE2461061AD2D9C600859233 /* NewPasswordViewController.swift in Sources */,
@@ -2713,6 +2732,7 @@
 				BE24612A1AD2D9C600859233 /* InboxView.swift in Sources */,
 				BE24612B1AD2D9C600859233 /* DeviceService.swift in Sources */,
 				BE24612C1AD2D9C600859233 /* CacheCleanupPolicy.swift in Sources */,
+				40900BAD1B62C37D0043E495 /* FlipBook.swift in Sources */,
 				BE24612D1AD2D9C600859233 /* RoomExtension.swift in Sources */,
 				BE24612E1AD2D9C600859233 /* ChatViewController.swift in Sources */,
 				BE24612F1AD2D9C600859233 /* FlipsHeaderView.swift in Sources */,
