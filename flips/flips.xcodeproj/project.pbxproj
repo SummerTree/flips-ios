@@ -637,7 +637,6 @@
 		BE2461391AD2D9C600859233 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70FD4E7F19D064450024EBDB /* Images.xcassets */; };
 		BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 075A0C0A1A44B84B00E92760 /* SyncView.xib */; };
 		BE2E72081A98119400F237BE /* empty_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = BE2E72071A98119400F237BE /* empty_video.mov */; };
-		BE3897AA1AD43D5100471B88 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BE3897A91AD43D5100471B88 /* Info.plist */; };
 		BE3A904D1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		BE3A904E1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
 		BE3A904F1AD70DF300405EC8 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A904C1AD70DF300405EC8 /* AppSettings.swift */; };
@@ -1919,7 +1918,7 @@
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0640;
 				TargetAttributes = {
 					70FD4E6F19D064450024EBDB = {
 						DevelopmentTeam = Q2H5Y569K8;
@@ -1968,7 +1967,6 @@
 			files = (
 				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
-				BE3897AA1AD43D5100471B88 /* Info.plist in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,

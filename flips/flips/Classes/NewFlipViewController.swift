@@ -64,6 +64,7 @@ class NewFlipViewController: FlipsViewController,
     @IBOutlet weak var flipView: TopBorderedView!
     @IBOutlet weak var nextButton: NextButton!
     @IBOutlet weak var buttonPanelView: UIView!
+    @IBOutlet weak var buttonPanel2View: UIView!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -136,9 +137,10 @@ class NewFlipViewController: FlipsViewController,
     
     private func layoutSendButtons() {
         
-        let buttonCount = 2
+        let firstRowButtonCount = 2
+        let secondRowButtonCount = 3
         
-        var flipsSendButton = FlipsSendButton(buttonCount: buttonCount,
+        var flipsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
                                               buttonOrder: 0,
                                               buttonHeight: self.buttonPanelView.frame.size.height,
                                               activeColor: UIColor.flipOrange(),
@@ -146,19 +148,51 @@ class NewFlipViewController: FlipsViewController,
                                               imageName: "FlipWord",
                                               allowedToBeInactive: false)
         
-        var smsSendButton = FlipsSendButton(buttonCount: buttonCount,
+        var smsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
                                             buttonOrder: 1,
                                             buttonHeight: self.buttonPanelView.frame.size.height,
                                             activeColor: UIColor.avacado(),
                                             buttonType: .SMS,
                                             imageName: "smsicon",
                                             allowedToBeInactive: true)
-        smsSendButton.makeInactive()
         
-        self.optionButtons += [smsSendButton]
+        var facebookButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+                                            buttonOrder: 0,
+                                            buttonHeight: self.buttonPanel2View.frame.size.height,
+                                            activeColor: UIColor.facebookBlue(),
+                                            buttonType: .Facebook,
+                                            imageName: "Facebook",
+                                            allowedToBeInactive: true)
+        
+        var twitterButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+                                            buttonOrder: 1,
+                                            buttonHeight: self.buttonPanel2View.frame.size.height,
+                                            activeColor: UIColor.twitterBlue(),
+                                            buttonType: .Twitter,
+                                            imageName: "Twitter",
+                                            allowedToBeInactive: true)
+        
+        var instagramButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+                                            buttonOrder: 2,
+                                            buttonHeight: self.buttonPanel2View.frame.size.height,
+                                            activeColor: UIColor.instagramBlue(),
+                                            buttonType: .Instagram,
+                                            imageName: "Instagram",
+                                            allowedToBeInactive: true)
+        
+        smsSendButton.makeInactive()
+        facebookButton.makeInactive()
+        twitterButton.makeInactive()
+        instagramButton.makeInactive()
+        
+        self.optionButtons += [smsSendButton,facebookButton,twitterButton,instagramButton]
         
         self.buttonPanelView.addSubview(flipsSendButton)
         self.buttonPanelView.addSubview(smsSendButton)
+        
+        self.buttonPanel2View.addSubview(facebookButton)
+        self.buttonPanel2View.addSubview(twitterButton)
+        self.buttonPanel2View.addSubview(instagramButton)
         
     }
     
@@ -175,8 +209,10 @@ class NewFlipViewController: FlipsViewController,
     private func shouldLockSendOptions(lock: Bool) {
         if lock {
             for optionButton in self.optionButtons {
-                optionButton.makeActive()
-                optionButton.allowedToBeInactive = false
+                if optionButton.sendButtonType == .SMS {
+                    optionButton.makeActive()
+                    optionButton.allowedToBeInactive = false
+                }
             }
         }
         else {
@@ -259,9 +295,11 @@ class NewFlipViewController: FlipsViewController,
                 self.navigationController?.pushViewController(composeViewController, animated: true)
             }
             
-            var userIDs = [String]()
-            var phoneNumbers = [String]()
+            self.draftingTable!.resetDraftingTable()
+            self.draftingTable!.contacts = self.contacts
+            self.draftingTable!.sendOptions = self.retrieveSendOptions()
             
+            var userIDs = [String]()
             for contact in self.contacts {
                 if (contact.contactUser == nil) {
                     createNewRoom()
@@ -273,6 +311,8 @@ class NewFlipViewController: FlipsViewController,
             let roomDataSource = RoomDataSource()
             var result = roomDataSource.hasRoomWithUserIDs(userIDs)
             if (result.hasRoom) {
+                self.draftingTable!.room = result.room!
+                
                 let composeViewController = ComposeViewController(sendOptions: self.retrieveSendOptions(), roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getTextWords())
                 composeViewController.delegate = self
                 composeViewController.fullContacts = self.contacts

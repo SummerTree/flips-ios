@@ -14,6 +14,7 @@ enum FlipsSendButtonOption : String, Printable {
     case WhatsApp = "WhatsApp"
     case Facebook = "Facebook"
     case Twitter = "Twitter"
+    case Instagram = "Instagram"
     case NotSet = "Not Set"
     
      var description : String {
