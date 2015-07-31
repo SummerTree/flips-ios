@@ -84,10 +84,32 @@ public class DraftingTable : NSObject {
         }
     }
     
-    internal func updateFlipWordsState() {
-        
+    func mapWordsToFirstAvailableFlip() {
+        if let flipBook = self.flipBook {
+            if let pages = flipBook.flipPages {
+                for flipPage in pages {
+                    if let firstFlipId : String = self.myFlipsDictionary[flipPage.word]?.first {
+                        flipPage.pageID = firstFlipId
+                    }
+                }
+            }
+        }
     }
-
+    
+    private let NO_FLIP_SELECTED_INDEX = -1
+    
+    func nextEmptyFlipPage() -> Int {
+        if let flipBook = self.flipBook {
+            if let pages = flipBook.flipPages {
+                for flipPage in pages {
+                    if (flipPage.pageID == nil) {
+                        return flipPage.order
+                    }
+                }
+            }
+        }
+        return NO_FLIP_SELECTED_INDEX
+    }
     
     //MARK: - Drafting Table mgmt
     
@@ -105,12 +127,16 @@ public class DraftingTable : NSObject {
         
     }
     
-    private func uploadFlipWord(flip: FlipPage, success: CreateFlipSuccessCompletion, failure: CreateFlipFailureCompletion) {
-        
+    func uploadFlipPage(flipPage: FlipPage?) {
+        if let page = flipPage {
+            
+        }
     }
     
-    private func associateFlipsWords() {
-        
+    func uploadFlipBook(flipBook: FlipBook?) {
+        if let book = flipBook {
+            
+        }
     }
     
     //MARK: - Maintenance Methods
