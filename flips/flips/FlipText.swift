@@ -24,9 +24,9 @@ class FlipText {
     }
 }
 
-enum FlipState {
-    case NotAssociatedAndNoResourcesAvailable
-    case NotAssociatedButResourcesAvailable
-    case AssociatedAndNoResourcesAvailable
-    case AssociatedAndResourcesAvailable
+enum FlipState : String {
+    case NotAssociatedAndNoResourcesAvailable = "NotAssociatedAndNoResourcesAvailable"
+    case NotAssociatedButResourcesAvailable = "NotAssociatedButResourcesAvailable"
+    case AssociatedAndNoResourcesAvailable = "AssociatedAndNoResourcesAvailable"
+    case AssociatedAndResourcesAvailable = "AssociatedAndResourcesAvailable"
 }

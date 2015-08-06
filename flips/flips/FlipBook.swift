@@ -8,14 +8,14 @@
 
 import Foundation
 
-class FlipBook {
+class FlipBook : NSObject {
 
     var flipID : String?
-    var flipPages : [FlipPage]?
+    var flipPages : [FlipPage]
     var flipMessage : String {
         get {
             var message : String = ""
-            for (index, flip) in enumerate(self.flipPages!) {
+            for (index, flip) in enumerate(self.flipPages) {
                 message += "\(flip.word) "
             }
             return message
@@ -24,7 +24,7 @@ class FlipBook {
     var flipWords : [String]? {
         get {
             var words : [String] = []
-            for (index, flip) in enumerate(self.flipPages!) {
+            for (index, flip) in enumerate(self.flipPages) {
                 words += [flip.word]
             }
             return words
@@ -33,35 +33,37 @@ class FlipBook {
     
     // MARK: - Init methods
     
-    init () {
-        self.flipPages = []
+    override init () {
+        self.flipPages = Array<FlipPage>()
+        super.init()
     }
     
-    init (pages: [FlipPage]?) {
+    init (pages: [FlipPage]) {
         self.flipPages = pages
+        super.init()
     }
     
     // MARK: - Flipbook mgmt methods
     
     func addFlip(flip: FlipPage, atLocation location: Int = -1) {
-        if let pages = self.flipPages {
-            if location != -1 {
-                self.flipPages?.insert(flip, atIndex: location)
-            }
-            else {
-                self.flipPages?.append(flip)
-            }
+        if location != -1 {
+            self.flipPages.insert(flip, atIndex: location)
+        }
+        else {
+            self.flipPages.append(flip)
         }
     }
     
+    func replaceFlip(flip: FlipPage) {
+            self.flipPages[flip.order] = flip
+    }
+    
     func removeFlip(atLocation location: Int = -1) {
-        if let pages = self.flipPages {
-            if location != -1 {
-                self.flipPages?.removeAtIndex(location)
-            }
-            else if self.flipPages?.count > 0 {
-                self.flipPages?.removeLast()
-            }
+        if location != -1 {
+            self.flipPages.removeAtIndex(location)
+        }
+        else if self.flipPages.count > 0 {
+            self.flipPages.removeLast()
         }
     }
 }

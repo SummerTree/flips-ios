@@ -279,7 +279,6 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         self.delegate?.composeBottomViewContainerDidTapGalleryButton(self)
     }
     
-    
     // MARK: - MyFlips Load Methods
     
     func reloadMyFlips() {

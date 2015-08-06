@@ -205,6 +205,7 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
     func showFlip(flipId: String, withWord word: String, autoPlay: Bool = true) {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipId) {
+            
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if (self.previewType == PreviewType.Flip && self.flipPlayerView.isSetupWithFlips([flip], andFormattedWords: [word])) {
                     self.flipPlayerView.play()

@@ -117,7 +117,8 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
         
         self.previewView.viewDidLoad()
         
-        let result = self.parseFlipWords()
+//        let result = self.parseFlipWords()
+        let result = self.parseFlipWordsFromDraftingTable()
         
         self.previewView.setupVideoPlayerWithFlips(result.flips, formattedWords: result.formattedWords)
     }
@@ -163,6 +164,44 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 flips.append(emptyFlip)
             }
             formattedWords.append(flipWord.text)
+        }
+        
+        return (flips, formattedWords)
+    }
+    
+    private func parseFlipWordsFromDraftingTable() -> (flips: [Flip], formattedWords: [String]) {
+        
+        var flips = Array<Flip>()
+        var formattedWords = Array<String>()
+        
+        let flipDataSource = FlipDataSource()
+        
+        for flipPage in self.draftingTable!.flipBook.flipPages {
+            
+            if let flipID = flipPage.pageID {
+                var flip = flipDataSource.retrieveFlipWithId(flipID)
+                flips.append(flip)
+            }
+            else if let videoURL = flipPage.videoURL {
+                var flip: Flip! = flipDataSource.createEmptyFlipWithWord(flipPage.word)
+                flip.backgroundURL = flipPage.videoURL!.absoluteString
+                flip.thumbnailURL = flipPage.thumbnailURL!.absoluteString
+                
+//                @property (nonatomic, retain) NSNumber * backgroundContentType;
+//                @property (nonatomic, retain) NSString * backgroundURL;
+//                @property (nonatomic, retain) NSString * category;
+//                @property (nonatomic, retain) NSString * flipID;
+//                @property (nonatomic, retain) NSNumber * isPrivate;
+//                @property (nonatomic, retain) NSNumber * removed;
+//                @property (nonatomic, retain) NSString * soundURL;
+//                @property (nonatomic, retain) NSString * thumbnailURL;
+//                @property (nonatomic, retain) NSString * word;
+//                @property (nonatomic, retain) NSDate * updatedAt;
+//                @property (nonatomic, retain) NSSet *entries;
+//                @property (nonatomic, retain) User *owner;
+            }
+            
+            formattedWords.append(flipPage.word)
         }
         
         return (flips, formattedWords)

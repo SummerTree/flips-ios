@@ -15,20 +15,19 @@ public class DraftingTable : NSObject {
     var room : Room?
     var flipID : String?
     
-    private var flipBook : FlipBook?
+    var flipBook : FlipBook
+    
     private var myFlipsDictionary: Dictionary<String, [String]>!
     private var stockFlipsDictionary: Dictionary<String, [String]>!
     
-    override init() {
-        super.init()
+    override private init() {
         self.flipBook = FlipBook()
+        super.init()
     }
     
-    init(pages: [FlipPage]?) {
+    private init(pages: [FlipPage]) {
+        self.flipBook = FlipBook(pages: pages)
         super.init()
-        if let pgs = pages {
-            self.flipBook = FlipBook(pages: pgs)
-        }
     }
     
     public class var sharedInstance : DraftingTable {
@@ -41,57 +40,47 @@ public class DraftingTable : NSObject {
     //MARK: - Drafting Table setup methods
 
     func loadFlipsForWords() {
-        if let flipBook = self.flipBook {
-            let flipDataSource = FlipDataSource()
-            
-            var words = Array<String>()
-            if let flipPages = flipBook.flipPages {
-                for flipPage in flipPages {
-                    words.append(flipPage.word)
-                }
-            }
-
-            self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
-            self.stockFlipsDictionary = flipDataSource.getStockFlipsIdsForWords(words)
+        let flipDataSource = FlipDataSource()
+        
+        var words = Array<String>()
+        for flipPage in self.flipBook.flipPages {
+            words.append(flipPage.word)
         }
+
+        self.myFlipsDictionary = flipDataSource.getMyFlipsIdsForWords(words)
+        self.stockFlipsDictionary = flipDataSource.getStockFlipsIdsForWords(words)
     }
     
     func setFlipBookPagesState() {
-        if let flipBook = self.flipBook {
-            if let pages = flipBook.flipPages {
-                for flipPage in pages {
-                    let word = flipPage.word
-                    let myFlipsForWord = myFlipsDictionary[word]
-                    let stockFlipsForWord = stockFlipsDictionary[word]
-                    
-                    let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsForWord!.count
-                    
-                    if (flipPage.pageID == nil) {
-                        if (numberOfFlipsForWord == 0) {
-                            flipPage.state = .NotAssociatedAndNoResourcesAvailable
-                        } else {
-                            flipPage.state = .NotAssociatedButResourcesAvailable
-                        }
-                    } else {
-                        if (numberOfFlipsForWord == 1) {
-                            flipPage.state = .AssociatedAndNoResourcesAvailable
-                        } else {
-                            flipPage.state = .AssociatedAndResourcesAvailable
-                        }
-                    }
+
+        for flipPage in self.flipBook.flipPages {
+            let word = flipPage.word
+            let myFlipsForWord = myFlipsDictionary[word]
+            let stockFlipsForWord = stockFlipsDictionary[word]
+            
+            let numberOfLocalFlips = (flipPage.videoURL != nil ? 1 : 0)
+            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsForWord!.count + numberOfLocalFlips
+            
+            if (flipPage.pageID == nil && flipPage.videoURL == nil) {
+                if (numberOfFlipsForWord == 0) {
+                    flipPage.state = .NotAssociatedAndNoResourcesAvailable
+                } else {
+                    flipPage.state = .NotAssociatedButResourcesAvailable
+                }
+            } else {
+                if (numberOfFlipsForWord == 1) {
+                    flipPage.state = .AssociatedAndNoResourcesAvailable
+                } else {
+                    flipPage.state = .AssociatedAndResourcesAvailable
                 }
             }
         }
     }
     
     func mapWordsToFirstAvailableFlip() {
-        if let flipBook = self.flipBook {
-            if let pages = flipBook.flipPages {
-                for flipPage in pages {
-                    if let firstFlipId : String = self.myFlipsDictionary[flipPage.word]?.first {
-                        flipPage.pageID = firstFlipId
-                    }
-                }
+        for flipPage in self.flipBook.flipPages {
+            if let firstFlipId : String = self.myFlipsDictionary[flipPage.word]?.first {
+                flipPage.pageID = firstFlipId
             }
         }
     }
@@ -99,13 +88,10 @@ public class DraftingTable : NSObject {
     private let NO_FLIP_SELECTED_INDEX = -1
     
     func nextEmptyFlipPage() -> Int {
-        if let flipBook = self.flipBook {
-            if let pages = flipBook.flipPages {
-                for flipPage in pages {
-                    if (flipPage.pageID == nil) {
-                        return flipPage.order
-                    }
-                }
+
+        for flipPage in self.flipBook.flipPages {
+            if (flipPage.pageID == nil && flipPage.videoURL == nil) {
+                return flipPage.order
             }
         }
         return NO_FLIP_SELECTED_INDEX
@@ -114,11 +100,19 @@ public class DraftingTable : NSObject {
     //MARK: - Drafting Table mgmt
     
     func addFlipToFlipBook(flip: FlipPage) {
-        self.flipBook?.addFlip(flip)
+        self.flipBook.addFlip(flip)
+    }
+    
+    func updateFlipInFlipBook(flip: FlipPage) {
+        self.flipBook.replaceFlip(flip)
     }
     
     func removeFlipFromFlipbook(index: Int) {
-        self.flipBook?.removeFlip(atLocation: index)
+        self.flipBook.removeFlip(atLocation: index)
+    }
+    
+    func flipPageAtIndex(index: Int) -> FlipPage {
+        return self.flipBook.flipPages[index]
     }
     
     //MARK: - Send Flip Message
@@ -151,19 +145,39 @@ public class DraftingTable : NSObject {
             self.sendOptions?.removeAll(keepCapacity: false)
         }
         
-        self.flipBook = nil
-        self.room = nil
+        if let room = self.room {
+            self.room = nil;
+        }
+        
+        self.flipBook = FlipBook()
     }
     
     func dumpTableToConsole() {
-        if let flipBook : FlipBook = self.flipBook {
-            println("------ Dumping the Drafting Table --------")
-            for flipPage : FlipPage in flipBook.flipPages! {
-                println("\(flipPage.order). \(flipPage.word)")
-                println("--> video: \(flipPage.videoURL?.absoluteString)")
-                println("--> thumb: \(flipPage.thumbnailURL?.absoluteString)")
-                println("--> id:    \(flipPage.pageID)")
-                println("--> assoc: \(self.myFlipsDictionary[flipPage.word]!.count)")
+        println("------ Dumping the Drafting Table --------")
+        
+        for flipPage : FlipPage in self.flipBook.flipPages {
+            println("\(flipPage.order). \(flipPage.word)")
+            
+            if let myFlipID = flipPage.pageID {
+                println("--> id:\t\(flipPage.pageID!)")
+            }
+            
+                println("--> state:\t\(flipPage.state.rawValue)")
+            
+            if let thumbURL = flipPage.thumbnailURL {
+                println("--> thumb:\t\(flipPage.thumbnailURL!.absoluteString!.lastPathComponent)")
+            }
+            
+            if let vidURL = flipPage.videoURL {
+                println("--> video:\t\(flipPage.videoURL!.absoluteString!.lastPathComponent)")
+            }
+            
+            if let myFlips = self.myFlipsDictionary {
+                println("--> assoc:\t\(myFlips[flipPage.word]!.count)")
+            }
+            
+            if let stockFlips = self.stockFlipsDictionary {
+                println("--> stock:\t\(stockFlips[flipPage.word]!.count)")
             }
         }
     }

@@ -22,6 +22,8 @@ private let NO_SPACE_VIDEO_ERROR_MESSAGE = "There is not enough available storag
 private let NO_SPACE_PHOTO_ERROR_TITLE = "Cannot Take Photo"
 private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storage to take a photo. You manage your storage in Settings."
 
+public typealias VideoComposerSuccess = (NSURL!, NSURL!)  -> Void
+
 class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
     
     private let NO_FLIP_SELECTED_INDEX = -1
@@ -133,7 +135,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             stockFlipsDictionary[word] = Array<String>()
             
             var flipPage : FlipPage = FlipPage(word: word, order: i)
-            self.draftingTable?.addFlipToFlipBook(flipPage)
+            self.draftingTable!.addFlipToFlipBook(flipPage)
         }
     }
 
@@ -161,8 +163,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.reloadMyFlips()
             self.mapWordsToFirstAvailableFlip()
             self.updateFlipWordsState()
+
+            self.draftingTable!.loadFlipsForWords()
+            self.draftingTable!.mapWordsToFirstAvailableFlip()
+            self.draftingTable!.setFlipBookPagesState()
             self.showContentForHighlightedWord()
         })
+
 
         self.shouldEnableUserInteraction(true)
     }
@@ -176,8 +183,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         composeTopViewContainer?.viewWillAppear()
         composeTopViewContainer?.delegate = self
-        
-        self.draftingTable!.dumpTableToConsole()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -356,15 +361,25 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.moveToNextFlipWord()
     }
     
+    func onFlipPageAdded() {
+        
+        self.updateFlipWordsState()
+        self.draftingTable!.loadFlipsForWords()
+        self.draftingTable!.setFlipBookPagesState()
+        self.moveToNextFlipWordWithNoFlipPage()
+    }
+    
     internal func updateFlipWordsState() {
         for flipWord in flipWords {
             let word = flipWord.text
+            let flipPage = self.draftingTable!.flipPageAtIndex(flipWord.position)
             let myFlipsForWord = myFlipsDictionary[word]
             let stockFlipsForWord = stockFlipsDictionary[word]
             
-            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsForWord!.count
+            let numberOfLocalFlips = (flipPage.videoURL != nil ? 1 : 0)
+            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsForWord!.count + numberOfLocalFlips
             
-            if (flipWord.associatedFlipId == nil) {
+            if (flipWord.associatedFlipId == nil && flipPage.videoURL == nil) {
                 if (numberOfFlipsForWord == 0) {
                     flipWord.state = .NotAssociatedAndNoResourcesAvailable
                 } else {
@@ -389,6 +404,25 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             index++
         }
         return NO_FLIP_SELECTED_INDEX
+    }
+    
+    internal func moveToNextFlipWordWithNoFlipPage() {
+        let nextIndex = self.draftingTable!.nextEmptyFlipPage()
+        if (nextIndex == NO_FLIP_SELECTED_INDEX) {
+            if (self.shouldShowPreviewButton()) {
+                let oneSecond = 0.5 * Double(NSEC_PER_SEC)
+                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
+                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+                    self.openPreview()
+                }
+            } else {
+                self.composeBottomViewContainer.showAllFlipCreateMessage()
+            }
+        } else {
+            self.highlightedWordIndex = nextIndex
+        }
+        
+        self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
     }
     
     internal func moveToNextFlipWord() {
@@ -512,20 +546,29 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
         
-        // Flips 1.0 - Upload Each Individual Flip by Confirming each
-        
-        self.hideAudioRecordingView()
-        let flipWord = flipWords[highlightedWordIndex]
-        let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: self.highlightedWordCurrentAssociatedImage, flipAudio: nil)
-        confirmFlipViewController.title = self.composeTitle
-        confirmFlipViewController.showPreviewButton = self.shouldShowPreviewButton()
-        confirmFlipViewController.delegate = self
-        self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
-        
+
         // Flips 2.0 - Upload Each Individual Flip upon submission
         
-        var videoComposer = VideoComposer()
-        videoComposer.flipVideoFromImage(self.highlightedWordCurrentAssociatedImage, andAudioURL: nil, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
+
+        self.hideAudioRecordingView()
+        self.addFlipPageToDraftingTableFlipBook(self.highlightedWordCurrentAssociatedImage, video: nil, audio: nil)
+        
+//            // Flips 1.0 - Upload Each Individual Flip by Confirming each
+//
+//            self.hideAudioRecordingView()
+//            let flipWord = flipWords[highlightedWordIndex]
+//            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: self.highlightedWordCurrentAssociatedImage, flipAudio: nil)
+//            confirmFlipViewController.title = self.composeTitle
+//            confirmFlipViewController.showPreviewButton = self.shouldShowPreviewButton()
+//            confirmFlipViewController.delegate = self
+//            
+//            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+        
+    }
+    
+    private func addFlipPageToDraftingTableFlipBook(image: UIImage?, video: NSURL?, audio: NSURL?) {
+        
+        let vcSuccessHandler : VideoComposerSuccess = { (flipVideoURL, thumbnailURL) -> Void in
             
             if (flipVideoURL == nil || thumbnailURL == nil) {
                 let alertView = UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK)
@@ -534,15 +577,35 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             else {
                 var newFlipPage = FlipPage(videoURL: flipVideoURL,
-                                           thumbnailURL: thumbnailURL,
-                                           word: self.flipWords[self.highlightedWordIndex].text,
-                                           order: self.highlightedWordIndex + 1)
+                    thumbnailURL: thumbnailURL,
+                    word: self.flipWords[self.highlightedWordIndex].text,
+                    order: self.highlightedWordIndex)
                 
-                self.draftingTable?.addFlipToFlipBook(newFlipPage)
+                self.draftingTable!.updateFlipInFlipBook(newFlipPage)
+                self.onFlipPageAdded()
+                
+                self.draftingTable?.dumpTableToConsole()
+                
+                self.fromVideo = false
+                self.fromPicture = false
+                self.fromFrontCamera = false
+                self.fromCameraRoll = false
+                self.fromAudio = false
+                self.inLandspace = false
             }
-        })
-        
-        
+        }
+
+    
+        var videoComposer = VideoComposer()
+        if let img = image {
+            videoComposer.flipVideoFromImage(img, andAudioURL: audio, successHandler: vcSuccessHandler)
+        }
+        else if let vid = video {
+            videoComposer.flipVideoFromVideo(vid, successHandler: vcSuccessHandler)
+        }
+        else {
+            videoComposer.flipVideoFromImage(nil, andAudioURL: audio, successHandler: vcSuccessHandler)
+        }
     }
     
     func composeBottomViewContainerDidHoldShutterButton(composeBottomViewContainer: ComposeBottomViewContainer) {
@@ -716,11 +779,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool) {
         if (success) {
-            let flipWord = flipWords[highlightedWordIndex]
-            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
-            confirmFlipViewController.title = self.composeTitle
-            confirmFlipViewController.delegate = self
-            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+            
+            self.addFlipPageToDraftingTableFlipBook(nil, video: url, audio: nil)
+            
+//            // Flips 1.0 - confirm reject video
+//            let flipWord = flipWords[highlightedWordIndex]
+//            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
+//            confirmFlipViewController.title = self.composeTitle
+//            confirmFlipViewController.delegate = self
+//            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
         } else {
             var alertMessage = UIAlertView(title: NO_SPACE_VIDEO_ERROR_TITLE, message: NO_SPACE_VIDEO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
@@ -793,15 +860,25 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         let time = MILLISECONDS_UNTIL_RECORDING_SESSION_IS_REALLY_DONE * NSEC_PER_MSEC
         let delayInMilliseconds = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
-        dispatch_after(delayInMilliseconds, dispatch_get_main_queue()) { () -> Void in            
+        dispatch_after(delayInMilliseconds, dispatch_get_main_queue()) { () -> Void in
+            
+            // Flips 2.0
+            self.hideAudioRecordingView()
+            
             let flipWord = self.flipWords[self.highlightedWordIndex]
             var flipImage = self.highlightedWordCurrentAssociatedImage
             
-            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
-            confirmFlipViewController.delegate = self
-            confirmFlipViewController.title = self.composeTitle
-            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
-            self.hideAudioRecordingView()
+            self.addFlipPageToDraftingTableFlipBook(flipImage, video: nil, audio: fileURL)
+            
+//            // Flips 1.0 - confirm reject
+//            let flipWord = self.flipWords[self.highlightedWordIndex]
+//            var flipImage = self.highlightedWordCurrentAssociatedImage
+//            
+//            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
+//            confirmFlipViewController.delegate = self
+//            confirmFlipViewController.title = self.composeTitle
+//            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+//            self.hideAudioRecordingView()
         }
         
         self.fromAudio = true
