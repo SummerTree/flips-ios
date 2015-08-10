@@ -539,6 +539,12 @@ class PlayerView: UIView {
         }
 
         for (var i = 0; i < flips.count; i++) {
+            let passedFlip = flips[i]
+            let localFlip = self.flips[i]
+            
+            println("\(passedFlip)")
+            println("\(localFlip)")
+            
             if (flips[i].flipID! != self.flips[i].flipID!) {
                 return false
             }

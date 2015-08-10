@@ -97,4 +97,13 @@ class FlipPage {
         self.order = order
         self.state = FlipState.AssociatedAndNoResourcesAvailable
     }
+    
+    func createFlip() -> Flip! {
+        var flipDataSource = FlipDataSource()
+        var flip = flipDataSource.createEmptyFlipWithWord(self.word)
+        flip.flipID = "\(self.word)_createdFromFlipPage"
+        flip.backgroundURL = self.videoURL!.absoluteString
+        flip.thumbnailURL = self.thumbnailURL!.absoluteString
+        return flip
+    }
 }

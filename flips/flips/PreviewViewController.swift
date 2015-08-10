@@ -183,22 +183,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 flips.append(flip)
             }
             else if let videoURL = flipPage.videoURL {
-                var flip: Flip! = flipDataSource.createEmptyFlipWithWord(flipPage.word)
-                flip.backgroundURL = flipPage.videoURL!.absoluteString
-                flip.thumbnailURL = flipPage.thumbnailURL!.absoluteString
-                
-//                @property (nonatomic, retain) NSNumber * backgroundContentType;
-//                @property (nonatomic, retain) NSString * backgroundURL;
-//                @property (nonatomic, retain) NSString * category;
-//                @property (nonatomic, retain) NSString * flipID;
-//                @property (nonatomic, retain) NSNumber * isPrivate;
-//                @property (nonatomic, retain) NSNumber * removed;
-//                @property (nonatomic, retain) NSString * soundURL;
-//                @property (nonatomic, retain) NSString * thumbnailURL;
-//                @property (nonatomic, retain) NSString * word;
-//                @property (nonatomic, retain) NSDate * updatedAt;
-//                @property (nonatomic, retain) NSSet *entries;
-//                @property (nonatomic, retain) User *owner;
+                flips.append(flipPage.createFlip())
             }
             
             formattedWords.append(flipPage.word)
@@ -226,20 +211,39 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 
                 var group = dispatch_group_create()
                 
-                let flipDataSource = FlipDataSource()
-                for flipWord in self.flipWords {
-                    if (flipWord.associatedFlipId == nil) {
+                // Flips 2.0 - confirm reject removed
+                // Upload all flipPages that were created locally
+                
+                for flipPage in self.draftingTable!.flipBook.flipPages {
+                    if flipPage.pageID == nil {
                         dispatch_group_enter(group)
-                        PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
-                            flipWord.associatedFlipId = flip.flipID
+                        PersistentManager.sharedInstance.createAndUploadFlip(flipPage.word, videoURL: flipPage.videoURL, thumbnailURL: flipPage.thumbnailURL, createFlipSuccessCompletion: { (flip) -> Void in
+                            flipPage.pageID = flip.flipID
                             dispatch_group_leave(group)
-                        }, createFlipFailCompletion: { (flipError) -> Void in
-                            error = flipError
-                            flipWord.associatedFlipId = "-1"
-                            dispatch_group_leave(group)
+                            }, createFlipFailCompletion: { (flipError) -> Void in
+                                error = flipError
+                                flipPage.pageID = "-1"
+                                dispatch_group_leave(group)
                         })
                     }
                 }
+                
+                
+//                //Flips 1.0 - relying on Confirm/Reject
+//                
+//                for flipWord in self.flipWords {
+//                    if (flipWord.associatedFlipId == nil) {
+//                        dispatch_group_enter(group)
+//                        PersistentManager.sharedInstance.createAndUploadFlip(flipWord.text, videoURL: nil, thumbnailURL: nil, createFlipSuccessCompletion: { (flip) -> Void in
+//                            flipWord.associatedFlipId = flip.flipID
+//                            dispatch_group_leave(group)
+//                        }, createFlipFailCompletion: { (flipError) -> Void in
+//                            error = flipError
+//                            flipWord.associatedFlipId = "-1"
+//                            dispatch_group_leave(group)
+//                        })
+//                    }
+//                }
                 
                 dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
                 
@@ -286,6 +290,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                                 let numOfWords = self.flipWords.count
                                 var numOfWordsAssigned = 0
                                 
+                                let flipDataSource = FlipDataSource()
                                 for word in self.flipWords {
                                     if let associatedFlipId = word.associatedFlipId {
                                         var flip = flipDataSource.retrieveFlipWithId(associatedFlipId)

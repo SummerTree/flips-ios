@@ -221,6 +221,26 @@ class ComposeTopViewContainer: UIView, CameraViewDelegate, PlayerViewDelegate {
         }
     }
     
+    func showFlip(flip: Flip?, autoPlay: Bool = true) {
+        
+        if flip != nil {
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if (self.previewType == PreviewType.Flip && self.flipPlayerView.isSetupWithFlips([flip!], andFormattedWords: [flip!.word])) {
+                    self.flipPlayerView.play()
+                } else {
+                    self.switchToPreviewType(PreviewType.Flip) { () -> Void in
+                        self.flipPlayerView.loadPlayerOnInit = autoPlay
+                        self.flipPlayerView.setupPlayerWithFlips([flip!], andFormattedWords: [flip!.word])
+                    }
+                }
+            })
+        }
+        else {
+            UIAlertView.showUnableToLoadFlip()
+        }
+    }
+    
     func showImage(image: UIImage, andText text: String) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.flipImageView.image = image

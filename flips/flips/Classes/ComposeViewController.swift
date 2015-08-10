@@ -281,10 +281,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
 
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             let flipWord = self.flipWords[self.highlightedWordIndex]
-            
-            if (flipWord.associatedFlipId != nil) {
-                self.showFlipCreatedState(flipWord.associatedFlipId!)
-            } else {
+            let flipPage = self.draftingTable!.flipPageAtIndex(self.highlightedWordIndex)
+
+            if (flipPage.pageID != nil || flipPage.videoURL != nil) {
+                self.showFlipCreatedState() //flipPage.pageID!)
+            }
+//            if (flipWord.associatedFlipId != nil) {
+//                self.showFlipCreatedState(flipWord.associatedFlipId!)
+            else {
                 let flipDataSource = FlipDataSource()
                 let myFlips = flipDataSource.getMyFlipsForWord(flipWord.text)
                 let stockFlips = flipDataSource.getStockFlipsForWord(flipWord.text)
@@ -305,7 +309,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         })
     }
 
-    private func showFlipCreatedState(flipId: String) {
+    private func showFlipCreatedState() {  //flipId: String) {
         let flipWord = self.flipWords[self.highlightedWordIndex]
 
         if (self.canShowMyFlips()) {
@@ -545,7 +549,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
-        
 
         // Flips 2.0 - Upload Each Individual Flip upon submission
         
@@ -644,11 +647,20 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func composeBottomViewContainerWillOpenMyFlipsView(composeBottomViewContainer: ComposeBottomViewContainer) {
         let flipWord = flipWords[highlightedWordIndex]
+        let flipPage = self.draftingTable!.flipPageAtIndex(self.highlightedWordIndex)
+        let autoPlay = (self.navigationController?.topViewController == self)
+        let flipDataSource = FlipDataSource();
         
-        if (flipWord.associatedFlipId != nil) {
-            var autoPlay = (self.navigationController?.topViewController == self)
-            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text, autoPlay: autoPlay);
-        } else {
+//        if (flipWord.associatedFlipId != nil) {
+//            var autoPlay = (self.navigationController?.topViewController == self)
+//            composeTopViewContainer.showFlip(flipWord.associatedFlipId!, withWord: flipWord.text, autoPlay: autoPlay)
+        if let pageID = flipPage.pageID {
+            composeTopViewContainer.showFlip(pageID, withWord: flipPage.word, autoPlay: autoPlay)
+        }
+        else if let videoURL = flipPage.videoURL {
+            composeTopViewContainer.showFlip(flipPage.createFlip(), autoPlay: autoPlay)
+        }
+        else {
             composeTopViewContainer.showImage(UIImage.emptyFlipImage(), andText: flipWord.text)
         }
         composeBottomViewContainer.reloadMyFlips()
