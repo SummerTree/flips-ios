@@ -174,6 +174,14 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.shouldEnableUserInteraction(true)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        //Should resize toolbar based on calculated height?
+//        self.composeBottomViewContainer.toolSlider!.addSubviews()
+//        self.composeBottomViewContainer.toolSlider!.makeConstraints()
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -549,10 +557,22 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func composeBottomViewContainerDidTapSkipAudioButton(composeBottomViewContainer: ComposeBottomViewContainer) {
+        
+        if self.shouldShowPlusButtonInWords() {
+            
+            self.hideAudioRecordingView()
+            let flipWord = flipWords[highlightedWordIndex]
+            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: self.highlightedWordCurrentAssociatedImage, flipAudio: nil)
+            confirmFlipViewController.title = self.composeTitle
+            confirmFlipViewController.showPreviewButton = self.shouldShowPreviewButton()
+            confirmFlipViewController.delegate = self
 
+            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+        }
+        else  {
+        
         // Flips 2.0 - Upload Each Individual Flip upon submission
         
-
         self.hideAudioRecordingView()
         self.addFlipPageToDraftingTableFlipBook(self.highlightedWordCurrentAssociatedImage, video: nil, audio: nil)
         
@@ -566,6 +586,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
 //            confirmFlipViewController.delegate = self
 //            
 //            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+        }
         
     }
     
@@ -792,14 +813,24 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     func composeTopViewContainer(composeTopViewContainer: ComposeTopViewContainer, didFinishRecordingVideoAtUrl url: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool) {
         if (success) {
             
-            self.addFlipPageToDraftingTableFlipBook(nil, video: url, audio: nil)
-            
+            if self.shouldShowPlusButtonInWords() {
+                //use if word builder
+                let flipWord = flipWords[highlightedWordIndex]
+                let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
+                confirmFlipViewController.title = self.composeTitle
+                confirmFlipViewController.delegate = self
+                self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+            }
+            else {
+                self.addFlipPageToDraftingTableFlipBook(nil, video: url, audio: nil)
+                
 //            // Flips 1.0 - confirm reject video
 //            let flipWord = flipWords[highlightedWordIndex]
 //            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipVideo: url)
 //            confirmFlipViewController.title = self.composeTitle
 //            confirmFlipViewController.delegate = self
 //            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+            }
         } else {
             var alertMessage = UIAlertView(title: NO_SPACE_VIDEO_ERROR_TITLE, message: NO_SPACE_VIDEO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
@@ -874,23 +905,35 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let delayInMilliseconds = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
         dispatch_after(delayInMilliseconds, dispatch_get_main_queue()) { () -> Void in
             
-            // Flips 2.0
             self.hideAudioRecordingView()
             
             let flipWord = self.flipWords[self.highlightedWordIndex]
             var flipImage = self.highlightedWordCurrentAssociatedImage
             
-            self.addFlipPageToDraftingTableFlipBook(flipImage, video: nil, audio: fileURL)
+            if self.shouldShowPlusButtonInWords() {
+
+                let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
+                confirmFlipViewController.delegate = self
+                confirmFlipViewController.title = self.composeTitle
+                self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+                self.hideAudioRecordingView()
+                
+            }
+            else {
+                
+                 // Flips 2.0
+                self.addFlipPageToDraftingTableFlipBook(flipImage, video: nil, audio: fileURL)
             
-//            // Flips 1.0 - confirm reject
-//            let flipWord = self.flipWords[self.highlightedWordIndex]
-//            var flipImage = self.highlightedWordCurrentAssociatedImage
-//            
-//            let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
-//            confirmFlipViewController.delegate = self
-//            confirmFlipViewController.title = self.composeTitle
-//            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
-//            self.hideAudioRecordingView()
+//                // Flips 1.0 - confirm reject
+//                let flipWord = self.flipWords[self.highlightedWordIndex]
+//                var flipImage = self.highlightedWordCurrentAssociatedImage
+//                
+//                let confirmFlipViewController = ConfirmFlipViewController(flipWord: flipWord.text, flipPicture: flipImage, flipAudio: fileURL)
+//                confirmFlipViewController.delegate = self
+//                confirmFlipViewController.title = self.composeTitle
+//                self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
+//                self.hideAudioRecordingView()
+            }
         }
         
         self.fromAudio = true

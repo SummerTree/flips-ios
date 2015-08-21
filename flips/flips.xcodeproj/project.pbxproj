@@ -48,6 +48,15 @@
 		40F044001B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
 		40F044011B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
 		40F044021B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
+		40F093941B7E317800787969 /* ToolSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093931B7E317800787969 /* ToolSlider.swift */; };
+		40F093951B7E317800787969 /* ToolSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093931B7E317800787969 /* ToolSlider.swift */; };
+		40F093961B7E317800787969 /* ToolSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093931B7E317800787969 /* ToolSlider.swift */; };
+		40F093981B7E31C000787969 /* ToolSliderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093971B7E31C000787969 /* ToolSliderAction.swift */; };
+		40F093991B7E31C000787969 /* ToolSliderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093971B7E31C000787969 /* ToolSliderAction.swift */; };
+		40F0939A1B7E31C000787969 /* ToolSliderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093971B7E31C000787969 /* ToolSliderAction.swift */; };
+		40F0939D1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
+		40F0939E1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
+		40F0939F1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
@@ -698,6 +707,9 @@
 		40900BAA1B62C37D0043E495 /* FlipBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipBook.swift; sourceTree = "<group>"; };
 		40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposerExternal.swift; sourceTree = "<group>"; };
 		40F043FF1B3CE70300AF3B73 /* MovieExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieExport.swift; sourceTree = "<group>"; };
+		40F093931B7E317800787969 /* ToolSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSlider.swift; sourceTree = "<group>"; };
+		40F093971B7E31C000787969 /* ToolSliderAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSliderAction.swift; sourceTree = "<group>"; };
+		40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSliderCollection.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -1012,6 +1024,16 @@
 				40900BAA1B62C37D0043E495 /* FlipBook.swift */,
 			);
 			name = DraftingTable;
+			sourceTree = "<group>";
+		};
+		40F0939B1B7E34C000787969 /* ToolSlider */ = {
+			isa = PBXGroup;
+			children = (
+				40F093931B7E317800787969 /* ToolSlider.swift */,
+				40F093971B7E31C000787969 /* ToolSliderAction.swift */,
+				40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */,
+			);
+			name = ToolSlider;
 			sourceTree = "<group>";
 		};
 		5707185619D19D180069064F /* Services */ = {
@@ -1351,6 +1373,7 @@
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
 			isa = PBXGroup;
 			children = (
+				40F0939B1B7E34C000787969 /* ToolSlider */,
 				7A8BFEDC1A095A6900E7F2A3 /* Utils */,
 				7A8BFEDB1A09597600E7F2A3 /* Flips Collection */,
 				7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */,
@@ -2112,6 +2135,7 @@
 				7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
 				73D63F201AF0323B000EC678 /* FlipsUINavigationController.m in Sources */,
+				40F093941B7E317800787969 /* ToolSlider.swift in Sources */,
 				07B66B311A147B5800407A28 /* MBContactModel.m in Sources */,
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
@@ -2211,6 +2235,7 @@
 				7046C9B719F18EB100CBD72D /* AudioRecorderService.swift in Sources */,
 				A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				40F0939D1B7E34E400787969 /* ToolSliderCollection.swift in Sources */,
 				7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
 				40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
@@ -2248,6 +2273,7 @@
 				709088251A1E163B009915FE /* ImportContactTableViewController.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* FlipsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
+				40F093981B7E31C000787969 /* ToolSliderAction.swift in Sources */,
 				7A54599C1A9A84FC00EAC679 /* NavigationHandler.swift in Sources */,
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
@@ -2326,6 +2352,7 @@
 				BE245F9D1AD2D95900859233 /* JournalEntry.swift in Sources */,
 				BE245F9E1AD2D95900859233 /* ConfirmPictureViewDelegate.swift in Sources */,
 				BE245F9F1AD2D95900859233 /* MBContactModel.m in Sources */,
+				40F093951B7E317800787969 /* ToolSlider.swift in Sources */,
 				BE245FA01AD2D95900859233 /* ComposeTopViewContainer.swift in Sources */,
 				BE245FA11AD2D95900859233 /* CacheJournal.swift in Sources */,
 				BE245FA21AD2D95900859233 /* TakePictureViewControllerDelegate.swift in Sources */,
@@ -2425,6 +2452,7 @@
 				BE245FF91AD2D95900859233 /* AudioRecorderService.swift in Sources */,
 				BE245FFA1AD2D95900859233 /* FlipTextView.swift in Sources */,
 				BE245FFB1AD2D95900859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				40F0939E1B7E34E400787969 /* ToolSliderCollection.swift in Sources */,
 				BE245FFC1AD2D95900859233 /* OnboardingHelper.swift in Sources */,
 				7A9240E01AE5410E00E591B7 /* QueueHelper.swift in Sources */,
 				40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
@@ -2462,6 +2490,7 @@
 				BE24601C1AD2D95900859233 /* PhoneNumberViewDelegate.swift in Sources */,
 				BE24601D1AD2D95900859233 /* ImportContactTableViewController.swift in Sources */,
 				BE24601E1AD2D95900859233 /* FlipsViewCell.swift in Sources */,
+				40F093991B7E31C000787969 /* ToolSliderAction.swift in Sources */,
 				BE24601F1AD2D95900859233 /* UserFormViewDelegate.swift in Sources */,
 				BE2460201AD2D95900859233 /* NavigationHandler.swift in Sources */,
 				BE2460211AD2D95900859233 /* DateHelper.swift in Sources */,
@@ -2540,6 +2569,7 @@
 				BE2460771AD2D9C600859233 /* JournalEntry.swift in Sources */,
 				BE2460781AD2D9C600859233 /* ConfirmPictureViewDelegate.swift in Sources */,
 				BE2460791AD2D9C600859233 /* MBContactModel.m in Sources */,
+				40F093961B7E317800787969 /* ToolSlider.swift in Sources */,
 				BE24607A1AD2D9C600859233 /* ComposeTopViewContainer.swift in Sources */,
 				BE24607B1AD2D9C600859233 /* CacheJournal.swift in Sources */,
 				BE24607C1AD2D9C600859233 /* TakePictureViewControllerDelegate.swift in Sources */,
@@ -2639,6 +2669,7 @@
 				BE2460D31AD2D9C600859233 /* AudioRecorderService.swift in Sources */,
 				BE2460D41AD2D9C600859233 /* FlipTextView.swift in Sources */,
 				BE2460D51AD2D9C600859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				40F0939F1B7E34E400787969 /* ToolSliderCollection.swift in Sources */,
 				BE2460D61AD2D9C600859233 /* OnboardingHelper.swift in Sources */,
 				7A9240E11AE5410E00E591B7 /* QueueHelper.swift in Sources */,
 				40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
@@ -2676,6 +2707,7 @@
 				BE2460F61AD2D9C600859233 /* PhoneNumberViewDelegate.swift in Sources */,
 				BE2460F71AD2D9C600859233 /* ImportContactTableViewController.swift in Sources */,
 				BE2460F81AD2D9C600859233 /* FlipsViewCell.swift in Sources */,
+				40F0939A1B7E31C000787969 /* ToolSliderAction.swift in Sources */,
 				BE2460F91AD2D9C600859233 /* UserFormViewDelegate.swift in Sources */,
 				BE2460FA1AD2D9C600859233 /* NavigationHandler.swift in Sources */,
 				BE2460FB1AD2D9C600859233 /* DateHelper.swift in Sources */,

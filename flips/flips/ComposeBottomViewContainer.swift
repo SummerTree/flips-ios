@@ -31,6 +31,8 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     
     private var flipsView: FlipsView!
     
+    //var toolSlider : ToolSlider?
+    
     weak var delegate: ComposeBottomViewContainerDelegate?
     weak var dataSource: ComposeBottomViewContainerDataSource? {
         didSet {
@@ -68,6 +70,9 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         flipsView.dataSource = self
         flipsView.alpha = 0.0
         self.addSubview(flipsView)
+        
+//        self.toolSlider = ToolSlider()
+//        self.addSubview(self.toolSlider!)
     }
     
     private func addConstraints() {
@@ -86,6 +91,15 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
             make.width.equalTo()(self.cameraButtonsView)
             make.height.equalTo()(self)
         }
+        
+//        self.toolSlider!.mas_makeConstraints({ (make) -> Void in
+//            make.left.equalTo()(self)
+//            make.top.equalTo()(self)
+//            make.width.equalTo()(self)
+//            make.height.equalTo()(self)
+//        })
+        
+//        self.bringSubviewToFront(self.toolSlider!)
     }
     
     private func addCameraButtons() {
@@ -111,7 +125,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         takePictureButton.sizeToFit()
         
         let longPress = UILongPressGestureRecognizer(target: self, action: "shutterButtonLongPressAction:")
-        longPress.minimumPressDuration = 0.5
+        longPress.minimumPressDuration = 0.2
         longPress.allowableMovement = 50.0
         takePictureButton.addGestureRecognizer(longPress)
         

@@ -215,19 +215,24 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                 // Upload all flipPages that were created locally
                 
                 for flipPage in self.draftingTable!.flipBook.flipPages {
+                    
+                    var flipWord = self.flipWords[flipPage.order]
+                    
                     if flipPage.pageID == nil {
                         dispatch_group_enter(group)
                         PersistentManager.sharedInstance.createAndUploadFlip(flipPage.word, videoURL: flipPage.videoURL, thumbnailURL: flipPage.thumbnailURL, createFlipSuccessCompletion: { (flip) -> Void in
                             flipPage.pageID = flip.flipID
+                            flipWord.associatedFlipId = flip.flipID
+                            
                             dispatch_group_leave(group)
                             }, createFlipFailCompletion: { (flipError) -> Void in
                                 error = flipError
                                 flipPage.pageID = "-1"
+                                
                                 dispatch_group_leave(group)
                         })
                     }
                 }
-                
                 
 //                //Flips 1.0 - relying on Confirm/Reject
 //                
@@ -260,6 +265,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate {
                         alertView.show()
                     })
                 } else {
+                    
                     let completionBlock: SendMessageCompletion = { (success, roomID, flipError) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (success) {
