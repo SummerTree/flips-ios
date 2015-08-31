@@ -20,7 +20,8 @@ class NewFlipViewController: FlipsViewController,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
     UITextViewDelegate,
-    ComposeViewControllerDelegate {
+    ComposeViewControllerDelegate,
+    FlipsCompositionControllerDelegate {
 
     // MARK: - Constants
     
@@ -270,29 +271,41 @@ class NewFlipViewController: FlipsViewController,
         
         flipTextField.endEditing(true)
         
-        if (self.contactPicker.invalidContact) {
+        if (self.contactPicker.invalidContact)
+        {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                
                 let alertView = UIAlertView(title: self.INVALID_CONTACT_TITLE,
                                             message: self.INVALID_CONTACT_MESSAGE,
                                             delegate: nil,
                                             cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
+                
             }
-        } else if (flipTextField.text == MESSAGE_PLACEHOLDER) {
+        }
+        else if (flipTextField.text == MESSAGE_PLACEHOLDER)
+        {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                
                 let alertView = UIAlertView(title: self.EMPTY_MESSAGE_TITLE,
                     message: self.EMPTY_MESSAGE_MESSAGE,
                     delegate: nil,
                     cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
                 self.flipTextField.becomeFirstResponder()
+                
             }
-        } else {
+        }
+        else
+        {
             let createNewRoom = { () -> Void in
-                let composeViewController = ComposeViewController(sendOptions: self.retrieveSendOptions(), contacts: self.contacts, words: self.flipTextField.getTextWords())
-                composeViewController.delegate = self
-                composeViewController.fullContacts = self.contacts
-                self.navigationController?.pushViewController(composeViewController, animated: true)
+                
+                let compositionController = FlipMessageCompositionVC(sendOptions: self.retrieveSendOptions(), contacts: self.contacts, words: self.flipTextField.getTextWords())
+                compositionController.delegate = self
+                compositionController.contacts = self.contacts
+                
+                self.navigationController?.pushViewController(compositionController, animated: true)
+                
             }
             
             self.draftingTable!.resetDraftingTable()
@@ -300,23 +313,29 @@ class NewFlipViewController: FlipsViewController,
             self.draftingTable!.sendOptions = self.retrieveSendOptions()
             
             var userIDs = [String]()
-            for contact in self.contacts {
-                if (contact.contactUser == nil) {
+            for contact in self.contacts
+            {
+                if (contact.contactUser == nil)
+                {
                     createNewRoom()
                     return
                 }
+                
                 userIDs.append(contact.contactUser.userID)
             }
             
             let roomDataSource = RoomDataSource()
             var result = roomDataSource.hasRoomWithUserIDs(userIDs)
-            if (result.hasRoom) {
+            if (result.hasRoom)
+            {
                 self.draftingTable!.room = result.room!
                 
-                let composeViewController = ComposeViewController(sendOptions: self.retrieveSendOptions(), roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getTextWords())
-                composeViewController.delegate = self
-                composeViewController.fullContacts = self.contacts
-                self.navigationController?.pushViewController(composeViewController, animated: true)
+                let compositionController = FlipMessageCompositionVC(sendOptions: self.retrieveSendOptions(), roomID: result.room!.roomID, compositionTitle: result.room!.roomName(), words: flipTextField.getTextWords())
+                compositionController.delegate = self
+                compositionController.contacts = self.contacts
+                
+                self.navigationController?.pushViewController(compositionController, animated: true)
+                
                 return
             }
             
@@ -457,6 +476,17 @@ class NewFlipViewController: FlipsViewController,
     func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
         self.flipTextField.setWords(words)
     }
+    
+    ////
+    // MARK: - FlipsCompositionControllerDelegate
+    // This is redundant with the above ComposeViewControllerDelegate. Since it can't be safely removed yet
+    // I've had to create duplicate functionality. In the future the one of these should be removed
+    ////
+    
+    func didSendMessageToRoom(roomID: String, withExternal messageComposer: MessageComposerExternal?) {
+        delegate?.newFlipViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
+    }
+    
 
 }
 

@@ -644,6 +644,36 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
     }
     
+    func startRecording() {
+        
+        let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
+        let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
+        videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
+        
+        videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
+        let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).mov"
+        
+        var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+        var docsDir: AnyObject = dirPaths[0]
+        var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+        var videoURL = NSURL(fileURLWithPath: videoFilePath)!
+        
+        var fileManager = NSFileManager.defaultManager()
+        
+        if (fileManager.fileExistsAtPath(videoURL.path!)) {
+            println("File already exists, removing it.")
+            fileManager.removeItemAtURL(videoURL, error: nil)
+        }
+        
+        self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
+        
+    }
+    
     func stopRecording() {
         println("Stop recording video")
         self.movieFileOutput.stopRecording()

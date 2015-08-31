@@ -91,16 +91,43 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         })
     }
     
+    func startManualRecording(error: RecordError) {
+        
+        AVAudioSession.sharedInstance().requestRecordPermission({(granted: Bool) -> Void in
+            
+            self.delegate?.audioRecorderService(self, didRequestRecordPermission: granted)
+            
+            if (granted)
+            {
+                self.setupRecorder()
+                self.setSessionPlayAndRecord()
+                self.recorder.record()
+            }
+            else
+            {
+                error(LocalizedString.ERROR)
+            }
+            
+        })
+        
+    }
+    
     func stopRecording() {
+        
         self.recorder.stop()
+        
         var error: NSError?
-        if (!AVAudioSession.sharedInstance().setActive(false, error: &error)) {
+        
+        if (!AVAudioSession.sharedInstance().setActive(false, error: &error))
+        {
             println("could not deactivate audio session")
             if let e = error {
                 println(e.localizedDescription)
             }
         }
+        
         self.recorder = nil
+        
     }
 
 }
