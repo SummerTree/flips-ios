@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, ComposeViewControllerDelegate, UIAlertViewDelegate {
+class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSource, FlipsCompositionControllerDelegate, UIAlertViewDelegate {
     
     private let groupTitle: String = NSLocalizedString("Group Chat")
 
@@ -212,7 +212,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     func chatView(chatView: ChatView, didTapNextButtonWithWords words : [String]) {
-        var composeViewController = ComposeViewController(roomID: self.roomID, composeTitle: self.chatTitle, words: words)
+        var composeViewController = FlipMessageCompositionVC(roomID: self.roomID, compositionTitle: self.chatTitle, words: words)
         composeViewController.delegate = self
         self.navigationController?.pushViewController(composeViewController, animated: true)
     }
@@ -350,7 +350,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     // MARK: - ComposeViewControllerDelegate
     
-    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
+    func didSendMessageToRoom(roomID: String, withExternal: MessageComposerExternal?) {
         
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
@@ -365,11 +365,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 self.chatView.hideTextFieldAndShowReplyButton()
             })
         })
+        
     }
     
-    func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
-        self.chatView.changeFlipWords(words)
-    }
     
     
     // MARK: - UIAlertViewDelegate
