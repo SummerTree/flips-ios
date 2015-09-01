@@ -270,13 +270,33 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     // MARK: - Utility
     ////
     
+    internal func createFlipVideoForCurrentWord(successHandler: VideoComposerSuccess) {
+        
+        let composer = VideoComposer()
+        
+        messageWords[messageWordIndex].setHasPendingChanges(false)
+        
+        if let video = getCurrentFlipWordVideoURL()
+        {
+            composer.flipVideoFromVideo(video, successHandler: successHandler)
+        }
+        else if let img = getCurrentFlipWordImage(), aud = getCurrentFlipWordAudioURL()
+        {
+            composer.flipVideoFromImage(img, andAudioURL: aud, successHandler: successHandler)
+        }
+        else if let img = getCurrentFlipWordImage()
+        {
+            composer.flipVideoFromImage(img, andAudioURL: nil, successHandler: successHandler)
+        }
+        else
+        {
+            composer.flipVideoFromImage(UIImage.emptyFlipImage(), andAudioURL: nil, successHandler: successHandler)
+        }
+        
+    }
+    
     internal func shouldCreateFlipForCurrentWord() -> (Bool) {
-        
-        let currentWord = getCurrentFlipWord()
-        let currentPage = getCurrentFlipPage()
-        
-        return currentWord.associatedFlipId == nil && currentPage.videoURL == nil && currentFlipWordHasContent()
-        
+        return messageWords[messageWordIndex].hasPendingChanges()
     }
     
     internal func currentFlipWordHasContent() -> (Bool) {
@@ -341,6 +361,7 @@ private class FlipMessageWord {
     var wordImage : UIImage!
     var wordVideo : NSURL!
     var wordAudio : NSURL!
+    var pendingChanges: Bool = false
     
     
     
@@ -381,6 +402,7 @@ private class FlipMessageWord {
         wordVideo = nil
         wordImage = nil
         wordAudio = nil
+        pendingChanges = false
         
     }
     
@@ -396,6 +418,8 @@ private class FlipMessageWord {
             
             // Clear any associated flips
             word.associatedFlipId = nil
+            
+            pendingChanges = true
         }
         
     }
@@ -412,6 +436,8 @@ private class FlipMessageWord {
             
             // Clear any associated flips
             word.associatedFlipId = nil
+            
+            pendingChanges = true
         }
         
     }
@@ -429,8 +455,14 @@ private class FlipMessageWord {
             
             // Clear any associated flips
             word.associatedFlipId = nil
+            
+            pendingChanges = true
         }
         
+    }
+    
+    func setHasPendingChanges(pendingChanges: Bool) {
+        self.pendingChanges = pendingChanges
     }
     
     
@@ -453,6 +485,32 @@ private class FlipMessageWord {
     
     func getAudio() -> (NSURL?) {
         return wordAudio
+    }
+    
+    
+    
+    ////
+    // MARK: - Utility
+    ////
+    
+    func hasFlip() -> (Bool) {
+        return getFlipId() != nil
+    }
+    
+    func hasVideo() -> (Bool) {
+        return getVideo() != nil
+    }
+    
+    func hasAudio() -> (Bool) {
+        return getAudio() != nil
+    }
+    
+    func hasImage() -> (Bool) {
+        return getImage() != nil
+    }
+    
+    func hasPendingChanges() -> (Bool) {
+        return pendingChanges
     }
     
 }

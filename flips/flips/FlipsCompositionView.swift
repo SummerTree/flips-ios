@@ -357,6 +357,10 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
                     {
                         animateViewSwipedOut(playerViews[index])
                     }
+                    else if newPlayerView != nil && playerViews[index] != nil
+                    {
+                        playerViews[index].removeFromSuperview()
+                    }
                     
                     playerViews[index] = newPlayerView
                 }
@@ -469,6 +473,8 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     
     internal func didSwipeUpPlayerView(gestureRecognizer: UISwipeGestureRecognizer) {
         
+        hideAudioButton()
+        
         if let playerView = gestureRecognizer.view as? FlipCompositionPlayerView
         {
             let currentCenter = playerView.center
@@ -526,9 +532,9 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         let offset = CGPointMake(CGFloat(index) * self.previewScrollView.frame.width, 0)
         previewScrollView.setContentOffset(offset, animated: animated)
         
-        if let playerView = playerViews[index]
+        if let playerView = playerViews[index], source = dataSource
         {
-            if playerView.flip != nil
+            if source.flipImageForWordAtIndex(index) == nil
             {
                 hideAudioButton()
             }

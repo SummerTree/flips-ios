@@ -249,42 +249,13 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     ////
     
     internal func moveToNextEmptyFlipWord() {
-        
-        let nextEmptyWordIndex = flipMessageManager.getIndexForNextEmptyFlipWord()
-        
-        moveToFlipWordAtIndex(nextEmptyWordIndex)
-        
-    }
-    
-    internal func moveToNextFlipWord() {
-        
-        let nextFlipWordIndex = flipMessageManager.getCurrentFlipWordIndex() + 1
-        
-        if nextFlipWordIndex < flipMessageManager.getFlipWords().count
-        {
-            moveToFlipWordAtIndex(nextFlipWordIndex)
-        }
-        else if flipMessageManager.shouldCreateFlipForCurrentWord()
-        {
-            let image = flipMessageManager.getCurrentFlipWordImage()
-            let audioURL = flipMessageManager.getCurrentFlipWordAudioURL()
-            let videoURL = flipMessageManager.getCurrentFlipWordVideoURL()
-            
-            createFlipVideo(videoURL, image: image, audio: audioURL, forFlipWord: flipMessageManager.getCurrentFlipWord())
-        }
-        
+        moveToFlipWordAtIndex(flipMessageManager.getIndexForNextEmptyFlipWord())
     }
     
     internal func moveToFlipWordAtIndex(index: Int) {
         
         if flipMessageManager.shouldCreateFlipForCurrentWord() {
-            
-            let image = flipMessageManager.getCurrentFlipWordImage()
-            let audioURL = flipMessageManager.getCurrentFlipWordAudioURL()
-            let videoURL = flipMessageManager.getCurrentFlipWordVideoURL()
-            
-            createFlipVideo(videoURL, image: image, audio: audioURL, forFlipWord: flipMessageManager.getCurrentFlipWord())
-            
+            createFlipVideo()
         }
         
         // Move to the flip word at index
@@ -326,11 +297,11 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // MARK: - Flip Video Creation
     ////
     
-    private func createFlipVideo(videoURL: NSURL?, image: UIImage?, audio: NSURL?, forFlipWord flipWord: FlipText) {
+    private func createFlipVideo() {
         
-        let composer = VideoComposer()
+        let flipWord = flipMessageManager.getCurrentFlipWord()
         
-        let successHandler : VideoComposerSuccess = { (videoURL, thumbnailURL) -> Void in
+        flipMessageManager.createFlipVideoForCurrentWord({ (videoURL, thumbnailURL) -> Void in
             
             if let videoURL = videoURL, let thumbnailURL = thumbnailURL
             {
@@ -341,34 +312,11 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
             }
             
-        }
-        
-        if let video = videoURL
-        {
-            composer.flipVideoFromVideo(video, successHandler: successHandler)
-        }
-        else if let img = image, aud = audio
-        {
-            composer.flipVideoFromImage(img, andAudioURL: aud, successHandler: successHandler)
-        }
-        else if let img = image
-        {
-            composer.flipVideoFromImage(img, andAudioURL: nil, successHandler: successHandler)
-        }
-        else if let aud = audio
-        {
-            composer.flipVideoFromImage(nil, andAudioURL: aud, successHandler: successHandler)
-        }
-        else
-        {
-            composer.flipVideoFromImage(UIImage.emptyFlipImage(), andAudioURL: nil, successHandler: successHandler)
-        }
+        })
         
     }
     
     private func didCreateFlipVideo(videoURL: NSURL?, withThumbnail thumbnailURL: NSURL?, forFlipWord flipWord: FlipText) {
-        
-        flipMessageManager.resetFlipWordAtIndex(flipWord.position)
         
         let newFlipPage = FlipPage(videoURL: videoURL!, thumbnailURL: thumbnailURL!, word: flipWord.text, order: flipWord.position)
         self.flipMessageManager.updateFlipPage(newFlipPage)
@@ -655,7 +603,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         
-        let flipWord = flipMessageManager.getCurrentFlipWord()
         let croppedImage = image.cropSquareThumbnail()
         
         flipMessageManager.setCurrentFlipWordImage(croppedImage)
