@@ -10,11 +10,8 @@ import Foundation
 
 class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSource {
     
-    private var flipWords : [FlipText]!
-    private var flipWordIndex : Int = 0
-    private var flipWordImage : UIImage!
-    private var flipWordVideo : NSURL!
-    private var flipWordAudio : NSURL!
+    private var messageWords : [FlipMessageWord]!
+    private var messageWordIndex : Int = 0
     
     private var userFlips : Dictionary<String, [String]>!
     private var stockFlips : Dictionary<String, [String]>!
@@ -29,8 +26,8 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     init(words: [String], draftingTable: DraftingTable!) {
         
-        flipWords = Array()
-        flipWordIndex = 0
+        messageWords = Array()
+        messageWordIndex = 0
         
         userFlips = Dictionary<String, [String]>()
         stockFlips = Dictionary<String, [String]>()
@@ -38,9 +35,7 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         for (var pos = 0; pos < words.count; pos++) {
             
             let word = words[pos]
-            let flipWord = FlipText(position: pos, text: word, state: .NotAssociatedAndNoResourcesAvailable)
-            
-            flipWords.append(flipWord)
+            messageWords.append(FlipMessageWord(word: FlipText(position: pos, text: word, state: .NotAssociatedAndNoResourcesAvailable)))
             
             userFlips[word] = Array<String>()
             stockFlips[word] = Array<String>()
@@ -64,8 +59,8 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         
         let flipDataSource = FlipDataSource()
         
-        let words = flipWords.map({ (flipWord) -> String in
-            return flipWord.text;
+        let words = messageWords.map({ (messageWord) -> String in
+            return messageWord.word.text;
         })
         
         userFlips = flipDataSource.getMyFlipsIdsForWords(words)
@@ -77,21 +72,25 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     func updateFlips() {
         
-        for flipWord in flipWords {
+        for messageWord in messageWords {
             
-            let flipPage = draftingTable.flipPageAtIndex(flipWord.position)
-            let userFlipsForWord = userFlips[flipWord.text]
-            let stockFlipsForWord = stockFlips[flipWord.text]
+            let word = messageWord.word.text
+            let position = messageWord.word.position
+            
+            let userFlipsForWord = userFlips[word]
+            let stockFlipsForWord = stockFlips[word]
+            
+            let flipPage = draftingTable.flipPageAtIndex(position)
             let localFlipsCount = (flipPage.videoURL != nil ? 1 : 0)
             let availableFlipsCount = localFlipsCount + userFlipsForWord!.count + stockFlipsForWord!.count
             
-            if (flipWord.associatedFlipId == nil && localFlipsCount == 0)
+            if (messageWord.word.associatedFlipId == nil && localFlipsCount == 0)
             {
-                flipWord.state = availableFlipsCount == 0 ? .NotAssociatedAndNoResourcesAvailable : .NotAssociatedButResourcesAvailable
+                messageWord.word.state = availableFlipsCount == 0 ? .NotAssociatedAndNoResourcesAvailable : .NotAssociatedButResourcesAvailable
             }
             else
             {
-                flipWord.state = availableFlipsCount == 1 ? .AssociatedAndNoResourcesAvailable : .AssociatedAndResourcesAvailable
+                messageWord.word.state = availableFlipsCount == 1 ? .AssociatedAndNoResourcesAvailable : .AssociatedAndResourcesAvailable
             }
             
         }
@@ -102,10 +101,10 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     func matchFlipWordsToFirstAvailableFlip() {
         
-        for flipWord in flipWords {
+        for messageWord in messageWords {
             
-            if let firstFlipId = userFlips[flipWord.text]?.first {
-                flipWord.associatedFlipId = firstFlipId
+            if let firstFlipId = userFlips[messageWord.word.text]?.first {
+                messageWord.setFlipId(firstFlipId)
             }
             
         }
@@ -117,8 +116,16 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     
     ////
-    // MARK: - Getters
+    // MARK: - Pre-Made Flip Accessors
     ////
+    
+    func getUserFlipsForCurrentWord() -> ([String]!) {
+        return getUserFlipsForWord(getCurrentFlipWord())
+    }
+    
+    func getStockFlipsForCurrentWord() -> ([String]!) {
+        return getStockFlipsForWord(getCurrentFlipWord())
+    }
     
     func getUserFlipsForWord(word: String) -> ([String]!) {
         return userFlips[word]
@@ -126,10 +133,6 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     func getUserFlipsForWord(flipWord: FlipText) -> ([String]!) {
         return getUserFlipsForWord(flipWord.text)
-    }
-    
-    func getUserFlipsForCurrentWord() -> ([String]!) {
-        return getUserFlipsForWord(getCurrentFlipWord())
     }
     
     func getStockFlipsForWord(word: String) -> ([String]!) {
@@ -140,79 +143,96 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         return getStockFlipsForWord(flipWord.text)
     }
     
-    func getStockFlipsForCurrentWord() -> ([String]!) {
-        return getStockFlipsForWord(getCurrentFlipWord())
-    }
     
-    func getFlipWords() -> ([FlipText]!) {
-        return flipWords
-    }
+    
+    ////
+    // MARK: - Current Word Accessors
+    ////
     
     func getCurrentFlipWord() -> (FlipText) {
-        return flipWords[flipWordIndex]
+        return messageWords[messageWordIndex].word
+    }
+    
+    func getCurrentFlipPage() -> (FlipPage) {
+        return draftingTable.flipPageAtIndex(messageWordIndex)
+    }
+    
+    func getCurrentFlipWordIndex() -> (Int) {
+        return messageWordIndex
+    }
+    
+    func getCurrentFlipWordImage() -> (UIImage!) {
+        return messageWords[messageWordIndex].getImage()
+    }
+    
+    func getCurrentFlipWordVideoURL() -> (NSURL!) {
+        return messageWords[messageWordIndex].getVideo()
+    }
+    
+    func getCurrentFlipWordAudioURL() -> (NSURL!) {
+        return messageWords[messageWordIndex].getAudio()
+    }
+    
+    
+    
+    ////
+    // MARK: - Utility Accessors
+    ////
+    
+    func getFlipWords() -> ([FlipText]!) {
+        return messageWords.map({ (messageWord) -> FlipText in
+            return messageWord.word
+        })
     }
     
     func getFlipPageForWordAtIndex(index: Int) -> (FlipPage) {
         return draftingTable.flipPageAtIndex(index)
     }
     
-    func getCurrentFlipPage() -> (FlipPage) {
-        return draftingTable.flipPageAtIndex(flipWordIndex)
-    }
-    
-    func getCurrentFlipWordIndex() -> (Int) {
-        return flipWordIndex
-    }
-    
-    func getCurrentFlipWordImage() -> (UIImage!) {
-        return flipWordImage
-    }
-    
-    func getCurrentFlipWordVideoURL() -> (NSURL!) {
-        return flipWordVideo
-    }
-    
-    func getCurrentFlipWordAudioURL() -> (NSURL!) {
-        return flipWordAudio
-    }
-    
     func getIndexForNextEmptyFlipWord() -> (Int) {
         
-        for flipWord in flipWords {
+        for messageWord in messageWords {
             
-            let currentPage = getFlipPageForWordAtIndex(flipWord.position)
+            let currentPage = getFlipPageForWordAtIndex(messageWord.word.position)
             
-            if flipWord.associatedFlipId == nil && currentPage.videoURL == nil && flipWordIndex != flipWord.position
+            if messageWord.word.associatedFlipId == nil && currentPage.videoURL == nil && messageWordIndex != messageWord.word.position
             {
-                return flipWord.position
+                return messageWord.word.position
             }
             
         }
         
-        return flipWords.count - 1
+        return messageWords.count - 1
         
     }
     
     
     
     ////
-    // MARK: - Setters
+    // MARK: - Current Word Setters
     ////
     
+    func setCurrentFlipWordImage(image: UIImage?) {
+        messageWords[messageWordIndex].setImage(image)
+    }
+    
+    func setCurrentFlipWordAudioURL(audioURL: NSURL?) {
+        messageWords[messageWordIndex].setAudio(audioURL)
+    }
+    
+    func setCurrentFlipWordVideoURL(videoURL: NSURL?) {
+        messageWords[messageWordIndex].setVideo(videoURL)
+    }
+    
     func setCurrentFlipWordFlip(flip: Flip) {
-        
-        let currentWord = getCurrentFlipWord()
-        currentWord.associatedFlipId = flip.flipID
-        
+        messageWords[messageWordIndex].setFlipId(flip.flipID)
         updateFlips()
-        
     }
     
     func setCurrentFlipWordIndex(index: Int) {
         
-        if index < flipWords.count {
-            flipWordIndex = index
-            flipWordImage = nil
+        if index < messageWords.count {
+            messageWordIndex = index
         }
         
     }
@@ -223,17 +243,12 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     func resetFlipWordAtIndex(index: Int) {
         
-        // Reset the FlipPage for the current word
-        let flipWord = flipWords[index]
-        flipWord.associatedFlipId = nil
+        let messageWord = messageWords[index]
         
-        let newFlipPage = FlipPage(word: flipWord.text, order: flipWord.position)
+        messageWord.clear()
+        
+        let newFlipPage = FlipPage(word: messageWord.word.text, order: messageWord.word.position)
         updateFlipPage(newFlipPage)
-        
-        // Disassociate the current image
-        setCurrentFlipWordVideoURL(nil)
-        setCurrentFlipWordAudioURL(nil)
-        setCurrentFlipWordImage(nil)
         
     }
     
@@ -248,17 +263,6 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         
     }
     
-    func setCurrentFlipWordImage(image: UIImage?) {
-        flipWordImage = image
-    }
-    
-    func setCurrentFlipWordAudioURL(audioURL: NSURL?) {
-        flipWordAudio = audioURL
-    }
-    
-    func setCurrentFlipWordVideoURL(videoURL: NSURL?) {
-        flipWordVideo = videoURL
-    }
     
     
     
@@ -271,16 +275,17 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         let currentWord = getCurrentFlipWord()
         let currentPage = getCurrentFlipPage()
         
-        return currentWord.associatedFlipId == nil && currentPage.videoURL == nil
+        return currentWord.associatedFlipId == nil && currentPage.videoURL == nil && currentFlipWordHasContent()
         
     }
     
     internal func currentFlipWordHasContent() -> (Bool) {
         
-        let currentWord = getCurrentFlipWord()
+        let currentWord = messageWords[messageWordIndex]
         let currentPage = getCurrentFlipPage()
         
-        return currentWord.associatedFlipId != nil || flipWordImage != nil || flipWordVideo != nil || flipWordAudio != nil || currentPage.videoURL != nil
+        // Don't worry about audioURL since a word can only have audio if it already has an image
+        return currentWord.getFlipId() != nil || currentWord.getImage() != nil || currentWord.getVideo() != nil || currentPage.videoURL != nil
         
     }
     
@@ -291,15 +296,15 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     ////
     
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, flipWordAtIndex index: Int) -> FlipText {
-        return flipWords[index]
+        return messageWords[index].word
     }
     
     func numberOfFlipWords() -> Int {
-        return flipWords.count
+        return messageWords.count
     }
     
     func flipMessageWordListViewHighlightedWordIndex(flipMessageWordListView: FlipMessageWordListView) -> Int {
-        return flipWordIndex
+        return messageWordIndex
     }
    
     
@@ -326,6 +331,128 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     func flipsViewSelectedFlipId() -> String? {
         return self.getCurrentFlipWord().associatedFlipId!
+    }
+    
+}
+
+private class FlipMessageWord {
+    
+    var word : FlipText!
+    var wordImage : UIImage!
+    var wordVideo : NSURL!
+    var wordAudio : NSURL!
+    
+    
+    
+    ////
+    // MARK: - Init
+    ////
+    
+    init(word : FlipText) {
+        self.word = word
+    }
+    
+    
+    
+    ////
+    // MARK: - Clear
+    ////
+    
+    func clear() {
+        
+        wordVideo = nil
+        wordImage = nil
+        wordAudio = nil
+        
+        word.associatedFlipId = nil
+        
+    }
+    
+    
+    
+    ////
+    // MARK: - Setters
+    ////
+    
+    func setFlipId(flipId: String) {
+        
+        word.associatedFlipId = flipId
+        
+        wordVideo = nil
+        wordImage = nil
+        wordAudio = nil
+        
+    }
+    
+    func setImage(image: UIImage?) {
+        
+        if let image = image
+        {
+            // Set the video URL
+            wordImage = image
+            
+            // Clear the image and audio
+            wordVideo = nil
+            
+            // Clear any associated flips
+            word.associatedFlipId = nil
+        }
+        
+    }
+    
+    func setAudio(audioURL: NSURL?) {
+        
+        if let audioURL = audioURL
+        {
+            // Set the video URL
+            wordAudio = audioURL
+            
+            // Clear the video
+            wordVideo = nil
+            
+            // Clear any associated flips
+            word.associatedFlipId = nil
+        }
+        
+    }
+    
+    func setVideo(videoURL: NSURL?) {
+        
+        if let videoURL = videoURL
+        {
+            // Set the video URL
+            wordVideo = videoURL
+            
+            // Clear the image and audio
+            wordAudio = nil
+            wordImage = nil
+            
+            // Clear any associated flips
+            word.associatedFlipId = nil
+        }
+        
+    }
+    
+    
+    
+    ////
+    // MARK: - Getters
+    ////
+    
+    func getFlipId() -> (String?) {
+        return word.associatedFlipId
+    }
+    
+    func getVideo() -> (NSURL?) {
+        return wordVideo
+    }
+    
+    func getImage() -> (UIImage?) {
+        return wordImage
+    }
+    
+    func getAudio() -> (NSURL?) {
+        return wordAudio
     }
     
 }
