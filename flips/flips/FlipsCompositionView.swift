@@ -28,7 +28,6 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     // UI
     private var cameraView : CameraView!
     private var progressBar : UIView!
-    private var wordLabel : UILabel!
     private var audioButton : UIButton!
     private var previewScrollView : UIScrollView!
     private var playerViews : [FlipCompositionPlayerView!] = []
@@ -59,10 +58,6 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         
         cameraView = CameraView(interfaceOrientation: .Portrait, showAvatarCropArea: false, showMicrophoneButton: false)
         self.addSubview(cameraView)
-        
-        wordLabel = UILabel.flipWordLabel()
-        wordLabel.sizeToFit()
-        self.addSubview(wordLabel)
         
         previewScrollView = UIScrollView()
         previewScrollView.delegate = self
@@ -101,11 +96,6 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
             make.left.equalTo()(self)
             make.height.equalTo()(UIScreen.mainScreen().bounds.size.height * 0.01)
             make.width.equalTo()(0)
-        }
-        
-        wordLabel.mas_makeConstraints { (make) -> Void in
-            make.bottom.equalTo()(self).with().offset()(FLIP_WORD_LABEL_MARGIN_BOTTOM)
-            make.centerX.equalTo()(self)
         }
         
         audioButton.mas_makeConstraints { (make) -> Void in
@@ -307,8 +297,6 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
                 hideAudioButton()
             }
             
-            wordLabel.text = source.currentFlipWord().text
-            
         }
         
     }
@@ -329,6 +317,8 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         {
             for var index = 0; index < source.flipWordsCount(); index++
             {
+                insertWordLabelAtIndex(index)
+                
                 let playerView = playerViewForIndex(index)
                 playerViews.append(playerView)
             }
@@ -408,6 +398,24 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         }
         
         return false
+        
+    }
+    
+    private func insertWordLabelAtIndex(index: Int) {
+        
+        if let source = dataSource {
+            
+            let wordLabel = UILabel.flipWordLabel()
+            wordLabel.sizeToFit()
+            wordLabel.text = source.flipWordAtIndex(index).text
+            previewScrollView.addSubview(wordLabel)
+            
+            wordLabel.mas_makeConstraints { (make) -> Void in
+                make.bottom.equalTo()(self.previewScrollView).with().offset()(self.previewScrollView.frame.height + FLIP_WORD_LABEL_MARGIN_BOTTOM)
+                make.centerX.equalTo()(self.previewScrollView).with().offset()(self.previewScrollView.frame.width * CGFloat(index))
+            }
+            
+        }
         
     }
     
@@ -555,8 +563,6 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.width)
         delegate?.didScrollToFlipAtIndex(currentPage)
-        let flipWord = dataSource?.flipWordAtIndex(currentPage)
-        wordLabel.text = flipWord?.text
     }
 
 }
