@@ -202,6 +202,13 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
     // MARK: - Delete Button
     ////
     
+    func scrollToDeleteButton() {
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC));
+        dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
+            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: true)
+        }
+    }
+    
     func handleDeleteButtonTap(sender: UIButton) {
         self.delegate?.didTapDeleteButton()
     }

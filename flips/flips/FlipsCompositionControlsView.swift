@@ -49,11 +49,11 @@ class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate,
         
         editControlsView = ComposeEditControlsView()
         editControlsView.delegate = self
-        editControlsView.hidden = true
+        editControlsView.alpha = 0
         
         captureControlsView = ComposeCaptureControlsView()
         captureControlsView.delegate = self
-        captureControlsView.hidden = true
+        captureControlsView.alpha = 0
         
         self.addSubview(editControlsView)
         self.addSubview(captureControlsView)
@@ -93,13 +93,25 @@ class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate,
     }
     
     internal func showCaptureControls() {
-        editControlsView.hidden = true
-        captureControlsView.hidden = false
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.editControlsView.alpha = 0
+            self.captureControlsView.alpha = 1.0
+        })
     }
     
     internal func showEditControls() {
-        captureControlsView.hidden = true
-        editControlsView.hidden = false
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.editControlsView.alpha = 1.0
+            self.captureControlsView.alpha = 0
+        })
+    }
+    
+    internal func scrollToDeleteButton() {
+        editControlsView.scrollToDeleteButton()
+    }
+    
+    internal func scrollToVideoButton() {
+        captureControlsView.scrollToVideoButton()
     }
     
     

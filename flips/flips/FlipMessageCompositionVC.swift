@@ -227,10 +227,12 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             if (self.flipMessageManager.currentFlipWordHasContent())
             {
                 self.flipControlsView.showEditControls()
+                self.flipControlsView.scrollToDeleteButton()
             }
             else
             {
                 self.flipControlsView.showCaptureControls()
+                self.flipControlsView.scrollToVideoButton()
             }
             
             self.flipCompositionView.refresh()
