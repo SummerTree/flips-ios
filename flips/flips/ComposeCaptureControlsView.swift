@@ -60,7 +60,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
         // Video Button Long Press Recognizer
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("handleVideoButtonPress:"))
-        longPressRecognizer.minimumPressDuration = 0.001
+        longPressRecognizer.minimumPressDuration = 0.1
         
         // Flips Views
         

@@ -70,7 +70,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         self.addSubview(progressBar)
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("handleAudioButtonPress:"))
-        longPressRecognizer.minimumPressDuration = 0.001
+        longPressRecognizer.minimumPressDuration = 0.1
         
         audioButton = UIButton()
         audioButton.setImage(UIImage(named: "Capture_Audio")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
