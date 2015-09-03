@@ -19,18 +19,20 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
     let RESENT_SMS_MESSAGE = "3 incorrect entries. Check your messages for a new code."
     
     var verificationCodeView: VerificationCodeView!
+    var countryCode : String!
     var phoneNumber: String!
     var userId: String!
     var verificationCode: String = "XXXX"
     
-    init(phoneNumber: String!, userId: String!) {
+    init(phoneNumber: String!, countryCode: String!, userId: String!) {
         super.init(nibName: nil, bundle: nil)
+        self.countryCode = countryCode
         self.phoneNumber = phoneNumber
         self.userId = userId
         
         let token = DeviceHelper.sharedInstance.retrieveDeviceToken()
         
-        createDeviceForUser(userId, phoneNumber: phoneNumber.intlPhoneNumber, platform: PLATFORM, token: token)
+        createDeviceForUser(userId, phoneNumber: phoneNumber.intlPhoneNumberWithCountryCode(self.countryCode), platform: PLATFORM, token: token)
     }
     
     override func loadView() {
@@ -68,7 +70,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
         
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
-        UserService.sharedInstance.forgotPassword(phoneNumber.intlPhoneNumber, success: { (user) -> Void in
+        UserService.sharedInstance.forgotPassword(phoneNumber.intlPhoneNumberWithCountryCode(self.countryCode), success: { (user) -> Void in
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
             }) { (flipError) -> Void in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)

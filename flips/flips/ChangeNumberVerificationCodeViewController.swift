@@ -67,7 +67,7 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
         
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
-        UserService.sharedInstance.resendCodeWhenChangingNumber(phoneNumber.intlPhoneNumber,
+        UserService.sharedInstance.resendCodeWhenChangingNumber(phoneNumber.intlPhoneNumberWithCountryCode(self.countryCode),
             success: { (device) -> Void in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
             },

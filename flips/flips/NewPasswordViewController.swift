@@ -17,14 +17,16 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     var newPasswordView: NewPasswordView!
     
     private var username: String!
-    private var phoneNumber: String!;
+    private var phoneNumber: String!
+    private var countryCode: String!
     private var verificationCode: String!
     
-    init(username: String, phoneNumber: String, verificationCode: String) {
+    init(username: String, phoneNumber: String, countryCode: String, verificationCode: String) {
         super.init(nibName: nil, bundle: nil)
         self.username = username
         self.verificationCode = verificationCode
         self.phoneNumber = phoneNumber
+        self.countryCode = countryCode
     }
     
     required init(coder: NSCoder) {
@@ -48,7 +50,7 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     // MARK: - NewPasswordViewDelegate Methods
     
     func newPasswordViewDidTapDoneButton(newPassword: NewPasswordView!) {
-        UserService.sharedInstance.updatePassword(self.username, phoneNumber: self.phoneNumber, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
+        UserService.sharedInstance.updatePassword(self.username, phoneNumber: self.phoneNumber, countryCode: self.countryCode, verificationCode: self.verificationCode, newPassword: newPasswordView.passwordField.text!,
             success: { () -> Void in
                 self.navigationController?.popToRootViewControllerAnimated(true)
                 self.dismissViewControllerAnimated(false, completion:nil)

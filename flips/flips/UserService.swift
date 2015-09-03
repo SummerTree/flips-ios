@@ -327,7 +327,7 @@ public class UserService: FlipsService {
     
     // MARK: - UPDATE password
     
-    func updatePassword(username: String, phoneNumber: String, verificationCode: String, newPassword: String, success: UserServicePasswordSuccessResponse, failure: UserServiceFailureResponse) {
+    func updatePassword(username: String, phoneNumber: String, countryCode: String, verificationCode: String, newPassword: String, success: UserServicePasswordSuccessResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
@@ -336,7 +336,7 @@ public class UserService: FlipsService {
         if let deviceId = DeviceHelper.sharedInstance.retrieveDeviceId() {
             let url = HOST + UPDATE_PASSWORD_URL
             let params = [RequestParams.EMAIL : username,
-                RequestParams.PHONE_NUMBER : phoneNumber.intlPhoneNumber,
+                RequestParams.PHONE_NUMBER : phoneNumber.intlPhoneNumberWithCountryCode(countryCode),
                 RequestParams.VERIFICATION_CODE : verificationCode,
                 RequestParams.PASSWORD : newPassword,
                 RequestParams.DEVICE_ID : deviceId]
@@ -537,12 +537,12 @@ public class UserService: FlipsService {
     
     // MARK: - Phone Number
     
-    func phoneNumberExists(phoneNumber: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
+    func phoneNumberExists(phoneNumber: String, countryCode: String, success: UserServiceSuccessResponse, failure: UserServiceFailureResponse) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             failure(FlipError(error: LocalizedString.ERROR, details: LocalizedString.NO_INTERNET_CONNECTION))
             return
         }
-        let url = self.HOST + self.PHONE_NUMBER_EXISTS_URL.stringByReplacingOccurrencesOfString("{{phone_number}}", withString: phoneNumber.intlPhoneNumber, options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let url = self.HOST + self.PHONE_NUMBER_EXISTS_URL.stringByReplacingOccurrencesOfString("{{phone_number}}", withString: phoneNumber.intlPhoneNumberWithCountryCode(countryCode), options: NSStringCompareOptions.LiteralSearch, range: nil)
         
         self.get(url, parameters: nil,
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
