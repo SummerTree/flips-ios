@@ -12,7 +12,7 @@
 
 import Foundation
 
-class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate {
+class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     weak var delegate: PhoneNumberViewDelegate?
     
@@ -21,7 +21,9 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     private let MOBILE_NUMBER_MARGIN_LEFT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
-    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
+    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 130.0
+    private let MOBILE_COUNTRY_CODE_LEADING: CGFloat = 50.0
+    private let MOBILE_COUNTRY_CODE_WIDTH: CGFloat = 60.0
     
     private let HINT_TEXT = "Enter your number\nto verify you are a human."
     private let SPAM_TEXT = "That whole spam thing...\nYeah, we don't do that."
@@ -36,6 +38,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     private var spamView: UIView!
     private var spamText: UILabel!
     private var keyboardFillerView: UIView!
+    private var mobileCountryRoller : UIPickerView!
     
     var keyboardHeight: CGFloat = 0.0
     
@@ -44,6 +47,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         self.backgroundColor = UIColor.flipOrange()
         self.addSubviews()
         self.makeConstraints()
+        
+        CountryCodes.sharedInstance.setSelectedPicksDialCode(self.mobileCountryRoller)
     }
     
     func viewWillAppear() {
@@ -80,6 +85,12 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         phoneImageView.contentMode = .Center
         mobileNumberView.addSubview(phoneImageView)
         
+        mobileCountryRoller = UIPickerView()
+        mobileCountryRoller.backgroundColor = UIColor.clearColor()
+        mobileCountryRoller.tintColor = UIColor.whiteColor()
+        mobileCountryRoller.delegate = self
+        mobileNumberView.addSubview(mobileCountryRoller)
+        
         mobileNumberField = UITextField()
         mobileNumberField.delegate = self
         mobileNumberField.textColor = UIColor.whiteColor()
@@ -104,6 +115,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         keyboardFillerView = UIView()
         self.addSubview(keyboardFillerView)
+        
+        mobileNumberView.bringSubviewToFront(mobileCountryRoller)
     }
     
     
@@ -147,6 +160,14 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
             make.width.equalTo()(self.phoneImageView.image?.size.width)
         }
         
+        mobileCountryRoller.mas_makeConstraints { (make) in
+            make.removeExisting = true
+            make.left.equalTo()(self).with().offset()(self.MOBILE_COUNTRY_CODE_LEADING)
+            make.width.equalTo()(self.MOBILE_COUNTRY_CODE_WIDTH)
+            make.height.equalTo()(self.mobileNumberView)
+            make.centerY.equalTo()(self.mobileNumberView)
+        }
+        
         mobileNumberField.mas_makeConstraints { (make) in
             make.removeExisting = true
             make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
@@ -180,7 +201,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         super.updateConstraints()
     }
-    
     
     // MARK: - UITextFieldDelegate methods
     
@@ -233,11 +253,35 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         self.makeConstraints()
     }
     
+    // MARK: - Picker view data & delegate
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return CountryCodes.sharedInstance.countryCodes.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+        var currCountry = CountryCodes.sharedInstance.countryCodes[row]
+        
+        var countryCode = UILabel();
+        countryCode.text = currCountry["dial_code"] as? String
+        countryCode.textColor = UIColor.whiteColor()
+        countryCode.tintColor = UIColor.whiteColor()
+        countryCode.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        countryCode.textAlignment = NSTextAlignment.Center
+        return countryCode
+    }
     
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.phoneNumberView(self, didFinishTypingMobileNumber: mobileNumberField.text)
+        var index = self.mobileCountryRoller.selectedRowInComponent(0)
+        var countryCode = CountryCodes.sharedInstance.findCountryDialCode(index)
+        
+        self.delegate?.phoneNumberView(self, didFinishTypingMobileNumber: mobileNumberField.text, withCountryCode: countryCode)
     }
     
     
@@ -257,5 +301,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
+    
     
 }

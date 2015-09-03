@@ -57,6 +57,9 @@
 		3E5F61631B911C1400B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
 		3E5F61641B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
 		3E5F61651B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
+		404F52201B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
+		404F52211B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
+		404F52221B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
 		406378651B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
 		406378661B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
 		406378671B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
@@ -66,6 +69,9 @@
 		40900BAB1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
 		40900BAC1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
 		40900BAD1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
+		40BF16801B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
+		40BF16811B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
+		40BF16821B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
 		40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
 		40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
 		40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
@@ -734,9 +740,11 @@
 		3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSelectionView.swift; sourceTree = "<group>"; };
 		3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsMessageManager.swift; sourceTree = "<group>"; };
 		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
+		404F521F1B978A2100F0CDAF /* CountryCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
 		40900BA51B62C3460043E495 /* DraftingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraftingTable.swift; sourceTree = "<group>"; };
 		40900BAA1B62C37D0043E495 /* FlipBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipBook.swift; sourceTree = "<group>"; };
+		40BF167F1B963CC80086E425 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
 		40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposerExternal.swift; sourceTree = "<group>"; };
 		40F043FF1B3CE70300AF3B73 /* MovieExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieExport.swift; sourceTree = "<group>"; };
 		40F093931B7E317800787969 /* ToolSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSlider.swift; sourceTree = "<group>"; };
@@ -1716,6 +1724,7 @@
 				7ACC603F1AC97E110052076D /* ReadFlipMessageDataSource.swift */,
 				7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */,
 				7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */,
+				404F521F1B978A2100F0CDAF /* CountryCodes.swift */,
 			);
 			name = "Data Sources";
 			sourceTree = "<group>";
@@ -1886,6 +1895,7 @@
 			children = (
 				F22184341AF83CBA0000220B /* flips-tutorial.mp4 */,
 				BE2E72071A98119400F237BE /* empty_video.mov */,
+				40BF167F1B963CC80086E425 /* CountryCodes.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2055,6 +2065,7 @@
 				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
+				40BF16801B963CC80086E425 /* CountryCodes.json in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
 				F22184351AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
@@ -2068,6 +2079,7 @@
 				BE24605B1AD2D95900859233 /* empty_video.mov in Resources */,
 				BE24605C1AD2D95900859233 /* NewFlip.storyboard in Resources */,
 				BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */,
+				40BF16811B963CC80086E425 /* CountryCodes.json in Resources */,
 				BE24605F1AD2D95900859233 /* Images.xcassets in Resources */,
 				F22184361AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE2460611AD2D95900859233 /* SyncView.xib in Resources */,
@@ -2081,6 +2093,7 @@
 				BE2461351AD2D9C600859233 /* empty_video.mov in Resources */,
 				BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */,
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
+				40BF16821B963CC80086E425 /* CountryCodes.json in Resources */,
 				BE2461391AD2D9C600859233 /* Images.xcassets in Resources */,
 				F22184371AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */,
@@ -2220,6 +2233,7 @@
 				7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */,
+				404F52201B978A2100F0CDAF /* CountryCodes.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7AA711811A28D8B10082165A /* Device.m in Sources */,
 				7A07EB961AC07AC60002DE18 /* GroupParticipantsView.swift in Sources */,
@@ -2445,6 +2459,7 @@
 				BE245FAE1AD2D95900859233 /* ThumbnailsCache.swift in Sources */,
 				BE245FAF1AD2D95900859233 /* VerificationCodeView.swift in Sources */,
 				BE245FB01AD2D95900859233 /* Device.m in Sources */,
+				404F52211B978A2100F0CDAF /* CountryCodes.swift in Sources */,
 				BE245FB11AD2D95900859233 /* GroupParticipantsView.swift in Sources */,
 				BE245FB21AD2D95900859233 /* MessagesTopViewCell.swift in Sources */,
 				BE245FB31AD2D95900859233 /* UIImage+ImageEffects.m in Sources */,
@@ -2670,6 +2685,7 @@
 				BE2460881AD2D9C600859233 /* ThumbnailsCache.swift in Sources */,
 				BE2460891AD2D9C600859233 /* VerificationCodeView.swift in Sources */,
 				BE24608A1AD2D9C600859233 /* Device.m in Sources */,
+				404F52221B978A2100F0CDAF /* CountryCodes.swift in Sources */,
 				BE24608B1AD2D9C600859233 /* GroupParticipantsView.swift in Sources */,
 				BE24608C1AD2D9C600859233 /* MessagesTopViewCell.swift in Sources */,
 				BE24608D1AD2D9C600859233 /* UIImage+ImageEffects.m in Sources */,

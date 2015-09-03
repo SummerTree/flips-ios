@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
+class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     weak var delegate: ForgotPasswordViewDelegate?
     
@@ -21,7 +21,9 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     private let MOBILE_NUMBER_MARGIN_LEFT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
-    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
+    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 130.0
+    private let MOBILE_COUNTRY_CODE_LEADING: CGFloat = 50.0
+    private let MOBILE_COUNTRY_CODE_WIDTH: CGFloat = 60.0
     
     private let HINT_TEXT: String = NSLocalizedString("Enter your phone number below\n to reset your password", comment: "")
     
@@ -32,6 +34,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     var mobileNumberView: UIView!
     var phoneImageView: UIImageView!
     var mobileNumberField: UITextField!
+    var mobileCountryRoller : UIPickerView!
     var spamView: UIView!
     var spamText: UILabel!
     var keyboardFillerView: UIView!
@@ -79,6 +82,12 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
         mobileNumberView.addSubview(mobileNumberField)
         
+        mobileCountryRoller = UIPickerView()
+        mobileCountryRoller.backgroundColor = UIColor.clearColor()
+        mobileCountryRoller.tintColor = UIColor.whiteColor()
+        mobileCountryRoller.delegate = self
+        mobileNumberView.addSubview(mobileCountryRoller)
+        
         spamView = UIView()
         spamView.contentMode = .Center
         self.addSubview(spamView)
@@ -113,6 +122,14 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
             make.height.equalTo()(self.MOBILE_NUMBER_VIEW_HEIGHT)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
+        }
+        
+        mobileCountryRoller.mas_makeConstraints { (make) in
+            make.removeExisting = true
+            make.left.equalTo()(self).with().offset()(self.MOBILE_COUNTRY_CODE_LEADING)
+            make.width.equalTo()(self.MOBILE_COUNTRY_CODE_WIDTH)
+            make.height.equalTo()(self.mobileNumberView)
+            make.centerY.equalTo()(self.mobileNumberView)
         }
         
         phoneImageView.mas_makeConstraints { (make) in
@@ -209,11 +226,35 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         self.makeConstraints()
     }
     
+    // MARK: - Picker data & delegate methods
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return CountryCodes.sharedInstance.countryCodes.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+        var currCountry = CountryCodes.sharedInstance.countryCodes[row]
+        
+        var countryCode = UILabel();
+        countryCode.text = currCountry["dial_code"] as? String
+        countryCode.textColor = UIColor.whiteColor()
+        countryCode.tintColor = UIColor.whiteColor()
+        countryCode.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        countryCode.textAlignment = NSTextAlignment.Center
+        return countryCode
+    }
     
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text)
+        var index = self.mobileCountryRoller.selectedRowInComponent(0)
+        var countryCode = CountryCodes.sharedInstance.findCountryDialCode(index)
+        
+        self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text, countryCode: countryCode)
     }
     
     

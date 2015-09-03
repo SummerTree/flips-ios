@@ -65,7 +65,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     
     // MARK: - PhoneNumberViewDelegate Methods
     
-    func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!) {        
+    func phoneNumberView(phoneNumberView: PhoneNumberView!, didFinishTypingMobileNumber mobileNumber: String!, withCountryCode countryCode: String!) {
         self.showActivityIndicator()
         if (self.userId == nil) {
             UserService.sharedInstance.signUp(self.username,
@@ -75,12 +75,12 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
                 avatar: self.avatar,
                 birthday: self.birthday,
                 nickname: self.nickname,
-                phoneNumber: mobileNumber.intlPhoneNumber,
+                phoneNumber: mobileNumber.intlPhoneNumberWithCountryCode(countryCode),
                 facebookId: self.facebookId,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
                     var userEntity = user as! User
-                    var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: userEntity.userID)
+                    var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode, userId: userEntity.userID)
                     self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
                     self.hideActivityIndicator()
                     
@@ -98,7 +98,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
             }
         } else {
             self.hideActivityIndicator()
-            var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, userId: self.userId)
+            var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode, userId: self.userId)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }
     }

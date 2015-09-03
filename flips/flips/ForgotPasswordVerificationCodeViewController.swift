@@ -15,9 +15,10 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
 
     let FORGOT_CODE_DID_NOT_MATCH = "Wrong validation code"
     
-    init(phoneNumber: String) {
+    init(phoneNumber: String, countryCode: String) {
         super.init(nibName: nil, bundle: nil)
         self.phoneNumber = phoneNumber
+        self.countryCode = countryCode
     }
     
     
@@ -26,14 +27,14 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
     override func verificationCodeView(verificatioCodeView: VerificationCodeView!, didFinishTypingVerificationCode verificationCode: String!) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
-        UserService.sharedInstance.verify(phoneNumber.intlPhoneNumber,
+        UserService.sharedInstance.verify(phoneNumber.intlPhoneNumberWithCountryCode(self.countryCode),
             verificationCode: verificationCode,
             success: { (username) in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 
                 self.verificationCodeView.resetVerificationCodeField()
                 
-                var newPasswordViewController = NewPasswordViewController(username: username, phoneNumber: self.phoneNumber, verificationCode: verificationCode)
+                var newPasswordViewController = NewPasswordViewController(username: username, phoneNumber: self.phoneNumber, countryCode: self.countryCode, verificationCode: verificationCode)
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
         failure: { (flipError) in

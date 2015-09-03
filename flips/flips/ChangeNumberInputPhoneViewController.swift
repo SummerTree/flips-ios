@@ -60,7 +60,7 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
         }
     }
     
-    func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber phone: String) {
+    func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber phone: String, countryCode: String!) {
         if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
             self.hideActivityIndicator()
             let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
@@ -70,7 +70,7 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
                 let alertView = UIAlertView(title: NSLocalizedString("Change Number Error"), message: NSLocalizedString("You have entered the same number you currently have in use. No changes saved."), delegate: self, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
             } else {
-                checkIfPhoneNumberExists(phone)
+                checkIfPhoneNumberExists(phone, countryCode: countryCode)
             }
         }
     }
@@ -83,9 +83,9 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
     
     // MARK: - Private functions
     
-    private func checkIfPhoneNumberExists(phoneNumber: String) {
+    private func checkIfPhoneNumberExists(phoneNumber: String, countryCode: String) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
-        UserService.sharedInstance.phoneNumberExists(phoneNumber,
+        UserService.sharedInstance.phoneNumberExists(phoneNumber, countryCode: countryCode,
             success: { (response) in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 let exists = response as! Bool
@@ -93,7 +93,7 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
                     let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.PHONE_NUMBER_ALREADY_EXISTS, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 } else {
-                    let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phoneNumber, userId: User.loggedUser()?.userID)
+                    let changeNumberVerificationCodeViewController = ChangeNumberVerificationCodeViewController(phoneNumber: phoneNumber, countryCode: countryCode, userId: User.loggedUser()?.userID)
                     self.navigationController?.pushViewController(changeNumberVerificationCodeViewController, animated: true)
                 }
             },

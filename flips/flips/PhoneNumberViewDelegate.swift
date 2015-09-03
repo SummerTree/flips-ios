@@ -12,7 +12,7 @@
 
 protocol PhoneNumberViewDelegate: class {
     
-    func phoneNumberView(phoneNumberView : PhoneNumberView!, didFinishTypingMobileNumber mobileNumber : String!)
+    func phoneNumberView(phoneNumberView : PhoneNumberView!, didFinishTypingMobileNumber mobileNumber : String!, withCountryCode countryCode: String!)
     
     func phoneNumberViewDidTapBackButton(phoneNumberView : PhoneNumberView!)
     
