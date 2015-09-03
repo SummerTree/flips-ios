@@ -51,6 +51,9 @@
 		3E4E6A491B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */; };
 		3E4E6A4A1B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */; };
 		3E4E6A4B1B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */; };
+		3E5B42851B97E5BB008A796B /* FlipsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */; };
+		3E5B42861B97E5BB008A796B /* FlipsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */; };
+		3E5B42871B97E5BB008A796B /* FlipsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */; };
 		3E5F61631B911C1400B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
 		3E5F61641B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
 		3E5F61651B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
@@ -728,6 +731,7 @@
 		3E4E6A3C1B90C78F00AD002B /* FlipsCompositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCompositionView.swift; sourceTree = "<group>"; };
 		3E4E6A441B90C7B800AD002B /* FlipCompositionPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipCompositionPlayerView.swift; sourceTree = "<group>"; };
 		3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageCompositionVC.swift; sourceTree = "<group>"; };
+		3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSelectionView.swift; sourceTree = "<group>"; };
 		3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsMessageManager.swift; sourceTree = "<group>"; };
 		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
 		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
@@ -1049,6 +1053,7 @@
 		3E4E6A361B90C74A00AD002B /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */,
 				3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */,
 				3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */,
 				3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */,
@@ -2312,6 +2317,7 @@
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
+				3E5B42851B97E5BB008A796B /* FlipsSelectionView.swift in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */,
 				7ACC60461AC97F090052076D /* ReadFlipMessage.m in Sources */,
@@ -2536,6 +2542,7 @@
 				BE2460061AD2D95900859233 /* BuilderService.swift in Sources */,
 				BE2460071AD2D95900859233 /* BuilderIntroductionViewController.swift in Sources */,
 				BE2460081AD2D95900859233 /* CustomBadgeView.swift in Sources */,
+				3E5B42861B97E5BB008A796B /* FlipsSelectionView.swift in Sources */,
 				BE2460091AD2D95900859233 /* ActivityIndicatorHelper.swift in Sources */,
 				BE24600A1AD2D95900859233 /* MBContactCollectionViewContactCell.m in Sources */,
 				BE24600B1AD2D95900859233 /* NetworkReachabilityHelper.swift in Sources */,
@@ -2760,6 +2767,7 @@
 				BE2460E01AD2D9C600859233 /* BuilderService.swift in Sources */,
 				BE2460E11AD2D9C600859233 /* BuilderIntroductionViewController.swift in Sources */,
 				BE2460E21AD2D9C600859233 /* CustomBadgeView.swift in Sources */,
+				3E5B42871B97E5BB008A796B /* FlipsSelectionView.swift in Sources */,
 				BE2460E31AD2D9C600859233 /* ActivityIndicatorHelper.swift in Sources */,
 				BE2460E41AD2D9C600859233 /* MBContactCollectionViewContactCell.m in Sources */,
 				BE2460E51AD2D9C600859233 /* NetworkReachabilityHelper.swift in Sources */,

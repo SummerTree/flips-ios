@@ -8,20 +8,22 @@
 
 import Foundation
 
-class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate, ComposeEditControlsViewDelegate {
+class FlipsCompositionControlsView : UIView, CaptureControlsViewDelegate, EditControlsViewDelegate {
     
     weak var delegate : FlipsCompositionControlsDelegate!
-    weak var dataSource : FlipsViewDataSource? {
+    weak var dataSource : FlipSelectionViewDataSource? {
         set {
-            self.editControlsView!.dataSource = newValue
-            self.captureControlsView!.dataSource = newValue
+            editControls.dataSource = newValue
+            captureControls.dataSource = newValue
         }
-        get { return self.captureControlsView!.dataSource }
+        get {
+            return editControls.dataSource
+        }
     }
     
     // UI
-    private var editControlsView : ComposeEditControlsView!
-    private var captureControlsView : ComposeCaptureControlsView!
+    private var editControls: ComposeEditControlsView!
+    private var captureControls: ComposeCaptureControlsView!
     
     
     
@@ -47,29 +49,28 @@ class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate,
     
     func initSubviews() {
         
-        editControlsView = ComposeEditControlsView()
-        editControlsView.delegate = self
-        editControlsView.alpha = 0
+        editControls = ComposeEditControlsView()
+        editControls.delegate = self
+        editControls.alpha = 0
+        addSubview(editControls)
         
-        captureControlsView = ComposeCaptureControlsView()
-        captureControlsView.delegate = self
-        captureControlsView.alpha = 0
-        
-        self.addSubview(editControlsView)
-        self.addSubview(captureControlsView)
+        captureControls = ComposeCaptureControlsView()
+        captureControls.delegate = self
+        captureControls.alpha = 0
+        addSubview(captureControls)
         
     }
     
     func initConstraints() {
         
-        editControlsView.mas_makeConstraints { (make) -> Void in
+        editControls.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
             make.height.equalTo()(self)
         }
         
-        captureControlsView.mas_makeConstraints { (make) -> Void in
+        captureControls.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self)
             make.left.equalTo()(self)
             make.right.equalTo()(self)
@@ -81,37 +82,82 @@ class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate,
     
     
     ////
-    // MARK: - Control View Management
+    // MARK: - Camera Controls
     ////
     
     internal func enableCameraControls() {
-        captureControlsView.enableCameraControls()
+        captureControls.enableCameraControls()
     }
     
     internal func disableCameraControls() {
-        captureControlsView.disableCameraControls()
+        captureControls.disableCameraControls()
+    }
+    
+    
+    
+    ////
+    // MARK: - Control Mode
+    ////
+    
+    internal func areCaptureControlsVisible() -> (Bool) {
+        return captureControls.alpha == 1
     }
     
     internal func showCaptureControls() {
+        
+        captureControls.reloadFlipsView()
+        
         UIView.animateWithDuration(0.25, animations: { () -> Void in
-            self.editControlsView.alpha = 0
-            self.captureControlsView.alpha = 1.0
+            self.editControls.alpha = 0
+            self.captureControls.alpha = 1.0
         })
+        
+    }
+    
+    internal func areEditControlsVisible() -> (Bool) {
+        return editControls.alpha == 1
     }
     
     internal func showEditControls() {
+        
+        editControls.reloadFlipsView()
+        
         UIView.animateWithDuration(0.25, animations: { () -> Void in
-            self.editControlsView.alpha = 1.0
-            self.captureControlsView.alpha = 0
+            self.editControls.alpha = 1.0
+            self.captureControls.alpha = 0
         })
+        
     }
     
-    internal func scrollToDeleteButton() {
-        editControlsView.scrollToDeleteButton()
+    
+    
+    ////
+    // MARK: - Flips Views
+    ////
+    
+    func resetFlipsViews() {
+        editControls.dismissStockFlips(false)
+        editControls.dismissUserFlips(false)
+        captureControls.dismissStockFlips(false)
+        captureControls.dismissUserFlips(false)
     }
     
-    internal func scrollToVideoButton() {
-        captureControlsView.scrollToVideoButton()
+    
+    
+    ////
+    // MARK: - Scroll Methods
+    ////
+    
+    internal func scrollToFlipsView(animated: Bool) {
+        editControls.scrollToFlipsView(animated)
+    }
+    
+    internal func scrollToDeleteButton(animated: Bool) {
+        editControls.scrollToDeleteButton(animated)
+    }
+    
+    internal func scrollToVideoButton(animated: Bool) {
+        captureControls.scrollToVideoButton(animated)
     }
     
     
@@ -119,6 +165,26 @@ class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate,
     ////
     // MARK: - ComposeCaptureControlsViewDelegate
     ////
+    
+    func captureControlsDidShowUserFlips() {
+        editControls.dismissStockFlips(false)
+        editControls.showUserFlips(false)
+    }
+    
+    func captureControlsDidDismissUserFlips() {
+        editControls.dismissStockFlips(false)
+        editControls.dismissUserFlips(false)
+    }
+    
+    func captureControlsDidShowStockFlips() {
+        editControls.dismissUserFlips(false)
+        editControls.showStockFlips(false)
+    }
+    
+    func captureControlsDidDismissStockFlips() {
+        editControls.dismissUserFlips(false)
+        editControls.dismissStockFlips(false)
+    }
     
     func didSelectStockFlipAtIndex(index: Int) {
         delegate?.didSelectStockFlipAtIndex(index)
@@ -149,6 +215,26 @@ class FlipsCompositionControlsView : UIView, ComposeCaptureControlsViewDelegate,
     ////
     // MARK: - ComposeCaptureControlsViewDelegate
     ////
+    
+    func editControlsDidShowUserFlips() {
+        captureControls.dismissStockFlips(false)
+        captureControls.showUserFlips(false)
+    }
+    
+    func editControlsDidDismissUserFlips() {
+        captureControls.dismissStockFlips(false)
+        captureControls.dismissUserFlips(false)
+    }
+    
+    func editControlsDidShowStockFlips() {
+        captureControls.dismissUserFlips(false)
+        captureControls.showStockFlips(false)
+    }
+    
+    func editControlsDidDismissStockFlips() {
+        captureControls.dismissUserFlips(false)
+        captureControls.dismissStockFlips(false)
+    }
     
     func didTapDeleteButton() {
         delegate?.didTapDeleteButton()

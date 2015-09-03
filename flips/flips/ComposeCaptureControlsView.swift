@@ -6,15 +6,18 @@
 //
 //
 
-class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate {
+class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewDelegate {
     
-    weak var delegate : ComposeCaptureControlsViewDelegate?
-    weak var dataSource : FlipsViewDataSource? {
+    private let SCROLL_DELAY = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC))
+    
+    weak var delegate : CaptureControlsViewDelegate?
+    weak var dataSource : FlipSelectionViewDataSource? {
         set {
-            self.myFlipsView!.dataSource = newValue
-            self.bottomMyFlipsView!.dataSource = newValue
+            flipsView.dataSource = newValue
         }
-        get { return self.myFlipsView!.dataSource }
+        get {
+            return flipsView.dataSource!
+        }
     }
     
     // Video Recording Timer
@@ -22,12 +25,13 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
     
     // UI
     private var optionsScrollView : UIScrollView!
-    private var myFlipsView : FlipsView!
-    private var cameraView : UIView!
-    private var topGalleryView : UIView!
-    private var galleryView : UIView!
+    
+    private var overflowCameraView : UIView!
+    private var overflowGalleryView : UIView!
+    private var flipsView : FlipsSelectionView!
     private var videoView : UIView!
-    private var bottomMyFlipsView : FlipsView!
+    private var cameraView : UIView!
+    private var galleryView : UIView!
     
     
     
@@ -64,18 +68,16 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
         
         // Flips Views
         
-        myFlipsView = FlipsView()
-        myFlipsView.delegate = self
-        
-        bottomMyFlipsView = FlipsView()
-        bottomMyFlipsView.delegate = self
+        flipsView = FlipsSelectionView()
+        flipsView.delegate = self
         
         // Button Containers
         
-        topGalleryView = buttonView(image: captureImage, tintColor: UIColor.greenColor(), tapSelector: Selector("handleGalleryButtonTap:"))
         videoView = buttonView(image: captureImage, tintColor: UIColor.orangeColor(), gestureRecognizer: longPressRecognizer)
         cameraView = buttonView(image: captureImage, tintColor: UIColor.blueColor(), tapSelector: Selector("handleCameraButtonTap:"))
+        overflowCameraView = buttonView(image: captureImage, tintColor: UIColor.blueColor(), tapSelector: Selector("handleCameraButtonTap:"))
         galleryView = buttonView(image: captureImage, tintColor: UIColor.greenColor(), tapSelector: Selector("handleGalleryButtonTap:"))
+        overflowGalleryView = buttonView(image: captureImage, tintColor: UIColor.greenColor(), tapSelector: Selector("handleGalleryButtonTap:"))
         
         disableCameraControls()
         
@@ -88,12 +90,12 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
         optionsScrollView.showsHorizontalScrollIndicator = false
         optionsScrollView.showsVerticalScrollIndicator = false
         
-        optionsScrollView.addSubview(topGalleryView)
-        optionsScrollView.addSubview(myFlipsView)
+        optionsScrollView.addSubview(overflowCameraView)
+        optionsScrollView.addSubview(galleryView)
+        optionsScrollView.addSubview(flipsView)
         optionsScrollView.addSubview(videoView)
         optionsScrollView.addSubview(cameraView)
-        optionsScrollView.addSubview(galleryView)
-        optionsScrollView.addSubview(bottomMyFlipsView)
+        optionsScrollView.addSubview(overflowGalleryView)
         
         addSubview(optionsScrollView)
         
@@ -108,23 +110,30 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
             make.width.equalTo()(self)
         }
         
-        topGalleryView.mas_makeConstraints { (make) -> Void in
+        overflowCameraView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
             make.top.equalTo()(self.optionsScrollView)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
         
-        myFlipsView.mas_makeConstraints { (make) -> Void in
+        galleryView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.topGalleryView.mas_bottom)
+            make.top.equalTo()(self.overflowCameraView.mas_bottom)
+            make.height.equalTo()(self.optionsScrollView)
+            make.width.equalTo()(self.optionsScrollView)
+        }
+        
+        flipsView.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.optionsScrollView)
+            make.top.equalTo()(self.galleryView.mas_bottom)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
         
         videoView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.myFlipsView.mas_bottom)
+            make.top.equalTo()(self.flipsView.mas_bottom)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
@@ -135,17 +144,10 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
-        
-        galleryView.mas_makeConstraints { (make) -> Void in
+       
+        overflowGalleryView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
             make.top.equalTo()(self.cameraView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        bottomMyFlipsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.galleryView.mas_bottom)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
@@ -161,7 +163,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
     override func layoutSubviews() {
         super.layoutSubviews()
         optionsScrollView.contentSize = CGSizeMake(optionsScrollView.frame.width, optionsScrollView.frame.height * 6)
-        optionsScrollView.contentOffset = CGPoint(x: 0, y: optionsScrollView.frame.height)
+        scrollToFlipsView(false)
     }
     
     
@@ -215,13 +217,14 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
         
         let currentPage = scrollView.contentOffset.y / scrollView.frame.height
         
-        if (currentPage == 0)
+        switch currentPage
         {
-            scrollView.scrollRectToVisible(CGRectMake(0, scrollView.frame.height * 4, scrollView.frame.width, scrollView.frame.height), animated: false)
-        }
-        else if (currentPage == 5)
-        {
-            scrollView.scrollRectToVisible(CGRectMake(0, scrollView.frame.height, scrollView.frame.width, scrollView.frame.height), animated: false)
+            case 0:
+                scrollToPhotoButton(false)
+            case 5:
+                scrollToGalleryButton(false)
+            default:
+                break;
         }
         
     }
@@ -240,6 +243,126 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
     func disableCameraControls() {
         self.cameraView.userInteractionEnabled = false
         self.videoView.userInteractionEnabled = false
+    }
+    
+    
+    
+    ////
+    // MARK: - Scrolling
+    ////
+    
+    func scrollToFlipsView(animated: Bool) {
+        
+        if animated
+        {
+            dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
+                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: true)
+            }
+        }
+        else
+        {
+            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: false)
+        }
+        
+    }
+    
+    func scrollToVideoButton(animated: Bool) {
+        
+        if animated
+        {
+            dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
+                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 3), animated: true)
+            }
+        }
+        else
+        {
+            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 3), animated: false)
+        }
+        
+    }
+    
+    func scrollToPhotoButton(animated: Bool) {
+        
+        if animated
+        {
+            dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
+                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 4), animated: true)
+            }
+        }
+        else
+        {
+            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 4), animated: false)
+        }
+        
+    }
+    
+    func scrollToGalleryButton(animated: Bool) {
+        
+        if animated
+        {
+            dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
+                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: true)
+            }
+        }
+        else
+        {
+            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: false)
+        }
+        
+    }
+    
+    
+    
+    ////
+    // MARK: - FlipsView
+    ////
+    
+    func reloadFlipsView() {
+        flipsView.reloadData()
+    }
+   
+    func showUserFlips(animated: Bool) {
+        
+        if animated {
+            flipsView.showUserFlipsViewAnimated()
+        }
+        else {
+            flipsView.showUserFlipsView()
+        }
+        
+    }
+    
+    func dismissUserFlips(animated: Bool) {
+        
+        if animated {
+            flipsView.dismissUserFlipsViewAnimated()
+        }
+        else {
+            flipsView.dismissUserFlipsView()
+        }
+        
+    }
+    
+    func showStockFlips(animated: Bool) {
+        
+        if animated {
+            flipsView.showStockFlipsViewAnimated()
+        }
+        else {
+            flipsView.showStockFlipsView()
+        }
+        
+    }
+    
+    func dismissStockFlips(animated: Bool) {
+        
+        if animated {
+            flipsView.dismissStockFlipsViewAnimated()
+        }
+        else {
+            flipsView.dismissStockFlipsView()
+        }
+        
     }
     
     
@@ -268,31 +391,6 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
     // MARK: - Video Timer & Button
     ////
     
-    func scrollToVideoButton() {
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC));
-        dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: true)
-        }
-    }
-    
-    func startVideoTimer() {
-        videoTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("handleVideoTimerExpired"), userInfo: nil, repeats: false)
-    }
-    
-    func clearVideoTimer() {
-        videoTimer.invalidate()
-        videoTimer = nil
-    }
-    
-    func handleVideoTimerExpired() {
-        
-        if let timer = self.videoTimer {
-            clearVideoTimer()
-            delegate?.didReleaseVideoButton()
-        }
-        
-    }
-    
     func handleVideoButtonPress(gestureRecognizer: UILongPressGestureRecognizer) {
         
         switch(gestureRecognizer.state) {
@@ -315,27 +413,69 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipsViewDelega
     
     
     ////
-    // MARK: - FlipsViewDelegate
+    // MARK: - Video Timer
     ////
     
-    func flipsViewDidTapAddFlip(flipsView: FlipsView!) {
-        // Ignore this, this has been phased out
+    func startVideoTimer() {
+        videoTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("handleVideoTimerExpired"), userInfo: nil, repeats: false)
     }
     
-    func flipsView(flipsView: FlipsView!, didTapAtIndex index: Int, fromStockFlips isStockFlip: Bool) {
+    func clearVideoTimer() {
+        videoTimer.invalidate()
+        videoTimer = nil
+    }
+    
+    func handleVideoTimerExpired() {
         
-        if (isStockFlip) {
-            delegate?.didSelectStockFlipAtIndex(index)
-        }
-        else {
-            delegate?.didSelectFlipAtIndex(index)
+        if let timer = self.videoTimer {
+            clearVideoTimer()
+            delegate?.didReleaseVideoButton()
         }
         
     }
+    
+    
+    
+    ////
+    // MARK: - FlipSelectionViewDelegate
+    ////
+    
+    func didOpenUserFlipsView() {
+        delegate?.captureControlsDidShowUserFlips()
+    }
+    
+    func didDismissUserFlipsView() {
+        delegate?.captureControlsDidDismissUserFlips()
+    }
+    
+    func didSelectUserFlipAtIndex(index: Int) {
+        delegate?.didSelectFlipAtIndex(index)
+    }
+    
+    func didOpenStockFlipsView() {
+        delegate?.captureControlsDidShowStockFlips()
+    }
+    
+    func didDismissStockFlipsView() {
+        delegate?.captureControlsDidDismissStockFlips()
+    }
+    
+    func didSelectStockFlipAtIndex(index: Int) {
+        delegate?.didSelectStockFlipAtIndex(index)
+    }
+    
     
 }
 
-protocol ComposeCaptureControlsViewDelegate : class {
+protocol CaptureControlsViewDelegate : class {
+    
+    func captureControlsDidShowUserFlips()
+    
+    func captureControlsDidDismissUserFlips()
+    
+    func captureControlsDidShowStockFlips()
+    
+    func captureControlsDidDismissStockFlips()
     
     func didSelectStockFlipAtIndex(index: Int)
     

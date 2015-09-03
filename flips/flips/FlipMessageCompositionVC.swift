@@ -19,7 +19,7 @@ private let NO_SPACE_VIDEO_ERROR_MESSAGE = "There is not enough available storag
 private let NO_SPACE_PHOTO_ERROR_TITLE = "Cannot Take Photo"
 private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storage to take a photo. You manage your storage in Settings."
 
-class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSource, FlipsCompositionControlsDelegate, FlipMessageWordListViewDelegate, FlipsCompositionViewDelegate, CameraViewDelegate, AudioRecorderServiceDelegate, PreviewViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSource, FlipsCompositionControlsDelegate, FlipMessageWordListViewDelegate, FlipsCompositionViewDelegate, CameraViewDelegate, AudioRecorderServiceDelegate, PreviewViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FlipSelectionViewDataSource {
     
     // Title
     private var compositionTitle : String!
@@ -162,7 +162,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
         flipControlsView = FlipsCompositionControlsView()
         flipControlsView.delegate = self
-        flipControlsView.dataSource = self.flipMessageManager
+        flipControlsView.dataSource = self
         self.view.addSubview(flipControlsView)
         
     }
@@ -224,15 +224,23 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
-            if (self.flipMessageManager.currentFlipWordHasContent())
+            if self.flipMessageManager.getCurrentFlipWordFlipId() != nil
+            {
+                if !self.flipControlsView.areEditControlsVisible() {
+                    self.flipControlsView.showEditControls()
+                }
+                
+                self.flipControlsView.scrollToFlipsView(false)
+            }
+            else if (self.flipMessageManager.currentFlipWordHasContent())
             {
                 self.flipControlsView.showEditControls()
-                self.flipControlsView.scrollToDeleteButton()
+                self.flipControlsView.scrollToDeleteButton(true)
             }
             else
             {
                 self.flipControlsView.showCaptureControls()
-                self.flipControlsView.scrollToVideoButton()
+                self.flipControlsView.scrollToVideoButton(true)
             }
             
             self.flipCompositionView.refresh()
@@ -263,6 +271,9 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         // Move to the flip word at index
         flipMessageManager.setCurrentFlipWordIndex(index)
         
+        // Reset the visuals on the flips views
+        flipControlsView.resetFlipsViews()
+        
         // Reload the views
         updateViewForCurrentFlipWord()
         
@@ -280,6 +291,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             
             if flipWord.associatedFlipId != flip.flipID
             {
+                self.flipMessageManager.resetCurrentFlipWord()
                 self.flipMessageManager.setCurrentFlipWordFlip(flip)
             }
             else
@@ -700,6 +712,32 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
         delegate?.didSendMessageToRoom(roomID, withExternal: messageComposer)
+    }
+ 
+    
+    
+    ////
+    // MARK: - FlipSelectionViewDataSource
+    ////
+    
+    func selectedFlipId() -> (String!) {
+        return flipMessageManager.getCurrentFlipWordFlipId()
+    }
+    
+    func userFlipsCount() -> (Int) {
+        return flipMessageManager.getUserFlipsForCurrentWord().count
+    }
+    
+    func userFlipIdForIndex(index: Int) -> (String!) {
+        return flipMessageManager.getUserFlipsForCurrentWord()[index]
+    }
+    
+    func stockFlipsCount() -> (Int) {
+        return flipMessageManager.getStockFlipsForCurrentWord().count
+    }
+    
+    func stockFlipIdForIndex(index: Int) -> (String!) {
+        return flipMessageManager.getStockFlipsForCurrentWord()[index]
     }
     
 }

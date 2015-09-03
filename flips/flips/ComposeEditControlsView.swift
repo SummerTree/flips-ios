@@ -6,23 +6,29 @@
 //
 //
 
-class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate {
+class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewDelegate {
     
-    weak var delegate : ComposeEditControlsViewDelegate?
-    weak var dataSource : FlipsViewDataSource? {
+    let SCROLL_DELAY = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC));
+    
+    weak var delegate : EditControlsViewDelegate?
+    weak var dataSource : FlipSelectionViewDataSource? {
         set {
-            self.myFlipsView!.dataSource = newValue
-            self.bottomMyFlipsView!.dataSource = newValue
+            flipsView.dataSource = newValue
         }
-        get { return self.myFlipsView!.dataSource }
+        get {
+            return flipsView.dataSource!
+        }
     }
     
     // UI
     private var optionsScrollView : UIScrollView!
-    private var myFlipsView : FlipsView!
-    private var bottomMyFlipsView : FlipsView!
+    
+    private var flipsView : FlipsSelectionView!
+    
+    private var overflowFlipsView : UIImageView!
+    
     private var deleteView : UIView!
-    private var topDeleteView : UIView!
+    private var overflowDeleteView : UIView!
     
     
     
@@ -54,16 +60,15 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
         
         // Flips Views
         
-        myFlipsView = FlipsView()
-        myFlipsView.delegate = self
+        flipsView = FlipsSelectionView()
+        flipsView.delegate = self
         
-        bottomMyFlipsView = FlipsView()
-        bottomMyFlipsView.delegate = self
+        overflowFlipsView = UIImageView()
         
         // Button Containers
         
         deleteView = buttonView(image: captureImage, tintColor: UIColor.redColor(), tapSelector: Selector("handleDeleteButtonTap:"))
-        topDeleteView = buttonView(image: captureImage, tintColor: UIColor.redColor(), tapSelector: Selector("handleDeleteButtonTap:"))
+        overflowDeleteView = buttonView(image: captureImage, tintColor: UIColor.redColor(), tapSelector: Selector("handleDeleteButtonTap:"))
         
         // ScrollView
         
@@ -74,10 +79,10 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
         optionsScrollView.showsHorizontalScrollIndicator = false
         optionsScrollView.showsVerticalScrollIndicator = false
         
-        optionsScrollView.addSubview(topDeleteView)
-        optionsScrollView.addSubview(myFlipsView)
+        optionsScrollView.addSubview(overflowDeleteView)
+        optionsScrollView.addSubview(flipsView)
         optionsScrollView.addSubview(deleteView)
-        optionsScrollView.addSubview(bottomMyFlipsView)
+        optionsScrollView.addSubview(overflowFlipsView)
         
         addSubview(optionsScrollView)
         
@@ -85,35 +90,35 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
     
     private func initConstraints() {
         
-        self.optionsScrollView.mas_makeConstraints { (make) -> Void in
+        optionsScrollView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self)
             make.top.equalTo()(self)
             make.height.equalTo()(self)
             make.width.equalTo()(self)
         }
         
-        topDeleteView.mas_makeConstraints { (make) -> Void in
+        overflowDeleteView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
             make.top.equalTo()(self.optionsScrollView)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
         
-        myFlipsView.mas_makeConstraints { (make) -> Void in
+        flipsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.topDeleteView.mas_bottom)
+            make.top.equalTo()(self.overflowDeleteView.mas_bottom)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
         
         deleteView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.myFlipsView.mas_bottom)
+            make.top.equalTo()(self.flipsView.mas_bottom)
             make.height.equalTo()(self.optionsScrollView)
             make.width.equalTo()(self.optionsScrollView)
         }
         
-        bottomMyFlipsView.mas_makeConstraints { (make) -> Void in
+        overflowFlipsView.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.optionsScrollView)
             make.top.equalTo()(self.deleteView.mas_bottom)
             make.height.equalTo()(self.optionsScrollView)
@@ -181,17 +186,152 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
     // MARK: - UIScrollViewDelegate
     ////
     
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        
+        UIGraphicsBeginImageContextWithOptions(flipsView.bounds.size, flipsView.opaque, 0.0)
+        
+        flipsView.layer.renderInContext(UIGraphicsGetCurrentContext())
+        
+        let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        overflowFlipsView.image = screenshot
+        
+    }
+    
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
         let currentPage = scrollView.contentOffset.y / scrollView.frame.height
         
-        if (currentPage == 0)
+        switch currentPage
         {
-            scrollView.scrollRectToVisible(CGRectMake(0, scrollView.frame.height * 2, scrollView.frame.width, scrollView.frame.height), animated: false)
+            case 0:
+                scrollToDeleteButton(false)
+            case 3:
+                scrollToFlipsView(false)
+            default:
+                break
         }
-        else if (currentPage == 3)
+        
+    }
+    
+    
+    
+    ////
+    // MARK: - Scrolling
+    ////
+    
+    func scrollToFlipsView(animated: Bool) {
+        
+        if animated
         {
-            scrollView.scrollRectToVisible(CGRectMake(0, scrollView.frame.height, scrollView.frame.width, scrollView.frame.height), animated: false)
+            dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
+                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: true)
+            }
+        }
+        else
+        {
+            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: false)
+        }
+    }
+    
+    func scrollToDeleteButton(animated: Bool) {
+        
+        if animated
+        {
+            dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
+                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: true)
+            }
+        }
+        else
+        {
+            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: false)
+        }
+    }
+    
+    
+    
+    ////
+    // MARK: - FlipsView
+    ////
+    
+    func reloadFlipsView() {
+        flipsView.reloadData()
+    }
+    
+    func showUserFlips(animated: Bool) {
+        
+        if animated {
+            
+            if !flipsView.isUserFlipsViewActive() {
+                flipsView.showUserFlipsViewAnimated()
+            }
+            
+        }
+        else {
+            
+            if !flipsView.isUserFlipsViewActive() {
+                flipsView.showUserFlipsView()
+            }
+            
+        }
+        
+    }
+    
+    func dismissUserFlips(animated: Bool) {
+        
+        if animated {
+            
+            if flipsView.isUserFlipsViewActive() {
+                flipsView.dismissUserFlipsViewAnimated()
+            }
+            
+        }
+        else {
+            
+            if flipsView.isUserFlipsViewActive() {
+                flipsView.dismissUserFlipsView()
+            }
+            
+        }
+        
+    }
+    
+    func showStockFlips(animated: Bool) {
+        
+        if animated {
+            
+            if !flipsView.isStockFlipsViewActive() {
+                flipsView.showStockFlipsViewAnimated()
+            }
+            
+        }
+        else {
+            
+            if !flipsView.isStockFlipsViewActive() {
+                flipsView.showStockFlipsView()
+            }
+            
+        }
+        
+    }
+    
+    func dismissStockFlips(animated: Bool) {
+        
+        if animated {
+            
+            if flipsView.isStockFlipsViewActive() {
+                flipsView.dismissStockFlipsViewAnimated()
+            }
+            
+        }
+        else {
+            
+            if flipsView.isStockFlipsViewActive() {
+                flipsView.dismissStockFlipsView()
+            }
+            
         }
         
     }
@@ -202,13 +342,6 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
     // MARK: - Delete Button
     ////
     
-    func scrollToDeleteButton() {
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC));
-        dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: true)
-        }
-    }
-    
     func handleDeleteButtonTap(sender: UIButton) {
         self.delegate?.didTapDeleteButton()
     }
@@ -216,27 +349,44 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipsViewDelegate 
     
     
     ////
-    // MARK: - FlipsViewDelegate
+    // MARK: - FlipSelectionViewDelegate
     ////
     
-    func flipsViewDidTapAddFlip(flipsView: FlipsView!) {
-        // Ignore this, it's been phased out
+    func didOpenUserFlipsView() {
+        delegate?.editControlsDidShowUserFlips()
     }
     
-    func flipsView(flipsView: FlipsView!, didTapAtIndex index: Int, fromStockFlips isStockFlip: Bool) {
-        
-        if (isStockFlip) {
-            delegate?.didSelectStockFlipAtIndex(index)
-        }
-        else {
-            delegate?.didSelectFlipAtIndex(index)
-        }
-        
+    func didDismissUserFlipsView() {
+        delegate?.editControlsDidDismissUserFlips()
+    }
+    
+    func didSelectUserFlipAtIndex(index: Int) {
+        delegate?.didSelectFlipAtIndex(index)
+    }
+    
+    func didOpenStockFlipsView() {
+        delegate?.editControlsDidShowStockFlips()
+    }
+    
+    func didDismissStockFlipsView() {
+        delegate?.editControlsDidDismissStockFlips()
+    }
+    
+    func didSelectStockFlipAtIndex(index: Int) {
+        delegate?.didSelectStockFlipAtIndex(index)
     }
     
 }
 
-protocol ComposeEditControlsViewDelegate : class {
+protocol EditControlsViewDelegate : class {
+    
+    func editControlsDidShowUserFlips()
+    
+    func editControlsDidDismissUserFlips()
+    
+    func editControlsDidShowStockFlips()
+    
+    func editControlsDidDismissStockFlips()
     
     func didSelectStockFlipAtIndex(index: Int)
     

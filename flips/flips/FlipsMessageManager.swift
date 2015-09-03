@@ -173,6 +173,10 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         return messageWords[messageWordIndex].getAudio()
     }
     
+    func getCurrentFlipWordFlipId() -> (String!) {
+        return messageWords[messageWordIndex].getFlipId()
+    }
+    
     
     
     ////
