@@ -193,6 +193,21 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         return draftingTable.flipPageAtIndex(index)
     }
     
+    func getIndexForFirstUnsavedFlipWord() -> (Int) {
+        
+        for messageWord in messageWords {
+            
+            if messageWord.hasPendingChanges() || !flipWordAtIndexHasContent(messageWord.word.position)
+            {
+                return messageWord.word.position
+            }
+            
+        }
+        
+        return -1
+        
+    }
+    
     func getIndexForNextEmptyFlipWord() -> (Int) {
         
         for messageWord in messageWords {
@@ -274,6 +289,32 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     // MARK: - Utility
     ////
     
+    internal func createFlipVideoForWordAtIndex(index: Int, successHandler: VideoComposerSuccess) {
+        
+        let composer = VideoComposer()
+        let messageWord = messageWords[index]
+        
+        messageWord.setHasPendingChanges(false)
+        
+        if let video = messageWord.getVideo()
+        {
+            composer.flipVideoFromVideo(video, successHandler: successHandler)
+        }
+        else if let img = messageWord.getImage(), aud = messageWord.getAudio()
+        {
+            composer.flipVideoFromImage(img, andAudioURL: aud, successHandler: successHandler)
+        }
+        else if let img = messageWord.getImage()
+        {
+            composer.flipVideoFromImage(img, andAudioURL: nil, successHandler: successHandler)
+        }
+        else
+        {
+            composer.flipVideoFromImage(UIImage.emptyFlipImage(), andAudioURL: nil, successHandler: successHandler)
+        }
+        
+    }
+    
     internal func createFlipVideoForCurrentWord(successHandler: VideoComposerSuccess) {
         
         let composer = VideoComposer()
@@ -301,6 +342,16 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     
     internal func shouldCreateFlipForCurrentWord() -> (Bool) {
         return messageWords[messageWordIndex].hasPendingChanges()
+    }
+    
+    internal func flipWordAtIndexHasContent(index: Int) -> (Bool) {
+        
+        let currentWord = messageWords[index]
+        let currentPage = getFlipPageForWordAtIndex(index)
+        
+        // Don't worry about audioURL since a word can only have audio if it already has an image
+        return currentWord.getFlipId() != nil || currentWord.getImage() != nil || currentWord.getVideo() != nil || currentPage.videoURL != nil
+        
     }
     
     internal func currentFlipWordHasContent() -> (Bool) {

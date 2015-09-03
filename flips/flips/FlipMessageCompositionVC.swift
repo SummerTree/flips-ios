@@ -684,7 +684,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // MARK: - Preview Bar Button
     ////
     
-    internal func previewButtonTapped(sender: UIBarButtonItem) {
+    internal func showPreviewController() {
         
         var previewController : PreviewViewController
         
@@ -701,6 +701,51 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         previewController.fullContacts = contacts
         
         self.navigationController?.pushViewController(previewController, animated: true)
+        
+    }
+    
+    internal func previewButtonTapped(sender: UIBarButtonItem) {
+        showPreviewControllerAfterCreatingPendingFlips()
+    }
+    
+    internal func showPreviewControllerAfterCreatingPendingFlips() {
+        
+        let firstUnsavedIndex = flipMessageManager.getIndexForFirstUnsavedFlipWord()
+        
+        if firstUnsavedIndex != -1
+        {
+            showActivityIndicator(userInteractionEnabled: false, message: "Saving flip word changes and creating flips for empty words. Please wait.")
+            
+            flipMessageManager.createFlipVideoForWordAtIndex(firstUnsavedIndex, successHandler: { (videoURL, thumbnailURL) -> Void in
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    let flipWord = self.flipMessageManager.getFlipWords()[firstUnsavedIndex]
+                
+                    if let videoURL = videoURL, let thumbnailURL = thumbnailURL
+                    {
+                        let newFlipPage = FlipPage(videoURL: videoURL, thumbnailURL: thumbnailURL, word: flipWord.text, order: flipWord.position)
+                        self.flipMessageManager.updateFlipPage(newFlipPage)
+                        
+                        self.updateViewForCurrentFlipWord()
+                        
+                        self.showPreviewControllerAfterCreatingPendingFlips()
+                    }
+                    else
+                    {
+                        UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
+                    }
+                    
+                })
+                
+            })
+        }
+        else
+        {
+            hideActivityIndicator()
+            
+            showPreviewController()
+        }
         
     }
     
