@@ -310,7 +310,7 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         }
         else
         {
-            composer.flipVideoFromImage(UIImage.emptyFlipImage(), andAudioURL: nil, successHandler: successHandler)
+            composer.flipVideoFromImage(nil, andAudioURL: nil, successHandler: successHandler)
         }
         
     }
@@ -335,7 +335,7 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         }
         else
         {
-            composer.flipVideoFromImage(UIImage.emptyFlipImage(), andAudioURL: nil, successHandler: successHandler)
+            composer.flipVideoFromImage(nil, andAudioURL: nil, successHandler: successHandler)
         }
         
     }
