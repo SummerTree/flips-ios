@@ -78,7 +78,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
 
         self.newNumberTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Number", comment: "New Number"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
         self.newNumberTextField.delegate = self
-        self.newNumberTextField.keyboardType = UIKeyboardType.PhonePad
+        self.newNumberTextField.keyboardType = UIKeyboardType.NumberPad
         self.newNumberTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         self.newNumberTextField.textColor = UIColor.whiteColor()
         self.newNumberContainerView.addSubview(newNumberTextField)
@@ -205,42 +205,47 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         shouldChangeCharactersInRange range: NSRange,
         replacementString string: String) -> Bool {
         
-        let text = textField.text
-        let length = count(text)
-        var shouldReplace = true
-        
-        if (string != "") {
-            switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
-            default:
-                break;
+        if self.getSelectedDialCode() == "+1" {
+            let text = textField.text
+            let length = count(text)
+            var shouldReplace = true
+            
+            if (string != "") {
+                switch length {
+                case 3, 7:
+                    textField.text = "\(text)-"
+                default:
+                    break;
+                }
+                if (length > 11) {
+                    shouldReplace = false
+                }
+            } else {
+                switch length {
+                case 5, 9:
+                    let nsString = text as NSString
+                    textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+                default:
+                    break;
+                }
             }
-            if (length > 11) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
+            return shouldReplace;
         }
-        return shouldReplace;
+        else {
+            return true
+        }
     }
     
     func newNumberFieldDidChange(textField: UITextField) {
-        if (count(textField.text) == 12) {
-            self.finishTypingMobileNumber(textField)
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                self.finishTypingMobileNumber(textField)
+            }
         }
     }
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        var index = self.mobileCountryRoller.selectedRowInComponent(0)
-        var countryCode = CountryCodes.sharedInstance.findCountryDialCode(index)
-        
+        var countryCode = self.getSelectedDialCode()
         self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text, countryCode: countryCode)
     }
     

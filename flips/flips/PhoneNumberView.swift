@@ -49,6 +49,13 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         self.makeConstraints()
         
         CountryCodes.sharedInstance.setSelectedPicksDialCode(self.mobileCountryRoller)
+        
+        if self.getSelectedDialCode() != "+1" {
+            self.mobileNumberField.showDoneButton(self, action: "doneTypingNumber")
+        }
+        else {
+            self.mobileNumberField.hideDoneButton()
+        }
     }
     
     func viewWillAppear() {
@@ -206,36 +213,47 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        let text = textField.text
-        let length = count(text)
-        var shouldReplace = true
-        
-        if (string != "") {
-            switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
-            default:
-                break;
+        if self.getSelectedDialCode() == "+1" {
+            let text = textField.text
+            let length = count(text)
+            var shouldReplace = true
+            
+            if (string != "") {
+                switch length {
+                case 3, 7:
+                    textField.text = "\(text)-"
+                default:
+                    break;
+                }
+                if (length > 11) {
+                    shouldReplace = false
+                }
+            } else {
+                switch length {
+                case 5, 9:
+                    let nsString = text as NSString
+                    textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+                default:
+                    break;
+                }
             }
-            if (length > 11) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
+            return shouldReplace;
         }
-        return shouldReplace;
+        else {
+            return true
+        }
+    }
+    
+    func doneTypingNumber() {
+        self.mobileNumberFieldDidChange(self.mobileNumberField)
     }
     
     func mobileNumberFieldDidChange(textField: UITextField) {
-        if (count(textField.text) == 12) {
-            textField.resignFirstResponder()
-            self.finishTypingMobileNumber(textField)
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(textField)
+            }
         }
     }
     
@@ -275,11 +293,23 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         return countryCode
     }
     
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if self.getSelectedDialCode() != "+1" {
+            self.mobileNumberField.showDoneButton(self, action: "doneTypingNumber")
+        }
+        else {
+            self.mobileNumberField.hideDoneButton()
+        }
+    }
+    
+    func getSelectedDialCode() -> String {
+        return CountryCodes.sharedInstance.countryCodes[self.mobileCountryRoller.selectedRowInComponent(0)].objectForKey("dial_code") as! String
+    }
+    
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        var index = self.mobileCountryRoller.selectedRowInComponent(0)
-        var countryCode = CountryCodes.sharedInstance.findCountryDialCode(index)
+        var countryCode = self.getSelectedDialCode()
         
         self.delegate?.phoneNumberView(self, didFinishTypingMobileNumber: mobileNumberField.text, withCountryCode: countryCode)
     }
