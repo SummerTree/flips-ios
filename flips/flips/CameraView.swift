@@ -340,7 +340,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             })
         }
 
-        if (self.showMicrophoneButton) {
             // We should ask for audio access if we aren't showing the button to record audio.
             if let audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as? AVCaptureDevice {
                 error = nil
@@ -359,7 +358,6 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             } else {
                 self.isMicrophoneAvailable = false
             }
-        }
 
         var movieOutput = AVCaptureMovieFileOutput()
 
@@ -646,37 +644,44 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     func startRecording() {
         
-        let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
-        let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
-        videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
-        
-        videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
-        CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
-        let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).mov"
-        
-        var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        var docsDir: AnyObject = dirPaths[0]
-        var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
-        var videoURL = NSURL(fileURLWithPath: videoFilePath)!
-        
-        var fileManager = NSFileManager.defaultManager()
-        
-        if (fileManager.fileExistsAtPath(videoURL.path!)) {
-            println("File already exists, removing it.")
-            fileManager.removeItemAtURL(videoURL, error: nil)
+        if !movieFileOutput.recording {
+            
+            let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
+            let videoConnection = self.stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
+            videoConnection.videoOrientation = videoPreviewLayer.connection.videoOrientation
+            
+            videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            
+            CameraView.setFlashMode(self.flashMode, forDevice: self.videoDeviceInput.device)
+            
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
+            let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).mov"
+            
+            var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+            var docsDir: AnyObject = dirPaths[0]
+            var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+            var videoURL = NSURL(fileURLWithPath: videoFilePath)!
+            
+            var fileManager = NSFileManager.defaultManager()
+            
+            if (fileManager.fileExistsAtPath(videoURL.path!)) {
+                println("File already exists, removing it.")
+                fileManager.removeItemAtURL(videoURL, error: nil)
+            }
+            
+            self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
+            
         }
-        
-        self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
         
     }
     
     func stopRecording() {
-        println("Stop recording video")
-        self.movieFileOutput.stopRecording()
+        
+        if movieFileOutput.recording {
+            self.movieFileOutput.stopRecording()
+        }
+        
     }
     
     func focusAndExposeTap(gestureRecognizer: UIGestureRecognizer) {

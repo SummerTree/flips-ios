@@ -132,13 +132,11 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.flipCompositionView.viewWillAppear()
         self.flipCompositionView.cameraViewDelegate = self
     }
     
     override func viewWillDisappear(animated: Bool) {
         self.flipCompositionView.cameraViewDelegate = nil
-        self.flipCompositionView.viewWillDissapear()
         super.viewWillDisappear(animated)
     }
     
@@ -636,6 +634,10 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     func currentFlipWord() -> (FlipText) {
         return flipMessageManager.getCurrentFlipWord()
+    }
+    
+    func currentFlipWordHasContent() -> (Bool) {
+        return flipMessageManager.currentFlipWordHasContent()
     }
     
     func flipWordsCount() -> (Int) {

@@ -115,20 +115,6 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     
     
     ////
-    // MARK: - Controller Lifecycle
-    ////
-    
-    func viewWillAppear() {
-        cameraView?.registerObservers()
-    }
-    
-    func viewWillDissapear() {
-        cameraView?.removeObservers()
-    }
-    
-    
-    
-    ////
     // MARK: - Video Capture
     ////
     
@@ -270,6 +256,27 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     
     
     ////
+    // Camera View Management
+    ////
+    
+    func updateCameraViewObservers() {
+        
+        if let source = dataSource {
+            
+            if source.currentFlipWordHasContent() {
+                cameraView.removeObservers()
+            }
+            else {
+                cameraView.registerObservers()
+            }
+            
+        }
+        
+    }
+    
+    
+    
+    ////
     // MARK: - Player View Management
     ////
     
@@ -296,6 +303,8 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
             {
                 hideAudioButton()
             }
+            
+            updateCameraViewObservers()
             
         }
         
@@ -592,5 +601,7 @@ protocol FlipsCompositionViewDataSource : class {
     func flipWordAtIndexHasImage(index: Int) -> (Bool)
     
     func flipImageForWordAtIndex(index: Int) -> (UIImage?)
+    
+    func currentFlipWordHasContent() -> (Bool)
     
 }

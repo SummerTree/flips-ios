@@ -119,7 +119,7 @@ class FlipCompositionPlayerView : UIView, PlayerViewDelegate, UIGestureRecognize
         
         if currentPreviewType == .Flip && self.flip != nil
         {
-            self.flipPlayerView.loadPlayerOnInit = true
+            self.flipPlayerView.loadPlayerOnInit = false
             self.flipPlayerView.setupPlayerWithFlips([self.flip!], andFormattedWords: [self.flip!.word])
         }
         
