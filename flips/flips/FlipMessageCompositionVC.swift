@@ -206,21 +206,15 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     private func initFlips() {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-            
-            self.flipMessageManager.reloadFlips()
-            self.flipMessageManager.matchFlipWordsToFirstAvailableFlip()
-            self.flipMessageManager.updateFlips()
-            
-            let nextEmptyIndex = self.flipMessageManager.getIndexForNextEmptyFlipWord()
-            
-            if self.flipMessageManager.currentFlipWordHasContent() {
-                self.flipMessageManager.setCurrentFlipWordIndex(nextEmptyIndex)
-            }
-            
+        if flipMessageManager.messageHasEmptyFlipWords() {
+            flipMessageManager.setCurrentFlipWordIndex(flipMessageManager.getIndexForFirstEmptyFlipWord())
             self.updateViewForCurrentFlipWord()
-            
-        })
+        }
+        else {
+            flipMessageManager.setCurrentFlipWordIndex(flipMessageManager.getFlipWordsCount() - 1)
+            self.updateViewForCurrentFlipWord()
+            showPreviewController()
+        }
         
     }
     
@@ -236,11 +230,11 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             
             if self.flipMessageManager.getCurrentFlipWordFlipId() != nil
             {
+                self.flipControlsView.scrollToFlipsView(false)
+                
                 if !self.flipControlsView.areEditControlsVisible() {
                     self.flipControlsView.showEditControls()
                 }
-                
-                self.flipControlsView.scrollToFlipsView(false)
             }
             else if (self.flipMessageManager.currentFlipWordHasContent())
             {
@@ -265,26 +259,70 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     
     ////
+    //
+    ////
+    
+    func savePendingContentForFlipWordAtIndex(index: Int, successHandler: VideoComposerSuccess) {
+        
+        if flipMessageManager.flipWordAtIndexHasPendingChanges(index) {
+            flipMessageManager.createFlipVideoForWordAtIndex(index, successHandler: successHandler)
+        }
+        
+    }
+    
+    
+    
+    ////
     // MARK: - Flip Word Scrolling
     ////
     
-    internal func moveToNextEmptyFlipWord() {
-        moveToFlipWordAtIndex(flipMessageManager.getIndexForNextEmptyFlipWord())
-    }
-    
-    internal func moveToFlipWordAtIndex(index: Int) {
+    func moveToNextEmptyFlipWord() {
         
-        if flipMessageManager.shouldCreateFlipForCurrentWord() {
-            createFlipVideo()
+        let nextEmptyIndex = flipMessageManager.getIndexForNextEmptyFlipWord()
+        
+        if nextEmptyIndex == -1 {
+            prepareFlipsForPreviewController()
+        }
+        else {
+            moveToFlipWordAtIndex(nextEmptyIndex)
         }
         
-        // Move to the flip word at index
+    }
+    
+    func moveToFlipWordAtIndex(index: Int) {
+        
+        let currentFlipWord = flipMessageManager.getCurrentFlipWord()
+        
+        savePendingContentForFlipWordAtIndex(flipMessageManager.getCurrentFlipWordIndex(), successHandler: { (videoURL, thumbnailURL) -> Void in
+                
+            if let videoURL = videoURL, let thumbnailURL = thumbnailURL
+            {
+                let newFlipPage = FlipPage(videoURL: videoURL, thumbnailURL: thumbnailURL, word: currentFlipWord.text, order: currentFlipWord.position)
+                
+                // Updatet the flip page
+                self.flipMessageManager.updateFlipPage(newFlipPage)
+                
+                // Update the UI if we are on the same word
+                if self.flipMessageManager.getCurrentFlipWordIndex() == currentFlipWord.position {
+                    self.updateViewForCurrentFlipWord()
+                }
+                
+                self.flipMessageWordListView.reloadWords(animated: false)
+            }
+            else
+            {
+                UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
+            }
+            
+        })
+        
+        // Update the current flip word index
         flipMessageManager.setCurrentFlipWordIndex(index)
         
-        // Reset the visuals on the flips views
+        // Reset the controls flips view
         flipControlsView.resetFlipsViews()
         
-        // Reload the views
+        // Update the UI
         updateViewForCurrentFlipWord()
         
     }
@@ -302,7 +340,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             if flipWord.associatedFlipId != flip.flipID
             {
                 self.flipMessageManager.resetCurrentFlipWord()
-                self.flipMessageManager.setCurrentFlipWordFlip(flip)
+                self.flipMessageManager.setCurrentFlipWordFlipId(flip.flipID)
             }
             else
             {
@@ -312,41 +350,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             self.updateViewForCurrentFlipWord()
             
         })
-        
-    }
-    
-    
-    
-    ////
-    // MARK: - Flip Video Creation
-    ////
-    
-    private func createFlipVideo() {
-        
-        let flipWord = flipMessageManager.getCurrentFlipWord()
-        
-        flipMessageManager.createFlipVideoForCurrentWord({ (videoURL, thumbnailURL) -> Void in
-            
-            if let videoURL = videoURL, let thumbnailURL = thumbnailURL
-            {
-                self.didCreateFlipVideo(videoURL, withThumbnail: thumbnailURL, forFlipWord: flipWord)
-            }
-            else
-            {
-                UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
-            }
-            
-        })
-        
-    }
-    
-    private func didCreateFlipVideo(videoURL: NSURL?, withThumbnail thumbnailURL: NSURL?, forFlipWord flipWord: FlipText) {
-        
-        let newFlipPage = FlipPage(videoURL: videoURL!, thumbnailURL: thumbnailURL!, word: flipWord.text, order: flipWord.position)
-        self.flipMessageManager.updateFlipPage(newFlipPage)
-        
-        // Update the UI
-        self.updateViewForCurrentFlipWord()
         
     }
     
@@ -372,7 +375,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 if let error = error
                 {
                     self.view.userInteractionEnabled = true
-                    
                     self.flipCompositionView.showAudioButton(true)
                     
                     UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
@@ -413,7 +415,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             
             let flipDataSource = FlipDataSource()
             let flipWord = self.flipMessageManager.getCurrentFlipWord()
-            let userFlips = self.flipMessageManager.getUserFlipsForWord(flipWord)
+            let userFlips = self.flipMessageManager.getUserFlipIdsForCurrentFlipWord()
             let flipID = userFlips[index]
             
             if let selectedFlip = flipDataSource.retrieveFlipWithId(flipID)
@@ -463,7 +465,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             
             let flipDataSource = FlipDataSource()
             let flipWord = self.flipMessageManager.getCurrentFlipWord()
-            let userFlips = self.flipMessageManager.getUserFlipsForWord(flipWord)
+            let userFlips = self.flipMessageManager.getUserFlipIdsForCurrentFlipWord()
             let flipID = userFlips[index]
             
             if let selectedFlip = flipDataSource.retrieveFlipWithId(flipID)
@@ -486,7 +488,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     func didReleaseVideoButton() {
         flipCompositionView.finishVideoCapture()
-        flipCompositionView.userInteractionEnabled = true
     }
     
     func didTapCapturePhotoButton() {
@@ -569,6 +570,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     func cameraView(cameraView: CameraView, didFinishRecordingVideoAtURL videoURL: NSURL?, inLandscape landscape: Bool, fromFrontCamera frontCamera: Bool, withSuccess success: Bool) {
         
+        flipCompositionView.userInteractionEnabled = true
+        
         if success
         {
             flipMessageManager.setCurrentFlipWordVideoURL(videoURL)
@@ -600,7 +603,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         dispatch_after(delayInMilliseconds, dispatch_get_main_queue()) { () -> Void in
             
             self.view.userInteractionEnabled = true
-            
             self.flipCompositionView.hideAudioButton()
             
             self.flipMessageManager.setCurrentFlipWordAudioURL(audioURL)
@@ -663,7 +665,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     }
     
     func flipPageForWordAtIndex(index: Int) -> (FlipPage) {
-        return flipMessageManager.getFlipPageForWordAtIndex(index)
+        return flipMessageManager.getFlipPageForFlipWordAtIndex(index)
     }
     
     func flipWordAtIndexHasImage(index: Int) -> (Bool) {
@@ -721,12 +723,21 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     }
     
     internal func previewButtonTapped(sender: UIBarButtonItem) {
-        showPreviewControllerAfterCreatingPendingFlips()
+        prepareFlipsForPreviewController()
     }
     
-    internal func showPreviewControllerAfterCreatingPendingFlips() {
+    internal func prepareFlipsForPreviewController() {
         
-        let firstUnsavedIndex = flipMessageManager.getIndexForFirstUnsavedFlipWord()
+        let firstEmptyIndex = flipMessageManager.getIndexForFirstEmptyFlipWord()
+        let firstPendingIndex = flipMessageManager.getIndexForFirstFlipWordWithPendingChanges()
+        var firstUnsavedIndex = -1
+        
+        if firstEmptyIndex != -1 && firstPendingIndex != -1 {
+            firstUnsavedIndex = min(firstEmptyIndex, firstPendingIndex)
+        }
+        else {
+            firstUnsavedIndex = max(firstEmptyIndex, firstPendingIndex)
+        }
         
         if firstUnsavedIndex != -1
         {
@@ -736,19 +747,18 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    let flipWord = self.flipMessageManager.getFlipWords()[firstUnsavedIndex]
+                    let flipWord = self.flipMessageManager.getFlipWordAtIndex(firstUnsavedIndex)
                 
                     if let videoURL = videoURL, let thumbnailURL = thumbnailURL
                     {
                         let newFlipPage = FlipPage(videoURL: videoURL, thumbnailURL: thumbnailURL, word: flipWord.text, order: flipWord.position)
                         self.flipMessageManager.updateFlipPage(newFlipPage)
                         
-                        self.updateViewForCurrentFlipWord()
-                        
-                        self.showPreviewControllerAfterCreatingPendingFlips()
+                        self.prepareFlipsForPreviewController()
                     }
                     else
                     {
+                        self.hideActivityIndicator()
                         UIAlertView(title: "Failed", message: NSLocalizedString("Flips couldn't create your flip now. Please try again"), delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
                     }
                     
@@ -759,8 +769,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         else
         {
             hideActivityIndicator()
-            
             showPreviewController()
+            updateViewForCurrentFlipWord()
         }
         
     }
@@ -786,19 +796,19 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     }
     
     func userFlipsCount() -> (Int) {
-        return flipMessageManager.getUserFlipsForCurrentWord().count
+        return flipMessageManager.getUserFlipIdsForCurrentFlipWord().count
     }
     
     func userFlipIdForIndex(index: Int) -> (String!) {
-        return flipMessageManager.getUserFlipsForCurrentWord()[index]
+        return flipMessageManager.getUserFlipIdsForCurrentFlipWord()[index]
     }
     
     func stockFlipsCount() -> (Int) {
-        return flipMessageManager.getStockFlipsForCurrentWord().count
+        return flipMessageManager.getStockFlipIdsForCurrentFlipWord().count
     }
     
     func stockFlipIdForIndex(index: Int) -> (String!) {
-        return flipMessageManager.getStockFlipsForCurrentWord()[index]
+        return flipMessageManager.getStockFlipIdsForCurrentFlipWord()[index]
     }
     
 }

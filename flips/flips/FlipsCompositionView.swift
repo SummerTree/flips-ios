@@ -384,7 +384,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
                 if hasFlip
                 {
                     let playerFlipID = playerView.flip?.flipID
-                    return playerFlipID != flipWord.associatedFlipId && playerFlipID != flipPage.pageID
+                    return playerFlipID == nil || (playerFlipID != flipWord.associatedFlipId && playerFlipID != flipPage.pageID)
                 }
                 else if hasVideo
                 {
