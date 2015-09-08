@@ -56,14 +56,14 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     
     func initSubviews() {
         
-        cameraView = CameraView(interfaceOrientation: .Portrait, showAvatarCropArea: false, showMicrophoneButton: false)
-        self.addSubview(cameraView)
-        
         previewScrollView = UIScrollView()
         previewScrollView.delegate = self
         previewScrollView.pagingEnabled = true
         previewScrollView.bounces = false
         self.addSubview(previewScrollView)
+        
+        cameraView = CameraView(interfaceOrientation: .Portrait, showAvatarCropArea: false, showMicrophoneButton: false)
+        self.previewScrollView.addSubview(cameraView)
         
         progressBar = UIView()
         progressBar.backgroundColor = UIColor.avacado()
@@ -568,6 +568,13 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     ////
     // MARK: - UIScrollView Delegate
     ////
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        let contentOffset = scrollView.contentOffset
+        cameraView.frame.origin.x = contentOffset.x
+        
+    }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.width)
