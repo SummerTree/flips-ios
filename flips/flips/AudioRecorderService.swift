@@ -21,7 +21,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
     
     weak var delegate: AudioRecorderServiceDelegate?
     
-    private func setupRecorder() {
+    func setupRecorder() {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd_hh:mm:ss.SSS"
         let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).m4a"

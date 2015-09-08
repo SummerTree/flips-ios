@@ -126,6 +126,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
         initSubviews()
         initConstraints()
+        initAudioRecorder()
         initFlips()
     }
     
@@ -188,6 +189,17 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             make.left.equalTo()(self.view)
             make.right.equalTo()(self.view)
             make.bottom.equalTo()(self.view)
+        }
+        
+    }
+    
+    private func initAudioRecorder() {
+        
+        flipAudioRecorder = AudioRecorderService()
+        
+        if let recorder = flipAudioRecorder
+        {
+            recorder.setupRecorder()
         }
         
     }
@@ -348,7 +360,9 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
         self.view.userInteractionEnabled = false
         
-        flipAudioRecorder = AudioRecorderService()
+        if flipAudioRecorder == nil {
+            initAudioRecorder()
+        }
         
         if let recorder = flipAudioRecorder
         {
