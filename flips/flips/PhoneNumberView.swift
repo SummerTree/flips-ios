@@ -49,13 +49,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         self.makeConstraints()
         
         CountryCodes.sharedInstance.setSelectedPicksDialCode(self.mobileCountryRoller)
-        
-        if self.getSelectedDialCode() != "+1" {
-            self.mobileNumberField.showDoneButton(self, action: "doneTypingNumber")
-        }
-        else {
-            self.mobileNumberField.hideDoneButton()
-        }
     }
     
     func viewWillAppear() {
@@ -106,6 +99,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
         mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        mobileNumberField.inputAccessoryView = self.setupAccessoryView()
         mobileNumberView.addSubview(mobileNumberField)
         
         spamView = UIView()
@@ -244,10 +238,6 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         }
     }
     
-    func doneTypingNumber() {
-        self.mobileNumberFieldDidChange(self.mobileNumberField)
-    }
-    
     func mobileNumberFieldDidChange(textField: UITextField) {
         if self.getSelectedDialCode() == "+1" {
             if (count(textField.text) == 12) {
@@ -294,12 +284,64 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if self.getSelectedDialCode() != "+1" {
-            self.mobileNumberField.showDoneButton(self, action: "doneTypingNumber")
+        
+        if (self.mobileNumberField!.text != "") {
+            if (self.getSelectedDialCode() != "+1") {
+                self.mobileNumberField!.text = self.mobileNumberField!.text.removeDashes()
+            }
+            else {
+                self.mobileNumberField!.text = self.mobileNumberField!.text.formatWithDashes()
+            }
+        }
+    }
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        textField.inputAccessoryView = setupAccessoryView()
+        return true
+    }
+    
+    func setupAccessoryView() -> UIToolbar {
+        var screenSize = UIScreen.mainScreen().bounds
+        var showFrame = CGRectMake(0,0,screenSize.size.width, 50)
+        
+        var numberToolbar = UIToolbar(frame: showFrame)
+        numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+                               UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+        numberToolbar.tintColor = UIColor.flipOrange()
+        numberToolbar.sizeToFit()
+        
+        return numberToolbar
+    }
+    
+    func doneTypingNumber(sender: AnyObject?) {
+        var textField = self.mobileNumberField!
+        var title = NSLocalizedString("Not Enough")
+        var message = NSLocalizedString("Your phone number is not long enough.")
+        
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(textField)
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    
+                    let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
+            }
+        }
+        else if (count(textField.text) >= 5) {
+            textField.resignFirstResponder()
+            self.finishTypingMobileNumber(textField)
         }
         else {
-            self.mobileNumberField.hideDoneButton()
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
         }
+
     }
     
     func getSelectedDialCode() -> String {

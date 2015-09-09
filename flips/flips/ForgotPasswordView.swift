@@ -80,6 +80,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
+        mobileNumberField.inputAccessoryView = setupAccessoryView()
         mobileNumberView.addSubview(mobileNumberField)
         
         mobileCountryRoller = UIPickerView()
@@ -163,6 +164,49 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         super.updateConstraints()
     }
     
+    func setupAccessoryView() -> UIToolbar {
+        var screenSize = UIScreen.mainScreen().bounds
+        var showFrame = CGRectMake(0,0,screenSize.size.width, 50)
+        
+        var numberToolbar = UIToolbar(frame: showFrame)
+        numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+        numberToolbar.tintColor = UIColor.flipOrange()
+        numberToolbar.sizeToFit()
+        
+        return numberToolbar
+    }
+    
+    func doneTypingNumber(sender: AnyObject?) {
+        var textField = self.mobileNumberField!
+        var title = NSLocalizedString("Not Enough")
+        var message = NSLocalizedString("Your phone number is not long enough.")
+        
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(textField)
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    
+                    let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
+            }
+        }
+        else if (count(textField.text) >= 5) {
+            textField.resignFirstResponder()
+            self.finishTypingMobileNumber(textField)
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
+        }
+        
+    }
     
     // MARK - Life Cycle
     
@@ -179,41 +223,52 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        let text = textField.text
-        let length = count(text)
-        var shouldReplace = true
-        
-        if (string != "") {
-            switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
-            default:
-                break;
+        if (self.getSelectedDialCode() == "+1") {
+            let text = textField.text
+            let length = count(text)
+            var shouldReplace = true
+            
+            if (string != "") {
+                switch length {
+                case 3, 7:
+                    textField.text = "\(text)-"
+                default:
+                    break;
+                }
+                if (length > 11) {
+                    shouldReplace = false
+                }
+            } else {
+                switch length {
+                case 5, 9:
+                    let nsString = text as NSString
+                    textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+                default:
+                    break;
+                }
             }
-            if (length > 11) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
+            return shouldReplace;
         }
-        return shouldReplace;
+        else {
+            return true
+        }
     }
     
     func mobileNumberFieldDidChange(textField: UITextField) {
-        if (count(textField.text) == 12) {
-            textField.resignFirstResponder()
-            self.finishTypingMobileNumber(self)
+        if (self.getSelectedDialCode() == "+1") {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(self)
+            }
         }
     }
     
     func focusKeyboardOnMobileNumberField() {
         mobileNumberField.becomeFirstResponder()
+    }
+    
+    func getSelectedDialCode() -> String {
+        return CountryCodes.sharedInstance.countryCodes[self.mobileCountryRoller.selectedRowInComponent(0)].objectForKey("dial_code") as! String
     }
     
     
@@ -246,6 +301,18 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         countryCode.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         countryCode.textAlignment = NSTextAlignment.Center
         return countryCode
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+
+        if (self.mobileNumberField!.text != "") {
+            if (self.getSelectedDialCode() != "+1") {
+                self.mobileNumberField!.text = self.mobileNumberField!.text.removeDashes()
+            }
+            else {
+                self.mobileNumberField!.text = self.mobileNumberField!.text.formatWithDashes()
+            }
+        }
     }
     
     // MARK: - Buttons delegate

@@ -69,9 +69,6 @@
 		40900BAB1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
 		40900BAC1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
 		40900BAD1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
-		4097EA0E1B9A4F4100BBD389 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4097EA0D1B9A4F4100BBD389 /* UITextFieldExtensions.swift */; };
-		4097EA0F1B9A4F4100BBD389 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4097EA0D1B9A4F4100BBD389 /* UITextFieldExtensions.swift */; };
-		4097EA101B9A4F4100BBD389 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4097EA0D1B9A4F4100BBD389 /* UITextFieldExtensions.swift */; };
 		40BF16801B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
 		40BF16811B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
 		40BF16821B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
@@ -747,7 +744,6 @@
 		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
 		40900BA51B62C3460043E495 /* DraftingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraftingTable.swift; sourceTree = "<group>"; };
 		40900BAA1B62C37D0043E495 /* FlipBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipBook.swift; sourceTree = "<group>"; };
-		4097EA0D1B9A4F4100BBD389 /* UITextFieldExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextFieldExtensions.swift; sourceTree = "<group>"; };
 		40BF167F1B963CC80086E425 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
 		40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposerExternal.swift; sourceTree = "<group>"; };
 		40F043FF1B3CE70300AF3B73 /* MovieExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieExport.swift; sourceTree = "<group>"; };
@@ -1372,7 +1368,6 @@
 				7AE044FF1A0CF14600C68313 /* UILabelExtensions.swift */,
 				7A9619E219DB85D4005E4343 /* UITableViewExtensions.swift */,
 				7AB7D3D31AC1927100DA8342 /* UITableViewCellExtensions.swift */,
-				4097EA0D1B9A4F4100BBD389 /* UITextFieldExtensions.swift */,
 				7A0D6CEA19D452C500E39A1B /* UIViewControllerExtensions.swift */,
 				70DAB34F1A1381510044AEC1 /* UIViewExtensions.swift */,
 			);
@@ -2404,7 +2399,6 @@
 				70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */,
 				70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */,
 				7033584819E462A20030CF11 /* PubNubService.swift in Sources */,
-				4097EA0E1B9A4F4100BBD389 /* UITextFieldExtensions.swift in Sources */,
 				7A2B13F319DD91CF00C6ABF3 /* UIButtonExtensions.swift in Sources */,
 				7AF82DFD19EFEC5800D0393F /* FlipMessageDataSource.swift in Sources */,
 				7024C19419DC6B85008EF445 /* AuthenticationHelper.swift in Sources */,
@@ -2631,7 +2625,6 @@
 				BE820DE31AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				BE2460361AD2D95900859233 /* SplashScreenView.swift in Sources */,
 				BE2460371AD2D95900859233 /* SplashScreenViewController.swift in Sources */,
-				4097EA0F1B9A4F4100BBD389 /* UITextFieldExtensions.swift in Sources */,
 				BE2460381AD2D95900859233 /* PubNubService.swift in Sources */,
 				BE2460391AD2D95900859233 /* UIButtonExtensions.swift in Sources */,
 				BE24603A1AD2D95900859233 /* FlipMessageDataSource.swift in Sources */,
@@ -2858,7 +2851,6 @@
 				BE24610F1AD2D9C600859233 /* AboutViewController.swift in Sources */,
 				BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				BE2461101AD2D9C600859233 /* SplashScreenView.swift in Sources */,
-				4097EA101B9A4F4100BBD389 /* UITextFieldExtensions.swift in Sources */,
 				BE2461111AD2D9C600859233 /* SplashScreenViewController.swift in Sources */,
 				BE2461121AD2D9C600859233 /* PubNubService.swift in Sources */,
 				BE2461131AD2D9C600859233 /* UIButtonExtensions.swift in Sources */,
