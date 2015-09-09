@@ -30,7 +30,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     internal var contactIDs : [String]!
     
     // Sending Options
-    private var sendingOptions : [FlipsSendButtonOption]!
+    private var sendingOptions : [FlipsSendButtonOption] = []
     
     // Flip Words Manager
     private var flipMessageManager : FlipMessageManager!
@@ -59,6 +59,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     init(compositionTitle: String, words: [String]) {
         super.init(nibName: nil, bundle: nil)
         self.compositionTitle = compositionTitle
+        self.draftingTable?.resetDraftingTable()
         self.flipMessageManager = FlipMessageManager(words: words, draftingTable: self.draftingTable)
     }
     
