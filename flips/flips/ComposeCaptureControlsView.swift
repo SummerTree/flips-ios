@@ -6,6 +6,12 @@
 //
 //
 
+enum CaptureButtonOption : String {
+    case Video = "Video"
+    case Camera = "Camera"
+    case Gallery = "Gallery"
+}
+
 class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewDelegate {
     
     private let SCROLL_DELAY = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC))
@@ -57,10 +63,6 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
     
     private func initSubviews() {
         
-        // Shared Button Image
-        
-        var captureImage = UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        
         // Video Button Long Press Recognizer
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("handleVideoButtonPress:"))
@@ -70,14 +72,15 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         
         flipsView = FlipsSelectionView()
         flipsView.delegate = self
+        flipsView.backgroundColor = UIColor.darkGrayColor()
         
         // Button Containers
         
-        videoView = buttonView(image: captureImage, tintColor: UIColor.orangeColor(), gestureRecognizer: longPressRecognizer)
-        cameraView = buttonView(image: captureImage, tintColor: UIColor.blueColor(), tapSelector: Selector("handleCameraButtonTap:"))
-        overflowCameraView = buttonView(image: captureImage, tintColor: UIColor.blueColor(), tapSelector: Selector("handleCameraButtonTap:"))
-        galleryView = buttonView(image: captureImage, tintColor: UIColor.greenColor(), tapSelector: Selector("handleGalleryButtonTap:"))
-        overflowGalleryView = buttonView(image: captureImage, tintColor: UIColor.greenColor(), tapSelector: Selector("handleGalleryButtonTap:"))
+        videoView = buttonView(.Video, gestureRecognizer: longPressRecognizer)
+        cameraView = buttonView(.Camera, tapSelector: Selector("handleCameraButtonTap:"))
+        overflowCameraView = buttonView(.Camera, tapSelector: Selector("handleCameraButtonTap:"))
+        galleryView = buttonView(.Gallery, tapSelector: Selector("handleGalleryButtonTap:"))
+        overflowGalleryView = buttonView(.Gallery, tapSelector: Selector("handleGalleryButtonTap:"))
         
         disableCameraControls()
         
@@ -85,7 +88,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         
         optionsScrollView = UIScrollView()
         optionsScrollView.pagingEnabled = true
-        optionsScrollView.backgroundColor = UIColor.sand()
+        optionsScrollView.backgroundColor = UIColor.darkGrayColor()
         optionsScrollView.delegate = self;
         optionsScrollView.showsHorizontalScrollIndicator = false
         optionsScrollView.showsVerticalScrollIndicator = false
@@ -162,6 +165,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         optionsScrollView.contentSize = CGSizeMake(optionsScrollView.frame.width, optionsScrollView.frame.height * 6)
         scrollToFlipsView(false)
     }
@@ -172,17 +176,33 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
     // MARK: - Button Setup
     ////
     
-    func buttonView(image: UIImage? = nil, tintColor: UIColor? = nil, gestureRecognizer: UIGestureRecognizer? = nil, tapSelector: Selector? = nil) -> (UIView) {
+    func buttonView(option: CaptureButtonOption, gestureRecognizer: UIGestureRecognizer? = nil, tapSelector: Selector? = nil) -> (UIView) {
         
-        let button = UIButton()
+        let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
+        let sizerMult : CGFloat = 1.35
         
-        if let buttonImage = image {
-            button.setImage(buttonImage, forState: .Normal)
-            button.sizeToFit()
-        }
+        let button = UIButton.buttonWithType(.Custom) as! UIButton
+        button.tintColor = UIColor.whiteColor()
+        button.layer.borderColor = UIColor.whiteColor().CGColor
+        button.layer.borderWidth = 5.0
+        button.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
+        button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         
-        if let buttonColor = tintColor {
-            button.tintColor = tintColor
+        switch option {
+            case .Video:
+                button.backgroundColor = UIColor.redColor()
+                button.imageView!.image = nil
+                break
+            case .Camera:
+                button.backgroundColor = UIColor.lightGrayColor()
+                button.setImage(UIImage(named: "CameraNew")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
+                //button.tintColor = UIColor.grayColor()
+                break
+            case .Gallery:
+                button.backgroundColor = UIColor.flipOrange()
+                button.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
+                ////button.tintColor = UIColor.lightSemitransparentBackground()
+                break
         }
         
         if let gestureRec = gestureRecognizer {
@@ -194,13 +214,23 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         }
         
         let buttonContainer = UIView()
+        buttonContainer.backgroundColor = UIColor.darkGrayColor()
         buttonContainer.addSubview(button)
         
         button.mas_makeConstraints { (make) -> Void in
             make.centerX.equalTo()(buttonContainer)
             make.centerY.equalTo()(buttonContainer)
-            make.height.equalTo()(button.frame.height)
-            make.width.equalTo()(button.frame.width)
+            make.height.equalTo()(imageSizer.frame.height * sizerMult)
+            make.width.equalTo()(imageSizer.frame.height * sizerMult)
+        }
+        
+        let heightDivider : CGFloat = 3
+        
+        button.imageView!.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(button).offset()(imageSizer.frame.height / heightDivider)
+            make.top.equalTo()(button).offset()(imageSizer.frame.height / heightDivider)
+            make.right.equalTo()(button).offset()(-1 * (imageSizer.frame.height / heightDivider))
+            make.bottom.equalTo()(button).offset()(-1 * (imageSizer.frame.height / heightDivider))
         }
         
         return buttonContainer

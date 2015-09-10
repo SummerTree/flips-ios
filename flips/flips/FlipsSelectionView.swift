@@ -60,7 +60,9 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         userFlipsButton.layer.borderColor = UIColor.flipOrange().CGColor
         userFlipsButton.setTitle("My Flips", forState: .Normal)
         userFlipsButton.setTitleColor(UIColor.flipOrange(), forState: .Normal)
+        userFlipsButton.titleLabel!.font = UIFont.avenirNextDemiBold(15.0)
         userFlipsButton.addTarget(self, action: Selector("didTapUserFlipsButton"), forControlEvents: UIControlEvents.TouchUpInside)
+        userFlipsButton.backgroundColor = UIColor.whiteColor()
         addSubview(userFlipsButton)
         
         stockFlipsButton = UIButton.buttonWithType(.System) as! UIButton
@@ -69,7 +71,9 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         stockFlipsButton.layer.borderColor = UIColor.flipOrange().CGColor
         stockFlipsButton.setTitle("Stock Flips", forState: .Normal)
         stockFlipsButton.setTitleColor(UIColor.flipOrange(), forState: .Normal)
+        stockFlipsButton.titleLabel!.font = UIFont.avenirNextDemiBold(15.0)
         stockFlipsButton.addTarget(self, action: Selector("didTapStockFlipsButton"), forControlEvents: UIControlEvents.TouchUpInside)
+        stockFlipsButton.backgroundColor = UIColor.whiteColor()
         addSubview(stockFlipsButton)
         
         let layout = UICollectionViewFlowLayout()
@@ -86,10 +90,10 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         
         emptyLabel = UILabel()
         emptyLabel.alpha = 0
-        emptyLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h3)
+        emptyLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h4)
         emptyLabel.text = "No Flips Available"
         emptyLabel.textAlignment = .Center
-        emptyLabel.textColor = UIColor.plum()
+        emptyLabel.textColor = UIColor.lightTextColor()
         addSubview(emptyLabel)
         
     }
