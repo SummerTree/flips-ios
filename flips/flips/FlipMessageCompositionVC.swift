@@ -58,6 +58,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     init(compositionTitle: String, words: [String]) {
         super.init(nibName: nil, bundle: nil)
+        self.automaticallyAdjustsScrollViewInsets = false
         self.compositionTitle = compositionTitle
         self.draftingTable?.resetDraftingTable()
         self.flipMessageManager = FlipMessageManager(words: words, draftingTable: self.draftingTable)
