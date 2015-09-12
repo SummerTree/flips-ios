@@ -179,7 +179,17 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     }
     
     func hideCaptureProgressBar() {
+        
         progressBar.hidden = true
+        progressBar.layer.removeAllAnimations()
+        progressBar.mas_updateConstraints { (update) -> Void in
+            update.removeExisting = true
+            update.top.equalTo()(self)
+            update.left.equalTo()(self)
+            update.height.equalTo()(UIScreen.mainScreen().bounds.size.height * 0.01)
+            update.width.equalTo()(0)
+        }
+        
     }
     
     
@@ -350,6 +360,8 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
             {
                 if shouldUpdatePlayerViewAtIndex(index)
                 {
+                    cameraView.removeObservers()
+                    
                     let newPlayerView = playerViewForIndex(index)
                     
                     if newPlayerView == nil && playerViews[index] != nil
