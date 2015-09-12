@@ -92,6 +92,14 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if let source = dataSource {
+            reloadWords(animated: false)
+        }
+    }
+    
     func addGestureRecognizers(flipTextView: FlipTextView) {
         flipTextView.userInteractionEnabled = true
         

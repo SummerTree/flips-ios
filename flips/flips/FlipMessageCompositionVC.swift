@@ -252,7 +252,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             self.flipCompositionView.refresh()
             self.flipCompositionView.scrollToIndex(self.flipMessageManager.getCurrentFlipWordIndex())
             
-            self.flipMessageWordListView.reloadWords(animated: false)
+            self.flipMessageWordListView.updateWordState()
             
         })
         
@@ -304,12 +304,17 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 // Updatet the flip page
                 self.flipMessageManager.updateFlipPage(newFlipPage)
                 
-                // Update the UI if we are on the same word
-                if self.flipMessageManager.getCurrentFlipWordIndex() == currentFlipWord.position {
-                    self.updateViewForCurrentFlipWord()
-                }
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    // Update the UI if we are on the same word
+                    if self.flipMessageManager.getCurrentFlipWordIndex() == currentFlipWord.position {
+                        self.updateViewForCurrentFlipWord()
+                    }
+                    
+                    self.flipMessageWordListView.updateWordState()
+                    
+                })
                 
-                self.flipMessageWordListView.reloadWords(animated: false)
             }
             else
             {
