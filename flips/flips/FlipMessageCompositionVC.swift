@@ -422,8 +422,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             
             let flipDataSource = FlipDataSource()
             let flipWord = self.flipMessageManager.getCurrentFlipWord()
-            let userFlips = self.flipMessageManager.getUserFlipIdsForCurrentFlipWord()
-            let flipID = userFlips[index]
+            let stockFlips = self.flipMessageManager.getStockFlipIdsForCurrentFlipWord()
+            let flipID = stockFlips[index]
             
             if let selectedFlip = flipDataSource.retrieveFlipWithId(flipID)
             {

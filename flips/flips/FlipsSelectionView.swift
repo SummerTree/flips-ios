@@ -52,8 +52,6 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     
     func initSubviews() {
         
-        backgroundColor = UIColor.sand()
-        
         userFlipsButton = UIButton.buttonWithType(.System) as! UIButton
         userFlipsButton.layer.cornerRadius = 3.0
         userFlipsButton.layer.borderWidth = 1.0
@@ -164,6 +162,8 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         
         isShowingUserFlips = true
         
+        flipsCollectionView.reloadData()
+        
         // Hide the stock flips button
         self.stockFlipsButton.alpha = 0
         
@@ -189,6 +189,8 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     func showUserFlipsViewAnimated() {
         
         isShowingUserFlips = true
+        
+        flipsCollectionView.reloadData()
         
         let userFlipsCount = dataSource?.userFlipsCount() ?? 0
         let isUserFlipsViewEmpty = userFlipsCount == 0
@@ -279,6 +281,8 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         
         isShowingStockFlips = true
         
+        flipsCollectionView.reloadData()
+        
         let stockFlipsCount = dataSource?.stockFlipsCount() ?? 0
         let isStockFlipsViewEmpty = stockFlipsCount == 0
         
@@ -306,6 +310,8 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     func showStockFlipsViewAnimated() {
         
         isShowingStockFlips = true
+        
+        flipsCollectionView.reloadData()
         
         let stockFlipsCount = dataSource?.stockFlipsCount() ?? 0
         let isStockFlipsViewEmpty = stockFlipsCount == 0
@@ -430,13 +436,17 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if (userFlipsButton.alpha == 1)
+        if isShowingUserFlips
         {
             return dataSource?.userFlipsCount() ?? 0
         }
-        else
+        else if isShowingStockFlips
         {
             return dataSource?.stockFlipsCount() ?? 0
+        }
+        else
+        {
+            return 0
         }
         
     }
@@ -445,7 +455,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FlipCell", forIndexPath: indexPath) as! FlipsViewCell
         
-        if (userFlipsButton.alpha == 1)
+        if isShowingUserFlips
         {
             if let flipId = dataSource?.userFlipIdForIndex(indexPath.row) {
                 let selectedId = dataSource?.selectedFlipId()
@@ -455,9 +465,10 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         }
         else
         {
-            if let flipId = dataSource?.stockFlipIdForIndex(indexPath.row), let selectedId = dataSource?.selectedFlipId() {
+            if let flipId = dataSource?.stockFlipIdForIndex(indexPath.row) {
+                let selectedId = dataSource?.selectedFlipId()
                 cell.setFlipId(flipId)
-                cell.setSelected(selectedId == flipId)
+                cell.setSelected(selectedId != nil && selectedId == flipId)
             }
         }
         
@@ -472,7 +483,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        if userFlipsButton.alpha == 1
+        if isShowingUserFlips
         {
             delegate?.didSelectUserFlipAtIndex(indexPath.row)
         }
@@ -487,7 +498,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             
             if i == indexPath.row
             {
-                cell.setSelected(!cell.isSelected ?? true)
+                cell.setSelected(cell.isSelected ?? true)
             }
             else
             {
