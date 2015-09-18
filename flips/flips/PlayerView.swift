@@ -635,6 +635,9 @@ class PlayerView: UIView {
         if (self.loadPlayerOnInit) {
             self.play()
         }
+        else {
+            self.playButtonView.alpha = BUTTONS_ALPHA
+        }
     }
     
     func setupPlayerWithWord(word: String, videoURL: NSURL, thumbnailURL: NSURL?) {
@@ -661,6 +664,9 @@ class PlayerView: UIView {
         
         if (self.loadPlayerOnInit) {
             self.play()
+        }
+        else {
+            self.playButtonView.alpha = BUTTONS_ALPHA
         }
     }
 
