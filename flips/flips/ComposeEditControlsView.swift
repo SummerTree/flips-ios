@@ -68,8 +68,8 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         
         // Button Containers
         
-        deleteView = buttonView(image: captureImage, tintColor: UIColor.redColor(), tapSelector: Selector("handleDeleteButtonTap:"))
-        overflowDeleteView = buttonView(image: captureImage, tintColor: UIColor.redColor(), tapSelector: Selector("handleDeleteButtonTap:"))
+        deleteView = buttonView(.Delete, tapSelector: Selector("handleDeleteButtonTap:"))
+        overflowDeleteView = buttonView(.Delete, tapSelector: Selector("handleDeleteButtonTap:"))
         
         // ScrollView
         
@@ -146,17 +146,26 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
     // MARK: - Button Setup
     ////
     
-    func buttonView(image: UIImage? = nil, tintColor: UIColor? = nil, gestureRecognizer: UIGestureRecognizer? = nil, tapSelector: Selector? = nil) -> (UIView) {
+    func buttonView(option: CaptureButtonOption, gestureRecognizer: UIGestureRecognizer? = nil, tapSelector: Selector? = nil) -> (UIView) {
         
-        let button = UIButton()
+        let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
+        let sizerMult : CGFloat = 1.35
         
-        if let buttonImage = image {
-            button.setImage(buttonImage, forState: .Normal)
-            button.sizeToFit()
-        }
+        let button = UIButton.buttonWithType(.Custom) as! UIButton
+        button.tintColor = UIColor.whiteColor()
+        button.layer.borderColor = UIColor.whiteColor().CGColor
+        button.layer.borderWidth = 3.0
+        button.layer.cornerRadius = 5.0
+        button.titleLabel!.font = UIFont.avenirNextMedium(15.0)
+        button.shadowMe()
         
-        if let buttonColor = tintColor {
-            button.tintColor = tintColor
+        switch option {
+            case .Delete:
+                button.backgroundColor = UIColor.flipOrange()
+                button.setTitle("Epic Fail? Try again.", forState: .Normal)
+                break
+            default:
+                break
         }
         
         if let gestureRec = gestureRecognizer {
@@ -168,18 +177,29 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         }
         
         let buttonContainer = UIView()
+        buttonContainer.backgroundColor = UIColor.lightGreyF2()
         buttonContainer.addSubview(button)
         
         button.mas_makeConstraints { (make) -> Void in
-            make.centerX.equalTo()(buttonContainer)
-            make.centerY.equalTo()(buttonContainer)
-            make.height.equalTo()(button.frame.height)
-            make.width.equalTo()(button.frame.width)
+            make.center.equalTo()(buttonContainer)
+            make.height.equalTo()(imageSizer.frame.height)
+            make.left.equalTo()(buttonContainer).offset()(50)
+            make.right.equalTo()(buttonContainer).offset()(-50)
         }
+        
+//        let heightDivider : CGFloat = 3
+//        
+//        button.imageView!.mas_makeConstraints { (make) -> Void in
+//            make.left.equalTo()(button).offset()(imageSizer.frame.height / heightDivider)
+//            make.top.equalTo()(button).offset()(imageSizer.frame.height / heightDivider)
+//            make.right.equalTo()(button).offset()(-1 * (imageSizer.frame.height / heightDivider))
+//            make.bottom.equalTo()(button).offset()(-1 * (imageSizer.frame.height / heightDivider))
+//        }
         
         return buttonContainer
         
     }
+
     
     
     

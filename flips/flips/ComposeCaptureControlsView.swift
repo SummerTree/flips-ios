@@ -10,6 +10,7 @@ enum CaptureButtonOption : String {
     case Video = "Video"
     case Camera = "Camera"
     case Gallery = "Gallery"
+    case Delete = "Delete"
 }
 
 class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewDelegate {
@@ -203,6 +204,8 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
                 button.backgroundColor = UIColor.flipOrange()
                 button.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
                 ////button.tintColor = UIColor.lightSemitransparentBackground()
+                break
+        default:
                 break
         }
         
