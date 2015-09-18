@@ -272,6 +272,7 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         
         if index >= 0 && index < messageWords.count {
             messageWords[index].setFlipId(flipId)
+            draftingTable.flipBook.flipPages[index].pageID = flipId
         }
         
     }
