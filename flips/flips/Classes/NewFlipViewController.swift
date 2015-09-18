@@ -99,6 +99,8 @@ class NewFlipViewController: FlipsViewController,
         self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
         
+        self.buttonPanel2View.hidden = true
+        
         layoutSendButtons()
         updateNextButtonState()
     }
