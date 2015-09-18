@@ -45,7 +45,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     private func initSubviews() {
-        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User")!, showSettingsButton: true, showBuilderButton: true)
+        navigationBar = CustomNavigationBar.CustomSmallNavigationBar(UIImage(named: "User")!, showSettingsButton: true, showBuilderButton: false)
         if let loggedUser = User.loggedUser() {
             if let url = NSURL(string: loggedUser.photoURL) {
                 navigationBar.setAvatarImageURL(url)
