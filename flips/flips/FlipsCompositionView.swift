@@ -362,7 +362,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
                 {
                     cameraView.removeObservers()
                     
-                    let newPlayerView = playerViewForIndex(index)
+                    let newPlayerView = playerViewForIndex(index, autoPlay: true)
                     
                     if newPlayerView == nil && playerViews[index] != nil
                     {
@@ -440,7 +440,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         
     }
     
-    private func playerViewForIndex(index: Int) -> (FlipCompositionPlayerView?) {
+    private func playerViewForIndex(index: Int, autoPlay: Bool = false) -> (FlipCompositionPlayerView?) {
         
         if let unwrappedDataSource = dataSource {
             
@@ -451,7 +451,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
             if (flipWord.associatedFlipId != nil)
             {
                 let flip = FlipDataSource().getFlipById(flipWord.associatedFlipId!)
-                playerView = FlipCompositionPlayerView(flip: flip)
+                playerView = FlipCompositionPlayerView(flip: flip, autoPlay: autoPlay)
             }
             else if (flipPage.videoURL != nil)
             {

@@ -29,6 +29,9 @@ class FlipCompositionPlayerView : UIView, PlayerViewDelegate, UIGestureRecognize
     internal var flipImage : UIImage?
     internal var flipText : String?
     
+    // Autoplay Flip
+    private var shouldAutoPlayFlip : Bool! = false
+    
     // Delegate
     weak var delegate : FlipCompositionPlayerViewDelegate?
     
@@ -42,11 +45,12 @@ class FlipCompositionPlayerView : UIView, PlayerViewDelegate, UIGestureRecognize
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(flip: Flip?) {
+    init(flip: Flip?, autoPlay: Bool = false) {
         super.init(frame: CGRectZero)
         self.flip = flip
         self.currentPreviewType = .Flip
         self.backgroundColor = UIColor.blackColor()
+        self.shouldAutoPlayFlip = autoPlay
         initSubviews()
         initConstraints()
         initContent()
@@ -80,7 +84,7 @@ class FlipCompositionPlayerView : UIView, PlayerViewDelegate, UIGestureRecognize
         else
         {
             flipPlayerView = PlayerView()
-            flipPlayerView.loadPlayerOnInit = false
+            flipPlayerView.loadPlayerOnInit = shouldAutoPlayFlip
             flipPlayerView.delegate = self
             self.addSubview(flipPlayerView)
         }
@@ -119,7 +123,6 @@ class FlipCompositionPlayerView : UIView, PlayerViewDelegate, UIGestureRecognize
         
         if currentPreviewType == .Flip && self.flip != nil
         {
-            self.flipPlayerView.loadPlayerOnInit = false
             self.flipPlayerView.setupPlayerWithFlips([self.flip!], andFormattedWords: [self.flip!.word])
         }
         
