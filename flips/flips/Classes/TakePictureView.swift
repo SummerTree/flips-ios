@@ -72,16 +72,14 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         takePictureButton.enabled = cameraView.isDeviceAuthorized()
         
         galleryButton = UIButton()
-//        galleryButton.setImage(UIImage(named: "Grid"), forState: .Normal)
         galleryButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         galleryButton.sizeToFit()
-//        galleryButton.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
         galleryButton.tintColor = UIColor.whiteColor()
         galleryButton.layer.borderColor = UIColor.whiteColor().CGColor
         galleryButton.layer.borderWidth = 3.0
         galleryButton.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
         galleryButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-        galleryButton.backgroundColor = UIColor.lightGrayColor()
+        galleryButton.backgroundColor = UIColor.flipOrange()
         galleryButton.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped", forControlEvents: .TouchUpInside)
         bottomButtonsContainerView.addSubview(galleryButton)
@@ -127,7 +125,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             make.width.equalTo()(imageSizer.frame.height * sizerMult)
         }
         
-        let heightDivider : CGFloat = 3
+        var heightDivider : CGFloat = 3
         
         takePictureButton.imageView!.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
@@ -145,6 +143,15 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             make.width.equalTo()(self.galleryButton.frame.width)
             make.height.equalTo()(self.galleryButton.frame.height)
         }
+        
+        heightDivider = 4.0 as CGFloat
+        
+        galleryButton.imageView!.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
+            make.top.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
+            make.right.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+            make.bottom.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+        }
     }
     
     
@@ -153,6 +160,9 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     func viewWillAppear(animated: Bool) {
         cameraView.registerObservers()
         //galleryButton.setLastCameraPhotoAsButtonImage()
+        
+        takePictureButton.layer.cornerRadius = takePictureButton.bounds.height / 2
+        galleryButton.layer.cornerRadius = galleryButton.bounds.height / 2
     }
     
     func viewWillDisappear(animated: Bool) {
