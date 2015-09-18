@@ -171,7 +171,7 @@ class FlipCompositionPlayerView : UIView, PlayerViewDelegate, UIGestureRecognize
     }
 
     func playerViewShouldShowPlayButtonOnInitialState(playerView: PlayerView) -> Bool {
-        return false
+        return true
     }   
     
 }
