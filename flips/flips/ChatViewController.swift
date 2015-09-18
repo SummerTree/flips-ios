@@ -56,16 +56,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK - Overridden Methods
     
     override func viewDidLoad() {
-        
         self.navigationController?.navigationBar.translucent = false
-        
-        if FlipMessageSubmissionManager.sharedInstance.hasPendingMessageForRoom(self.roomID) {
-            showSendingView()
-        }
-        else {
-            hideSendingView()
-        }
-        
     }
     
     override func loadView() {
@@ -378,7 +369,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         if sendingView.hidden == true {
             
             self.sendingView.mas_updateConstraints { (update) -> Void in
-                update.top.equalTo()(self.view.mas_top)
+                update.top.equalTo()(self.view)
             }
             
             self.sendingView.hidden = false
@@ -394,6 +385,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             UIView.animateWithDuration(0.5, animations: { () -> Void in
                 
                 self.sendingView.frame.origin.y -= self.sendingView.frame.height
+                self.view.layoutIfNeeded()
                 
             }, completion:{ (finished) -> Void in
                     
