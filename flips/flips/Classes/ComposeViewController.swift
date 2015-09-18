@@ -24,7 +24,7 @@ private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storag
 
 public typealias VideoComposerSuccess = (NSURL!, NSURL!)  -> Void
 
-class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate, PreviewViewControllerDelegate {
+class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelegate, FlipMessageWordListViewDataSource, ComposeBottomViewContainerDelegate, ComposeBottomViewContainerDataSource, ComposeTopViewContainerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AudioRecorderServiceDelegate, ConfirmFlipViewControllerDelegate {
     
     private let NO_FLIP_SELECTED_INDEX = -1
     
@@ -54,8 +54,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     internal var words: [String]!
     internal var sendOptions : [FlipsSendButtonOption] = []
-    
-    weak var delegate: ComposeViewControllerDelegate?
     
     var audioRecorder: AudioRecorderService?
     
@@ -149,12 +147,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         self.setupWhiteNavBarWithBackButton(self.composeTitle)
         self.setNeedsStatusBarAppearanceUpdate()
-        
-        if (self.shouldShowPreviewButton()) {
-            var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview"), style: .Done, target: self, action: "previewButtonTapped:")
-            previewBarButton.tintColor = UIColor.flipOrange()
-            self.navigationItem.rightBarButtonItem = previewBarButton
-        }
         
         self.addSubviews()
         self.addConstraints()
@@ -258,25 +250,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         }
     }
     
-    
-    // MARK: - Bar Buttons
-    
-    func previewButtonTapped(sender: AnyObject?) {
-        self.openPreview()
-    }
-    
-    private func openPreview() {
-        var previewViewController: PreviewViewController
-        if (contactIDs != nil) {
-            previewViewController = PreviewViewController(sendOptions: sendOptions, flipWords: self.flipWords, contactIDs: self.contactIDs!)
-        } else {
-            previewViewController = PreviewViewController(sendOptions: sendOptions, flipWords: self.flipWords, roomID: self.roomID!)
-        }
-        
-        previewViewController.delegate = self
-        previewViewController.fullContacts = self.fullContacts
-        self.navigationController?.pushViewController(previewViewController, animated: true)
-    }
     
     
     // MARK: - View States Setters
@@ -421,15 +394,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     internal func moveToNextFlipWordWithNoFlipPage() {
         let nextIndex = self.draftingTable!.nextEmptyFlipPage()
         if (nextIndex == NO_FLIP_SELECTED_INDEX) {
-            if (self.shouldShowPreviewButton()) {
-                let oneSecond = 0.5 * Double(NSEC_PER_SEC)
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-                    self.openPreview()
-                }
-            } else {
-                self.composeBottomViewContainer.showAllFlipCreateMessage()
-            }
+            self.composeBottomViewContainer.showAllFlipCreateMessage()
         } else {
             self.highlightedWordIndex = nextIndex
         }
@@ -440,15 +405,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     internal func moveToNextFlipWord() {
         let nextIndex = self.nextEmptyFlipWordIndex()
         if (nextIndex == NO_FLIP_SELECTED_INDEX) {
-            if (self.shouldShowPreviewButton()) {
-                let oneSecond = 0.5 * Double(NSEC_PER_SEC)
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(oneSecond))
-                dispatch_after(delay, dispatch_get_main_queue()) { () -> Void in
-                    self.openPreview()
-                }
-            } else {
-                self.composeBottomViewContainer.showAllFlipCreateMessage()
-            }
+            self.composeBottomViewContainer.showAllFlipCreateMessage()
         } else {
             self.highlightedWordIndex = nextIndex
         }
@@ -520,8 +477,6 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 }
             }
             flipWords = newFlipWords
-            
-            self.delegate?.composeViewController?(self, didChangeFlipWords: flipWords.map { $0.text })
             
             self.reloadMyFlips()
             self.updateFlipWordsState()
@@ -985,18 +940,5 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         return false
     }
     
-    
-    // MARK: - PreviewViewControllerDelegate
-    
-    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
-        delegate?.composeViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
-    }
 }
 
-@objc protocol ComposeViewControllerDelegate {
-    
-    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?)
-    
-    optional func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String])
-    
-}

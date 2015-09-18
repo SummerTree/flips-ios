@@ -19,6 +19,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private let ONBOARDING_BUBBLE_TITLE = NSLocalizedString("Welcome to Flips", comment: "Welcome to Flips")
     private let ONBOARDING_BUBBLE_MESSAGE = NSLocalizedString("You have a message. Must be nice to\nbe so popular.", comment: "You have a message. Must be nice to\nbe so popular.")
 
+    private var sendingView : UILabel!
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
@@ -66,6 +67,14 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         conversationsTableView.dataSource = self
         conversationsTableView.delegate = self
         
+        sendingView = UILabel()
+        sendingView.hidden = true
+        sendingView.backgroundColor = UIColor.flipOrangeBackground()
+        sendingView.textColor = UIColor.whiteColor()
+        sendingView.text = "Sending Message..."
+        sendingView.textAlignment = NSTextAlignment.Center
+        addSubview(self.sendingView)
+        
         self.addSubview(navigationBar)
         
         composeButton = UIButton()
@@ -93,6 +102,13 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             make.trailing.equalTo()(self)
             make.leading.equalTo()(self)
             make.height.equalTo()(self.navigationBar.frame.size.height)
+        }
+        
+        sendingView.mas_makeConstraints { (make) -> Void in
+            make.bottom.equalTo()(self.navigationBar)
+            make.left.equalTo()(self)
+            make.width.equalTo()(self)
+            make.height.equalTo()(44)
         }
         
         conversationsTableView.mas_makeConstraints { (make) -> Void in
@@ -250,6 +266,48 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         delegate?.inboxViewDidTapBuilderButton(self)
     }
+    
+    
+    
+    ////
+    // MARK: - Sending View
+    ////
+    
+    func showSendingView() {
+        
+        if sendingView.hidden == true
+        {
+            self.sendingView.mas_updateConstraints { (update) -> Void in
+                update.bottom.equalTo()(self.navigationBar)
+            }
+            
+            self.sendingView.hidden = false
+            
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.sendingView.frame.origin.y += self.sendingView.frame.height
+            })
+        }
+        
+    }
+    
+    func hideSendingView() {
+        
+        if sendingView.hidden == false
+        {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            
+                self.sendingView.frame.origin.y -= self.sendingView.frame.height
+                
+            }, completion:{ (finished) -> Void in
+                    
+                self.sendingView.hidden = true
+                
+            })
+        }
+        
+    }
+    
+    
 }
 
 protocol InboxViewDataSource: class {

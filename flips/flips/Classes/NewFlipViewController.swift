@@ -20,7 +20,6 @@ class NewFlipViewController: FlipsViewController,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
     UITextViewDelegate,
-    ComposeViewControllerDelegate,
     FlipsCompositionControllerDelegate {
 
     // MARK: - Constants
@@ -470,11 +469,11 @@ class NewFlipViewController: FlipsViewController,
     // MARK: - ComposeViewControllerDelegate
     
     func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
-        delegate?.newFlipViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
+        //delegate?.newFlipViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
     }
     
     func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
-        self.flipTextField.setWords(words)
+        //self.flipTextField.setWords(words)
     }
     
     ////
@@ -483,15 +482,14 @@ class NewFlipViewController: FlipsViewController,
     // I've had to create duplicate functionality. In the future the one of these should be removed
     ////
     
-    func didSendMessageToRoom(roomID: String, withExternal messageComposer: MessageComposerExternal?) {
-        delegate?.newFlipViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
+    func didBeginSendingMessageToRoom(roomID: String!) {
+        delegate?.didBeginSendingMessageToRoom(roomID)
     }
+    
     
 
 }
 
 protocol NewFlipViewControllerDelegate: class {
-    
-    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?)
-    
+    func didBeginSendingMessageToRoom(roomID: String!)
 }

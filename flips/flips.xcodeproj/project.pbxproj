@@ -57,6 +57,9 @@
 		3E5F61631B911C1400B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
 		3E5F61641B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
 		3E5F61651B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
+		3E63A36A1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
+		3E63A36B1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
+		3E63A36C1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
 		404F52201B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
 		404F52211B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
 		404F52221B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
@@ -739,6 +742,7 @@
 		3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageCompositionVC.swift; sourceTree = "<group>"; };
 		3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSelectionView.swift; sourceTree = "<group>"; };
 		3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsMessageManager.swift; sourceTree = "<group>"; };
+		3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageSubmissionManager.swift; sourceTree = "<group>"; };
 		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
 		404F521F1B978A2100F0CDAF /* CountryCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
@@ -1659,6 +1663,7 @@
 				A2392BF619EEE7C70037B0C0 /* FlipText.swift */,
 				3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */,
 				3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */,
+				3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -2310,6 +2315,7 @@
 				7033584619E4160B0030CF11 /* SettingsView.swift in Sources */,
 				70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */,
+				3E63A36A1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */,
 				70AC67021A23C98A003FE3CA /* ImportContactViewController.swift in Sources */,
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7AF82E0119EFECC900D0393F /* DeviceDataSource.swift in Sources */,
@@ -2536,6 +2542,7 @@
 				BE245FE71AD2D95900859233 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				BE245FE81AD2D95900859233 /* UserExtension.swift in Sources */,
 				BE245FE91AD2D95900859233 /* ImportContactViewController.swift in Sources */,
+				3E63A36B1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */,
 				BE245FEA1AD2D95900859233 /* UIViewControllerExtensions.swift in Sources */,
 				BE245FEB1AD2D95900859233 /* DeviceDataSource.swift in Sources */,
 				BE245FEC1AD2D95900859233 /* LocalizedString.swift in Sources */,
@@ -2762,6 +2769,7 @@
 				BE2460C11AD2D9C600859233 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				BE2460C21AD2D9C600859233 /* UserExtension.swift in Sources */,
 				BE2460C31AD2D9C600859233 /* ImportContactViewController.swift in Sources */,
+				3E63A36C1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */,
 				BE2460C41AD2D9C600859233 /* UIViewControllerExtensions.swift in Sources */,
 				BE2460C51AD2D9C600859233 /* DeviceDataSource.swift in Sources */,
 				BE2460C61AD2D9C600859233 /* LocalizedString.swift in Sources */,

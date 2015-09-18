@@ -788,10 +788,10 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // MARK: - PreviewViewControllerDelegate
     ////
     
-    func previewViewController(viewController: PreviewViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
-        delegate?.didSendMessageToRoom(roomID, withExternal: messageComposer)
+    func didBeginMessageSubmissionToRoom(roomID: String!) {
+        delegate?.didBeginSendingMessageToRoom(roomID)
     }
- 
+    
     
     
     ////
@@ -822,6 +822,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
 
 protocol FlipsCompositionControllerDelegate : class {
     
-    func didSendMessageToRoom(roomID: String, withExternal: MessageComposerExternal?)
+    func didBeginSendingMessageToRoom(roomID: String!)
     
 }

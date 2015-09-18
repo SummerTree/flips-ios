@@ -9,8 +9,7 @@
 import Foundation
 import MessageUI
 
-class MessageComposerExternal: NSObject,
-                               MFMessageComposeViewControllerDelegate {
+class MessageComposerExternal: NSObject, MFMessageComposeViewControllerDelegate {
     
     private let STOCK_INVITATION = NSLocalizedString(
                                         " just sent you a Flip Message! " +
@@ -29,13 +28,26 @@ class MessageComposerExternal: NSObject,
     var messagePresented : Bool = false
     var containsNonFlipsUsers : Bool = false
     
-    func canSendText() -> Bool {
+    weak var delegate : MessageComposerExternalDelegate?
+    
+    
+    ////
+    // MFMessageComposeViewController Method Wrappers
+    ////
+    
+    static func canSendText() -> Bool {
         return MFMessageComposeViewController.canSendText()
     }
     
-    func canSendAttachments() -> Bool {
+    static func canSendAttachments() -> Bool {
         return MFMessageComposeViewController.canSendAttachments()
     }
+    
+    
+    
+    ////
+    // MARK: -
+    ////
     
     func configuredMessageComposeViewController() -> MFMessageComposeViewController {
         
@@ -49,7 +61,7 @@ class MessageComposerExternal: NSObject,
             messageComposeVC.body = userName + STOCK_INVITATION
         }
         
-        if self.canSendAttachments() {
+        if MessageComposerExternal.canSendAttachments() {
             messageComposeVC.addAttachmentURL(self.videoUrl, withAlternateFilename: "\(userName).mov")
             messageComposeVC.disableUserAttachments()
         }
@@ -60,15 +72,21 @@ class MessageComposerExternal: NSObject,
         return messageComposeVC
     }
     
+    
+    
+    ////
+    // MFMessageComposerViewController Delegate
+    ////
+    
     func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
 
-        switch result.value {
+        switch result.value
+        {
             case MessageComposeResultSent.value:
                 println("Flip MMS sent successfully.")
                 self.messageSent = true
-                
                 AnalyticsService.logMMSSent()
-                break
+                delegate?.didFinishSendingTextMessage(true)
             case MessageComposeResultFailed.value:
                 println("Text message failed to send.")
                 let alertView = UIAlertView(
@@ -78,22 +96,32 @@ class MessageComposerExternal: NSObject,
                     cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
                 self.messageSent = false
-                
                 AnalyticsService.logMMSFailed()
-                break
+                delegate?.didFinishSendingTextMessage(false)
             case MessageComposeResultCancelled.value:
                 println("Flips MMS was cancelled.")
                 self.messageSent = false
-                
                 AnalyticsService.logMMSCancelled()
-                break
+                delegate?.didCancelSendingTextMessage()
             default:
                 self.messageSent = false
-                break
+                delegate?.didFinishSendingTextMessage(false)
         }
         
         controller.dismissViewControllerAnimated(true, completion: {
             MovieExport.sharedInstance.clearVideoFromLocalStorage(self.videoUrl)
         })
     }
+    
+}
+
+////
+// MessageComposerExternal Delegate Protocol
+////
+
+protocol MessageComposerExternalDelegate : class {
+    
+    func didFinishSendingTextMessage(success: Bool)
+    func didCancelSendingTextMessage()
+    
 }

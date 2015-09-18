@@ -19,6 +19,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
     private var downloadingMessageFromNotificationRetries: Int = 0
 
+    private var sendingView: UILabel!
     private var chatView: ChatView!
     private var groupParticipantsView: GroupParticipantsView?
     
@@ -29,8 +30,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     private var flipMessageIdFromPushNotification: String?
     
-    private var messageExternal : MessageComposerExternal?
-    
 
     // MARK: - Initializers
     
@@ -38,8 +37,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(room: Room, andFlipMessageIdFromPushNotification flipMessageID: String? = nil,
-                     andWithExternalMessageComposer messageComposer: MessageComposerExternal? = nil) {
+    init(room: Room, andFlipMessageIdFromPushNotification flipMessageID: String? = nil) {
         
         super.init(nibName: nil, bundle: nil)
         self.chatTitle = room.roomName()
@@ -52,13 +50,26 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         }
         
         self.flipMessages = NSMutableOrderedSet(array: room.notRemovedFlipMessagesOrderedByReceivedAt())
-        self.messageExternal = messageComposer
+                        
     }
-    
     
     // MARK - Overridden Methods
     
+    override func viewDidLoad() {
+        
+        self.navigationController?.navigationBar.translucent = false
+        
+        if FlipMessageSubmissionManager.sharedInstance.hasPendingMessageForRoom(self.roomID) {
+            showSendingView()
+        }
+        else {
+            hideSendingView()
+        }
+        
+    }
+    
     override func loadView() {
+        
         var showOnboarding = false
         if (!OnboardingHelper.onboardingHasBeenShown()) {
             showOnboarding = true
@@ -88,6 +99,22 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             })
             self.groupParticipantsView!.setupView()
         }
+        
+        self.sendingView = UILabel()
+        self.sendingView.hidden = true
+        self.sendingView.backgroundColor = UIColor.flipOrangeBackground()
+        self.sendingView.textColor = UIColor.whiteColor()
+        self.sendingView.text = "Sending Message..."
+        self.sendingView.textAlignment = NSTextAlignment.Center
+        self.view.addSubview(self.sendingView)
+        
+        self.sendingView.mas_makeConstraints { (make) -> Void in
+            make.top.equalTo()(self.view)
+            make.left.equalTo()(self.view)
+            make.width.equalTo()(self.view)
+            make.height.equalTo()(44)
+        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -144,15 +171,9 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         })
         self.groupParticipantsView?.updateConstraintsIfNeeded()
         self.groupParticipantsView?.layoutIfNeeded()
-        
-        if let messageExt = self.messageExternal {
-            if !messageExt.messagePresented {
-                var mmsViewController = messageExt.configuredMessageComposeViewController()
-                self.presentViewController(mmsViewController, animated: true, completion: nil)
-                
-                messageExt.messagePresented = true
-            }
-        }
+       
+        updateMessageSubmissionState()
+        registerForMessageSubmissionNotifications()
     }
     
     override func viewDidLayoutSubviews() {
@@ -178,6 +199,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         if (DeviceHelper.sharedInstance.systemVersion() >= 8) {
             self.chatView.removeKeyboardControl()
         }
+        
+        unregisterMessageSubmissionNotifications()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -348,23 +371,162 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     
-    // MARK: - ComposeViewControllerDelegate
+    // MARK: - FlipsCompositionControllerDelegate
     
-    func didSendMessageToRoom(roomID: String, withExternal: MessageComposerExternal?) {
+    func showSendingView() {
+        
+        if sendingView.hidden == true {
+            
+            self.sendingView.mas_updateConstraints { (update) -> Void in
+                update.top.equalTo()(self.view.mas_top)
+            }
+            
+            self.sendingView.hidden = false
+            
+        }
+        
+    }
+    
+    func hideSendingView() {
+        
+        if sendingView.hidden == false {
+            
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                
+                self.sendingView.frame.origin.y -= self.sendingView.frame.height
+                
+            }, completion:{ (finished) -> Void in
+                    
+                self.sendingView.hidden = true
+                
+            })
+            
+        }
+        
+    }
+    
+    func didBeginSendingMessageToRoom(roomID: String!) {
+        
+        self.navigationController?.popToViewController(self, animated: true)
+        self.chatView.clearReplyTextField()
+        self.chatView.hideTextFieldAndShowReplyButton()
+        
+        showSendingView()
+        
+    }
+    
+    
+    ////
+    // MARK: - SubmissionManager Notifications
+    ////
+    
+    func submissionManagerDidFinishSendingMessage(notification: NSNotification) {
         
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            
             self.reloadFlipMessages()
+            
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.updateMessageSubmissionState()
+                
                 self.chatView.loadNewFlipMessages()
                 self.chatView.showNewestMessage(shouldScrollAnimated: false)
+                
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 
-                self.navigationController?.popToViewController(self, animated: true)
-                self.chatView.clearReplyTextField()
-                self.chatView.hideTextFieldAndShowReplyButton()
             })
+            
         })
+        
+    }
+    
+    func submissionManagerDidFailToSendMessage(notification: NSNotification) {
+        
+        let payload = notification.userInfo as [NSObject : AnyObject]?
+        var alertTitle = "Error Sending Message"
+        var alertMessage = "Flips was unable to send your message."
+        
+        if let payload = payload {
+            
+            if let error = payload["error"] as? String {
+                alertTitle = error
+            }
+            
+            if let details = payload["details"] as? String {
+                alertMessage = details
+            }
+            
+        }
+        
+        showMessageSubmissionFailedAlert(alertTitle, message: alertMessage)
+        
+    }
+    
+    
+    
+    ////
+    // MARK: - Message Submission State Handling
+    ////
+    
+    private func registerForMessageSubmissionNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFinishSendingMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFailToSendMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
+    }
+    
+    private func unregisterMessageSubmissionNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
+    }
+    
+    private func updateMessageSubmissionState() {
+        
+        let submissionManager = FlipMessageSubmissionManager.sharedInstance
+        
+        switch submissionManager.getState() {
+            case .Sending:
+                if submissionManager.hasPendingMessageForRoom(self.roomID) {
+                    showSendingView()
+                }
+                else {
+                    hideSendingView()
+                }
+            case .Waiting:
+                hideSendingView()
+            case .Error:
+                showMessageSubmissionFailedAlert("Message Submission Failed", message: "An error occurred while sending your message.")
+        }
+        
+    }
+    
+    private func showMessageSubmissionFailedAlert(title: String, message: String) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            
+            self.showSendingView()
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
+            
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            
+            if FlipMessageSubmissionManager.sharedInstance.hasAdditionalPendingMessagesForRoom(self.roomID) {
+                self.showSendingView()
+            }
+            else {
+                self.hideSendingView()
+            }
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
+            
+        }))
+        
+        presentViewController(alertController, animated: true, completion: nil)
         
     }
     
