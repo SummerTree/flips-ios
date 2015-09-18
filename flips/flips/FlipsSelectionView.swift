@@ -91,7 +91,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         emptyLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h4)
         emptyLabel.text = "No Flips Available"
         emptyLabel.textAlignment = .Center
-        emptyLabel.textColor = UIColor.lightTextColor()
+        emptyLabel.textColor = UIColor.darkGrayColor()
         addSubview(emptyLabel)
         
     }

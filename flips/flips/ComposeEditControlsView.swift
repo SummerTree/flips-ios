@@ -62,7 +62,7 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         
         flipsView = FlipsSelectionView()
         flipsView.delegate = self
-        flipsView.backgroundColor = UIColor.darkGrayColor()
+        flipsView.backgroundColor = UIColor.lightGreyF2()
         
         overflowFlipsView = UIImageView()
         
@@ -75,7 +75,7 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         
         optionsScrollView = UIScrollView()
         optionsScrollView.pagingEnabled = true
-        optionsScrollView.backgroundColor = UIColor.darkGrayColor()
+        optionsScrollView.backgroundColor = UIColor.lightGreyF2()
         optionsScrollView.delegate = self;
         optionsScrollView.showsHorizontalScrollIndicator = false
         optionsScrollView.showsVerticalScrollIndicator = false

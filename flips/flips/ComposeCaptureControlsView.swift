@@ -72,7 +72,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         
         flipsView = FlipsSelectionView()
         flipsView.delegate = self
-        flipsView.backgroundColor = UIColor.darkGrayColor()
+        flipsView.backgroundColor = UIColor.lightGreyF2()
         
         // Button Containers
         
@@ -88,7 +88,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         
         optionsScrollView = UIScrollView()
         optionsScrollView.pagingEnabled = true
-        optionsScrollView.backgroundColor = UIColor.darkGrayColor()
+        optionsScrollView.backgroundColor = UIColor.lightGreyF2()
         optionsScrollView.delegate = self;
         optionsScrollView.showsHorizontalScrollIndicator = false
         optionsScrollView.showsVerticalScrollIndicator = false
@@ -184,14 +184,15 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         let button = UIButton.buttonWithType(.Custom) as! UIButton
         button.tintColor = UIColor.whiteColor()
         button.layer.borderColor = UIColor.whiteColor().CGColor
-        button.layer.borderWidth = 5.0
+        button.layer.borderWidth = 3.0
         button.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
         button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        button.shadowMe()
         
         switch option {
             case .Video:
                 button.backgroundColor = UIColor.redColor()
-                button.imageView!.image = nil
+                button.setImage(UIImage(named: "VideoRecord")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
                 break
             case .Camera:
                 button.backgroundColor = UIColor.lightGrayColor()
@@ -214,7 +215,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         }
         
         let buttonContainer = UIView()
-        buttonContainer.backgroundColor = UIColor.darkGrayColor()
+        buttonContainer.backgroundColor = UIColor.lightGreyF2()
         buttonContainer.addSubview(button)
         
         button.mas_makeConstraints { (make) -> Void in

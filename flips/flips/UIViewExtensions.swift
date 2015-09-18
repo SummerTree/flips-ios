@@ -26,4 +26,13 @@ extension UIView {
         
         return image
     }
+    
+    func shadowMe() {
+        var layer = self.layer
+        layer.masksToBounds = false
+        layer.shadowOffset = CGSizeMake(0,3)
+        layer.shadowColor = UIColor.darkGrayColor().CGColor
+        layer.shadowOpacity = 0.75
+        layer.shadowPath = UIBezierPath(rect:self.bounds).CGPath;
+    }
 }
