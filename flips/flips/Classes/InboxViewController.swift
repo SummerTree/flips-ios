@@ -51,13 +51,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
     
     // MARK: - UIViewController overridden methods
-
+    
     override func loadView() {
         var showOnboarding = false
         if (!OnboardingHelper.onboardingHasBeenShown()) {
@@ -95,6 +91,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 }
             })
         }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -125,6 +122,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         NSNotificationCenter.defaultCenter().removeObserver(self, name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
+        
+        unregisterMessageSubmissionNotifications()
         
         self.roomIdToShow = nil
         self.flipMessageIdToShow = nil
@@ -158,6 +157,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                 alertView.show()
             }
         }
+        
+        updateMessageSubmissionState()
+        registerForMessageSubmissionNotifications()
     }
     
     private func openRoomForPushNotificationIfMessageReceived() {
@@ -460,13 +462,130 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     // MARK: - NewFlipViewControllerDelegate
     
-    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String) {
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in
-            let roomDataSource = RoomDataSource()
-            let room = roomDataSource.retrieveRoomWithId(roomID)
-            self.navigationController?.pushViewController(ChatViewController(room: room), animated: true)
+    
+    func didBeginSendingMessageToRoom(roomID: String!) {
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            
+            self.dismissViewControllerAnimated(true, completion: { () -> Void in
+                
+                self.inboxView.showSendingView()
+            
+                if let roomID = roomID
+                {
+                    let roomDataSource = RoomDataSource()
+                    let room = roomDataSource.retrieveRoomWithId(roomID)
+                    
+                    var chatVC = ChatViewController(room: room, andFlipMessageIdFromPushNotification: nil)
+                    self.navigationController?.pushViewController(chatVC, animated: true)
+                }
+                
+            })
+            
         })
+        
     }
+    
+    
+    
+    ////
+    // MARK: - SubmissionManager Notifications
+    ////
+    
+    func submissionManagerDidFinishSendingMessage(notification: NSNotification) {
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.refreshRooms()
+            self.updateMessageSubmissionState()
+        })
+        
+    }
+    
+    func submissionManagerDidFailToSendMessage(notification: NSNotification) {
+        
+        let payload = notification.userInfo as [NSObject : AnyObject]?
+        var alertTitle = "Error Sending Message"
+        var alertMessage = "Flips was unable to send you message."
+        
+        if let payload = payload {
+            
+            if let error = payload["error"] as? String {
+                alertTitle = error
+            }
+            
+            if let details = payload["details"] as? String {
+                alertMessage = details
+            }
+            
+        }
+        
+        showMessageSubmissionFailedAlert(alertTitle, message: alertMessage)
+        
+    }
+    
+    
+    
+    ////
+    // MARK : - Message Submission State Handling
+    ////
+    
+    private func registerForMessageSubmissionNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFinishSendingMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFailToSendMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
+    }
+    
+    private func unregisterMessageSubmissionNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
+    }
+    
+    private func updateMessageSubmissionState() {
+        
+        let submissionManager = FlipMessageSubmissionManager.sharedInstance
+        
+        switch submissionManager.getState() {
+            case .Sending:
+                self.inboxView.showSendingView()
+            case .Waiting:
+                self.inboxView.hideSendingView()
+            case .Error:
+                showMessageSubmissionFailedAlert("Message Submission Failed", message: "An error occurred while sending your message.")
+        }
+        
+    }
+    
+    private func showMessageSubmissionFailedAlert(title: String, message: String) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            
+            self.inboxView.showSendingView()
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
+            
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            
+            if FlipMessageSubmissionManager.sharedInstance.hasPendingMessages()
+            {
+                self.inboxView.showSendingView()
+            }
+            else
+            {
+                self.inboxView.hideSendingView()
+            }
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
+            
+        }))
+        
+        presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    
     
     
     // MARK: - InboxViewDataSource

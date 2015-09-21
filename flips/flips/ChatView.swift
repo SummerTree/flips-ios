@@ -42,7 +42,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     private var showOnboarding: Bool = false
     private var bubbleView: BubbleView!
-    
+
     private var prototypeCell: ChatTableViewCell?
     
     private var indexPathToShow: NSIndexPath?
@@ -52,6 +52,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var openingFromPushNotification: Bool!
     
     private var isViewDisappearing: Bool = false
+    
+    var parentViewController : UIViewController?
     
     
     // MARK: - Required initializers
@@ -340,6 +342,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         if let flipMessage: FlipMessage? = dataSource?.chatView(self, flipMessageAtIndex: indexPath.row) {
             cell.setFlipMessage(flipMessage!)
+            cell.parentViewController = self.parentViewController
         }
     }
     

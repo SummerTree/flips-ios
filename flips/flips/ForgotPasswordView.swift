@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate {
+class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     weak var delegate: ForgotPasswordViewDelegate?
     
@@ -21,7 +21,9 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     private let MOBILE_NUMBER_MARGIN_LEFT: CGFloat = 25.0
     private let MOBILE_NUMBER_MARGIN_RIGHT: CGFloat = 25.0
     private let MOBILE_NUMBER_VIEW_HEIGHT: CGFloat = 60.0
-    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 58.0
+    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 130.0
+    private let MOBILE_COUNTRY_CODE_LEADING: CGFloat = 50.0
+    private let MOBILE_COUNTRY_CODE_WIDTH: CGFloat = 60.0
     
     private let HINT_TEXT: String = NSLocalizedString("Enter your phone number below\n to reset your password", comment: "")
     
@@ -32,6 +34,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     var mobileNumberView: UIView!
     var phoneImageView: UIImageView!
     var mobileNumberField: UITextField!
+    var mobileCountryRoller : UIPickerView!
     var spamView: UIView!
     var spamText: UILabel!
     var keyboardFillerView: UIView!
@@ -77,7 +80,14 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
+        mobileNumberField.inputAccessoryView = setupAccessoryView()
         mobileNumberView.addSubview(mobileNumberField)
+        
+        mobileCountryRoller = UIPickerView()
+        mobileCountryRoller.backgroundColor = UIColor.clearColor()
+        mobileCountryRoller.tintColor = UIColor.whiteColor()
+        mobileCountryRoller.delegate = self
+        mobileNumberView.addSubview(mobileCountryRoller)
         
         spamView = UIView()
         spamView.contentMode = .Center
@@ -115,6 +125,14 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
             make.right.equalTo()(self)
         }
         
+        mobileCountryRoller.mas_makeConstraints { (make) in
+            make.removeExisting = true
+            make.left.equalTo()(self).with().offset()(self.MOBILE_COUNTRY_CODE_LEADING)
+            make.width.equalTo()(self.MOBILE_COUNTRY_CODE_WIDTH)
+            make.height.equalTo()(self.mobileNumberView)
+            make.centerY.equalTo()(self.mobileNumberView)
+        }
+        
         phoneImageView.mas_makeConstraints { (make) in
             make.left.equalTo()(self.mobileNumberView).with().offset()(self.MOBILE_NUMBER_MARGIN_LEFT)
             make.centerY.equalTo()(self.mobileNumberView)
@@ -146,6 +164,49 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         super.updateConstraints()
     }
     
+    func setupAccessoryView() -> UIToolbar {
+        var screenSize = UIScreen.mainScreen().bounds
+        var showFrame = CGRectMake(0,0,screenSize.size.width, 50)
+        
+        var numberToolbar = UIToolbar(frame: showFrame)
+        numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+        numberToolbar.tintColor = UIColor.flipOrange()
+        numberToolbar.sizeToFit()
+        
+        return numberToolbar
+    }
+    
+    func doneTypingNumber(sender: AnyObject?) {
+        var textField = self.mobileNumberField!
+        var title = NSLocalizedString("Not Enough")
+        var message = NSLocalizedString("Your phone number is not long enough.")
+        
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(textField)
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    
+                    let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
+            }
+        }
+        else if (count(textField.text) >= 5) {
+            textField.resignFirstResponder()
+            self.finishTypingMobileNumber(textField)
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
+        }
+        
+    }
     
     // MARK - Life Cycle
     
@@ -162,41 +223,52 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        let text = textField.text
-        let length = count(text)
-        var shouldReplace = true
-        
-        if (string != "") {
-            switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
-            default:
-                break;
+        if (self.getSelectedDialCode() == "+1") {
+            let text = textField.text
+            let length = count(text)
+            var shouldReplace = true
+            
+            if (string != "") {
+                switch length {
+                case 3, 7:
+                    textField.text = "\(text)-"
+                default:
+                    break;
+                }
+                if (length > 11) {
+                    shouldReplace = false
+                }
+            } else {
+                switch length {
+                case 5, 9:
+                    let nsString = text as NSString
+                    textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+                default:
+                    break;
+                }
             }
-            if (length > 11) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
+            return shouldReplace;
         }
-        return shouldReplace;
+        else {
+            return true
+        }
     }
     
     func mobileNumberFieldDidChange(textField: UITextField) {
-        if (count(textField.text) == 12) {
-            textField.resignFirstResponder()
-            self.finishTypingMobileNumber(self)
+        if (self.getSelectedDialCode() == "+1") {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(self)
+            }
         }
     }
     
     func focusKeyboardOnMobileNumberField() {
         mobileNumberField.becomeFirstResponder()
+    }
+    
+    func getSelectedDialCode() -> String {
+        return CountryCodes.sharedInstance.countryCodes[self.mobileCountryRoller.selectedRowInComponent(0)].objectForKey("dial_code") as! String
     }
     
     
@@ -209,11 +281,47 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         self.makeConstraints()
     }
     
+    // MARK: - Picker data & delegate methods
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return CountryCodes.sharedInstance.countryCodes.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+        var currCountry = CountryCodes.sharedInstance.countryCodes[row]
+        
+        var countryCode = UILabel();
+        countryCode.text = currCountry["dial_code"] as? String
+        countryCode.textColor = UIColor.whiteColor()
+        countryCode.tintColor = UIColor.whiteColor()
+        countryCode.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        countryCode.textAlignment = NSTextAlignment.Center
+        return countryCode
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+
+        if (self.mobileNumberField!.text != "") {
+            if (self.getSelectedDialCode() != "+1") {
+                self.mobileNumberField!.text = self.mobileNumberField!.text.removeDashes()
+            }
+            else {
+                self.mobileNumberField!.text = self.mobileNumberField!.text.formatWithDashes()
+            }
+        }
+    }
     
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text)
+        var index = self.mobileCountryRoller.selectedRowInComponent(0)
+        var countryCode = CountryCodes.sharedInstance.findCountryDialCode(index)
+        
+        self.delegate?.phoneNumberView(mobileNumberField, didFinishTypingMobileNumber: mobileNumberField.text, countryCode: countryCode)
     }
     
     

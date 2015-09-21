@@ -1,0 +1,114 @@
+{
+	"id": "2c4ce73c-cff7-25bf-ab49-99c0bf9ffa9e",
+	"name": "Flips",
+	"description": "",
+	"order": [
+		"edc510cc-4112-e65b-ef00-f15ff2926923",
+		"cfc67a48-7419-da62-c20c-e53c1d2a431d",
+		"d7bedfe5-0dc0-a619-3886-1b46eba14cae",
+		"ea9e346c-4ef4-b344-b4f0-90712855ba43"
+	],
+	"folders": [],
+	"timestamp": 1431991501269,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"hasRequests": true,
+	"requests": [
+		{
+			"id": "cfc67a48-7419-da62-c20c-e53c1d2a431d",
+			"headers": "",
+			"url": "https://api.flipsapp.com/background",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "2c4ce73c-cff7-25bf-ab49-99c0bf9ffa9e",
+			"data": [
+				{
+					"key": "background",
+					"value": "",
+					"type": "file",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Upload Flip Video",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1431991612962,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "d7bedfe5-0dc0-a619-3886-1b46eba14cae",
+			"headers": "",
+			"url": "https://api.flipsapp.com/thumbnail",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "2c4ce73c-cff7-25bf-ab49-99c0bf9ffa9e",
+			"data": [
+				{
+					"key": "thumbnail",
+					"value": "",
+					"type": "file",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Upload Flip Thumbnail",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1431991640348,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "ea9e346c-4ef4-b344-b4f0-90712855ba43",
+			"headers": "Content-Type: application/json\n",
+			"url": "https://api.flipsapp.com/user/2/flips",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "2c4ce73c-cff7-25bf-ab49-99c0bf9ffa9e",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Create Flip",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1431991688321,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n    \"background_url\" : \"https://s3.amazonaws.com/flips-background/e6428631-2427-4e58-9bd7-f323c1d8427c.mov\",\n    \"thumbnail_url\" : \"https://s3.amazonaws.com/flips-thumbnails/c830e656-4d3c-4c0b-a893-1b90e1dfa076.jpg\",\n    \"is_private\" : 0,\n    \"word\" : \".\"\n}"
+		},
+		{
+			"id": "edc510cc-4112-e65b-ef00-f15ff2926923",
+			"headers": "Content-Type: application/json\n",
+			"url": "https://api.flipsapp.com/signin",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1431991562620,
+			"name": "Sign In",
+			"description": "",
+			"collectionId": "2c4ce73c-cff7-25bf-ab49-99c0bf9ffa9e",
+			"responses": [],
+			"rawModeData": "{\n    \"password\": \"Password1\",\n    \"username\": \"e@o.d\"\n}"
+		}
+	]
+}

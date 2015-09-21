@@ -14,14 +14,13 @@ import UIKit
 
 private let STORYBOARD = "NewFlip"
 
-
 class NewFlipViewController: FlipsViewController,
     JoinStringsTextFieldDelegate,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
     UIAlertViewDelegate,
     UITextViewDelegate,
-    ComposeViewControllerDelegate {
+    FlipsCompositionControllerDelegate {
 
     // MARK: - Constants
     
@@ -32,6 +31,9 @@ class NewFlipViewController: FlipsViewController,
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     private let INVALID_CONTACT_TITLE = NSLocalizedString("Invalid Contact", comment: "Invalid Contact")
     private let INVALID_CONTACT_MESSAGE = NSLocalizedString("Please choose a valid contact.", comment: "Please choose a valid contact.")
+    private let MESSAGE_PLACEHOLDER = NSLocalizedString("Type your message here...", comment: "Type your message here...")
+    private let EMPTY_MESSAGE_TITLE = NSLocalizedString("Empty Message", comment: "Empty Message")
+    private let EMPTY_MESSAGE_MESSAGE = NSLocalizedString("Please input a message.", comment: "Please input a message.")
     
     weak var delegate: NewFlipViewControllerDelegate?
     
@@ -61,6 +63,8 @@ class NewFlipViewController: FlipsViewController,
     @IBOutlet weak var flipTextFieldHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var flipView: TopBorderedView!
     @IBOutlet weak var nextButton: NextButton!
+    @IBOutlet weak var buttonPanelView: UIView!
+    @IBOutlet weak var buttonPanel2View: UIView!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -70,9 +74,12 @@ class NewFlipViewController: FlipsViewController,
             }
         }
     }
+    
+    var optionButtons : [FlipsSendButton]
 
     required init(coder: NSCoder) {
         contacts = [Contact]()
+        optionButtons = [FlipsSendButton]()
         
         super.init(coder: coder)
     }
@@ -83,11 +90,18 @@ class NewFlipViewController: FlipsViewController,
         self.setNeedsStatusBarAppearanceUpdate()
         
         self.flipTextField.joinStringsTextFieldDelegate = self
+        self.flipTextField.delegate = self;
+        self.flipTextField.text = MESSAGE_PLACEHOLDER
+        self.flipTextField.textColor = UIColor.lightGrayColor()
         
         self.contactPicker.datasource = self
         self.contactPicker.delegate = self
         self.contactPicker.backgroundColor = .sand()
         self.automaticallyAdjustsScrollViewInsets = false
+        
+        self.buttonPanel2View.hidden = true
+        
+        layoutSendButtons()
         updateNextButtonState()
     }
     
@@ -98,6 +112,7 @@ class NewFlipViewController: FlipsViewController,
         registerForKeyboardNotifications()
         
         self.flipTextField.setupMenu()
+        
 
         if self.contacts.isEmpty {
             self.contactPicker.becomeFirstResponder()
@@ -122,6 +137,106 @@ class NewFlipViewController: FlipsViewController,
     
     // MARK: - Private methods
     
+    private func layoutSendButtons() {
+        
+        let firstRowButtonCount = 2
+        let secondRowButtonCount = 3
+        
+        var flipsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
+                                              buttonOrder: 0,
+                                              buttonHeight: self.buttonPanelView.frame.size.height,
+                                              activeColor: UIColor.flipOrange(),
+                                              buttonType: .Flips,
+                                              imageName: "FlipWord",
+                                              allowedToBeInactive: false)
+        
+        var smsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
+                                            buttonOrder: 1,
+                                            buttonHeight: self.buttonPanelView.frame.size.height,
+                                            activeColor: UIColor.avacado(),
+                                            buttonType: .SMS,
+                                            imageName: "smsicon",
+                                            allowedToBeInactive: true)
+        
+        var facebookButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+                                            buttonOrder: 0,
+                                            buttonHeight: self.buttonPanel2View.frame.size.height,
+                                            activeColor: UIColor.facebookBlue(),
+                                            buttonType: .Facebook,
+                                            imageName: "Facebook",
+                                            allowedToBeInactive: true)
+        
+        var twitterButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+                                            buttonOrder: 1,
+                                            buttonHeight: self.buttonPanel2View.frame.size.height,
+                                            activeColor: UIColor.twitterBlue(),
+                                            buttonType: .Twitter,
+                                            imageName: "Twitter",
+                                            allowedToBeInactive: true)
+        
+        var instagramButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+                                            buttonOrder: 2,
+                                            buttonHeight: self.buttonPanel2View.frame.size.height,
+                                            activeColor: UIColor.instagramBlue(),
+                                            buttonType: .Instagram,
+                                            imageName: "Instagram",
+                                            allowedToBeInactive: true)
+        
+        smsSendButton.makeInactive()
+        facebookButton.makeInactive()
+        twitterButton.makeInactive()
+        instagramButton.makeInactive()
+        
+        self.optionButtons += [smsSendButton,facebookButton,twitterButton,instagramButton]
+        
+        self.buttonPanelView.addSubview(flipsSendButton)
+        self.buttonPanelView.addSubview(smsSendButton)
+        
+        self.buttonPanel2View.addSubview(facebookButton)
+        self.buttonPanel2View.addSubview(twitterButton)
+        self.buttonPanel2View.addSubview(instagramButton)
+        
+    }
+    
+    private func updateSendOptions() {
+        for contact : Contact in self.contacts {
+            if contact.contactUser == nil {
+                shouldLockSendOptions(true)
+                return
+            }
+        }
+        shouldLockSendOptions(false)
+    }
+    
+    private func shouldLockSendOptions(lock: Bool) {
+        if lock {
+            for optionButton in self.optionButtons {
+                if optionButton.sendButtonType == .SMS {
+                    optionButton.makeActive()
+                    optionButton.allowedToBeInactive = false
+                }
+            }
+        }
+        else {
+            for optionButton in self.optionButtons {
+                optionButton.allowedToBeInactive = true
+            }
+        }
+        
+    }
+    
+    private func retrieveSendOptions() -> [FlipsSendButtonOption] {
+        var options = Array<FlipsSendButtonOption>()
+        
+        for optionButton : FlipsSendButton in self.optionButtons {
+            if optionButton.isButtonActive {
+                options += [optionButton.sendButtonType]
+            }
+        }
+        
+        return options
+    }
+    
     private func registerForKeyboardNotifications() {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
@@ -145,7 +260,9 @@ class NewFlipViewController: FlipsViewController,
     
     private func updateNextButtonState() {
         let hasContacts = contacts.count > 0
-        let hasText = !flipTextField.text.removeWhiteSpaces().isEmpty
+        let textValue = flipTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let hasText = Bool(textValue != MESSAGE_PLACEHOLDER)
+        
         nextButton.enabled = hasContacts && hasText
     }
     
@@ -153,33 +270,73 @@ class NewFlipViewController: FlipsViewController,
     
     @IBAction func nextButtonAction(sender: UIButton) {
         
-        if (self.contactPicker.invalidContact) {
+        flipTextField.endEditing(true)
+        
+        if (self.contactPicker.invalidContact)
+        {
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                let alertView = UIAlertView(title: self.INVALID_CONTACT_TITLE, message: self.INVALID_CONTACT_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                
+                let alertView = UIAlertView(title: self.INVALID_CONTACT_TITLE,
+                                            message: self.INVALID_CONTACT_MESSAGE,
+                                            delegate: nil,
+                                            cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
+                
             }
-        } else {
+        }
+        else if (flipTextField.text == MESSAGE_PLACEHOLDER)
+        {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                
+                let alertView = UIAlertView(title: self.EMPTY_MESSAGE_TITLE,
+                    message: self.EMPTY_MESSAGE_MESSAGE,
+                    delegate: nil,
+                    cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+                self.flipTextField.becomeFirstResponder()
+                
+            }
+        }
+        else
+        {
             let createNewRoom = { () -> Void in
-                let composeViewController = ComposeViewController(contacts: self.contacts, words: self.flipTextField.getTextWords())
-                composeViewController.delegate = self
-                self.navigationController?.pushViewController(composeViewController, animated: true)
+                
+                let compositionController = FlipMessageCompositionVC(sendOptions: self.retrieveSendOptions(), contacts: self.contacts, words: self.flipTextField.getTextWords())
+                compositionController.delegate = self
+                compositionController.contacts = self.contacts
+                
+                self.navigationController?.pushViewController(compositionController, animated: true)
+                
             }
             
+            self.draftingTable!.resetDraftingTable()
+            self.draftingTable!.contacts = self.contacts
+            self.draftingTable!.sendOptions = self.retrieveSendOptions()
+            
             var userIDs = [String]()
-            for contact in self.contacts {
-                if (contact.contactUser == nil) {
+            for contact in self.contacts
+            {
+                if (contact.contactUser == nil)
+                {
                     createNewRoom()
                     return
                 }
+                
                 userIDs.append(contact.contactUser.userID)
             }
             
             let roomDataSource = RoomDataSource()
             var result = roomDataSource.hasRoomWithUserIDs(userIDs)
-            if (result.hasRoom) {
-                let composeViewController = ComposeViewController(roomID: result.room!.roomID, composeTitle: result.room!.roomName(), words: flipTextField.getTextWords())
-                composeViewController.delegate = self
-                self.navigationController?.pushViewController(composeViewController, animated: true)
+            if (result.hasRoom)
+            {
+                self.draftingTable!.room = result.room!
+                
+                let compositionController = FlipMessageCompositionVC(sendOptions: self.retrieveSendOptions(), roomID: result.room!.roomID, compositionTitle: result.room!.roomName(), words: flipTextField.getTextWords())
+                compositionController.delegate = self
+                compositionController.contacts = self.contacts
+                
+                self.navigationController?.pushViewController(compositionController, animated: true)
+                
                 return
             }
             
@@ -247,6 +404,7 @@ class NewFlipViewController: FlipsViewController,
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didAddContact model: MBContactPickerModelProtocol!) {
         if let contact = model as? Contact {
             contacts.append(contact)
+            updateSendOptions()
         }
     }
     
@@ -254,6 +412,7 @@ class NewFlipViewController: FlipsViewController,
         if let contact = model as? Contact {
             if let index = find(contacts, contact) {
                 contacts.removeAtIndex(index)
+                updateSendOptions()
             }
         }
     }
@@ -280,6 +439,26 @@ class NewFlipViewController: FlipsViewController,
         self.updateContactPickerHeight(newHeight)
     }
     
+    //MARK: UITextViewDelegate
+    
+    func textViewDidChange(textView: UITextView) {
+        updateNextButtonState()
+    }
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.textColor == UIColor.lightGrayColor() {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = MESSAGE_PLACEHOLDER
+            textView.textColor = UIColor.lightGrayColor()
+        }
+        updateNextButtonState()
+    }
     
     // MARK: - UIAlertViewDelegate
     
@@ -289,21 +468,30 @@ class NewFlipViewController: FlipsViewController,
         }
     }
     
-    
     // MARK: - ComposeViewControllerDelegate
     
-    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String) {
-        delegate?.newFlipViewController(self, didSendMessageToRoom: roomID)
+    func composeViewController(viewController: ComposeViewController, didSendMessageToRoom roomID: String, withExternal messageComposer: MessageComposerExternal?) {
+        //delegate?.newFlipViewController(self, didSendMessageToRoom: roomID, withExternal: messageComposer)
     }
     
     func composeViewController(viewController: ComposeViewController, didChangeFlipWords words: [String]) {
-        self.flipTextField.setWords(words)
+        //self.flipTextField.setWords(words)
     }
+    
+    ////
+    // MARK: - FlipsCompositionControllerDelegate
+    // This is redundant with the above ComposeViewControllerDelegate. Since it can't be safely removed yet
+    // I've had to create duplicate functionality. In the future the one of these should be removed
+    ////
+    
+    func didBeginSendingMessageToRoom(roomID: String!) {
+        delegate?.didBeginSendingMessageToRoom(roomID)
+    }
+    
+    
 
 }
 
 protocol NewFlipViewControllerDelegate: class {
-    
-    func newFlipViewController(viewController: NewFlipViewController, didSendMessageToRoom roomID: String)
-    
+    func didBeginSendingMessageToRoom(roomID: String!)
 }

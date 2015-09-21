@@ -21,14 +21,17 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     private let NUMBER_OF_ROWS                      : Int = 8
     private let NUMBER_OF_ACTION_ROWS               : Int = 7
+    
     private let USER_PROFILE_CELL_POSITION          : Int = 0
-    private let ABOUT_CELL_POSITION                 : Int = 1
-    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 2
-    private let PRIVACY_POLICY_CELL_POSITION        : Int = 3
-    private let SEND_FEEDBACK_CELL_POSITION         : Int = 4
-    private let CHANGE_NUMBER_CELL_POSITION         : Int = 5
-    private let IMPORT_CONTACTS_CELL_POSITION       : Int = 6
-    private let TUTORIAL_CELL_POSITION              : Int = 7
+    
+    private let IMPORT_CONTACTS_CELL_POSITION       : Int = 1
+    private let CHANGE_NUMBER_CELL_POSITION         : Int = 2
+    private let SEND_FEEDBACK_CELL_POSITION         : Int = 3
+    private let TUTORIAL_CELL_POSITION              : Int = 4
+    private let ABOUT_CELL_POSITION                 : Int = 5
+    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 6
+    private let PRIVACY_POLICY_CELL_POSITION        : Int = 7
+
 
     weak var delegate: SettingsViewDelegate?
     
@@ -46,6 +49,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     init() {
         super.init(frame: CGRectZero)
+        
         self.addSubviews()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)

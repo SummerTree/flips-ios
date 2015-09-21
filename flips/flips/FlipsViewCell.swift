@@ -28,6 +28,7 @@ class FlipsViewCell : UICollectionViewCell {
         cellImageView = UIImageView()
         cellImageView.frame.size = CGSizeMake(FLIPS_CELL_WIDTH, FLIPS_CELL_HEIGHT)
         cellImageView.image = UIImage(named: "Filter_Photo")
+        cellImageView.tag = 1369
         self.addSubview(cellImageView);
         
         self.seletedOverlayView = SelectedFlipOverlayView(frame: CGRectMake(0, 0, FLIPS_CELL_WIDTH, FLIPS_CELL_WIDTH))

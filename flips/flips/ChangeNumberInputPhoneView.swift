@@ -12,13 +12,16 @@
 
 import UIKit
 
-class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
+class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     weak var delegate: ChangeNumberInputPhoneViewDelegate?
     
     private let ENTER_NUMBER_BELOW_CONTAINER_HEIGHT:    CGFloat = 75.0
     private let NEW_NUMBER_CONTAINER_HEIGHT:            CGFloat = 50.0
     private let NEW_NUMBER_IMAGE_MARGIN:                CGFloat = 20.0
+    private let MOBILE_TEXT_FIELD_LEADING: CGFloat = 130.0
+    private let MOBILE_COUNTRY_CODE_LEADING: CGFloat = 50.0
+    private let MOBILE_COUNTRY_CODE_WIDTH: CGFloat = 60.0
     
     private var keyboardHeight: CGFloat = 0.0
     private var enterNumberBelowContainer: UIView!
@@ -29,6 +32,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
     private var newNumberTextField:     UITextField!
     private var newNumberImageView:     UIImageView!
     private var keyboardView:           UIView!
+    private var mobileCountryRoller : UIPickerView!
     
     init() {
         super.init(frame: CGRectZero)
@@ -74,11 +78,17 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
 
         self.newNumberTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Number", comment: "New Number"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
         self.newNumberTextField.delegate = self
-        self.newNumberTextField.keyboardType = UIKeyboardType.PhonePad
+        self.newNumberTextField.keyboardType = UIKeyboardType.NumberPad
         self.newNumberTextField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
-        
         self.newNumberTextField.textColor = UIColor.whiteColor()
+        self.newNumberTextField.inputAccessoryView = self.setupAccessoryView()
         self.newNumberContainerView.addSubview(newNumberTextField)
+        
+        self.mobileCountryRoller = UIPickerView()
+        self.mobileCountryRoller.backgroundColor = UIColor.clearColor()
+        self.mobileCountryRoller.tintColor = UIColor.whiteColor()
+        self.mobileCountryRoller.delegate = self
+        newNumberContainerView.addSubview(mobileCountryRoller)
         
         self.newNumberImageView = UIImageView(image: UIImage(named: "AddNumber"))
         self.newNumberImageView.sizeToFit()
@@ -140,10 +150,18 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
             make.height.equalTo()(self.newNumberImageView.frame.size.height)
         }
         
+        mobileCountryRoller.mas_makeConstraints { (make) in
+            make.removeExisting = true
+            make.left.equalTo()(self).with().offset()(self.MOBILE_COUNTRY_CODE_LEADING)
+            make.width.equalTo()(self.MOBILE_COUNTRY_CODE_WIDTH)
+            make.height.equalTo()(self.newNumberContainerView)
+            make.centerY.equalTo()(self.newNumberContainerView)
+        }
+        
         newNumberTextField.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.centerY.equalTo()(self.newNumberContainerView)
-            make.left.equalTo()(self.newNumberImageView.mas_right).with().offset()(self.NEW_NUMBER_IMAGE_MARGIN)
+            make.left.equalTo()(self).with().offset()(self.MOBILE_TEXT_FIELD_LEADING)
             make.right.equalTo()(self.newNumberContainerView)
             make.height.equalTo()(self.newNumberContainerView)
         }
@@ -181,6 +199,19 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         self.makeConstraints()
     }
     
+    func setupAccessoryView() -> UIToolbar {
+        var screenSize = UIScreen.mainScreen().bounds
+        var showFrame = CGRectMake(0,0,screenSize.size.width, 50)
+        
+        var numberToolbar = UIToolbar(frame: showFrame)
+        numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+        numberToolbar.tintColor = UIColor.flipOrange()
+        numberToolbar.sizeToFit()
+        
+        return numberToolbar
+    }
+    
     
     // UITextFieldDelegate
     
@@ -188,46 +219,123 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
         shouldChangeCharactersInRange range: NSRange,
         replacementString string: String) -> Bool {
         
-        let text = textField.text
-        let length = count(text)
-        var shouldReplace = true
-        
-        if (string != "") {
-            switch length {
-            case 3, 7:
-                textField.text = "\(text)-"
-            default:
-                break;
+        if self.getSelectedDialCode() == "+1" {
+            let text = textField.text
+            let length = count(text)
+            var shouldReplace = true
+            
+            if (string != "") {
+                switch length {
+                case 3, 7:
+                    textField.text = "\(text)-"
+                default:
+                    break;
+                }
+                if (length > 11) {
+                    shouldReplace = false
+                }
+            } else {
+                switch length {
+                case 5, 9:
+                    let nsString = text as NSString
+                    textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
+                default:
+                    break;
+                }
             }
-            if (length > 11) {
-                shouldReplace = false
-            }
-        } else {
-            switch length {
-            case 5, 9:
-                let nsString = text as NSString
-                textField.text = nsString.substringWithRange(NSRange(location: 0, length: length-1)) as String
-            default:
-                break;
-            }
+            return shouldReplace;
         }
-        return shouldReplace;
+        else {
+            return true
+        }
     }
     
     func newNumberFieldDidChange(textField: UITextField) {
-        if (count(textField.text) == 12) {
-            self.finishTypingMobileNumber(textField)
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                self.finishTypingMobileNumber(textField)
+            }
         }
     }
     
+    func doneTypingNumber(sender: AnyObject?) {
+        var textField = self.newNumberTextField!
+        var title = NSLocalizedString("Not Enough")
+        var message = NSLocalizedString("Your phone number is not long enough.")
+        
+        if self.getSelectedDialCode() == "+1" {
+            if (count(textField.text) == 12) {
+                textField.resignFirstResponder()
+                self.finishTypingMobileNumber(textField)
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    
+                    let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    alertView.show()
+                }
+            }
+        }
+        else if (count(textField.text) >= 5) {
+            textField.resignFirstResponder()
+            self.finishTypingMobileNumber(textField)
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                let alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                alertView.show()
+            }
+        }
+        
+    }
+
+    
     func finishTypingMobileNumber(sender: AnyObject?) {
-        self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text)
+        var countryCode = self.getSelectedDialCode()
+        self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text, countryCode: countryCode)
     }
     
     func clearPhoneNumberField() {
         self.newNumberTextField.text = ""
     }
     
+    // MARK: - Picker data & delegate methods
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return CountryCodes.sharedInstance.countryCodes.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+        var currCountry = CountryCodes.sharedInstance.countryCodes[row]
+        
+        var countryCode = UILabel();
+        countryCode.text = currCountry["dial_code"] as? String
+        countryCode.textColor = UIColor.whiteColor()
+        countryCode.tintColor = UIColor.whiteColor()
+        countryCode.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
+        countryCode.textAlignment = NSTextAlignment.Center
+        return countryCode
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        if (self.newNumberTextField!.text != "") {
+            if (self.getSelectedDialCode() != "+1") {
+                self.newNumberTextField!.text = self.newNumberTextField!.text.removeDashes()
+            }
+            else {
+                self.newNumberTextField!.text = self.newNumberTextField!.text.formatWithDashes()
+            }
+        }
+    }
+
+    func getSelectedDialCode() -> String {
+        return CountryCodes.sharedInstance.countryCodes[self.mobileCountryRoller.selectedRowInComponent(0)].objectForKey("dial_code") as! String
+    }
     
     // MARK: - Required inits
     
@@ -242,5 +350,5 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate {
 
 protocol ChangeNumberInputPhoneViewDelegate: class {
     func makeConstraintToNavigationBarBottom(view: UIView!)
-    func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber: String)
+    func changeNumberInputPhoneView(view: ChangeNumberInputPhoneView, didFinishTypingMobileNumber: String, countryCode: String!)
 }

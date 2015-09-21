@@ -117,6 +117,45 @@ extension String {
         return nil
     }
     
+    func formatWithDashes() -> String {
+        var newNumber = self as NSString
+        var len = newNumber.length - 1
+        
+        var firstPart = ""
+        var secondPart = ""
+        var thirdPart = ""
+        
+        if len < 2 {
+            firstPart = newNumber.substringWithRange(NSRange(location: 0, length: len+1))
+        }
+        else {
+            firstPart = newNumber.substringWithRange(NSRange(location: 0, length: 3))
+            firstPart = self.addDashToString(firstPart)
+            
+            if len < 5 {
+                secondPart = newNumber.substringWithRange(NSRange(location: 3, length: (len+1) - 3))
+            }
+            else
+            {
+                secondPart = newNumber.substringWithRange(NSRange(location: 3, length: 3))
+                secondPart = self.addDashToString(secondPart)
+                
+                thirdPart = newNumber.substringWithRange(NSRange(location: 6, length: (len+1) - 6))
+            }
+        }
+        
+        return "\(firstPart)\(secondPart)\(thirdPart)"
+    }
+    
+    func addDashToString(str: String) -> String {
+        return "\(str)-"
+    }
+    
+    func removeDashes() -> String {
+        return self.stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+    }
+
+    
 }
 
 extension NSString {
@@ -124,5 +163,7 @@ extension NSString {
     func toFormattedPhoneNumber() -> NSString {
         return NSString(string: (self as String).toFormattedPhoneNumber())
     }
+    
+    
     
 }

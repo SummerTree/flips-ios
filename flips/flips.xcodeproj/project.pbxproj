@@ -33,6 +33,63 @@
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
+		3E4E6A2F1B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */; };
+		3E4E6A301B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */; };
+		3E4E6A311B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */; };
+		3E4E6A331B90C74400AD002B /* ComposeEditControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */; };
+		3E4E6A341B90C74400AD002B /* ComposeEditControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */; };
+		3E4E6A351B90C74400AD002B /* ComposeEditControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */; };
+		3E4E6A381B90C76800AD002B /* ComposeCaptureControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */; };
+		3E4E6A391B90C76800AD002B /* ComposeCaptureControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */; };
+		3E4E6A3A1B90C76800AD002B /* ComposeCaptureControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */; };
+		3E4E6A3D1B90C78F00AD002B /* FlipsCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A3C1B90C78F00AD002B /* FlipsCompositionView.swift */; };
+		3E4E6A3E1B90C78F00AD002B /* FlipsCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A3C1B90C78F00AD002B /* FlipsCompositionView.swift */; };
+		3E4E6A3F1B90C78F00AD002B /* FlipsCompositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A3C1B90C78F00AD002B /* FlipsCompositionView.swift */; };
+		3E4E6A451B90C7B800AD002B /* FlipCompositionPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A441B90C7B800AD002B /* FlipCompositionPlayerView.swift */; };
+		3E4E6A461B90C7B800AD002B /* FlipCompositionPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A441B90C7B800AD002B /* FlipCompositionPlayerView.swift */; };
+		3E4E6A471B90C7B800AD002B /* FlipCompositionPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A441B90C7B800AD002B /* FlipCompositionPlayerView.swift */; };
+		3E4E6A491B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */; };
+		3E4E6A4A1B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */; };
+		3E4E6A4B1B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */; };
+		3E5B42851B97E5BB008A796B /* FlipsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */; };
+		3E5B42861B97E5BB008A796B /* FlipsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */; };
+		3E5B42871B97E5BB008A796B /* FlipsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */; };
+		3E5F61631B911C1400B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
+		3E5F61641B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
+		3E5F61651B911C1A00B869FD /* FlipsMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */; };
+		3E63A36A1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
+		3E63A36B1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
+		3E63A36C1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
+		404F52201B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
+		404F52211B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
+		404F52221B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
+		406378651B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		406378661B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		406378671B309DF30086AA59 /* FlipsSendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406378641B309DF30086AA59 /* FlipsSendButton.swift */; };
+		40900BA61B62C3460043E495 /* DraftingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BA51B62C3460043E495 /* DraftingTable.swift */; };
+		40900BA71B62C3460043E495 /* DraftingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BA51B62C3460043E495 /* DraftingTable.swift */; };
+		40900BA81B62C3460043E495 /* DraftingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BA51B62C3460043E495 /* DraftingTable.swift */; };
+		40900BAB1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
+		40900BAC1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
+		40900BAD1B62C37D0043E495 /* FlipBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40900BAA1B62C37D0043E495 /* FlipBook.swift */; };
+		40BF16801B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
+		40BF16811B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
+		40BF16821B963CC80086E425 /* CountryCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 40BF167F1B963CC80086E425 /* CountryCodes.json */; };
+		40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
+		40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
+		40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */; };
+		40F044001B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
+		40F044011B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
+		40F044021B3CE70300AF3B73 /* MovieExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F043FF1B3CE70300AF3B73 /* MovieExport.swift */; };
+		40F093941B7E317800787969 /* ToolSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093931B7E317800787969 /* ToolSlider.swift */; };
+		40F093951B7E317800787969 /* ToolSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093931B7E317800787969 /* ToolSlider.swift */; };
+		40F093961B7E317800787969 /* ToolSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093931B7E317800787969 /* ToolSlider.swift */; };
+		40F093981B7E31C000787969 /* ToolSliderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093971B7E31C000787969 /* ToolSliderAction.swift */; };
+		40F093991B7E31C000787969 /* ToolSliderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093971B7E31C000787969 /* ToolSliderAction.swift */; };
+		40F0939A1B7E31C000787969 /* ToolSliderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F093971B7E31C000787969 /* ToolSliderAction.swift */; };
+		40F0939D1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
+		40F0939E1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
+		40F0939F1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
@@ -677,6 +734,26 @@
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
 		07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSErrorExtensions.swift; path = Classes/NSErrorExtensions.swift; sourceTree = "<group>"; };
 		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
+		3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCompositionControlsView.swift; sourceTree = "<group>"; };
+		3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeEditControlsView.swift; sourceTree = "<group>"; };
+		3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeCaptureControlsView.swift; sourceTree = "<group>"; };
+		3E4E6A3C1B90C78F00AD002B /* FlipsCompositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCompositionView.swift; sourceTree = "<group>"; };
+		3E4E6A441B90C7B800AD002B /* FlipCompositionPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipCompositionPlayerView.swift; sourceTree = "<group>"; };
+		3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageCompositionVC.swift; sourceTree = "<group>"; };
+		3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSelectionView.swift; sourceTree = "<group>"; };
+		3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsMessageManager.swift; sourceTree = "<group>"; };
+		3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageSubmissionManager.swift; sourceTree = "<group>"; };
+		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
+		404F521F1B978A2100F0CDAF /* CountryCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
+		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
+		40900BA51B62C3460043E495 /* DraftingTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DraftingTable.swift; sourceTree = "<group>"; };
+		40900BAA1B62C37D0043E495 /* FlipBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipBook.swift; sourceTree = "<group>"; };
+		40BF167F1B963CC80086E425 /* CountryCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = CountryCodes.json; sourceTree = "<group>"; };
+		40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageComposerExternal.swift; sourceTree = "<group>"; };
+		40F043FF1B3CE70300AF3B73 /* MovieExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieExport.swift; sourceTree = "<group>"; };
+		40F093931B7E317800787969 /* ToolSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSlider.swift; sourceTree = "<group>"; };
+		40F093971B7E31C000787969 /* ToolSliderAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSliderAction.swift; sourceTree = "<group>"; };
+		40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSliderCollection.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -976,9 +1053,66 @@
 			name = "New Flip";
 			sourceTree = "<group>";
 		};
+		3E4E6A2D1B90C6D700AD002B /* New Composition Views */ = {
+			isa = PBXGroup;
+			children = (
+				3E4E6A3B1B90C77000AD002B /* Capture & Preview */,
+				3E4E6A361B90C74A00AD002B /* Controls */,
+			);
+			name = "New Composition Views";
+			sourceTree = "<group>";
+		};
+		3E4E6A361B90C74A00AD002B /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */,
+				3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */,
+				3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */,
+				3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */,
+			);
+			name = Controls;
+			sourceTree = "<group>";
+		};
+		3E4E6A3B1B90C77000AD002B /* Capture & Preview */ = {
+			isa = PBXGroup;
+			children = (
+				3E4E6A441B90C7B800AD002B /* FlipCompositionPlayerView.swift */,
+				3E4E6A3C1B90C78F00AD002B /* FlipsCompositionView.swift */,
+			);
+			name = "Capture & Preview";
+			sourceTree = "<group>";
+		};
+		4041EA491B47144200F36BFE /* Twilio */ = {
+			isa = PBXGroup;
+			children = (
+				4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */,
+			);
+			name = Twilio;
+			sourceTree = "<group>";
+		};
+		40900BA91B62C3570043E495 /* DraftingTable */ = {
+			isa = PBXGroup;
+			children = (
+				40900BA51B62C3460043E495 /* DraftingTable.swift */,
+				40900BAA1B62C37D0043E495 /* FlipBook.swift */,
+			);
+			name = DraftingTable;
+			sourceTree = "<group>";
+		};
+		40F0939B1B7E34C000787969 /* ToolSlider */ = {
+			isa = PBXGroup;
+			children = (
+				40F093931B7E317800787969 /* ToolSlider.swift */,
+				40F093971B7E31C000787969 /* ToolSliderAction.swift */,
+				40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */,
+			);
+			name = ToolSlider;
+			sourceTree = "<group>";
+		};
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4041EA491B47144200F36BFE /* Twilio */,
 				7A777A541ADD43F40004BEB1 /* Remote Request Manager */,
 				73D727981A83E728006DCC92 /* Caching */,
 				5707185719D19D580069064F /* Backend */,
@@ -1068,6 +1202,8 @@
 				7A18BF4D1A1E496B00C40E16 /* PhoneNumberHelper.swift */,
 				BE22C9941AA6BEC00079298E /* TempFiles.swift */,
 				7A9240DE1AE5410E00E591B7 /* QueueHelper.swift */,
+				40F043FF1B3CE70300AF3B73 /* MovieExport.swift */,
+				40C151951B4C6EE200400C98 /* MessageComposerExternal.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1310,12 +1446,15 @@
 		7066E0A319EC4D570009BCF2 /* Compose */ = {
 			isa = PBXGroup;
 			children = (
+				3E4E6A2D1B90C6D700AD002B /* New Composition Views */,
+				40F0939B1B7E34C000787969 /* ToolSlider */,
 				7A8BFEDC1A095A6900E7F2A3 /* Utils */,
 				7A8BFEDB1A09597600E7F2A3 /* Flips Collection */,
 				7A8BFED91A09596700E7F2A3 /* ComposeBottomViewContainer.swift */,
 				7A8BFEDD1A095AB100E7F2A3 /* ComposeTopViewContainer.swift */,
 				7A12B8D119F5C6E900DE955E /* FlipMessageWordListView.swift */,
 				A2392BF819EEE7C70037B0C0 /* FlipTextView.swift */,
+				406378641B309DF30086AA59 /* FlipsSendButton.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -1456,6 +1595,7 @@
 				7AB1685519E32CB0004E2162 /* Camera */,
 				704E110A19D08E3C00D2BB88 /* Controller */,
 				704E110C19D08E7B00D2BB88 /* CoreData */,
+				40900BA91B62C3570043E495 /* DraftingTable */,
 				7A2A7E4219EEF2AD00033164 /* Data Sources */,
 				704E111519D0ACAF00D2BB88 /* Extensions */,
 				70057E9219DADEB5004343ED /* Helpers */,
@@ -1521,6 +1661,9 @@
 			children = (
 				7A11792119DA07F30086A66B /* ComposeViewController.swift */,
 				A2392BF619EEE7C70037B0C0 /* FlipText.swift */,
+				3E4E6A481B90C7D900AD002B /* FlipMessageCompositionVC.swift */,
+				3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */,
+				3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */,
 			);
 			name = Compose;
 			sourceTree = "<group>";
@@ -1586,6 +1729,7 @@
 				7ACC603F1AC97E110052076D /* ReadFlipMessageDataSource.swift */,
 				7AF82DFB19EFEC5800D0393F /* RoomDataSource.swift */,
 				7AF82DFC19EFEC5800D0393F /* UserDataSource.swift */,
+				404F521F1B978A2100F0CDAF /* CountryCodes.swift */,
 			);
 			name = "Data Sources";
 			sourceTree = "<group>";
@@ -1756,6 +1900,7 @@
 			children = (
 				F22184341AF83CBA0000220B /* flips-tutorial.mp4 */,
 				BE2E72071A98119400F237BE /* empty_video.mov */,
+				40BF167F1B963CC80086E425 /* CountryCodes.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1859,6 +2004,7 @@
 				BE2461311AD2D9C600859233 /* Frameworks */,
 				BE2461341AD2D9C600859233 /* Resources */,
 				BE24613D1AD2D9C600859233 /* Copy Pods Resources */,
+				4097EA0C1B9A29AC00BBD389 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1875,9 +2021,10 @@
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0640;
 				TargetAttributes = {
 					70FD4E6F19D064450024EBDB = {
+						DevelopmentTeam = Q2H5Y569K8;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1885,11 +2032,15 @@
 						};
 					};
 					BE245F901AD2D95900859233 = {
+						DevelopmentTeam = Q2H5Y569K8;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
 						};
+					};
+					BE24606A1AD2D9C600859233 = {
+						DevelopmentTeam = Q2H5Y569K8;
 					};
 				};
 			};
@@ -1920,6 +2071,7 @@
 				BE2E72081A98119400F237BE /* empty_video.mov in Resources */,
 				0794A9C21A0A986800DA8CFA /* NewFlip.storyboard in Resources */,
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
+				40BF16801B963CC80086E425 /* CountryCodes.json in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
 				F22184351AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
@@ -1933,6 +2085,7 @@
 				BE24605B1AD2D95900859233 /* empty_video.mov in Resources */,
 				BE24605C1AD2D95900859233 /* NewFlip.storyboard in Resources */,
 				BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */,
+				40BF16811B963CC80086E425 /* CountryCodes.json in Resources */,
 				BE24605F1AD2D95900859233 /* Images.xcassets in Resources */,
 				F22184361AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE2460611AD2D95900859233 /* SyncView.xib in Resources */,
@@ -1946,6 +2099,7 @@
 				BE2461351AD2D9C600859233 /* empty_video.mov in Resources */,
 				BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */,
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
+				40BF16821B963CC80086E425 /* CountryCodes.json in Resources */,
 				BE2461391AD2D9C600859233 /* Images.xcassets in Resources */,
 				F22184371AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */,
@@ -1969,6 +2123,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		4097EA0C1B9A29AC00BBD389 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
 		};
 		5703BC6994854CA9A34690DC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2064,6 +2231,7 @@
 				7330F80A1A89670300446CD8 /* JournalEntry.swift in Sources */,
 				7AD93F9019E4B805009CC59A /* ConfirmPictureViewDelegate.swift in Sources */,
 				73D63F201AF0323B000EC678 /* FlipsUINavigationController.m in Sources */,
+				40F093941B7E317800787969 /* ToolSlider.swift in Sources */,
 				07B66B311A147B5800407A28 /* MBContactModel.m in Sources */,
 				7A8BFEDE1A095AB100E7F2A3 /* ComposeTopViewContainer.swift in Sources */,
 				7330F8081A89624F00446CD8 /* CacheJournal.swift in Sources */,
@@ -2084,6 +2252,7 @@
 				7043DF361A116D0300EFF9AD /* ChangeNumberInputPhoneView.swift in Sources */,
 				574156AA19D4A05F006F0A2F /* SwiftyJSON.swift in Sources */,
 				7317F5CD1A954CA2006E00FD /* ThumbnailsCache.swift in Sources */,
+				404F52201B978A2100F0CDAF /* CountryCodes.swift in Sources */,
 				57EECE4919DB510D0066BEE7 /* VerificationCodeView.swift in Sources */,
 				7AA711811A28D8B10082165A /* Device.m in Sources */,
 				7A07EB961AC07AC60002DE18 /* GroupParticipantsView.swift in Sources */,
@@ -2092,6 +2261,7 @@
 				07B66B2E1A147B5800407A28 /* MBContactCollectionViewEntryCell.m in Sources */,
 				7AB1685819E32CD2004E2162 /* AVCamPreviewView.m in Sources */,
 				07DAAF781A40ED9D0017DBA1 /* ChatLabel.swift in Sources */,
+				3E4E6A451B90C7B800AD002B /* FlipCompositionPlayerView.swift in Sources */,
 				7AD93FA719E62F4E009CC59A /* NotificationMessageViewDelegate.swift in Sources */,
 				7ACC604D1ACAD66C0052076D /* DeletedFlipMessageExtension.swift in Sources */,
 				572BF9181AB9E52600B0D75A /* Flip.m in Sources */,
@@ -2101,6 +2271,7 @@
 				7AE045001A0CF14600C68313 /* UILabelExtensions.swift in Sources */,
 				0757ECAA1A114FA500D0277C /* ContactTableViewCell.swift in Sources */,
 				7A11791D19DA03980086A66B /* CustomNavigationBarDelegate.swift in Sources */,
+				40F044001B3CE70300AF3B73 /* MovieExport.swift in Sources */,
 				7AFE1F381AB8A67500E38673 /* flips.xcdatamodeld in Sources */,
 				7AD93FA019E62530009CC59A /* NotificationMessageView.swift in Sources */,
 				7A11792219DA07F30086A66B /* ComposeViewController.swift in Sources */,
@@ -2119,9 +2290,11 @@
 				7A6D3C9919D2058500057058 /* UIImageViewExtensions.swift in Sources */,
 				7A0D6CF119D4966700E39A1B /* BuilderViewController.swift in Sources */,
 				5753BF4319D8974200E37216 /* TermsOfUseViewController.swift in Sources */,
+				406378651B309DF30086AA59 /* FlipsSendButton.swift in Sources */,
 				F29324711A1583B700355A4D /* PlayerView.swift in Sources */,
 				70FD4E7619D064450024EBDB /* AppDelegate.swift in Sources */,
 				705B3DDB1A03BBB400E0D3E9 /* PreviewViewController.swift in Sources */,
+				3E5F61631B911C1400B869FD /* FlipsMessageManager.swift in Sources */,
 				7A356E4519F95546002D923B /* ContactDataSource.swift in Sources */,
 				7A11792419DA08800086A66B /* InboxViewDelegate.swift in Sources */,
 				70DAB3461A1241B70044AEC1 /* ChangeNumberVerificationCodeViewController.swift in Sources */,
@@ -2142,6 +2315,7 @@
 				7033584619E4160B0030CF11 /* SettingsView.swift in Sources */,
 				70B7695919E6C1E900CAA9A9 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				7AF82DEA19EFEC3300D0393F /* UserExtension.swift in Sources */,
+				3E63A36A1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */,
 				70AC67021A23C98A003FE3CA /* ImportContactViewController.swift in Sources */,
 				7A0D6CEB19D452C500E39A1B /* UIViewControllerExtensions.swift in Sources */,
 				7AF82E0119EFECC900D0393F /* DeviceDataSource.swift in Sources */,
@@ -2161,8 +2335,10 @@
 				7046C9B719F18EB100CBD72D /* AudioRecorderService.swift in Sources */,
 				A2392BFC19EEE7C70037B0C0 /* FlipTextView.swift in Sources */,
 				A2D60FCC19E45EEA001C92A0 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				40F0939D1B7E34E400787969 /* ToolSliderCollection.swift in Sources */,
 				7AF2BF101A37276E0030DDF2 /* OnboardingHelper.swift in Sources */,
 				7A27FA5119D58DFE005104A9 /* CustomNavigationBar.swift in Sources */,
+				40C151961B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
 				7AB1683D19E31B8E004E2162 /* TakePictureViewDelegate.swift in Sources */,
 				07CB53721A3E4A3C00853A78 /* UIAlertViewExtensions.swift in Sources */,
 				7A2A7E2419EDBFB800033164 /* CoreDataHandler.swift in Sources */,
@@ -2175,11 +2351,13 @@
 				7AA95E211A14CD69004286D3 /* BuilderIntroductionViewController.swift in Sources */,
 				7AFB0B6819D5ABB900634C4B /* CustomBadgeView.swift in Sources */,
 				7ACBBED31A02B41400A7109C /* ActivityIndicatorHelper.swift in Sources */,
+				3E5B42851B97E5BB008A796B /* FlipsSelectionView.swift in Sources */,
 				07B66B2D1A147B5800407A28 /* MBContactCollectionViewContactCell.m in Sources */,
 				709D8EBA1A2E1C9A007A119F /* NetworkReachabilityHelper.swift in Sources */,
 				7ACC60461AC97F090052076D /* ReadFlipMessage.m in Sources */,
 				BE22C9951AA6BEC00079298E /* TempFiles.swift in Sources */,
 				A216D3D919E708E800AD10DB /* JoinStringsTextField.swift in Sources */,
+				3E4E6A2F1B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */,
 				7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */,
 				07B66B321A147B5800407A28 /* MBContactPicker.m in Sources */,
 				F2DA965E1A38D06700BAA359 /* FlipMessage.m in Sources */,
@@ -2197,13 +2375,16 @@
 				709088251A1E163B009915FE /* ImportContactTableViewController.swift in Sources */,
 				A2A5C6DB1A01457A00E4CB2C /* FlipsViewCell.swift in Sources */,
 				7AB946DA19DEF1CC00779C73 /* UserFormViewDelegate.swift in Sources */,
+				40F093981B7E31C000787969 /* ToolSliderAction.swift in Sources */,
 				7A54599C1A9A84FC00EAC679 /* NavigationHandler.swift in Sources */,
 				7ACBBED11A024F4300A7109C /* DateHelper.swift in Sources */,
 				7AF82E0519EFED2100D0393F /* BaseDataSource.swift in Sources */,
 				5707186519D1AEBB0069064F /* FlipsService.swift in Sources */,
+				3E4E6A3D1B90C78F00AD002B /* FlipsCompositionView.swift in Sources */,
 				07B5B7691A30E59E0087AD61 /* StringPhoneNumberExtensions.swift in Sources */,
 				70ABC7EA1A09376100A7085A /* SettingsTableViewCell.swift in Sources */,
 				7ACC604F1ACAD8730052076D /* DeletedFlipMessageDataSource.swift in Sources */,
+				3E4E6A331B90C74400AD002B /* ComposeEditControlsView.swift in Sources */,
 				F29324751A19A36700355A4D /* FlipPlayerItem.swift in Sources */,
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
@@ -2213,6 +2394,7 @@
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
 				7AA711721A28D8AF0082165A /* Contact.m in Sources */,
 				7A9619DC19DB2976005E4343 /* FlipsViewController.swift in Sources */,
+				3E4E6A491B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */,
 				70A2A5B61A0A8DFE00725953 /* AboutView.swift in Sources */,
 				A2124E9A19DB269700631FE0 /* ForgotPasswordViewDelegate.swift in Sources */,
 				70B560A219D995E600FE4C34 /* FlipsWebViewController.swift in Sources */,
@@ -2234,9 +2416,11 @@
 				57945D501AA5307600D55FD4 /* SessionService.swift in Sources */,
 				70AC67051A23C99F003FE3CA /* ImportContactView.swift in Sources */,
 				7A12B8D219F5C6E900DE955E /* FlipMessageWordListView.swift in Sources */,
+				3E4E6A381B90C76800AD002B /* ComposeCaptureControlsView.swift in Sources */,
 				57A3A6C119D5E4D90043790E /* PhoneNumberViewController.swift in Sources */,
 				7A0D6CEF19D4963100E39A1B /* SettingsViewController.swift in Sources */,
 				7AB946D819DED95900779C73 /* StringExtensions.swift in Sources */,
+				40900BA61B62C3460043E495 /* DraftingTable.swift in Sources */,
 				70B560A519D996F000FE4C34 /* FlipsWebView.swift in Sources */,
 				7A9619E919DC2CF0005E4343 /* SignUpView.swift in Sources */,
 				7A9FFA421AEE7623002DE1FE /* Room.m in Sources */,
@@ -2254,6 +2438,7 @@
 				5786B2C919EEADB700021DD3 /* ChatViewController.swift in Sources */,
 				7A7937A11A3085E500136144 /* FlipsHeaderView.swift in Sources */,
 				7A1892CE19D1EE050026E641 /* ConversationTableViewCell.swift in Sources */,
+				40900BAB1B62C37D0043E495 /* FlipBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2273,6 +2458,7 @@
 				BE245F9D1AD2D95900859233 /* JournalEntry.swift in Sources */,
 				BE245F9E1AD2D95900859233 /* ConfirmPictureViewDelegate.swift in Sources */,
 				BE245F9F1AD2D95900859233 /* MBContactModel.m in Sources */,
+				40F093951B7E317800787969 /* ToolSlider.swift in Sources */,
 				BE245FA01AD2D95900859233 /* ComposeTopViewContainer.swift in Sources */,
 				BE245FA11AD2D95900859233 /* CacheJournal.swift in Sources */,
 				BE245FA21AD2D95900859233 /* TakePictureViewControllerDelegate.swift in Sources */,
@@ -2293,6 +2479,7 @@
 				BE245FAE1AD2D95900859233 /* ThumbnailsCache.swift in Sources */,
 				BE245FAF1AD2D95900859233 /* VerificationCodeView.swift in Sources */,
 				BE245FB01AD2D95900859233 /* Device.m in Sources */,
+				404F52211B978A2100F0CDAF /* CountryCodes.swift in Sources */,
 				BE245FB11AD2D95900859233 /* GroupParticipantsView.swift in Sources */,
 				BE245FB21AD2D95900859233 /* MessagesTopViewCell.swift in Sources */,
 				BE245FB31AD2D95900859233 /* UIImage+ImageEffects.m in Sources */,
@@ -2301,6 +2488,7 @@
 				BE245FB61AD2D95900859233 /* ChatLabel.swift in Sources */,
 				BE245FB71AD2D95900859233 /* NotificationMessageViewDelegate.swift in Sources */,
 				BE245FB81AD2D95900859233 /* DeletedFlipMessageExtension.swift in Sources */,
+				3E4E6A461B90C7B800AD002B /* FlipCompositionPlayerView.swift in Sources */,
 				BE245FB91AD2D95900859233 /* Flip.m in Sources */,
 				BE245FBA1AD2D95900859233 /* MBContactCollectionViewPromptCell.m in Sources */,
 				BE245FBB1AD2D95900859233 /* SelectedFlipOverlayView.swift in Sources */,
@@ -2310,6 +2498,7 @@
 				BE245FBF1AD2D95900859233 /* CustomNavigationBarDelegate.swift in Sources */,
 				BE245FC01AD2D95900859233 /* flips.xcdatamodeld in Sources */,
 				BE245FC11AD2D95900859233 /* NotificationMessageView.swift in Sources */,
+				40F044011B3CE70300AF3B73 /* MovieExport.swift in Sources */,
 				BE245FC21AD2D95900859233 /* ComposeViewController.swift in Sources */,
 				BE245FC31AD2D95900859233 /* ConfirmFlipViewController.swift in Sources */,
 				BE245FC41AD2D95900859233 /* InboxViewController.swift in Sources */,
@@ -2328,9 +2517,11 @@
 				BE245FD11AD2D95900859233 /* TermsOfUseViewController.swift in Sources */,
 				7A9FFA431AEE7623002DE1FE /* Room.m in Sources */,
 				BE245FD21AD2D95900859233 /* PlayerView.swift in Sources */,
+				406378661B309DF30086AA59 /* FlipsSendButton.swift in Sources */,
 				BE245FD31AD2D95900859233 /* AppDelegate.swift in Sources */,
 				BE245FD41AD2D95900859233 /* PreviewViewController.swift in Sources */,
 				BE245FD51AD2D95900859233 /* ContactDataSource.swift in Sources */,
+				3E5F61641B911C1A00B869FD /* FlipsMessageManager.swift in Sources */,
 				BE245FD61AD2D95900859233 /* InboxViewDelegate.swift in Sources */,
 				BE245FD71AD2D95900859233 /* ChangeNumberVerificationCodeViewController.swift in Sources */,
 				BE245FD81AD2D95900859233 /* MBContactCollectionView.m in Sources */,
@@ -2351,6 +2542,7 @@
 				BE245FE71AD2D95900859233 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				BE245FE81AD2D95900859233 /* UserExtension.swift in Sources */,
 				BE245FE91AD2D95900859233 /* ImportContactViewController.swift in Sources */,
+				3E63A36B1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */,
 				BE245FEA1AD2D95900859233 /* UIViewControllerExtensions.swift in Sources */,
 				BE245FEB1AD2D95900859233 /* DeviceDataSource.swift in Sources */,
 				BE245FEC1AD2D95900859233 /* LocalizedString.swift in Sources */,
@@ -2370,8 +2562,10 @@
 				BE245FF91AD2D95900859233 /* AudioRecorderService.swift in Sources */,
 				BE245FFA1AD2D95900859233 /* FlipTextView.swift in Sources */,
 				BE245FFB1AD2D95900859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				40F0939E1B7E34E400787969 /* ToolSliderCollection.swift in Sources */,
 				BE245FFC1AD2D95900859233 /* OnboardingHelper.swift in Sources */,
 				7A9240E01AE5410E00E591B7 /* QueueHelper.swift in Sources */,
+				40C151971B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
 				BE245FFD1AD2D95900859233 /* CustomNavigationBar.swift in Sources */,
 				BE245FFE1AD2D95900859233 /* TakePictureViewDelegate.swift in Sources */,
 				BE245FFF1AD2D95900859233 /* UIAlertViewExtensions.swift in Sources */,
@@ -2384,11 +2578,13 @@
 				BE2460061AD2D95900859233 /* BuilderService.swift in Sources */,
 				BE2460071AD2D95900859233 /* BuilderIntroductionViewController.swift in Sources */,
 				BE2460081AD2D95900859233 /* CustomBadgeView.swift in Sources */,
+				3E5B42861B97E5BB008A796B /* FlipsSelectionView.swift in Sources */,
 				BE2460091AD2D95900859233 /* ActivityIndicatorHelper.swift in Sources */,
 				BE24600A1AD2D95900859233 /* MBContactCollectionViewContactCell.m in Sources */,
 				BE24600B1AD2D95900859233 /* NetworkReachabilityHelper.swift in Sources */,
 				BE24600C1AD2D95900859233 /* ReadFlipMessage.m in Sources */,
 				BE24600D1AD2D95900859233 /* TempFiles.swift in Sources */,
+				3E4E6A301B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */,
 				BE24600E1AD2D95900859233 /* JoinStringsTextField.swift in Sources */,
 				BE24600F1AD2D95900859233 /* FlipService.swift in Sources */,
 				BE2460101AD2D95900859233 /* MBContactPicker.m in Sources */,
@@ -2406,13 +2602,16 @@
 				BE24601C1AD2D95900859233 /* PhoneNumberViewDelegate.swift in Sources */,
 				BE24601D1AD2D95900859233 /* ImportContactTableViewController.swift in Sources */,
 				BE24601E1AD2D95900859233 /* FlipsViewCell.swift in Sources */,
+				40F093991B7E31C000787969 /* ToolSliderAction.swift in Sources */,
 				BE24601F1AD2D95900859233 /* UserFormViewDelegate.swift in Sources */,
 				BE2460201AD2D95900859233 /* NavigationHandler.swift in Sources */,
 				BE2460211AD2D95900859233 /* DateHelper.swift in Sources */,
 				BE2460221AD2D95900859233 /* BaseDataSource.swift in Sources */,
+				3E4E6A3E1B90C78F00AD002B /* FlipsCompositionView.swift in Sources */,
 				BE2460231AD2D95900859233 /* FlipsService.swift in Sources */,
 				BE2460241AD2D95900859233 /* StringPhoneNumberExtensions.swift in Sources */,
 				BE2460251AD2D95900859233 /* SettingsTableViewCell.swift in Sources */,
+				3E4E6A341B90C74400AD002B /* ComposeEditControlsView.swift in Sources */,
 				BE2460261AD2D95900859233 /* DeletedFlipMessageDataSource.swift in Sources */,
 				BE2460271AD2D95900859233 /* FlipPlayerItem.swift in Sources */,
 				BE2460281AD2D95900859233 /* UIColorExtensions.swift in Sources */,
@@ -2422,6 +2621,7 @@
 				BE24602C1AD2D95900859233 /* NewPasswordViewController.swift in Sources */,
 				BE24602D1AD2D95900859233 /* UserFormView.swift in Sources */,
 				BE24602E1AD2D95900859233 /* Contact.m in Sources */,
+				3E4E6A4A1B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */,
 				BE24602F1AD2D95900859233 /* FlipsViewController.swift in Sources */,
 				BE2460301AD2D95900859233 /* AboutView.swift in Sources */,
 				BE2460311AD2D95900859233 /* ForgotPasswordViewDelegate.swift in Sources */,
@@ -2443,9 +2643,11 @@
 				BE2460401AD2D95900859233 /* NewPasswordViewDelegate.swift in Sources */,
 				BE2460411AD2D95900859233 /* SessionService.swift in Sources */,
 				BE2460421AD2D95900859233 /* ImportContactView.swift in Sources */,
+				3E4E6A391B90C76800AD002B /* ComposeCaptureControlsView.swift in Sources */,
 				BE2460431AD2D95900859233 /* FlipMessageWordListView.swift in Sources */,
 				BE2460441AD2D95900859233 /* PhoneNumberViewController.swift in Sources */,
 				BE2460451AD2D95900859233 /* SettingsViewController.swift in Sources */,
+				40900BA71B62C3460043E495 /* DraftingTable.swift in Sources */,
 				BE2460461AD2D95900859233 /* StringExtensions.swift in Sources */,
 				BE2460471AD2D95900859233 /* FlipsWebView.swift in Sources */,
 				BE2460481AD2D95900859233 /* SignUpView.swift in Sources */,
@@ -2463,6 +2665,7 @@
 				BE2460541AD2D95900859233 /* ChatViewController.swift in Sources */,
 				BE2460551AD2D95900859233 /* FlipsHeaderView.swift in Sources */,
 				BE2460561AD2D95900859233 /* ConversationTableViewCell.swift in Sources */,
+				40900BAC1B62C37D0043E495 /* FlipBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2482,6 +2685,7 @@
 				BE2460771AD2D9C600859233 /* JournalEntry.swift in Sources */,
 				BE2460781AD2D9C600859233 /* ConfirmPictureViewDelegate.swift in Sources */,
 				BE2460791AD2D9C600859233 /* MBContactModel.m in Sources */,
+				40F093961B7E317800787969 /* ToolSlider.swift in Sources */,
 				BE24607A1AD2D9C600859233 /* ComposeTopViewContainer.swift in Sources */,
 				BE24607B1AD2D9C600859233 /* CacheJournal.swift in Sources */,
 				BE24607C1AD2D9C600859233 /* TakePictureViewControllerDelegate.swift in Sources */,
@@ -2502,6 +2706,7 @@
 				BE2460881AD2D9C600859233 /* ThumbnailsCache.swift in Sources */,
 				BE2460891AD2D9C600859233 /* VerificationCodeView.swift in Sources */,
 				BE24608A1AD2D9C600859233 /* Device.m in Sources */,
+				404F52221B978A2100F0CDAF /* CountryCodes.swift in Sources */,
 				BE24608B1AD2D9C600859233 /* GroupParticipantsView.swift in Sources */,
 				BE24608C1AD2D9C600859233 /* MessagesTopViewCell.swift in Sources */,
 				BE24608D1AD2D9C600859233 /* UIImage+ImageEffects.m in Sources */,
@@ -2510,6 +2715,7 @@
 				BE2460901AD2D9C600859233 /* ChatLabel.swift in Sources */,
 				BE2460911AD2D9C600859233 /* NotificationMessageViewDelegate.swift in Sources */,
 				BE2460921AD2D9C600859233 /* DeletedFlipMessageExtension.swift in Sources */,
+				3E4E6A471B90C7B800AD002B /* FlipCompositionPlayerView.swift in Sources */,
 				BE2460931AD2D9C600859233 /* Flip.m in Sources */,
 				BE2460941AD2D9C600859233 /* MBContactCollectionViewPromptCell.m in Sources */,
 				BE2460951AD2D9C600859233 /* SelectedFlipOverlayView.swift in Sources */,
@@ -2519,6 +2725,7 @@
 				BE2460991AD2D9C600859233 /* CustomNavigationBarDelegate.swift in Sources */,
 				BE24609A1AD2D9C600859233 /* flips.xcdatamodeld in Sources */,
 				BE24609B1AD2D9C600859233 /* NotificationMessageView.swift in Sources */,
+				40F044021B3CE70300AF3B73 /* MovieExport.swift in Sources */,
 				BE24609C1AD2D9C600859233 /* ComposeViewController.swift in Sources */,
 				BE24609D1AD2D9C600859233 /* ConfirmFlipViewController.swift in Sources */,
 				BE24609E1AD2D9C600859233 /* InboxViewController.swift in Sources */,
@@ -2537,9 +2744,11 @@
 				BE2460AB1AD2D9C600859233 /* TermsOfUseViewController.swift in Sources */,
 				7A9FFA441AEE7623002DE1FE /* Room.m in Sources */,
 				BE2460AC1AD2D9C600859233 /* PlayerView.swift in Sources */,
+				406378671B309DF30086AA59 /* FlipsSendButton.swift in Sources */,
 				BE2460AD1AD2D9C600859233 /* AppDelegate.swift in Sources */,
 				BE2460AE1AD2D9C600859233 /* PreviewViewController.swift in Sources */,
 				BE2460AF1AD2D9C600859233 /* ContactDataSource.swift in Sources */,
+				3E5F61651B911C1A00B869FD /* FlipsMessageManager.swift in Sources */,
 				BE2460B01AD2D9C600859233 /* InboxViewDelegate.swift in Sources */,
 				BE2460B11AD2D9C600859233 /* ChangeNumberVerificationCodeViewController.swift in Sources */,
 				BE2460B21AD2D9C600859233 /* MBContactCollectionView.m in Sources */,
@@ -2560,6 +2769,7 @@
 				BE2460C11AD2D9C600859233 /* UIImagePickerController+StatusBarLight.swift in Sources */,
 				BE2460C21AD2D9C600859233 /* UserExtension.swift in Sources */,
 				BE2460C31AD2D9C600859233 /* ImportContactViewController.swift in Sources */,
+				3E63A36C1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */,
 				BE2460C41AD2D9C600859233 /* UIViewControllerExtensions.swift in Sources */,
 				BE2460C51AD2D9C600859233 /* DeviceDataSource.swift in Sources */,
 				BE2460C61AD2D9C600859233 /* LocalizedString.swift in Sources */,
@@ -2579,8 +2789,10 @@
 				BE2460D31AD2D9C600859233 /* AudioRecorderService.swift in Sources */,
 				BE2460D41AD2D9C600859233 /* FlipTextView.swift in Sources */,
 				BE2460D51AD2D9C600859233 /* ForgotPasswordVerificationCodeViewController.swift in Sources */,
+				40F0939F1B7E34E400787969 /* ToolSliderCollection.swift in Sources */,
 				BE2460D61AD2D9C600859233 /* OnboardingHelper.swift in Sources */,
 				7A9240E11AE5410E00E591B7 /* QueueHelper.swift in Sources */,
+				40C151981B4C6EE200400C98 /* MessageComposerExternal.swift in Sources */,
 				BE2460D71AD2D9C600859233 /* CustomNavigationBar.swift in Sources */,
 				BE2460D81AD2D9C600859233 /* TakePictureViewDelegate.swift in Sources */,
 				BE2460D91AD2D9C600859233 /* UIAlertViewExtensions.swift in Sources */,
@@ -2593,11 +2805,13 @@
 				BE2460E01AD2D9C600859233 /* BuilderService.swift in Sources */,
 				BE2460E11AD2D9C600859233 /* BuilderIntroductionViewController.swift in Sources */,
 				BE2460E21AD2D9C600859233 /* CustomBadgeView.swift in Sources */,
+				3E5B42871B97E5BB008A796B /* FlipsSelectionView.swift in Sources */,
 				BE2460E31AD2D9C600859233 /* ActivityIndicatorHelper.swift in Sources */,
 				BE2460E41AD2D9C600859233 /* MBContactCollectionViewContactCell.m in Sources */,
 				BE2460E51AD2D9C600859233 /* NetworkReachabilityHelper.swift in Sources */,
 				BE2460E61AD2D9C600859233 /* ReadFlipMessage.m in Sources */,
 				BE2460E71AD2D9C600859233 /* TempFiles.swift in Sources */,
+				3E4E6A311B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */,
 				BE2460E81AD2D9C600859233 /* JoinStringsTextField.swift in Sources */,
 				BE2460E91AD2D9C600859233 /* FlipService.swift in Sources */,
 				BE2460EA1AD2D9C600859233 /* MBContactPicker.m in Sources */,
@@ -2615,21 +2829,26 @@
 				BE2460F61AD2D9C600859233 /* PhoneNumberViewDelegate.swift in Sources */,
 				BE2460F71AD2D9C600859233 /* ImportContactTableViewController.swift in Sources */,
 				BE2460F81AD2D9C600859233 /* FlipsViewCell.swift in Sources */,
+				40F0939A1B7E31C000787969 /* ToolSliderAction.swift in Sources */,
 				BE2460F91AD2D9C600859233 /* UserFormViewDelegate.swift in Sources */,
 				BE2460FA1AD2D9C600859233 /* NavigationHandler.swift in Sources */,
 				BE2460FB1AD2D9C600859233 /* DateHelper.swift in Sources */,
 				BE2460FC1AD2D9C600859233 /* BaseDataSource.swift in Sources */,
+				3E4E6A3F1B90C78F00AD002B /* FlipsCompositionView.swift in Sources */,
 				BE2460FD1AD2D9C600859233 /* FlipsService.swift in Sources */,
 				BE2460FE1AD2D9C600859233 /* StringPhoneNumberExtensions.swift in Sources */,
 				BE2460FF1AD2D9C600859233 /* SettingsTableViewCell.swift in Sources */,
+				3E4E6A351B90C74400AD002B /* ComposeEditControlsView.swift in Sources */,
 				BE2461001AD2D9C600859233 /* DeletedFlipMessageDataSource.swift in Sources */,
 				BE2461011AD2D9C600859233 /* FlipPlayerItem.swift in Sources */,
 				BE2461021AD2D9C600859233 /* UIColorExtensions.swift in Sources */,
 				BE2461031AD2D9C600859233 /* TakePictureViewController.swift in Sources */,
+				40900BA81B62C3460043E495 /* DraftingTable.swift in Sources */,
 				BE2461041AD2D9C600859233 /* DAKeyboardControl.m in Sources */,
 				BE2461051AD2D9C600859233 /* BlurredThumbnailsCache.swift in Sources */,
 				BE2461061AD2D9C600859233 /* NewPasswordViewController.swift in Sources */,
 				BE2461071AD2D9C600859233 /* UserFormView.swift in Sources */,
+				3E4E6A4B1B90C7D900AD002B /* FlipMessageCompositionVC.swift in Sources */,
 				BE2461081AD2D9C600859233 /* Contact.m in Sources */,
 				BE2461091AD2D9C600859233 /* FlipsViewController.swift in Sources */,
 				BE24610A1AD2D9C600859233 /* AboutView.swift in Sources */,
@@ -2651,6 +2870,7 @@
 				BE2461191AD2D9C600859233 /* FlipMessageExtension.swift in Sources */,
 				BE24611A1AD2D9C600859233 /* NewPasswordViewDelegate.swift in Sources */,
 				BE24611B1AD2D9C600859233 /* SessionService.swift in Sources */,
+				3E4E6A3A1B90C76800AD002B /* ComposeCaptureControlsView.swift in Sources */,
 				BE24611C1AD2D9C600859233 /* ImportContactView.swift in Sources */,
 				BE24611D1AD2D9C600859233 /* FlipMessageWordListView.swift in Sources */,
 				BE24611E1AD2D9C600859233 /* PhoneNumberViewController.swift in Sources */,
@@ -2668,6 +2888,7 @@
 				BE24612A1AD2D9C600859233 /* InboxView.swift in Sources */,
 				BE24612B1AD2D9C600859233 /* DeviceService.swift in Sources */,
 				BE24612C1AD2D9C600859233 /* CacheCleanupPolicy.swift in Sources */,
+				40900BAD1B62C37D0043E495 /* FlipBook.swift in Sources */,
 				BE24612D1AD2D9C600859233 /* RoomExtension.swift in Sources */,
 				BE24612E1AD2D9C600859233 /* ChatViewController.swift in Sources */,
 				BE24612F1AD2D9C600859233 /* FlipsHeaderView.swift in Sources */,
@@ -2818,6 +3039,7 @@
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -2840,6 +3062,7 @@
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -2851,7 +3074,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -2862,6 +3085,7 @@
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = flips/ObjectiveCHeaders.h;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Distribution;
 		};
@@ -2917,7 +3141,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Flips, LLC (Q2H5Y569K8)";
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = flips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

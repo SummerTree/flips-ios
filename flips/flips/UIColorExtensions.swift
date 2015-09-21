@@ -90,4 +90,18 @@ extension UIColor {
     class func flipLabelTextColor() -> UIColor {
         return UIColor.whiteColor()
     }
+    
+    // MARK: Social
+    
+    class func facebookBlue() -> UIColor {
+        return UIColor(RRGGBB: UInt(0x3b5998))
+    }
+    
+    class func twitterBlue() -> UIColor {
+        return UIColor(RRGGBB: UInt(0x00aced))
+    }
+    
+    class func instagramBlue() -> UIColor {
+        return UIColor(RRGGBB: UInt(0x517fa4))
+    }
 }

@@ -115,7 +115,8 @@ extension UIImage {
     }
 
     class func emptyFlipImage() -> UIImage {
-        return UIImage.imageWithColor(UIColor.avacado())
+//        return UIImage.imageWithColor(UIColor.avacado())
+        return UIImage(named: "Empty_Flip_Thumbnail")!
     }
 }
 

@@ -114,7 +114,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         FBSession.activeSession().closeAndClearTokenInformation()
         
         // You must ALWAYS ask for public_profile permissions when opening a session
-        var scope = ["public_profile", "email", "user_birthday", "user_friends"]
+        var scope = ["public_profile", "email", /*"user_birthday",*/ "user_friends"]
         FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
             completionHandler: { (session, state, error) -> Void in
                 if (error == nil && (state == FBSessionState.Closed || state == FBSessionState.ClosedLoginFailed)) {

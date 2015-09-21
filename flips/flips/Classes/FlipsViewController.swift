@@ -25,19 +25,23 @@ class FlipsViewController : UIViewController {
     private var activityIndicator: UIActivityIndicatorView!
     private var loadingMessageLabel: UILabel!
     
+    var draftingTable : DraftingTable?
     
     // MARK: - Init methods
     
     init() {
         super.init(nibName: nil, bundle: nil)
+        self.draftingTable = DraftingTable.sharedInstance
     }
     
     required init(coder: NSCoder) {
 		super.init(coder: coder)
+        self.draftingTable = DraftingTable.sharedInstance
     }
     
     override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
         super.init(nibName: nil, bundle: nil)
+        self.draftingTable = DraftingTable.sharedInstance
     }
     
     
@@ -48,6 +52,7 @@ class FlipsViewController : UIViewController {
         self.setNeedsStatusBarAppearanceUpdate()
         self.setupActivityIndicator()
         self.view.bringSubviewToFront(self.activityIndicator)
+
     }
     
     override func viewWillAppear(animated: Bool) {

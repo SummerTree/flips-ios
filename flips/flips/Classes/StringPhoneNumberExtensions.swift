@@ -20,8 +20,16 @@ extension String {
     var trimmedPhoneNumber: String {
         return stringByReplacingOccurrencesOfString("-", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
     }
+    
+    var trimmedCountryCode: String {
+        return stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+    }
 
-    var intlPhoneNumber: String {
+    var intlPhoneNumberUSOnly: String {
         return "\(US_CODE)\(trimmedPhoneNumber)"
+    }
+    
+    func intlPhoneNumberWithCountryCode(countryCode: String) -> String {
+        return "\(countryCode.trimmedCountryCode)\(trimmedPhoneNumber)"
     }
 }

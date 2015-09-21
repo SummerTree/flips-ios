@@ -51,20 +51,36 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         self.addSubview(navigationBar)
         
         bottomButtonsContainerView = UIView()
-        bottomButtonsContainerView.backgroundColor = UIColor.whiteColor()
+        bottomButtonsContainerView.backgroundColor = UIColor.lightGreyF2()
         self.addSubview(bottomButtonsContainerView)
         
-        takePictureButton = UIButton()
+        let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
+        let sizerMult : CGFloat = 1.35
+        
+        takePictureButton = UIButton.buttonWithType(.Custom) as! UIButton
         takePictureButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         takePictureButton.sizeToFit()
         takePictureButton.addTarget(self, action: "takePictureButtonTapped", forControlEvents: .TouchUpInside)
+        takePictureButton.tintColor = UIColor.whiteColor()
+        takePictureButton.layer.borderColor = UIColor.whiteColor().CGColor
+        takePictureButton.layer.borderWidth = 3.0
+        takePictureButton.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
+        takePictureButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        takePictureButton.backgroundColor = UIColor.lightGrayColor()
+        takePictureButton.setImage(UIImage(named: "CameraNew")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
         bottomButtonsContainerView.addSubview(takePictureButton)
         takePictureButton.enabled = cameraView.isDeviceAuthorized()
         
         galleryButton = UIButton()
-        galleryButton.setImage(UIImage(named: "Grid"), forState: .Normal)
+        galleryButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         galleryButton.sizeToFit()
-        galleryButton.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
+        galleryButton.tintColor = UIColor.whiteColor()
+        galleryButton.layer.borderColor = UIColor.whiteColor().CGColor
+        galleryButton.layer.borderWidth = 3.0
+        galleryButton.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
+        galleryButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        galleryButton.backgroundColor = UIColor.flipOrange()
+        galleryButton.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped", forControlEvents: .TouchUpInside)
         bottomButtonsContainerView.addSubview(galleryButton)
     }
@@ -99,20 +115,42 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             make.bottom.equalTo()(self)
         }
         
+        let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
+        let sizerMult : CGFloat = 1.35
+        
         takePictureButton.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.center.equalTo()(self.bottomButtonsContainerView)
-            make.width.equalTo()(self.takePictureButton.frame.width)
-            make.height.equalTo()(self.takePictureButton.frame.height)
+            make.height.equalTo()(imageSizer.frame.height * sizerMult)
+            make.width.equalTo()(imageSizer.frame.height * sizerMult)
+        }
+        
+        var heightDivider : CGFloat = 3
+        
+        takePictureButton.imageView!.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
+            make.top.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
+            make.right.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+            make.bottom.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
         }
         
         var galleryButtonCenterXOffset : CGFloat = self.frame.width / 4
+        
         galleryButton.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
             make.centerY.equalTo()(self.bottomButtonsContainerView)
             make.leading.equalTo()(self.bottomButtonsContainerView.mas_centerX).with().offset()(galleryButtonCenterXOffset)
             make.width.equalTo()(self.galleryButton.frame.width)
             make.height.equalTo()(self.galleryButton.frame.height)
+        }
+        
+        heightDivider = 4.0 as CGFloat
+        
+        galleryButton.imageView!.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
+            make.top.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
+            make.right.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+            make.bottom.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
         }
     }
     
@@ -121,7 +159,10 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     
     func viewWillAppear(animated: Bool) {
         cameraView.registerObservers()
-        galleryButton.setLastCameraPhotoAsButtonImage()
+        //galleryButton.setLastCameraPhotoAsButtonImage()
+        
+        takePictureButton.layer.cornerRadius = takePictureButton.bounds.height / 2
+        galleryButton.layer.cornerRadius = galleryButton.bounds.height / 2
     }
     
     func viewWillDisappear(animated: Bool) {

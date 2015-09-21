@@ -11,6 +11,7 @@
 //
 
 import UIKit
+import AssetsLibrary
 
 class PlayerView: UIView {
 
@@ -45,10 +46,23 @@ class PlayerView: UIView {
     
     private var contentIdentifier: String?
     
+    var loadedPlayerItems : Array<FlipPlayerItem> {
+        get {
+            return self.playerItems
+        }
+    }
+    
+    var flipWordsStrings : [String] {
+        get {
+            return words!
+        }
+    }
+    
     // MARK: - Initializers
 
     init() {
         super.init(frame: CGRectZero)
+        
         self.addSubviews()
         self.makeConstraints()
 
@@ -395,7 +409,7 @@ class PlayerView: UIView {
 
     // MARK: - Resource loading
 
-    private func loadFlipsResourcesForPlayback(completion: () -> Void) -> Bool {
+    func loadFlipsResourcesForPlayback(completion: () -> Void) -> Bool {
         let currentIdentifier = self.contentIdentifier
         
         self.loadingFlips = true
@@ -468,6 +482,7 @@ class PlayerView: UIView {
                                 if (self.playerItems.count == flipsArray.count) {
                                     self.loadingFlips = false
                                     self.sortPlayerItems()
+                                    
                                     completion()
                                 }
                             })
@@ -524,6 +539,12 @@ class PlayerView: UIView {
         }
 
         for (var i = 0; i < flips.count; i++) {
+            let passedFlip = flips[i]
+            let localFlip = self.flips[i]
+            
+            println("\(passedFlip)")
+            println("\(localFlip)")
+            
             if (flips[i].flipID! != self.flips[i].flipID!) {
                 return false
             }
@@ -614,6 +635,9 @@ class PlayerView: UIView {
         if (self.loadPlayerOnInit) {
             self.play()
         }
+        else {
+            self.playButtonView.alpha = BUTTONS_ALPHA
+        }
     }
     
     func setupPlayerWithWord(word: String, videoURL: NSURL, thumbnailURL: NSURL?) {
@@ -640,6 +664,9 @@ class PlayerView: UIView {
         
         if (self.loadPlayerOnInit) {
             self.play()
+        }
+        else {
+            self.playButtonView.alpha = BUTTONS_ALPHA
         }
     }
 
@@ -714,8 +741,7 @@ class PlayerView: UIView {
         
         completion(player: videoPlayer)
     }
-   
-
+    
     // MARK: - View lifecycle
 
     private func addSubviews() {

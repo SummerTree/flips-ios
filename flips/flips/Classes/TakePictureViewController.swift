@@ -94,7 +94,7 @@ class TakePictureViewController : FlipsViewController, TakePictureViewDelegate, 
         UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: false)
     }
     
-    func imagePickerController(picker: UIImagePickerController!, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         self.picture = image.cropSquareThumbnail()
         confirmPictureView.setPicture(self.picture)
         self.showConfirmPictureView()
