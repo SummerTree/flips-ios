@@ -60,6 +60,9 @@
 		3E63A36A1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
 		3E63A36B1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
 		3E63A36C1BA56135006D4C51 /* FlipMessageSubmissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */; };
+		3E8C2CF11BAD1B57005DFD81 /* EndlessScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8C2CF01BAD1B57005DFD81 /* EndlessScrollView.swift */; };
+		3E8C2CF21BAD1B57005DFD81 /* EndlessScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8C2CF01BAD1B57005DFD81 /* EndlessScrollView.swift */; };
+		3E8C2CF31BAD1B57005DFD81 /* EndlessScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8C2CF01BAD1B57005DFD81 /* EndlessScrollView.swift */; };
 		404F52201B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
 		404F52211B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
 		404F52221B978A2100F0CDAF /* CountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404F521F1B978A2100F0CDAF /* CountryCodes.swift */; };
@@ -743,6 +746,7 @@
 		3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSelectionView.swift; sourceTree = "<group>"; };
 		3E5F61621B911C1400B869FD /* FlipsMessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsMessageManager.swift; sourceTree = "<group>"; };
 		3E63A3691BA56135006D4C51 /* FlipMessageSubmissionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipMessageSubmissionManager.swift; sourceTree = "<group>"; };
+		3E8C2CF01BAD1B57005DFD81 /* EndlessScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndlessScrollView.swift; sourceTree = "<group>"; };
 		4041EA4A1B47146F00F36BFE /* TwilioMessaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwilioMessaging.swift; sourceTree = "<group>"; };
 		404F521F1B978A2100F0CDAF /* CountryCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCodes.swift; sourceTree = "<group>"; };
 		406378641B309DF30086AA59 /* FlipsSendButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsSendButton.swift; sourceTree = "<group>"; };
@@ -1065,6 +1069,7 @@
 		3E4E6A361B90C74A00AD002B /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				3E8C2CF01BAD1B57005DFD81 /* EndlessScrollView.swift */,
 				3E5B42841B97E5BB008A796B /* FlipsSelectionView.swift */,
 				3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */,
 				3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */,
@@ -2021,6 +2026,7 @@
 		70FD4E6819D064450024EBDB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0640;
 				TargetAttributes = {
 					70FD4E6F19D064450024EBDB = {
@@ -2361,6 +2367,7 @@
 				7A3733C919FADDE800D1E87B /* FlipService.swift in Sources */,
 				07B66B321A147B5800407A28 /* MBContactPicker.m in Sources */,
 				F2DA965E1A38D06700BAA359 /* FlipMessage.m in Sources */,
+				3E8C2CF11BAD1B57005DFD81 /* EndlessScrollView.swift in Sources */,
 				57E3763E19DC715F0060AAA8 /* VerificationCodeViewDelegate.swift in Sources */,
 				078D4BD91A1FC71100F24262 /* RoundImageView.swift in Sources */,
 				7ACC604B1ACAD6500052076D /* DeletedFlipMessage.m in Sources */,
@@ -2588,6 +2595,7 @@
 				BE24600E1AD2D95900859233 /* JoinStringsTextField.swift in Sources */,
 				BE24600F1AD2D95900859233 /* FlipService.swift in Sources */,
 				BE2460101AD2D95900859233 /* MBContactPicker.m in Sources */,
+				3E8C2CF21BAD1B57005DFD81 /* EndlessScrollView.swift in Sources */,
 				BE2460111AD2D95900859233 /* FlipMessage.m in Sources */,
 				BE2460121AD2D95900859233 /* VerificationCodeViewDelegate.swift in Sources */,
 				BE2460131AD2D95900859233 /* RoundImageView.swift in Sources */,
@@ -2815,6 +2823,7 @@
 				BE2460E81AD2D9C600859233 /* JoinStringsTextField.swift in Sources */,
 				BE2460E91AD2D9C600859233 /* FlipService.swift in Sources */,
 				BE2460EA1AD2D9C600859233 /* MBContactPicker.m in Sources */,
+				3E8C2CF31BAD1B57005DFD81 /* EndlessScrollView.swift in Sources */,
 				BE2460EB1AD2D9C600859233 /* FlipMessage.m in Sources */,
 				BE2460EC1AD2D9C600859233 /* VerificationCodeViewDelegate.swift in Sources */,
 				BE2460ED1AD2D9C600859233 /* RoundImageView.swift in Sources */,

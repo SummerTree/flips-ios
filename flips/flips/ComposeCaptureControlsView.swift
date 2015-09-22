@@ -13,7 +13,7 @@ enum CaptureButtonOption : String {
     case Delete = "Delete"
 }
 
-class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewDelegate {
+class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate {
     
     private let SCROLL_DELAY = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC))
     
@@ -31,10 +31,6 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
     private var videoTimer : NSTimer!
     
     // UI
-    private var optionsScrollView : UIScrollView!
-    
-    private var overflowCameraView : UIView!
-    private var overflowGalleryView : UIView!
     private var flipsView : FlipsSelectionView!
     private var videoView : UIView!
     private var cameraView : UIView!
@@ -50,10 +46,9 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         fatalError("init(coder:) has not been implemented")
     }
     
-    init() {
-        super.init(frame: CGRectZero)
+    override init() {
+        super.init()
         self.initSubviews()
-        self.initConstraints()
     }
     
     
@@ -79,96 +74,12 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         
         videoView = buttonView(.Video, gestureRecognizer: longPressRecognizer)
         cameraView = buttonView(.Camera, tapSelector: Selector("handleCameraButtonTap:"))
-        overflowCameraView = buttonView(.Camera, tapSelector: Selector("handleCameraButtonTap:"))
         galleryView = buttonView(.Gallery, tapSelector: Selector("handleGalleryButtonTap:"))
-        overflowGalleryView = buttonView(.Gallery, tapSelector: Selector("handleGalleryButtonTap:"))
         
         disableCameraControls()
         
-        // ScrollView
+        addViews([flipsView, videoView, cameraView, galleryView])
         
-        optionsScrollView = UIScrollView()
-        optionsScrollView.pagingEnabled = true
-        optionsScrollView.backgroundColor = UIColor.lightGreyF2()
-        optionsScrollView.delegate = self;
-        optionsScrollView.showsHorizontalScrollIndicator = false
-        optionsScrollView.showsVerticalScrollIndicator = false
-        
-        optionsScrollView.addSubview(overflowCameraView)
-        optionsScrollView.addSubview(galleryView)
-        optionsScrollView.addSubview(flipsView)
-        optionsScrollView.addSubview(videoView)
-        optionsScrollView.addSubview(cameraView)
-        optionsScrollView.addSubview(overflowGalleryView)
-        
-        addSubview(optionsScrollView)
-        
-    }
-    
-    private func initConstraints() {
-        
-        self.optionsScrollView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self)
-            make.top.equalTo()(self)
-            make.height.equalTo()(self)
-            make.width.equalTo()(self)
-        }
-        
-        overflowCameraView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.optionsScrollView)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        galleryView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.overflowCameraView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        flipsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.galleryView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        videoView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.flipsView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        cameraView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.videoView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-       
-        overflowGalleryView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.cameraView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-    }
-    
-    
-    
-    ////
-    // MARK: - Lifecycle
-    ////
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        optionsScrollView.contentSize = CGSizeMake(optionsScrollView.frame.width, optionsScrollView.frame.height * 6)
-        scrollToFlipsView(false)
     }
     
     
@@ -188,7 +99,7 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         button.layer.borderWidth = 3.0
         button.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
         button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-        button.shadowMe()
+        //button.shadowMe()
         
         switch option {
             case .Video:
@@ -244,28 +155,6 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
     
     
     ////
-    // MARK: - UIScrollViewDelegate
-    ////
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        let currentPage = scrollView.contentOffset.y / scrollView.frame.height
-        
-        switch currentPage
-        {
-            case 0:
-                scrollToPhotoButton(false)
-            case 5:
-                scrollToGalleryButton(false)
-            default:
-                break;
-        }
-        
-    }
-    
-    
-    
-    ////
     // MARK: - Camera Controls
     ////
     
@@ -290,12 +179,12 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         if animated
         {
             dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
-                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: true)
+                self.scrollToPageIndex(0, animated: true)
             }
         }
         else
         {
-            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: false)
+            scrollToPageIndex(0, animated: false)
         }
         
     }
@@ -305,12 +194,12 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         if animated
         {
             dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
-                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 3), animated: true)
+                self.scrollToPageIndex(1, animated: true)
             }
         }
         else
         {
-            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 3), animated: false)
+            scrollToPageIndex(1, animated: false)
         }
         
     }
@@ -320,12 +209,12 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         if animated
         {
             dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
-                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 4), animated: true)
+                self.scrollToPageIndex(2, animated: true)
             }
         }
         else
         {
-            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 4), animated: false)
+            scrollToPageIndex(2, animated: false)
         }
         
     }
@@ -335,12 +224,12 @@ class ComposeCaptureControlsView : UIView, UIScrollViewDelegate, FlipSelectionVi
         if animated
         {
             dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
-                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: true)
+                self.scrollToPageIndex(3, animated: true)
             }
         }
         else
         {
-            optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: false)
+            scrollToPageIndex(3, animated: false)
         }
         
     }
