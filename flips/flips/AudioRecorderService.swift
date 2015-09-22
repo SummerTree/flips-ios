@@ -70,6 +70,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
     public func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
         println("finished recording with success? \(flag)")
         self.delegate?.audioRecorderService(self, didFinishRecordingAudioURL: recorder.url, success: flag)
+        setupRecorder()
     }
     
     func removeLastRecordedAudio() {
@@ -99,7 +100,10 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
             
             if (granted)
             {
-                self.setupRecorder()
+                if (self.recorder == nil) {
+                    self.setupRecorder()
+                }
+                
                 self.setSessionPlayAndRecord()
                 self.recorder.record()
             }
