@@ -6,7 +6,7 @@
 //
 //
 
-class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewDelegate {
+class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
     
     let SCROLL_DELAY = dispatch_time(DISPATCH_TIME_NOW, Int64(0.75) * Int64(NSEC_PER_SEC));
     
@@ -21,14 +21,8 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
     }
     
     // UI
-    private var optionsScrollView : UIScrollView!
-    
     private var flipsView : FlipsSelectionView!
-    
-    private var overflowFlipsView : UIImageView!
-    
     private var deleteView : UIView!
-    private var overflowDeleteView : UIView!
     
     
     
@@ -40,10 +34,9 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         fatalError("init(coder:) has not been implemented")
     }
     
-    init() {
-        super.init(frame: CGRectZero)
+    override init() {
+        super.init()
         self.initSubviews()
-        self.initConstraints()
     }
     
     
@@ -64,80 +57,12 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         flipsView.delegate = self
         flipsView.backgroundColor = UIColor.lightGreyF2()
         
-        overflowFlipsView = UIImageView()
-        
         // Button Containers
         
         deleteView = buttonView(.Delete, tapSelector: Selector("handleDeleteButtonTap:"))
-        overflowDeleteView = buttonView(.Delete, tapSelector: Selector("handleDeleteButtonTap:"))
         
-        // ScrollView
+        addViews([flipsView, deleteView])
         
-        optionsScrollView = UIScrollView()
-        optionsScrollView.pagingEnabled = true
-        optionsScrollView.backgroundColor = UIColor.lightGreyF2()
-        optionsScrollView.delegate = self;
-        optionsScrollView.showsHorizontalScrollIndicator = false
-        optionsScrollView.showsVerticalScrollIndicator = false
-        
-        optionsScrollView.addSubview(overflowDeleteView)
-        optionsScrollView.addSubview(flipsView)
-        optionsScrollView.addSubview(deleteView)
-        optionsScrollView.addSubview(overflowFlipsView)
-        
-        addSubview(optionsScrollView)
-        
-    }
-    
-    private func initConstraints() {
-        
-        optionsScrollView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self)
-            make.top.equalTo()(self)
-            make.height.equalTo()(self)
-            make.width.equalTo()(self)
-        }
-        
-        overflowDeleteView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.optionsScrollView)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        flipsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.overflowDeleteView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        deleteView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.flipsView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-        overflowFlipsView.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.optionsScrollView)
-            make.top.equalTo()(self.deleteView.mas_bottom)
-            make.height.equalTo()(self.optionsScrollView)
-            make.width.equalTo()(self.optionsScrollView)
-        }
-        
-    }
-    
-    
-    
-    ////
-    // MARK: - Lifecycle Overrides
-    ////
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        optionsScrollView.contentSize = CGSizeMake(optionsScrollView.frame.width, optionsScrollView.frame.height * 4)
-        optionsScrollView.contentOffset = CGPoint(x: 0, y: optionsScrollView.frame.height)
     }
     
     
@@ -157,7 +82,7 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         button.layer.borderWidth = 3.0
         button.layer.cornerRadius = 5.0
         button.titleLabel!.font = UIFont.avenirNextMedium(15.0)
-        button.shadowMe()
+        //button.shadowMe()
         
         switch option {
             case .Delete:
@@ -202,43 +127,6 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
 
     
     
-    
-    ////
-    // MARK: - UIScrollViewDelegate
-    ////
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        
-        UIGraphicsBeginImageContextWithOptions(flipsView.bounds.size, flipsView.opaque, 0.0)
-        
-        flipsView.layer.renderInContext(UIGraphicsGetCurrentContext())
-        
-        let screenshot = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-        
-        overflowFlipsView.image = screenshot
-        
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        let currentPage = scrollView.contentOffset.y / scrollView.frame.height
-        
-        switch currentPage
-        {
-            case 0:
-                scrollToDeleteButton(false)
-            case 3:
-                scrollToFlipsView(false)
-            default:
-                break
-        }
-        
-    }
-    
-    
-    
     ////
     // MARK: - Scrolling
     ////
@@ -248,12 +136,12 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         if animated
         {
             dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
-                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: true)
+                self.scrollToPageIndex(0, animated: true)
             }
         }
         else
         {
-            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height), animated: false)
+            scrollToPageIndex(0, animated: false)
         }
     }
     
@@ -262,12 +150,12 @@ class ComposeEditControlsView : UIView, UIScrollViewDelegate, FlipSelectionViewD
         if animated
         {
             dispatch_after(SCROLL_DELAY, dispatch_get_main_queue()) { () -> Void in
-                self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: true)
+                self.scrollToPageIndex(1, animated: true)
             }
         }
         else
         {
-            self.optionsScrollView.setContentOffset(CGPointMake(0, self.optionsScrollView.frame.height * 2), animated: false)
+            scrollToPageIndex(1, animated: false)
         }
     }
     
