@@ -73,7 +73,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         longPressRecognizer.minimumPressDuration = 0.1
         
         audioButton = UIButton()
-        audioButton.setImage(UIImage(named: "Capture_Audio")?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
+        audioButton.setImage(UIImage(named: "Capture_Audio"), forState: .Normal)
         audioButton.sizeToFit()
         audioButton.tintColor = UIColor.redColor()
         audioButton.hidden = true
