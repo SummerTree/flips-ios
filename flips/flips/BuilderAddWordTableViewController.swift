@@ -136,7 +136,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     }
 
     func addWord() -> Bool {
-        let word = self.newWordTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let word = self.newWordTextField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 
         if (word.characters.count > 0) {
             let result = PersistentManager.sharedInstance.addBuilderWord(word, fromServer: false)

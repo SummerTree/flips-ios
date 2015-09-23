@@ -183,7 +183,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         var message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
-            if (textField.text.characters.count == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -195,7 +195,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
                 }
             }
         }
-        else if (textField.text.characters.count >= 5) {
+        else if (textField.text!.characters.count >= 5) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
         }
@@ -224,7 +224,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         if (self.getSelectedDialCode() == "+1") {
-            let text = textField.text
+            let text = textField.text!
             let length = text.characters.count
             var shouldReplace = true
             
@@ -256,7 +256,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     
     func mobileNumberFieldDidChange(textField: UITextField) {
         if (self.getSelectedDialCode() == "+1") {
-            if (textField.text.characters.count == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(self)
             }
@@ -307,10 +307,10 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
 
         if (self.mobileNumberField!.text != "") {
             if (self.getSelectedDialCode() != "+1") {
-                self.mobileNumberField!.text = self.mobileNumberField!.text.removeDashes()
+                self.mobileNumberField!.text = self.mobileNumberField!.text!.removeDashes()
             }
             else {
-                self.mobileNumberField!.text = self.mobileNumberField!.text.formatWithDashes()
+                self.mobileNumberField!.text = self.mobileNumberField!.text!.formatWithDashes()
             }
         }
     }

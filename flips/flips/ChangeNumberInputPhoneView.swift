@@ -220,7 +220,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         replacementString string: String) -> Bool {
         
         if self.getSelectedDialCode() == "+1" {
-            let text = textField.text
+            let text = textField.text!
             let length = text.characters.count
             var shouldReplace = true
             
@@ -252,7 +252,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     
     func newNumberFieldDidChange(textField: UITextField) {
         if self.getSelectedDialCode() == "+1" {
-            if (textField.text.characters.count == 12) {
+            if (textField.text!.characters.count == 12) {
                 self.finishTypingMobileNumber(textField)
             }
         }
@@ -264,7 +264,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         var message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
-            if (textField.text.characters.count == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -276,7 +276,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
                 }
             }
         }
-        else if (textField.text.characters.count >= 5) {
+        else if (textField.text!.characters.count >= 5) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
         }
@@ -292,7 +292,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     
     func finishTypingMobileNumber(sender: AnyObject?) {
         var countryCode = self.getSelectedDialCode()
-        self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text, countryCode: countryCode)
+        self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text!, countryCode: countryCode)
     }
     
     func clearPhoneNumberField() {
@@ -325,10 +325,10 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         
         if (self.newNumberTextField!.text != "") {
             if (self.getSelectedDialCode() != "+1") {
-                self.newNumberTextField!.text = self.newNumberTextField!.text.removeDashes()
+                self.newNumberTextField!.text = self.newNumberTextField!.text!.removeDashes()
             }
             else {
-                self.newNumberTextField!.text = self.newNumberTextField!.text.formatWithDashes()
+                self.newNumberTextField!.text = self.newNumberTextField!.text!.formatWithDashes()
             }
         }
     }

@@ -587,13 +587,13 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func signInButtonTapped(sender: AnyObject?) {
         
-        if (self.emailTextField.text.isEmpty || self.passwordTextField.text.isEmpty) {
+        if (self.emailTextField.text!.isEmpty || self.passwordTextField.text!.isEmpty) {
             var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
             return
         }
         
-        self.delegate?.loginViewDidTapSignInButton(self, username: self.emailTextField.text, password: self.passwordTextField.text)
+        self.delegate?.loginViewDidTapSignInButton(self, username: self.emailTextField.text!, password: self.passwordTextField.text!)
     }
     
     func termsOfUseButtonTapped(sender: AnyObject?) {
@@ -605,7 +605,7 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func forgotPasswordButtonTapped(sender: AnyObject?) {
-        self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text)
+        self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text!)
     }
     
     func signUpButtonTapped(sender: AnyObject?) {

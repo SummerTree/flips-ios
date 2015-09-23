@@ -269,7 +269,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let textFieldLength = textField.text.characters.count
+        let textFieldLength = textField.text!.characters.count
         let replacementStringLength = string.characters.count
         if (replacementStringLength == 0) { //backspace
             if (textField == codeField3) {
@@ -352,7 +352,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func codeFieldDidChange(textField: UITextField) {
-        let verificationCode = codeField0.text + codeField1.text + codeField2.text + codeField3.text
+        let verificationCode = codeField0.text! + codeField1.text! + codeField2.text! + codeField3.text!
         let stringWithDigitsOnly = verificationCode.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
         let numberOfDigitsProvided = stringWithDigitsOnly.characters.count
         if (numberOfDigitsProvided == 4) {

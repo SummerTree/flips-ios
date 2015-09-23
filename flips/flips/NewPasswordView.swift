@@ -196,7 +196,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     // MARK: - Buttons delegate
     func didTapDoneButton() {
-        let passwordStatus = verifyPassword(passwordField.text)
+        let passwordStatus = verifyPassword(passwordField.text!)
             
         if (passwordStatus.isValid) {
             self.delegate?.newPasswordViewDidTapDoneButton(self)
