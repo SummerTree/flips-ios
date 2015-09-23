@@ -9,7 +9,7 @@
 // in whole or in part, is expressly prohibited except as authorized by
 // the license agreement.
 
-class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageComposerExternalDelegate {
+class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageComposerExternalDelegate, UIAlertViewDelegate {
     
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Fail", comment: "Fail")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
@@ -258,24 +258,49 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
     
     private func showMMSUnsupportedErrorAlert() {
         
-        let alertController = UIAlertController(title: "Error Sending MMS", message: "This device does not support SMS.", preferredStyle: UIAlertControllerStyle.Alert)
+        let errorTitle = "Error Sending MMS"
+        let errorMessage = "This device does not support SMS."
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            self.submitMessageRequest()
-        }))
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                self.submitMessageRequest()
+            }))
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: errorTitle, message: errorMessage, delegate: self, cancelButtonTitle: "Dismiss").show()
+        }
         
-        presentViewController(alertController, animated: true, completion: nil)
     }
     
     private func showExternalComposerErrorAlert() {
         
-        let alertController = UIAlertController(title: "Error Sending MMS", message: "Flips was unable to send your message at this time.", preferredStyle: UIAlertControllerStyle.Alert)
+        let errorTitle = "Error Sending MMS"
+        let errorMessage = "Flips was unable to send your message at this time."
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                self.submitMessageRequest()
+            }))
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: errorTitle, message: errorMessage, delegate: self, cancelButtonTitle: "Dismiss").show()
+        }
+        
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        if alertView.buttonTitleAtIndex(buttonIndex)! == "Dismiss" {
             self.submitMessageRequest()
-        }))
-        
-        presentViewController(alertController, animated: true, completion: nil)
+        }
         
     }
     
