@@ -14,7 +14,7 @@ import MediaPlayer
 
 let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
 
-class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UIAlertViewDelegate {
     
     private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
     
@@ -556,35 +556,57 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     private func showMessageSubmissionFailedAlert(title: String, message: String) {
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        
-        alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                
+                self.retryMessageSubmission()
+                
+            }))
+            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                
+                self.cancelMessageSubmission()
+                
+            }))
             
-            self.inboxView.showSendingView()
-            
-            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
-            
-        }))
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-            
-            if FlipMessageSubmissionManager.sharedInstance.hasPendingMessages()
-            {
-                self.inboxView.showSendingView()
-            }
-            else
-            {
-                self.inboxView.hideSendingView()
-            }
-            
-            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
-            
-        }))
-        
-        presentViewController(alertController, animated: true, completion: nil)
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Retry").show()
+        }
         
     }
     
+    
+    
+    ////
+    // Local Notification Handler Methods
+    ////
+    
+    private func retryMessageSubmission() {
+        
+        self.inboxView.showSendingView()
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
+        
+    }
+    
+    private func cancelMessageSubmission() {
+        
+        if FlipMessageSubmissionManager.sharedInstance.hasPendingMessages()
+        {
+            self.inboxView.showSendingView()
+        }
+        else
+        {
+            self.inboxView.hideSendingView()
+        }
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
+        
+    }
     
     
     
@@ -603,6 +625,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     
+    
     // MARK: - Push Notification Methods
     
     func prepareToLoadPushNotificationForRoomId(roomId: String, andFlipMessageId flipMessageId: String?) {
@@ -610,4 +633,22 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.flipMessageIdToShow = flipMessageId
         self.showActivityIndicator(true)
     }
+    
+    
+    // MARK: - UIAlertView Delegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        switch(alertView.buttonTitleAtIndex(buttonIndex)!)
+        {
+            case "Retry":
+                self.retryMessageSubmission()
+            case "Cancel":
+                self.cancelMessageSubmission()
+            default:
+                break;
+        }
+        
+    }
+    
 }
