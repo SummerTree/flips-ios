@@ -67,10 +67,10 @@ public class MovieExport : NSObject {
         
         var insertTime = kCMTimeZero
         
-        var videoAsset = playerItem.asset as AVAsset?
-        var videoAssetTrack = videoAsset!.tracksWithMediaType(AVMediaTypeVideo)[0] as? AVAssetTrack
+        var videoAsset = playerItem.asset
+        var videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
         
-        let videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset!.duration)
+        let videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
         
         do {
             try videoCompositionTrack.insertTimeRange(videoTimeRange,
@@ -79,11 +79,11 @@ public class MovieExport : NSObject {
         } catch _ {
         }
         
-        let audioTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset!.duration)
+        let audioTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
         
-        if videoAsset!.tracksWithMediaType(AVMediaTypeAudio).count > 0 {
+        if videoAsset.tracksWithMediaType(AVMediaTypeAudio).count > 0 {
             
-            let audioAssetTrack = videoAsset!.tracksWithMediaType(AVMediaTypeAudio)[0] 
+            let audioAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeAudio)[0]
             
             do {
                 try audioCompositionTrack.insertTimeRange(audioTimeRange,
@@ -93,7 +93,7 @@ public class MovieExport : NSObject {
             }
         }
         
-        insertTime = CMTimeAdd(insertTime, videoAsset!.duration)
+        insertTime = CMTimeAdd(insertTime, videoAsset.duration)
         
         var videoSize = videoCompositionTrack.naturalSize;
         
@@ -116,40 +116,43 @@ public class MovieExport : NSObject {
         
         let outputFileUrl = NSURL.fileURLWithPath(myPathDocs)
         
-        var assetExport = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetMediumQuality)
-        assetExport.videoComposition = videoComp;
-        assetExport.outputFileType = AVFileTypeQuickTimeMovie
-        assetExport.outputURL = outputFileUrl
-        
-        assetExport.exportAsynchronouslyWithCompletionHandler()  {
-            var status = assetExport.status
-            switch (status) {
-            case .Failed:
-                print("Individual Export Failed: \(word)")
-                print("Error: \(assetExport.error.description)")
-                print("Error Reason: \(assetExport.error.localizedFailureReason)")
-                break
-            case .Completed:
-                print("Individual Export Completed: \(word)")
-                
-                self.videoURLs.append(url: outputFileUrl!, order: orderIndex)
-                if self.videoURLs.count == totalWords {
-                    self.exportAllFlipsInOneVideo(completion)
+        if let assetExport = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetMediumQuality) {
+            
+            assetExport.videoComposition = videoComp;
+            assetExport.outputFileType = AVFileTypeQuickTimeMovie
+            assetExport.outputURL = outputFileUrl
+            
+            assetExport.exportAsynchronouslyWithCompletionHandler()  {
+                var status = assetExport.status
+                switch (status) {
+                case .Failed:
+                    print("Individual Export Failed: \(word)")
+                    print("Error: \(assetExport.error?.description)")
+                    print("Error Reason: \(assetExport.error?.localizedFailureReason)")
+                    break
+                case .Completed:
+                    print("Individual Export Completed: \(word)")
+                    
+                    self.videoURLs.append(url: outputFileUrl, order: orderIndex)
+                    if self.videoURLs.count == totalWords {
+                        self.exportAllFlipsInOneVideo(completion)
+                    }
+                    break;
+                case .Unknown:
+                    print("Invidual Export Unknown")
+                    break
+                case .Exporting:
+                    print("Individual Export Exporting")
+                    break
+                case .Waiting:
+                    print("Individual Export Waiting")
+                    break
+                default:
+                    print("Individual Export Defaulted")
+                    break
                 }
-                break;
-            case .Unknown:
-                print("Invidual Export Unknown")
-                break
-            case .Exporting:
-                print("Individual Export Exporting")
-                break
-            case .Waiting:
-                print("Individual Export Waiting")
-                break
-            default:
-                print("Individual Export Defaulted")
-                break
             }
+            
         }
     }
 
@@ -166,7 +169,7 @@ public class MovieExport : NSObject {
         for videoURL in self.videoURLs {
             
             var videoAsset = AVURLAsset(URL: videoURL.url, options: nil)
-            var videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0] as? AVAssetTrack
+            var videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
             
             let videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
             
@@ -180,7 +183,7 @@ public class MovieExport : NSObject {
             let audioTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
             
             if videoAsset.tracksWithMediaType(AVMediaTypeAudio).count > 0 {
-                let audioAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeAudio)[0] as! AVAssetTrack
+                let audioAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeAudio)[0]
                 
                 do {
                     try audioCompositionTrack.insertTimeRange(audioTimeRange,
@@ -199,44 +202,47 @@ public class MovieExport : NSObject {
         
         let outputFileUrl = NSURL.fileURLWithPath(myPathDocs)
         
-        var assetExport = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetMediumQuality)
-        assetExport.outputFileType = AVFileTypeQuickTimeMovie
-        assetExport.outputURL = outputFileUrl
-        
-        assetExport.exportAsynchronouslyWithCompletionHandler()  {
-            var status = assetExport.status
-            switch (status) {
-            case .Failed:
-                print("Export Failed")
-                print("Error: \(assetExport.error.localizedDescription)")
-                print("Error Reason: \(assetExport.error.localizedFailureReason)")
-                break
-            case .Completed:
-                print("Export Completed")
-                self.compositeVideoURL = outputFileUrl!
-                
-                #if DEV
-                self.exportDidFinish(assetExport)
-                #endif
-                
-                self.clearAllIndividualVideosFromLocalStorage()
-                
-                completion(outputFileUrl, nil)
-                
-                break;
-            case .Unknown:
-                print("Export Unknown")
-                break
-            case .Exporting:
-                print("Export Exporting")
-                break
-            case .Waiting:
-                print("Export Waiting")
-                break
-            default:
-                print("Export Defaulted")
-                break
+        if let assetExport = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetMediumQuality) {
+            
+            assetExport.outputFileType = AVFileTypeQuickTimeMovie
+            assetExport.outputURL = outputFileUrl
+            
+            assetExport.exportAsynchronouslyWithCompletionHandler()  {
+                var status = assetExport.status
+                switch (status) {
+                case .Failed:
+                    print("Export Failed")
+                    print("Error: \(assetExport.error?.localizedDescription)")
+                    print("Error Reason: \(assetExport.error?.localizedFailureReason)")
+                    break
+                case .Completed:
+                    print("Export Completed")
+                    self.compositeVideoURL = outputFileUrl
+                    
+                    #if DEV
+                    self.exportDidFinish(assetExport)
+                    #endif
+                    
+                    self.clearAllIndividualVideosFromLocalStorage()
+                    
+                    completion(outputFileUrl, nil)
+                    
+                    break;
+                case .Unknown:
+                    print("Export Unknown")
+                    break
+                case .Exporting:
+                    print("Export Exporting")
+                    break
+                case .Waiting:
+                    print("Export Waiting")
+                    break
+                default:
+                    print("Export Defaulted")
+                    break
+                }
             }
+            
         }
     }
     
@@ -331,21 +337,20 @@ public class MovieExport : NSObject {
             let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
             let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
             
-            if let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true) {
-                if paths.count > 0 {
-                    if let dirPath = paths[0] as? String {
-                        var error : NSErrorPointer = NSErrorPointer()
-                        do {
-                            try fileManager.removeItemAtPath(fileURL!.path!)
-                        } catch var error1 as NSError {
-                            error.memory = error1
-                        }
-                        if error != nil {
-                            print(error.debugDescription)
-                        }
-                        else {
-                            print("\(fileURL!.path!) deleted successfully")
-                        }
+            let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            if paths.count > 0 {
+                if let dirPath = paths[0] as? String {
+                    var error : NSErrorPointer = NSErrorPointer()
+                    do {
+                        try fileManager.removeItemAtPath(fileURL!.path!)
+                    } catch var error1 as NSError {
+                        error.memory = error1
+                    }
+                    if error != nil {
+                        print(error.debugDescription)
+                    }
+                    else {
+                        print("\(fileURL!.path!) deleted successfully")
                     }
                 }
             }
