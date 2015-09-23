@@ -18,7 +18,7 @@ extension UITableView {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         
         CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -tableViewContentOffset.y)
-        self.layer.renderInContext(UIGraphicsGetCurrentContext())
+        self.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
