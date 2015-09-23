@@ -49,7 +49,7 @@ class NewFlipViewController: FlipsViewController,
             }
         }
 
-        navigationController.topViewController.modalPresentationStyle = UIModalPresentationStyle.FullScreen
+        navigationController.topViewController?.modalPresentationStyle = UIModalPresentationStyle.FullScreen
         
         return navigationController
     }
