@@ -43,6 +43,11 @@
     if (viewController != _poppedViewController) {
         _poppedViewController = nil;
     }
+    
+    if (self.afterViewControllerPresented != nil) {
+        self.afterViewControllerPresented();
+        self.afterViewControllerPresented = nil;
+    }
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
@@ -69,6 +74,17 @@
 - (BOOL)isBusyAnimatingTransition {
     NSTimeInterval oneSecondAgo = [[[NSDate date] dateByAddingTimeInterval:-1] timeIntervalSince1970];
     return self.busyAnimating && self.lastAnimationTime > oneSecondAgo;
+}
+
+- (void) dispatchAfterViewControllerPresented:(void (^)())afterViewControllerPresented {
+    
+    if (self.busyAnimating) {
+        self.afterViewControllerPresented = afterViewControllerPresented;
+    }
+    else {
+        afterViewControllerPresented();
+    }
+    
 }
 
 @end

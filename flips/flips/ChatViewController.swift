@@ -425,7 +425,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 self.updateMessageSubmissionState()
                 
                 self.chatView.loadNewFlipMessages()
-                self.chatView.showNewestMessage(shouldScrollAnimated: false)
                 
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 

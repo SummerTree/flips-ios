@@ -16,5 +16,8 @@
 
 @property (nonatomic) BOOL busyAnimating;
 @property (nonatomic) NSTimeInterval lastAnimationTime;
+@property (nonatomic, copy) void (^afterViewControllerPresented)();
+
+- (void) dispatchAfterViewControllerPresented:(void (^)())afterViewControllerPresented;
 
 @end

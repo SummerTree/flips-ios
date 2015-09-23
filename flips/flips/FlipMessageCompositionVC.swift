@@ -129,7 +129,15 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         initSubviews()
         initConstraints()
         initAudioRecorder()
-        initFlips()
+        
+        if let navController = self.navigationController as? FlipsUINavigationController {
+            navController.dispatchAfterViewControllerPresented({ () -> Void in
+                self.initFlips()
+            })
+        }
+        else {
+            initFlips();
+        }
     }
     
     override func viewWillAppear(animated: Bool) {

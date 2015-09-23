@@ -238,6 +238,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     func showNewestMessage(shouldScrollAnimated scrollAnimated: Bool) {
+        
         if (scrollAnimated) {
             self.indexPathToShow = self.indexPathForCellThatShouldBeVisible()
         }
@@ -256,6 +257,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 })
             }
         }
+        
     }
 
     
@@ -280,6 +282,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         }
         if (newCellsIndexPaths.count > 0) {
             self.tableView.insertRowsAtIndexPaths(newCellsIndexPaths, withRowAnimation: UITableViewRowAnimation.None)
+            self.showNewestMessage(shouldScrollAnimated: true)
         }
     }
 
