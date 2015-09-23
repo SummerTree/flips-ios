@@ -241,7 +241,7 @@ struct ContactAttributes {
             predicates.append(phonetypePredicate)
         }
         
-        let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
+        let compound = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         return Contact.findFirstWithPredicate(compound, inContext: currentContext) as? Contact
     }
 }
