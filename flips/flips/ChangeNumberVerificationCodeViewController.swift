@@ -12,7 +12,7 @@
 
 import Foundation
 
-class ChangeNumberVerificationCodeViewController: VerificationCodeViewController, VerificationCodeViewDelegate, ChangeNumberVerificationCodeViewDelegate {
+class ChangeNumberVerificationCodeViewController: VerificationCodeViewController, ChangeNumberVerificationCodeViewDelegate {
  
     private var changeNumberVerificationCodeView: ChangeNumberVerificationCodeView!
     
