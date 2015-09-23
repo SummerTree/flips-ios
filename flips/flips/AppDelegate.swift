@@ -53,10 +53,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // register for push notifications
         
-        if (DeviceHelper.sharedInstance.systemVersion() >= 8.0) {
+        if #available(iOS 8.0, *)
+        {
             application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: ([UIUserNotificationType.Alert, UIUserNotificationType.Sound, UIUserNotificationType.Badge]), categories: nil))
             application.registerForRemoteNotifications()
-        } else {
+        }
+        else
+        {
             application.registerForRemoteNotificationTypes([UIRemoteNotificationType.Alert, UIRemoteNotificationType.Sound, UIRemoteNotificationType.Badge])
         }
         
@@ -107,6 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PubNubService.sharedInstance.enablePushNotificationOnMyChannels()
     }
     
+    @available(iOS 8.0, *)
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         application.registerForRemoteNotifications()
     }
