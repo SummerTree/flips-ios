@@ -248,10 +248,8 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         menuController.setTargetRect(selectionRect, inView: self)
         
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: NSSelectorFromString("splitText"))
-        menuController.menuItems = NSArray(array: [lookupMenu]) as [AnyObject]
-        
+        menuController.menuItems = NSArray(array: [lookupMenu]) as? [UIMenuItem]
         menuController.update();
-        
         menuController.setMenuVisible(true, animated: true)
     }
     

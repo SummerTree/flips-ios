@@ -106,7 +106,7 @@ public class CacheCleanupPolicy {
         var error: NSError?
         var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         do {
-            let attributes = try NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last as! String)
+            let attributes = try NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last!)
             if let freeFileSystemSizeInBytes = attributes[NSFileSystemFreeSize] as? NSNumber {
                 return freeFileSystemSizeInBytes.longLongValue
             }

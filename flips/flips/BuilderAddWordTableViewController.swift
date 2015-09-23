@@ -107,7 +107,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as? UITableViewCell
+        var cell : UITableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER)
         if (cell == nil) {
             cell = UITableViewCell(style:.Default, reuseIdentifier: CELL_IDENTIFIER)
         }

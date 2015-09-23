@@ -61,7 +61,7 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     }
   
     func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!) {
-        if let viewControllers = navigationController?.viewControllers as? [UIViewController] {
+        if let viewControllers : [UIViewController] = navigationController?.viewControllers {
             let count = viewControllers.count
             
             if count >= 3 {

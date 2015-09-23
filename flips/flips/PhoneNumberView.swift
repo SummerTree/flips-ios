@@ -208,7 +208,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         if self.getSelectedDialCode() == "+1" {
-            let text = textField.text
+            let text = textField.text!
             let length = text.characters.count
             var shouldReplace = true
             
@@ -240,7 +240,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func mobileNumberFieldDidChange(textField: UITextField) {
         if self.getSelectedDialCode() == "+1" {
-            if (textField.text.characters.count == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -287,10 +287,10 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         if (self.mobileNumberField!.text != "") {
             if (self.getSelectedDialCode() != "+1") {
-                self.mobileNumberField!.text = self.mobileNumberField!.text.removeDashes()
+                self.mobileNumberField!.text = self.mobileNumberField!.text!.removeDashes()
             }
             else {
-                self.mobileNumberField!.text = self.mobileNumberField!.text.formatWithDashes()
+                self.mobileNumberField!.text = self.mobileNumberField!.text!.formatWithDashes()
             }
         }
     }
@@ -319,7 +319,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         var message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
-            if (textField.text.characters.count == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -331,7 +331,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
                 }
             }
         }
-        else if (textField.text.characters.count >= 5) {
+        else if (textField.text!.characters.count >= 5) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
         }

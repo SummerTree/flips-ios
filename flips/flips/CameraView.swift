@@ -310,11 +310,14 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             return;
         }
 
-        var deviceInput: AVCaptureDeviceInput! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice) as? AVCaptureDeviceInput
-
-        if (deviceInput == nil || error != nil) {
+        var deviceInput: AVCaptureDeviceInput!
+        
+        do {
+            deviceInput = try AVCaptureDeviceInput(device: videoDevice)
+        }
+        catch _ {
             self.setCameraButtonsEnabled(false)
-
+            
             print("TakePicture error: \(error)")
             self.showAlert(self.CAMERA_ERROR, message: error?.localizedDescription ?? self.CAMERA_ERROR_MESSAGE)
             self.activityIndicator.stopAnimating()
@@ -343,19 +346,27 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             // We should ask for audio access if we aren't showing the button to record audio.
             if let audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as? AVCaptureDevice {
                 error = nil
-
-                if let audioDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice) as? AVCaptureDeviceInput {
+                
+                do
+                {
+                    let audioDeviceInput = try AVCaptureDeviceInput(device: audioDevice)
+                    
                     self.isMicrophoneAvailable = true
+                    
                     if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
                         self.session.addInput(audioDeviceInput as AVCaptureInput)
                     }
-                } else {
-                    self.isMicrophoneAvailable = false
-
-                    let alertView = UIAlertView(title: NSLocalizedString("Microphone Error"), message: error?.localizedFailureReasonOrDescription, delegate: nil, cancelButtonTitle: LocalizedString.OK)
-                    alertView.show()
                 }
-            } else {
+                catch let error as NSError
+                {
+                    self.isMicrophoneAvailable = false
+                    
+                    UIAlertView(title: NSLocalizedString("Microphone Error"), message: error.localizedFailureReasonOrDescription, delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
+                }
+
+            }
+            else
+            {
                 self.isMicrophoneAvailable = false
             }
 
@@ -507,7 +518,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func toggleCameraButtonTapped() {
         var overlayView: UIView? = nil
 
-        if (DeviceHelper.sharedInstance.systemVersion() >= 8.0) {
+        if #available(iOS 8.0, *) {
             overlayView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         } else {
             overlayView = UIView()
@@ -745,9 +756,11 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func focusWithMode(focusMode: AVCaptureFocusMode, exposesWithMode exposureMode: AVCaptureExposureMode, atDevicePoint point: CGPoint, monitorSubjectAreaChange: Bool) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             if let device = self.videoDeviceInput?.device {
-                let error: NSError? = nil
-                
-                if (device.lockForConfiguration()) {
+
+                do
+                {
+                    try device.lockForConfiguration()
+                    
                     if (device.focusPointOfInterestSupported && device.isFocusModeSupported(focusMode)) {
                         device.focusMode = focusMode
                         device.focusPointOfInterest = point
@@ -759,22 +772,28 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     
                     device.subjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
                     device.unlockForConfiguration()
-                } else {
+                }
+                catch let error as NSError
+                {
                     print("error configuring device: \(error)")
                 }
+                
             }
         })
     }
     
     class func setFlashMode(flashMode: AVCaptureFlashMode, forDevice device: AVCaptureDevice) {
         if (device.hasFlash && device.isFlashModeSupported(flashMode)) {
-            let error: NSError? = nil
-            if (device.lockForConfiguration()) {
+            
+            do {
+                try device.lockForConfiguration()
                 device.flashMode = flashMode
                 device.unlockForConfiguration()
-            } else {
+            }
+            catch let error as NSError {
                 print("Error settinf flash: \(error)")
             }
+
         }
     }
     

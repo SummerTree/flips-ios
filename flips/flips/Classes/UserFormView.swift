@@ -264,7 +264,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         if (textField == birthdayTextField) {
             shouldChangeTextFieldText = false
             
-            var stringWithDigitsOnly = birthdayTextField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
+            var stringWithDigitsOnly = birthdayTextField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             var numberOfDigitsProvided = stringWithDigitsOnly.characters.count
             
             if (string == "" ) {
@@ -294,7 +294,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if (textField == birthdayTextField) {
-            var stringWithOnlyDigits = textField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
+            var stringWithOnlyDigits = textField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
                 textField.text = NSLocalizedString("MM/DD/YYYY", comment: "Birthday date format")
             }
@@ -303,7 +303,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func textFieldDidEndEditing(textField: UITextField) {
         if (textField == birthdayTextField) {
-            var stringWithOnlyDigits = textField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
+            var stringWithOnlyDigits = textField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
                 textField.text = ""
             }
@@ -319,14 +319,14 @@ class UserFormView : UIView, UITextFieldDelegate {
         self.allFieldsValid = true
         self.allFieldsFilled = true
 
-        if (firstNameTextField.text.isEmpty || lastNameTextField.text.isEmpty || emailTextField.text.isEmpty ||
-            (!birthdayTextField.hidden && birthdayTextField.text.isEmpty) ||
-            (!passwordTextField.hidden && passwordTextField.text.isEmpty)) {
+        if (firstNameTextField.text!.isEmpty || lastNameTextField.text!.isEmpty || emailTextField.text!.isEmpty ||
+            (!birthdayTextField.hidden && birthdayTextField.text!.isEmpty) ||
+            (!passwordTextField.hidden && passwordTextField.text!.isEmpty)) {
                 
             self.allFieldsFilled = false
         }
         
-        if (!firstNameTextField.text.isEmpty && !lastNameTextField.text.isEmpty) {
+        if (!firstNameTextField.text!.isEmpty && !lastNameTextField.text!.isEmpty) {
             self.nameFilled = true
             self.nameValid = true
         } else if ((!firstNameTextField.isFirstResponder() && !lastNameTextField.isFirstResponder()) || includeFieldsBeingEdited) {
@@ -335,11 +335,11 @@ class UserFormView : UIView, UITextFieldDelegate {
             self.allFieldsFilled = false
         }
 
-        if (emailTextField.text.isEmpty) {
+        if (emailTextField.text!.isEmpty) {
             self.emailFilled = false
         } else {
             self.emailFilled = true
-            if (emailTextField.text.isValidEmail()) {
+            if (emailTextField.text!.isValidEmail()) {
                 emailTextField.rightView?.hidden = true
                 self.emailValid = true
             } else if (!emailTextField.isFirstResponder() || includeFieldsBeingEdited) {
@@ -349,11 +349,11 @@ class UserFormView : UIView, UITextFieldDelegate {
             }
         }
         
-        if (passwordTextField.text.isEmpty) {
+        if (passwordTextField.text!.isEmpty) {
             self.passwordFilled = false
         } else {
             self.passwordFilled = true
-            if (passwordTextField.text.isValidPassword()) {
+            if (passwordTextField.text!.isValidPassword()) {
                 passwordTextField.rightView?.hidden = true
                 self.passwordValid = true
             } else if (!passwordTextField.isFirstResponder() || includeFieldsBeingEdited) {
@@ -363,11 +363,11 @@ class UserFormView : UIView, UITextFieldDelegate {
             }
         }
         
-        if (birthdayTextField.text.isEmpty) {
+        if (birthdayTextField.text!.isEmpty) {
             self.birthdayFilled = false
         } else {
             self.birthdayFilled = true
-            if (self.isBirthdayValid(birthdayTextField.text)) {
+            if (self.isBirthdayValid(birthdayTextField.text!)) {
                 birthdayTextField.rightView?.hidden = true
                 self.birthdayValid = true
             } else if (!birthdayTextField.isFirstResponder() || includeFieldsBeingEdited) {
@@ -505,7 +505,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     // MARK: - Getters
     
     func getUserData() -> (firstName: String, lastName: String, email: String, password: String, birthday:String) {
-        return (firstNameTextField.text, lastNameTextField.text, emailTextField.text, passwordTextField.text, birthdayTextField.text)
+        return (firstNameTextField.text!, lastNameTextField.text!, emailTextField.text!, passwordTextField.text!, birthdayTextField.text!)
     }
     
     func isAllFieldsValids() -> Bool {

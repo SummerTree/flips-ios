@@ -11,7 +11,7 @@
 // the license agreement.
 //
 
-class ImportContactsTableViewController: UITableViewController, NewFlipViewControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+class ImportContactsTableViewController: UITableViewController, NewFlipViewControllerDelegate {
     
     private let CONTACT_TABLE_VIEW_IDENTIFIER_ON_FLIPS: String! = "CONTACT_TABLE_VIEW_IDENTIFIER_ON_FLIPS"
     private let CONTACT_TABLE_VIEW_IDENTIFIER_OTHERS: String! = "CONTACT_TABLE_VIEW_IDENTIFIER_OTHERS"
