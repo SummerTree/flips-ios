@@ -48,7 +48,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         self.becomeFirstResponder()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -96,17 +96,17 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         super.layoutSubviews()
         
         if let source = dataSource {
-            reloadWords(animated: false)
+            reloadWords(false)
         }
     }
     
     func addGestureRecognizers(flipTextView: FlipTextView) {
         flipTextView.userInteractionEnabled = true
         
-        var tapGesture = UITapGestureRecognizer(target: self, action: "flipWordTapped:")
+        let tapGesture = UITapGestureRecognizer(target: self, action: "flipWordTapped:")
         flipTextView.addGestureRecognizer(tapGesture)
         
-        var holdGesture = UILongPressGestureRecognizer(target: self, action: "flipWordLongPressed:")
+        let holdGesture = UILongPressGestureRecognizer(target: self, action: "flipWordLongPressed:")
         flipTextView.addGestureRecognizer(holdGesture)
     }
     
@@ -117,8 +117,8 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         for flipTextView in flipTextViews {
             flipTextView.updateLayout()
             
-            var requiredWidth = self.getTextWidth(flipTextView.textLabel.text!) + FLIP_TEXT_ADDITIONAL_WIDTH
-            var flipTextViewWidth = requiredWidth > MIN_BUTTON_WIDTH ? requiredWidth : MIN_BUTTON_WIDTH
+            let requiredWidth = self.getTextWidth(flipTextView.textLabel.text!) + FLIP_TEXT_ADDITIONAL_WIDTH
+            let flipTextViewWidth = requiredWidth > MIN_BUTTON_WIDTH ? requiredWidth : MIN_BUTTON_WIDTH
             
             var leftMargin: CGFloat = 0
             var rightMargin: CGFloat = 0
@@ -132,7 +132,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
             
             contentOffset += leftMargin
             
-            var textViewY = (CGRectGetHeight(self.frame) / 2) - (FLIP_TEXT_HEIGHT / 2) - (LABEL_MARGIN_TOP / 2)
+            let textViewY = (CGRectGetHeight(self.frame) / 2) - (FLIP_TEXT_HEIGHT / 2) - (LABEL_MARGIN_TOP / 2)
             flipTextView.frame = CGRectMake(contentOffset, textViewY, flipTextViewWidth, FLIP_TEXT_HEIGHT)
             
             if (rightMargin == 0) {
@@ -154,7 +154,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         for (var i = 0; i < dataSource?.numberOfFlipWords(); i++) {
             let flipText = dataSource?.flipMessageWordListView(self, flipWordAtIndex: i)
-            var flipTextView = FlipTextView(flipText: flipText!)
+            let flipTextView = FlipTextView(flipText: flipText!)
             flipTextView.sizeToFit()
             addGestureRecognizers(flipTextView)
             scrollView.addSubview(flipTextView)
@@ -208,7 +208,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     func flipWordLongPressed(gesture: UILongPressGestureRecognizer) {
         if (gesture.state == UIGestureRecognizerState.Began) {
             let flipTextView = gesture.view as! FlipTextView
-            var arrayOfWords : [String] = FlipStringsUtil.splitFlipString(flipTextView.flipText.text)
+            let arrayOfWords : [String] = FlipStringsUtil.splitFlipString(flipTextView.flipText.text)
             if (arrayOfWords.count > 1) {
                 gesture.view?.alpha = 0.5
                 self.showSplitMenuAtView(gesture.view as! FlipTextView)
@@ -243,8 +243,8 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         self.tappedFlipTextView = flipTextView;
         
-        var scrollViewCurrentMinX: CGFloat = self.scrollView.bounds.minX
-        var selectionRect : CGRect = CGRectMake(flipTextView.frame.origin.x - scrollViewCurrentMinX, flipTextView.frame.origin.y + 10, flipTextView.frame.size.width, flipTextView.frame.size.height);
+        let scrollViewCurrentMinX: CGFloat = self.scrollView.bounds.minX
+        let selectionRect : CGRect = CGRectMake(flipTextView.frame.origin.x - scrollViewCurrentMinX, flipTextView.frame.origin.y + 10, flipTextView.frame.size.width, flipTextView.frame.size.height);
         menuController.setTargetRect(selectionRect, inView: self)
         
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Split", comment: "Split"), action: NSSelectorFromString("splitText"))
@@ -289,23 +289,23 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         var flipTextViewToBeCentered = flipTextViews[0]
         
-        var scrollX = scrollView.contentOffset.x + CGRectGetMidX(scrollView.frame)
+        let scrollX = scrollView.contentOffset.x + CGRectGetMidX(scrollView.frame)
         
         for flipTextView in flipTextViews {
-            var currentCenteredFlipTextViewMidX = CGRectGetMidX(flipTextViewToBeCentered.frame)
-            var nextFlipTextViewMidX = CGRectGetMidX(flipTextView.frame)
+            let currentCenteredFlipTextViewMidX = CGRectGetMidX(flipTextViewToBeCentered.frame)
+            let nextFlipTextViewMidX = CGRectGetMidX(flipTextView.frame)
 
-            var currentCenteredFlipTextViewDistanceFromCenter = scrollX - currentCenteredFlipTextViewMidX
-            var nextFlipTextViewDistanceFromCenter = scrollX - nextFlipTextViewMidX
+            let currentCenteredFlipTextViewDistanceFromCenter = scrollX - currentCenteredFlipTextViewMidX
+            let nextFlipTextViewDistanceFromCenter = scrollX - nextFlipTextViewMidX
             
             if (abs(currentCenteredFlipTextViewDistanceFromCenter) > abs(nextFlipTextViewDistanceFromCenter)) {
                 flipTextViewToBeCentered = flipTextView
             }
         }
         
-        var flipTextViewToBeCenteredMidX: CGFloat = CGRectGetMidX(flipTextViewToBeCentered.frame)
-        var scrollViewCenterX: CGFloat = CGRectGetMidX(scrollView.frame)
-        var contentOffsetX = flipTextViewToBeCenteredMidX - scrollViewCenterX
+        let flipTextViewToBeCenteredMidX: CGFloat = CGRectGetMidX(flipTextViewToBeCentered.frame)
+        let scrollViewCenterX: CGFloat = CGRectGetMidX(scrollView.frame)
+        let contentOffsetX = flipTextViewToBeCenteredMidX - scrollViewCenterX
         
         if (scrollView.contentOffset.x != contentOffsetX) {
             scrollView.setContentOffset(CGPointMake(contentOffsetX, 0.0), animated: true)
@@ -319,9 +319,9 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     }
     
     private func centerScrollViewAtView(view: UIView, animated: Bool = true) {
-        var flipTextViewToBeCenteredMidX: CGFloat = CGRectGetMidX(view.frame)
-        var scrollViewCenterX: CGFloat = CGRectGetMidX(scrollView.frame)
-        var contentOffsetX = flipTextViewToBeCenteredMidX - scrollViewCenterX
+        let flipTextViewToBeCenteredMidX: CGFloat = CGRectGetMidX(view.frame)
+        let scrollViewCenterX: CGFloat = CGRectGetMidX(scrollView.frame)
+        let contentOffsetX = flipTextViewToBeCenteredMidX - scrollViewCenterX
         
         if (scrollView.contentOffset.x != contentOffsetX) {
             scrollView.setContentOffset(CGPointMake(contentOffsetX, 0.0), animated: animated)
@@ -333,7 +333,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     
     private func getTextWidth(text: String) -> CGFloat {
         let flipTextString: NSString = text as NSString
-        var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        let font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         let size: CGSize = flipTextString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
     }

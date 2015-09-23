@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum FlipsSendButtonOption : String, Printable {
+enum FlipsSendButtonOption : String, CustomStringConvertible {
     case Flips = "Flips"
     case SMS = "SMS"
     case WhatsApp = "WhatsApp"
@@ -58,14 +58,14 @@ class FlipsSendButton: UIImageView {
         
         super.init(image: UIImage(named: self.imageName) as UIImage?)
         
-        var width = calculateWidth(buttonCount: aCount)
-        var xPosition = Float(order) * width
-        var newFrame = CGRect(x: CGFloat(xPosition),
+        let width = calculateWidth(buttonCount: aCount)
+        let xPosition = Float(order) * width
+        let newFrame = CGRect(x: CGFloat(xPosition),
                               y: CGFloat(0.0),
                               width: CGFloat(width),
                               height: height)
         
-        var tapRecog = UITapGestureRecognizer(target: self, action: Selector("buttonTouched:"))
+        let tapRecog = UITapGestureRecognizer(target: self, action: Selector("buttonTouched:"))
         tapRecog.numberOfTapsRequired = 1
         addGestureRecognizer(tapRecog)
             
@@ -77,7 +77,7 @@ class FlipsSendButton: UIImageView {
         self.clipsToBounds = true
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

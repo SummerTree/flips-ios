@@ -33,7 +33,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
 
     // MARK: - Initializers
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -76,7 +76,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.setupWhiteNavBarWithBackButton(self.chatTitle)
 
         if (self.groupParticipantsView != nil) {
-            var participantsButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: "groupParticipantsButtonTapped")
+            let participantsButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: "groupParticipantsButtonTapped")
             self.navigationItem.rightBarButtonItem = participantsButton
 
             let participantsViewInitialY: CGFloat = -self.groupParticipantsView!.calculatedHeight()
@@ -143,7 +143,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 }
                 
                 if (!alreadyReceivedMessage) {
-                    self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+                    self.showActivityIndicator(true, message: NSLocalizedString("Downloading message"))
                     self.showMessageFromReceivedPushNotificationWhenDownloaded()
                 }
             }
@@ -226,7 +226,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     }
     
     func chatView(chatView: ChatView, didTapNextButtonWithWords words : [String]) {
-        var composeViewController = FlipMessageCompositionVC(roomID: self.roomID, compositionTitle: self.chatTitle, words: words)
+        let composeViewController = FlipMessageCompositionVC(roomID: self.roomID, compositionTitle: self.chatTitle, words: words)
         composeViewController.delegate = self
         self.navigationController?.pushViewController(composeViewController, animated: true)
     }
@@ -353,7 +353,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                     self.hideActivityIndicator()
                     self.flipMessageIdFromPushNotification = nil
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
+                        let alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
                         alertView.show()
                     })
                 }

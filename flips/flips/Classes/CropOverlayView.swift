@@ -15,31 +15,31 @@ class CropOverlayView : UIView {
     private var holeSize: CGSize!
     
     init(cropHoleSize: CGSize) {
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
         
         holeSize = cropHoleSize
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func drawRect(rect: CGRect) {
-        var context = UIGraphicsGetCurrentContext()
+        let context = UIGraphicsGetCurrentContext()
         
         CGContextSetFillColorWithColor(context, UIColor(RRGGBB: UInt(0x4A4A4A)).CGColor)
         CGContextSetAlpha(context, 0.9)
         CGContextFillRect(context, rect)
         
-        var positionX = (rect.width / 2) - (holeSize.width / 2)
-        var positionY = (rect.height / 2) - (holeSize.height / 2)
+        let positionX = (rect.width / 2) - (holeSize.width / 2)
+        let positionY = (rect.height / 2) - (holeSize.height / 2)
         
-        var holeRect = CGRectMake(positionX, positionY, holeSize.width, holeSize.height)
+        let holeRect = CGRectMake(positionX, positionY, holeSize.width, holeSize.height)
         
         var holeRectIntersection = CGRectIntersection(holeRect, rect)
         
         CGContextSetFillColorWithColor(context, UIColor.clearColor().CGColor)
-        CGContextSetBlendMode(context, kCGBlendModeClear)
+        CGContextSetBlendMode(context, CGBlendMode.Clear)
         
         CGContextFillEllipseInRect(context, holeRect)
     }

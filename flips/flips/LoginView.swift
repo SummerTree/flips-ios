@@ -97,7 +97,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -131,7 +131,7 @@ class LoginView : UIView, UITextFieldDelegate {
         self.logoView.center = self.center
         setFieldsHidden(true)
         
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.addGestureRecognizer(tapGestureRecognizer)
         
         self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
@@ -170,7 +170,7 @@ class LoginView : UIView, UITextFieldDelegate {
         }
 
         if let flipError = error {
-            var alertView = UIAlertView(title: flipError.error, message: flipError.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            let alertView = UIAlertView(title: flipError.error, message: flipError.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
         
@@ -225,18 +225,18 @@ class LoginView : UIView, UITextFieldDelegate {
         credentialsView.addSubview(emailTextField)
         
         emailPasswordSeparator = UIView()
-        var separatorRecognizer = UITapGestureRecognizer(target: self, action: "separatorTapped")
+        let separatorRecognizer = UITapGestureRecognizer(target: self, action: "separatorTapped")
         emailPasswordSeparator.addGestureRecognizer(separatorRecognizer)
         emailPasswordSeparator.backgroundColor = UIColor.whiteColor()
         credentialsView.addSubview(emailPasswordSeparator)
         
         spaceBetweenEmailFieldAndSeparator = UIView()
-        var emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenEmailAndSeparatorTapped")
+        let emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenEmailAndSeparatorTapped")
         spaceBetweenEmailFieldAndSeparator.addGestureRecognizer(emailSpaceViewRecognizer)
         credentialsView.addSubview(spaceBetweenEmailFieldAndSeparator)
         
         spaceBetweenPasswordFieldAndSeparator = UIView()
-        var passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenPasswordAndSeparatorTapped")
+        let passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenPasswordAndSeparatorTapped")
         spaceBetweenPasswordFieldAndSeparator.addGestureRecognizer(passwordSpaceViewRecognizer)
         credentialsView.addSubview(spaceBetweenPasswordFieldAndSeparator)
         
@@ -710,7 +710,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue()
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
     

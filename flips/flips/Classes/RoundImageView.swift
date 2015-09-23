@@ -26,7 +26,7 @@ let A4_AVATAR_SIZE = 40 + A4_BORDER_WIDTH
 class RoundImageView: UIView {
     var borderColor: UIColor {
         get {
-            return UIColor(CGColor: self.layer.borderColor)!
+            return UIColor(CGColor: self.layer.borderColor)
         }
         set {
             self.layer.borderColor = newValue.CGColor
@@ -75,7 +75,7 @@ class RoundImageView: UIView {
 
     // MARK: - Public instance methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -120,7 +120,7 @@ class RoundImageView: UIView {
                     self.validateLastRequestTime(thisRequestTime)
                     
                     dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                        println("Could not get avatar from \(remoteURL.path).")
+                        print("Could not get avatar from \(remoteURL.path).")
                     }
             })
         }
@@ -133,7 +133,7 @@ class RoundImageView: UIView {
     }
     
     func setTapSelector(selectorMethod: Selector, targetObject: AnyObject!) {
-        var gestRecog = UITapGestureRecognizer(target: targetObject, action: selectorMethod)
+        let gestRecog = UITapGestureRecognizer(target: targetObject, action: selectorMethod)
         gestRecog.numberOfTouchesRequired = 1
         gestRecog.numberOfTapsRequired = 1
         
@@ -142,7 +142,7 @@ class RoundImageView: UIView {
     }
     
     func setBlankWhiteImage() {
-        var imageSize = self.imageView.frame
+        let imageSize = self.imageView.frame
         self.imageView.image = UIImage.imageWithColor(UIColor.whiteColor(), size: imageSize.size)
     }
 

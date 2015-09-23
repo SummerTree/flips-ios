@@ -41,7 +41,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         self.init(frame: CGRectZero)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -100,14 +100,14 @@ class UserFormView : UIView, UITextFieldDelegate {
 	
 	func birthdaySelected(sender : AnyObject?) {
 		let picker = birthdayTextField.inputView as! UIDatePicker
-		var dateFormatter = NSDateFormatter()
+		let dateFormatter = NSDateFormatter()
 		dateFormatter.dateFormat = "MM/dd/yyyy"
 		birthdayTextField.text = dateFormatter.stringFromDate(picker.date)
 		self.validateFields()
 	}
     
     private func setupCell(placeHolder: String, leftImage: UIImage? = nil) -> UITextField {
-        var textField = UITextField()
+        let textField = UITextField()
         textField.backgroundColor = CELL_BACKGROUND_COLOR
         textField.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         textField.textColor = UIColor.whiteColor()
@@ -193,7 +193,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     private func adjustInternalPadding(textField: UITextField, adjustForRightView: Bool = false) {
         if (textField.leftView != nil) {
-            var frame: CGRect! = textField.leftView?.frame
+            let frame: CGRect! = textField.leftView?.frame
             textField.leftView?.contentMode = UIViewContentMode.Center
             textField.leftView?.frame = CGRectMake(CGRectGetMinX(frame),
                 CGRectGetMinY(frame),
@@ -201,7 +201,7 @@ class UserFormView : UIView, UITextFieldDelegate {
                 CGRectGetHeight(frame))
             
             if (adjustForRightView) {
-                var rightFrame: CGRect! = textField.rightView?.frame
+                let rightFrame: CGRect! = textField.rightView?.frame
                 textField.rightView?.contentMode = UIViewContentMode.Center
                 textField.rightView?.frame = CGRectMake(CGRectGetMinX(rightFrame),
                     CGRectGetMinY(rightFrame),
@@ -209,7 +209,7 @@ class UserFormView : UIView, UITextFieldDelegate {
                     CGRectGetHeight(rightFrame))
             }
         } else {
-            var paddingView = UIView(frame: CGRectMake(0, 0, CELL_WITHOUT_ICON_TOTAL_MARGIN, CELL_HEIGHT))
+            let paddingView = UIView(frame: CGRectMake(0, 0, CELL_WITHOUT_ICON_TOTAL_MARGIN, CELL_HEIGHT))
             textField.leftView = paddingView
         }
     }
@@ -221,7 +221,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             if ((i == BIRTHDAY_FIRST_SEPARATOR_POSITION) || (i == BIRTHDAY_SECOND_SEPARATOR_POSITION)) {
                 formatedDate = "\(formatedDate)\(BIRTHDAY_DATE_SEPARATOR)"
             } else if (!nonFormatedText.isEmpty) {
-                var digitToAdd = nonFormatedText.substringToIndex(nonFormatedText.startIndex.successor())
+                let digitToAdd = nonFormatedText.substringToIndex(nonFormatedText.startIndex.successor())
                 nonFormatedText = nonFormatedText.substringFromIndex(nonFormatedText.startIndex.successor())
                 formatedDate = "\(formatedDate)\(digitToAdd)"
             } else {
@@ -265,7 +265,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             shouldChangeTextFieldText = false
             
             var stringWithDigitsOnly = birthdayTextField.text.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
-            var numberOfDigitsProvided = count(stringWithDigitsOnly)
+            var numberOfDigitsProvided = stringWithDigitsOnly.characters.count
             
             if (string == "" ) {
                 if (numberOfDigitsProvided > 0) {
@@ -280,7 +280,7 @@ class UserFormView : UIView, UITextFieldDelegate {
                 textField.text = self.applyDateFormatToText(stringWithDigitsOnly)
             }
             
-            if (count(stringWithDigitsOnly) == 8) {
+            if (stringWithDigitsOnly.characters.count == 8) {
                 self.validateFields()
             }
         }
@@ -289,7 +289,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func textFieldDidChange(textField: UITextField) {
-        self.validateFields(includeFieldsBeingEdited: false)
+        self.validateFields(false)
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
@@ -383,13 +383,13 @@ class UserFormView : UIView, UITextFieldDelegate {
     }
     
     func isBirthdayValid(birthday: String) -> Bool {
-        var birthdayDate = birthday.dateValue()
+        let birthdayDate = birthday.dateValue()
         if (birthdayDate == nil) {
             return false
         }
         
-        var now = NSDate()
-        var ageComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.CalendarUnitYear, fromDate: birthdayDate, toDate: now, options: NSCalendarOptions.allZeros)
+        let now = NSDate()
+        let ageComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.Year, fromDate: birthdayDate, toDate: now, options: NSCalendarOptions())
         
         return (ageComponents.year >= 13)
     }
@@ -399,8 +399,8 @@ class UserFormView : UIView, UITextFieldDelegate {
         var lastCharacter = ""
         var lastButOneCharacter = ""
         var lastButTwoCharacters = ""
-        for character in newDateString {
-            var characterDoubleValue = String(character).doubleValue()
+        for character in newDateString.characters {
+            let characterDoubleValue = String(character).doubleValue()
             if (position == 0) {
                 if (characterDoubleValue > 1) {
                     return false

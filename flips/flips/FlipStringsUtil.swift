@@ -19,23 +19,23 @@ private enum FlipCharType {
 class FlipStringsUtil {
     
     class func splitFlipString(flipString: String) -> [String] {
-        let wordCharRegex = NSRegularExpression(pattern: WORD_CHARACTER_PATTERN, options: nil, error: nil)!
+        let wordCharRegex = try! NSRegularExpression(pattern: WORD_CHARACTER_PATTERN, options: [])
         var arrayOfFlips = [String]()
         var lastCharType = FlipCharType.WHITESPACE
         var newWord = ""
-        for char in flipString {
+        for char in flipString.characters {
             var currentCharType: FlipCharType
             if (char == " ") {
                 currentCharType = FlipCharType.WHITESPACE
             } else {
                 let str = String(char)
-                let range = NSRange(location: 0, length: count(str))
-                let isWordChar = wordCharRegex.numberOfMatchesInString(str, options: nil, range: range) > 0
+                let range = NSRange(location: 0, length: str.characters.count)
+                let isWordChar = wordCharRegex.numberOfMatchesInString(str, options: [], range: range) > 0
                 currentCharType = isWordChar ? FlipCharType.WORD : FlipCharType.SPECIAL
             }
             
             if (currentCharType == FlipCharType.WHITESPACE || currentCharType != lastCharType) {
-                if (count(newWord) > 0) {
+                if (newWord.characters.count > 0) {
                     arrayOfFlips.append(newWord)
                     newWord = ""
                 }
@@ -49,7 +49,7 @@ class FlipStringsUtil {
             lastCharType = currentCharType
         }
         
-        if (count(newWord) > 0) {
+        if (newWord.characters.count > 0) {
             arrayOfFlips.append(newWord)
         }
         

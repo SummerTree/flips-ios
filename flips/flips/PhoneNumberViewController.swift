@@ -79,32 +79,32 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
                 facebookId: self.facebookId,
                 success: { (user) -> Void in
                     self.hideActivityIndicator()
-                    var userEntity = user as! User
-                    var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode, userId: userEntity.userID)
+                    let userEntity = user as! User
+                    let verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode, userId: userEntity.userID)
                     self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
                     self.hideActivityIndicator()
                     
                 }) { (flipError) -> Void in
                     self.hideActivityIndicator()
-                    println("Error in the sign up [error=\(flipError!.error), details=\(flipError!.details)]")
+                    print("Error in the sign up [error=\(flipError!.error), details=\(flipError!.details)]")
                     var detail = flipError!.error
                     
                     if let hasDetail = flipError!.details {
                         detail = hasDetail
                     }
                     
-                    var alertView = UIAlertView(title: flipError!.error, message: detail, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                    let alertView = UIAlertView(title: flipError!.error, message: detail, delegate: self, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
             }
         } else {
             self.hideActivityIndicator()
-            var verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode, userId: self.userId)
+            let verificationCodeViewController = VerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode, userId: self.userId)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }
     }
     
     func phoneNumberViewDidTapBackButton(view: PhoneNumberView!) {
-        println(self.previousViewController())
+        print(self.previousViewController())
         if (self.previousViewController()!.isKindOfClass(SplashScreenViewController.self) ||
             self.previousViewController()!.isKindOfClass(LoginViewController.self)) {
                 AuthenticationHelper.sharedInstance.logout()
@@ -116,7 +116,7 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

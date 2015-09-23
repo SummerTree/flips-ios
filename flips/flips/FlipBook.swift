@@ -15,7 +15,7 @@ class FlipBook : NSObject {
     var flipMessage : String {
         get {
             var message : String = ""
-            for (index, flip) in enumerate(self.flipPages) {
+            for (index, flip) in self.flipPages.enumerate() {
                 message += "\(flip.word) "
             }
             return message
@@ -24,7 +24,7 @@ class FlipBook : NSObject {
     var flipWords : [String]? {
         get {
             var words : [String] = []
-            for (index, flip) in enumerate(self.flipPages) {
+            for (index, flip) in self.flipPages.enumerate() {
                 words += [flip.word]
             }
             return words
@@ -99,8 +99,8 @@ class FlipPage {
     }
     
     func createFlip() -> Flip! {
-        var flipDataSource = FlipDataSource()
-        var flip = flipDataSource.createEmptyFlipWithWord(self.word)
+        let flipDataSource = FlipDataSource()
+        let flip = flipDataSource.createEmptyFlipWithWord(self.word)
         flip.flipID = "\(self.word)_createdFromFlipPage"
         flip.backgroundURL = self.videoURL!.absoluteString
         flip.thumbnailURL = self.thumbnailURL!.absoluteString

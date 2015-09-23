@@ -13,13 +13,13 @@
 extension UITableView {
     
     func getImageWithSize(size: CGSize) -> UIImage {
-        var tableViewContentOffset = self.contentOffset
+        let tableViewContentOffset = self.contentOffset
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         
         CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -tableViewContentOffset.y)
         self.layer.renderInContext(UIGraphicsGetCurrentContext())
-        var image = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
         

@@ -136,7 +136,7 @@ class SettingsTableViewCell: UITableViewCell {
                         })
                     })
                 }, failure: { (url: String!, error: FlipError) -> Void in
-                    println("Could not get avatar from \(remoteURL!.path).")
+                    print("Could not get avatar from \(remoteURL!.path).")
             })
             
             if (returnValue == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {

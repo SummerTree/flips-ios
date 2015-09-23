@@ -153,31 +153,31 @@ public class DraftingTable : NSObject {
     }
     
     func dumpTableToConsole() {
-        println("------ Dumping the Drafting Table --------")
+        print("------ Dumping the Drafting Table --------")
         
         for flipPage : FlipPage in self.flipBook.flipPages {
-            println("\(flipPage.order). \(flipPage.word)")
+            print("\(flipPage.order). \(flipPage.word)")
             
             if let myFlipID = flipPage.pageID {
-                println("--> id:\t\(flipPage.pageID!)")
+                print("--> id:\t\(flipPage.pageID!)")
             }
             
-                println("--> state:\t\(flipPage.state.rawValue)")
+                print("--> state:\t\(flipPage.state.rawValue)")
             
             if let thumbURL = flipPage.thumbnailURL {
-                println("--> thumb:\t\(flipPage.thumbnailURL!.absoluteString!.lastPathComponent)")
+                print("--> thumb:\t\(flipPage.thumbnailURL!.absoluteString.lastPathComponent)")
             }
             
             if let vidURL = flipPage.videoURL {
-                println("--> video:\t\(flipPage.videoURL!.absoluteString!.lastPathComponent)")
+                print("--> video:\t\(flipPage.videoURL!.absoluteString.lastPathComponent)")
             }
             
             if let myFlips = self.myFlipsDictionary {
-                println("--> assoc:\t\(myFlips[flipPage.word]!.count)")
+                print("--> assoc:\t\(myFlips[flipPage.word]!.count)")
             }
             
             if let stockFlips = self.stockFlipsDictionary {
-                println("--> stock:\t\(stockFlips[flipPage.word]!.count)")
+                print("--> stock:\t\(stockFlips[flipPage.word]!.count)")
             }
         }
     }

@@ -60,7 +60,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     }
     
     func viewWillAppear() {
-        if let selected = self.tableView.indexPathForSelectedRow() {
+        if let selected = self.tableView.indexPathForSelectedRow {
             self.tableView.deselectRowAtIndexPath(selected, animated: true)
         }
          self.updateUserProfileInfo()
@@ -152,7 +152,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     // MARK: - Required inits
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -198,7 +198,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             return self.tutorialCell
             
         default:
-            println("Error creating row number: \(indexPath.row)")
+            print("Error creating row number: \(indexPath.row)")
             fatalError("Unknown row")
         }
     }
@@ -243,7 +243,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             self.delegate?.settingsViewDidTapTutorialButton(self)
             
         default:
-            println("Error creating row number: \(indexPath.row)")
+            print("Error creating row number: \(indexPath.row)")
             fatalError("Unknown row")
         }
     }

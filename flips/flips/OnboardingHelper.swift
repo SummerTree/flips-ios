@@ -17,7 +17,7 @@ import MediaPlayer
 class OnboardingHelper: NSObject {
     
     class func onboardingHasBeenShown() -> Bool {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         if let showOnboarding = userDefaults.valueForKey(ONBORDING_HAS_BEEN_SHOWN_KEY) as? Bool {
             return showOnboarding
         }
@@ -25,14 +25,14 @@ class OnboardingHelper: NSObject {
     }
     
     class func setOnboardingHasShown() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(true, forKey: ONBORDING_HAS_BEEN_SHOWN_KEY)
         userDefaults.synchronize()
     }
 
     class func presentOnboardingAtViewController(viewController: UIViewController) -> MPMoviePlayerController {
         let videoURL = NSBundle.mainBundle().URLForResource("flips-tutorial", withExtension: "mp4")
-        var tutorialViewController = MPMoviePlayerViewController(contentURL: videoURL);
+        let tutorialViewController = MPMoviePlayerViewController(contentURL: videoURL);
         tutorialViewController.moviePlayer.shouldAutoplay = true
 
         viewController.presentViewController(tutorialViewController, animated: true, completion: nil)

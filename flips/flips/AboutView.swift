@@ -38,7 +38,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         addSubviews();
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -70,9 +70,9 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         
         let currentDate = NSDate()
         let calendar = NSCalendar.currentCalendar()
-        let components = calendar.components(NSCalendarUnit.CalendarUnitYear, fromDate: currentDate)
+        let components = calendar.components(NSCalendarUnit.Year, fromDate: currentDate)
         
-        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as! String) as! String
+        let build = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as String) as! String
         
         copyright = UILabel()
         copyright.numberOfLines = 3
@@ -83,7 +83,7 @@ class AboutView: UIView, CustomNavigationBarDelegate {
         copyright.textAlignment = NSTextAlignment.Center
         self.logoContainer.addSubview(copyright)
         
-        var HOST = AppSettings.currentSettings().serverURL()
+        let HOST = AppSettings.currentSettings().serverURL()
         
         webView = FlipsWebView(URL: "\(HOST)/about")
         self.addSubview(webView)

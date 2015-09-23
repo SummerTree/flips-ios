@@ -28,14 +28,14 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     // MARK: - Initialization Methods
     
     init(interfaceOrientation: AVCaptureVideoOrientation) {
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
         
         self.initSubviewsWithInterfaceOrientation(interfaceOrientation)
         
         self.updateConstraintsIfNeeded()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -57,7 +57,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
         let sizerMult : CGFloat = 1.35
         
-        takePictureButton = UIButton.buttonWithType(.Custom) as! UIButton
+        takePictureButton = UIButton(type: .Custom)
         takePictureButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         takePictureButton.sizeToFit()
         takePictureButton.addTarget(self, action: "takePictureButtonTapped", forControlEvents: .TouchUpInside)
@@ -134,7 +134,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             make.bottom.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
         }
         
-        var galleryButtonCenterXOffset : CGFloat = self.frame.width / 4
+        let galleryButtonCenterXOffset : CGFloat = self.frame.width / 4
         
         galleryButton.mas_makeConstraints { (make) -> Void in
             make.removeExisting = true
@@ -179,19 +179,19 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     func takePictureButtonTapped() {
         cameraView.capturePictureWithCompletion({ (image, frontCamera, inLandspace) -> Void in
             if (image != nil) {
-                var receivedImage = image as UIImage!
+                let receivedImage = image as UIImage!
                 
-                var avatarImage: UIImage! = receivedImage.avatarA1Image(self.cameraView.frame)
+                let avatarImage: UIImage! = receivedImage.avatarA1Image(self.cameraView.frame)
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.delegate?.takePictureView(self, didTakePicture: avatarImage)
                     return ()
                 })
             } else {
-                println("Capturing picture problem. Image is nil")
+                print("Capturing picture problem. Image is nil")
             }
         }, fail: { (error) -> Void in
-            println("Error capturing picture: \(error)")
+            print("Error capturing picture: \(error)")
         })
     }
     

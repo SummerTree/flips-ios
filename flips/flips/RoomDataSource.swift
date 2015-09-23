@@ -33,7 +33,7 @@ class RoomDataSource : BaseDataSource {
     // MARK: - Creators
     
     private func createEntityWithJson(json: JSON) -> Room {
-        var entity: Room! = Room.createInContext(currentContext) as! Room
+        let entity: Room! = Room.createInContext(currentContext) as! Room
         self.fillRoom(entity, withJson: json)
         
         return entity
@@ -41,7 +41,7 @@ class RoomDataSource : BaseDataSource {
     
     private func fillRoom(room: Room, withJson json: JSON) {
         if (room.roomID != json[RoomJsonParams.ROOM_ID].stringValue) {
-            println("Possible error. Will change room id from (\(room.roomID)) to (\(json[RoomJsonParams.ROOM_ID].stringValue))")
+            print("Possible error. Will change room id from (\(room.roomID)) to (\(json[RoomJsonParams.ROOM_ID].stringValue))")
         }
         
         room.name = json[RoomJsonParams.NAME].stringValue
@@ -54,7 +54,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func associateRoom(room: Room, withAdmin admin: User?, andParticipants participants: [User]) {
-        var roomInContext = room.inContext(currentContext) as! Room
+        let roomInContext = room.inContext(currentContext) as! Room
 
         for user in participants {
             roomInContext.addParticipantsObject(user.inContext(currentContext) as! User)
@@ -69,10 +69,10 @@ class RoomDataSource : BaseDataSource {
     // MARK: - Getters
     
     func retrieveRoomWithId(roomId: String) -> Room {
-        var room = self.getRoomById(roomId)
+        let room = self.getRoomById(roomId)
         
         if (room == nil) {
-            println("Room (\(roomId)) not found in the database and it mustn't happen. Check why he wasn't added to database yet.")
+            print("Room (\(roomId)) not found in the database and it mustn't happen. Check why he wasn't added to database yet.")
         }
         
         return room!
@@ -87,9 +87,9 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getTeamFlipsRoom() -> Room? {
-        var rooms = getAllRooms()
+        let rooms = getAllRooms()
         for room in rooms {
-            var allParticipants = Array(room.participants)
+            let allParticipants = Array(room.participants)
             for participant : User in allParticipants as! [User] {
                 if (participant.username == TEAMFLIPS_USERNAME) {
                     return room
@@ -101,7 +101,7 @@ class RoomDataSource : BaseDataSource {
     }
     
     func getMyRoomsWithMessages() -> [Room] {
-        var rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as! [Room]
+        let rooms = Room.findAllSortedBy(RoomAttributes.LAST_MESSAGE_RECEIVED_AT, ascending: false, inContext: currentContext) as! [Room]
         var roomsWithMessages = Array<Room>()
         for room in rooms {
             let roomFlipMessages: [FlipMessage] = room.flipMessages.array as! [FlipMessage]
@@ -119,8 +119,8 @@ class RoomDataSource : BaseDataSource {
     func getMyRoomsOrderedByOldestNotReadMessage() -> [Room] {
         let now = NSDate()
         
-        var myRooms = self.getMyRoomsWithMessages()
-        return myRooms.sorted { (room, nextRoom) -> Bool in
+        let myRooms = self.getMyRoomsWithMessages()
+        return myRooms.sort { (room, nextRoom) -> Bool in
             let roomOldestMessage = room.oldestNotReadMessage()
             var roomDate = roomOldestMessage?.createdAt
             if (roomDate == nil) {
@@ -140,8 +140,8 @@ class RoomDataSource : BaseDataSource {
     func getMyRoomsOrderedByMostRecentMessage() -> [Room] {
         let now = NSDate()
         
-        var myRooms = self.getMyRoomsWithMessages()
-        return myRooms.sorted { (room, nextRoom) -> Bool in
+        let myRooms = self.getMyRoomsWithMessages()
+        return myRooms.sort { (room, nextRoom) -> Bool in
             let roomMostRecentMessage = room.flipMessagesNotRemoved().lastObject as? FlipMessage
             var roomDate = roomMostRecentMessage?.receivedAt
             if (roomDate == nil) {
@@ -169,7 +169,7 @@ class RoomDataSource : BaseDataSource {
         var roomFound: Room? = nil
         for room in rooms {
 
-            var allParticipants = Array(room.participants) as! [User]
+            let allParticipants = Array(room.participants) as! [User]
 
             if (allParticipants.count != userIDs.count+1) {
                 continue
@@ -177,7 +177,7 @@ class RoomDataSource : BaseDataSource {
             
             var sameParticipants = true
             for participant: User in allParticipants as [User] {
-                if (find(userIDs, participant.userID) == nil && participant.userID != loggedUserID) {
+                if (userIDs.indexOf(participant.userID) == nil && participant.userID != loggedUserID) {
                     sameParticipants = false
                     break
                 }

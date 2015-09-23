@@ -24,14 +24,14 @@ struct DeviceJsonParams {
 class DeviceDataSource : BaseDataSource {
     
     func createEntityWithJson(json : JSON) -> Device {
-        var entity = Device.createInContext(currentContext) as! Device
+        let entity = Device.createInContext(currentContext) as! Device
         self.fillDevice(entity, withJson: json)
         return entity as Device
     }
     
     func associateDevice(device: Device, withUser user: User) {
-        var deviceInContext = device.inContext(currentContext) as! Device
-        var userInContext = user.inContext(currentContext) as! User
+        let deviceInContext = device.inContext(currentContext) as! Device
+        let userInContext = user.inContext(currentContext) as! User
 
         deviceInContext.user = userInContext
         userInContext.device = deviceInContext

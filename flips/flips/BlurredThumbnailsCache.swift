@@ -42,7 +42,7 @@ public class BlurredThumbnailsCache: ThumbnailsDataSource {
                     self.cache.get(remoteURL, success: success, failure: failure)
                 }
             }, failure: { (url: String!, flipError: FlipError) -> Void in
-                println("Error generating blurred thumbnail: \(flipError)")
+                print("Error generating blurred thumbnail: \(flipError)")
             })
             return StorageCache.CacheGetResponse.DOWNLOAD_WILL_START
         }

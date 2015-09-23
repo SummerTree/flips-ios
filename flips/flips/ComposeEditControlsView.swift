@@ -30,7 +30,7 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
     // MARK: - Init
     ////
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -76,7 +76,7 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
         let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
         let sizerMult : CGFloat = 1.35
         
-        let button = UIButton.buttonWithType(.Custom) as! UIButton
+        let button = UIButton(type: .Custom)
         button.tintColor = UIColor.whiteColor()
         button.layer.borderColor = UIColor.whiteColor().CGColor
         button.layer.borderWidth = 3.0

@@ -23,12 +23,12 @@ class NotificationMessageView : UIView {
     // MARK: - Initialization Methods
     
     init(message: String) {
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
         self.message = message
         self.initSubviews()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

@@ -92,7 +92,7 @@ extension UIImage {
     
     // Used by the take a picture
     func avatarA1Image(cropRectFrameInView: CGRect) -> UIImage {
-        var avatarImageSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
+        let avatarImageSize = A1_AVATAR_SIZE - A1_BORDER_WIDTH
         return self.cropSquareImage(avatarImageSize)
     }
     

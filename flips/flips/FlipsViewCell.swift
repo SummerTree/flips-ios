@@ -36,13 +36,13 @@ class FlipsViewCell : UICollectionViewCell {
         self.addSubview(seletedOverlayView)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     func setFlipId(flipID: String) {
         let flipDataSource = FlipDataSource()
-        var flip = flipDataSource.retrieveFlipWithId(flipID)
+        let flip = flipDataSource.retrieveFlipWithId(flipID)
         
         let response = ThumbnailsCache.sharedInstance.get(NSURL(string: flip.thumbnailURL)!,
             success: { (url: String!, localThumbnailPath: String!) in
@@ -53,7 +53,7 @@ class FlipsViewCell : UICollectionViewCell {
             },
             failure: { (url: String!, error: FlipError) in
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
-                println("Failed to get resource from cache, error: \(error)")
+                print("Failed to get resource from cache, error: \(error)")
         })
         
         if (response == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {
@@ -61,7 +61,7 @@ class FlipsViewCell : UICollectionViewCell {
         }
     }
     
-    func setSelected(var selected: Bool) {
+    func setSelected(selected: Bool) {
         if (selected) {
             self.seletedOverlayView.alpha = 1
         } else {

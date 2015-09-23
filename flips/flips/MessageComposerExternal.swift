@@ -78,17 +78,17 @@ class MessageComposerExternal: NSObject, MFMessageComposeViewControllerDelegate 
     // MFMessageComposerViewController Delegate
     ////
     
-    func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
 
-        switch result.value
+        switch result.rawValue
         {
-            case MessageComposeResultSent.value:
-                println("Flip MMS sent successfully.")
+            case MessageComposeResultSent.rawValue:
+                print("Flip MMS sent successfully.")
                 self.messageSent = true
                 AnalyticsService.logMMSSent()
                 delegate?.didFinishSendingTextMessage(true)
-            case MessageComposeResultFailed.value:
-                println("Text message failed to send.")
+            case MessageComposeResultFailed.rawValue:
+                print("Text message failed to send.")
                 let alertView = UIAlertView(
                     title: NSLocalizedString("Text Send Failure"),
                     message: NSLocalizedString("Text message failed to send."),
@@ -98,8 +98,8 @@ class MessageComposerExternal: NSObject, MFMessageComposeViewControllerDelegate 
                 self.messageSent = false
                 AnalyticsService.logMMSFailed()
                 delegate?.didFinishSendingTextMessage(false)
-            case MessageComposeResultCancelled.value:
-                println("Flips MMS was cancelled.")
+            case MessageComposeResultCancelled.rawValue:
+                print("Flips MMS was cancelled.")
                 self.messageSent = false
                 AnalyticsService.logMMSCancelled()
                 delegate?.didCancelSendingTextMessage()

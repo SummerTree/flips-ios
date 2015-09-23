@@ -24,21 +24,21 @@ class CustomBadgeView : UIView {
     //MARK: - Initialization Methods
     
     convenience init() {
-        self.init(frame: CGRect.zeroRect)
+        self.init(frame: CGRect.zero)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        var badgeBackgroundImage = UIImage(named: "Notification")
+        let badgeBackgroundImage = UIImage(named: "Notification")
         
         self.frame = CGRectMake(0, 0, badgeBackgroundImage!.size.width, badgeBackgroundImage!.size.height)
 
-        var backgroundImageView = UIImageView(image: badgeBackgroundImage)
+        let backgroundImageView = UIImageView(image: badgeBackgroundImage)
         backgroundImageView.sizeToFit()
         self.addSubview(backgroundImageView)
 

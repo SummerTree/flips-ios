@@ -58,9 +58,9 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     private func onMessageReceived(flipMessage: FlipMessage) {
         // Notify any screen that there is a new message
 
-        println("New Message Received")
-        println("   From: \(flipMessage.from.firstName)")
-        println("   Sent at: \(flipMessage.createdAt)")
+        print("New Message Received")
+        print("   From: \(flipMessage.from.firstName)")
+        print("   Sent at: \(flipMessage.createdAt)")
 
         if let loggedUser = User.loggedUser() {
             UIApplication.sharedApplication().applicationIconBadgeNumber = loggedUser.countUnreadMessages()
@@ -73,7 +73,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let firstFlip = firstEntry.flip
         flipMessagesWaiting[flipMessage.flipMessageID]?.append(firstFlip.flipID)
 
-        println("   downloading thumbnail for flip #\(firstFlip.flipID)")
+        print("   downloading thumbnail for flip #\(firstFlip.flipID)")
 
         let cache = ThumbnailsCache.sharedInstance
         cache.get(NSURL(string: firstFlip.thumbnailURL)!,
@@ -81,7 +81,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
                 self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: nil)
             },
             failure: { (remoteURL: String!, error: FlipError) -> Void in
-                println("Failed to get resource from cache, error: \(error)")
+                print("Failed to get resource from cache, error: \(error)")
                 self.sendDownloadFinishedBroadcastForFlip(firstFlip, flipMessageID: flipMessage.flipMessageID, error: error)
         })
         
@@ -92,7 +92,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         var userInfo: Dictionary<String, AnyObject> = [DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FLIP_KEY: flip.flipID, DOWNLOAD_FINISHED_NOTIFICATION_PARAM_MESSAGE_KEY: flipMessageID]
         
         if (error != nil) {
-            println("Error download flip content: \(error!)")
+            print("Error download flip content: \(error!)")
             userInfo.updateValue(true, forKey: DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY)
         }
         
@@ -121,9 +121,9 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
         let flipDataSource = FlipDataSource()
         if let flip = flipDataSource.retrieveFlipWithId(flipID) {
             if (userInfo[DOWNLOAD_FINISHED_NOTIFICATION_PARAM_FAIL_KEY] != nil) {
-                println("Download failed for flip: \(flip.flipID)")
+                print("Download failed for flip: \(flip.flipID)")
             } else {
-                println("Download finished for flip: \(flip.flipID)")
+                print("Download finished for flip: \(flip.flipID)")
                 self.onFlipContentDownloadFinished(flip, flipMessageID: flipMessageID)
             }
         } else {
@@ -165,12 +165,12 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
 
     private func processFlipMessageJson(messageJson: JSON, atDate date: NSDate, fromChannelName: String, fromHistory: Bool) -> FlipMessage? {
         if (messageJson[MESSAGE_TYPE] == nil) {
-            println("Msg ignored")
+            print("Msg ignored")
             return nil
         }
 
         if (!AuthenticationHelper.sharedInstance.isAuthenticated()) {
-            println("User is not logged. Ignoring message.")
+            print("User is not logged. Ignoring message.")
             return nil
         }
         
@@ -197,7 +197,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     // MARK: - PubnubServiceDelegate
     
     func pubnubClient(client: PubNub!, didReceiveMessage messageJson: JSON, atDate date: NSDate, fromChannelName: String) {
-        println("\nMessage received:\n\(messageJson)\n")
+        print("\nMessage received:\n\(messageJson)\n")
 
         let flipMessage = self.processFlipMessageJson(messageJson, atDate: date, fromChannelName: fromChannelName, fromHistory: false)
 

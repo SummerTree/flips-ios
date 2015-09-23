@@ -21,7 +21,7 @@ class GroupPartcipantsTableViewCell: UITableViewCell {
 
     // MARK: - Required initializers
     
-    required internal init(coder aDecoder: NSCoder) {
+    required internal init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     

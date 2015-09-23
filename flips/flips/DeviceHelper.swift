@@ -60,7 +60,7 @@ public class DeviceHelper: NSObject {
     // MARK: - Save Device Data on User Defaults
     
     func saveDeviceToken(token: String?) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         if (token == nil) {
             userDefaults.removeObjectForKey(DEVICE_TOKEN)
         } else {
@@ -70,7 +70,7 @@ public class DeviceHelper: NSObject {
     }
     
     func saveDeviceTokenAsNsData(token: NSData?) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         if (token == nil) {
             userDefaults.removeObjectForKey(DEVICE_TOKEN_NSDATA)
         } else {
@@ -80,7 +80,7 @@ public class DeviceHelper: NSObject {
     }
     
     func saveDeviceId(deviceId: String?) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         if (deviceId == nil) {
             userDefaults.removeObjectForKey(DEVICE_ID)
         } else {
@@ -90,35 +90,35 @@ public class DeviceHelper: NSObject {
     }
     
     func removeDeviceToken() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(DEVICE_TOKEN)
         userDefaults.synchronize()
     }
     
     func removeDeviceTokenAsNsData() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(DEVICE_TOKEN_NSDATA)
         userDefaults.synchronize()
     }
     
     func removeDeviceId() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(DEVICE_ID)
         userDefaults.synchronize()
     }
     
     func retrieveDeviceToken() -> String? {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(DEVICE_TOKEN) as! String?
     }
     
     func retrieveDeviceTokenAsNSData() -> NSData? {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(DEVICE_TOKEN_NSDATA) as! NSData?
     }
     
     func retrieveDeviceId() -> String? {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(DEVICE_ID) as! String?
     }
     
@@ -132,7 +132,7 @@ public class DeviceHelper: NSObject {
             onboardingSeenArray = Array<String>()
         }
 
-        if (find(onboardingSeenArray!, userId!) == nil) {
+        if ((onboardingSeenArray!).indexOf((userId!)) == nil) {
             onboardingSeenArray!.append(userId!)
         }
 
@@ -150,7 +150,7 @@ public class DeviceHelper: NSObject {
             return false
         }
 
-        if (find(onboardingSeenArray!, userId!) != nil) {
+        if ((onboardingSeenArray!).indexOf((userId!)) != nil) {
             return true
         }
         

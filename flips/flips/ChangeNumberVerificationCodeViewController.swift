@@ -42,7 +42,7 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
     // MARK: - ChangeNumberVerificationCodeViewDelegate
     
     func makeConstraintToNavigationBarBottom(view: UIView!) {
-        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
+        let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
         
         view.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(topLayoutGuide.mas_bottom)
@@ -53,7 +53,7 @@ class ChangeNumberVerificationCodeViewController: VerificationCodeViewController
     func navigateAfterValidateDevice() {
         for viewController in self.navigationController!.viewControllers {
             
-            let lastViewController = viewController as! UIViewController
+            let lastViewController = viewController 
             if (lastViewController.isKindOfClass(SettingsViewController.self)) {
                 self.navigationController?.popToViewController(lastViewController, animated: true)
                 break

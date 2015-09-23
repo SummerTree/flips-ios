@@ -46,7 +46,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         self.addConstraints()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -202,7 +202,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     
     func showCameraButtons() {
         self.hideFlipCreatedMessage()
-        self.slideToCameraView(notifyDelegate: false)
+        self.slideToCameraView(false)
         self.updateGridButton()
     }
 
@@ -251,7 +251,7 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
     
     func showAllFlipCreateMessage() {
         self.builderFlipCreateLabel.numberOfLines = 5
-        var text = NSMutableAttributedString(string: BUILDER_ALL_FLIPS_CREATED_MESSAGE)
+        let text = NSMutableAttributedString(string: BUILDER_ALL_FLIPS_CREATED_MESSAGE)
         text.addAttribute(NSFontAttributeName, value: UIFont.avenirNextBoldItalic(UIFont.HeadingSize.h5), range: NSMakeRange(0, 23))
         text.addAttribute(NSFontAttributeName, value: UIFont.avenirNextBold(UIFont.HeadingSize.h6), range: NSMakeRange(23, text.length-23))
         

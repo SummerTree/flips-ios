@@ -32,14 +32,14 @@ class UserDataSource : BaseDataSource {
     // MARK: - CoreData Creator Methods
     
     private func createEntityWithJson(json: JSON) -> User {
-        var entity: User! = User.MR_createInContext(currentContext) as! User
+        let entity: User! = User.MR_createInContext(currentContext) as! User
         self.fillUser(entity, withJsonData: json)
         return entity
     }
     
     private func fillUser(user: User, withJsonData json: JSON) {
         if (user.userID != json[UserJsonParams.ID].stringValue) {
-            println("Possible error. Will change user id from (\(user.userID)) to (\(json[UserJsonParams.ID].stringValue))")
+            print("Possible error. Will change user id from (\(user.userID)) to (\(json[UserJsonParams.ID].stringValue))")
         }
         
         user.userID = json[UserJsonParams.ID].stringValue
@@ -69,7 +69,7 @@ class UserDataSource : BaseDataSource {
     // MARK - Public Methods
     
     func createUserWithJson(json: JSON, isLoggedUser: Bool = false) -> User {
-        var user = self.createEntityWithJson(json)
+        let user = self.createEntityWithJson(json)
         user.me = isLoggedUser
         return user
     }
@@ -85,20 +85,20 @@ class UserDataSource : BaseDataSource {
             currentUpdateTimestamp.compare(newUpdateTimestamp) == NSComparisonResult.OrderedSame) {
             return user
         }
-        var userInContext = user.inContext(currentContext) as! User
+        let userInContext = user.inContext(currentContext) as! User
         self.fillUser(userInContext, withJsonData: json)
         return userInContext
     }
     
     func associateUser(user: User, withDeviceInJson json: JSON) {
-        var userInContext = user.inContext(currentContext) as! User
+        let userInContext = user.inContext(currentContext) as! User
         // local user doesn't have device
         if (userInContext.device == nil) {
             
             // remote user has device
             if (json[UserJsonParams.DEVICES] != nil && json[UserJsonParams.DEVICES].array?.count > 0) {
                 let device = json[UserJsonParams.DEVICES].array?[0]
-                var deviceDataSource = DeviceDataSource(context: currentContext)
+                let deviceDataSource = DeviceDataSource(context: currentContext)
                 userInContext.device = deviceDataSource.createEntityWithJson(JSON(device!.object))
             }
         }
@@ -106,10 +106,10 @@ class UserDataSource : BaseDataSource {
     
     func associateUser(user: User, withContacts contacts: [Contact]) {
         let contactDataSource = ContactDataSource(context: currentContext)
-        var userInContext = user.inContext(currentContext) as! User
+        let userInContext = user.inContext(currentContext) as! User
         
         for contact in contacts {
-            var contactInContext = contact.inContext(currentContext) as! Contact
+            let contactInContext = contact.inContext(currentContext) as! Contact
             contactDataSource.setContactUserAndUpdateContact(userInContext, contact: contactInContext)
             userInContext.addContactsObject(contactInContext)
         }
@@ -121,8 +121,8 @@ class UserDataSource : BaseDataSource {
     
     // Users from the App that are my contacts
     func getMyUserContacts() -> [User] {
-        var predicate = NSPredicate(format: "((\(UserAttributes.ME) == false) AND (\(UserAttributes.CONTACTS).@count > 0))")
-        var result = User.MR_findAllSortedBy("\(UserAttributes.FIRST_NAME)", ascending: true, withPredicate: predicate, inContext: currentContext)
+        let predicate = NSPredicate(format: "((\(UserAttributes.ME) == false) AND (\(UserAttributes.CONTACTS).@count > 0))")
+        let result = User.MR_findAllSortedBy("\(UserAttributes.FIRST_NAME)", ascending: true, withPredicate: predicate, inContext: currentContext)
         return result as! [User]
     }
 }

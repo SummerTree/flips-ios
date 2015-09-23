@@ -27,7 +27,7 @@ class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDeleg
         self.username = username;
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -61,7 +61,7 @@ class ForgotPasswordViewController: FlipsViewController, ForgotPasswordViewDeleg
         UserService.sharedInstance.forgotPassword(mobileNumber.intlPhoneNumberWithCountryCode(countryCode), success: { (user) -> Void in
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
             
-            var verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode)
+            let verificationCodeViewController = ForgotPasswordVerificationCodeViewController(phoneNumber: mobileNumber, countryCode: countryCode)
             self.navigationController?.pushViewController(verificationCodeViewController, animated: true)
         }) { (flipError) -> Void in
             ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)

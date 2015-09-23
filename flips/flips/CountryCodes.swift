@@ -30,11 +30,11 @@ public class CountryCodes: NSObject {
     func loadCountryCodes() {
         if let path = NSBundle.mainBundle().pathForResource(self.JSON_FILE, ofType: self.JSON_EXT)
         {
-            if let jsonData = NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe, error: nil)
+            if let jsonData = try? NSData(contentsOfFile: path, options: .DataReadingMappedIfSafe)
             {
-                if let jsonResult: [NSDictionary] = NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers, error: nil) as? [NSDictionary]
+                if let jsonResult: [NSDictionary] = (try? NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers)) as? [NSDictionary]
                 {
-                    self.countryCodes = sorted(jsonResult) { self.countryCodeSort($0, p2: $1) }
+                    self.countryCodes = jsonResult.sort { self.countryCodeSort($0, p2: $1) }
                 }
             }
         }
@@ -63,16 +63,16 @@ public class CountryCodes: NSObject {
     }
     
     func findCountryDialCode(countryIndex: Int) -> String? {
-        var currCountry = self.countryCodes[countryIndex]
+        let currCountry = self.countryCodes[countryIndex]
         return currCountry["dial_code"] as! String?
     }
     
     func setSelectedPicksDialCode(picker: UIPickerView) {
-        var currentLocale = NSLocale.currentLocale()
-        var countryCode = currentLocale.objectForKey(NSLocaleCountryCode) as! String?
+        let currentLocale = NSLocale.currentLocale()
+        let countryCode = currentLocale.objectForKey(NSLocaleCountryCode) as! String?
         
         if countryCode != nil {
-            var dialCodeIndex = self.findCountryIndex(countryCode!)
+            let dialCodeIndex = self.findCountryIndex(countryCode!)
             picker.selectRow(dialCodeIndex, inComponent: 0, animated: true)
         }
     }

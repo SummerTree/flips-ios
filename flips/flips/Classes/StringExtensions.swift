@@ -21,15 +21,15 @@ extension String {
     }
     
     func isValidEmail() -> Bool {
-        var emailRegex = "(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+        let emailRegex = "(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
         
-        var emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         return emailTest.evaluateWithObject(self.lowercaseString)
     }
     
     func isValidPassword() -> Bool {
-        var passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$"
-        var passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
+        let passwordRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$"
+        let passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
         return passwordTest.evaluateWithObject(self)
     }
     
@@ -57,7 +57,7 @@ extension String {
 
         CC_MD5(str!, strLen, result)
 
-        var hash = NSMutableString()
+        let hash = NSMutableString()
         for i in 0..<digestLen {
             hash.appendFormat("%02x", result[i])
         }
@@ -90,15 +90,15 @@ extension String {
     // Allow to use text[0...5] to get substring
     subscript (r: Range<Int>) -> String {
         get {
-            let startIndex = advance(self.startIndex, r.startIndex)
-            let endIndex = advance(startIndex, r.endIndex - r.startIndex)
+            let startIndex = self.startIndex.advancedBy(r.startIndex)
+            let endIndex = startIndex.advancedBy(r.endIndex - r.startIndex)
             
             return self[Range(start: startIndex, end: endIndex)]
         }
     }
     
     func toFormattedPhoneNumber() -> String {
-        if (count(self) != 12) {
+        if (self.characters.count != 12) {
             return self
         }
         
@@ -118,8 +118,8 @@ extension String {
     }
     
     func formatWithDashes() -> String {
-        var newNumber = self as NSString
-        var len = newNumber.length - 1
+        let newNumber = self as NSString
+        let len = newNumber.length - 1
         
         var firstPart = ""
         var secondPart = ""

@@ -269,8 +269,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let textFieldLength = count(textField.text)
-        let replacementStringLength = count(string)
+        let textFieldLength = textField.text.characters.count
+        let replacementStringLength = string.characters.count
         if (replacementStringLength == 0) { //backspace
             if (textField == codeField3) {
                 codeField3.text = ""
@@ -327,7 +327,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func makeCodeField() -> UITextField {
-        var codeField = UITextField()
+        let codeField = UITextField()
         codeField.textAlignment = NSTextAlignment.Center
         codeField.sizeToFit()
         codeField.layoutIfNeeded()
@@ -354,7 +354,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     func codeFieldDidChange(textField: UITextField) {
         let verificationCode = codeField0.text + codeField1.text + codeField2.text + codeField3.text
         let stringWithDigitsOnly = verificationCode.stringByReplacingOccurrencesOfString(BULLET, withString: "", options: NSStringCompareOptions.CaseInsensitiveSearch)
-        let numberOfDigitsProvided = count(stringWithDigitsOnly)
+        let numberOfDigitsProvided = stringWithDigitsOnly.characters.count
         if (numberOfDigitsProvided == 4) {
             self.didFinishTypingVerificationCode(verificationCode)
         }
@@ -370,11 +370,11 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             if self.wrongVerificationCodeCounter >= 3 {
-                var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.CONSECUTIVE_INCORRECT_ENTRIES, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.CONSECUTIVE_INCORRECT_ENTRIES, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertMessage.show()
                 self.wrongVerificationCodeCounter = 0
             } else {
-                var alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.INCORRECT_VALIDATION_CODE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertMessage = UIAlertView(title: LocalizedString.WRONG_VERIFICATION_CODE, message: LocalizedString.INCORRECT_VALIDATION_CODE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertMessage.show()
             }
         })
@@ -404,7 +404,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

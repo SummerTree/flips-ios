@@ -38,7 +38,7 @@ public class ContactListHelperContact {
 
 }
 
-@objc public class ContactListHelper {
+public class ContactListHelper {
 
     public class var sharedInstance : ContactListHelper {
         struct Static {
@@ -118,7 +118,7 @@ public class ContactListHelperContact {
                                 phoneType = ABAddressBookCopyLocalizedLabel(phoneLabel).takeRetainedValue() as String
                             }
                             
-                            var contact = ContactListHelperContact(firstName: firstName,
+                            let contact = ContactListHelperContact(firstName: firstName,
                                 lastName: lastName, phoneNumber: cleanedPhoneNumber, phoneType: phoneType)
                             
                             contacts.append(contact)

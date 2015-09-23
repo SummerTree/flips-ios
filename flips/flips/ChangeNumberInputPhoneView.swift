@@ -200,10 +200,10 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     }
     
     func setupAccessoryView() -> UIToolbar {
-        var screenSize = UIScreen.mainScreen().bounds
-        var showFrame = CGRectMake(0,0,screenSize.size.width, 50)
+        let screenSize = UIScreen.mainScreen().bounds
+        let showFrame = CGRectMake(0,0,screenSize.size.width, 50)
         
-        var numberToolbar = UIToolbar(frame: showFrame)
+        let numberToolbar = UIToolbar(frame: showFrame)
         numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
         numberToolbar.tintColor = UIColor.flipOrange()
@@ -221,7 +221,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         
         if self.getSelectedDialCode() == "+1" {
             let text = textField.text
-            let length = count(text)
+            let length = text.characters.count
             var shouldReplace = true
             
             if (string != "") {
@@ -252,7 +252,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     
     func newNumberFieldDidChange(textField: UITextField) {
         if self.getSelectedDialCode() == "+1" {
-            if (count(textField.text) == 12) {
+            if (textField.text.characters.count == 12) {
                 self.finishTypingMobileNumber(textField)
             }
         }
@@ -264,7 +264,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         var message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
-            if (count(textField.text) == 12) {
+            if (textField.text.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -276,7 +276,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
                 }
             }
         }
-        else if (count(textField.text) >= 5) {
+        else if (textField.text.characters.count >= 5) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
         }
@@ -309,10 +309,10 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         return CountryCodes.sharedInstance.countryCodes.count
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
-        var currCountry = CountryCodes.sharedInstance.countryCodes[row]
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        let currCountry = CountryCodes.sharedInstance.countryCodes[row]
         
-        var countryCode = UILabel();
+        let countryCode = UILabel();
         countryCode.text = currCountry["dial_code"] as? String
         countryCode.textColor = UIColor.whiteColor()
         countryCode.tintColor = UIColor.whiteColor()
@@ -339,7 +339,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     
     // MARK: - Required inits
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

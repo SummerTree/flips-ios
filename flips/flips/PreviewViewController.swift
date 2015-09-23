@@ -91,7 +91,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         self.contactIDs = contactIDs
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -160,11 +160,11 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         
         for flipWord in self.flipWords {
             if (flipWord.associatedFlipId != nil) {
-                var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
+                let flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                 flips.append(flip)
                 
             } else {
-                var emptyFlip = flipDataSource.createEmptyFlipWithWord(flipWord.text)
+                let emptyFlip = flipDataSource.createEmptyFlipWithWord(flipWord.text)
                 flips.append(emptyFlip)
             }
             formattedWords.append(flipWord.text)
@@ -183,7 +183,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         for flipPage in self.draftingTable!.flipBook.flipPages {
             
             if let flipID = flipPage.pageID {
-                var flip = flipDataSource.retrieveFlipWithId(flipID)
+                let flip = flipDataSource.retrieveFlipWithId(flipID)
                 flips.append(flip)
             }
             else if let videoURL = flipPage.videoURL {
@@ -218,7 +218,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
     
     private func submitMMSMessage() {
         
-        var movieExport = MovieExport.sharedInstance
+        let movieExport = MovieExport.sharedInstance
                     
         movieExport.exportFlipForMMS(self.previewView.retrievePlayerItems(), words: self.flipWordStrings,
             completion: { (url: NSURL?, error: FlipError?) -> Void in
@@ -329,7 +329,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         container.mas_makeConstraints { (make) -> Void in
-            var topLayoutGuide: AnyObject = self.topLayoutGuide
+            let topLayoutGuide: AnyObject = self.topLayoutGuide
             make.top.equalTo()(topLayoutGuide.mas_bottom)
         }
     }

@@ -82,7 +82,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         self.showMicrophoneButton = showMicrophoneButton
         self.isMicrophoneAvailable = false
 
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         weak var weakSelf = self
@@ -106,7 +106,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         
         self.initSubviews()
         self.initCamera()
-        self.setCameraButtonsEnabled(enabled: false)
+        self.setCameraButtonsEnabled(false)
 
         self.updateConstraintsIfNeeded()
     }
@@ -119,7 +119,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         self.removeObservers()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -178,7 +178,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         }
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        activityIndicator.setTranslatesAutoresizingMaskIntoConstraints(false)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
         
         self.addSubview(activityIndicator)
@@ -310,12 +310,12 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             return;
         }
 
-        var deviceInput: AVCaptureDeviceInput! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as? AVCaptureDeviceInput
+        var deviceInput: AVCaptureDeviceInput! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice) as? AVCaptureDeviceInput
 
         if (deviceInput == nil || error != nil) {
-            self.setCameraButtonsEnabled(enabled: false)
+            self.setCameraButtonsEnabled(false)
 
-            println("TakePicture error: \(error)")
+            print("TakePicture error: \(error)")
             self.showAlert(self.CAMERA_ERROR, message: error?.localizedDescription ?? self.CAMERA_ERROR_MESSAGE)
             self.activityIndicator.stopAnimating()
             return
@@ -344,7 +344,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             if let audioDevice = AVCaptureDevice.devicesWithMediaType(AVMediaTypeAudio).first as? AVCaptureDevice {
                 error = nil
 
-                if let audioDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as? AVCaptureDeviceInput {
+                if let audioDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice) as? AVCaptureDeviceInput {
                     self.isMicrophoneAvailable = true
                     if (self.session.canAddInput(audioDeviceInput as AVCaptureInput)) {
                         self.session.addInput(audioDeviceInput as AVCaptureInput)
@@ -383,9 +383,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         }
         
         if (!observersRegistered) {
-            self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: SessionRunningAndDeviceAuthorizedContext)
-            self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: CapturingStillImageContext)
-            self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: (NSKeyValueObservingOptions.Old | NSKeyValueObservingOptions.New), context: RecordingContext)
+            self.addObserver(self, forKeyPath: self.DEVICE_AUTHORIZED_KEY_PATH, options: ([NSKeyValueObservingOptions.Old, NSKeyValueObservingOptions.New]), context: SessionRunningAndDeviceAuthorizedContext)
+            self.addObserver(self, forKeyPath: self.CAPTURING_STILL_IMAGE_KEY_PATH, options: ([NSKeyValueObservingOptions.Old, NSKeyValueObservingOptions.New]), context: CapturingStillImageContext)
+            self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: ([NSKeyValueObservingOptions.Old, NSKeyValueObservingOptions.New]), context: RecordingContext)
             
             if let deviceInput = self.videoDeviceInput {
                 NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
@@ -393,7 +393,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             
             weak var weakSelf = self
             self.runtimeErrorHandlingObserver = NSNotificationCenter.defaultCenter().addObserverForName(AVCaptureSessionRuntimeErrorNotification, object: self.session, queue: nil, usingBlock: { (notification) -> Void in
-                var strongSelf = weakSelf
+                let strongSelf = weakSelf
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     // Manually restarting the session since it must have been stopped due to an error.
                     strongSelf?.session.startRunning()
@@ -419,7 +419,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func removeObservers() {
         self.delegate?.cameraView(self, cameraAvailable: false)
         self.session.stopRunning()
-        self.setCameraButtonsEnabled(enabled: false)
+        self.setCameraButtonsEnabled(false)
 
         if (self.observersRegistered) {
 
@@ -444,7 +444,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
     // MARK: - Overridden Method
 
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if let changes = change as? [NSString: Bool] {
             if (context == CapturingStillImageContext) {
                 if let isCapturingStillImage = changes[NSKeyValueChangeNewKey] {
@@ -468,7 +468,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                             self.setCameraButtonsEnabled()
                         } else {
                             self.delegate?.cameraView(self, cameraAvailable: false)
-                            self.setCameraButtonsEnabled(enabled: false)
+                            self.setCameraButtonsEnabled(false)
                         }
                     })
                 }
@@ -568,7 +568,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         if (self.isMicrophoneAvailable) {
             self.delegate?.cameraViewDidTapMicrophoneButton!(self)
         } else {
-            var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            let alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
         }
     }
@@ -623,13 +623,16 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         var docsDir: AnyObject = dirPaths[0]
         var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
-        var videoURL = NSURL(fileURLWithPath: videoFilePath)!
+        var videoURL = NSURL(fileURLWithPath: videoFilePath)
         
         var fileManager = NSFileManager.defaultManager()
         
         if (fileManager.fileExistsAtPath(videoURL.path!)) {
-            println("File already exists, removing it.")
-            fileManager.removeItemAtURL(videoURL, error: nil)
+            print("File already exists, removing it.")
+            do {
+                try fileManager.removeItemAtURL(videoURL)
+            } catch _ {
+            }
         }
         
         let oneSecond = 1 * Double(NSEC_PER_SEC)
@@ -661,13 +664,16 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
             var docsDir: AnyObject = dirPaths[0]
             var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
-            var videoURL = NSURL(fileURLWithPath: videoFilePath)!
+            var videoURL = NSURL(fileURLWithPath: videoFilePath)
             
             var fileManager = NSFileManager.defaultManager()
             
             if (fileManager.fileExistsAtPath(videoURL.path!)) {
-                println("File already exists, removing it.")
-                fileManager.removeItemAtURL(videoURL, error: nil)
+                print("File already exists, removing it.")
+                do {
+                    try fileManager.removeItemAtURL(videoURL)
+                } catch _ {
+                }
             }
             
             self.movieFileOutput.startRecordingToOutputFileURL(videoURL, recordingDelegate: self)
@@ -729,7 +735,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     // MARK: - Notification Handlers
     
     func subjectAreaDidChange(notification: NSNotification) {
-        var devicePoint = CGPointMake(0.5, 0.5)
+        let devicePoint = CGPointMake(0.5, 0.5)
         self.focusWithMode(AVCaptureFocusMode.ContinuousAutoFocus, exposesWithMode: AVCaptureExposureMode.ContinuousAutoExposure, atDevicePoint: devicePoint, monitorSubjectAreaChange: false)
     }
     
@@ -739,9 +745,9 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func focusWithMode(focusMode: AVCaptureFocusMode, exposesWithMode exposureMode: AVCaptureExposureMode, atDevicePoint point: CGPoint, monitorSubjectAreaChange: Bool) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             if let device = self.videoDeviceInput?.device {
-                var error: NSError? = nil
+                let error: NSError? = nil
                 
-                if (device.lockForConfiguration(&error)) {
+                if (device.lockForConfiguration()) {
                     if (device.focusPointOfInterestSupported && device.isFocusModeSupported(focusMode)) {
                         device.focusMode = focusMode
                         device.focusPointOfInterest = point
@@ -754,7 +760,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     device.subjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
                     device.unlockForConfiguration()
                 } else {
-                    println("error configuring device: \(error)")
+                    print("error configuring device: \(error)")
                 }
             }
         })
@@ -762,18 +768,18 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     
     class func setFlashMode(flashMode: AVCaptureFlashMode, forDevice device: AVCaptureDevice) {
         if (device.hasFlash && device.isFlashModeSupported(flashMode)) {
-            var error: NSError? = nil
-            if (device.lockForConfiguration(&error)) {
+            let error: NSError? = nil
+            if (device.lockForConfiguration()) {
                 device.flashMode = flashMode
                 device.unlockForConfiguration()
             } else {
-                println("Error settinf flash: \(error)")
+                print("Error settinf flash: \(error)")
             }
         }
     }
     
     class func deviceWithMediaType(mediaType: String, preferringPosition position: AVCaptureDevicePosition) -> AVCaptureDevice! {
-        var devices = AVCaptureDevice.devicesWithMediaType(mediaType)
+        let devices = AVCaptureDevice.devicesWithMediaType(mediaType)
         var captureDevice: AVCaptureDevice! = devices.first as? AVCaptureDevice
         
         for device in devices as! [AVCaptureDevice]! {
@@ -792,7 +798,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
     private func prepareForCameraSwitch() {
         self.delegate?.cameraView(self, cameraAvailable: false)
-        self.setCameraButtonsEnabled(enabled: false)
+        self.setCameraButtonsEnabled(false)
 
         if let currentVideoDevice = self.videoDeviceInput?.device {
             var preferredPosition = AVCaptureDevicePosition.Unspecified
@@ -810,7 +816,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             }
 
             var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: preferredPosition)
-            var deviceInput: AnyObject! = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: nil)
+            var deviceInput: AnyObject! = try? AVCaptureDeviceInput.deviceInputWithDevice(videoDevice)
 
             self.session.beginConfiguration()
             self.session.removeInput(self.videoDeviceInput)
@@ -844,7 +850,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     // MARK: - Utility Methods
     
     func checkDeviceAuthorizationStatus() {
-        var mediaType = AVMediaTypeVideo
+        let mediaType = AVMediaTypeVideo
         
         let title = NSLocalizedString("Flips", comment: "Flips")
         let message = NSLocalizedString("Flips doesn't have permission to use Camera, please change privacy settings", comment: "Flips doesn't have permission to use Camera, please change privacy settings")
@@ -871,10 +877,10 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         let videoPreviewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
         let videoOrientation = videoPreviewLayer.connection.videoOrientation
-        var isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
+        let isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
 
         if (error != nil) {
-            println("An error happen while recording a video: error [\(error)] and userinfo[\(error.userInfo)]")
+            print("An error happen while recording a video: error [\(error)] and userinfo[\(error.userInfo)]")
             self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: nil, inLandscape: isLandscape, fromFrontCamera: self.isCameraFrontPositioned(), withSuccess: false)
         } else {
             self.delegate?.cameraView!(self, didFinishRecordingVideoAtURL: outputFileURL, inLandscape: isLandscape, fromFrontCamera: self.isCameraFrontPositioned(), withSuccess: true)

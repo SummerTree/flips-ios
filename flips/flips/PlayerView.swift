@@ -67,16 +67,22 @@ class PlayerView: UIView {
         self.makeConstraints()
 
         self.contentIdentifier = nil
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+        } catch _ {
+        }
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.addSubviews()
         self.makeConstraints()
         
         self.contentIdentifier = nil
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+        } catch _ {
+        }
     }
     
     deinit {
@@ -186,7 +192,7 @@ class PlayerView: UIView {
                     
                     if (player != nil) {
                         if (player!.status == AVPlayerStatus.ReadyToPlay) {
-                            self.fadeToPlayingState(completion: { () -> Void in
+                            self.fadeToPlayingState({ () -> Void in
                                 
                                 // Since it needs to wait the animation, the user can press back button, so it won't exist.
                                 if (currentIdentifier != self.contentIdentifier) {
@@ -223,11 +229,11 @@ class PlayerView: UIView {
         }
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if let player = self.player() {
             if (object as! AVQueuePlayer == player && keyPath == "status") {
                 if (player.status == AVPlayerStatus.ReadyToPlay) {
-                    self.fadeToPlayingState(completion: nil)
+                    self.fadeToPlayingState(nil)
                 }
             }
             player.removeObserver(self, forKeyPath: "status")
@@ -306,7 +312,7 @@ class PlayerView: UIView {
                                 return
                             }
                             
-                            var thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
+                            let thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 if (currentIdentifier != self.contentIdentifier) {
                                     completionBlock?()
@@ -318,7 +324,7 @@ class PlayerView: UIView {
                                 completionBlock?()
                             })
                         }, failure: { (url: String!, flipError: FlipError) -> Void in
-                            println("Failed to get resource from cache, error: \(error)")
+                            print("Failed to get resource from cache, error: \(error)")
                             completionBlock?()
                         })
 
@@ -424,7 +430,7 @@ class PlayerView: UIView {
         }
         
         if let flipsArray: Array<Flip> = self.flips {
-            for (index, flip) in enumerate(flipsArray) {
+            for (index, flip) in flipsArray.enumerate() {
                 if (currentIdentifier != self.contentIdentifier) {
                     return true // shouldn't retry
                 }
@@ -442,7 +448,7 @@ class PlayerView: UIView {
                     
                     self.flipsDownloadProgress[index] = 1.0
                     
-                    var animated = flipsArray.count > 1
+                    let animated = flipsArray.count > 1
                     
                     self.updateDownloadProgress(Float(self.playerItems.count),
                         of: Float(flipsArray.count),
@@ -488,7 +494,7 @@ class PlayerView: UIView {
                             })
                         },
                         failure: { (url: String!, error: FlipError) in
-                            println("Failed to get resource from cache, error: \(error)")
+                            print("Failed to get resource from cache, error: \(error)")
                             if (currentIdentifier != self.contentIdentifier) {
                                 return
                             }
@@ -528,7 +534,7 @@ class PlayerView: UIView {
     }
 
     private func sortPlayerItems() {
-        self.playerItems.sort { (itemOne: FlipPlayerItem, itemTwo: FlipPlayerItem) -> Bool in
+        self.playerItems.sortInPlace { (itemOne: FlipPlayerItem, itemTwo: FlipPlayerItem) -> Bool in
             return itemOne.order < itemTwo.order
         }
     }
@@ -542,8 +548,8 @@ class PlayerView: UIView {
             let passedFlip = flips[i]
             let localFlip = self.flips[i]
             
-            println("\(passedFlip)")
-            println("\(localFlip)")
+            print("\(passedFlip)")
+            print("\(localFlip)")
             
             if (flips[i].flipID! != self.flips[i].flipID!) {
                 return false
@@ -608,7 +614,7 @@ class PlayerView: UIView {
                             return
                         }
 
-                        var thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
+                        let thumbnail: UIImage? = UIImage(contentsOfFile: localThumbnailPath)
 
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             if (currentIdentifier != self.contentIdentifier) {
@@ -618,7 +624,7 @@ class PlayerView: UIView {
                             self.thumbnailView.image = thumbnail
                         })
                     }, failure: { (url: String!, flipError: FlipError) -> Void in
-                        println("Failed to get resource from cache, error: \(error)")
+                        print("Failed to get resource from cache, error: \(error)")
                     })
                 }
             } else {
@@ -645,8 +651,8 @@ class PlayerView: UIView {
         
         self.words = [word]
         
-        var videoAsset: AVURLAsset = AVURLAsset(URL: videoURL, options: nil)
-        var flipPlayerItem = playerItemWithVideoAsset(videoAsset)
+        let videoAsset: AVURLAsset = AVURLAsset(URL: videoURL, options: nil)
+        let flipPlayerItem = playerItemWithVideoAsset(videoAsset)
         flipPlayerItem.order = 0
         self.playerItems = [flipPlayerItem]
         
@@ -658,7 +664,7 @@ class PlayerView: UIView {
                     })
                 },
                 failure: { (url: String!, error: FlipError) in
-                    println("Failed to get resource from cache, error: \(error)")
+                    print("Failed to get resource from cache, error: \(error)")
                 })
         }
         
@@ -838,9 +844,9 @@ class PlayerView: UIView {
         self.flipsDownloadProgress.removeAll()
 
         if let player = self.player() {
-            SwiftTryCatch.try({ () -> Void in
+            SwiftTryCatch.`try`({ () -> Void in
                 player.removeObserver(self, forKeyPath: "status")
-            }, catch: { (exception: NSException!) -> Void in
+            }, `catch`: { (exception: NSException!) -> Void in
                 return // Do nothing
             }, finally: { () -> Void in
                 return

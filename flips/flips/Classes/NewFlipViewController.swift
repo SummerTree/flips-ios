@@ -77,7 +77,7 @@ class NewFlipViewController: FlipsViewController,
     
     var optionButtons : [FlipsSendButton]
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         contacts = [Contact]()
         optionButtons = [FlipsSendButton]()
         
@@ -142,7 +142,7 @@ class NewFlipViewController: FlipsViewController,
         let firstRowButtonCount = 2
         let secondRowButtonCount = 3
         
-        var flipsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
+        let flipsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
                                               buttonOrder: 0,
                                               buttonHeight: self.buttonPanelView.frame.size.height,
                                               activeColor: UIColor.flipOrange(),
@@ -150,7 +150,7 @@ class NewFlipViewController: FlipsViewController,
                                               imageName: "FlipWord",
                                               allowedToBeInactive: false)
         
-        var smsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
+        let smsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
                                             buttonOrder: 1,
                                             buttonHeight: self.buttonPanelView.frame.size.height,
                                             activeColor: UIColor.avacado(),
@@ -158,7 +158,7 @@ class NewFlipViewController: FlipsViewController,
                                             imageName: "smsicon",
                                             allowedToBeInactive: true)
         
-        var facebookButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+        let facebookButton = FlipsSendButton(buttonCount: secondRowButtonCount,
                                             buttonOrder: 0,
                                             buttonHeight: self.buttonPanel2View.frame.size.height,
                                             activeColor: UIColor.facebookBlue(),
@@ -166,7 +166,7 @@ class NewFlipViewController: FlipsViewController,
                                             imageName: "Facebook",
                                             allowedToBeInactive: true)
         
-        var twitterButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+        let twitterButton = FlipsSendButton(buttonCount: secondRowButtonCount,
                                             buttonOrder: 1,
                                             buttonHeight: self.buttonPanel2View.frame.size.height,
                                             activeColor: UIColor.twitterBlue(),
@@ -174,7 +174,7 @@ class NewFlipViewController: FlipsViewController,
                                             imageName: "Twitter",
                                             allowedToBeInactive: true)
         
-        var instagramButton = FlipsSendButton(buttonCount: secondRowButtonCount,
+        let instagramButton = FlipsSendButton(buttonCount: secondRowButtonCount,
                                             buttonOrder: 2,
                                             buttonHeight: self.buttonPanel2View.frame.size.height,
                                             activeColor: UIColor.instagramBlue(),
@@ -326,7 +326,7 @@ class NewFlipViewController: FlipsViewController,
             }
             
             let roomDataSource = RoomDataSource()
-            var result = roomDataSource.hasRoomWithUserIDs(userIDs)
+            let result = roomDataSource.hasRoomWithUserIDs(userIDs)
             if (result.hasRoom)
             {
                 self.draftingTable!.room = result.room!
@@ -410,7 +410,7 @@ class NewFlipViewController: FlipsViewController,
     
     func contactCollectionView(contactCollectionView: MBContactCollectionView!, didRemoveContact model: MBContactPickerModelProtocol!) {
         if let contact = model as? Contact {
-            if let index = find(contacts, contact) {
+            if let index = contacts.indexOf(contact) {
                 contacts.removeAtIndex(index)
                 updateSendOptions()
             }

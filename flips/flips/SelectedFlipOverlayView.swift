@@ -21,12 +21,12 @@ class SelectedFlipOverlayView : UIView {
         self.backgroundColor = UIColor.darkGray().colorWithAlphaComponent(0.8)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func addSubviews() {
-        var checkImage : UIImage = UIImage(named: "Check")!
+        let checkImage : UIImage = UIImage(named: "Check")!
         checkImageView = UIImageView(image: checkImage)
         self.addSubview(checkImageView)
         

@@ -31,25 +31,25 @@ public class AuthenticationHelper: NSObject {
     }
     
     private func saveAuthenticatedUsername(username: String) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(username, forKey: LOGIN_USERNAME_KEY)
         userDefaults.synchronize()
     }
 
     private func removeAuthenticatedUsername() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey(LOGIN_USERNAME_KEY)
         userDefaults.synchronize()
     }
     
     private func resetTimestampForStockFlips() {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(nil, forKey: LAST_STOCK_FLIPS_SYNC_AT)
         userDefaults.synchronize()
     }
     
     func saveLastTimestampForStockFlip(timestamp: NSDate) {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         if let lastTimestamp = (userDefaults.valueForKey(self.LAST_STOCK_FLIPS_SYNC_AT) as? NSDate) {
             if (lastTimestamp.compare(timestamp) == NSComparisonResult.OrderedAscending) {
                 userDefaults.setValue(timestamp, forKey: LAST_STOCK_FLIPS_SYNC_AT)
@@ -63,7 +63,7 @@ public class AuthenticationHelper: NSObject {
     
     func retrieveAuthenticatedUsernameIfExists() -> String? {
         var loggedUserInfo = User.isUserLoggedIn()
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(LOGIN_USERNAME_KEY) as? String
     }
     

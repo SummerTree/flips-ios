@@ -24,16 +24,16 @@ class GroupParticipantsView: UIView, UITableViewDelegate, UITableViewDataSource 
     // MARK: - Init Methods
     
     init(participants: Array<User>) {
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
         self.participants = participants
         
         self.tintColor = UIColor.whiteColor()
         self.alpha = VIEW_ALPHA
         
-        self.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -68,7 +68,7 @@ class GroupParticipantsView: UIView, UITableViewDelegate, UITableViewDataSource 
     // MARK: - TableViewDataSource Methods
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: GroupPartcipantsTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as! GroupPartcipantsTableViewCell
+        let cell: GroupPartcipantsTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER, forIndexPath: indexPath) as! GroupPartcipantsTableViewCell
         
         let user = self.participants[indexPath.row]
         cell.configureCellWithUser(user)

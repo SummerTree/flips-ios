@@ -39,7 +39,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         self.everyoneElseHeaderView = createEveryoneElseHeaderView()
     }
     
-    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -115,7 +115,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         super.setupWhiteNavBarWithoutBackButtonWithRightDoneButton("Contacts")
         self.navigationController?.navigationBar.alpha = 1.0
         self.navigationController?.navigationBar.translucent = false
-        var textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
+        let textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         super.setNeedsStatusBarAppearanceUpdate()
@@ -180,8 +180,8 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
             AnalyticsService.logUserSentInvite()
         }
 
-        let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact: contact)
-        var newFlipViewController = navigationController.topViewController as! NewFlipViewController
+        let navigationController: UINavigationController = NewFlipViewController.instantiateNavigationController(contact)
+        let newFlipViewController = navigationController.topViewController as! NewFlipViewController
         newFlipViewController.delegate = self
         self.presentViewController(navigationController, animated: true, completion: nil)
     }

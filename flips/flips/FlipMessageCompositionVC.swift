@@ -52,7 +52,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // MARK: - Init
     ////
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -178,7 +178,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     private func initConstraints() {
         
-        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
+        let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
         
         flipCompositionView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(topLayoutGuide.mas_bottom)
@@ -450,7 +450,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                             
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 
-                                println("Downloading stock flip(id: \(selectedFlip.flipID)) error: \(error)")
+                                print("Downloading stock flip(id: \(selectedFlip.flipID)) error: \(error)")
                                 
                                 UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK).show()
                                 
@@ -651,7 +651,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         flipMessageManager.setCurrentFlipWordImage(croppedImage)
         
         // No need to reload words for an image
-        updateViewForCurrentFlipWord(reloadWords: false)
+        updateViewForCurrentFlipWord(false)
         
         self.dismissViewControllerAnimated(true, completion: nil)
         
@@ -756,7 +756,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
         if firstUnsavedIndex != -1
         {
-            showActivityIndicator(userInteractionEnabled: false, message: "Saving flip word changes and creating flips for empty words. Please wait.")
+            showActivityIndicator(false, message: "Saving flip word changes and creating flips for empty words. Please wait.")
             
             flipMessageManager.createFlipVideoForWordAtIndex(firstUnsavedIndex, successHandler: { (videoURL, thumbnailURL) -> Void in
                 

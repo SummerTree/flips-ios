@@ -40,10 +40,10 @@ public class StorageCache {
     init(cacheID: String, cacheDirectoryName: String, scheduleCleanup: () -> Void) {
         self.scheduleCleanup = scheduleCleanup
         let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
-        let applicationSupportDirPath = paths.first! as! String
+        let applicationSupportDirPath = paths.first! 
         let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
         let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
-        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)!
+        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)
         let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheID).cache")
         self.cacheJournal = CacheJournal(absolutePath: journalName)
         self.cacheQueue = dispatch_queue_create(cacheID, nil)
@@ -61,19 +61,27 @@ public class StorageCache {
         var error: NSError? = nil
         
         if (fileManager.fileExistsAtPath(cacheDirectoryPath.path!, isDirectory: &isDirectory)) {
-            println("Directory exists: \(cacheDirectoryPath)")
+            print("Directory exists: \(cacheDirectoryPath)")
         } else {
-            fileManager.createDirectoryAtPath(cacheDirectoryPath.path!, withIntermediateDirectories: true, attributes: nil, error: &error)
+            do {
+                try fileManager.createDirectoryAtPath(cacheDirectoryPath.path!, withIntermediateDirectories: true, attributes: nil)
+            } catch let error1 as NSError {
+                error = error1
+            }
             if (error != nil) {
-                println("Error creating cache dir: \(error)")
+                print("Error creating cache dir: \(error)")
             } else {
-                println("Directory '\(cacheDirectoryPath)' created!")
+                print("Directory '\(cacheDirectoryPath)' created!")
             }
         }
         
-        cacheDirectoryPath.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey, error: &error)
+        do {
+            try cacheDirectoryPath.setResourceValue(true, forKey: NSURLIsExcludedFromBackupKey)
+        } catch let error1 as NSError {
+            error = error1
+        }
         if (error != nil) {
-            println("Error excluding cache dir from backup: \(error)")
+            print("Error excluding cache dir from backup: \(error)")
         }
     }
 
@@ -85,10 +93,10 @@ public class StorageCache {
     error description. While the asset is being downloaded the progress callback will be called to indicate
     the progress of the operation.
     
-    :param: remoteURL The URL from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: success   A function that is called when the asset is successfully available.
-    :param: failure   A function that is called when the asset could not be retrieved.
-    :param: progress  A function that is called while the asset is being retrieved to indicate progress.
+    - parameter remoteURL: The URL from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    - parameter success:   A function that is called when the asset is successfully available.
+    - parameter failure:   A function that is called when the asset could not be retrieved.
+    - parameter progress:  A function that is called while the asset is being retrieved to indicate progress.
     */
     func get(remoteURL: NSURL, success: CacheSuccessCallback?, failure: CacheFailureCallback?, progress: CacheProgressCallback? = nil) -> CacheGetResponse {
         self.cacheWasCleared.value = false
@@ -122,7 +130,7 @@ public class StorageCache {
         }
         
         Downloader.sharedInstance.downloadTask(remoteURL,
-            localURL: NSURL(fileURLWithPath: localPath)!,
+            localURL: NSURL(fileURLWithPath: localPath),
             completion: { (success) -> Void in
                 if (self.cacheWasCleared.value) {
                     return
@@ -143,7 +151,7 @@ public class StorageCache {
                 }
                 
                 if (callbacksArray == nil) {
-                    println("Local path (\(localPath)) has been downloaded but we already cleaned up its callbacks.")
+                    print("Local path (\(localPath)) has been downloaded but we already cleaned up its callbacks.")
                     return
                 }
                 
@@ -174,7 +182,7 @@ public class StorageCache {
                 }
                 
                 if (callbacksAlreadyCleaned) {
-                    println("Local path (\(localPath)) is being downloaded but we already cleaned up its callbacks.")
+                    print("Local path (\(localPath)) is being downloaded but we already cleaned up its callbacks.")
                     return
                 }
                 
@@ -196,8 +204,8 @@ public class StorageCache {
     /**
     Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
     
-    :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: srcPath   The path where the asset is locally saved. The asset will be moved to the cache.
+    - parameter remoteURL: The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    - parameter srcPath:   The path where the asset is locally saved. The asset will be moved to the cache.
     */
     func put(remoteURL: NSURL, localPath srcPath: String) -> Void {
         self.cacheWasCleared.value = false
@@ -207,9 +215,15 @@ public class StorageCache {
             dispatch_async(self.cacheQueue) {
                 var error: NSError? = nil
                 let fileManager = NSFileManager.defaultManager()
-                fileManager.moveItemAtPath(srcPath, toPath: toPath, error: &error)
+                do {
+                    try fileManager.moveItemAtPath(srcPath, toPath: toPath)
+                } catch let error1 as NSError {
+                    error = error1
+                } catch {
+                    fatalError()
+                }
                 if (error != nil) {
-                    println("Error move asset to the cache dir: \(error)")
+                    print("Error move asset to the cache dir: \(error)")
                 }
                 self.cacheJournal.insertNewEntry(toPath)
                 self.scheduleCleanup()
@@ -220,8 +234,8 @@ public class StorageCache {
     /**
     Inserts the data into the cache, identified by its remote URL. This operation is synchronous.
     
-    :param: remoteURL The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
-    :param: data      The actual asset that is going to be inserted into the cache.
+    - parameter remoteURL: The path from which the asset will be downloaded if a cache miss has occurred. This path also uniquely identifies the asset.
+    - parameter data:      The actual asset that is going to be inserted into the cache.
     */
     func put(remoteURL: NSURL, data: NSData) -> String {
         self.cacheWasCleared.value = false
@@ -253,8 +267,8 @@ public class StorageCache {
             for fileName in leastRecentlyUsed {
                 var error: NSError? = nil
                 let path = self.cacheDirectoryPath.path!.stringByAppendingPathComponent(fileName)
-                if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(fileName). Error: \(error)")
+                if (!fileManager.removeItemAtPath(path)) {
+                    print("Could not remove file \(fileName). Error: \(error)")
                 }
             }
             
@@ -269,8 +283,8 @@ public class StorageCache {
             for fileName in entries {
                 var error: NSError? = nil
                 let path = self.cacheDirectoryPath.path!.stringByAppendingPathComponent(fileName)
-                if (!fileManager.removeItemAtPath(path, error: &error)) {
-                    println("Could not remove file \(fileName). Error: \(error)")
+                if (!fileManager.removeItemAtPath(path)) {
+                    print("Could not remove file \(fileName). Error: \(error)")
                 }
             }
             

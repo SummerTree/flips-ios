@@ -27,7 +27,7 @@ class ToolSliderCollection: UIView {
         self.makeConstraints()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     

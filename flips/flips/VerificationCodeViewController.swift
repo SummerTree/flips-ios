@@ -90,13 +90,13 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
             uuid: token,
             success: { (device) in
                 if (device == nil) {
-                    println("Error: Device was not created")
+                    print("Error: Device was not created")
                     return ()
                 }
                 DeviceHelper.sharedInstance.saveDeviceId(device!.deviceID)
             },
             failure: { (flipError) in
-                println("Error trying to register device: " + flipError!.error!)
+                print("Error trying to register device: " + flipError!.error!)
         })
     }
     
@@ -108,10 +108,10 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
             phoneNumber: self.phoneNumber,
             success: { (device) in
                 if (device == nil) {
-                    println("Error verifying device")
+                    print("Error verifying device")
                     return ()
                 }
-                var deviceEntity = device as! Device
+                let deviceEntity = device as! Device
 
                 PersistentManager.sharedInstance.defineAsLoggedUserSync(deviceEntity.user)
                 
@@ -137,7 +137,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
                         let alertView = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.NO_INTERNET_CONNECTION, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                         alertView.show()
                     } else {
-                        println("Device code verification error: " + flipError!.error!)
+                        print("Device code verification error: " + flipError!.error!)
                         let verificationCodeView = self.view as! VerificationCodeView
                         verificationCodeView.resetVerificationCodeField()
                         verificationCodeView.focusKeyboardOnCodeField()
@@ -149,7 +149,7 @@ class VerificationCodeViewController: FlipsViewController, VerificationCodeViewD
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

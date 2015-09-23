@@ -54,10 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // register for push notifications
         
         if (DeviceHelper.sharedInstance.systemVersion() >= 8.0) {
-            application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: (UIUserNotificationType.Alert | UIUserNotificationType.Sound | UIUserNotificationType.Badge), categories: nil))
+            application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: ([UIUserNotificationType.Alert, UIUserNotificationType.Sound, UIUserNotificationType.Badge]), categories: nil))
             application.registerForRemoteNotifications()
         } else {
-            application.registerForRemoteNotificationTypes(UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound | UIRemoteNotificationType.Badge)
+            application.registerForRemoteNotificationTypes([UIRemoteNotificationType.Alert, UIRemoteNotificationType.Sound, UIRemoteNotificationType.Badge])
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true;
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
     }
     
@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"))
         token = token.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        println("token: \(token)")
+        print("token: \(token)")
         DeviceHelper.sharedInstance.saveDeviceToken(token)
         DeviceHelper.sharedInstance.saveDeviceTokenAsNsData(deviceToken)
         PubNubService.sharedInstance.enablePushNotificationOnMyChannels()
@@ -113,9 +113,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [NSObject : AnyObject], completionHandler: () -> Void) {
         if (identifier == "declineAction") {
-            println("User did not allow to receive push notifications")
+            print("User did not allow to receive push notifications")
         } else if (identifier == "answerAction") {
-            println("User allowed to receive push notifications")
+            print("User allowed to receive push notifications")
         }
     }
     
@@ -135,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        println(error.description)
+        print(error.description)
     }
     
     
@@ -161,7 +161,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let roomId: String = String.stringFromValue(userInfo[NOTIFICATION_ROOM_KEY]) {
                 let flipMessageId: String? = String.stringFromValue(userInfo[NOTIFICATION_FLIP_MESSAGE_KEY])
                 if (UIApplication.sharedApplication().keyWindow == nil)  {
-                    self.openSplashScreen(roomID: roomId, andFlipMessageID: flipMessageId)
+                    self.openSplashScreen(roomId, andFlipMessageID: flipMessageId)
                 } else if (application.applicationState != UIApplicationState.Active) {
                     NavigationHandler.sharedInstance.showThreadScreenForRoomId(roomId, andFlipMessageID: flipMessageId)
                 }
