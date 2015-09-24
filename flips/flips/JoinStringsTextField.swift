@@ -28,7 +28,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
     var numberOfLines: Int {
-        return Int(self.contentSize.height/self.font.lineHeight)
+        return Int(self.contentSize.height / self.font!.lineHeight)
     }
     
     convenience init() {
@@ -52,7 +52,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func setupMenu() {
         let menuController = UIMenuController.sharedMenuController()
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
-        menuController.menuItems = NSArray(array: [lookupMenu]) as [AnyObject]
+        menuController.menuItems = NSArray(array: [lookupMenu]) as? [UIMenuItem]
         menuController.update()
         menuController.setMenuVisible(true, animated: true)
     }
@@ -81,7 +81,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 tempEnd = countSubstrings! + 1
             }
                         
-            string.append((char, range))
+            string.append((char!, range))
             ++countSubstrings!
         }
         
@@ -154,7 +154,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
         
         let fullRange = NSMakeRange(0, textLength)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: fullRange)
+        attributedString.addAttribute(NSFontAttributeName, value: self.font!, range: fullRange)
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: fullRange)
         
         for joinedTextRange in joinedTextRanges {
@@ -283,7 +283,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func handleMultipleLines(height: CGFloat) {
         if (numberOfLines > 1) {
             let y = self.contentSize.height-height
-            let cursorRect = self.caretRectForPosition(self.selectedTextRange?.start)
+            let cursorRect = self.caretRectForPosition(self.selectedTextRange!.start)
             if (cursorRect.origin.y < y) {
                 let cursorLineRect = CGRectMake(0, cursorRect.origin.y, self.contentSize.width, cursorRect.size.height)
                 self.scrollRectToVisible(cursorLineRect, animated: false)

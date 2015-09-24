@@ -456,7 +456,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
     // MARK: - Overridden Method
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if let changes = change as? [NSString: Bool] {
+        if let changes = change as? [String : Bool] {
             if (context == CapturingStillImageContext) {
                 if let isCapturingStillImage = changes[NSKeyValueChangeNewKey] {
                     if (isCapturingStillImage) {
@@ -603,7 +603,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                     var image = UIImage(data: imageData)!
         
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
-                        image = UIImage(CGImage: image.CGImage, scale: 1.0, orientation: UIImageOrientation.LeftMirrored)!
+                        image = UIImage(CGImage: image.CGImage!, scale: 1.0, orientation: UIImageOrientation.LeftMirrored)
                         image = image.cropSquareThumbnail()
                     } else {
                         image = image.cropSquareThumbnail()
@@ -821,7 +821,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
         if let currentVideoDevice = self.videoDeviceInput?.device {
             var preferredPosition = AVCaptureDevicePosition.Unspecified
-            var currentPosition = currentVideoDevice.position
+            let currentPosition = currentVideoDevice.position
 
             var flashEnabled = false
             switch currentPosition {
@@ -834,8 +834,8 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 break
             }
 
-            var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: preferredPosition)
-            var deviceInput: AnyObject! = try? AVCaptureDeviceInput.deviceInputWithDevice(videoDevice)
+            let videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: preferredPosition)
+            let deviceInput : AnyObject! = try? AVCaptureDeviceInput(device: videoDevice)
 
             self.session.beginConfiguration()
             self.session.removeInput(self.videoDeviceInput)

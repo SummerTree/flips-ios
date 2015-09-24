@@ -26,7 +26,7 @@ let A4_AVATAR_SIZE = 40 + A4_BORDER_WIDTH
 class RoundImageView: UIView {
     var borderColor: UIColor {
         get {
-            return UIColor(CGColor: self.layer.borderColor)
+            return UIColor(CGColor: self.layer.borderColor!)
         }
         set {
             self.layer.borderColor = newValue.CGColor

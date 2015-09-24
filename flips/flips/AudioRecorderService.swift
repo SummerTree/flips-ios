@@ -27,55 +27,66 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).m4a"
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        var docsDir: AnyObject = dirPaths[0]
-        var soundFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+        let docsDir: AnyObject = dirPaths[0]
+        let soundFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
         soundFileURL = NSURL(fileURLWithPath: soundFilePath)
         
-        var recordSettings = [
-            AVFormatIDKey as String : kAudioFormatAppleLossless,
-            AVEncoderAudioQualityKey as String : AVAudioQuality.Max.rawValue,
-            AVEncoderBitRateKey as String : 320000,
-            AVNumberOfChannelsKey as String : 2,
-            AVSampleRateKey as String : 44100.0
-        ] as [String : AnyObject]
+        let recordSettings = [
+            AVFormatIDKey: Int(kAudioFormatAppleLossless),
+            AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
+            AVEncoderBitRateKey : 320000,
+            AVNumberOfChannelsKey: 2,
+            AVSampleRateKey : 44100.0
+        ]
         
-        var error: NSError?
-        do {
-            recorder = try AVAudioRecorder(URL: soundFileURL!, settings: recordSettings)
-        } catch var error1 as NSError {
-            error = error1
-            recorder = nil
-        }
-        if let e = error {
-            print(e.localizedDescription)
-        } else {
+        do
+        {
+            recorder = try AVAudioRecorder(URL: soundFileURL!, settings: recordSettings as! [String : AnyObject])
             recorder.delegate = self
             recorder.meteringEnabled = true
             recorder.prepareToRecord() // creates/overwrites the file at soundFileURL
         }
+        catch let error
+        {
+            recorder = nil
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
+            }
+        }
+
     }
     
     private func setSessionPlayAndRecord() {
+        
         let session:AVAudioSession = AVAudioSession.sharedInstance()
-        var error: NSError?
-        do {
+        
+        do
+        {
             try session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker)
-        } catch let error1 as NSError {
-            error = error1
+        }
+        catch let error
+        {
             print("could not set session category")
-            if let e = error {
-                print(e.localizedDescription)
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
             }
         }
-        do {
+        
+        do
+        {
             try session.setActive(true)
-        } catch let error1 as NSError {
-            error = error1
+        }
+        catch let error
+        {
             print("could not make session active")
-            if let e = error {
-                print(e.localizedDescription)
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
             }
         }
+        
     }
     
     public func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
@@ -131,13 +142,16 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         
         self.recorder.stop()
         
-        var error: NSError?
-        
-        if (!AVAudioSession.sharedInstance().setActive(false))
+        do
+        {
+            try AVAudioSession.sharedInstance().setActive(false)
+        }
+        catch let error
         {
             print("could not deactivate audio session")
-            if let e = error {
-                print(e.localizedDescription)
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
             }
         }
         

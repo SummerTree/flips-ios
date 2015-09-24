@@ -198,7 +198,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
             let view = views[i]
             
             UIGraphicsBeginImageContextWithOptions(self.bounds.size, view.opaque, 0.0)
-            view.layer.renderInContext(UIGraphicsGetCurrentContext())
+            view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
             let viewImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             

@@ -167,7 +167,7 @@ public class FlipService: FlipsService {
             let createFlipParams = [
                 RequestParams.WORD: word,
                 RequestParams.BACKGROUND_URL: (videoURL == nil ? "" : videoURL!.absoluteString),
-                RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString!),
+                RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString),
                 RequestParams.CATEGORY: category,
                 RequestParams.IS_PRIVATE: isPrivate]
             

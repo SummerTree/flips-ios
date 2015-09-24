@@ -494,30 +494,54 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     
     private func showMessageSubmissionFailedAlert(title: String, message: String) {
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        
-        alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                
+                self.retryMessageSubmission()
+                
+            }))
             
+            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                
+                self.cancelMessageSubmission()
+                
+            }))
+            
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Retry").show()
+        }
+        
+    }
+    
+    
+    
+    ////
+    // Local Notification Handler Methods
+    ////
+    
+    private func retryMessageSubmission() {
+        
+        self.showSendingView()
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
+        
+    }
+    
+    private func cancelMessageSubmission() {
+        
+        if FlipMessageSubmissionManager.sharedInstance.hasAdditionalPendingMessagesForRoom(self.roomID) {
             self.showSendingView()
-            
-            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
-            
-        }))
+        }
+        else {
+            self.hideSendingView()
+        }
         
-        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-            
-            if FlipMessageSubmissionManager.sharedInstance.hasAdditionalPendingMessagesForRoom(self.roomID) {
-                self.showSendingView()
-            }
-            else {
-                self.hideSendingView()
-            }
-            
-            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
-            
-        }))
-        
-        presentViewController(alertController, animated: true, completion: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
         
     }
     
@@ -526,6 +550,17 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     // MARK: - UIAlertViewDelegate
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        self.navigationController?.popViewControllerAnimated(true)
+        
+        switch (alertView.buttonTitleAtIndex(buttonIndex)!) {
+            case LocalizedString.OK:
+                 self.navigationController?.popViewControllerAnimated(true)
+            case "Retry":
+                self.retryMessageSubmission()
+            case "Cancel":
+                self.cancelMessageSubmission()
+            default:
+                return
+        }
     }
+    
 }
