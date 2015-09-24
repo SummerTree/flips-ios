@@ -10,7 +10,7 @@
 // the license agreement.
 //
 
-class TempFiles {
+class TempFiles : NSObject {
     
     class func tempThumbnailFilePath() -> String {
         return (tempFilesPath() as NSString).stringByAppendingPathComponent(randomFileName("jpg"))
