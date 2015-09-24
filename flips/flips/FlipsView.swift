@@ -169,7 +169,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
                 cell.setFlipId(flip.flipID)
                 
                 let isSelected = (flip.flipID == dataSource?.flipsViewSelectedFlipId())
-                cell.setSelected(isSelected)
+                cell.setIsSelected(isSelected)
             } else {
                 UIAlertView.showUnableToLoadFlip()
             }

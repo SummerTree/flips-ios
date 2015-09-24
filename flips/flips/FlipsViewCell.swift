@@ -61,7 +61,7 @@ class FlipsViewCell : UICollectionViewCell {
         }
     }
     
-    func setSelected(selected: Bool) {
+    func setIsSelected(selected: Bool) {
         if (selected) {
             self.seletedOverlayView.alpha = 1
         } else {
@@ -73,7 +73,7 @@ class FlipsViewCell : UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.cellImageView.image = UIImage(named: "Filter_Photo")
-        self.setSelected(false)
+        self.setIsSelected(false)
         ActivityIndicatorHelper.hideActivityIndicatorAtView(self.cellImageView)
     }
 }

@@ -164,12 +164,12 @@ public class DraftingTable : NSObject {
             
                 print("--> state:\t\(flipPage.state.rawValue)")
             
-            if let thumbURL = flipPage.thumbnailURL {
-                print("--> thumb:\t\(flipPage.thumbnailURL!.absoluteString.lastPathComponent)")
+            if let thumbURL = flipPage.thumbnailURL, let thumbURLAbsolute = NSURL(string: thumbURL.absoluteString) {
+                print("--> thumb:\t\(thumbURLAbsolute.lastPathComponent)")
             }
             
-            if let vidURL = flipPage.videoURL {
-                print("--> video:\t\(flipPage.videoURL!.absoluteString.lastPathComponent)")
+            if let vidURL = flipPage.videoURL, let vidURLAbsolute = NSURL(string: vidURL.absoluteString) {
+                print("--> video:\t\(vidURLAbsolute.lastPathComponent)")
             }
             
             if let myFlips = self.myFlipsDictionary {

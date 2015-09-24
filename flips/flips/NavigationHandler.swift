@@ -50,7 +50,7 @@ public class NavigationHandler : NSObject {
                     }
                     
                     // Checking if the app is showing a modal
-                    if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                    if (rootNavigationViewController.visibleViewController?.navigationController != rootNavigationViewController) {
                         self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completionBlock)
                     } else {
                         completionBlock()
@@ -116,7 +116,7 @@ public class NavigationHandler : NSObject {
                     }
                     
                     // Checking if the app is showing a modal
-                    if (rootNavigationViewController.visibleViewController.navigationController != rootNavigationViewController) {
+                    if (rootNavigationViewController.visibleViewController?.navigationController != rootNavigationViewController) {
                         self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completionBlock)
                     } else {
                         completionBlock()
@@ -128,8 +128,8 @@ public class NavigationHandler : NSObject {
     }
     
     private func dismissVisibleModalFromRootViewController(rootNavigationViewController: UINavigationController, withCompletion completion: () -> Void) {
-        if (rootNavigationViewController.visibleViewController.presentingViewController != nil) {
-            rootNavigationViewController.visibleViewController.dismissViewControllerAnimated(false, completion: { () -> Void in
+        if (rootNavigationViewController.visibleViewController?.presentingViewController != nil) {
+            rootNavigationViewController.visibleViewController?.dismissViewControllerAnimated(false, completion: { () -> Void in
                 self.dismissVisibleModalFromRootViewController(rootNavigationViewController, withCompletion: completion)
             })
         } else {

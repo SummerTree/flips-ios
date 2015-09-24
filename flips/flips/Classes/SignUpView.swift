@@ -167,7 +167,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
                 })
             }
             UIGraphicsBeginImageContextWithOptions(navigationBar.frame.size, false, 0.0)
-            navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext())
+            navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext()!)
             let image = UIGraphicsGetImageFromCurrentImageContext()
             
             UIGraphicsEndImageContext()

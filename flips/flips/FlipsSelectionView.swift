@@ -460,7 +460,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             if let flipId = dataSource?.userFlipIdForIndex(indexPath.row) {
                 let selectedId = dataSource?.selectedFlipId()
                 cell.setFlipId(flipId)
-                cell.setSelected(selectedId != nil && selectedId == flipId)
+                cell.setIsSelected(selectedId != nil && selectedId == flipId)
             }
         }
         else
@@ -468,7 +468,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             if let flipId = dataSource?.stockFlipIdForIndex(indexPath.row) {
                 let selectedId = dataSource?.selectedFlipId()
                 cell.setFlipId(flipId)
-                cell.setSelected(selectedId != nil && selectedId == flipId)
+                cell.setIsSelected(selectedId != nil && selectedId == flipId)
             }
         }
         
@@ -498,11 +498,11 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             
             if i == indexPath.row
             {
-                cell.setSelected(cell.isSelected ?? true)
+                cell.setIsSelected(cell.isSelected ?? true)
             }
             else
             {
-                cell.setSelected(false)
+                cell.setIsSelected(false)
             }
             
         }

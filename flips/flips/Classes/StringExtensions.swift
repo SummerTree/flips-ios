@@ -68,15 +68,19 @@ extension String {
     }
 
     func hasPathExtension(extensions: Array<String>) -> Bool {
-        let pathExtension = (self.pathExtension as NSString).lowercaseString
-
-        for ext in extensions {
-            if (ext == pathExtension) {
-                return true
+        
+        if let pathURL = NSURL(string: self) {
+        
+            for ext in extensions {
+                if (ext == pathURL.pathExtension) {
+                    return true
+                }
             }
+            
         }
 
         return false
+        
     }
 
     func isImagePath() -> Bool {

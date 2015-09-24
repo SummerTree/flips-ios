@@ -51,23 +51,37 @@ public class CacheJournal {
         }
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-        let newEntry = JournalEntry(key: key.lastPathComponent, size: entrySize, timestamp: entryTimestamp)
-        dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.value.append(newEntry)
-        })
-        self.persistJournal()
+        if let keyPath = NSURL(string: key)?.lastPathComponent
+        {
+            let newEntry = JournalEntry(key: keyPath, size: entrySize, timestamp: entryTimestamp)
+            
+            dispatch_sync(self.entriesQueue, { () -> Void in
+                self.entries.value.append(newEntry)
+            })
+            
+            self.persistJournal()
+        }
     }
     
     func updateEntry(key: String) -> Void {
-        dispatch_sync(self.entriesQueue, { () -> Void in
-            for entry in self.entries.value {
-                if key.lastPathComponent == entry.key {
-                    entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-                    break
+        
+        if let keyPath = NSURL(string: key)?.lastPathComponent {
+        
+            dispatch_sync(self.entriesQueue, { () -> Void in
+                
+                for entry in self.entries.value {
+                    if keyPath == entry.key {
+                        entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
+                        break
+                    }
                 }
-            }
-        })
-        self.persistJournal()
+                
+            })
+            
+            self.persistJournal()
+            
+        }
+        
     }
     
     func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> ArraySlice<(UInt64,Int)> {
@@ -108,7 +122,7 @@ public class CacheJournal {
             self.entries.value.sortInPlace({ $0.timestamp < $1.timestamp })
 
             if (count <= self.entries.value.count) {
-                entriesSlice = Array(self.entries.value[0..<count].map { $0.key })
+                entriesSlice = ArraySlice<String>(self.entries.value[0..<count].map { $0.key })
             } else {
                 print("Failed to get all LRU entries from cache journal, expected \(count), found \(self.entries.value.count)")
                 entriesSlice = ArraySlice<String>()
