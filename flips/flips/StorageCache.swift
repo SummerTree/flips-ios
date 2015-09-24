@@ -41,11 +41,11 @@ public class StorageCache {
         self.scheduleCleanup = scheduleCleanup
         let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! 
-        let applicationSupportDirAbsolutePath = NSHomeDirectory().stringByAppendingPathComponent(applicationSupportDirPath)
-        let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath.stringByAppendingPathComponent(cacheDirectoryName)
-        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)
-        let journalName = self.cacheDirectoryPath.path!.stringByAppendingPathComponent("\(cacheID).cache")
-        self.cacheJournal = CacheJournal(absolutePath: journalName)
+        let applicationSupportDirAbsolutePath = NSURL(string: NSHomeDirectory())?.URLByAppendingPathComponent(applicationSupportDirPath)
+        let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath?.URLByAppendingPathComponent(cacheDirectoryName)
+        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath!.absoluteString)
+        let journalName = self.cacheDirectoryPath.URLByAppendingPathComponent("\(cacheID).cache")
+        self.cacheJournal = CacheJournal(absolutePath: journalName.absoluteString)
         self.cacheQueue = dispatch_queue_create(cacheID, nil)
         self.downloadSyncQueue = dispatch_queue_create("\(cacheID)DownloadQueue", nil)
         self.downloadInProgressURLs = Dictionary<String, [DownloadFinishedCallbacks]>()
