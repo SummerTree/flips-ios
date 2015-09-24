@@ -74,16 +74,16 @@ extension UIImage {
         var ctx:CGContextRef = CGBitmapContextCreate(nil, Int(squareSize), Int(squareSize),
             CGImageGetBitsPerComponent(self.CGImage), 0,
             CGImageGetColorSpace(self.CGImage),
-            bitmapInfo)
+            bitmapInfo.rawValue)!
         
         CGContextScaleCTM(ctx, scale, scale)
         CGContextConcatCTM(ctx, transform)
         CGContextDrawImage(ctx, CGRectMake(0, 0, width, height), self.CGImage)
 
         var cgimg = CGBitmapContextCreateImage(ctx)
-        var img = UIImage(CGImage: cgimg, scale: 1.0, orientation: UIImageOrientation.Up)
+        var img = UIImage(CGImage: cgimg!, scale: 1.0, orientation: UIImageOrientation.Up)
         
-        return img!
+        return img
     }
 
     func cropSquareThumbnail() -> UIImage {

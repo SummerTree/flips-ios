@@ -13,15 +13,15 @@
 class TempFiles {
     
     class func tempThumbnailFilePath() -> String {
-        return tempFilesPath().stringByAppendingPathComponent(randomFileName("jpg"))
+        return (tempFilesPath() as NSString).stringByAppendingPathComponent(randomFileName("jpg"))
     }
     
     class func tempVideoFilePath() -> String {
-        return tempFilesPath().stringByAppendingPathComponent(randomFileName("mov"))
+        return (tempFilesPath() as NSString).stringByAppendingPathComponent(randomFileName("mov"))
     }
     
     class func tempFilesPath() -> String {
-        let tempFilesPath = NSTemporaryDirectory().stringByAppendingPathComponent("flips_files")
+        let tempFilesPath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent("flips_files")
         do {
             try NSFileManager.defaultManager().createDirectoryAtPath(tempFilesPath, withIntermediateDirectories: true, attributes: nil)
         } catch _ {

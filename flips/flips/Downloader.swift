@@ -32,8 +32,8 @@ public class Downloader : NSObject {
 
     func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil, numberOfRetries: Int? = 3) {
         
-        let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
-        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
+        let tempFileName = "\(NSDate().timeIntervalSince1970)_\((localURL.path! as NSString).lastPathComponent)"
+        let tempPath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(tempFileName)
         let tempURL = NSURL(fileURLWithPath: tempPath)
 
         self.downloadTaskRetryingNumberOfTimes(numberOfRetries!, url: url, localURL: tempURL, success: { (responseObject) -> Void in
@@ -41,7 +41,7 @@ public class Downloader : NSObject {
             let fileManager = NSFileManager.defaultManager()
             do {
                 try fileManager.moveItemAtURL(tempURL, toURL: localURL)
-            } catch var error1 as NSError {
+            } catch let error1 as NSError {
                 error = error1
             } catch {
                 fatalError()
@@ -51,7 +51,7 @@ public class Downloader : NSObject {
             }
             completion(success: true)
         }, failure: { (error: NSError?) -> Void in
-            print("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
+            print("Could not download data from URL: \(url.absoluteString) ERROR: \(error)")
             completion(success: false)
         }, progress: progress, latestError: nil)
     }

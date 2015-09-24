@@ -41,11 +41,11 @@ public class StorageCache {
         self.scheduleCleanup = scheduleCleanup
         let paths = NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .LocalDomainMask, true)
         let applicationSupportDirPath = paths.first! 
-        let applicationSupportDirAbsolutePath = NSURL(string: NSHomeDirectory())?.URLByAppendingPathComponent(applicationSupportDirPath)
-        let cacheDirectoryAbsolutePath = applicationSupportDirAbsolutePath?.URLByAppendingPathComponent(cacheDirectoryName)
-        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath!.absoluteString)
-        let journalName = self.cacheDirectoryPath.URLByAppendingPathComponent("\(cacheID).cache")
-        self.cacheJournal = CacheJournal(absolutePath: journalName.absoluteString)
+        let applicationSupportDirAbsolutePath = (NSHomeDirectory() as NSString).stringByAppendingPathComponent(applicationSupportDirPath)
+        let cacheDirectoryAbsolutePath = (applicationSupportDirAbsolutePath as NSString).stringByAppendingPathComponent(cacheDirectoryName)
+        self.cacheDirectoryPath = NSURL(fileURLWithPath: cacheDirectoryAbsolutePath)
+        let journalName = (self.cacheDirectoryPath.path! as NSString).stringByAppendingPathComponent("\(cacheID).cache")
+        self.cacheJournal = CacheJournal(absolutePath: journalName)
         self.cacheQueue = dispatch_queue_create(cacheID, nil)
         self.downloadSyncQueue = dispatch_queue_create("\(cacheID)DownloadQueue", nil)
         self.downloadInProgressURLs = Dictionary<String, [DownloadFinishedCallbacks]>()
@@ -264,16 +264,12 @@ public class StorageCache {
         dispatch_async(self.cacheQueue) {
             let leastRecentlyUsed = self.cacheJournal.getLRUEntries(count)
             let fileManager = NSFileManager.defaultManager()
-            for fileName in leastRecentlyUsed
-            {
-                let path = self.cacheDirectoryPath.URLByAppendingPathComponent(fileName)
-                
-                do
-                {
-                    try fileManager.removeItemAtPath(path.path!)
+            for fileName in leastRecentlyUsed {
+                let path = (self.cacheDirectoryPath.path! as NSString).stringByAppendingPathComponent(fileName)
+                do {
+                    try fileManager.removeItemAtPath(path)
                 }
-                catch let error as NSError
-                {
+                catch let error as NSError {
                     print("Could not remove file \(fileName). Error: \(error)")
                 }
             }
@@ -286,16 +282,13 @@ public class StorageCache {
         dispatch_async(self.cacheQueue) {
             let entries = self.cacheJournal.getEntries()
             let fileManager = NSFileManager.defaultManager()
-            for fileName in entries
-            {
-                let path = self.cacheDirectoryPath.URLByAppendingPathComponent(fileName)
+            for fileName in entries {
+                let path = (self.cacheDirectoryPath.path! as NSString).stringByAppendingPathComponent(fileName)
                 
-                do
-                {
-                    try fileManager.removeItemAtPath(path.path!)
+                do {
+                    try fileManager.removeItemAtPath(path)
                 }
-                catch let error as NSError
-                {
+                catch let error as NSError {
                     print("Could not remove file \(fileName). Error: \(error)")
                 }
             }
@@ -309,7 +302,7 @@ public class StorageCache {
     private func createLocalPath(remoteURL: NSURL) -> String {
         //I think the best approach here would be to generate a Hash based on the actual data,
         //but for now we're just using the last path component.
-        return cacheDirectoryPath.URLByAppendingPathComponent(remoteURL.lastPathComponent!).path!
+        return (cacheDirectoryPath.path! as NSString).stringByAppendingPathComponent(remoteURL.lastPathComponent!)
     }
     
     private func cacheHit(localPath: String) -> Bool {

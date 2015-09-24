@@ -62,7 +62,7 @@ class MessageComposerExternal: NSObject, MFMessageComposeViewControllerDelegate 
         }
         
         if MessageComposerExternal.canSendAttachments() {
-            messageComposeVC.addAttachmentURL(self.videoUrl, withAlternateFilename: "\(userName).mov")
+            messageComposeVC.addAttachmentURL(self.videoUrl!, withAlternateFilename: "\(userName).mov")
             messageComposeVC.disableUserAttachments()
         }
         

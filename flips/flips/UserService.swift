@@ -217,7 +217,7 @@ public class UserService: FlipsService {
                 parameters: params,
                 constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
                     if (avatar != nil) {
-                        let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                        let imageData = UIImageJPEGRepresentation(avatar!, self.IMAGE_COMPRESSION)
                         formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
                     }
                 },

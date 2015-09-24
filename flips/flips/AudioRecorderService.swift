@@ -32,16 +32,16 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         soundFileURL = NSURL(fileURLWithPath: soundFilePath)
         
         var recordSettings = [
-            AVFormatIDKey: kAudioFormatAppleLossless,
-            AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
-            AVEncoderBitRateKey : 320000,
-            AVNumberOfChannelsKey: 2,
-            AVSampleRateKey : 44100.0
-        ]
+            AVFormatIDKey as String : kAudioFormatAppleLossless,
+            AVEncoderAudioQualityKey as String : AVAudioQuality.Max.rawValue,
+            AVEncoderBitRateKey as String : 320000,
+            AVNumberOfChannelsKey as String : 2,
+            AVSampleRateKey as String : 44100.0
+        ] as [String : AnyObject]
         
         var error: NSError?
         do {
-            recorder = try AVAudioRecorder(URL: soundFileURL!, settings: recordSettings as [NSObject : AnyObject])
+            recorder = try AVAudioRecorder(URL: soundFileURL!, settings: recordSettings)
         } catch var error1 as NSError {
             error = error1
             recorder = nil

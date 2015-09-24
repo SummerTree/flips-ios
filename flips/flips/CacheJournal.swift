@@ -51,37 +51,23 @@ public class CacheJournal {
         }
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-        if let keyPath = NSURL(string: key)?.lastPathComponent
-        {
-            let newEntry = JournalEntry(key: keyPath, size: entrySize, timestamp: entryTimestamp)
-            
-            dispatch_sync(self.entriesQueue, { () -> Void in
-                self.entries.value.append(newEntry)
-            })
-            
-            self.persistJournal()
-        }
+        let newEntry = JournalEntry(key: (key as NSString).lastPathComponent, size: entrySize, timestamp: entryTimestamp)
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            self.entries.value.append(newEntry)
+        })
+        self.persistJournal()
     }
     
     func updateEntry(key: String) -> Void {
-        
-        if let keyPath = NSURL(string: key)?.lastPathComponent {
-        
-            dispatch_sync(self.entriesQueue, { () -> Void in
-                
-                for entry in self.entries.value {
-                    if keyPath == entry.key {
-                        entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-                        break
-                    }
+        dispatch_sync(self.entriesQueue, { () -> Void in
+            for entry in self.entries.value {
+                if (key as NSString).lastPathComponent == entry.key {
+                    entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
+                    break
                 }
-                
-            })
-            
-            self.persistJournal()
-            
-        }
-        
+            }
+        })
+        self.persistJournal()
     }
     
     func getLRUSizesAndTimestamps(sizeInBytes: Int64) -> ArraySlice<(UInt64,Int)> {
@@ -106,7 +92,7 @@ public class CacheJournal {
             if (upperLimit <= 0) {
                 entriesSlice = ArraySlice<(UInt64,Int)>()
             } else {
-                entriesSlice = Array(self.entries.value[0..<upperLimit].map { ($0.size, $0.timestamp) })
+                entriesSlice = ArraySlice<(UInt64,Int)>(self.entries.value[0..<upperLimit].map { ($0.size as UInt64, $0.timestamp as Int) })
             }
         })
         return entriesSlice

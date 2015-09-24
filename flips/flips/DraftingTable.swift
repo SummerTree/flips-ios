@@ -159,17 +159,17 @@ public class DraftingTable : NSObject {
             print("\(flipPage.order). \(flipPage.word)")
             
             if let myFlipID = flipPage.pageID {
-                print("--> id:\t\(flipPage.pageID!)")
+                print("--> id:\t\(myFlipID)")
             }
             
                 print("--> state:\t\(flipPage.state.rawValue)")
             
-            if let thumbURL = flipPage.thumbnailURL, let thumbURLAbsolute = NSURL(string: thumbURL.absoluteString) {
-                print("--> thumb:\t\(thumbURLAbsolute.lastPathComponent)")
+            if let thumbURL = flipPage.thumbnailURL {
+                print("--> thumb:\t\((thumbURL.absoluteString as NSString).lastPathComponent)")
             }
             
-            if let vidURL = flipPage.videoURL, let vidURLAbsolute = NSURL(string: vidURL.absoluteString) {
-                print("--> video:\t\(vidURLAbsolute.lastPathComponent)")
+            if let vidURL = flipPage.videoURL {
+                print("--> video:\t\((vidURL.absoluteString as NSString).lastPathComponent)")
             }
             
             if let myFlips = self.myFlipsDictionary {
