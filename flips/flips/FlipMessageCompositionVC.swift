@@ -13,13 +13,18 @@ private let STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE = NSLocalizedString("Flips failed
 
 private let MILLISECONDS_UNTIL_RECORDING_SESSION_IS_REALLY_DONE: UInt64 = 300
 
+private let CANCEL_MESSAGE = NSLocalizedString("Wait! If you go back, you will lose your progress. Do you still want to go back?", comment: "Cancel message")
+private let CANCEL_TITLE = NSLocalizedString("Delete Message", comment: "Delete Message")
+private let DELETE = NSLocalizedString("Delete", comment: "Delete")
+private let NO = NSLocalizedString("No", comment: "No")
+
 private let NO_SPACE_VIDEO_ERROR_TITLE = "Cannot Record Video"
 private let NO_SPACE_VIDEO_ERROR_MESSAGE = "There is not enough available storage to record video. You manage your storage in Settings."
 
 private let NO_SPACE_PHOTO_ERROR_TITLE = "Cannot Take Photo"
 private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storage to take a photo. You manage your storage in Settings."
 
-class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSource, FlipsCompositionControlsDelegate, FlipMessageWordListViewDelegate, FlipsCompositionViewDelegate, CameraViewDelegate, AudioRecorderServiceDelegate, PreviewViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FlipSelectionViewDataSource {
+class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSource, FlipsCompositionControlsDelegate, FlipMessageWordListViewDelegate, FlipsCompositionViewDelegate, CameraViewDelegate, AudioRecorderServiceDelegate, PreviewViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FlipSelectionViewDataSource, UIAlertViewDelegate {
     
     // Title
     private var compositionTitle : String!
@@ -711,6 +716,28 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         // DO NOTHING - the optional mark didn't work on this delegate because of the others methods' params
     }
     
+    
+    ////
+    // MARK: - Back Button Callback
+    ////
+    
+    override func backButtonTapped() {
+        UIAlertView(title: CANCEL_TITLE, message: CANCEL_MESSAGE, delegate: self, cancelButtonTitle: NO, otherButtonTitles: DELETE).show()
+    }
+    
+    
+    
+    ////
+    // MARK: - UIAlertView Delegate
+    ////
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        if alertView.buttonTitleAtIndex(buttonIndex) != NO {
+            super.backButtonTapped()
+        }
+        
+    }
     
     
     ////
