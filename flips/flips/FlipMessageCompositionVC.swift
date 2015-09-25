@@ -250,10 +250,13 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 if !self.flipControlsView.areEditControlsVisible() {
                     self.flipControlsView.showEditControls()
                 }
+                
+                self.flipControlsView.updateEditControls()
             }
             else if (self.flipMessageManager.currentFlipWordHasContent())
             {
                 self.flipControlsView.showEditControls()
+                self.flipControlsView.updateEditControls()
                 self.flipControlsView.scrollToDeleteButton(true)
             }
             else

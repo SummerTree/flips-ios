@@ -128,6 +128,24 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
     
     
     ////
+    // MARK: - Update Delete Button
+    ////
+    
+    func updateDeleteButton() {
+        
+        let button : UIButton? = deleteView.subviews[0] as? UIButton
+        
+        if let dataSource = flipsView.dataSource, let flipID = dataSource.selectedFlipId() {
+            button?.titleLabel?.text = "Create a new Flip"
+        }
+        else {
+            button?.titleLabel?.text = "Epic Fail? Try again."
+        }
+        
+    }
+    
+    
+    ////
     // MARK: - Scrolling
     ////
     
