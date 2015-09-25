@@ -756,7 +756,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
         if firstUnsavedIndex != -1
         {
-            showActivityIndicator(userInteractionEnabled: false, message: "Saving flip word changes and creating flips for empty words. Please wait.")
+            showActivityIndicator(userInteractionEnabled: false, message: nil)
             
             flipMessageManager.createFlipVideoForWordAtIndex(firstUnsavedIndex, successHandler: { (videoURL, thumbnailURL) -> Void in
                 
