@@ -51,20 +51,27 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
     }
     
     private func setSessionPlayAndRecord() {
+        
         let session:AVAudioSession = AVAudioSession.sharedInstance()
+        
         var error: NSError?
-        if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker, error:&error) {
-            println("could not set session category")
-            if let e = error {
-                println(e.localizedDescription)
+        
+        if session.category != AVAudioSessionCategoryPlayAndRecord {
+            if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker, error:&error) {
+                println("could not set session category")
+                if let e = error {
+                    println(e.localizedDescription)
+                }
             }
         }
+        
         if !session.setActive(true, error: &error) {
             println("could not make session active")
             if let e = error {
                 println(e.localizedDescription)
             }
         }
+        
     }
     
     public func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
