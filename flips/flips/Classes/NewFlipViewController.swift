@@ -18,16 +18,11 @@ class NewFlipViewController: FlipsViewController,
     JoinStringsTextFieldDelegate,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
-    UIAlertViewDelegate,
     UITextViewDelegate,
     FlipsCompositionControllerDelegate {
 
     // MARK: - Constants
     
-    private let CANCEL_MESSAGE = NSLocalizedString("This will delete any text you have written for this message.  Do you wish to delete this message?", comment: "Cancel message")
-    private let CANCEL_TITLE = NSLocalizedString("Delete Message", comment: "Delete Message")
-    private let DELETE = NSLocalizedString("Delete", comment: "Delete")
-    private let NO = NSLocalizedString("No", comment: "No")
     private let TITLE = NSLocalizedString("New Flip", comment: "New Flip")
     private let INVALID_CONTACT_TITLE = NSLocalizedString("Invalid Contact", comment: "Invalid Contact")
     private let INVALID_CONTACT_MESSAGE = NSLocalizedString("Please choose a valid contact.", comment: "Please choose a valid contact.")
@@ -344,15 +339,6 @@ class NewFlipViewController: FlipsViewController,
         }
     }
     
-    override func closeButtonTapped() {
-        if !flipTextField.hasText() {
-            super.closeButtonTapped()
-        } else {
-            let alertView = UIAlertView(title: CANCEL_TITLE, message: CANCEL_MESSAGE, delegate: self, cancelButtonTitle: NO, otherButtonTitles: DELETE)
-            alertView.show()
-        }
-    }
-    
     func keyboardWillShow(notification: NSNotification) {
         if let info = notification.userInfo {
             let kbFrame = info[UIKeyboardFrameEndUserInfoKey] as! NSValue
@@ -458,14 +444,6 @@ class NewFlipViewController: FlipsViewController,
             textView.textColor = UIColor.lightGrayColor()
         }
         updateNextButtonState()
-    }
-    
-    // MARK: - UIAlertViewDelegate
-    
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if buttonIndex != alertView.cancelButtonIndex {
-            super.closeButtonTapped()
-        }
     }
     
     // MARK: - ComposeViewControllerDelegate

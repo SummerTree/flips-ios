@@ -27,6 +27,7 @@ class PlayerView: UIView {
     var playInLoop = false
     var loadingFlips = false
     var hasDownloadError = false
+    var originalSessionCategory : String! = nil
     
     private var flips: Array<Flip>!
     private var words: Array<String>?
@@ -67,7 +68,6 @@ class PlayerView: UIView {
         self.makeConstraints()
 
         self.contentIdentifier = nil
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -76,7 +76,6 @@ class PlayerView: UIView {
         self.makeConstraints()
         
         self.contentIdentifier = nil
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
     }
     
     deinit {
@@ -151,6 +150,10 @@ class PlayerView: UIView {
     // MARK: - Playback control
 
     func play() {
+        
+        originalSessionCategory = AVAudioSession.sharedInstance().category
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
+        
         self.timer?.invalidate()
 
         if (self.loadingFlips) {
@@ -291,6 +294,11 @@ class PlayerView: UIView {
     }
     
     private func onFlipMessagePlaybackFinishedWithCompletion(completionBlock: (() -> Void)?) {
+        
+        if self.originalSessionCategory != nil {
+            AVAudioSession.sharedInstance().setCategory(originalSessionCategory, error: nil)
+        }
+        
         delegate?.playerViewDidFinishPlayback(self)
         
         let currentIdentifier = self.contentIdentifier

@@ -129,6 +129,10 @@ class FlipsCompositionControlsView : UIView, CaptureControlsViewDelegate, EditCo
         
     }
     
+    internal func updateEditControls() {
+        editControls.updateDeleteButton()
+    }
+    
     
     
     ////

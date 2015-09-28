@@ -2009,7 +2009,7 @@
 				BE2461311AD2D9C600859233 /* Frameworks */,
 				BE2461341AD2D9C600859233 /* Resources */,
 				BE24613D1AD2D9C600859233 /* Copy Pods Resources */,
-				4097EA0C1B9A29AC00BBD389 /* ShellScript */,
+				3EDF25DC1BB5C8CA002BEE90 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2130,7 +2130,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4097EA0C1B9A29AC00BBD389 /* ShellScript */ = {
+		3EDF25DC1BB5C8CA002BEE90 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2141,7 +2141,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
+			shellScript = "if [ $CONFIGURATION == Release ]; then\necho \"Bumping build number...\"\nplist=${PROJECT_DIR}/${INFOPLIST_FILE}\n\n# increment the build number (ie 115 to 116)\nbuildnum=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${plist}\")\nif [[ \"${buildnum}\" == \"\" ]]; then\necho \"No build number in $plist\"\nexit 2\nfi\n\nbuildnum=$(expr $buildnum + 1)\n/usr/libexec/Plistbuddy -c \"Set CFBundleVersion $buildnum\" \"${plist}\"\necho \"Bumped build number to $buildnum\"\n\nelse\necho $CONFIGURATION \" build - Not bumping build number.\"\nfi";
 		};
 		5703BC6994854CA9A34690DC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
