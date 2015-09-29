@@ -152,7 +152,12 @@ class PlayerView: UIView {
     func play() {
         
         originalSessionCategory = AVAudioSession.sharedInstance().category
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, error: nil)
+        
+        do
+        {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+        }
+        catch _ {}
         
         self.timer?.invalidate()
 
@@ -296,7 +301,9 @@ class PlayerView: UIView {
     private func onFlipMessagePlaybackFinishedWithCompletion(completionBlock: (() -> Void)?) {
         
         if self.originalSessionCategory != nil {
-            AVAudioSession.sharedInstance().setCategory(originalSessionCategory, error: nil)
+            do {
+                try AVAudioSession.sharedInstance().setCategory(originalSessionCategory)
+            } catch _ {}
         }
         
         delegate?.playerViewDidFinishPlayback(self)
