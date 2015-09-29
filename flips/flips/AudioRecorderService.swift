@@ -63,7 +63,9 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         
         do
         {
-            try session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker)
+            if session.category != AVAudioSessionCategoryPlayAndRecord {
+                try session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker)
+            }
         }
         catch let error
         {
