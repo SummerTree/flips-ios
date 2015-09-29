@@ -178,10 +178,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     private func initConstraints() {
         
-        let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
-        
         flipCompositionView.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
             make.left.equalTo()(self.view)
             make.right.equalTo()(self.view)
             make.height.equalTo()(self.view.mas_width)

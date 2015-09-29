@@ -58,11 +58,8 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     // MARK: - Settings View Delegate
     
     func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!) {
-        // using Mansory strategy
-        // check here: https://github.com/Masonry/Masonry/issues/27
         tableView.mas_makeConstraints { (make) -> Void in
-            let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
         }
     }
     

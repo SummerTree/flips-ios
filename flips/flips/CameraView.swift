@@ -208,21 +208,24 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 make.height.equalTo()(self.mas_width)
             }
         }
-        
-        frontCameraButtonView.mas_makeConstraints { (make) -> Void in
-            make.removeExisting = true
-            make.top.equalTo()(self)
-            make.centerX.equalTo()(self)
-            make.width.equalTo()(self.mas_width)
-            make.height.equalTo()(self.mas_width)
+        if let _ = frontCameraButtonView.superview {
+            frontCameraButtonView.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.top.equalTo()(self)
+                make.centerX.equalTo()(self)
+                make.width.equalTo()(self.mas_width)
+                make.height.equalTo()(self.mas_width)
+            }
         }
         
-        backCameraButtonView.mas_makeConstraints { (make) -> Void in
-            make.removeExisting = true
-            make.top.equalTo()(self)
-            make.centerX.equalTo()(self)
-            make.width.equalTo()(self.mas_width)
-            make.height.equalTo()(self.mas_width)
+        if let _ = backCameraButtonView.superview {
+            backCameraButtonView.mas_makeConstraints { (make) -> Void in
+                make.removeExisting = true
+                make.top.equalTo()(self)
+                make.centerX.equalTo()(self)
+                make.width.equalTo()(self.mas_width)
+                make.height.equalTo()(self.mas_width)
+            }
         }
         
         if (self.showMicrophoneButton) {
@@ -552,6 +555,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 overlayView!.removeFromSuperview()
                 fromView.alpha = 0.0
                 toView.alpha = 1.0
+                self.addSubview(fromView)
             }
         )
 

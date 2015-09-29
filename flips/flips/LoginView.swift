@@ -511,9 +511,9 @@ class LoginView : UIView, UITextFieldDelegate {
         }
         
         andWord.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.termsOfUse.mas_right).with().offset()(self.ANDWORD_MARGIN_LEFT)
+            make.left.equalTo()(self.termsOfUse.mas_right).with().offset()(self.ANDWORD_MARGIN_LEFT)
             make.centerY.equalTo()(self.termsOfUse)
-            make.trailing.equalTo()(self.privacyPolicy.mas_left).with().offset()(-self.ANDWORD_MARGIN_RIGHT)
+            make.right.equalTo()(self.privacyPolicy.mas_left).with().offset()(-self.ANDWORD_MARGIN_RIGHT)
             make.bottom.equalTo()(self.acceptanceView)
         }
         

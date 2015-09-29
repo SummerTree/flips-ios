@@ -287,10 +287,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Developer's use of the SDK is governed by the license in the applicable Flurry Terms of Service. Some components of the SDK are governed by open source software licenses. In the event of any conflict between the license in the applicable Flurry Terms of Service and the applicable open source license, the terms of the open source license shall prevail with respect to those components.
-</string>
+			<string>Developer's use of the SDK is governed by the license in the applicable Flurry Terms of Service. Some components of the SDK are governed by open source software licenses. In the event of any conflict between the license in the applicable Flurry Terms of Service and the applicable open source license, the terms of the open source license shall prevail with respect to those components.</string>
 			<key>Title</key>
-			<string>FlurrySDK</string>
+			<string>Flurry-iOS-SDK</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
@@ -389,7 +388,7 @@ http://www.pubnub.com/terms
 			<key>FooterText</key>
 			<string>See https://mint.splunk.com/termsofuse</string>
 			<key>Title</key>
-			<string>SplunkMint-iOS</string>
+			<string>SplunkMint</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
