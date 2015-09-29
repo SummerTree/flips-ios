@@ -48,7 +48,7 @@ class FlipDataSource : BaseDataSource {
     
     private func fillFlip(flip: Flip, withJsonData json: JSON) {
         if (flip.flipID != json[FlipJsonParams.ID].stringValue) {
-            println("Will update flip id from (\(flip.flipID)) to (\(json[FlipJsonParams.ID].stringValue))")
+            print("Will update flip id from (\(flip.flipID)) to (\(json[FlipJsonParams.ID].stringValue))")
         }
 
         flip.flipID = json[FlipJsonParams.ID].stringValue
@@ -72,8 +72,8 @@ class FlipDataSource : BaseDataSource {
     }
     
     func associateFlip(flip: Flip, withOwner owner: User) {
-        var flipInContext = flip.inContext(currentContext) as! Flip
-        var ownerInContext = owner.inContext(currentContext) as! User
+        let flipInContext = flip.inContext(currentContext) as! Flip
+        let ownerInContext = owner.inContext(currentContext) as! User
         flipInContext.owner = ownerInContext
     }
     
@@ -83,7 +83,7 @@ class FlipDataSource : BaseDataSource {
     
     // This flip is never uploaded to the server and never saved in database. It is used only via Pubnub
     func createEmptyFlipWithWord(word: String) -> Flip {
-        var flip: Flip! = Flip.createInContext(currentContext) as! Flip
+        let flip: Flip! = Flip.createInContext(currentContext) as! Flip
         flip.word = word
         return flip
     }
@@ -135,7 +135,7 @@ class FlipDataSource : BaseDataSource {
             // I've tried in many diffent ways with NSPredicate or NSCompoundPredicate, but none of it worked and for some of it returned an weird error about a selector not found.
             // The error happened when I tried to use: NSPredicate(format: <#String#>, argumentArray: <#[AnyObject]?#>)
             // Error: swift predicate reason: '-[Swift._NSContiguousString countByEnumeratingWithState:objects:count:]: unrecognized selector
-            var flips = self.getMyFlipsForWord(word)
+            let flips = self.getMyFlipsForWord(word)
             for flip in flips {
                 resultDictionary[word]?.append(flip.flipID)
             }
@@ -156,7 +156,7 @@ class FlipDataSource : BaseDataSource {
             for word in words {
                 resultDictionary[word] = Array<String>()
 
-                var flips = self.getStockFlipsForWord(word)
+                let flips = self.getStockFlipsForWord(word)
                 for flip in flips {
                     resultDictionary[word]?.append(flip.flipID)
                 }

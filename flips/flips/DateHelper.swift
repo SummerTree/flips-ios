@@ -44,8 +44,8 @@ class DateHelper {
             return NSLocalizedString("\(formatter.stringFromDate(date))", comment: "\(formatter.stringFromDate(date))")
         } else {
             formatter.dateFormat = "yyyy"
-            let currentYear = formatter.stringFromDate(currentDate).toInt()
-            let dateYear = formatter.stringFromDate(date).toInt()
+            let currentYear = Int(formatter.stringFromDate(currentDate))
+            let dateYear = Int(formatter.stringFromDate(date))
             let yearDif = currentYear! - dateYear!
             if yearDif > 0 {
                 formatter.dateFormat = "MMM dd yyyy, hh:mm a"

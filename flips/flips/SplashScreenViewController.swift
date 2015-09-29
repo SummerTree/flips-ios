@@ -35,7 +35,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
         self.flipMessageIdToShow = flipMessageID
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -92,14 +92,14 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
                                 self.openInboxViewController()
                             }
                         } else {
-                            var alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                            let alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
                             alertView.show()
                         }
                     })
                 })
             },
             failure: { (flipError) -> Void in
-                println("Error signing in with Facebook: \(flipError)")
+                print("Error signing in with Facebook: \(flipError)")
                 AuthenticationHelper.sharedInstance.logout() // Make sure that app state is clean
                 self.openLoginViewController()
         })
@@ -140,18 +140,18 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     }
     
     private func openInboxViewController() {
-        var inboxViewController = InboxViewController(roomID: self.roomIdToShow, flipMessageID: self.flipMessageIdToShow)
+        let inboxViewController = InboxViewController(roomID: self.roomIdToShow, flipMessageID: self.flipMessageIdToShow)
         self.navigationController?.pushViewController(inboxViewController, animated: true)
     }
     
     private func openPhoneNumberController(userID: String) {
-        var phoneNumberViewController = PhoneNumberViewController(userId: userID)
+        let phoneNumberViewController = PhoneNumberViewController(userId: userID)
         self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
     }
     
     private func userHasDevice(user: User) -> Bool {
-        var userHasPhone = user.phoneNumber != nil
-        var phoneNumberLength = count(user.phoneNumber)
+        let userHasPhone = user.phoneNumber != nil
+        let phoneNumberLength = user.phoneNumber.characters.count
         var isDeviceVerified: Bool = false
         
         if let isVerified = user.device.isVerified {

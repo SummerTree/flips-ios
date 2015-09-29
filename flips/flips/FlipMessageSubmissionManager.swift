@@ -161,11 +161,11 @@ class FlipMessageSubmissionManager : NSObject {
     private func createAndUploadFlips(request: SubmissionRequest) -> (Bool) {
         
         var error : FlipError?
-        var group = dispatch_group_create()
+        let group = dispatch_group_create()
         
         for flipPage in request.flipPages {
                 
-            var flipWord = request.flipWords[flipPage.order]
+            let flipWord = request.flipWords[flipPage.order]
             
             if flipPage.pageID == nil
             {
@@ -252,7 +252,7 @@ class FlipMessageSubmissionManager : NSObject {
         {
             if let associatedFlipId = word.associatedFlipId
             {
-                var flip = flipDataSource.retrieveFlipWithId(associatedFlipId)
+                let flip = flipDataSource.retrieveFlipWithId(associatedFlipId)
                 
                 if (!flip.backgroundURL.isEmpty)
                 {

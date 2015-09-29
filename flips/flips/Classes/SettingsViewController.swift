@@ -58,31 +58,28 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
     // MARK: - Settings View Delegate
     
     func settingsViewMakeConstraintToNavigationBarBottom(tableView: UIView!) {
-        // using Mansory strategy
-        // check here: https://github.com/Masonry/Masonry/issues/27
         tableView.mas_makeConstraints { (make) -> Void in
-            var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
         }
     }
     
     func settingsViewDidTapChangeProfile(settingsView: SettingsView) {
-        var updateUserProfileViewController = UpdateUserProfileViewController()
+        let updateUserProfileViewController = UpdateUserProfileViewController()
         self.navigationController?.pushViewController(updateUserProfileViewController, animated: true)
     }
     
     func settingsViewDidTapAbout(settingsView: SettingsView) {
-        var aboutViewController = AboutViewController()
+        let aboutViewController = AboutViewController()
         self.navigationController?.pushViewController(aboutViewController, animated: true)
     }
     
     func settingsViewDidTapTermsOfUse(settingsView: SettingsView) {
-        var termsOfUseViewController = TermsOfUseViewController()
+        let termsOfUseViewController = TermsOfUseViewController()
         self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
     func settingsViewDidTapPrivacyPolicy(settingsView: SettingsView) {
-        var privacyPolicyViewController = PrivacyPolicyViewController()
+        let privacyPolicyViewController = PrivacyPolicyViewController()
         self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
@@ -91,16 +88,16 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         let teamFlipsRoom: Room? = roomDataSource.getTeamFlipsRoom()
         
         if let room = teamFlipsRoom {
-            var chatViewController = ChatViewController(room: room)
+            let chatViewController = ChatViewController(room: room)
             self.navigationController?.pushViewController(chatViewController, animated: true)
         } else {
-            var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.TEAMFLIPS_ROOM_NOT_FOUND, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            let alertMessage = UIAlertView(title: LocalizedString.ERROR, message: LocalizedString.TEAMFLIPS_ROOM_NOT_FOUND, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
         }
     }
     
     func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView) {
-        var changeNumberInfoViewController = ChangeNumberInfoViewController()
+        let changeNumberInfoViewController = ChangeNumberInfoViewController()
         self.navigationController?.pushViewController(changeNumberInfoViewController, animated: true)
     }
     
@@ -140,7 +137,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         
         AuthenticationHelper.sharedInstance.logout()
         
-        var navigationController: UINavigationController = self.presentingViewController as! UINavigationController
+        let navigationController: UINavigationController = self.presentingViewController as! UINavigationController
         navigationController.popToRootViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion:nil)
         

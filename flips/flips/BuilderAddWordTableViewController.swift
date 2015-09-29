@@ -107,7 +107,7 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as? UITableViewCell
+        var cell : UITableViewCell? = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER)
         if (cell == nil) {
             cell = UITableViewCell(style:.Default, reuseIdentifier: CELL_IDENTIFIER)
         }
@@ -136,9 +136,9 @@ class BuilderAddWordTableViewController: UITableViewController, UITextFieldDeleg
     }
 
     func addWord() -> Bool {
-        let word = self.newWordTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let word = self.newWordTextField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 
-        if (count(word) > 0) {
+        if (word.characters.count > 0) {
             let result = PersistentManager.sharedInstance.addBuilderWord(word, fromServer: false)
 
             if (result) {

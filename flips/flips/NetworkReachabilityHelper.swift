@@ -29,13 +29,13 @@ public class NetworkReachabilityHelper {
             let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             switch(status) {
             case AFNetworkReachabilityStatus.ReachableViaWiFi:
-                println("Reachable via WiFi")
+                print("Reachable via WiFi")
             case AFNetworkReachabilityStatus.ReachableViaWWAN:
-                println("Reachable via WWAN 3G/4G")
+                print("Reachable via WWAN 3G/4G")
             case AFNetworkReachabilityStatus.NotReachable:
-                println("Not Reachable")
+                print("Not Reachable")
             default:
-                println("Default [status=\(status.rawValue)]")
+                print("Default [status=\(status.rawValue)]")
             }
             NSNotificationCenter.defaultCenter().postNotificationName(NETWORK_REACHABILITY_CHANGED_NOTIFICATION_KEY, object: nil)
         }

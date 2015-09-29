@@ -29,7 +29,7 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
         self.countryCode = countryCode
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -61,7 +61,7 @@ class NewPasswordViewController: FlipsViewController, NewPasswordViewDelegate {
     }
   
     func newPasswordViewDidTapBackButton(newPassword: NewPasswordView!) {
-        if let viewControllers = navigationController?.viewControllers as? [UIViewController] {
+        if let viewControllers : [UIViewController] = navigationController?.viewControllers {
             let count = viewControllers.count
             
             if count >= 3 {

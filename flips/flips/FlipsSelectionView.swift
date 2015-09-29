@@ -30,7 +30,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     // MARK: - Init
     ////
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -52,7 +52,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     
     func initSubviews() {
         
-        userFlipsButton = UIButton.buttonWithType(.System) as! UIButton
+        userFlipsButton = UIButton(type: .System)
         userFlipsButton.layer.cornerRadius = 3.0
         userFlipsButton.layer.borderWidth = 1.0
         userFlipsButton.layer.borderColor = UIColor.flipOrange().CGColor
@@ -63,7 +63,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         userFlipsButton.backgroundColor = UIColor.whiteColor()
         addSubview(userFlipsButton)
         
-        stockFlipsButton = UIButton.buttonWithType(.System) as! UIButton
+        stockFlipsButton = UIButton(type: .System)
         stockFlipsButton.layer.cornerRadius = 3.0
         stockFlipsButton.layer.borderWidth = 1.0
         stockFlipsButton.layer.borderColor = UIColor.flipOrange().CGColor
@@ -460,7 +460,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             if let flipId = dataSource?.userFlipIdForIndex(indexPath.row) {
                 let selectedId = dataSource?.selectedFlipId()
                 cell.setFlipId(flipId)
-                cell.setSelected(selectedId != nil && selectedId == flipId)
+                cell.setIsSelected(selectedId != nil && selectedId == flipId)
             }
         }
         else
@@ -468,7 +468,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             if let flipId = dataSource?.stockFlipIdForIndex(indexPath.row) {
                 let selectedId = dataSource?.selectedFlipId()
                 cell.setFlipId(flipId)
-                cell.setSelected(selectedId != nil && selectedId == flipId)
+                cell.setIsSelected(selectedId != nil && selectedId == flipId)
             }
         }
         
@@ -498,11 +498,11 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             
             if i == indexPath.row
             {
-                cell.setSelected(cell.isSelected ?? true)
+                cell.setIsSelected(cell.isSelected ?? true)
             }
             else
             {
-                cell.setSelected(false)
+                cell.setIsSelected(false)
             }
             
         }

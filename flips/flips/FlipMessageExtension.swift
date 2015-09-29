@@ -49,7 +49,7 @@ extension FlipMessage {
     func addFlip(formatedFlip: FormattedFlip, inContext context: NSManagedObjectContext) {
         let nextEntryOrder = self.entries.count
 
-        var entry: FlipEntry! = FlipEntry.createInContext(context) as? FlipEntry
+        let entry: FlipEntry! = FlipEntry.createInContext(context) as? FlipEntry
         entry.order = nextEntryOrder
         entry.formattedWord = formatedFlip.word
         entry.flip = formatedFlip.flip.inContext(context) as? Flip
@@ -61,11 +61,11 @@ extension FlipMessage {
     func messagePhrase() -> String {
         let flipsEntries: [FlipEntry] = self.flipsEntries!
         let words = flipsEntries.map {
-            (var flipEntry) -> String in
+            (flipEntry) -> String in
             return flipEntry.formattedWord
         }
 
-        return " ".join(words)
+        return words.joinWithSeparator(" ")
     }
     
     func messageThumbnail(success: ((UIImage?) -> Void)? = nil) {
@@ -85,10 +85,10 @@ extension FlipMessage {
 
                 cacheInstance.get(NSURL(string: firstFlip.thumbnailURL!)!,
                     success: { (url: String!, localPath: String!) in
-                        var image = UIImage(contentsOfFile: localPath)
+                        let image = UIImage(contentsOfFile: localPath)
                         success?(image)
                     }, failure: { (url: String!, error: FlipError) in
-                        println("Could not get thumbnail for flip \(firstFlip).")
+                        print("Could not get thumbnail for flip \(firstFlip).")
                 })
             }
         } else {

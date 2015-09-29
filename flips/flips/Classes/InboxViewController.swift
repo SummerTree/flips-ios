@@ -14,7 +14,7 @@ import MediaPlayer
 
 let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
 
-class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource {
+class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UIAlertViewDelegate {
     
     private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
     
@@ -47,7 +47,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         self.flipMessageIdToShow = flipMessageID
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -82,8 +82,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             self.shouldInformPubnubNotConnected = true
             
             weak var weakSelf = self
-            PubNubService.sharedInstance.subscribeOnMyChannels(completion: { (success: Bool) -> Void in
-                println("   InboxViewController subscribeOnMyChannels completion called")
+            PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
+                print("   InboxViewController subscribeOnMyChannels completion called")
                 if (weakSelf?.roomIdToShow != nil) {
                     weakSelf?.openRoomForPushNotificationIfMessageReceived()
                 } else {
@@ -107,7 +107,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
             if (!PubNubService.sharedInstance.isConnected()) {
-                println("Inbox appeared with PubNub disconnected. Calling connect again.")
+                print("Inbox appeared with PubNub disconnected. Calling connect again.")
                 Mint.sharedInstance().logEventAsyncWithTag("inbox_pubnub_not_connected-reconnecting", completionBlock: { (result: MintLogResult!) -> Void in
                     return
                 })
@@ -146,7 +146,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     let alertView: UIAlertView = UIAlertView(title: nil, message: NSLocalizedString("Unable to retrieve message. Please check your connection and try again."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertView.show()
                 } else {
-                    self.showActivityIndicator(userInteractionEnabled: true, message: NSLocalizedString("Downloading message"))
+                    self.showActivityIndicator(true, message: NSLocalizedString("Downloading message"))
                     self.openRoomForPushNotificationIfMessageReceived()
                 }
             }
@@ -213,7 +213,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     self.roomIdToShow = nil
                     self.flipMessageIdToShow = nil
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        var alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
+                        let alertView = UIAlertView(title: nil, message: NSLocalizedString("Download failed. Please try again later."), delegate: nil, cancelButtonTitle: "OK")
                         alertView.show()
                     })
                 }
@@ -253,7 +253,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     DeviceHelper.sharedInstance.setSyncViewShown(true)
                     self.syncMessageHistoryBlock = nil
                     
-                    PubNubService.sharedInstance.subscribeOnMyChannels(completion: { (success: Bool) -> Void in
+                    PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
                         self.refreshRooms()
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             UIView.animateWithDuration(self.ANIMATION_DURATION, animations: { () -> Void in
@@ -303,7 +303,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     }
                     AnalyticsService.logOnboardingClosed(secondsWatched)
                 default:
-                    println("Another event happened")
+                    print("Another event happened")
                 }
             }
         }
@@ -316,22 +316,22 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     // MARK: - InboxViewDelegate
     
     func inboxViewDidTapComposeButton(inboxView : InboxView) {
-        var newFlipViewNavigationController = NewFlipViewController.instantiateNavigationController()
-        var viewController = newFlipViewNavigationController.topViewController as! NewFlipViewController
+        let newFlipViewNavigationController = NewFlipViewController.instantiateNavigationController()
+        let viewController = newFlipViewNavigationController.topViewController as! NewFlipViewController
         viewController.delegate = self
         self.navigationController?.presentViewController(newFlipViewNavigationController, animated: true, completion: nil)
     }
     
     func inboxViewDidTapSettingsButton(inboxView : InboxView) {
-        var settingsViewController = SettingsViewController()
-        var navigationController = FlipsUINavigationController(rootViewController: settingsViewController)
+        let settingsViewController = SettingsViewController()
+        let navigationController = FlipsUINavigationController(rootViewController: settingsViewController)
         
         settingsViewController.modalPresentationStyle = UIModalPresentationStyle.FullScreen;
         self.presentViewController(navigationController, animated: true, completion: nil)
     }
     
     func inboxViewDidTapBuilderButton(inboxView : InboxView) {
-        var builderViewController = BuilderViewController()
+        let builderViewController = BuilderViewController()
         self.navigationController?.pushViewController(builderViewController, animated:true)
     }
     
@@ -428,7 +428,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     func onFlipMessageReceivedNotification(notification: NSNotification) {
         self.refreshRooms()
         if let userInfo: Dictionary<String, String> = notification.userInfo as? Dictionary<String, String> {
-            var receivedFlipMessageID: String = userInfo[FLIP_MESSAGE_RECEIVED_NOTIFICATION_PARAM_MESSAGE_KEY]!
+            let receivedFlipMessageID: String = userInfo[FLIP_MESSAGE_RECEIVED_NOTIFICATION_PARAM_MESSAGE_KEY]!
             
             if let roomID: String = self.roomIdToShow {
                 if let flipMessageID: String = self.flipMessageIdToShow {
@@ -476,7 +476,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     let roomDataSource = RoomDataSource()
                     let room = roomDataSource.retrieveRoomWithId(roomID)
                     
-                    var chatVC = ChatViewController(room: room, andFlipMessageIdFromPushNotification: nil)
+                    let chatVC = ChatViewController(room: room, andFlipMessageIdFromPushNotification: nil)
                     self.navigationController?.pushViewController(chatVC, animated: true)
                 }
                 
@@ -556,35 +556,57 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     private func showMessageSubmissionFailedAlert(title: String, message: String) {
         
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        
-        alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Retry", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                
+                self.retryMessageSubmission()
+                
+            }))
+            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                
+                self.cancelMessageSubmission()
+                
+            }))
             
-            self.inboxView.showSendingView()
-            
-            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
-            
-        }))
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-            
-            if FlipMessageSubmissionManager.sharedInstance.hasPendingMessages()
-            {
-                self.inboxView.showSendingView()
-            }
-            else
-            {
-                self.inboxView.hideSendingView()
-            }
-            
-            NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
-            
-        }))
-        
-        presentViewController(alertController, animated: true, completion: nil)
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Retry").show()
+        }
         
     }
     
+    
+    
+    ////
+    // Local Notification Handler Methods
+    ////
+    
+    private func retryMessageSubmission() {
+        
+        self.inboxView.showSendingView()
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.RETRY_SUBMISSION, object: nil)
+        
+    }
+    
+    private func cancelMessageSubmission() {
+        
+        if FlipMessageSubmissionManager.sharedInstance.hasPendingMessages()
+        {
+            self.inboxView.showSendingView()
+        }
+        else
+        {
+            self.inboxView.hideSendingView()
+        }
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(FlipMessageSubmissionManager.Notifications.CANCEL_SUBMISSION, object: nil)
+        
+    }
     
     
     
@@ -603,11 +625,30 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     
+    
     // MARK: - Push Notification Methods
     
     func prepareToLoadPushNotificationForRoomId(roomId: String, andFlipMessageId flipMessageId: String?) {
         self.roomIdToShow = roomId
         self.flipMessageIdToShow = flipMessageId
-        self.showActivityIndicator(userInteractionEnabled: true)
+        self.showActivityIndicator(true)
     }
+    
+    
+    // MARK: - UIAlertView Delegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        switch(alertView.buttonTitleAtIndex(buttonIndex)!)
+        {
+            case "Retry":
+                self.retryMessageSubmission()
+            case "Cancel":
+                self.cancelMessageSubmission()
+            default:
+                break;
+        }
+        
+    }
+    
 }

@@ -32,11 +32,11 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.initSubviews()
         self.initConstraints()
         
-        var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
         self.messagesTopView.addGestureRecognizer(panGestureRecognizer)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -86,7 +86,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     // MARK: - Life Cycle
     
     func loadView() {
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.addGestureRecognizer(tapGestureRecognizer)
     }
     
@@ -109,7 +109,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         if (userFormView.isAllFieldsValids()) {
             self.dismissKeyboard()
-            var userData = getUserData()
+            let userData = getUserData()
             delegate?.signUpView!(self, didTapNextButtonWith: userData.firstName, lastName: userData.lastName, email: userData.email, password: userData.password, birthday: userData.birthday)
         }
     }
@@ -167,8 +167,8 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
                 })
             }
             UIGraphicsBeginImageContextWithOptions(navigationBar.frame.size, false, 0.0)
-            navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext())
-            var image = UIGraphicsGetImageFromCurrentImageContext()
+            navigationBar.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
             
             UIGraphicsEndImageContext()
             messagesTopView.setMessagesTopViewBackgroundImage(image)
@@ -250,7 +250,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue()
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameBeginUserInfoKey)!.CGRectValue
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
     
@@ -258,8 +258,8 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.layoutIfNeeded()
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             if (movedUp) {
-                var userFormViewFrameBottom = self.userFormView.frame.origin.y + self.userFormView.frame.size.height
-                var offsetValue = keyboardTop - userFormViewFrameBottom
+                let userFormViewFrameBottom = self.userFormView.frame.origin.y + self.userFormView.frame.size.height
+                let offsetValue = keyboardTop - userFormViewFrameBottom
                 if (offsetValue < 0) {
                     self.navigationBar.mas_makeConstraints { (update) -> Void in
                         update.removeExisting = true

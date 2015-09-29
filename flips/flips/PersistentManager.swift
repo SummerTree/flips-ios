@@ -47,7 +47,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         
         var content = json[RoomJsonParams.PARTICIPANTS]
         var participants = Array<User>()
-        for (index: String, json: JSON) in content {
+        for (index, json): (String, JSON) in content {
             if (isNewRoom) {
                 // Only users can participate of a room
                 participants.append(self.createOrUpdateUserWithJson(json))
@@ -136,7 +136,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             }
             self.associateFlip(flip!, withOwnerInJson: json)
             
-            return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID, error: nil) as! Flip
+            return (try! NSManagedObjectContext.MR_defaultContext().existingObjectWithID(flip!.objectID)) as! Flip
         }
     }
 
@@ -152,7 +152,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     flipDataSource.associateFlip(flip, withOwner: loggedUser)
                 })
                 
-                var flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as! Flip
+                let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as! Flip
                 
                 if (videoURL != nil) {
                     FlipsCache.sharedInstance.put(NSURL(string: flipInContext.backgroundURL)!, localPath: videoURL!.path!)
@@ -184,7 +184,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             let content = json[MESSAGE_CONTENT]
             
             var formattedFlips: [FormattedFlip] = Array<FormattedFlip>()
-            for (index: String, flipJson: JSON) in content {
+            for (index, flipJson): (String, JSON) in content {
                 let flip = self.createFlipWithJson(flipJson)
                 
                 var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
@@ -279,10 +279,10 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                         PubNubService.sharedInstance.sendMessage(readFlipMessageJSON!, pubnubID: loggedUser.pubnubID, completion: nil)
                     }
                 } else {
-                    println("Error: readFlipMessageJSON is nil")
+                    print("Error: readFlipMessageJSON is nil")
                 }
             } else {
-                println("Marking message(\(flipMessageId) as read failed with error - \(error))")
+                print("Marking message(\(flipMessageId) as read failed with error - \(error))")
             }
         })
     }
@@ -361,7 +361,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
         
         if (!isLoggedUser) {
             let contactDataSource = ContactDataSource()
-            var userInContext = user!.inThreadContext() as! User
+            let userInContext = user!.inThreadContext() as! User
             
             let contactsWithSamePhoneNumber: [Contact] = contactDataSource.retrieveContactsWithPhoneNumber(userInContext.phoneNumber)
             
@@ -373,8 +373,8 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                         var userContact: Contact?
                         
                         if (authenticatedId != userInContext.userID) {
-                            var facebookID = user!.facebookID
-                            var phonetype = (facebookID != nil) ? facebookID : ""
+                            let facebookID = user!.facebookID
+                            let phonetype = (facebookID != nil) ? facebookID : ""
                             userContact = self.createOrUpdateContactWith(userInContext.firstName, lastName: userInContext.lastName, phoneNumber: userInContext.phoneNumber, phoneType: phonetype!, andContactUser: userInContext)
                         }
                     }
@@ -382,12 +382,12 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             }
         }
         
-        return NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID, error: nil) as! User
+        return (try! NSManagedObjectContext.MR_defaultContext().existingObjectWithID(user!.objectID)) as! User
     }
     
     func defineAsLoggedUser(user: User) {
         MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            var userInContext = user.inContext(context) as! User
+            let userInContext = user.inContext(context) as! User
             userInContext.me = true
             AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
@@ -395,7 +395,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     func defineAsLoggedUserSync(user: User) {
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            var userInContext = user.inContext(context) as! User
+            let userInContext = user.inContext(context) as! User
             userInContext.me = true
             AuthenticationHelper.sharedInstance.onLogin(userInContext)
         }
@@ -422,10 +422,10 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             let group = dispatch_group_create()
             
             dispatch_group_enter(group)
-            println("getMyFlips")
+            print("getMyFlips")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 userService.getMyFlips({ (jsonResponse) -> Void in
-                    println("   getMyFlips - success")
+                    print("   getMyFlips - success")
                     let myFlipsAsJSON = jsonResponse.array
                     
                     for myFlipJson in myFlipsAsJSON! {
@@ -434,32 +434,32 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
-                    println("   getMyFlips - fail")
+                    print("   getMyFlips - fail")
                     error = flipError
                     dispatch_group_leave(group)
                 })
             })
             
             let roomService = RoomService()
-            println("getMyRooms")
+            print("getMyRooms")
             dispatch_group_enter(group)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 roomService.getMyRooms({ (rooms) -> Void in
-                    println("   getMyRooms - success")
+                    print("   getMyRooms - success")
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
-                    println("   getMyRooms - fail")
+                    print("   getMyRooms - fail")
                     error = flipError
                     dispatch_group_leave(group)
                 })
             })
             
-            var builderService = BuilderService()
+            let builderService = BuilderService()
             dispatch_group_enter(group)
-            println("getSuggestedWords")
+            print("getSuggestedWords")
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 builderService.getSuggestedWords({ (words) -> Void in
-                    println("   getSuggestedWords - success")
+                    print("   getSuggestedWords - success")
 
                     let flipDataSource = FlipDataSource()
                     let myFlips = flipDataSource.getMyFlipsIdsForWords(words)
@@ -475,7 +475,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     self.addBuilderWords(newWords, fromServer: true)
                     dispatch_group_leave(group)
                 }, failCompletion: { (flipError) -> Void in
-                    println("   getSuggestedWords - fail")
+                    print("   getSuggestedWords - fail")
                     error = flipError
                     dispatch_group_leave(group)
                 })
@@ -502,7 +502,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     },
                     failure: { (flipError) -> Void in
                         if (flipError != nil) {
-                            println("Error \(flipError)")
+                            print("Error \(flipError)")
                         }
                         error = flipError
                         dispatch_group_leave(group)
@@ -513,7 +513,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             dispatch_group_wait(group, DISPATCH_TIME_FOREVER)
             
             if (error != nil) {
-                println("sync fail\n")
+                print("sync fail\n")
                 callback(false, error)
                 return
             }
@@ -597,14 +597,14 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     func cleanBuilderWordsFromServer() {
         MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            var builderWordDataSource = BuilderWordDataSource(context: context)
+            let builderWordDataSource = BuilderWordDataSource(context: context)
             builderWordDataSource.cleanWordsFromServer()
         }
     }
     
     func addBuilderWords(words: [String], fromServer: Bool) {
         MagicalRecord.saveWithBlock { (context: NSManagedObjectContext!) -> Void in
-            var builderWordDataSource = BuilderWordDataSource(context: context)
+            let builderWordDataSource = BuilderWordDataSource(context: context)
             builderWordDataSource.addWords(words, fromServer: fromServer)
         }
     }
@@ -612,7 +612,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     func addBuilderWord(word: String, fromServer: Bool) -> Bool {
         var result: Bool!
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            var builderWordDataSource = BuilderWordDataSource(context: context)
+            let builderWordDataSource = BuilderWordDataSource(context: context)
             result = builderWordDataSource.addWord(word, fromServer: fromServer)
         }
         return result
@@ -620,7 +620,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     
     func removeBuilderWordWithWord(word: String) {
         MagicalRecord.saveWithBlockAndWait { (context: NSManagedObjectContext!) -> Void in
-            var builderWordDataSource = BuilderWordDataSource(context: context)
+            let builderWordDataSource = BuilderWordDataSource(context: context)
             builderWordDataSource.removeBuilderWordWithWord(word)
         }
     }

@@ -208,8 +208,8 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         if self.getSelectedDialCode() == "+1" {
-            let text = textField.text
-            let length = count(text)
+            let text = textField.text!
+            let length = text.characters.count
             var shouldReplace = true
             
             if (string != "") {
@@ -240,7 +240,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     func mobileNumberFieldDidChange(textField: UITextField) {
         if self.getSelectedDialCode() == "+1" {
-            if (count(textField.text) == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -271,10 +271,10 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         return CountryCodes.sharedInstance.countryCodes.count
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
-        var currCountry = CountryCodes.sharedInstance.countryCodes[row]
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        let currCountry = CountryCodes.sharedInstance.countryCodes[row]
         
-        var countryCode = UILabel();
+        let countryCode = UILabel();
         countryCode.text = currCountry["dial_code"] as? String
         countryCode.textColor = UIColor.whiteColor()
         countryCode.tintColor = UIColor.whiteColor()
@@ -287,10 +287,10 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         if (self.mobileNumberField!.text != "") {
             if (self.getSelectedDialCode() != "+1") {
-                self.mobileNumberField!.text = self.mobileNumberField!.text.removeDashes()
+                self.mobileNumberField!.text = self.mobileNumberField!.text!.removeDashes()
             }
             else {
-                self.mobileNumberField!.text = self.mobileNumberField!.text.formatWithDashes()
+                self.mobileNumberField!.text = self.mobileNumberField!.text!.formatWithDashes()
             }
         }
     }
@@ -301,10 +301,10 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     }
     
     func setupAccessoryView() -> UIToolbar {
-        var screenSize = UIScreen.mainScreen().bounds
-        var showFrame = CGRectMake(0,0,screenSize.size.width, 50)
+        let screenSize = UIScreen.mainScreen().bounds
+        let showFrame = CGRectMake(0,0,screenSize.size.width, 50)
         
-        var numberToolbar = UIToolbar(frame: showFrame)
+        let numberToolbar = UIToolbar(frame: showFrame)
         numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
                                UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
         numberToolbar.tintColor = UIColor.flipOrange()
@@ -319,7 +319,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         var message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
-            if (count(textField.text) == 12) {
+            if (textField.text!.characters.count == 12) {
                 textField.resignFirstResponder()
                 self.finishTypingMobileNumber(textField)
             }
@@ -331,7 +331,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
                 }
             }
         }
-        else if (count(textField.text) >= 5) {
+        else if (textField.text!.characters.count >= 5) {
             textField.resignFirstResponder()
             self.finishTypingMobileNumber(textField)
         }
@@ -351,7 +351,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     // MARK: - Buttons delegate
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        var countryCode = self.getSelectedDialCode()
+        let countryCode = self.getSelectedDialCode()
         
         self.delegate?.phoneNumberView(self, didFinishTypingMobileNumber: mobileNumberField.text, withCountryCode: countryCode)
     }
@@ -366,7 +366,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

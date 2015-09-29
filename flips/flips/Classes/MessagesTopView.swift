@@ -47,7 +47,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
         self.initConstraints()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -107,7 +107,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:MessagesTopViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! MessagesTopViewCell
+        let cell:MessagesTopViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! MessagesTopViewCell
         cell.setAttributedMessage(Array(messages.values)[indexPath.row])
         return cell;
     }
@@ -148,7 +148,7 @@ class MessagesTopView : UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     private func showMessage(firstLineKey: String, secondLineKey: String, dictionaryKey: String) {
-        var message = self.formatUsingUltraLightFont(NSLocalizedString(firstLineKey, comment: firstLineKey))
+        let message = self.formatUsingUltraLightFont(NSLocalizedString(firstLineKey, comment: firstLineKey))
         message.appendAttributedString(self.formatUsingMediumFont(NSLocalizedString(secondLineKey, comment: secondLineKey)))
         
         messages.updateValue(message, forKey: dictionaryKey)

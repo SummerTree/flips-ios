@@ -34,7 +34,7 @@ class FlipsViewController : UIViewController {
         self.draftingTable = DraftingTable.sharedInstance
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
 		super.init(coder: coder)
         self.draftingTable = DraftingTable.sharedInstance
     }
@@ -165,6 +165,6 @@ class FlipsViewController : UIViewController {
             return nil
         }
         
-        return self.navigationController?.viewControllers![numberOfViewControllers! - 2] as! UIViewController!
+        return self.navigationController?.viewControllers[numberOfViewControllers! - 2] as! UIViewController!
     }
 }

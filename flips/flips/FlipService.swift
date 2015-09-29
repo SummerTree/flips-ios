@@ -41,7 +41,7 @@ public class FlipService: FlipsService {
     
     func createFlip(word: String, videoURL: NSURL?, thumbnailURL: NSURL?, category: String = "", isPrivate: Bool = true, uploadFlipSuccessCallback: UploadFlipSuccessResponse, uploadFlipFailCallBack: UploadFlipFailureResponse) {
         
-        var uploadFlipBlock: ((NSURL?, NSURL?) -> Void) = { (remoteVideoURL, remoteThumbnailURL) -> () in
+        let uploadFlipBlock: ((NSURL?, NSURL?) -> Void) = { (remoteVideoURL, remoteThumbnailURL) -> () in
             self.uploadNewFlip(word, videoURL: remoteVideoURL, thumbnailURL: remoteThumbnailURL, category: category, isPrivate: isPrivate, uploadFlipSuccessCallback: uploadFlipSuccessCallback, uploadFlipFailCallBack: uploadFlipFailCallBack)
         }
         
@@ -68,7 +68,7 @@ public class FlipService: FlipsService {
         }
         
         let stockFlipUrl = HOST + STOCK_FLIPS
-        var stockFlipParams = [
+        let stockFlipParams = [
             RequestParams.TIMESTAMP: (timestamp == nil ? "" : timestamp!)
         ]
         
@@ -91,9 +91,15 @@ public class FlipService: FlipsService {
     private func uploadVideo(videoPathUrl: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         var error: NSError?
 
-        let videoData: NSData? = NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions.allZeros, error: &error)
+        let videoData: NSData?
+        do {
+            videoData = try NSData(contentsOfURL: videoPathUrl, options: NSDataReadingOptions())
+        } catch let error1 as NSError {
+            error = error1
+            videoData = nil
+        }
         if (videoData != nil) {
-            println("Uploading a video with size = \(videoData?.length)")
+            print("Uploading a video with size = \(videoData?.length)")
             
             let url = HOST + UPLOAD_BACKGROUND
             let fileName = "video_\(NSDate().timeIntervalSince1970).mov"
@@ -105,7 +111,13 @@ public class FlipService: FlipsService {
     
     private func uploadThumbnail(imageURL: NSURL, successCallback: UploadSuccessResponse, failCallback: UploadFailureResponse) {
         var error: NSError?
-        let imageData = NSData(contentsOfURL: imageURL, options: NSDataReadingOptions.allZeros, error: &error)
+        let imageData: NSData?
+        do {
+            imageData = try NSData(contentsOfURL: imageURL, options: NSDataReadingOptions())
+        } catch let error1 as NSError {
+            error = error1
+            imageData = nil
+        }
         
         let url = HOST + UPLOAD_THUMBNAIL
         let fileName = imageURL.lastPathComponent
@@ -125,7 +137,7 @@ public class FlipService: FlipsService {
                 formData.appendPartWithFileData(data, name: partName, fileName: fileName, mimeType: mimeType)
             },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                var url = self.parseUploadResponse(responseObject)
+                let url = self.parseUploadResponse(responseObject)
                 if (url == nil) {
                     failCallback(FlipError(error: LocalizedString.ERROR, details: LocalizedString.COULD_NOT_UPLOAD_FLIP))
                 } else {
@@ -154,8 +166,8 @@ public class FlipService: FlipsService {
             let createFlipUrl = HOST + createURL
             let createFlipParams = [
                 RequestParams.WORD: word,
-                RequestParams.BACKGROUND_URL: (videoURL == nil ? "" : videoURL!.absoluteString!),
-                RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString!),
+                RequestParams.BACKGROUND_URL: (videoURL == nil ? "" : videoURL!.absoluteString),
+                RequestParams.THUMBNAIL_URL: (thumbnailURL == nil ? "" : thumbnailURL!.absoluteString),
                 RequestParams.CATEGORY: category,
                 RequestParams.IS_PRIVATE: isPrivate]
             
@@ -188,7 +200,7 @@ public class FlipService: FlipsService {
             return json[UPLOAD_THUMBNAIL_RESPONSE_URL].stringValue
         }
         
-        println("FlipService Upload Parser error - response didn't return a valid value.")
+        print("FlipService Upload Parser error - response didn't return a valid value.")
         
         return nil
     }

@@ -44,14 +44,14 @@ public class CacheJournal {
     }
     
     func insertNewEntry(key: String) -> Void {
-        let attributes = NSFileManager.defaultManager().attributesOfItemAtPath(key, error: nil)
+        let attributes = try? NSFileManager.defaultManager().attributesOfItemAtPath(key)
         if (attributes == nil) {
-            println("Can't get file (\(key)) attributes, not inserting into cache.")
+            print("Can't get file (\(key)) attributes, not inserting into cache.")
             return
         }
         let entrySize = (attributes! as NSDictionary).fileSize()
         let entryTimestamp = Int(NSDate.timeIntervalSinceReferenceDate())
-        var newEntry = JournalEntry(key: key.lastPathComponent, size: entrySize, timestamp: entryTimestamp)
+        let newEntry = JournalEntry(key: (key as NSString).lastPathComponent, size: entrySize, timestamp: entryTimestamp)
         dispatch_sync(self.entriesQueue, { () -> Void in
             self.entries.value.append(newEntry)
         })
@@ -61,7 +61,7 @@ public class CacheJournal {
     func updateEntry(key: String) -> Void {
         dispatch_sync(self.entriesQueue, { () -> Void in
             for entry in self.entries.value {
-                if key.lastPathComponent == entry.key {
+                if (key as NSString).lastPathComponent == entry.key {
                     entry.timestamp = Int(NSDate.timeIntervalSinceReferenceDate())
                     break
                 }
@@ -74,7 +74,7 @@ public class CacheJournal {
         var entriesSlice: ArraySlice<(UInt64,Int)>!
         
         dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.value.sort({ $0.timestamp < $1.timestamp })
+            self.entries.value.sortInPlace({ $0.timestamp < $1.timestamp })
             
             var count: Int64 = 0
             var upperLimit: Int = 0
@@ -92,7 +92,7 @@ public class CacheJournal {
             if (upperLimit <= 0) {
                 entriesSlice = ArraySlice<(UInt64,Int)>()
             } else {
-                entriesSlice = self.entries.value[0..<upperLimit].map { ($0.size, $0.timestamp) }
+                entriesSlice = ArraySlice<(UInt64,Int)>(self.entries.value[0..<upperLimit].map { ($0.size as UInt64, $0.timestamp as Int) })
             }
         })
         return entriesSlice
@@ -105,12 +105,12 @@ public class CacheJournal {
         
         var entriesSlice: ArraySlice<String>!
         dispatch_sync(self.entriesQueue, { () -> Void in
-            self.entries.value.sort({ $0.timestamp < $1.timestamp })
+            self.entries.value.sortInPlace({ $0.timestamp < $1.timestamp })
 
             if (count <= self.entries.value.count) {
-                entriesSlice = self.entries.value[0..<count].map { $0.key }
+                entriesSlice = ArraySlice<String>(self.entries.value[0..<count].map { $0.key })
             } else {
-                println("Failed to get all LRU entries from cache journal, expected \(count), found \(self.entries.value.count)")
+                print("Failed to get all LRU entries from cache journal, expected \(count), found \(self.entries.value.count)")
                 entriesSlice = ArraySlice<String>()
             }
         })
@@ -146,22 +146,28 @@ public class CacheJournal {
         }
         
         var error: NSError?
-        let fileContent = String(contentsOfFile: self.path, encoding: NSUTF8StringEncoding, error: &error)
+        let fileContent: String?
+        do {
+            fileContent = try String(contentsOfFile: self.path, encoding: NSUTF8StringEncoding)
+        } catch let error1 as NSError {
+            error = error1
+            fileContent = nil
+        }
         
         if let actualError = error {
-            println("\(actualError.localizedDescription)")
+            print("\(actualError.localizedDescription)")
             return
         }
         
         let actualFileContent = fileContent!
-        let lines = split(actualFileContent) {$0 == self.EOL}
+        let lines = actualFileContent.characters.split {$0 == self.EOL}.map { String($0) }
         for line in lines {
-            let fields = split(line) {$0 == self.SEP}
+            let fields = line.characters.split {$0 == self.SEP}.map { String($0) }
             if fields.count == 3 {
                 let key: String = fields[0]
-                let size: UInt64 = UInt64((fields[1] as String).toInt()!)
-                let timestamp: Int = (fields[2] as String).toInt()!
-                var entry = JournalEntry(key: key, size: size, timestamp: timestamp)
+                let size: UInt64 = UInt64(Int((fields[1] as String))!)
+                let timestamp: Int = Int((fields[2] as String))!
+                let entry = JournalEntry(key: key, size: size, timestamp: timestamp)
                 entries.value.append(entry)
             }
         }
@@ -169,13 +175,13 @@ public class CacheJournal {
     
     private func persistJournal() -> Void {
         dispatch_async(self.fileManagerQueue, { () -> Void in
-            let newContent = "".join(self.entries.value.map { $0.toString(self.SEP, eol: self.EOL) })
+            let newContent = self.entries.value.map { $0.toString(self.SEP, eol: self.EOL) }.joinWithSeparator("")
             if let outputStream = NSOutputStream(toFileAtPath: self.path, append: false) {
                 outputStream.open()
-                outputStream.write(newContent, maxLength: count(newContent))
+                outputStream.write(newContent, maxLength: newContent.characters.count)
                 outputStream.close()
             } else {
-                println("Failed to persist cache journal to file \(self.path)")
+                print("Failed to persist cache journal to file \(self.path)")
             }
         })
     }

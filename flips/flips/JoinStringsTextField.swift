@@ -17,7 +17,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     private let NUM_WORDS_LIMIT = 60
     
     private var joinedTextRanges : [NSRange] = [NSRange]()
-    private let wordCharRegex = NSRegularExpression(pattern: WORD_CHARACTER_PATTERN, options: nil, error: nil)!
+    private let wordCharRegex = try! NSRegularExpression(pattern: WORD_CHARACTER_PATTERN, options: [])
     private var rangeThatWillChange: (range: NSRange, text: String)? = nil
     private let WHITESPACE: String = " "
     private let WHITESPACE_CHAR: Character = " "
@@ -28,11 +28,11 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     weak var joinStringsTextFieldDelegate: JoinStringsTextFieldDelegate?
     
     var numberOfLines: Int {
-        return Int(self.contentSize.height/self.font.lineHeight)
+        return Int(self.contentSize.height / self.font!.lineHeight)
     }
     
     convenience init() {
-        self.init(frame: CGRect.zeroRect, textContainer: nil)
+        self.init(frame: CGRect.zero, textContainer: nil)
         self.returnKeyType = .Next
         self.delegate = self
         self.backgroundColor = UIColor.clearColor()
@@ -43,7 +43,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         self.returnKeyType = .Next
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
 		super.init(coder: coder)
         self.returnKeyType = .Next
 		self.delegate = self
@@ -52,7 +52,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     func setupMenu() {
         let menuController = UIMenuController.sharedMenuController()
         let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
-        menuController.menuItems = NSArray(array: [lookupMenu]) as [AnyObject]
+        menuController.menuItems = NSArray(array: [lookupMenu]) as? [UIMenuItem]
         menuController.update()
         menuController.setMenuVisible(true, animated: true)
     }
@@ -72,7 +72,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         var nsstring = self.text as NSString
         let fullRange = NSMakeRange(0, nsstring.length)
-        nsstring.enumerateSubstringsInRange(fullRange, options: .ByComposedCharacterSequences) { (char: String!, range: NSRange, enclosingRange: NSRange, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+        nsstring.enumerateSubstringsInRange(fullRange, options: .ByComposedCharacterSequences) { (char: String?, range: NSRange, enclosingRange: NSRange, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
             if (range.location == initialRange!.location) {
                 tempInit = countSubstrings!
             }
@@ -81,7 +81,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 tempEnd = countSubstrings! + 1
             }
                         
-            string.append((char, range))
+            string.append((char!, range))
             ++countSubstrings!
         }
         
@@ -146,22 +146,22 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     private func updateColorOnJoinedTexts() {
-        var selectedTextRange = self.selectedTextRange
-        var attributedString = NSMutableAttributedString(string: self.text)
+        let selectedTextRange = self.selectedTextRange
+        let attributedString = NSMutableAttributedString(string: self.text)
         let textLength = (self.text as NSString).length
         if (textLength <= 0) {
             return
         }
         
         let fullRange = NSMakeRange(0, textLength)
-        attributedString.addAttribute(NSFontAttributeName, value: self.font, range: fullRange)
+        attributedString.addAttribute(NSFontAttributeName, value: self.font!, range: fullRange)
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: fullRange)
         
         for joinedTextRange in joinedTextRanges {
             if (NSIntersectionRange(fullRange, joinedTextRange).length == joinedTextRange.length) {
                 attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
             } else {
-                println("Invalid joined text range \(joinedTextRange) on text field with length \(textLength)")
+                print("Invalid joined text range \(joinedTextRange) on text field with length \(textLength)")
             }
         }
 
@@ -171,7 +171,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     private func getTextWords(text: String, limit: Int = -1) -> (words: [String], truncatedText: String) {
         var words = [String]()
-        var textArray = Array(text)
+        var textArray = Array(text.characters)
         var word: String = ""
         var index: Int = 0
         var limitIndex: Int = -1
@@ -183,7 +183,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             
             let partOfRange = isPartOfJoinedTextRanges(index)
             if (partOfRange.isPart) {
-                if (count(word) > 0) {
+                if (word.characters.count > 0) {
                     words.append(word)
                     word = ""
                 }
@@ -191,7 +191,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 index = partOfRange.range!.location+partOfRange.range!.length
             } else {
                 let i = index++
-                if (count(word) > 0 && (textArray[i] == WHITESPACE_CHAR || (isSpecialCharacter(Array(word)[0]) != isSpecialCharacter(textArray[i])))) {
+                if (word.characters.count > 0 && (textArray[i] == WHITESPACE_CHAR || (isSpecialCharacter(Array(word.characters)[0]) != isSpecialCharacter(textArray[i])))) {
                     words.append(word)
                     word = ""
                 }
@@ -208,7 +208,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         
         var truncatedText = text
         if (limitIndex >= 0) {
-            truncatedText = text.substringToIndex(advance(text.startIndex, limitIndex))
+            truncatedText = text.substringToIndex(text.startIndex.advancedBy(limitIndex))
         }
 
         return (words, truncatedText)
@@ -234,12 +234,12 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     private func isSpecialCharacter(char: String) -> Bool {
-        return wordCharRegex.numberOfMatchesInString(char, options: nil, range: NSMakeRange(0, (char as NSString).length)) == 0
+        return wordCharRegex.numberOfMatchesInString(char, options: [], range: NSMakeRange(0, (char as NSString).length)) == 0
     }
     
     private func isSpecialCharacter(char: Character) -> Bool {
         let str = String(char)
-        return wordCharRegex.numberOfMatchesInString(str, options: nil, range: NSMakeRange(0, (str as NSString).length)) == 0
+        return wordCharRegex.numberOfMatchesInString(str, options: [], range: NSMakeRange(0, (str as NSString).length)) == 0
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
@@ -267,23 +267,23 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func selectedTextCanBeJoined() -> Bool {
-        var selectedTextRange: UITextRange = self.selectedTextRange!
+        let selectedTextRange: UITextRange = self.selectedTextRange!
         
-        var posInit: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
-        var posEnd: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
-        var selectionTextRange = NSMakeRange(posInit, posEnd-posInit)
+        let posInit: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.start)
+        let posEnd: Int = self.offsetFromPosition(self.beginningOfDocument, toPosition: selectedTextRange.end)
+        let selectionTextRange = NSMakeRange(posInit, posEnd-posInit)
         
         let textNSString = self.text as NSString
-        var stringFromSelection = textNSString.substringWithRange(selectionTextRange)
+        let stringFromSelection = textNSString.substringWithRange(selectionTextRange)
         
-        var arrayOfWords = FlipStringsUtil.splitFlipString(stringFromSelection)
+        let arrayOfWords = FlipStringsUtil.splitFlipString(stringFromSelection)
         return arrayOfWords.count > 1
     }
     
     func handleMultipleLines(height: CGFloat) {
         if (numberOfLines > 1) {
             let y = self.contentSize.height-height
-            let cursorRect = self.caretRectForPosition(self.selectedTextRange?.start)
+            let cursorRect = self.caretRectForPosition(self.selectedTextRange!.start)
             if (cursorRect.origin.y < y) {
                 let cursorLineRect = CGRectMake(0, cursorRect.origin.y, self.contentSize.width, cursorRect.size.height)
                 self.scrollRectToVisible(cursorLineRect, animated: false)
@@ -360,7 +360,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
                 firstWord = false
             }
             if (isCompoundText(word)) {
-                var compoundTextRange = NSMakeRange((text as NSString).length, (word as NSString).length)
+                let compoundTextRange = NSMakeRange((text as NSString).length, (word as NSString).length)
                 joinedTextRanges.append(compoundTextRange)
             }
             text += word

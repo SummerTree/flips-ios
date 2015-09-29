@@ -38,8 +38,8 @@ public class RoomService: FlipsService {
                 RequestParams.USERS : userIds,
                 RequestParams.PHONE_NUMBERS : contactNumbers]
             
-            println("params: \(createRoomParams)")
-            println("params descriptions: \(createRoomParams.description)")
+            print("params: \(createRoomParams)")
+            print("params descriptions: \(createRoomParams.description)")
             
             self.post(createRoomUrl,
                 parameters: createRoomParams,
@@ -93,7 +93,7 @@ public class RoomService: FlipsService {
         
         if let jsonArray = json.array {
             for roomJson in jsonArray {
-                var room = PersistentManager.sharedInstance.createRoomWithJson(roomJson)
+                let room = PersistentManager.sharedInstance.createRoomWithJson(roomJson)
                 rooms.append(room)
             }
         }

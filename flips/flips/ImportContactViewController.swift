@@ -22,7 +22,7 @@ class ImportContactViewController: UIViewController {
         self.importContactView = ImportContactView()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -40,7 +40,7 @@ class ImportContactViewController: UIViewController {
         super.setupWhiteNavBarWithoutButtons("Contacts")
         self.navigationController?.navigationBar.alpha = 1.0
         self.navigationController?.navigationBar.translucent = false
-        var textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
+        let textAttributes = [NSForegroundColorAttributeName: UIColor.deepSea()]
         self.navigationController?.navigationBar.titleTextAttributes = textAttributes
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.hidesBackButton = true
@@ -54,15 +54,15 @@ class ImportContactViewController: UIViewController {
         
         if (User.loggedUser()?.facebookID != nil) {
             UserService.sharedInstance.importFacebookFriends({ (success) -> Void in
-                println("Success importing facebook friends")
+                print("Success importing facebook friends")
             }, failure: { (error) -> Void in
-                println("Error importing facebook friends: \(error?.error) details: \(error?.details)")
+                print("Error importing facebook friends: \(error?.error) details: \(error?.details)")
             })
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             UserService.sharedInstance.uploadContacts({ (success) -> Void in
-                println("Success importing local contacts")
+                print("Success importing local contacts")
                 let importContactsTableViewController = ImportContactsTableViewController()
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
@@ -70,7 +70,7 @@ class ImportContactViewController: UIViewController {
                 })
                 
             }, failure: { (error) -> Void in
-                println("Error importing local contacts")
+                print("Error importing local contacts")
                 ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     let alertView = UIAlertView(title: error!.error,

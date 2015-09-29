@@ -20,14 +20,14 @@ class ReadFlipMessageDataSource: BaseDataSource {
     private let FLIP_MESSAGE_ID: String = "flipMessageID"
 
     func createReadFlipMessageWithID(flipMessageID: String) -> ReadFlipMessage {
-        var entity = ReadFlipMessage.createInContext(currentContext) as! ReadFlipMessage
+        let entity = ReadFlipMessage.createInContext(currentContext) as! ReadFlipMessage
         entity.flipMessageID = flipMessageID
 
         return entity
     }
     
     func createReadFlipMessageWithJSON(json: JSON) -> ReadFlipMessage {
-        var entity = ReadFlipMessage.createInContext(currentContext) as! ReadFlipMessage
+        let entity = ReadFlipMessage.createInContext(currentContext) as! ReadFlipMessage
         
         let flipMessageID: String = json[ReadFlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         entity.flipMessageID = flipMessageID

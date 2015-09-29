@@ -9,7 +9,7 @@
 // in whole or in part, is expressly prohibited except as authorized by
 // the license agreement.
 
-class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageComposerExternalDelegate {
+class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageComposerExternalDelegate, UIAlertViewDelegate {
     
     private let SEND_MESSAGE_ERROR_TITLE = NSLocalizedString("Fail", comment: "Fail")
     private let SEND_MESSAGE_ERROR_MESSAGE = NSLocalizedString("Flips couldn't send your message. Please try again.\n", comment: "Flips couldn't send your message. Please try again.")
@@ -91,7 +91,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         self.contactIDs = contactIDs
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -160,11 +160,11 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         
         for flipWord in self.flipWords {
             if (flipWord.associatedFlipId != nil) {
-                var flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
+                let flip = flipDataSource.retrieveFlipWithId(flipWord.associatedFlipId!)
                 flips.append(flip)
                 
             } else {
-                var emptyFlip = flipDataSource.createEmptyFlipWithWord(flipWord.text)
+                let emptyFlip = flipDataSource.createEmptyFlipWithWord(flipWord.text)
                 flips.append(emptyFlip)
             }
             formattedWords.append(flipWord.text)
@@ -183,7 +183,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         for flipPage in self.draftingTable!.flipBook.flipPages {
             
             if let flipID = flipPage.pageID {
-                var flip = flipDataSource.retrieveFlipWithId(flipID)
+                let flip = flipDataSource.retrieveFlipWithId(flipID)
                 flips.append(flip)
             }
             else if let videoURL = flipPage.videoURL {
@@ -218,7 +218,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
     
     private func submitMMSMessage() {
         
-        var movieExport = MovieExport.sharedInstance
+        let movieExport = MovieExport.sharedInstance
                     
         movieExport.exportFlipForMMS(self.previewView.retrievePlayerItems(), words: self.flipWordStrings,
             completion: { (url: NSURL?, error: FlipError?) -> Void in
@@ -258,24 +258,49 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
     
     private func showMMSUnsupportedErrorAlert() {
         
-        let alertController = UIAlertController(title: "Error Sending MMS", message: "This device does not support SMS.", preferredStyle: UIAlertControllerStyle.Alert)
+        let errorTitle = "Error Sending MMS"
+        let errorMessage = "This device does not support SMS."
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            self.submitMessageRequest()
-        }))
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                self.submitMessageRequest()
+            }))
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: errorTitle, message: errorMessage, delegate: self, cancelButtonTitle: "Dismiss").show()
+        }
         
-        presentViewController(alertController, animated: true, completion: nil)
     }
     
     private func showExternalComposerErrorAlert() {
         
-        let alertController = UIAlertController(title: "Error Sending MMS", message: "Flips was unable to send your message at this time.", preferredStyle: UIAlertControllerStyle.Alert)
+        let errorTitle = "Error Sending MMS"
+        let errorMessage = "Flips was unable to send your message at this time."
         
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+        if #available(iOS 8.0, *)
+        {
+            let alertController = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+                self.submitMessageRequest()
+            }))
+            presentViewController(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            UIAlertView(title: errorTitle, message: errorMessage, delegate: self, cancelButtonTitle: "Dismiss").show()
+        }
+        
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        if alertView.buttonTitleAtIndex(buttonIndex)! == "Dismiss" {
             self.submitMessageRequest()
-        }))
-        
-        presentViewController(alertController, animated: true, completion: nil)
+        }
         
     }
     
@@ -329,8 +354,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         container.mas_makeConstraints { (make) -> Void in
-            var topLayoutGuide: AnyObject = self.topLayoutGuide
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
         }
     }
     

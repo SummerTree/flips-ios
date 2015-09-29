@@ -34,7 +34,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
                 
                 self.verificationCodeView.resetVerificationCodeField()
                 
-                var newPasswordViewController = NewPasswordViewController(username: username, phoneNumber: self.phoneNumber, countryCode: self.countryCode, verificationCode: verificationCode)
+                let newPasswordViewController = NewPasswordViewController(username: username, phoneNumber: self.phoneNumber, countryCode: self.countryCode, verificationCode: verificationCode)
                 self.navigationController?.pushViewController(newPasswordViewController, animated: true)
             },
         failure: { (flipError) in
@@ -43,7 +43,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
             if (flipError!.error == self.FORGOT_CODE_DID_NOT_MATCH || flipError!.error == self.RESENT_SMS_MESSAGE) {
                 self.verificationCodeView.didEnterWrongVerificationCode()
             } else {
-                var alertView: UIAlertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                let alertView: UIAlertView = UIAlertView(title: flipError!.error, message: flipError!.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
                 
                 self.verificationCodeView.resetVerificationCodeField()
@@ -55,7 +55,7 @@ class ForgotPasswordVerificationCodeViewController: VerificationCodeViewControll
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

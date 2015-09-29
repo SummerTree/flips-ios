@@ -1,3 +1,18 @@
+/// Swift Migrator:
+///
+/// This file contains one or more places using either an index
+/// or a range with ArraySlice. While in Swift 1.2 ArraySlice
+/// indices were 0-based, in Swift 2.0 they changed to match the
+/// the indices of the original array.
+///
+/// The Migrator wrapped the places it found in a call to the
+/// following function, please review all call sites and fix
+/// incides if necessary.
+@available(*, deprecated=2.0, message="Swift 2.0 migration: Review possible 0-based index")
+private func __reviewIndex__<T>(value: T) -> T {
+    return value
+}
+
 //
 // Copyright 2015 ArcTouch, Inc.
 // All rights reserved.
@@ -57,14 +72,14 @@ public class CacheCleanupPolicy {
                 var minTimestamp: Int = Int.max
                 var minIndex = 0
                 for i in 0..<sizesAndTimestampsArray.count {
-                    if (sizesAndTimestampsArray[i].count > 0 && sizesAndTimestampsArray[i][0].1 < minTimestamp) {
-                        minTimestamp = sizesAndTimestampsArray[i][0].1
+                    if (sizesAndTimestampsArray[i].count > 0 && sizesAndTimestampsArray[i][__reviewIndex__(0)].1 < minTimestamp) {
+                        minTimestamp = sizesAndTimestampsArray[i][__reviewIndex__(0)].1
                         minIndex = i
                     }
                 }
                 ++entryCountToRemove[minIndex]
-                sizeToRemove -= Int64(sizesAndTimestampsArray[minIndex][0].0)
-                sizesAndTimestampsArray[minIndex].removeAtIndex(0)
+                sizeToRemove -= Int64(sizesAndTimestampsArray[minIndex][__reviewIndex__(0)].0)
+                sizesAndTimestampsArray[minIndex].removeAtIndex(__reviewIndex__(0))
                 --entryCount
             }
             
@@ -90,13 +105,16 @@ public class CacheCleanupPolicy {
         var freeSpace: Int64 = 0
         var error: NSError?
         var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        if let attributes = NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last as! String, error: &error) {
+        do {
+            let attributes = try NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last!)
             if let freeFileSystemSizeInBytes = attributes[NSFileSystemFreeSize] as? NSNumber {
                 return freeFileSystemSizeInBytes.longLongValue
             }
+        } catch var error1 as NSError {
+            error = error1
         }
         
-        println("Error getting file system memory info. Domain: \(error?.domain), code: \(error?.code)")
+        print("Error getting file system memory info. Domain: \(error?.domain), code: \(error?.code)")
         return Int64.max
     }
     

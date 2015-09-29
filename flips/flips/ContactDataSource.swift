@@ -24,7 +24,7 @@ struct ContactAttributes {
     // MARK: - CoreData Creator Methods
     
     private func createEntityWith(firstName: String, lastName: String?, phoneNumber: String, phoneType: String) -> Contact {
-        var entity: Contact! = Contact.createInContext(currentContext) as! Contact
+        let entity: Contact! = Contact.createInContext(currentContext) as! Contact
 
         entity.createdAt = NSDate()
         self.fillContact(entity, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, phoneType: phoneType)
@@ -94,8 +94,8 @@ struct ContactAttributes {
             
             let formatedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber)
             let predicate = NSPredicate(format: "(\(ContactAttributes.PHONE_NUMBER) != %@) and ((\(ContactAttributes.CONTACT_USER) == nil) or (\(ContactAttributes.CONTACT_USER).isTemporary == true))", formatedPhoneNumber)
-            var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: predicate, inContext: currentContext) as NSArray
-            var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
+            let contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: predicate, inContext: currentContext) as NSArray
+            let sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
             var contactIds = Array<String>()
             
             for contact in sortedContacts {
@@ -114,8 +114,8 @@ struct ContactAttributes {
             NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
         ]
 
-        var contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false) and (\(ContactAttributes.CONTACT_USER).isTemporary != true)"), inContext: currentContext) as NSArray
-        var sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
+        let contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false) and (\(ContactAttributes.CONTACT_USER).isTemporary != true)"), inContext: currentContext) as NSArray
+        let sortedContacts = contacts.sortedArrayUsingDescriptors(sortedBy)
         var contactIds = [String]()
         
         for contact in sortedContacts {
@@ -126,17 +126,17 @@ struct ContactAttributes {
     }
     
     func retrieveContactWithId(id: String) -> Contact {
-        var contact = self.getContactById(id)
+        let contact = self.getContactById(id)
         
         if (contact == nil) {
-            println("Contact (\(id)) not found in the database, and it mustn't happen. Check why he wasn't imported to database yet.")
+            print("Contact (\(id)) not found in the database, and it mustn't happen. Check why he wasn't imported to database yet.")
         }
         
         return contact!
     }
 
     func retrieveContactsWithPhoneNumber(phoneNumber: String) -> [Contact] {
-        if (count(phoneNumber) == 0) {
+        if (phoneNumber.characters.count == 0) {
             return [Contact]()
         }
         
@@ -145,7 +145,7 @@ struct ContactAttributes {
         
         var contactsWithSamePhoneNumber = Array<Contact>()
         for contact in contacts {
-            var contactPhoneNumber = contact.phoneNumber as String!
+            let contactPhoneNumber = contact.phoneNumber as String!
             if (PhoneNumberHelper.formatUsingUSInternational(contactPhoneNumber) == cleannedPhoneNumber) {
                contactsWithSamePhoneNumber.append(contact)
             }
@@ -200,9 +200,9 @@ struct ContactAttributes {
         
         var currentID: Int = 0
         for contact in contacts {
-            var contactID: String = contact.contactID
-            if (contactID.toInt() > currentID) {
-                currentID = contactID.toInt()!
+            let contactID: String = contact.contactID
+            if (Int(contactID) > currentID) {
+                currentID = Int(contactID)!
             }
         }
         return ++currentID
@@ -241,7 +241,7 @@ struct ContactAttributes {
             predicates.append(phonetypePredicate)
         }
         
-        let compound = NSCompoundPredicate.andPredicateWithSubpredicates(predicates)
+        let compound = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         return Contact.findFirstWithPredicate(compound, inContext: currentContext) as? Contact
     }
 }

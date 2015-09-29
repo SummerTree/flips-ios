@@ -18,7 +18,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
     // MARK: - Init
     ////
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -198,7 +198,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
             let view = views[i]
             
             UIGraphicsBeginImageContextWithOptions(self.bounds.size, view.opaque, 0.0)
-            view.layer.renderInContext(UIGraphicsGetCurrentContext())
+            view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
             let viewImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             

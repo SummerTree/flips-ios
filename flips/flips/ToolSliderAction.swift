@@ -31,12 +31,12 @@ class ToolSliderAction: UIView {
         self.makeConstraints()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     func addSubviews() {
-        self.actionButton = UIButton.buttonWithType(.System) as? UIButton
+        self.actionButton = UIButton(type: .System) as? UIButton
         self.actionButton!.setTitle("testing", forState: .Normal)
         self.actionButton!.imageView!.image = self.actionImage!
         self.actionButton!.addTarget(self, action: Selector("didTapToolSliderActionButton"), forControlEvents: .TouchUpInside)

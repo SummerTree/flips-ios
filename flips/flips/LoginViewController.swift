@@ -58,12 +58,12 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     // MARK: - LoginViewDelegate Methods
     
     func loginViewDidTapTermsOfUse(loginView: LoginView!) {
-        var termsOfUseViewController = TermsOfUseViewController()
+        let termsOfUseViewController = TermsOfUseViewController()
         self.navigationController?.pushViewController(termsOfUseViewController, animated: true)
     }
     
     func loginViewDidTapPrivacyPolicy(loginView: LoginView!) {
-        var privacyPolicyViewController = PrivacyPolicyViewController()
+        let privacyPolicyViewController = PrivacyPolicyViewController()
         self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
@@ -75,7 +75,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 return
             }
             
-            var authenticatedUser: User = user as! User
+            let authenticatedUser: User = user as! User
             AuthenticationHelper.sharedInstance.onLogin(authenticatedUser)
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                 PersistentManager.sharedInstance.syncUserData({ (success, FlipError) -> Void in
@@ -90,7 +90,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         }) { (flipError) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.hideActivityIndicator()
-                self.loginView.showValidationErrorInCredentialFields(error: flipError)
+                self.loginView.showValidationErrorInCredentialFields(flipError)
             })
         }
         
@@ -105,7 +105,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
     
     func loginViewDidTapForgotPassword(loginView: LoginView!, username: String) {
         loginView.dismissKeyboard()
-        var forgotPasswordViewController = ForgotPasswordViewController(username: username)
+        let forgotPasswordViewController = ForgotPasswordViewController(username: username)
         self.navigationController?.pushViewController(forgotPasswordViewController, animated: true)
     }
     
@@ -114,7 +114,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
         FBSession.activeSession().closeAndClearTokenInformation()
         
         // You must ALWAYS ask for public_profile permissions when opening a session
-        var scope = ["public_profile", "email", /*"user_birthday",*/ "user_friends"]
+        let scope = ["public_profile", "email", /*"user_birthday",*/ "user_friends"]
         FBSession.openActiveSessionWithReadPermissions(scope, allowLoginUI: true,
             completionHandler: { (session, state, error) -> Void in
                 if (error == nil && (state == FBSessionState.Closed || state == FBSessionState.ClosedLoginFailed)) {
@@ -123,9 +123,9 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 
                 if (error != nil) {
                     if state == FBSessionState.ClosedLoginFailed {
-                        println("Error opening facebook session: \(error)")
+                        print("Error opening facebook session: \(error)")
                     } else {
-                        println("Error opening facebook session, state: \(state), error: \(error)")
+                        print("Error opening facebook session, state: \(state), error: \(error)")
                     }
                     return
                 }
@@ -134,8 +134,8 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                 self.authenticateWithFacebook() { (flipError) -> Void in
                     let errorHandler: (FlipError?) -> Void = { (flipError) -> Void in
                         self.hideActivityIndicator()
-                        println("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
-                        var alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                        print("Error on authenticating with Facebook [error=\(flipError!.error), details=\(flipError!.details)]")
+                        let alertView = UIAlertView(title: LOGIN_ERROR, message: flipError!.error, delegate: self, cancelButtonTitle: LocalizedString.OK)
                         alertView.show()
                     }
                     
@@ -145,7 +145,7 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                         //no error message, assuming User Not Found
                         UserService.sharedInstance.getFacebookUserInfo({ (userObject) -> Void in
                             self.hideActivityIndicator()
-                            println("User not found, going to Sign Up View")
+                            print("User not found, going to Sign Up View")
                             let signUpController = SignUpViewController(facebookInput: userObject)
                             self.navigationController?.pushViewController(signUpController, animated: true)
                         }, failure: { (flipError) -> Void in
@@ -173,14 +173,14 @@ class LoginViewController: FlipsViewController, LoginViewDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         if let authenticatedUser = User.loggedUser() {
                             if (authenticatedUser.device == nil) {
-                                var phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
+                                let phoneNumberViewController = PhoneNumberViewController(userId: authenticatedUser.userID)
                                 self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
                             } else {
                                 self.navigationController?.pushViewController(InboxViewController(), animated: true)
                             }
                         } else {
                             self.hideActivityIndicator()
-                            var alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
+                            let alertView = UIAlertView(title: NO_USER_IN_SESSION_ERROR, message: NO_USER_IN_SESSION_MESSAGE, delegate: self, cancelButtonTitle: LocalizedString.OK)
                             alertView.show()
                         }
                     })

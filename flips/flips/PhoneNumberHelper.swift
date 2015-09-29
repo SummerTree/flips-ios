@@ -16,7 +16,7 @@ private let RIGHT_PARENTHESIS = ")"
 private let DOT_SEPARATOR = " "
 private let PERIOD = "."
 
-@objc class PhoneNumberHelper {
+class PhoneNumberHelper : NSObject {
     
     class func cleanFormattedPhoneNumber(phoneNumber: String) -> String {
         let clean = phoneNumber.stringByRemovingStringsIn([HYPHEN, LEFT_PARENTHESIS, RIGHT_PARENTHESIS, DOT_SEPARATOR, PERIOD])
@@ -25,7 +25,7 @@ private let PERIOD = "."
     
     class func formatUsingUSInternational(phoneNumber: String) -> String {
         let phone = cleanFormattedPhoneNumber(phoneNumber)
-        let phoneNumberLength = count(phone)
+        let phoneNumberLength = phone.characters.count
         
         if (phoneNumberLength >= 2) {
             let countryCode = phone[0...1]
@@ -49,7 +49,7 @@ private let PERIOD = "."
     
     class func formatUsingUSInternationalStrict(phoneNumber: String) -> String? {
         let phone = cleanFormattedPhoneNumber(phoneNumber)
-        let phoneNumberLength = count(phone)
+        let phoneNumberLength = phone.characters.count
         
         if (phoneNumberLength == 10) {
             return "+1\(phone)"

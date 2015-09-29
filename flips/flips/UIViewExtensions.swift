@@ -28,7 +28,7 @@ extension UIView {
     }
     
     func shadowMe() {
-        var layer = self.layer
+        let layer = self.layer
         layer.masksToBounds = false
         layer.shadowOffset = CGSizeMake(0,3)
         layer.shadowColor = UIColor.darkGrayColor().CGColor

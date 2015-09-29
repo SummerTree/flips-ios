@@ -23,12 +23,12 @@ private let LOGGED_USER_ATTRIBUTE = "me"
 extension User {
     
     class func loggedUser() -> User? {
-        var loggedAttributeUser: User? = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as? User
+        let loggedAttributeUser: User? = User.MR_findFirstByAttribute(LOGGED_USER_ATTRIBUTE, withValue: true) as? User
         return loggedAttributeUser
     }
 
     class func isUserLoggedIn() -> Bool {
-        var loggedUser = User.loggedUser() as User?
+        let loggedUser = User.loggedUser() as User?
         return (loggedUser != nil)
     }
     

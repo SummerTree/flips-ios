@@ -44,7 +44,7 @@ public class BuilderService: FlipsService {
         
         if let jsonArray = json.array {
             for suggestedWordJson in jsonArray {
-                var suggestedWord = suggestedWordJson["word"].stringValue
+                let suggestedWord = suggestedWordJson["word"].stringValue
                 suggestedWords.append(suggestedWord)
             }
         }

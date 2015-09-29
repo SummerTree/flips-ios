@@ -73,7 +73,7 @@ public class UserService: FlipsService {
                 formData.appendPartWithFileData(UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION), name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
             },
             success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                var user = self.parseUserResponse(responseObject)
+                let user = self.parseUserResponse(responseObject)
                 success(user)
                 
                 var source = ""
@@ -217,7 +217,7 @@ public class UserService: FlipsService {
                 parameters: params,
                 constructingBodyWithBlock: { (formData: AFMultipartFormData!) -> Void in
                     if (avatar != nil) {
-                        let imageData = UIImageJPEGRepresentation(avatar, self.IMAGE_COMPRESSION)
+                        let imageData = UIImageJPEGRepresentation(avatar!, self.IMAGE_COMPRESSION)
                         formData.appendPartWithFileData(imageData, name: RequestParams.PHOTO, fileName: "avatar.jpg", mimeType: "image/jpeg")
                     }
                 },
@@ -373,7 +373,7 @@ public class UserService: FlipsService {
         
         if let loggedUser = User.loggedUser() {
             let permissions: [String] = FBSession.activeSession().permissions as! [String]
-            if (!contains(permissions, "user_friends")) {
+            if (!permissions.contains("user_friends")) {
                 failure(FlipError(error: "user_friends permission not allowed.", details:nil))
                 return
             }
@@ -408,11 +408,11 @@ public class UserService: FlipsService {
                         var response:JSON = JSON(responseObject)
                         
                         for (index, user) in response {
-                            SwiftTryCatch.try({ () -> Void in
-                                println("Trying to import: \(user)")
+                            SwiftTryCatch.`try`({ () -> Void in
+                                print("Trying to import: \(user)")
                                 var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                                }, catch: { (error) -> Void in
-                                    println("Error: [\(error))")
+                                }, `catch`: { (error) -> Void in
+                                    print("Error: [\(error))")
                                 }, finally: nil)
                         }
                         
@@ -464,7 +464,7 @@ public class UserService: FlipsService {
 
         if let loggedUser = User.loggedUser() {
             ContactListHelper.sharedInstance.findAllContactsWithPhoneNumber({ (contacts: Array<ContactListHelperContact>?) -> Void in
-                if (count(contacts!) == 0) {
+                if ((contacts!).count == 0) {
                     success(nil)
                     return
                 }
@@ -483,11 +483,11 @@ public class UserService: FlipsService {
                 self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
                     var response:JSON = JSON(responseObject)
                     for (index, user) in response {
-                        SwiftTryCatch.try({ () -> Void in
-                            println("Trying to import: \(user)")
+                        SwiftTryCatch.`try`({ () -> Void in
+                            print("Trying to import: \(user)")
                             PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                        }, catch: { (error) -> Void in
-                            println("Error: [\(error))")
+                        }, `catch`: { (error) -> Void in
+                            print("Error: [\(error))")
                         }, finally: nil)
                     }
 
@@ -571,7 +571,7 @@ public class UserService: FlipsService {
             path = path.stringByReplacingOccurrencesOfString("{{device_id}}", withString: DeviceHelper.sharedInstance.retrieveDeviceId()!, options: NSStringCompareOptions.LiteralSearch, range: nil)
             let url = self.HOST + path
             
-            var params: Dictionary<String, AnyObject> = [
+            let params: Dictionary<String, AnyObject> = [
                 RequestParams.PHONE_NUMBER : phoneNumber
             ]
             

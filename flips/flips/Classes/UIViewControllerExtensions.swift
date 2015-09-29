@@ -18,21 +18,21 @@ extension UIViewController {
     func setupWhiteNavBarWithCloseButton(title: String) {
         setupWhiteNavBarWithoutButtons(title)
         
-        var closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: "closeButtonTapped")
+        let closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: "closeButtonTapped")
         self.navigationItem.leftBarButtonItem = closeBarButton
     }
     
     func setupWhiteNavBarWithBackButton(title: String) {
         setupWhiteNavBarWithoutButtons(title)
         
-        var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
+        let backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
         self.navigationItem.leftBarButtonItem = backBarButton
     }
     
     func setupWhiteNavBarWithoutBackButtonWithRightDoneButton(title: String) {
         setupWhiteNavBarWithoutButtons(title)
         
-        var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonTapped")
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonTapped")
         doneButton.tintColor = UIColor.flipOrange()
         self.navigationItem.rightBarButtonItem = doneButton
     }
@@ -40,14 +40,14 @@ extension UIViewController {
 	func setupWhiteNavBarWithCancelButton(title: String) {
 		setupWhiteNavBarWithoutButtons(title)
 		
-		var backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "closeButtonTapped")
+		let backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "closeButtonTapped")
 		self.navigationItem.leftBarButtonItem = backBarButton
 	}
 	
     func setupWhiteNavBarWithoutButtons(title: String) {
         self.setNavBarColor()
         
-        var titleLabel = UILabel()
+        let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
         titleLabel.textColor = UIColor.blackColor()
@@ -63,7 +63,7 @@ extension UIViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.translucent = true
         
-        var titleLabel = UILabel()
+        let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = UIFont.avenirNextDemiBold(UIFont.HeadingSize.h2)
         titleLabel.textColor = UIColor.whiteColor()
@@ -71,7 +71,7 @@ extension UIViewController {
         titleLabel.sizeToFit()
         self.navigationItem.titleView = titleLabel
         
-        var backBarButton = UIBarButtonItem(image: UIImage(named: "Back_White") , style: .Done, target: self, action: "backButtonTapped")
+        let backBarButton = UIBarButtonItem(image: UIImage(named: "Back_White") , style: .Done, target: self, action: "backButtonTapped")
         backBarButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }

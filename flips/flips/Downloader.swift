@@ -32,20 +32,26 @@ public class Downloader : NSObject {
 
     func downloadTask(url: NSURL, localURL: NSURL, completion: ((success: Bool) -> Void), progress: ((Float) -> Void)? = nil, numberOfRetries: Int? = 3) {
         
-        let tempFileName = "\(NSDate().timeIntervalSince1970)_\(localURL.path!.lastPathComponent)"
-        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(tempFileName)
-        let tempURL = NSURL(fileURLWithPath: tempPath)!
+        let tempFileName = "\(NSDate().timeIntervalSince1970)_\((localURL.path! as NSString).lastPathComponent)"
+        let tempPath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(tempFileName)
+        let tempURL = NSURL(fileURLWithPath: tempPath)
 
         self.downloadTaskRetryingNumberOfTimes(numberOfRetries!, url: url, localURL: tempURL, success: { (responseObject) -> Void in
             var error: NSError? = nil
             let fileManager = NSFileManager.defaultManager()
-            fileManager.moveItemAtURL(tempURL, toURL: localURL, error: &error)
+            do {
+                try fileManager.moveItemAtURL(tempURL, toURL: localURL)
+            } catch let error1 as NSError {
+                error = error1
+            } catch {
+                fatalError()
+            }
             if let err = error {
-                println("Error moving item to path \(localURL.path!), error \(err)")
+                print("Error moving item to path \(localURL.path!), error \(err)")
             }
             completion(success: true)
         }, failure: { (error: NSError?) -> Void in
-            println("Could not download data from URL: \(url.absoluteString!) ERROR: \(error)")
+            print("Could not download data from URL: \(url.absoluteString) ERROR: \(error)")
             completion(success: false)
         }, progress: progress, latestError: nil)
     }
@@ -63,9 +69,12 @@ public class Downloader : NSObject {
             operation.setCompletionBlockWithSuccess({ (operation, responseObject) -> Void in
                 success(responseObject)
             }, failure: { (operation, error) -> Void in
-                println("Download failed - retries remaining: \(numberOfRetries - 1)")
+                print("Download failed - retries remaining: \(numberOfRetries - 1)")
                 let fileManager = NSFileManager.defaultManager()
-                fileManager.removeItemAtURL(localURL, error: nil)
+                do {
+                    try fileManager.removeItemAtURL(localURL)
+                } catch _ {
+                }
 
                 if (numberOfRetries > 0) {
                     self.downloadTaskRetryingNumberOfTimes(numberOfRetries - 1, url: url, localURL: localURL, success: success, failure: failure, progress: progress, latestError: error)

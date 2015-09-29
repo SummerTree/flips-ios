@@ -53,14 +53,14 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
 
     // MARK: - Required initializers
     
-    required public init(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: reuseIdentifier)
         
-        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
         
         self.addSubviews()
         self.addConstraints()
@@ -71,12 +71,12 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     
     func addSubviews() {
         videoPlayerContainerView = UIView()
-        videoPlayerContainerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        videoPlayerContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(videoPlayerContainerView)
 
         videoPlayerView = PlayerView()
         videoPlayerView.delegate = self
-        videoPlayerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        videoPlayerView.translatesAutoresizingMaskIntoConstraints = false
         videoPlayerContainerView.addSubview(videoPlayerView)
         
         avatarView = RoundImageView.avatarA3()
@@ -84,13 +84,13 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         self.contentView.addSubview(avatarView)
 
         messageContainerView = UIView()
-        messageContainerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        messageContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(messageContainerView)
         
         messageDateLabel = ChatLabel()
         messageDateLabel.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         messageDateLabel.textColor = UIColor.deepSea()
-        messageDateLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        messageDateLabel.translatesAutoresizingMaskIntoConstraints = false
         messageContainerView.addSubview(messageDateLabel)
         
         messageTextLabel = ChatLabel()
@@ -100,11 +100,11 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         messageTextLabel.textAlignment = NSTextAlignment.Center
         messageTextLabel.lineBreakMode = .ByWordWrapping
         messageTextLabel.numberOfLines = 0
-        messageTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        messageTextLabel.translatesAutoresizingMaskIntoConstraints = false
         messageTextLabel.setContentCompressionResistancePriority(751, forAxis: UILayoutConstraintAxis.Vertical)
         messageContainerView.addSubview(messageTextLabel)
         
-        shareButton = UIButton.buttonWithType(.Custom) as! UIButton
+        shareButton = UIButton(type: .Custom)
         shareButton.setImage(UIImage(named: "Share"), forState: .Normal)
         shareButton.addTarget(self, action: "shareFlip", forControlEvents: .TouchUpInside)
         shareButton.hidden = true
@@ -330,7 +330,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     }
     
     func pauseMovie() {
-        self.videoPlayerView.pause(fadeOutVolume: true)
+        self.videoPlayerView.pause(true)
         
         let readFlipMessageDataSource = ReadFlipMessageDataSource()
         let hasFlipMessagedMarkedAsRead = readFlipMessageDataSource.hasFlipMessageWithID(self.flipMessageID)
@@ -396,7 +396,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         }
         else {
             
-            var movieExport = MovieExport()
+            let movieExport = MovieExport()
             movieExport.exportFlipForMMS(self.videoPlayerView.loadedPlayerItems, words: self.videoPlayerView.flipWordsStrings,
                 completion: { (url: NSURL?, error: FlipError?) -> Void in
                     
@@ -410,7 +410,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
                             self.messageComposer!.videoUrl = videoUrl
                             self.messageComposer!.containsNonFlipsUsers = false
                             
-                            var messageComposerVC = self.messageComposer!.configuredMessageComposeViewController()
+                            let messageComposerVC = self.messageComposer!.configuredMessageComposeViewController()
                             if let parentVC = self.parentViewController {
                                 parentVC.presentViewController(messageComposerVC, animated: true, completion: nil)
                             }
@@ -435,7 +435,7 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
     }
     
     private func stopSharingFlip(message: String) {
-        println(message)
+        print(message)
         self.shareButton.hidden = false
         self.shareActivityIndicator.hidden = true
         self.shareActivityIndicator.stopAnimating()

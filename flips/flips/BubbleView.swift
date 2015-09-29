@@ -42,7 +42,7 @@ class BubbleView: UIView {
         self.addSubviews()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -92,7 +92,7 @@ class BubbleView: UIView {
             update.height.equalTo()(self.bubbleImage!.size.height)
         }
 
-        var marginFromCenter: CGFloat = 5
+        let marginFromCenter: CGFloat = 5
         
         titleLabel.mas_updateConstraints { (update) -> Void in
             update.removeExisting = true

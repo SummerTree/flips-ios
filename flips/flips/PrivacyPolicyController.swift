@@ -18,7 +18,7 @@ class PrivacyPolicyViewController: FlipsChatWebViewController {
         super.init(view: PrivacyPolicyView(), title: "Privacy Policy")
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

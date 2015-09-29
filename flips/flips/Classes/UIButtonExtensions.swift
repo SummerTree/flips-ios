@@ -47,7 +47,7 @@ extension UIButton {
     }
     
     func setAvatarImage(image: UIImage, forStates states: [UIControlState]) {
-        var resizedImage = image.cropSquareImage(UIScreen.mainScreen().scale*self.frame.size.width)
+        let resizedImage = image.cropSquareImage(UIScreen.mainScreen().scale*self.frame.size.width)
         for state in states {
             self.setImage(resizedImage, forState: state)
         }
@@ -63,7 +63,7 @@ extension UIButton {
         
         let size: CGSize = CGSizeMake(480, 480)
         let attributes: Dictionary = [NSFontAttributeName : self.titleLabel!.font]
-        var textSize: CGRect = title.boundingRectWithSize(size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributes, context: NSStringDrawingContext())
+        let textSize: CGRect = title.boundingRectWithSize(size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: attributes, context: NSStringDrawingContext())
         
         self.imageEdgeInsets.top = -(image.size.height)
         self.imageEdgeInsets.left = textSize.size.width

@@ -33,14 +33,14 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     // MARK: - Initialization Methods
     
     init(showOnboarding: Bool) {
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
         
         self.showOnboarding = showOnboarding
         self.initSubviews()
         self.initConstraints()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -159,8 +159,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func reloadCells() {
-        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells() as! [ConversationTableViewCell] {
-            cell.refreshCell(shouldSetThumbnailAnimated: false)
+        for cell: ConversationTableViewCell in self.conversationsTableView.visibleCells as! [ConversationTableViewCell] {
+            cell.refreshCell(false)
         }
     }
     
@@ -168,7 +168,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     // MARK: - UITableViewDataSource
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! ConversationTableViewCell
+        let cell:ConversationTableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as! ConversationTableViewCell
         
         if let roomId = dataSource?.inboxView(self, roomAtIndex: indexPath.row) {
             cell.setRoomId(roomId)
@@ -222,7 +222,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
                     })
 
                     let roomDataSource = RoomDataSource()
-                    var room = roomDataSource.retrieveRoomWithId(roomId)
+                    let room = roomDataSource.retrieveRoomWithId(roomId)
                     
                     room.markAllMessagesAsRemoved({ (success) -> Void in
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in

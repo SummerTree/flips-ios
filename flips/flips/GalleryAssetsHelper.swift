@@ -39,7 +39,7 @@ public class GalleryAssetsHelper {
                             var assetRep: ALAssetRepresentation = result.defaultRepresentation()
                             
                             var iref = assetRep.fullScreenImage().takeUnretainedValue()
-                            lastImage = UIImage(CGImage: iref)?.cropSquareImage(self.GALLERY_BUTTON_IMAGE_SIZE)
+                            lastImage = UIImage(CGImage: iref).cropSquareImage(self.GALLERY_BUTTON_IMAGE_SIZE)
                             button.setImage(lastImage, forState: .Normal)
                         } else {
                             if lastImage == nil {
@@ -58,7 +58,7 @@ public class GalleryAssetsHelper {
                 if lastImage == nil {
                     button.setImage(self.FILTER_PHOTO_IMAGE, forState: .Normal)
                 }
-                println(error)
+                print(error)
         })
     }
 }

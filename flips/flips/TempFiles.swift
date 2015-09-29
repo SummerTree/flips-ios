@@ -10,19 +10,22 @@
 // the license agreement.
 //
 
-@objc class TempFiles {
+class TempFiles : NSObject {
     
     class func tempThumbnailFilePath() -> String {
-        return tempFilesPath().stringByAppendingPathComponent(randomFileName("jpg"))
+        return (tempFilesPath() as NSString).stringByAppendingPathComponent(randomFileName("jpg"))
     }
     
     class func tempVideoFilePath() -> String {
-        return tempFilesPath().stringByAppendingPathComponent(randomFileName("mov"))
+        return (tempFilesPath() as NSString).stringByAppendingPathComponent(randomFileName("mov"))
     }
     
     class func tempFilesPath() -> String {
-        let tempFilesPath = NSTemporaryDirectory().stringByAppendingPathComponent("flips_files")
-        NSFileManager.defaultManager().createDirectoryAtPath(tempFilesPath, withIntermediateDirectories: true, attributes: nil, error: nil)
+        let tempFilesPath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent("flips_files")
+        do {
+            try NSFileManager.defaultManager().createDirectoryAtPath(tempFilesPath, withIntermediateDirectories: true, attributes: nil)
+        } catch _ {
+        }
         return tempFilesPath
     }
     
@@ -33,7 +36,10 @@
     }
     
     class func clearTempFiles() {
-        NSFileManager.defaultManager().removeItemAtPath(tempFilesPath(), error: nil)
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(tempFilesPath())
+        } catch _ {
+        }
     }
 
 }

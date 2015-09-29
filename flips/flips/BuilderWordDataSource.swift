@@ -19,16 +19,16 @@ struct BuilderWordAttributes {
 class BuilderWordDataSource: BaseDataSource {
     
     func cleanWordsFromServer() {
-        var predicate = NSPredicate(format: "\(BuilderWordAttributes.FROM_SERVER) == true")
+        let predicate = NSPredicate(format: "\(BuilderWordAttributes.FROM_SERVER) == true")
         BuilderWord.deleteAllMatchingPredicate(predicate, inContext: currentContext)
     }
     
     func addWords(words: [String], fromServer: Bool) {
         for word in words {
-            var predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
-            var existingWord = BuilderWord.findAllWithPredicate(predicate, inContext: currentContext)
+            let predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
+            let existingWord = BuilderWord.findAllWithPredicate(predicate, inContext: currentContext)
             if (existingWord.count == 0) {
-                var builderWord = BuilderWord.createInContext(currentContext) as! BuilderWord
+                let builderWord = BuilderWord.createInContext(currentContext) as! BuilderWord
                 builderWord.word = word
                 builderWord.fromServer = fromServer
                 builderWord.addedAt = NSDate()
@@ -39,12 +39,12 @@ class BuilderWordDataSource: BaseDataSource {
     func addWord(word: String, fromServer: Bool) -> Bool {
         var result: Bool!
 
-        var predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
-        var existingWord = BuilderWord.findAllWithPredicate(predicate, inContext: currentContext)
+        let predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
+        let existingWord = BuilderWord.findAllWithPredicate(predicate, inContext: currentContext)
         if (existingWord.count > 0) {
             result = false // DO NOT DUPLICATE
         } else {
-            var builderWord = BuilderWord.createInContext(currentContext) as! BuilderWord
+            let builderWord = BuilderWord.createInContext(currentContext) as! BuilderWord
             builderWord.word = word
             builderWord.fromServer = fromServer
             builderWord.addedAt = NSDate()
@@ -59,8 +59,8 @@ class BuilderWordDataSource: BaseDataSource {
     }
     
     func removeBuilderWordWithWord(word: String) {
-        println("\nRemoving builder word: \(word)")
-        var predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
+        print("\nRemoving builder word: \(word)")
+        let predicate = NSPredicate(format: "%K like %@", BuilderWordAttributes.WORD, word)
         BuilderWord.deleteAllMatchingPredicate(predicate, inContext: currentContext)
     }
 }

@@ -47,7 +47,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         super.init(frame: frame)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -168,8 +168,8 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
             if let flip = flipDataSource.retrieveFlipWithId(flipId!) {
                 cell.setFlipId(flip.flipID)
                 
-                var isSelected = (flip.flipID == dataSource?.flipsViewSelectedFlipId())
-                cell.setSelected(isSelected)
+                let isSelected = (flip.flipID == dataSource?.flipsViewSelectedFlipId())
+                cell.setIsSelected(isSelected)
             } else {
                 UIAlertView.showUnableToLoadFlip()
             }

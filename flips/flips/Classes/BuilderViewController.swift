@@ -21,7 +21,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
         super.init(composeTitle: NSLocalizedString("Builder", comment: "Builder"))
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -157,7 +157,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     // MARK: - FlipMessageWordListView Delegate
     
     override func flipMessageWordListViewDidTapAddWordButton(flipMessageWordListView: FlipMessageWordListView) {
-        var addWordWords: Array<String> = self.flipWords.map {
+        let addWordWords: Array<String> = self.flipWords.map {
             return $0.text
         }
 

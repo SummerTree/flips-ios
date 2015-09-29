@@ -29,7 +29,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.flipWord = flipWord
         self.confirmFlipView = ConfirmFlipView()
         
-        var videoComposer = VideoComposer()
+        let videoComposer = VideoComposer()
         videoComposer.flipVideoFromImage(flipPicture, andAudioURL:flipAudio, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
             self.onVideoCreated(flipVideoURL, thumbnailURL: thumbnailURL)
         })
@@ -40,7 +40,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.flipWord = flipWord
         self.confirmFlipView = ConfirmFlipView()
 
-        var videoComposer = VideoComposer()
+        let videoComposer = VideoComposer()
         videoComposer.flipVideoFromVideo(flipVideo, successHandler: { (flipVideoURL, thumbnailURL) -> Void in
             self.onVideoCreated(flipVideoURL, thumbnailURL: thumbnailURL)
         })
@@ -69,7 +69,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.setupWhiteNavBarWithoutButtons(self.title!)
         
         if (showPreviewButton) {
-            var previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+            let previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
             previewBarButton.enabled = false
             previewBarButton.tintColor = UIColor.flipOrange()
             self.navigationItem.rightBarButtonItem = previewBarButton
@@ -104,7 +104,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         pictureContainerView.mas_makeConstraints { (make) -> Void in
-            var topLayoutGuide: AnyObject = self.topLayoutGuide
+            let topLayoutGuide: AnyObject = self.topLayoutGuide
             make.top.equalTo()(topLayoutGuide.mas_bottom)
         }
     }
@@ -118,21 +118,21 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         
         self.confirmFlipView.showActivityIndicator()
 
-        var createFlipSuccessBlock : CreateFlipSuccessCompletion = { (flip) -> Void in
+        let createFlipSuccessBlock : CreateFlipSuccessCompletion = { (flip) -> Void in
             let flipInContext = flip.inContext(NSManagedObjectContext.MR_defaultContext()) as! Flip
             self.navigationController?.popViewControllerAnimated(false)
             self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: true, flipID: flipInContext.flipID)
             self.confirmFlipView.hideActivityIndicator()
         }
         
-        var createFlipFailBlock : CreateFlipFailureCompletion = { (error) -> Void in
+        let createFlipFailBlock : CreateFlipFailureCompletion = { (error) -> Void in
             if let flipError = error {
                 let errorTitle = flipError.error
                 let errorMessage = flipError.details
                 self.confirmFlipView.hideActivityIndicator()
 
                 self.delegate?.confirmFlipViewController(self, didFinishEditingWithSuccess: false, flipID: nil)
-                var alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                let alertView = UIAlertView(title: errorTitle, message: errorMessage, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertView.show()
             }
         }

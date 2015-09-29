@@ -97,7 +97,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -131,7 +131,7 @@ class LoginView : UIView, UITextFieldDelegate {
         self.logoView.center = self.center
         setFieldsHidden(true)
         
-        var tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.addGestureRecognizer(tapGestureRecognizer)
         
         self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
@@ -170,7 +170,7 @@ class LoginView : UIView, UITextFieldDelegate {
         }
 
         if let flipError = error {
-            var alertView = UIAlertView(title: flipError.error, message: flipError.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
+            let alertView = UIAlertView(title: flipError.error, message: flipError.details, delegate: self, cancelButtonTitle: LocalizedString.OK)
             alertView.show()
         }
         
@@ -225,18 +225,18 @@ class LoginView : UIView, UITextFieldDelegate {
         credentialsView.addSubview(emailTextField)
         
         emailPasswordSeparator = UIView()
-        var separatorRecognizer = UITapGestureRecognizer(target: self, action: "separatorTapped")
+        let separatorRecognizer = UITapGestureRecognizer(target: self, action: "separatorTapped")
         emailPasswordSeparator.addGestureRecognizer(separatorRecognizer)
         emailPasswordSeparator.backgroundColor = UIColor.whiteColor()
         credentialsView.addSubview(emailPasswordSeparator)
         
         spaceBetweenEmailFieldAndSeparator = UIView()
-        var emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenEmailAndSeparatorTapped")
+        let emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenEmailAndSeparatorTapped")
         spaceBetweenEmailFieldAndSeparator.addGestureRecognizer(emailSpaceViewRecognizer)
         credentialsView.addSubview(spaceBetweenEmailFieldAndSeparator)
         
         spaceBetweenPasswordFieldAndSeparator = UIView()
-        var passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenPasswordAndSeparatorTapped")
+        let passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenPasswordAndSeparatorTapped")
         spaceBetweenPasswordFieldAndSeparator.addGestureRecognizer(passwordSpaceViewRecognizer)
         credentialsView.addSubview(spaceBetweenPasswordFieldAndSeparator)
         
@@ -511,9 +511,9 @@ class LoginView : UIView, UITextFieldDelegate {
         }
         
         andWord.mas_makeConstraints { (make) -> Void in
-            make.leading.equalTo()(self.termsOfUse.mas_right).with().offset()(self.ANDWORD_MARGIN_LEFT)
+            make.left.equalTo()(self.termsOfUse.mas_right).with().offset()(self.ANDWORD_MARGIN_LEFT)
             make.centerY.equalTo()(self.termsOfUse)
-            make.trailing.equalTo()(self.privacyPolicy.mas_left).with().offset()(-self.ANDWORD_MARGIN_RIGHT)
+            make.right.equalTo()(self.privacyPolicy.mas_left).with().offset()(-self.ANDWORD_MARGIN_RIGHT)
             make.bottom.equalTo()(self.acceptanceView)
         }
         
@@ -587,13 +587,13 @@ class LoginView : UIView, UITextFieldDelegate {
     
     func signInButtonTapped(sender: AnyObject?) {
         
-        if (self.emailTextField.text.isEmpty || self.passwordTextField.text.isEmpty) {
+        if (self.emailTextField.text!.isEmpty || self.passwordTextField.text!.isEmpty) {
             var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
             return
         }
         
-        self.delegate?.loginViewDidTapSignInButton(self, username: self.emailTextField.text, password: self.passwordTextField.text)
+        self.delegate?.loginViewDidTapSignInButton(self, username: self.emailTextField.text!, password: self.passwordTextField.text!)
     }
     
     func termsOfUseButtonTapped(sender: AnyObject?) {
@@ -605,7 +605,7 @@ class LoginView : UIView, UITextFieldDelegate {
     }
     
     func forgotPasswordButtonTapped(sender: AnyObject?) {
-        self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text)
+        self.delegate?.loginViewDidTapForgotPassword(self, username: emailTextField.text!)
     }
     
     func signUpButtonTapped(sender: AnyObject?) {
@@ -710,7 +710,7 @@ class LoginView : UIView, UITextFieldDelegate {
     
     private func getKeyboardMinY(notification: NSNotification) -> CGFloat {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue()
+        let keyboardRect: CGRect = userInfo.valueForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue
         return CGRectGetMaxY(self.frame) - CGRectGetHeight(keyboardRect)
     }
     

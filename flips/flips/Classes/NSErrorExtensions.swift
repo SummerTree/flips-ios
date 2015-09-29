@@ -19,7 +19,7 @@ enum FlipsErrorCode: Int {
 }
 
 extension NSError {
-    class func flipsError(#code: FlipsErrorCode, userInfo: [NSObject : AnyObject]?) -> NSError {
+    class func flipsError(code code: FlipsErrorCode, userInfo: [NSObject : AnyObject]?) -> NSError {
         return NSError(domain: FlipsErrorDomain, code: code.rawValue, userInfo: userInfo)
     }
     

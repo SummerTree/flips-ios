@@ -42,7 +42,7 @@ public class BlurredThumbnailsCache: ThumbnailsDataSource {
                     self.cache.get(remoteURL, success: success, failure: failure)
                 }
             }, failure: { (url: String!, flipError: FlipError) -> Void in
-                println("Error generating blurred thumbnail: \(flipError)")
+                print("Error generating blurred thumbnail: \(flipError)")
             })
             return StorageCache.CacheGetResponse.DOWNLOAD_WILL_START
         }
@@ -74,6 +74,6 @@ public class BlurredThumbnailsCache: ThumbnailsDataSource {
     private func blurredImageDataFrom(image: UIImage) -> NSData {
         let resizedImage: UIImage = image.cropSquareImage(image.size.width / 2)
         let blurredImage: UIImage = resizedImage.applyLightEffect()
-        return UIImageJPEGRepresentation(blurredImage, self.IMAGE_COMPRESSION)
+        return UIImageJPEGRepresentation(blurredImage, self.IMAGE_COMPRESSION)!
     }
 }

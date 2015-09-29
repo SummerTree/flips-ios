@@ -27,55 +27,72 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).m4a"
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        var docsDir: AnyObject = dirPaths[0]
-        var soundFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+        let docsDir: AnyObject = dirPaths[0]
+        let soundFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
         soundFileURL = NSURL(fileURLWithPath: soundFilePath)
         
-        var recordSettings = [
-            AVFormatIDKey: kAudioFormatAppleLossless,
+        let recordSettings = [
+            AVFormatIDKey: Int(kAudioFormatAppleLossless),
             AVEncoderAudioQualityKey : AVAudioQuality.Max.rawValue,
             AVEncoderBitRateKey : 320000,
             AVNumberOfChannelsKey: 2,
             AVSampleRateKey : 44100.0
         ]
         
-        var error: NSError?
-        recorder = AVAudioRecorder(URL: soundFileURL!, settings: recordSettings as [NSObject : AnyObject], error: &error)
-        if let e = error {
-            println(e.localizedDescription)
-        } else {
+        do
+        {
+            recorder = try AVAudioRecorder(URL: soundFileURL!, settings: recordSettings as! [String : AnyObject])
             recorder.delegate = self
             recorder.meteringEnabled = true
             recorder.prepareToRecord() // creates/overwrites the file at soundFileURL
         }
+        catch let error
+        {
+            recorder = nil
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
+            }
+        }
+
     }
     
     private func setSessionPlayAndRecord() {
         
         let session:AVAudioSession = AVAudioSession.sharedInstance()
         
-        var error: NSError?
-        
-        if session.category != AVAudioSessionCategoryPlayAndRecord {
-            if !session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker, error:&error) {
-                println("could not set session category")
-                if let e = error {
-                    println(e.localizedDescription)
-                }
+        do
+        {
+            if session.category != AVAudioSessionCategoryPlayAndRecord {
+                try session.setCategory(AVAudioSessionCategoryPlayAndRecord, withOptions: .DefaultToSpeaker)
+            }
+        }
+        catch let error
+        {
+            print("could not set session category")
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
             }
         }
         
-        if !session.setActive(true, error: &error) {
-            println("could not make session active")
-            if let e = error {
-                println(e.localizedDescription)
+        do
+        {
+            try session.setActive(true)
+        }
+        catch let error
+        {
+            print("could not make session active")
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
             }
         }
         
     }
     
-    public func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
-        println("finished recording with success? \(flag)")
+    public func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
+        print("finished recording with success? \(flag)")
         self.delegate?.audioRecorderService(self, didFinishRecordingAudioURL: recorder.url, success: flag)
         setupRecorder()
     }
@@ -127,13 +144,16 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
         
         self.recorder.stop()
         
-        var error: NSError?
-        
-        if (!AVAudioSession.sharedInstance().setActive(false, error: &error))
+        do
         {
-            println("could not deactivate audio session")
-            if let e = error {
-                println(e.localizedDescription)
+            try AVAudioSession.sharedInstance().setActive(false)
+        }
+        catch let error
+        {
+            print("could not deactivate audio session")
+            
+            if let error = error as? NSError {
+                print(error.localizedDescription)
             }
         }
         

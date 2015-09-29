@@ -83,7 +83,7 @@ class UpdateUserProfileView: SignUpView {
         return pictureHasChanged || self.originalUser!.firstName != self.userFormView.firstNameTextField.text ||
             self.originalUser!.lastName != self.userFormView.lastNameTextField.text ||
             self.originalUser!.username != self.userFormView.emailTextField.text ||
-            !self.userFormView.passwordTextField.text.isEmpty
+            !self.userFormView.passwordTextField.text!.isEmpty
     }
     
     override func setUserPicture(picture: UIImage) {

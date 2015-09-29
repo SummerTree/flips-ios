@@ -53,11 +53,11 @@ class CustomNavigationBar : UIView {
             builderButtonImage = UIImage(named: "Builder")
         }
         
-        var navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
-        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
-        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        let navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        let navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        let navigationBar = CustomNavigationBar(frame: navBarFrame)
         
-        var imageView = RoundImageView.avatarA4()
+        let imageView = RoundImageView.avatarA4()
         imageView.image = avatarImage
         
         navigationBar.setup(imageView, leftButtonImage: settingsButtonImage, rightButtonObject: builderButtonImage)
@@ -72,9 +72,9 @@ class CustomNavigationBar : UIView {
             backButtonImage = UIImage(named: "Back_White")
         }
         
-        var navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
-        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
-        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        let navBarHeight = SMALL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        let navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        let navigationBar = CustomNavigationBar(frame: navBarFrame)
         
         navigationBar.buttonsMargin = NORMAL_NAV_BAR_BUTTON_MARGIN
         navigationBar.setup(title, leftButtonImage: backButtonImage)
@@ -90,9 +90,9 @@ class CustomNavigationBar : UIView {
             backButtonImage = UIImage(named: "Back_White")
         }
         
-        var navBarHeight = NORMAL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
-        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
-        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        let navBarHeight = NORMAL_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        let navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        let navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = NORMAL_NAV_BAR_BUTTON_MARGIN
         navigationBar.setup(title, leftButtonImage: backButtonImage)
         
@@ -112,12 +112,12 @@ class CustomNavigationBar : UIView {
             nextButtonInactiveImage = UIImage(named: "Forward_Inactive")
         }
         
-        var navBarHeight = LARGE_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
-        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
-        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        let navBarHeight = LARGE_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        let navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        let navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
         
-        var imageButton = UIButton.avatarA2(avatarImage)
+        let imageButton = UIButton.avatarA2(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
         navigationBar.setup(imageButton, leftButtonImage: backButtonImage, rightButtonObject: nextButtonImage, rightButtonInactiveObject: nextButtonInactiveImage)
@@ -136,12 +136,12 @@ class CustomNavigationBar : UIView {
             saveButtonTitle = NSLocalizedString("Save", comment: "Save")
         }
         
-        var navBarHeight = LARGE_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
-        var navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
-        var navigationBar = CustomNavigationBar(frame: navBarFrame)
+        let navBarHeight = LARGE_NAVIGATION_BAR_HEIGHT + STATUS_BAR_HEIGHT
+        let navBarFrame = CGRectMake(0, 0, CGRectGetWidth(UIScreen.mainScreen().bounds), navBarHeight)
+        let navigationBar = CustomNavigationBar(frame: navBarFrame)
         navigationBar.buttonsMargin = LARGE_NAV_BAR_BUTTON_MARGIN
         
-        var imageButton = UIButton.avatarA2WithoutBorder(avatarImage)
+        let imageButton = UIButton.avatarA2WithoutBorder(avatarImage)
         imageButton.userInteractionEnabled = isAvatarButtonInteractionEnabled
         
         navigationBar.setup(imageButton, leftButtonImage: backButtonImage, rightButtonObject: saveButtonTitle)
@@ -159,7 +159,7 @@ class CustomNavigationBar : UIView {
         self.addSubview(backgroundImageView)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -350,7 +350,7 @@ class CustomNavigationBar : UIView {
                     })
                 }, failure: { (url: String!, error: FlipError) -> Void in
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.avatarButton)
-                    println("Could not get avatar from \(remoteURL.path).")
+                    print("Could not get avatar from \(remoteURL.path).")
             })
             
             if (returnValue == StorageCache.CacheGetResponse.DOWNLOAD_WILL_START) {

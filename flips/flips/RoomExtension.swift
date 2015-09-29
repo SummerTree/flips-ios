@@ -29,7 +29,7 @@ extension Room {
     func oldestNotReadMessage() -> FlipMessage? {
         let flipMessageDataSource = FlipMessageDataSource(context: self.managedObjectContext!)
         
-        var oldestMessageNotRead = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(self.roomID)
+        let oldestMessageNotRead = flipMessageDataSource.oldestNotReadFlipMessageForRoomId(self.roomID)
         
         if (oldestMessageNotRead == nil) {
             return self.flipMessagesNotRemoved().lastObject as? FlipMessage
@@ -39,7 +39,7 @@ extension Room {
     }
     
     func flipMessagesNotRemoved() -> NSOrderedSet {
-        var notRemovedMessages = NSMutableOrderedSet()
+        let notRemovedMessages = NSMutableOrderedSet()
         
         for (var i = 0; i < self.flipMessages.count; i++) {
             if let flipMessage: FlipMessage = self.flipMessages[i] as? FlipMessage {
@@ -53,7 +53,7 @@ extension Room {
     }
     
     func notRemovedFlipMessagesOrderedByReceivedAt() -> [FlipMessage] {
-        var sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: FlipMessageAttributes.RECEIVED_AT, ascending: true)
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: FlipMessageAttributes.RECEIVED_AT, ascending: true)
         let orderedFlipMessage: [AnyObject] = self.flipMessagesNotRemoved().sortedArrayUsingDescriptors([sortDescriptor])
         return orderedFlipMessage as! [FlipMessage]
     }
@@ -79,7 +79,7 @@ extension Room {
             }
         }
 
-        var sortedParticipants = entries.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
+        let sortedParticipants = entries.sortedArrayUsingDescriptors([nameDescriptor, lastNameDescriptor, phoneNumberDescriptor])
         
         for participant: User in sortedParticipants as! [User] {
             if let loggedUser = User.loggedUser() {

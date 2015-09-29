@@ -40,7 +40,7 @@ public class MessageService {
         var room: Room!
         var error: FlipError?
         
-        var group = dispatch_group_create()
+        let group = dispatch_group_create()
         dispatch_group_enter(group)
         roomService.createRoom(userIds, contactNumbers: contactNumbers, successCompletion: { (newRoom) -> Void in
             room = newRoom
@@ -72,7 +72,7 @@ public class MessageService {
             for flipWord in flipWords {
                 if let flipId: String = flipWord.associatedFlipId {
                     if let flip = flipDataSource.retrieveFlipWithId(flipId) {
-                        var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipWord.text)
+                        let formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipWord.text)
                         formattedFlips.append(formattedFlip)
                     }
                 }
@@ -86,7 +86,7 @@ public class MessageService {
             PubNubService.sharedInstance.sendMessage(messageJson, pubnubID: room.pubnubID) { (success) -> Void in
                 if (!success) {
                     QueueHelper.dispatchAsyncWithNewContext { (newContext) -> Void in
-                        var flipMessageInNewContext: FlipMessage = flipMessage.inContext(newContext) as! FlipMessage
+                        let flipMessageInNewContext: FlipMessage = flipMessage.inContext(newContext) as! FlipMessage
 
                         // We need to mark as removed the FlipMessage that wasn't sent.
                         PersistentManager.sharedInstance.markFlipMessageAsRemoved(flipMessageInNewContext, completion: { (result) -> Void in

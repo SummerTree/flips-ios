@@ -72,7 +72,7 @@ class UpdateUserProfileViewController : FlipsViewController, SignUpViewDelegate,
     // MARK: - SignUpViewDelegate
     
     func signUpViewDidTapTakePictureButton(signUpView: SignUpView) {
-        var takePictureViewController = TakePictureViewController()
+        let takePictureViewController = TakePictureViewController()
         takePictureViewController.delegate = self
         self.navigationController?.pushViewController(takePictureViewController, animated: true)
     }

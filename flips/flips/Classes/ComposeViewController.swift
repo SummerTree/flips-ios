@@ -115,7 +115,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         self.sendOptions = sendOptions
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -126,13 +126,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         flipWords = Array()
         for (var i = 0; i < words.count; i++) {
-            var word = words[i]
-            var flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NotAssociatedAndNoResourcesAvailable)
+            let word = words[i]
+            let flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NotAssociatedAndNoResourcesAvailable)
             self.flipWords.append(flipText)
             myFlipsDictionary[word] = Array<String>()
             stockFlipsDictionary[word] = Array<String>()
             
-            var flipPage : FlipPage = FlipPage(word: word, order: i)
+            let flipPage : FlipPage = FlipPage(word: word, order: i)
             self.draftingTable!.addFlipToFlipBook(flipPage)
         }
     }
@@ -220,7 +220,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     private func addConstraints() {
-        var topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
+        let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
         
         composeTopViewContainer.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.view)
@@ -399,7 +399,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.highlightedWordIndex = nextIndex
         }
         
-        self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
+        self.showContentForHighlightedWord(!self.canShowMyFlips())
     }
     
     internal func moveToNextFlipWord() {
@@ -410,7 +410,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.highlightedWordIndex = nextIndex
         }
         
-        self.showContentForHighlightedWord(shouldReloadWords: !self.canShowMyFlips())
+        self.showContentForHighlightedWord(!self.canShowMyFlips())
     }
     
     
@@ -450,7 +450,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 composeBottomViewContainer.showCameraButtons()
             }
         case FlipState.AssociatedAndNoResourcesAvailable, FlipState.AssociatedAndResourcesAvailable:
-            self.showContentForHighlightedWord(shouldReloadWords: false)
+            self.showContentForHighlightedWord(false)
         }
     }
     
@@ -484,10 +484,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
             
             if (highlightedWordIndex == flipWord.position) {
-                self.showContentForHighlightedWord(shouldReloadWords: false)
+                self.showContentForHighlightedWord(false)
             }
             
-            self.flipMessageWordListView.reloadWords(animated: true)
+            self.flipMessageWordListView.reloadWords(true)
         }
     }
     
@@ -504,7 +504,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             recorder.startRecording { (error) -> Void in
                 if let error = error {
                     self.composeTopViewContainer.showCameraWithWord(self.flipWords[self.highlightedWordIndex].text)
-                    var alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                    let alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertMessage.show()
                 }
             }
@@ -555,7 +555,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                 return
             }
             else {
-                var newFlipPage = FlipPage(videoURL: flipVideoURL,
+                let newFlipPage = FlipPage(videoURL: flipVideoURL,
                     thumbnailURL: thumbnailURL,
                     word: self.flipWords[self.highlightedWordIndex].text,
                     order: self.highlightedWordIndex)
@@ -575,7 +575,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         }
 
     
-        var videoComposer = VideoComposer()
+        let videoComposer = VideoComposer()
         if let img = image {
             videoComposer.flipVideoFromImage(img, andAudioURL: audio, successHandler: vcSuccessHandler)
         }
@@ -610,13 +610,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                     self.showAudioRecordingView()
                 })
             } else {
-                println("Capturing picture problem. Image is nil")
-                var alertMessage = UIAlertView(title: NO_SPACE_PHOTO_ERROR_TITLE, message: NO_SPACE_PHOTO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                print("Capturing picture problem. Image is nil")
+                let alertMessage = UIAlertView(title: NO_SPACE_PHOTO_ERROR_TITLE, message: NO_SPACE_PHOTO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertMessage.show()
             }
             }, fail: { (error) -> Void in
-                println("Error capturing picture: \(error)")
-                var alertMessage = UIAlertView(title: LocalizedString.ERROR, message: error?.localizedDescription, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                print("Error capturing picture: \(error)")
+                let alertMessage = UIAlertView(title: LocalizedString.ERROR, message: error?.localizedDescription, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                 alertMessage.show()
         })
     }
@@ -649,8 +649,8 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     
     func composeBottomViewContainerDidTapGalleryButton(composeBottomViewContainer: ComposeBottomViewContainer) {
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
-            var imagePickerController = UIImagePickerControllerWithLightStatusBar()
-            var textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+            let imagePickerController = UIImagePickerControllerWithLightStatusBar()
+            let textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
             imagePickerController.navigationBar.barTintColor = UIColor.flipOrange()
             imagePickerController.navigationBar.translucent = false
             imagePickerController.navigationBar.tintColor = UIColor.whiteColor()
@@ -678,7 +678,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
                                 self.onFlipSelected(flipId)
                             }, failure: { (url: String!, error: FlipError) in
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    println("Downloading stock flip(id: \(flipId)) error: \(error)")
+                                    print("Downloading stock flip(id: \(flipId)) error: \(error)")
                                     let alertView = UIAlertView(title: STOCK_FLIP_DOWNLOAD_FAILED_TITLE, message: STOCK_FLIP_DOWNLOAD_FAILED_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                                     alertView.show()
                                 })
@@ -725,7 +725,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             }
             self.updateFlipWordsState()
             
-            self.flipMessageWordListView.reloadWords(animated: false) // Word state can change
+            self.flipMessageWordListView.reloadWords(false) // Word state can change
             self.composeBottomViewContainer.reloadMyFlips() // Refresh selected state
         })
     }
@@ -787,7 +787,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
 //            self.navigationController?.pushViewController(confirmFlipViewController, animated: false)
             }
         } else {
-            var alertMessage = UIAlertView(title: NO_SPACE_VIDEO_ERROR_TITLE, message: NO_SPACE_VIDEO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            let alertMessage = UIAlertView(title: NO_SPACE_VIDEO_ERROR_TITLE, message: NO_SPACE_VIDEO_ERROR_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
         }
         
@@ -840,13 +840,13 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.navigationController?.view.userInteractionEnabled = true
             self.navigationItem.rightBarButtonItem?.enabled = true
 
-            println("User interaction enabled for compose view")
+            print("User interaction enabled for compose view")
         } else {
             self.view.userInteractionEnabled = false
             self.navigationController?.view.userInteractionEnabled = false
             self.navigationItem.rightBarButtonItem?.enabled = false
 
-            println("User interaction disabled for compose view")
+            print("User interaction disabled for compose view")
         }
     }
     
@@ -863,7 +863,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             self.hideAudioRecordingView()
             
             let flipWord = self.flipWords[self.highlightedWordIndex]
-            var flipImage = self.highlightedWordCurrentAssociatedImage
+            let flipImage = self.highlightedWordCurrentAssociatedImage
             
             if self.shouldShowPlusButtonInWords() {
 

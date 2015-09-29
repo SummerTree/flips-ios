@@ -17,7 +17,7 @@ let FLIP_WORD_LABEL_MARGIN_BOTTOM: CGFloat = -40
 extension UILabel {
     
     class func flipWordLabel() -> UILabel {
-        var flipWordLabel = UILabel()
+        let flipWordLabel = UILabel()
         flipWordLabel.font = UIFont.avenirNextBold(UIFont.HeadingSize.h1)
         flipWordLabel.textColor = UIColor.whiteColor()
         flipWordLabel.layer.shadowColor = UIColor.blackColor().CGColor

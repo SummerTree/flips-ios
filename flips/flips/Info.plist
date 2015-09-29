@@ -6,6 +6,19 @@
 	<dict>
 		<key>DEV</key>
 		<dict>
+			<key>NSAppTransportSecurity</key>
+			<dict>
+				<key>NSExceptionDomains</key>
+				<dict>
+					<key>flips-dev95.arctouch.com</key>
+					<dict>
+						<key>NSExceptionAllowsInsecureHTTPLoads</key>
+						<true/>
+						<key>NSIncludesSubdomains</key>
+						<true/>
+					</dict>
+				</dict>
+			</dict>
 			<key>PubNubPublishKey</key>
 			<string>pub-c-07cf42ec-470f-486b-aeb3-5a0026e24dc0</string>
 			<key>PubNubSecretKey</key>
@@ -17,6 +30,19 @@
 		</dict>
 		<key>PROD</key>
 		<dict>
+			<key>NSAppTransportSecurity</key>
+			<dict>
+				<key>NSExceptionDomains</key>
+				<dict>
+					<key>api.flipsapp.com</key>
+					<dict>
+						<key>NSExceptionAllowsInsecureHTTPLoads</key>
+						<true/>
+						<key>NSIncludesSubdomains</key>
+						<true/>
+					</dict>
+				</dict>
+			</dict>
 			<key>PubNubPublishKey</key>
 			<string>pub-c-18de6448-8924-43b5-9f5b-a333e7d7e6d9</string>
 			<key>PubNubSecretKey</key>
@@ -28,6 +54,19 @@
 		</dict>
 		<key>QA</key>
 		<dict>
+			<key>NSAppTransportSecurity</key>
+			<dict>
+				<key>NSExceptionDomains</key>
+				<dict>
+					<key>flips-qa.elasticbeanstalk.com</key>
+					<dict>
+						<key>NSExceptionAllowsInsecureHTTPLoads</key>
+						<true/>
+						<key>NSIncludesSubdomains</key>
+						<true/>
+					</dict>
+				</dict>
+			</dict>
 			<key>PubNubPublishKey</key>
 			<string>pub-c-579fbcaa-1c0a-44fc-bb1c-e02e43e7eb30</string>
 			<key>PubNubSecretKey</key>
@@ -70,13 +109,68 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>90</string>
+	<string>128</string>
 	<key>FacebookAppID</key>
 	<string>338424696329576</string>
 	<key>FacebookDisplayName</key>
 	<string>Flips</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>akamaihd.net</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+			<key>facebook.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+			<key>fbcdn.net</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+			<key>flips-dev95.arctouch.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>flipsapp.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>pubsub.pubnub.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>s3.amazonaws.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

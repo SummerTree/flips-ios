@@ -34,7 +34,7 @@ class ConversationTableViewCell : UITableViewCell {
     
     // MARK: - Init Methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -164,7 +164,7 @@ class ConversationTableViewCell : UITableViewCell {
         QueueHelper.dispatchAsyncWithNewContext { (newContext) -> Void in
             if (self.roomId == currentRoomId) {
                 let roomDataSource = RoomDataSource(context: newContext)
-                var room = roomDataSource.retrieveRoomWithId(self.roomId)
+                let room = roomDataSource.retrieveRoomWithId(self.roomId)
                 self.layoutCell(room, shouldSetThumbnailAnimated: shouldSetThumbnailAnimated)
             }
         }
@@ -182,7 +182,7 @@ class ConversationTableViewCell : UITableViewCell {
         if (flipMessages.count > 0) {
             lastMessage = flipMessages.last!
         } else {
-            println("\n\nCoreData problem: flipMessages is empty for room(\(room.roomID))\n\n")
+            print("\n\nCoreData problem: flipMessages is empty for room(\(room.roomID))\n\n")
         }
         
         // The preview still photo should reflect the first frame of the video of the most recent message in the conversation
@@ -219,7 +219,7 @@ class ConversationTableViewCell : UITableViewCell {
                         }
                     })
                 } else {
-                    println("Retrieved thumbnail error: Thumbnail(\(thumbnail)) - Initial RoomId (\(originalRoomId)) - Current RoomId (\(self.roomId))")
+                    print("Retrieved thumbnail error: Thumbnail(\(thumbnail)) - Initial RoomId (\(originalRoomId)) - Current RoomId (\(self.roomId))")
                 }
             }
 

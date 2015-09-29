@@ -25,7 +25,7 @@ class FlipTextView : UIView {
     // MARK: - Initialization Methods
     
     convenience init(flipText : FlipText) {
-        self.init(frame: CGRect.zeroRect)
+        self.init(frame: CGRect.zero)
         
         self.flipText = flipText
         
@@ -36,7 +36,7 @@ class FlipTextView : UIView {
         super.init(frame: frame)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -70,7 +70,7 @@ class FlipTextView : UIView {
     }
     
     func updateLayout() {
-        var status : FlipState = self.flipText.state
+        let status : FlipState = self.flipText.state
         switch status {
         case FlipState.NotAssociatedAndNoResourcesAvailable:
             textLabel.textColor =   UIColor.blackColor()
@@ -111,7 +111,7 @@ class FlipTextView : UIView {
     
     func getTextWidth() -> CGFloat{
         let myString: NSString = self.flipText.text as NSString
-        var font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        let font: UIFont = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         let size: CGSize = myString.sizeWithAttributes([NSFontAttributeName: font])
         return size.width
     }

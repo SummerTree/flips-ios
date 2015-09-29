@@ -196,7 +196,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     // MARK: - Buttons delegate
     func didTapDoneButton() {
-        let passwordStatus = verifyPassword(passwordField.text)
+        let passwordStatus = verifyPassword(passwordField.text!)
             
         if (passwordStatus.isValid) {
             self.delegate?.newPasswordViewDidTapDoneButton(self)
@@ -208,7 +208,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     // Requirement: 8+ characters, Mixed case, at least 1 number
     // Specific messages not being used for now
     func verifyPassword(password: String) -> (isValid: Bool, message: String) {
-        if count(password) < 8 {
+        if password.characters.count < 8 {
             return (false, "Password must have at least 8 characters.");
         }
         
@@ -233,7 +233,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     func customNavigationBarDidTapRightButton(navBar : CustomNavigationBar) {
         // Do nothing
-        println("customNavigationBarDidTapRightButton")
+        print("customNavigationBarDidTapRightButton")
     }
     
     
@@ -247,7 +247,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
     
     // MARK: - Required methods
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

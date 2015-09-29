@@ -59,7 +59,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - Required initializers
     
     init(showOnboarding: Bool, isOpeningFromPushNotification: Bool) {
-        super.init(frame: CGRect.zeroRect)
+        super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.whiteColor()
         
         self.openingFromPushNotification = isOpeningFromPushNotification
@@ -73,7 +73,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.lastPlayedRow = -1
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -116,7 +116,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         
-        let visibleCells = tableView.visibleCells()
+        let visibleCells = tableView.visibleCells
         for cell : ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             cell.stopMovie()
             cell.releaseResources()
@@ -276,7 +276,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         var newCellsIndexPaths: Array<NSIndexPath> = Array<NSIndexPath>()
         if let newNumberOfCells: Int = self.dataSource?.numberOfFlipMessages(self) {
             for (var i = currentNumberOfCells; i < newNumberOfCells; i++) {
-                var indexPath = NSIndexPath(forRow: i, inSection: 0)
+                let indexPath = NSIndexPath(forRow: i, inSection: 0)
                 newCellsIndexPaths.append(indexPath)
             }
         }
@@ -318,7 +318,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             return UITableViewAutomaticDimension
         }
 
-        var cell = self.getPrototypeCell()
+        let cell = self.getPrototypeCell()
 
         var size: CGFloat = 0
         if let flipMessage: FlipMessage? = dataSource?.chatView(self, flipMessageAtIndex: indexPath.row) {
@@ -388,7 +388,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        let visibleCells: [AnyObject] = self.tableView.visibleCells()
+        let visibleCells: [AnyObject] = self.tableView.visibleCells
         for cell: ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             if !self.isCell(cell, totallyVisibleOnView: self) {
                 if cell.isPlayingFlip() {
@@ -415,8 +415,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
     
     private func isCell(cell: ChatTableViewCell, totallyVisibleOnView view: UIView) -> Bool {
-        var videoContainerView: UIView = cell.subviews[0] as! UIView // Gets video container view from cell
-        var convertedVideoContainerViewFrame: CGRect = cell.convertRect(videoContainerView.frame, toView:view)
+        let videoContainerView: UIView = cell.subviews[0] // Gets video container view from cell
+        let convertedVideoContainerViewFrame: CGRect = cell.convertRect(videoContainerView.frame, toView:view)
         if (CGRectContainsRect(view.frame, convertedVideoContainerViewFrame)) {
             return true
         } else {
@@ -448,15 +448,15 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     }
 
     private func playVideoForVisibleCell() {
-        let visibleCells = self.tableView.visibleCells()
+        let visibleCells = self.tableView.visibleCells
         for cell : ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             if (self.isCell(cell, totallyVisibleOnView: self)) {
-                var indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
+                let indexPath = self.tableView.indexPathForCell(cell) as NSIndexPath?
                 if (indexPath == nil) {
                     return
                 }
 
-                var row = indexPath?.row
+                let row = indexPath?.row
                 if let shouldAutoPlay = dataSource?.chatView(self, shouldAutoPlayFlipMessageAtIndex: row!) {
                     if (shouldAutoPlay && (row != self.lastPlayedRow)) {
                         self.lastPlayedRow = row
@@ -499,7 +499,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     func didTapReplyButton() {
         hideReplyButtonAndShowTextField()
         
-        let visibleCells: [AnyObject] = tableView.visibleCells()
+        let visibleCells: [AnyObject] = tableView.visibleCells
         for cell: ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             cell.stopMovie()
         }
@@ -575,7 +575,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     // MARK: - ChatTableViewCellDelegate
     
     func chatTableViewCellIsVisible(chatTableViewCell: ChatTableViewCell) -> Bool {
-        let visibleCells = tableView.visibleCells()
+        let visibleCells = tableView.visibleCells
         for cell : ChatTableViewCell in visibleCells as! [ChatTableViewCell] {
             if (cell == chatTableViewCell) {
                 return true

@@ -14,7 +14,7 @@ extension UITableViewCell {
     
     func removeSeparatorInsets() {
         // Remove separator insets in iOS 8
-        if (self.respondsToSelector("layoutMargins")) {
+        if #available(iOS 8.0, *) {
             self.layoutMargins = UIEdgeInsetsZero
             self.preservesSuperviewLayoutMargins = false
         }

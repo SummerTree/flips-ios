@@ -22,7 +22,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
         self.facebookInput = facebookInput
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -97,7 +97,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
             
             self.signUpView.hideMissingPictureMessage()
             
-            var phoneNumberViewController = PhoneNumberViewController(username: email, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName, facebookId: facebookId)
+            let phoneNumberViewController = PhoneNumberViewController(username: email, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName, facebookId: facebookId)
             
             self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
         }
@@ -109,7 +109,7 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     }
     
     func signUpViewDidTapTakePictureButton(signUpView: SignUpView) {
-        var takePictureViewController = TakePictureViewController()
+        let takePictureViewController = TakePictureViewController()
         takePictureViewController.delegate = self
         self.navigationController?.pushViewController(takePictureViewController, animated: true)
     }
