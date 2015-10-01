@@ -333,7 +333,7 @@ class PlayerView: UIView {
                                 completionBlock?()
                             })
                         }, failure: { (url: String!, flipError: FlipError) -> Void in
-                            print("Failed to get resource from cache, error: \(error)")
+                            print("Failed to get resource from cache, error: \(flipError)")
                             completionBlock?()
                         })
 
@@ -633,7 +633,7 @@ class PlayerView: UIView {
                             self.thumbnailView.image = thumbnail
                         })
                     }, failure: { (url: String!, flipError: FlipError) -> Void in
-                        print("Failed to get resource from cache, error: \(error)")
+                        print("Failed to get resource from cache, error: \(flipError)")
                     })
                 }
             } else {

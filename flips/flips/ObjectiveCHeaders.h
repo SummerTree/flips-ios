@@ -25,7 +25,6 @@
 #import <PubNub/PNImports.h>
 #import "MBContactPicker.h"
 #import "UIImage+ImageEffects.h"
-#import <SplunkMint/SplunkMint.h>
 #import "AVCamPreviewView.h"
 #import <Flurry-iOS-SDK/Flurry.h>
 

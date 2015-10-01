@@ -15,6 +15,8 @@ import CoreData
 import Fabric
 import Crashlytics
 
+public typealias FailureBlock = (NSError!) -> Void
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
