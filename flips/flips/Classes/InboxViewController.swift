@@ -104,16 +104,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageReceivedNotification:", name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         syncView?.hidden = true
-
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
-            if (!PubNubService.sharedInstance.isConnected()) {
-                print("Inbox appeared with PubNub disconnected. Calling connect again.")
-                Mint.sharedInstance().logEventAsyncWithTag("inbox_pubnub_not_connected-reconnecting", completionBlock: { (result: MintLogResult!) -> Void in
-                    return
-                })
-                PubNubService.sharedInstance.connect()
-            }
-        })
     }
     
     override func viewWillDisappear(animated: Bool) {

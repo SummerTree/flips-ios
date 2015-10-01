@@ -1971,6 +1971,7 @@
 				70FD4E6D19D064450024EBDB /* Frameworks */,
 				70FD4E6E19D064450024EBDB /* Resources */,
 				3628194CFFFD4347B72D4904 /* Copy Pods Resources */,
+				3E44C1081BBDBD020010B276 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1990,6 +1991,7 @@
 				BE2460571AD2D95900859233 /* Frameworks */,
 				BE24605A1AD2D95900859233 /* Resources */,
 				BE2460631AD2D95900859233 /* Copy Pods Resources */,
+				3E44C1091BBDBD1E0010B276 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2010,6 +2012,7 @@
 				BE2461341AD2D9C600859233 /* Resources */,
 				BE24613D1AD2D9C600859233 /* Copy Pods Resources */,
 				3EDF25DC1BB5C8CA002BEE90 /* ShellScript */,
+				3E44C10A1BBDBD280010B276 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2130,6 +2133,45 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		3E44C1081BBDBD020010B276 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" 16da1dc13e45522200ff103c275a5f801d7fd3b9 9da9560f0e5415cbe784cff6092e4267a67e1028dd3f3cbaad6b7466fc3890bc";
+		};
+		3E44C1091BBDBD1E0010B276 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" 16da1dc13e45522200ff103c275a5f801d7fd3b9 9da9560f0e5415cbe784cff6092e4267a67e1028dd3f3cbaad6b7466fc3890bc";
+		};
+		3E44C10A1BBDBD280010B276 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" 16da1dc13e45522200ff103c275a5f801d7fd3b9 9da9560f0e5415cbe784cff6092e4267a67e1028dd3f3cbaad6b7466fc3890bc";
 		};
 		3EDF25DC1BB5C8CA002BEE90 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

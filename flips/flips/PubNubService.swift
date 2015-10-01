@@ -554,19 +554,8 @@ public class PubNubService: FlipsService, PNDelegate {
         print("pubnubClient connectionDidFailWithError \(error)")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        let dataList: LimitedExtraDataList = LimitedExtraDataList()
-        if (error != nil) {
-            dataList.addWithKey("description", andValue: "\(error.description)")
-            dataList.addWithKey("localizedDescription", andValue: "\(error.localizedDescription)")
-        }
-        
-        dataList.addWithKey("internetStatus", andValue: NetworkReachabilityHelper.sharedInstance.hasInternetConnection() ? "true" : "false")
-
-        if let loggedUser: User = User.loggedUser() {
-            Mint.sharedInstance().logEventAsyncWithTag("PubnubClientConnectionDidFail - user(\(loggedUser.userID))", limitedExtraDataList: dataList , completionBlock: { (logResult:MintLogResult!) -> Void in
-                let result = logResult.resultState.rawValue == OKResultState.rawValue ? "OK" : "Failed"
-                print("Log Event Result:\(result)")
-            })
+        if NetworkReachabilityHelper.sharedInstance.hasInternetConnection(), let loggedUser : User = User.loggedUser() {
+            Flurry.logError("PubNub Connection Failure", message: "Connection attempt failed for user: \(loggedUser.userID).", error: error)
         }
     }
     
