@@ -19,18 +19,18 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
     
-    private let NUMBER_OF_ROWS                      : Int = 8
-    private let NUMBER_OF_ACTION_ROWS               : Int = 7
+    private let NUMBER_OF_ROWS                      : Int = 7
+    private let NUMBER_OF_ACTION_ROWS               : Int = 6
     
     private let USER_PROFILE_CELL_POSITION          : Int = 0
     
     private let IMPORT_CONTACTS_CELL_POSITION       : Int = 1
     private let CHANGE_NUMBER_CELL_POSITION         : Int = 2
     private let SEND_FEEDBACK_CELL_POSITION         : Int = 3
-    private let TUTORIAL_CELL_POSITION              : Int = 4
-    private let ABOUT_CELL_POSITION                 : Int = 5
-    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 6
-    private let PRIVACY_POLICY_CELL_POSITION        : Int = 7
+//    private let TUTORIAL_CELL_POSITION              : Int = 4
+    private let ABOUT_CELL_POSITION                 : Int = 4
+    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 5
+    private let PRIVACY_POLICY_CELL_POSITION        : Int = 6
 
 
     weak var delegate: SettingsViewDelegate?
@@ -45,7 +45,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private var sendFeedbackCell: SettingsTableViewCell!
     private var changeNumberCell: SettingsTableViewCell!
     private var importContactsCell: SettingsTableViewCell!
-    private var tutorialCell: SettingsTableViewCell!
+//    private var tutorialCell: SettingsTableViewCell!
     
     init() {
         super.init(frame: CGRectZero)
@@ -117,7 +117,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         self.createFeedbackCell()
         self.createChangeNumberCell()
         self.createImportContactsCell()
-        self.createTutorialCell()
+        //self.createTutorialCell()
     }
     
     private func makeConstraints() {
@@ -194,8 +194,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         case self.IMPORT_CONTACTS_CELL_POSITION:
             return self.importContactsCell
             
-        case self.TUTORIAL_CELL_POSITION:
-            return self.tutorialCell
+//        case self.TUTORIAL_CELL_POSITION:
+//            return self.tutorialCell
             
         default:
             print("Error creating row number: \(indexPath.row)")
@@ -239,8 +239,8 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         case self.IMPORT_CONTACTS_CELL_POSITION:
             self.delegate?.settingsViewDidTapImportContacts(self)
             
-        case self.TUTORIAL_CELL_POSITION:
-            self.delegate?.settingsViewDidTapTutorialButton(self)
+//        case self.TUTORIAL_CELL_POSITION:
+//            self.delegate?.settingsViewDidTapTutorialButton(self)
             
         default:
             print("Error creating row number: \(indexPath.row)")
@@ -323,12 +323,12 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         }
     }
     
-    private func createTutorialCell() {
-        
-        if (self.tutorialCell == nil) {
-            self.tutorialCell = SettingsTableViewCell(image: UIImage(named: "TutorialCell"), labelText: NSLocalizedString("Play Tutorial", comment: "Play Tutorial"), detailLabel: nil)
-        }
-    }
+//    private func createTutorialCell() {
+//        
+//        if (self.tutorialCell == nil) {
+//            self.tutorialCell = SettingsTableViewCell(image: UIImage(named: "TutorialCell"), labelText: NSLocalizedString("Play Tutorial", comment: "Play Tutorial"), detailLabel: nil)
+//        }
+//    }
     
     
     // MARK: - Setters
