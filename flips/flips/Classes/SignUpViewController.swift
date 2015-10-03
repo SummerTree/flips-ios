@@ -85,22 +85,24 @@ class SignUpViewController : FlipsViewController, SignUpViewDelegate, TakePictur
     
     func signUpView(signUpView: SignUpView, didTapNextButtonWith firstName: String, lastName: String, email: String, password: String, birthday: String) {
         
-        if (self.avatar == nil) {
-            self.signUpView.showMissingPictureMessage()
-        } else {
-            var actualPassword = password
-            var facebookId: String? = nil
-            if (self.facebookInput != nil) {
-                facebookId = self.facebookInput!["id"].stringValue
-                actualPassword = "f\(NSUUID().UUIDString)"
-            }
-            
-            self.signUpView.hideMissingPictureMessage()
-            
-            let phoneNumberViewController = PhoneNumberViewController(username: email, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName, facebookId: facebookId)
-            
-            self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+        if (self.avatar == nil)
+        {
+            self.avatar = UIImage(named: "ChatBubble")
         }
+
+        var actualPassword = password
+        var facebookId: String? = nil
+        if (self.facebookInput != nil) {
+            facebookId = self.facebookInput!["id"].stringValue
+            actualPassword = "f\(NSUUID().UUIDString)"
+        }
+        
+        self.signUpView.hideMissingPictureMessage()
+        
+        let phoneNumberViewController = PhoneNumberViewController(username: email, password: actualPassword, firstName: firstName, lastName: lastName, avatar: self.avatar, birthday: birthday, nickname: firstName, facebookId: facebookId)
+        
+        self.navigationController?.pushViewController(phoneNumberViewController, animated: true)
+
     }
     
     func signUpView(signUpView: SignUpView, setStatusBarHidden hidden: Bool) {
