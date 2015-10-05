@@ -12,7 +12,7 @@
 
 class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavigationBarDelegate {
     
-    private let FLIP_CELL_HEIGHT : CGFloat = 169
+    //private let FLIP_CELL_HEIGHT : CGFloat = 169
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
     
@@ -23,6 +23,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
+    
+    private var cellHeight : CGFloat = 169
     
     weak var delegate : InboxViewDelegate?
     weak var dataSource: InboxViewDataSource?
@@ -125,7 +127,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         
         if (showOnboarding) {
             bubbleView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self.navigationBar.mas_bottom).with().offset()(self.FLIP_CELL_HEIGHT)
+                make.top.equalTo()(self.navigationBar.mas_bottom).with().offset()(self.cellHeight)
                 make.width.equalTo()(self.bubbleView.getWidth())
                 make.height.equalTo()(self.bubbleView.getHeight())
                 make.centerX.equalTo()(self)
@@ -139,6 +141,11 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
                 navigationBar.setAvatarImageURL(url)
             }
         }
+    }
+    
+    override func layoutSubviews() {
+        cellHeight = self.frame.height * 0.4
+        super.layoutSubviews()
     }
     
     
@@ -185,7 +192,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return FLIP_CELL_HEIGHT;
+        return cellHeight;
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

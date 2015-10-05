@@ -55,11 +55,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     // MARK: - UIViewController overridden methods
     
     override func loadView() {
-        var showOnboarding = false
-        if (!OnboardingHelper.onboardingHasBeenShown()) {
-            showOnboarding = true
-        }
-        
         inboxView = InboxView(showOnboarding: false) // Onboarding is disabled for now.
         inboxView.delegate = self
         inboxView.dataSource = self
@@ -122,8 +117,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        self.showOnboarding()
         
         self.refreshRooms()
         
@@ -269,39 +262,6 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             }
         }
     }
-    
-    
-    // MARK: - Onboarding Handlers
-    
-    private func showOnboarding() {
-        if (!OnboardingHelper.onboardingHasBeenShown()) {
-            self.onboardingPlayer = OnboardingHelper.presentOnboardingAtViewController(self)
-            OnboardingHelper.setOnboardingHasShown()
-            
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "onboardingDidFinish:", name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
-        }
-    }
-    
-    func onboardingDidFinish(notification: NSNotification) {
-        if let reason = notification.userInfo?[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as? NSNumber {
-            if let reasonValue = MPMovieFinishReason(rawValue: reason.integerValue) {
-                switch reasonValue {
-                case .UserExited:
-                    var secondsWatched: String = ""
-                    if let player = self.onboardingPlayer {
-                        secondsWatched = "\(Int(player.currentPlaybackTime))"
-                    }
-                    AnalyticsService.logOnboardingClosed(secondsWatched)
-                default:
-                    print("Another event happened")
-                }
-            }
-        }
-        
-        self.onboardingPlayer = nil
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
-    }
-    
     
     // MARK: - InboxViewDelegate
     

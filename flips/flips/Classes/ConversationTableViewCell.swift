@@ -102,9 +102,9 @@ class ConversationTableViewCell : UITableViewCell {
     private func initConstraints() {
         flipImageView.mas_makeConstraints { (make) -> Void in
             make.top.equalTo()(self.contentView)
-            make.height.equalTo()(self.CELL_FLIP_IMAGE_VIEW_HEIGHT)
             make.leading.equalTo()(self.contentView)
             make.trailing.equalTo()(self.contentView).with().offset()(0.5)
+            make.bottom.equalTo()(self.infoView.mas_top)
         }
         
         userImageView.mas_makeConstraints { (make) -> Void in
@@ -124,7 +124,7 @@ class ConversationTableViewCell : UITableViewCell {
         infoView.mas_makeConstraints { (make) -> Void in
             make.leading.equalTo()(self.userImageView.mas_trailing).with().offset()(self.CELL_INFO_VIEW_HORIZONTAL_SPACING)
             make.trailing.equalTo()(self.contentView)
-            make.top.equalTo()(self.flipImageView.mas_bottom)
+            make.bottom.equalTo()(self)
             make.height.equalTo()(self.CELL_INFO_VIEW_HEIGHT)
         }
         

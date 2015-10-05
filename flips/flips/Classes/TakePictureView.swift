@@ -83,6 +83,24 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         galleryButton.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped", forControlEvents: .TouchUpInside)
         bottomButtonsContainerView.addSubview(galleryButton)
+        
+        var heightDivider : CGFloat = 3
+        
+        takePictureButton.imageView!.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
+            make.top.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
+            make.right.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+            make.bottom.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+        }
+        
+        heightDivider = 4.0 as CGFloat
+        
+        galleryButton.imageView!.mas_makeConstraints { (make) -> Void in
+            make.left.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
+            make.top.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
+            make.right.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+            make.bottom.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
+        }
     }
     
     
@@ -125,15 +143,6 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             make.width.equalTo()(imageSizer.frame.height * sizerMult)
         }
         
-        var heightDivider : CGFloat = 3
-        
-        takePictureButton.imageView!.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
-            make.top.equalTo()(self.takePictureButton).offset()(imageSizer.frame.height / heightDivider)
-            make.right.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
-            make.bottom.equalTo()(self.takePictureButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
-        }
-        
         let galleryButtonCenterXOffset : CGFloat = self.frame.width / 4
         
         galleryButton.mas_makeConstraints { (make) -> Void in
@@ -144,14 +153,6 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
             make.height.equalTo()(self.galleryButton.frame.height)
         }
         
-        heightDivider = 4.0 as CGFloat
-        
-        galleryButton.imageView!.mas_makeConstraints { (make) -> Void in
-            make.left.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
-            make.top.equalTo()(self.galleryButton).offset()(imageSizer.frame.height / heightDivider)
-            make.right.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
-            make.bottom.equalTo()(self.galleryButton).offset()(-1 * (imageSizer.frame.height / heightDivider))
-        }
     }
     
     
