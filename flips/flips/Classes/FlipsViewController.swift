@@ -93,23 +93,31 @@ class FlipsViewController : UIViewController {
     }
     
     func showActivityIndicator(userInteractionEnabled: Bool = false, message: String? = nil) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.view.bringSubviewToFront(self.loadingContainer)
+        
+        if self.isViewLoaded() && self.view.window != nil {
             
-            let isShowingMessage: Bool = (message != nil)
-            if (isShowingMessage) {
-                self.loadingMessageLabel.text = message!
-            } else {
-                self.loadingMessageLabel.text = ""
-            }
-            self.updateLoadingViewConstraints(isShowingMessage)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.view.bringSubviewToFront(self.loadingContainer)
             
-            self.view.userInteractionEnabled = userInteractionEnabled
-            self.activityIndicator.startAnimating()
-            UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                self.loadingContainer.alpha = 0.8
+                let isShowingMessage: Bool = (message != nil)
+                if (isShowingMessage) {
+                    self.loadingMessageLabel.text = message!
+                } else {
+                    self.loadingMessageLabel.text = ""
+                }
+                self.updateLoadingViewConstraints(isShowingMessage)
+                
+                self.view.userInteractionEnabled = userInteractionEnabled
+                self.activityIndicator.startAnimating()
+                UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+                    self.loadingContainer.alpha = 0.8
+                })
+                
             })
-        })
+            
+        }
+        
     }
     
     private func updateLoadingViewConstraints(isShowingText: Bool) {
@@ -148,20 +156,41 @@ class FlipsViewController : UIViewController {
         self.view.updateConstraints()
     }
     
+    func isCurrentViewController() -> (Bool) {
+        
+        let presentedController = self.navigationController?.presentedViewController
+        
+        if let controller = presentedController as? UINavigationController {
+            if let controller = controller.topViewController {
+                return controller == self
+            }
+        }
+        else if let controller = presentedController {
+            return controller == self
+        }
+        
+        return false
+        
+    }
+    
     func hideActivityIndicator() {
+        
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
-            if self.navigationController?.presentedViewController == self {
+            if self.isCurrentViewController() {
+                
                 self.view.userInteractionEnabled = true
+            
+                UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+                    self.loadingContainer?.alpha = 0
+                }, completion: { (finished) -> Void in
+                    self.activityIndicator?.stopAnimating() 
+                })
+                
             }
             
-            UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                self.loadingContainer.alpha = 0
-            }, completion: { (finished) -> Void in
-                self.activityIndicator.stopAnimating()
-            })
-            
         })
+        
     }
     
     func previousViewController() -> UIViewController? {
