@@ -29,6 +29,9 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // Title
     private var compositionTitle : String!
     
+    // Flips UI Initialization
+    private var flipsInitialized : Bool = false
+    
     // Contact
     internal var roomID : String!
     internal var contacts : [Contact]!
@@ -134,21 +137,19 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         initSubviews()
         initConstraints()
         initAudioRecorder()
-        
-        if let navController = self.navigationController as? FlipsUINavigationController {
-            navController.dispatchAfterViewControllerPresented({ () -> Void in
-                self.initFlips()
-            })
-        }
-        else {
-            initFlips();
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.flipCompositionView.cameraViewDelegate = self
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if !flipsInitialized {
+            initFlips()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -218,6 +219,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     }
     
     private func initFlips() {
+        
+        flipsInitialized = true
         
         if flipMessageManager.messageHasEmptyFlipWords() {
             flipMessageManager.setCurrentFlipWordIndex(flipMessageManager.getIndexForFirstEmptyFlipWord())
