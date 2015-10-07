@@ -490,7 +490,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                     success: { (responseAsJSON) -> Void in
                         let stockFlipsAsJSON = responseAsJSON?[self.STOCK_FLIPS].array
                         for stockFlipJson in stockFlipsAsJSON! {
-                            PersistentManager.sharedInstance.createFlipWithJsonAsync(stockFlipJson)
+                            PersistentManager.sharedInstance.createFlipWithJson(stockFlipJson)
                         }
                         if let json = responseAsJSON {
                             let lastTimestampAsString = json[self.STOCK_FLIPS_LAST_TIMESTAMP].stringValue
