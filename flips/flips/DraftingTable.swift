@@ -83,9 +83,6 @@ public class DraftingTable : NSObject {
             if let firstFlipId : String = self.myFlipsDictionary[flipPage.word]?.first {
                 flipPage.pageID = firstFlipId
             }
-            else if let firstFlipId : String = self.stockFlipsDictionary[flipPage.word]?.first {
-                flipPage.pageID = firstFlipId
-            }
         }
         
     }
