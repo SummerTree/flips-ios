@@ -35,8 +35,7 @@ class AboutViewController : FlipsViewController, AboutViewDelegate {
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         logoContainer.mas_makeConstraints { (make) -> Void in
-            let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
         }
     }
     
