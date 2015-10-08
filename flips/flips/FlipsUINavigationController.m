@@ -72,8 +72,7 @@
 }
 
 - (BOOL)isBusyAnimatingTransition {
-    NSTimeInterval oneSecondAgo = [[[NSDate date] dateByAddingTimeInterval:-1] timeIntervalSince1970];
-    return self.busyAnimating && self.lastAnimationTime > oneSecondAgo;
+    return self.busyAnimating && self.lastAnimationTime > [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) dispatchAfterViewControllerPresented:(void (^)())afterViewControllerPresented {
