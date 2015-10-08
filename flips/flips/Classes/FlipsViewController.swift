@@ -94,29 +94,35 @@ class FlipsViewController : UIViewController {
     
     func showActivityIndicator(userInteractionEnabled: Bool = false, message: String? = nil) {
         
-        if self.isViewLoaded() && self.view.window != nil {
-            
+        if !NSThread.isMainThread() {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                self.view.bringSubviewToFront(self.loadingContainer)
-            
-                let isShowingMessage: Bool = (message != nil)
-                if (isShowingMessage) {
-                    self.loadingMessageLabel.text = message!
-                } else {
-                    self.loadingMessageLabel.text = ""
-                }
-                self.updateLoadingViewConstraints(isShowingMessage)
-                
-                self.view.userInteractionEnabled = userInteractionEnabled
-                self.activityIndicator.startAnimating()
-                UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                    self.loadingContainer.alpha = 0.8
-                })
-                
+                self.performShowActivityIndicator(userInteractionEnabled, message: message)
             })
-            
         }
+        else {
+            self.performShowActivityIndicator(userInteractionEnabled, message: message)
+        }
+
+        
+    }
+    
+    private func performShowActivityIndicator(userInteractionEnabled: Bool = false, message: String? = nil) {
+        
+        self.view.bringSubviewToFront(self.loadingContainer)
+        
+        let isShowingMessage: Bool = (message != nil)
+        if (isShowingMessage) {
+            self.loadingMessageLabel.text = message!
+        } else {
+            self.loadingMessageLabel.text = ""
+        }
+        self.updateLoadingViewConstraints(isShowingMessage)
+        
+        self.view.userInteractionEnabled = userInteractionEnabled
+        self.activityIndicator.startAnimating()
+        UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+            self.loadingContainer.alpha = 0.8
+        })
         
     }
     
@@ -156,39 +162,29 @@ class FlipsViewController : UIViewController {
         self.view.updateConstraints()
     }
     
-    func isCurrentViewController() -> (Bool) {
+    func hideActivityIndicator() {
         
-        let presentedController = self.navigationController?.presentedViewController
+        if !NSThread.isMainThread() {
         
-        if let controller = presentedController as? UINavigationController {
-            if let controller = controller.topViewController {
-                return controller == self
-            }
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.performHideActivityIndicator()
+            })
+            
         }
-        else if let controller = presentedController {
-            return controller == self
+        else {
+            self.performHideActivityIndicator()
         }
-        
-        return false
         
     }
     
-    func hideActivityIndicator() {
+    private func performHideActivityIndicator() {
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            
-            if self.isCurrentViewController() {
-                
-                self.view.userInteractionEnabled = true
-            
-                UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                    self.loadingContainer?.alpha = 0
-                }, completion: { (finished) -> Void in
-                    self.activityIndicator?.stopAnimating() 
-                })
-                
-            }
-            
+        self.view.userInteractionEnabled = true
+        
+        UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+            self.loadingContainer?.alpha = 0
+            }, completion: { (finished) -> Void in
+                self.activityIndicator?.stopAnimating()
         })
         
     }
