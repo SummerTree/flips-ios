@@ -186,8 +186,13 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
                 let flip = flipDataSource.retrieveFlipWithId(flipID)
                 flips.append(flip)
             }
-            else if let videoURL = flipPage.videoURL {
+            else if let _ = flipPage.videoURL {
                 flips.append(flipPage.createFlip())
+            }
+            else {
+                let flip = flipDataSource.createEmptyFlipWithWord(flipPage.word)
+                flips.append(flip)
+                flipPage.pageID = flip.flipID
             }
             
             formattedWords.append(flipPage.word)
