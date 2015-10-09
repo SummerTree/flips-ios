@@ -34,7 +34,7 @@ public class CountryCodes: NSObject {
             {
                 if let jsonResult: [NSDictionary] = (try? NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers)) as? [NSDictionary]
                 {
-                    self.countryCodes = jsonResult.sort { self.countryCodeSort($0, p2: $1) }
+                    self.countryCodes = jsonResult //.sort { self.countryCodeSort($0, p2: $1) }
                 }
             }
         }
