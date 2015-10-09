@@ -125,6 +125,10 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.chatView.delegate = self
         self.chatView.dataSource = self
         self.chatView.viewWillAppear()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         if let flipMessageID = self.flipMessageIdFromPushNotification {
             if (!NetworkReachabilityHelper.sharedInstance.hasInternetConnection()) {
@@ -148,10 +152,6 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 }
             }
         }
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
         
         self.groupParticipantsView?.mas_updateConstraints( { (update: MASConstraintMaker!) -> Void in
             update.removeExisting = true
