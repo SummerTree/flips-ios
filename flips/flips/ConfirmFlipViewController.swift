@@ -104,8 +104,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         // using Mansory strategy
         // check here: https://github.com/Masonry/Masonry/issues/27
         pictureContainerView.mas_makeConstraints { (make) -> Void in
-            let topLayoutGuide: AnyObject = self.topLayoutGuide
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
         }
     }
     

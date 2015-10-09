@@ -93,23 +93,37 @@ class FlipsViewController : UIViewController {
     }
     
     func showActivityIndicator(userInteractionEnabled: Bool = false, message: String? = nil) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.view.bringSubviewToFront(self.loadingContainer)
-            
-            let isShowingMessage: Bool = (message != nil)
-            if (isShowingMessage) {
-                self.loadingMessageLabel.text = message!
-            } else {
-                self.loadingMessageLabel.text = ""
-            }
-            self.updateLoadingViewConstraints(isShowingMessage)
-            
-            self.view.userInteractionEnabled = userInteractionEnabled
-            self.activityIndicator.startAnimating()
-            UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                self.loadingContainer.alpha = 0.8
+        
+        if !NSThread.isMainThread() {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.performShowActivityIndicator(userInteractionEnabled, message: message)
             })
+        }
+        else {
+            self.performShowActivityIndicator(userInteractionEnabled, message: message)
+        }
+
+        
+    }
+    
+    private func performShowActivityIndicator(userInteractionEnabled: Bool = false, message: String? = nil) {
+        
+        self.view.bringSubviewToFront(self.loadingContainer)
+        
+        let isShowingMessage: Bool = (message != nil)
+        if (isShowingMessage) {
+            self.loadingMessageLabel.text = message!
+        } else {
+            self.loadingMessageLabel.text = ""
+        }
+        self.updateLoadingViewConstraints(isShowingMessage)
+        
+        self.view.userInteractionEnabled = userInteractionEnabled
+        self.activityIndicator.startAnimating()
+        UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+            self.loadingContainer.alpha = 0.8
         })
+        
     }
     
     private func updateLoadingViewConstraints(isShowingText: Bool) {
@@ -149,14 +163,30 @@ class FlipsViewController : UIViewController {
     }
     
     func hideActivityIndicator() {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.view.userInteractionEnabled = true
-            UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
-                self.loadingContainer.alpha = 0
-            }, completion: { (finished) -> Void in
-                self.activityIndicator.stopAnimating()
+        
+        if !NSThread.isMainThread() {
+        
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.performHideActivityIndicator()
             })
+            
+        }
+        else {
+            self.performHideActivityIndicator()
+        }
+        
+    }
+    
+    private func performHideActivityIndicator() {
+        
+        self.view.userInteractionEnabled = true
+        
+        UIView.animateWithDuration(self.ACTIVITY_INDICATOR_FADE_ANIMATION_DURATION, animations: { () -> Void in
+            self.loadingContainer?.alpha = 0
+            }, completion: { (finished) -> Void in
+                self.activityIndicator?.stopAnimating()
         })
+        
     }
     
     func previousViewController() -> UIViewController? {

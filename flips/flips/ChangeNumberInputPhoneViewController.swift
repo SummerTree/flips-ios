@@ -52,10 +52,8 @@ class ChangeNumberInputPhoneViewController : FlipsViewController, ChangeNumberIn
     // MARK: - ChangeNumberInputPhoneViewDelegate
     
     func makeConstraintToNavigationBarBottom(view: UIView!) {
-        let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
-        
         view.mas_makeConstraints { (make) -> Void in
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
             return ()
         }
     }

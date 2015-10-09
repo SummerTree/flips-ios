@@ -78,11 +78,13 @@ public class DraftingTable : NSObject {
     }
     
     func mapWordsToFirstAvailableFlip() {
+        
         for flipPage in self.flipBook.flipPages {
             if let firstFlipId : String = self.myFlipsDictionary[flipPage.word]?.first {
                 flipPage.pageID = firstFlipId
             }
         }
+        
     }
     
     private let NO_FLIP_SELECTED_INDEX = -1

@@ -26,14 +26,14 @@ class PhoneNumberViewController: FlipsViewController, PhoneNumberViewDelegate {
     private var birthday: NSDate!
     private var facebookId: String?
     
-    init(userId: String) {
+    init(userId: String!) {
         super.init(nibName: nil, bundle: nil)
         self.userId = userId
     }
     
     convenience init(username: String, password: String, firstName: String, lastName: String, avatar: UIImage, birthday: String!, nickname: String?, facebookId: String?) {
         
-        self.init(nibName: nil, bundle: nil)
+        self.init(userId: nil)
         self.username = username
         self.password = password
         self.firstName = firstName

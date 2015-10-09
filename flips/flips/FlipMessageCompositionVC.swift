@@ -29,6 +29,9 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // Title
     private var compositionTitle : String!
     
+    // Flips UI Initialization
+    private var flipsInitialized : Bool = false
+    
     // Contact
     internal var roomID : String!
     internal var contacts : [Contact]!
@@ -134,21 +137,19 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         initSubviews()
         initConstraints()
         initAudioRecorder()
-        
-        if let navController = self.navigationController as? FlipsUINavigationController {
-            navController.dispatchAfterViewControllerPresented({ () -> Void in
-                self.initFlips()
-            })
-        }
-        else {
-            initFlips();
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.flipCompositionView.cameraViewDelegate = self
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if !flipsInitialized {
+            initFlips()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -218,6 +219,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     }
     
     private func initFlips() {
+        
+        flipsInitialized = true
         
         if flipMessageManager.messageHasEmptyFlipWords() {
             flipMessageManager.setCurrentFlipWordIndex(flipMessageManager.getIndexForFirstEmptyFlipWord())
@@ -771,26 +774,26 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     
     internal func prepareFlipsForPreviewController() {
         
-        let firstEmptyIndex = flipMessageManager.getIndexForFirstEmptyFlipWord()
+//        let firstEmptyIndex = flipMessageManager.getIndexForFirstEmptyFlipWord()
         let firstPendingIndex = flipMessageManager.getIndexForFirstFlipWordWithPendingChanges()
-        var firstUnsavedIndex = -1
+//        var firstUnsavedIndex = -1
+//        
+//        if firstEmptyIndex != -1 && firstPendingIndex != -1 {
+//            firstUnsavedIndex = min(firstEmptyIndex, firstPendingIndex)
+//        }
+//        else {
+//            firstUnsavedIndex = max(firstEmptyIndex, firstPendingIndex)
+//        }
         
-        if firstEmptyIndex != -1 && firstPendingIndex != -1 {
-            firstUnsavedIndex = min(firstEmptyIndex, firstPendingIndex)
-        }
-        else {
-            firstUnsavedIndex = max(firstEmptyIndex, firstPendingIndex)
-        }
-        
-        if firstUnsavedIndex != -1
+        if firstPendingIndex != -1
         {
             showActivityIndicator(false, message: nil)
             
-            flipMessageManager.createFlipVideoForWordAtIndex(firstUnsavedIndex, successHandler: { (videoURL, thumbnailURL) -> Void in
+            flipMessageManager.createFlipVideoForWordAtIndex(firstPendingIndex, successHandler: { (videoURL, thumbnailURL) -> Void in
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     
-                    let flipWord = self.flipMessageManager.getFlipWordAtIndex(firstUnsavedIndex)
+                    let flipWord = self.flipMessageManager.getFlipWordAtIndex(firstPendingIndex)
                 
                     if let videoURL = videoURL, let thumbnailURL = thumbnailURL
                     {

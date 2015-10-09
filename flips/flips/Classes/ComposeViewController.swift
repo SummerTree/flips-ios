@@ -220,12 +220,10 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     private func addConstraints() {
-        let topLayoutGuide: UIView = self.topLayoutGuide as AnyObject! as! UIView
-        
         composeTopViewContainer.mas_makeConstraints { (make) -> Void in
             make.left.equalTo()(self.view)
             make.right.equalTo()(self.view)
-            make.top.equalTo()(topLayoutGuide.mas_bottom)
+            make.top.equalTo()(self.mas_topLayoutGuideBottom)
             
             if (DeviceHelper.sharedInstance.isDeviceModelLessOrEqualThaniPhone4S()) {
                 make.centerX.equalTo()(self.view)

@@ -235,8 +235,13 @@
 }
 
 - (void)mergeVideo:(NSURL *)videoURL withAudio:(NSURL *)audioURL atPath:(NSString *)destPath completionHandler:(void (^)())completionHandler {
+    
     AVURLAsset *audioAsset = [AVURLAsset assetWithURL:audioURL];
     AVURLAsset *videoAsset = [AVURLAsset assetWithURL:videoURL];
+    
+    double videoDuration = videoAsset.duration.value / videoAsset.duration.timescale;
+    double audioDuration = audioAsset.duration.value / audioAsset.duration.timescale;
+    CMTime duration = videoDuration > audioDuration ? audioAsset.duration : videoAsset.duration;
     
     NSError *error;
     
@@ -244,7 +249,8 @@
     
     AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio
                                                                                    preferredTrackID:kCMPersistentTrackID_Invalid];
-    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration)
+    
+    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, duration)
                                    ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
                                     atTime:kCMTimeZero error:&error];
     
@@ -257,7 +263,8 @@
     if ([videoTracks count] > 0) {
         AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo
                                                                                        preferredTrackID:kCMPersistentTrackID_Invalid];
-        [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
+        
+        [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, duration)
                                        ofTrack:[videoTracks objectAtIndex:0]
                                         atTime:kCMTimeZero error:&error];
         
@@ -338,7 +345,7 @@
             NSLog(@"failed to append buffer");
         }
         
-        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(1, 2)];
+        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(3, 2)];
         if (result == NO) {
             NSLog(@"failed to append buffer");
         }
