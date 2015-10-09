@@ -65,6 +65,13 @@ class ImportContactViewController: UIViewController {
                 print("Success importing local contacts")
                 let importContactsTableViewController = ImportContactsTableViewController()
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    if let user = User.loggedUser() {
+                        let userDefaults = NSUserDefaults.standardUserDefaults()
+                        userDefaults.setValue(true, forKey: "\(user.userID)DidImportContacts")
+                        userDefaults.synchronize()
+                    }
+                    
                     ActivityIndicatorHelper.hideActivityIndicatorAtView(self.view)
                     self.navigationController?.pushViewController(importContactsTableViewController, animated: true)
                 })

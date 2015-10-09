@@ -13,6 +13,8 @@
 import MediaPlayer
 
 let RESYNC_INBOX_NOTIFICATION_NAME: String = "resync_inbox_notification"
+let MESSAGE_SEND_ALERT_TAG = 1000
+let IMPORT_CONTACTS_ALERT_TAG = 1001
 
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UIAlertViewDelegate {
     
@@ -75,6 +77,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             // We don't need to show the Sync in this case. So, we need to mark it as seen.
             DeviceHelper.sharedInstance.setSyncViewShown(true)
             self.shouldInformPubnubNotConnected = true
+            
+            if !self.userHasImportedContacts() {
+                self.showImportContactsDialog()
+            }
             
             weak var weakSelf = self
             PubNubService.sharedInstance.subscribeOnMyChannels({ (success: Bool) -> Void in
@@ -244,6 +250,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                                 return
                             }, completion: { (finished: Bool) -> Void in
                                 self.syncView?.hidden = true
+                                if !self.userHasImportedContacts() {
+                                    self.showImportContactsDialog()
+                                }
                                 return
                             })
                         })
@@ -524,7 +533,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         }
         else
         {
-            UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Retry").show()
+            let alert = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Retry")
+            
+            alert.tag = MESSAGE_SEND_ALERT_TAG
+            alert.show()
         }
         
     }
@@ -585,6 +597,58 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     }
     
     
+    ////
+    // MARK: - Import Contacts Notice
+    ////
+    
+    private func userHasImportedContacts() -> (Bool) {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let user = User.loggedUser() {
+            return userDefaults.valueForKey("\(user.userID)DidImportContacts") === true
+        }
+        
+        return false;
+        
+    }
+    
+    private func showImportContactsDialog() {
+        
+        let alertView = UIAlertView(title: "Import Contacts", message: "We noticed you haven’t imported your contacts yet. Want to do so now? Flips works best when this is done.", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Import")
+        
+        alertView.tag = IMPORT_CONTACTS_ALERT_TAG
+        alertView.show()
+        
+    }
+    
+    func showImportContactsController() {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            if let user = User.loggedUser() {
+                let userId = user.userID
+                SessionService.sharedInstance.checkSession(userId,
+                    success: { (success) -> Void in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            let importContactViewController = ImportContactViewController()
+                            let navigationController = FlipsUINavigationController(rootViewController: importContactViewController)
+                            self.presentViewController(navigationController, animated: true, completion: nil)
+                        })
+                    },
+                    failure: { (error) -> Void in
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            if let flipError: FlipError = error {
+                                let alertMessage = UIAlertView(title: flipError.error, message: flipError.details, delegate: nil, cancelButtonTitle: LocalizedString.OK)
+                                alertMessage.show()
+                            }
+                        })
+                    }
+                )
+            }
+        })
+        
+    }
+    
     // MARK: - UIAlertView Delegate
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
@@ -594,7 +658,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             case "Retry":
                 self.retryMessageSubmission()
             case "Cancel":
-                self.cancelMessageSubmission()
+                if alertView.tag == MESSAGE_SEND_ALERT_TAG {
+                    self.cancelMessageSubmission()
+                }
+            case "Import":
+                self.showImportContactsController()
             default:
                 break;
         }
