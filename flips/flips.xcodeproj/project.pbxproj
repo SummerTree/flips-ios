@@ -689,9 +689,6 @@
 		BE820DE31AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
 		BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */; };
 		ECAABC603EEC4666A01F7818 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E055BF9E4B434289F06FD3 /* libPods.a */; };
-		F22184351AF83CBA0000220B /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F22184341AF83CBA0000220B /* flips-tutorial.mp4 */; };
-		F22184361AF83CBA0000220B /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F22184341AF83CBA0000220B /* flips-tutorial.mp4 */; };
-		F22184371AF83CBA0000220B /* flips-tutorial.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F22184341AF83CBA0000220B /* flips-tutorial.mp4 */; };
 		F22611261AB6FEC4004C875A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22611251AB6FEC4004C875A /* ProgressBar.swift */; };
 		F23E38221AF2E0B2003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
 		F23E38231AF2E0BF003CAAC3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */; };
@@ -960,7 +957,6 @@
 		BE820DE11AE6BE5C00C25208 /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		C3E055BF9E4B434289F06FD3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42F2704A96077C5800507B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		F22184341AF83CBA0000220B /* flips-tutorial.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "flips-tutorial.mp4"; sourceTree = "<group>"; };
 		F22611251AB6FEC4004C875A /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F29324701A1583B700355A4D /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
@@ -1903,7 +1899,6 @@
 		BE2E72061A98119400F237BE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F22184341AF83CBA0000220B /* flips-tutorial.mp4 */,
 				BE2E72071A98119400F237BE /* empty_video.mov */,
 				40BF167F1B963CC80086E425 /* CountryCodes.json */,
 			);
@@ -2084,7 +2079,6 @@
 				40BF16801B963CC80086E425 /* CountryCodes.json in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
-				F22184351AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2097,7 +2091,6 @@
 				BE24605E1AD2D95900859233 /* ContactTableViewCell.xib in Resources */,
 				40BF16811B963CC80086E425 /* CountryCodes.json in Resources */,
 				BE24605F1AD2D95900859233 /* Images.xcassets in Resources */,
-				F22184361AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE2460611AD2D95900859233 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2111,7 +2104,6 @@
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
 				40BF16821B963CC80086E425 /* CountryCodes.json in Resources */,
 				BE2461391AD2D9C600859233 /* Images.xcassets in Resources */,
-				F22184371AF83CBA0000220B /* flips-tutorial.mp4 in Resources */,
 				BE24613B1AD2D9C600859233 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
