@@ -234,44 +234,73 @@
     return composition;
 }
 
+
+
 - (void)mergeVideo:(NSURL *)videoURL withAudio:(NSURL *)audioURL atPath:(NSString *)destPath completionHandler:(void (^)())completionHandler {
     
     AVURLAsset *audioAsset = [AVURLAsset assetWithURL:audioURL];
+    AVAssetTrack * audioTrack = [[audioAsset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+    
     AVURLAsset *videoAsset = [AVURLAsset assetWithURL:videoURL];
-    
-    double videoDuration = videoAsset.duration.value / videoAsset.duration.timescale;
-    double audioDuration = audioAsset.duration.value / audioAsset.duration.timescale;
-    CMTime duration = videoDuration > audioDuration ? audioAsset.duration : videoAsset.duration;
-    
-    NSError *error;
+    AVAssetTrack * videoTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] firstObject];
     
     AVMutableComposition *mixComposition = [AVMutableComposition composition];
+    
+    AVMutableCompositionTrack * mutableVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    CMTime audioDuration = [audioAsset duration];
+    CMTime videoDuration = CMTimeConvertScale(audioDuration, videoAsset.duration.timescale, kCMTimeRoundingMethod_Default);
+    
+    if (CMTimeCompare(videoAsset.duration, videoDuration) > -1)
+    {
+        // VideoAsset duration is greater than or equal to audio duration
+        CMTimeRange trackTimeRange = CMTimeRangeMake(kCMTimeZero, CMTimeSubtract(videoDuration, kCMTimeZero));
+        
+        NSError * error;
+        
+        [mutableVideoTrack insertTimeRange:trackTimeRange ofTrack:videoTrack atTime:kCMTimeZero error:&error];
+    }
+    else
+    {
+        // VideoAsset duration is less than audio duration
+        CMTime videoStart = CMTimeMake(0, videoDuration.timescale);
+        
+        while(CMTimeCompare(videoStart, videoDuration) < 0)
+        {
+            double durationDiff = videoDuration.value - videoStart.value;
+            
+            if (durationDiff > videoAsset.duration.value)
+            {
+                // This is not the final iteration, add the full duration
+                CMTimeRange trackTimeRange = CMTimeRangeMake(videoStart, CMTimeAdd(videoStart, videoAsset.duration));
+                
+                NSError * error;
+                
+                [mutableVideoTrack insertTimeRange:trackTimeRange ofTrack:videoTrack atTime:videoStart error:&error];
+            }
+            else
+            {
+                // This is the final iteration, add up to the end of the video duration
+                CMTimeRange trackTimeRange = CMTimeRangeMake(videoStart, CMTimeSubtract(videoDuration, videoStart));
+                
+                NSError * error;
+                
+                [mutableVideoTrack insertTimeRange:trackTimeRange ofTrack:videoTrack atTime:videoStart error:&error];
+            }
+            
+            videoStart = CMTimeAdd(videoStart, videoAsset.duration);
+        }
+
+    }
+    
+    NSError *error;
     
     AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio
                                                                                    preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, duration)
-                                   ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0]
+    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoDuration)
+                                   ofTrack:audioTrack
                                     atTime:kCMTimeZero error:&error];
-    
-    if (error) {
-        NSLog(@"Could not insert audio track: %@", error.localizedDescription);
-    }
-    
-    NSArray *videoTracks = [videoAsset tracksWithMediaType:AVMediaTypeVideo];
-    
-    if ([videoTracks count] > 0) {
-        AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo
-                                                                                       preferredTrackID:kCMPersistentTrackID_Invalid];
-        
-        [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, duration)
-                                       ofTrack:[videoTracks objectAtIndex:0]
-                                        atTime:kCMTimeZero error:&error];
-        
-        if (error) {
-            NSLog(@"Could not insert video track: %@", error.localizedDescription);
-        }
-    }
     
     AVAssetExportSession *assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition
                                                                          presetName:AVAssetExportPresetMediumQuality];
@@ -345,7 +374,7 @@
             NSLog(@"failed to append buffer");
         }
         
-        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(3, 2)];
+        result = [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(1, 2)];
         if (result == NO) {
             NSLog(@"failed to append buffer");
         }
