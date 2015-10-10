@@ -14,7 +14,7 @@ import UIKit
 
 class PrivacyPolicyView: FlipsWebView {
     
-    let PRIVACY_POLICY_URL = "http://www.flipsapp.com/privacy.html"
+    let PRIVACY_POLICY_URL = "http://www.flipsapp.com/privacy"
     
     init() {
         super.init(URL: PRIVACY_POLICY_URL)
