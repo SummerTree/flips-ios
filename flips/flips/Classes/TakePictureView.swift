@@ -158,12 +158,15 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
     
     // MARK: - Public Methods
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        takePictureButton.layer.cornerRadius = takePictureButton.bounds.width / 2
+        galleryButton.layer.cornerRadius = galleryButton.bounds.height / 2
+    }
+    
     func viewWillAppear(animated: Bool) {
         cameraView.registerObservers()
         //galleryButton.setLastCameraPhotoAsButtonImage()
-        
-        takePictureButton.layer.cornerRadius = takePictureButton.bounds.height / 2
-        galleryButton.layer.cornerRadius = galleryButton.bounds.height / 2
     }
     
     func viewWillDisappear(animated: Bool) {
