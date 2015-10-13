@@ -47,10 +47,6 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
     
     private func initSubviews() {
         
-        // Shared Button Image
-        
-        var captureImage = UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        
         // Flips Views
         
         flipsView = FlipsSelectionView()
@@ -74,7 +70,6 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
     func buttonView(option: CaptureButtonOption, gestureRecognizer: UIGestureRecognizer? = nil, tapSelector: Selector? = nil) -> (UIView) {
         
         let imageSizer = UIImageView(image: UIImage(named: "Capture")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))
-        let sizerMult : CGFloat = 1.35
         
         let button = UIButton(type: .Custom)
         button.tintColor = UIColor.whiteColor()
@@ -135,11 +130,11 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
         
         let button : UIButton? = deleteView.subviews[0] as? UIButton
         
-        if let dataSource = flipsView.dataSource, let flipID = dataSource.selectedFlipId() {
-            button?.titleLabel?.text = "Create a new Flip"
+        if let dataSource = flipsView.dataSource, let _ = dataSource.selectedFlipId() {
+            button?.setTitle("Create a new Flip", forState: .Normal)
         }
         else {
-            button?.titleLabel?.text = "Epic Fail? Try again."
+            button?.setTitle("Epic Fail? Try again.", forState: .Normal)
         }
         
     }
