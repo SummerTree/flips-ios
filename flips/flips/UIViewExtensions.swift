@@ -29,10 +29,16 @@ extension UIView {
     
     func shadowMe() {
         let layer = self.layer
-        layer.masksToBounds = false
-        layer.shadowOffset = CGSizeMake(0,3)
+//        layer.masksToBounds = false
+//        layer.shadowOffset = CGSizeMake(0,3)
+//        layer.shadowColor = UIColor.darkGrayColor().CGColor
+//        layer.shadowOpacity = 0.75
+//        layer.shadowPath = UIBezierPath(rect:self.bounds).CGPath;
+        
         layer.shadowColor = UIColor.darkGrayColor().CGColor
-        layer.shadowOpacity = 0.75
-        layer.shadowPath = UIBezierPath(rect:self.bounds).CGPath;
+        layer.shadowRadius = 3.0
+        layer.shadowOpacity = 0.50
+        layer.shadowOffset = CGSizeMake(0,0)
+        layer.masksToBounds = false
     }
 }

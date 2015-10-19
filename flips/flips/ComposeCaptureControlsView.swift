@@ -99,22 +99,20 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
         button.layer.borderWidth = 3.0
         button.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
         button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-        //button.shadowMe()
+        button.shadowMe()
         
         switch option {
             case .Video:
-                button.backgroundColor = UIColor.redColor()
+                button.backgroundColor = UIColor.flipOrangeBackground()
                 button.setImage(UIImage(named: "VideoRecord")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
                 break
             case .Camera:
-                button.backgroundColor = UIColor.lightGrayColor()
+                button.backgroundColor = UIColor.banana()
                 button.setImage(UIImage(named: "CameraNew")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
-                //button.tintColor = UIColor.grayColor()
                 break
             case .Gallery:
-                button.backgroundColor = UIColor.flipOrange()
+                button.backgroundColor = UIColor.purpleColor()
                 button.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
-                ////button.tintColor = UIColor.lightSemitransparentBackground()
                 break
         default:
                 break
