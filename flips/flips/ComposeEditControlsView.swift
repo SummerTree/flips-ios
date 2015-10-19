@@ -77,7 +77,7 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
         button.layer.borderWidth = 3.0
         button.layer.cornerRadius = 5.0
         button.titleLabel!.font = UIFont.avenirNextMedium(15.0)
-        //button.shadowMe()
+        button.shadowMe()
         
         switch option {
             case .Delete:

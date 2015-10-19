@@ -61,6 +61,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         userFlipsButton.titleLabel!.font = UIFont.avenirNextDemiBold(15.0)
         userFlipsButton.addTarget(self, action: Selector("didTapUserFlipsButton"), forControlEvents: UIControlEvents.TouchUpInside)
         userFlipsButton.backgroundColor = UIColor.whiteColor()
+        userFlipsButton.shadowMe()
         addSubview(userFlipsButton)
         
         stockFlipsButton = UIButton(type: .System)
@@ -72,6 +73,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         stockFlipsButton.titleLabel!.font = UIFont.avenirNextDemiBold(15.0)
         stockFlipsButton.addTarget(self, action: Selector("didTapStockFlipsButton"), forControlEvents: UIControlEvents.TouchUpInside)
         stockFlipsButton.backgroundColor = UIColor.whiteColor()
+        stockFlipsButton.shadowMe()
         addSubview(stockFlipsButton)
         
         let layout = UICollectionViewFlowLayout()
