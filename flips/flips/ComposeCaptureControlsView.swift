@@ -111,7 +111,7 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
                 button.setImage(UIImage(named: "CameraNew")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
                 break
             case .Gallery:
-                button.backgroundColor = UIColor.purpleColor()
+                button.backgroundColor = UIColor.galleryButton()
                 button.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
                 break
         default:

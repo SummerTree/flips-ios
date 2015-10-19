@@ -75,6 +75,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         sendingView.textColor = UIColor.whiteColor()
         sendingView.text = "Sending Message..."
         sendingView.textAlignment = NSTextAlignment.Center
+        sendingView.font = UIFont.avenirNextMedium(16.0)
         addSubview(self.sendingView)
         
         self.addSubview(navigationBar)

@@ -68,6 +68,10 @@ extension UIColor {
         return UIColor(RRGGBB: UInt(0x4A4A4A))
     }
     
+    class func galleryButton() -> UIColor {
+        return UIColor (RRGGBB: UInt(0xA68EC1))
+    }
+    
     
     // MARK: Components
     
