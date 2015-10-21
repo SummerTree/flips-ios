@@ -12,6 +12,8 @@
 
 class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavigationBarDelegate {
     
+    private let ONBOARDING_KEY = "InboxViewOnboardingShown";
+    
     //private let FLIP_CELL_HEIGHT : CGFloat = 169
     private let COMPOSE_BUTTON_BOTTOM_MARGIN : CGFloat = 8
     private let CELL_IDENTIFIER = "conversationCell"
@@ -23,6 +25,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
+    private var overlayView : UIImageView!
     
     private var cellHeight : CGFloat = 169
     
@@ -84,7 +87,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         composeButton.addTarget(self, action: "composeButtonTapped", forControlEvents: .TouchUpInside)
         composeButton.sizeToFit()
         self.addSubview(composeButton)
-        
+       
         if (showOnboarding) {
             navigationBar.userInteractionEnabled = false
             composeButton.userInteractionEnabled = false
@@ -96,6 +99,8 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             navigationBar.userInteractionEnabled = true
             composeButton.userInteractionEnabled = true
         }
+        
+        setupOnboarding()
     }
     
     private func initConstraints() {
@@ -146,6 +151,46 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     override func layoutSubviews() {
         cellHeight = self.frame.height * 0.4
         super.layoutSubviews()
+    }
+    
+    ////
+    // MARK: - Onboarding
+    ////
+    
+    private func shouldShowOnboarding() -> (Bool) {
+        return !NSUserDefaults.standardUserDefaults().boolForKey(ONBOARDING_KEY);
+    }
+    
+    private func setupOnboarding() {
+        
+        if (shouldShowOnboarding()) {
+            
+            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
+            singleTap.numberOfTapsRequired = 1
+            
+            overlayView = UIImageView(image: UIImage(named: "Inbox Overlay"))
+            overlayView.userInteractionEnabled = true
+            overlayView.addGestureRecognizer(singleTap)
+            
+            self.addSubview(overlayView)
+            
+            overlayView.mas_makeConstraints { (make) -> Void in
+                make.top.equalTo()(self)
+                make.left.equalTo()(self)
+                make.right.equalTo()(self)
+                make.bottom.equalTo()(self)
+            }
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults();
+            userDefaults.setBool(true, forKey: ONBOARDING_KEY);
+            userDefaults.synchronize();
+            
+        }
+        
+    }
+    
+    func onOnboardingOverlayClick() {
+        overlayView.removeFromSuperview()
     }
     
     
