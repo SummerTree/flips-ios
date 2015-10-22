@@ -359,8 +359,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 }
                 
                 self.flipControlsView.updateEditControls()
-                
-                self.setupClearOnboarding()
             }
             else if (self.flipMessageManager.currentFlipWordHasContent())
             {
@@ -368,8 +366,12 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 self.flipControlsView.updateEditControls()
                 self.flipControlsView.scrollToDeleteButton(true)
                 
-                if let _ = self.flipMessageManager.getCurrentFlipWordImage() {
+                if self.flipMessageManager.getCurrentFlipWordImage() != nil
+                    && self.shouldShowAudioOnboarding() {
                     self.setupAudioOnboarding()
+                }
+                else {
+                    self.setupClearOnboarding()
                 }
             }
             else
