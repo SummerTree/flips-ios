@@ -30,6 +30,8 @@ class NewFlipViewController: FlipsViewController,
     private let EMPTY_MESSAGE_TITLE = NSLocalizedString("Empty Message", comment: "Empty Message")
     private let EMPTY_MESSAGE_MESSAGE = NSLocalizedString("Please input a message.", comment: "Please input a message.")
     
+    private let ONBOARDING_KEY = "NewFlipOverlayShown"
+    
     weak var delegate: NewFlipViewControllerDelegate?
     
     // MARK: - Class methods
@@ -60,6 +62,8 @@ class NewFlipViewController: FlipsViewController,
     @IBOutlet weak var nextButton: NextButton!
     @IBOutlet weak var buttonPanelView: UIView!
     @IBOutlet weak var buttonPanel2View: UIView!
+    
+    private var overlayView : UIImageView!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -98,6 +102,8 @@ class NewFlipViewController: FlipsViewController,
         
         layoutSendButtons()
         updateNextButtonState()
+        
+        setupOnboarding()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -128,6 +134,46 @@ class NewFlipViewController: FlipsViewController,
     override func updateViewConstraints() {
         super.updateViewConstraints()
         handleReplyTextFieldSize()
+    }
+    
+    ////
+    // MARK: - Onboarding
+    ////
+    
+    private func shouldShowOnboarding() -> (Bool) {
+        return !NSUserDefaults.standardUserDefaults().boolForKey(ONBOARDING_KEY);
+    }
+    
+    private func setupOnboarding() {
+        
+        if (shouldShowOnboarding()) {
+            
+            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
+            singleTap.numberOfTapsRequired = 1
+            
+            overlayView = UIImageView(image: UIImage(named: "New Flip Overlay"))
+            overlayView.userInteractionEnabled = true
+            overlayView.addGestureRecognizer(singleTap)
+            
+            self.view.addSubview(overlayView)
+            
+            overlayView.mas_makeConstraints { (make) -> Void in
+                make.top.equalTo()(self.mas_topLayoutGuideBottom)
+                make.left.equalTo()(self.view)
+                make.right.equalTo()(self.view)
+                make.bottom.equalTo()(self.view)
+            }
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults();
+            userDefaults.setBool(true, forKey: ONBOARDING_KEY);
+            userDefaults.synchronize();
+            
+        }
+        
+    }
+    
+    func onOnboardingOverlayClick() {
+        overlayView.removeFromSuperview()
     }
     
     // MARK: - Private methods
