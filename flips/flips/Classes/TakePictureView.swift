@@ -66,7 +66,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         takePictureButton.layer.borderWidth = 3.0
         takePictureButton.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
         takePictureButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-        takePictureButton.backgroundColor = UIColor.lightGrayColor()
+        takePictureButton.backgroundColor = UIColor.banana()
         takePictureButton.setImage(UIImage(named: "CameraNew")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
         bottomButtonsContainerView.addSubview(takePictureButton)
         takePictureButton.enabled = cameraView.isDeviceAuthorized()
@@ -79,7 +79,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         galleryButton.layer.borderWidth = 3.0
         galleryButton.layer.cornerRadius = (imageSizer.frame.height * sizerMult) / 2
         galleryButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-        galleryButton.backgroundColor = UIColor.flipOrange()
+        galleryButton.backgroundColor = UIColor.galleryButton()
         galleryButton.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
         galleryButton.addTarget(self, action: "galleryButtonTapped", forControlEvents: .TouchUpInside)
         bottomButtonsContainerView.addSubview(galleryButton)

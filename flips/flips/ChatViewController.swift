@@ -97,6 +97,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.sendingView.textColor = UIColor.whiteColor()
         self.sendingView.text = "Sending Message..."
         self.sendingView.textAlignment = NSTextAlignment.Center
+        self.sendingView.font = UIFont.avenirNextMedium(16.0)
         self.view.addSubview(self.sendingView)
         
         self.sendingView.mas_makeConstraints { (make) -> Void in
