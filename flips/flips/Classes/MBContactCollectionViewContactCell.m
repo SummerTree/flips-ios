@@ -85,7 +85,7 @@
 - (void)setFocused:(BOOL)focused
 {
     _focused = focused;
-    
+
     if (focused)
     {
         self.contactTitleLabel.textColor = [UIColor whiteColor];
