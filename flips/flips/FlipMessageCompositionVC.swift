@@ -26,6 +26,10 @@ private let NO_SPACE_PHOTO_ERROR_MESSAGE = "There is not enough available storag
 
 class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSource, FlipsCompositionControlsDelegate, FlipMessageWordListViewDelegate, FlipsCompositionViewDelegate, CameraViewDelegate, AudioRecorderServiceDelegate, PreviewViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FlipSelectionViewDataSource, UIAlertViewDelegate {
     
+    private let AUDIO_ONBOARDING_KEY = "FlipAudioOverlayShown"
+    private let CAPTURE_ONBOARDING_KEY = "FlipCaptureOverlayShown"
+    private let CLEAR_ONBOARDING_KEY = "FlipClearOverlayShown"
+    
     // Title
     private var compositionTitle : String!
     
@@ -234,8 +238,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
     }
     
-    
-    
     ////
     // MARK: - UI Updates
     ////
@@ -259,11 +261,23 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 self.flipControlsView.showEditControls()
                 self.flipControlsView.updateEditControls()
                 self.flipControlsView.scrollToDeleteButton(true)
+                
+                if self.flipMessageManager.getCurrentFlipWordImage() != nil
+                    && self.shouldShowOnboarding(self.AUDIO_ONBOARDING_KEY) {
+                    self.setupOnboarding(self.AUDIO_ONBOARDING_KEY, onboardingImage: UIImage(named: "Audio Overlay")!)
+                }
+                else if self.shouldShowOnboarding(self.CLEAR_ONBOARDING_KEY) {
+                    self.setupOnboarding(self.CLEAR_ONBOARDING_KEY, onboardingImage: UIImage(named: "Clear Overlay")!)
+                }
             }
             else
             {
                 self.flipControlsView.showCaptureControls()
                 self.flipControlsView.scrollToVideoButton(true)
+                
+                if (self.shouldShowOnboarding(self.CAPTURE_ONBOARDING_KEY)) {
+                    self.setupOnboarding(self.CAPTURE_ONBOARDING_KEY, onboardingImage: UIImage(named: "Capture Overlay")!)
+                }
             }
             
             self.flipCompositionView.refresh()

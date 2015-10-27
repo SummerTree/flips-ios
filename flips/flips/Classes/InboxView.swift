@@ -23,6 +23,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
     private var navigationBar : CustomNavigationBar!
     private var conversationsTableView : UITableView!
     private var composeButton : UIButton!
+    private var overlayView : UIImageView!
     
     private var cellHeight : CGFloat = 169
     
@@ -85,7 +86,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         composeButton.addTarget(self, action: "composeButtonTapped", forControlEvents: .TouchUpInside)
         composeButton.sizeToFit()
         self.addSubview(composeButton)
-        
+       
         if (showOnboarding) {
             navigationBar.userInteractionEnabled = false
             composeButton.userInteractionEnabled = false
@@ -148,7 +149,6 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         cellHeight = self.frame.height * 0.4
         super.layoutSubviews()
     }
-    
     
     // MARK: - Rooms Setter
     

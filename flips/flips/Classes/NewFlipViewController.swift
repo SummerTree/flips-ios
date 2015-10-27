@@ -30,6 +30,8 @@ class NewFlipViewController: FlipsViewController,
     private let EMPTY_MESSAGE_TITLE = NSLocalizedString("Empty Message", comment: "Empty Message")
     private let EMPTY_MESSAGE_MESSAGE = NSLocalizedString("Please input a message.", comment: "Please input a message.")
     
+    private let ONBOARDING_KEY = "NewFlipOverlayShown"
+    
     weak var delegate: NewFlipViewControllerDelegate?
     
     // MARK: - Class methods
@@ -108,10 +110,16 @@ class NewFlipViewController: FlipsViewController,
         
         self.flipTextField.setupMenu()
         
-
-        if self.contacts.isEmpty {
+        if shouldShowOnboarding(self.ONBOARDING_KEY)
+        {
+            setupOnboarding(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "New Flip Overlay")!)
+        }
+        else if self.contacts.isEmpty
+        {
             self.contactPicker.becomeFirstResponder()
-        } else {
+        }
+        else
+        {
             self.flipTextField.becomeFirstResponder()
         }
     }

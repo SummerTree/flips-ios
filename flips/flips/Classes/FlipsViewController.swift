@@ -21,6 +21,7 @@ class FlipsViewController : UIViewController {
     private let LOADING_CONTAINER_HORIZONTAL_MARGIN: CGFloat = 20
     private let LOADING_MESSAGE_TOP_MARGIN: CGFloat = 15
 
+    private var overlayView: UIImageView!
     private var loadingContainer: UIView!
     private var activityIndicator: UIActivityIndicatorView!
     private var loadingMessageLabel: UILabel!
@@ -195,6 +196,48 @@ class FlipsViewController : UIViewController {
             return nil
         }
         
-        return self.navigationController?.viewControllers[numberOfViewControllers! - 2] as! UIViewController!
+        return self.navigationController?.viewControllers[numberOfViewControllers! - 2] as UIViewController!
     }
+    
+    ////
+    // MARK: - Onboarding Overlay Methods
+    ////
+    
+    func shouldShowOnboarding(onboardingKey : String) -> (Bool) {
+        return !NSUserDefaults.standardUserDefaults().boolForKey(onboardingKey);
+    }
+    
+    func setupOnboarding(onboardingKey : String, onboardingImage : UIImage) {
+        
+        if (shouldShowOnboarding(onboardingKey)) {
+            
+            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
+            singleTap.numberOfTapsRequired = 1
+            
+            overlayView = UIImageView(image: onboardingImage)
+            overlayView.userInteractionEnabled = true
+            overlayView.addGestureRecognizer(singleTap)
+            
+            let window = UIApplication.sharedApplication().keyWindow
+            window!.addSubview(overlayView)
+            
+            overlayView.mas_makeConstraints { (make) -> Void in
+                make.top.equalTo()(window)
+                make.left.equalTo()(window)
+                make.right.equalTo()(window)
+                make.bottom.equalTo()(window)
+            }
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults();
+            userDefaults.setBool(true, forKey: onboardingKey);
+            userDefaults.synchronize();
+            
+        }
+        
+    }
+    
+    func onOnboardingOverlayClick() {
+        overlayView.removeFromSuperview()
+    }
+    
 }

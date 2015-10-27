@@ -18,6 +18,8 @@ let IMPORT_CONTACTS_ALERT_TAG = 1001
 
 class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewControllerDelegate, InboxViewDataSource, UIAlertViewDelegate {
     
+    private let ONBOARDING_KEY = "InboxViewOnboardingShown";
+    
     private let DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES: Int = 20 // aproximately 20 seconds
     
     private let LOAD_HISTORY_FAIL_MESSAGE: String = NSLocalizedString("Flips is having trouble fetching your message history.\nYou may continue using the app, and we’ll keep trying in the background.")
@@ -77,6 +79,10 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             // We don't need to show the Sync in this case. So, we need to mark it as seen.
             DeviceHelper.sharedInstance.setSyncViewShown(true)
             self.shouldInformPubnubNotConnected = true
+            
+            if shouldShowOnboarding(ONBOARDING_KEY) {
+                setupOnboarding(ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
+            }
             
             if !self.userHasImportedContacts() {
                 self.showImportContactsDialog()
@@ -250,6 +256,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                                 return
                             }, completion: { (finished: Bool) -> Void in
                                 self.syncView?.hidden = true
+                                if self.shouldShowOnboarding(self.ONBOARDING_KEY) {
+                                    self.setupOnboarding(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
+                                }
                                 if !self.userHasImportedContacts() {
                                     self.showImportContactsDialog()
                                 }

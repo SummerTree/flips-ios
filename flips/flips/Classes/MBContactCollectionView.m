@@ -404,7 +404,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
     MBContactCollectionViewContactCell *cell = (MBContactCollectionViewContactCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
     if ([self becomeFirstResponder]) {
-        cell.focused = YES;
+        cell.mbfocused = YES;
         
         if ([self.contactDelegate respondsToSelector:@selector(contactCollectionView:didSelectContact:)])
         {
@@ -421,7 +421,7 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MBContactCollectionViewContactCell *cell = (MBContactCollectionViewContactCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    cell.focused = NO;
+    cell.mbfocused = NO;
 }
 
 #pragma mark - UICollectionViewDelegateContactFlowLayout
@@ -503,11 +503,11 @@ typedef NS_ENUM(NSInteger, ContactCollectionViewSection) {
         cell.model = self.selectedContacts[[self selectedContactIndexFromIndexPath:indexPath]];
         if ([self.indexPathOfSelectedCell isEqual:indexPath])
         {
-            cell.focused = YES;
+            cell.mbfocused = YES;
         }
         else
         {
-            cell.focused = NO;
+            cell.mbfocused = NO;
         }
         collectionCell = cell;
     }

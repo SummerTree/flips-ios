@@ -171,7 +171,8 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         if (showOnboarding) {
             bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, bubbleType: BubbleType.arrowDownFirstLineBold)
             self.addSubview(bubbleView)
-        } 
+        }
+
     }
     
     func makeConstraints() {
@@ -223,6 +224,10 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             })
         }
     }
+    
+    ////
+    // MARK: - Flip Words
+    ////
     
     func changeFlipWords(words: [String]) {
         self.replyTextField.setWords(words)
