@@ -322,13 +322,14 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             overlayView.addGestureRecognizer(singleTap)
             overlayView.hidden = true
             
-            self.view.addSubview(overlayView)
+            let window = UIApplication.sharedApplication().keyWindow
+            window!.addSubview(overlayView)
             
             overlayView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self.mas_topLayoutGuideBottom)
-                make.left.equalTo()(self.view)
-                make.right.equalTo()(self.view)
-                make.bottom.equalTo()(self.view)
+                make.top.equalTo()(window)
+                make.left.equalTo()(window)
+                make.right.equalTo()(window)
+                make.bottom.equalTo()(window)
             }
             
         }

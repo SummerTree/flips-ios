@@ -172,13 +172,14 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
             overlayView.userInteractionEnabled = true
             overlayView.addGestureRecognizer(singleTap)
             
-            self.addSubview(overlayView)
+            let window = UIApplication.sharedApplication().keyWindow
+            window!.addSubview(overlayView)
             
             overlayView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self)
-                make.left.equalTo()(self)
-                make.right.equalTo()(self)
-                make.bottom.equalTo()(self)
+                make.top.equalTo()(window)
+                make.left.equalTo()(window)
+                make.right.equalTo()(window)
+                make.bottom.equalTo()(window)
             }
             
             let userDefaults = NSUserDefaults.standardUserDefaults();
