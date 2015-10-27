@@ -84,7 +84,7 @@
 
 - (void)setFocused:(BOOL)focused
 {
-    _focused = focused;
+    self.focused = focused;
     
     if (focused)
     {
