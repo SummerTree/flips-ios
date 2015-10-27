@@ -62,8 +62,6 @@ class NewFlipViewController: FlipsViewController,
     @IBOutlet weak var nextButton: NextButton!
     @IBOutlet weak var buttonPanelView: UIView!
     @IBOutlet weak var buttonPanel2View: UIView!
-    
-    private var overlayView : UIImageView!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -112,9 +110,9 @@ class NewFlipViewController: FlipsViewController,
         
         self.flipTextField.setupMenu()
         
-        if shouldShowOnboarding()
+        if shouldShowOnboarding(self.ONBOARDING_KEY)
         {
-            setupOnboarding()
+            setupOnboarding(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "New Flip Overlay")!)
         }
         else if self.contacts.isEmpty
         {
@@ -138,47 +136,6 @@ class NewFlipViewController: FlipsViewController,
     override func updateViewConstraints() {
         super.updateViewConstraints()
         handleReplyTextFieldSize()
-    }
-    
-    ////
-    // MARK: - Onboarding
-    ////
-    
-    private func shouldShowOnboarding() -> (Bool) {
-        return !NSUserDefaults.standardUserDefaults().boolForKey(ONBOARDING_KEY);
-    }
-    
-    private func setupOnboarding() {
-        
-        if (shouldShowOnboarding()) {
-            
-            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
-            singleTap.numberOfTapsRequired = 1
-            
-            overlayView = UIImageView(image: UIImage(named: "New Flip Overlay"))
-            overlayView.userInteractionEnabled = true
-            overlayView.addGestureRecognizer(singleTap)
-            
-            let window = UIApplication.sharedApplication().keyWindow
-            window!.addSubview(overlayView)
-            
-            overlayView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(window)
-                make.left.equalTo()(window)
-                make.right.equalTo()(window)
-                make.bottom.equalTo()(window)
-            }
-            
-            let userDefaults = NSUserDefaults.standardUserDefaults();
-            userDefaults.setBool(true, forKey: ONBOARDING_KEY);
-            userDefaults.synchronize();
-            
-        }
-        
-    }
-    
-    func onOnboardingOverlayClick() {
-        overlayView.removeFromSuperview()
     }
     
     // MARK: - Private methods

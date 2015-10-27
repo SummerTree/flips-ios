@@ -55,9 +55,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     private var flipControlsView : FlipsCompositionControlsView!
     private var flipMessageWordListView : FlipMessageWordListView!
     
-    // Onboarding
-    private var overlayView : UIImageView!
-    
     // ComposeViewControllerDelegate
     weak var delegate : FlipsCompositionControllerDelegate?
     
@@ -241,108 +238,6 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         
     }
     
-    
-    
-    ////
-    // MARK: - Onboarding
-    ////
-    
-    private func shouldShowAudioOnboarding() -> (Bool) {
-        return !NSUserDefaults.standardUserDefaults().boolForKey(AUDIO_ONBOARDING_KEY);
-    }
-    
-    private func shouldShowCaptureOnboarding() -> (Bool) {
-        return !NSUserDefaults.standardUserDefaults().boolForKey(CAPTURE_ONBOARDING_KEY);
-    }
-    
-    private func shouldShowClearOnboarding() -> (Bool) {
-        return !NSUserDefaults.standardUserDefaults().boolForKey(CLEAR_ONBOARDING_KEY);
-    }
-    
-    private func setupAudioOnboarding() {
-        
-        if (shouldShowAudioOnboarding()) {
-            
-            showOnboardingOverlay(UIImage(named: "Audio Overlay"))
-            
-            let userDefaults = NSUserDefaults.standardUserDefaults();
-            userDefaults.setBool(true, forKey: AUDIO_ONBOARDING_KEY);
-            userDefaults.synchronize();
-            
-        }
-        
-    }
-    
-    private func setupCaptureOnboarding() {
-        
-        if (shouldShowCaptureOnboarding()) {
-            
-            showOnboardingOverlay(UIImage(named: "Capture Overlay"))
-            
-            let userDefaults = NSUserDefaults.standardUserDefaults();
-            userDefaults.setBool(true, forKey: CAPTURE_ONBOARDING_KEY);
-            userDefaults.synchronize();
-            
-        }
-        
-    }
-    
-    private func setupClearOnboarding() {
-        
-        if (shouldShowClearOnboarding()) {
-            
-            showOnboardingOverlay(UIImage(named: "Clear Overlay"))
-            
-            let userDefaults = NSUserDefaults.standardUserDefaults();
-            userDefaults.setBool(true, forKey: CLEAR_ONBOARDING_KEY);
-            userDefaults.synchronize();
-            
-        }
-        
-    }
-    
-    private func showOnboardingOverlay(onboardingImage : UIImage!) {
-        
-        initOverlayView()
-        
-        overlayView.image = onboardingImage
-        overlayView.hidden = false
-        
-    }
-    
-    private func initOverlayView() {
-        
-        if (overlayView == nil) {
-            
-            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
-            singleTap.numberOfTapsRequired = 1
-            
-            overlayView = UIImageView()
-            overlayView.userInteractionEnabled = true
-            overlayView.addGestureRecognizer(singleTap)
-            overlayView.hidden = true
-            
-            let window = UIApplication.sharedApplication().keyWindow
-            window!.addSubview(overlayView)
-            
-            overlayView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(window)
-                make.left.equalTo()(window)
-                make.right.equalTo()(window)
-                make.bottom.equalTo()(window)
-            }
-            
-        }
-        
-    }
-    
-    func onOnboardingOverlayClick() {
-        overlayView.removeFromSuperview()
-        overlayView = nil
-    }
-    
-    
-    
     ////
     // MARK: - UI Updates
     ////
@@ -368,11 +263,11 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 self.flipControlsView.scrollToDeleteButton(true)
                 
                 if self.flipMessageManager.getCurrentFlipWordImage() != nil
-                    && self.shouldShowAudioOnboarding() {
-                    self.setupAudioOnboarding()
+                    && self.shouldShowOnboarding(self.AUDIO_ONBOARDING_KEY) {
+                    self.setupOnboarding(self.AUDIO_ONBOARDING_KEY, onboardingImage: UIImage(named: "Audio Overlay")!)
                 }
-                else {
-                    self.setupClearOnboarding()
+                else if self.shouldShowOnboarding(self.CLEAR_ONBOARDING_KEY) {
+                    self.setupOnboarding(self.CLEAR_ONBOARDING_KEY, onboardingImage: UIImage(named: "Clear Overlay")!)
                 }
             }
             else
@@ -380,7 +275,9 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 self.flipControlsView.showCaptureControls()
                 self.flipControlsView.scrollToVideoButton(true)
                 
-                self.setupCaptureOnboarding()
+                if (self.shouldShowOnboarding(self.CAPTURE_ONBOARDING_KEY)) {
+                    self.setupOnboarding(self.CAPTURE_ONBOARDING_KEY, onboardingImage: UIImage(named: "Capture Overlay")!)
+                }
             }
             
             self.flipCompositionView.refresh()
