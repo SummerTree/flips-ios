@@ -14,8 +14,6 @@ import Foundation
 
 class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, JoinStringsTextFieldDelegate,ChatTableViewCellDelegate {
     
-    private let ONBOARDING_KEY = "ChatViewOverlayViewShown"
-    
     private let CELL_IDENTIFIER: String = "flipChatCell"
     private let REPLY_VIEW_DEFAULT_HEIGHT : CGFloat = 42.0
     private let REPLY_VIEW_OFFSET : CGFloat = 18.0
@@ -35,7 +33,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     private var replyButton: UIButton!
     private var replyTextField: JoinStringsTextField!
     private var nextButton: NextButton!
-    private var overlayView : UIImageView!
     
     private var shouldPlayUnreadMessage: Bool = true
     private var keyboardHeight: CGFloat = 0.0
@@ -175,8 +172,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             bubbleView = BubbleView(title: ONBOARDING_BUBBLE_TITLE, message: ONBOARDING_BUBBLE_MESSAGE, bubbleType: BubbleType.arrowDownFirstLineBold)
             self.addSubview(bubbleView)
         }
-        
-        setupOnboarding()
+
     }
     
     func makeConstraints() {
@@ -227,47 +223,6 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
                 make.centerX.equalTo()(self)
             })
         }
-    }
-    
-    
-    ////
-    // MARK: - Onboarding
-    ////
-    
-    private func shouldShowOnboarding() -> (Bool) {
-        return !NSUserDefaults.standardUserDefaults().boolForKey(ONBOARDING_KEY);
-    }
-    
-    private func setupOnboarding() {
-        
-        if (shouldShowOnboarding()) {
-            
-            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
-            singleTap.numberOfTapsRequired = 1
-            
-            overlayView = UIImageView(image: UIImage(named: "Chat View Overlay"))
-            overlayView.userInteractionEnabled = true
-            overlayView.addGestureRecognizer(singleTap)
-            
-            self.addSubview(overlayView)
-            
-            overlayView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self)
-                make.left.equalTo()(self)
-                make.right.equalTo()(self)
-                make.bottom.equalTo()(self)
-            }
-            
-            let userDefaults = NSUserDefaults.standardUserDefaults();
-            userDefaults.setBool(true, forKey: ONBOARDING_KEY);
-            userDefaults.synchronize();
-            
-        }
-        
-    }
-    
-    func onOnboardingOverlayClick() {
-        overlayView.removeFromSuperview()
     }
     
     ////
