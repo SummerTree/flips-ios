@@ -102,8 +102,6 @@ class NewFlipViewController: FlipsViewController,
         
         layoutSendButtons()
         updateNextButtonState()
-        
-        setupOnboarding()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -114,10 +112,16 @@ class NewFlipViewController: FlipsViewController,
         
         self.flipTextField.setupMenu()
         
-
-        if self.contacts.isEmpty {
+        if shouldShowOnboarding()
+        {
+            setupOnboarding()
+        }
+        else if self.contacts.isEmpty
+        {
             self.contactPicker.becomeFirstResponder()
-        } else {
+        }
+        else
+        {
             self.flipTextField.becomeFirstResponder()
         }
     }
@@ -155,13 +159,14 @@ class NewFlipViewController: FlipsViewController,
             overlayView.userInteractionEnabled = true
             overlayView.addGestureRecognizer(singleTap)
             
-            self.view.addSubview(overlayView)
+            let window = UIApplication.sharedApplication().keyWindow
+            window!.addSubview(overlayView)
             
             overlayView.mas_makeConstraints { (make) -> Void in
-                make.top.equalTo()(self.mas_topLayoutGuideBottom)
-                make.left.equalTo()(self.view)
-                make.right.equalTo()(self.view)
-                make.bottom.equalTo()(self.view)
+                make.top.equalTo()(window)
+                make.left.equalTo()(window)
+                make.right.equalTo()(window)
+                make.bottom.equalTo()(window)
             }
             
             let userDefaults = NSUserDefaults.standardUserDefaults();
