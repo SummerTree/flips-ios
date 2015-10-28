@@ -80,12 +80,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             DeviceHelper.sharedInstance.setSyncViewShown(true)
             self.shouldInformPubnubNotConnected = true
             
-            if shouldShowOnboarding(ONBOARDING_KEY) {
-                setupOnboarding(ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
-            }
-            
             if !self.userHasImportedContacts() {
                 self.showImportContactsDialog()
+            }
+            else if shouldShowOnboarding(ONBOARDING_KEY) {
+                setupOnboardingInNavigationController(ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
             }
             
             weak var weakSelf = self
@@ -256,11 +255,11 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                                 return
                             }, completion: { (finished: Bool) -> Void in
                                 self.syncView?.hidden = true
-                                if self.shouldShowOnboarding(self.ONBOARDING_KEY) {
-                                    self.setupOnboarding(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
-                                }
                                 if !self.userHasImportedContacts() {
                                     self.showImportContactsDialog()
+                                }
+                                else if self.shouldShowOnboarding(self.ONBOARDING_KEY) {
+                                    self.setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
                                 }
                                 return
                             })
@@ -669,6 +668,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             case "Cancel":
                 if alertView.tag == MESSAGE_SEND_ALERT_TAG {
                     self.cancelMessageSubmission()
+                }
+                else if (shouldShowOnboarding(ONBOARDING_KEY)) {
+                    self.setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
                 }
             case "Import":
                 self.showImportContactsController()
