@@ -242,7 +242,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
     // MARK: - UI Updates
     ////
     
-    internal func updateViewForCurrentFlipWord(reloadWords: Bool = true) {
+    internal func updateViewForCurrentFlipWord(reloadWords: Bool = true, allowOnboarding: Bool = true) {
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
@@ -262,12 +262,16 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 self.flipControlsView.updateEditControls()
                 self.flipControlsView.scrollToDeleteButton(true)
                 
-                if self.flipMessageManager.getCurrentFlipWordImage() != nil
-                    && self.shouldShowOnboarding(self.AUDIO_ONBOARDING_KEY) {
-                    self.setupOnboarding(self.AUDIO_ONBOARDING_KEY, onboardingImage: UIImage(named: "Audio Overlay")!)
+                if allowOnboarding
+                    && self.flipMessageManager.getCurrentFlipWordImage() != nil
+                    && self.shouldShowOnboarding(self.AUDIO_ONBOARDING_KEY)
+                {
+                    self.setupOnboardingInWindow(self.AUDIO_ONBOARDING_KEY, onboardingImage: UIImage(named: "Audio Overlay")!)
                 }
-                else if self.shouldShowOnboarding(self.CLEAR_ONBOARDING_KEY) {
-                    self.setupOnboarding(self.CLEAR_ONBOARDING_KEY, onboardingImage: UIImage(named: "Clear Overlay")!)
+                else if allowOnboarding
+                    && self.shouldShowOnboarding(self.CLEAR_ONBOARDING_KEY)
+                {
+                    self.setupOnboardingInWindow(self.CLEAR_ONBOARDING_KEY, onboardingImage: UIImage(named: "Clear Overlay")!)
                 }
             }
             else
@@ -275,8 +279,8 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
                 self.flipControlsView.showCaptureControls()
                 self.flipControlsView.scrollToVideoButton(true)
                 
-                if (self.shouldShowOnboarding(self.CAPTURE_ONBOARDING_KEY)) {
-                    self.setupOnboarding(self.CAPTURE_ONBOARDING_KEY, onboardingImage: UIImage(named: "Capture Overlay")!)
+                if allowOnboarding && self.shouldShowOnboarding(self.CAPTURE_ONBOARDING_KEY) {
+                    self.setupOnboardingInWindow(self.CAPTURE_ONBOARDING_KEY, onboardingImage: UIImage(named: "Capture Overlay")!)
                 }
             }
             
@@ -830,7 +834,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         {
             hideActivityIndicator()
             showPreviewController()
-            updateViewForCurrentFlipWord()
+            updateViewForCurrentFlipWord(allowOnboarding: false)
         }
         
     }

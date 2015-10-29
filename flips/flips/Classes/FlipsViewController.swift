@@ -207,7 +207,7 @@ class FlipsViewController : UIViewController {
         return !NSUserDefaults.standardUserDefaults().boolForKey(onboardingKey);
     }
     
-    func setupOnboarding(onboardingKey : String, onboardingImage : UIImage) {
+    func setupOnboardingInWindow(onboardingKey : String, onboardingImage : UIImage) {
         
         if (shouldShowOnboarding(onboardingKey)) {
             
@@ -226,6 +226,34 @@ class FlipsViewController : UIViewController {
                 make.left.equalTo()(window)
                 make.right.equalTo()(window)
                 make.bottom.equalTo()(window)
+            }
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults();
+            userDefaults.setBool(true, forKey: onboardingKey);
+            userDefaults.synchronize();
+            
+        }
+        
+    }
+    
+    func setupOnboardingInNavigationController(onboardingKey : String, onboardingImage : UIImage) {
+        
+        if (shouldShowOnboarding(onboardingKey)) {
+            
+            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
+            singleTap.numberOfTapsRequired = 1
+            
+            overlayView = UIImageView(image: onboardingImage)
+            overlayView.userInteractionEnabled = true
+            overlayView.addGestureRecognizer(singleTap)
+            
+            self.navigationController?.view.addSubview(overlayView)
+            
+            overlayView.mas_makeConstraints { (make) -> Void in
+                make.top.equalTo()(self.navigationController?.view)
+                make.left.equalTo()(self.navigationController?.view)
+                make.right.equalTo()(self.navigationController?.view)
+                make.bottom.equalTo()(self.navigationController?.view)
             }
             
             let userDefaults = NSUserDefaults.standardUserDefaults();

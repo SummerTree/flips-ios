@@ -112,7 +112,7 @@ class NewFlipViewController: FlipsViewController,
         
         if shouldShowOnboarding(self.ONBOARDING_KEY)
         {
-            setupOnboarding(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "New Flip Overlay")!)
+            setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "New Flip Overlay")!)
         }
         else if self.contacts.isEmpty
         {
