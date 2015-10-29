@@ -474,6 +474,14 @@ class NewFlipViewController: FlipsViewController,
         delegate?.didBeginSendingMessageToRoom(roomID)
     }
     
+    ////
+    //
+    ////
+    
+    override func onOnboardingOverlayClick() {
+        super.onOnboardingOverlayClick()
+        contactPicker.becomeFirstResponder()
+    }
     
 
 }
