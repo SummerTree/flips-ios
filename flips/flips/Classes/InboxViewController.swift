@@ -673,6 +673,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     self.setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
                 }
             case "Import":
+                if (shouldShowOnboarding(ONBOARDING_KEY)) {
+                    self.setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "Inbox Overlay")!)
+                }
                 self.showImportContactsController()
             default:
                 break;
