@@ -272,7 +272,7 @@
             if (durationDiff > videoAsset.duration.value)
             {
                 // This is not the final iteration, add the full duration
-                CMTimeRange trackTimeRange = CMTimeRangeMake(videoStart, CMTimeAdd(videoStart, videoAsset.duration));
+                CMTimeRange trackTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration);
                 
                 NSError * error;
                 
@@ -281,7 +281,7 @@
             else
             {
                 // This is the final iteration, add up to the end of the video duration
-                CMTimeRange trackTimeRange = CMTimeRangeMake(videoStart, CMTimeSubtract(videoDuration, videoStart));
+                CMTimeRange trackTimeRange = CMTimeRangeMake(kCMTimeZero, CMTimeSubtract(videoDuration, videoStart));
                 
                 NSError * error;
                 
