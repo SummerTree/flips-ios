@@ -70,13 +70,52 @@ public class MovieExport : NSObject {
         var videoAsset = playerItem.asset
         var videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
         
-        let videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
+        NSLog("Video Asset Duration: \(videoAsset.duration)")
+        NSLog("Video Track Duration: \(videoAssetTrack.timeRange.duration)")
         
-        do {
-            try videoCompositionTrack.insertTimeRange(videoTimeRange,
-                ofTrack: videoAssetTrack,
-                atTime: insertTime)
-        } catch _ {
+        if CMTimeCompare(videoAssetTrack.timeRange.duration, videoAsset.duration)  > -1
+        {
+            let videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
+            
+            do {
+                try videoCompositionTrack.insertTimeRange(videoTimeRange,
+                    ofTrack: videoAssetTrack,
+                    atTime: kCMTimeZero)
+            } catch _ {}
+            
+        }
+        else
+        {
+            var videoStart = CMTimeMake(0, videoAsset.duration.timescale)
+            
+            while(CMTimeCompare(videoStart, videoAsset.duration) < 0)
+            {
+                let durationDiff = videoAsset.duration.value - videoStart.value
+                
+                if (durationDiff > videoAssetTrack.timeRange.duration.value)
+                {
+                    let trackTimeRange = CMTimeRangeMake(kCMTimeZero, videoAssetTrack.timeRange.duration)
+                    
+                    do {
+                        try videoCompositionTrack.insertTimeRange(trackTimeRange,
+                            ofTrack: videoAssetTrack,
+                            atTime: videoStart)
+                    } catch _ {}
+                }
+                else
+                {
+                    let trackTimeRange = CMTimeRangeMake(kCMTimeZero, CMTimeSubtract(videoAssetTrack.timeRange.duration, videoStart))
+                    
+                    do {
+                        try videoCompositionTrack.insertTimeRange(trackTimeRange,
+                            ofTrack: videoAssetTrack,
+                            atTime: videoStart)
+                    } catch _ {}
+                }
+                
+                videoStart = CMTimeAdd(videoStart, videoAssetTrack.timeRange.duration);
+                
+            }
         }
         
         let audioTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
