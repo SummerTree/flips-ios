@@ -42,11 +42,14 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     private var codeField1: UITextField!
     private var codeField2: UITextField!
     private var codeField3: UITextField!
+    private var codeTappableView: UIView!
+    private var codeTappableGestRecog: UITapGestureRecognizer!
     private var codeViewTrailingSpace: UIView!
     private var resendButtonView: UIView!
     private var resendButton: UIButton!
     private var keyboardFillerView: UIView!
     private var errorSignView: UIImageView!
+
     
     private var keyboardHeight: CGFloat = 0.0
     
@@ -127,6 +130,16 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         disableUserInteractionCodeView = UIView()
         disableUserInteractionCodeView.contentMode = UIViewContentMode.Center
         self.addSubview(disableUserInteractionCodeView)
+        
+        codeTappableView = UIView()
+        codeTappableView.userInteractionEnabled = true
+        disableUserInteractionCodeView.addSubview(codeTappableView)
+        disableUserInteractionCodeView.bringSubviewToFront(codeTappableView)
+        
+        codeTappableGestRecog = UITapGestureRecognizer(target: self, action: Selector("didTapCodeTappableView:"))
+        codeTappableGestRecog.numberOfTapsRequired = 1
+        codeTappableGestRecog.numberOfTouchesRequired = 1
+        codeTappableView.addGestureRecognizer(codeTappableGestRecog)
         
         resendButtonView = UIView()
         resendButtonView.contentMode = .Center
@@ -228,6 +241,16 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             make.left.equalTo()(self.codeField2.mas_right).with().offset()(self.CODE_FIELD_KERNEL_ADJUSTMENT_VALUE)
         }
         
+        codeTappableView.mas_updateConstraints { (make) -> Void in
+            make.removeExisting = true;
+            make.left.equalTo()(self.codeField0)
+            make.right.equalTo()(self.codeField3)
+            make.centerY.equalTo()(self.codeView)
+            make.height.equalTo()(self.codeField0)
+
+            self.codeTappableView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        }
+        
         codeViewTrailingSpace.mas_updateConstraints( { (make) in
             make.removeExisting = true
             make.left.equalTo()(self.codeField3.mas_right)
@@ -240,6 +263,8 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
             make.height.equalTo()(self.codeView)
             make.left.equalTo()(self.codeView)
             make.right.equalTo()(self.codeView)
+            
+            self.disableUserInteractionCodeView.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.25)
         }
         
         resendButtonView.mas_updateConstraints({ (make) in
@@ -266,6 +291,23 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         })
         
         super.updateConstraints()
+    }
+    
+    func didTapCodeTappableView(recognizer: UITapGestureRecognizer) {
+        print("didTapCodeTappableView")
+
+        if self.codeField0.text!.characters.count <= 0 {
+            self.codeField0.becomeFirstResponder()
+        }
+        else if self.codeField1.text!.characters.count <= 0 {
+            self.codeField1.becomeFirstResponder()
+        }
+        else if self.codeField2.text!.characters.count <= 0 {
+            self.codeField2.becomeFirstResponder()
+        }
+        else if self.codeField3.text!.characters.count <= 0 {
+            self.codeField3.becomeFirstResponder()
+        }
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
