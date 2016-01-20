@@ -19,18 +19,19 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private let USER_PROFILE_CELL_HEIGHT: CGFloat = 95.0
     private let ACTION_ROW_HEIGHT       : CGFloat = 60.0
     
-    private let NUMBER_OF_ROWS                      : Int = 7
+    private let NUMBER_OF_ROWS                      : Int = 8
     private let NUMBER_OF_ACTION_ROWS               : Int = 6
     
     private let USER_PROFILE_CELL_POSITION          : Int = 0
     
     private let IMPORT_CONTACTS_CELL_POSITION       : Int = 1
-    private let CHANGE_NUMBER_CELL_POSITION         : Int = 2
-    private let SEND_FEEDBACK_CELL_POSITION         : Int = 3
+    private let STOCK_FLIPS_CELL_POSITION           : Int = 2
+    private let CHANGE_NUMBER_CELL_POSITION         : Int = 3
+    private let SEND_FEEDBACK_CELL_POSITION         : Int = 4
 //    private let TUTORIAL_CELL_POSITION              : Int = 4
-    private let ABOUT_CELL_POSITION                 : Int = 4
-    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 5
-    private let PRIVACY_POLICY_CELL_POSITION        : Int = 6
+    private let ABOUT_CELL_POSITION                 : Int = 5
+    private let TERMS_OF_USE_PROFILE_CELL_POSITION  : Int = 6
+    private let PRIVACY_POLICY_CELL_POSITION        : Int = 7
 
 
     weak var delegate: SettingsViewDelegate?
@@ -45,6 +46,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private var sendFeedbackCell: SettingsTableViewCell!
     private var changeNumberCell: SettingsTableViewCell!
     private var importContactsCell: SettingsTableViewCell!
+    private var stockFlipsListCell: SettingsTableViewCell!
 //    private var tutorialCell: SettingsTableViewCell!
     
     init() {
@@ -117,6 +119,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         self.createFeedbackCell()
         self.createChangeNumberCell()
         self.createImportContactsCell()
+        self.createStockFlipsCell()
         //self.createTutorialCell()
     }
     
@@ -194,6 +197,9 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         case self.IMPORT_CONTACTS_CELL_POSITION:
             return self.importContactsCell
             
+        case self.STOCK_FLIPS_CELL_POSITION:
+            return self.stockFlipsListCell
+            
 //        case self.TUTORIAL_CELL_POSITION:
 //            return self.tutorialCell
             
@@ -238,6 +244,9 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
             
         case self.IMPORT_CONTACTS_CELL_POSITION:
             self.delegate?.settingsViewDidTapImportContacts(self)
+            
+        case self.STOCK_FLIPS_CELL_POSITION:
+            self.delegate?.settingsViewDidTapStockFlipsList(self)
             
 //        case self.TUTORIAL_CELL_POSITION:
 //            self.delegate?.settingsViewDidTapTutorialButton(self)
@@ -302,6 +311,13 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         }
     }
     
+    private func createStockFlipsCell() {
+        
+        if (self.stockFlipsListCell == nil) {
+            self.stockFlipsListCell = SettingsTableViewCell(image: UIImage(named: "Privacy"), labelText: NSLocalizedString("Stock Flips", comment: "Stock Flips"), detailLabel: nil)
+        }
+    }
+    
     private func createFeedbackCell() {
         
         if (self.sendFeedbackCell == nil) {
@@ -355,6 +371,7 @@ protocol SettingsViewDelegate: class {
     func settingsViewDidTapSendFeedback(settingsView: SettingsView)
     func settingsViewDidTapChangePhoneNumber(settingsView: SettingsView)
     func settingsViewDidTapImportContacts(settingsView: SettingsView)
+    func settingsViewDidTapStockFlipsList(settingsView: SettingsView)
     func settingsViewDidTapTutorialButton(settingsView: SettingsView)
     func settingsViewDidTapLogOutButton(settingsView: SettingsView)
 }

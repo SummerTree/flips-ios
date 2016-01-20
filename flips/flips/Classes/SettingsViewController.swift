@@ -83,6 +83,11 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         self.navigationController?.pushViewController(privacyPolicyViewController, animated: true)
     }
     
+    func settingsViewDidTapStockFlipsList(settingsView: SettingsView) {
+        let stockFlipsViewController = StockFlipsListViewController()
+        self.navigationController?.pushViewController(stockFlipsViewController, animated: true)
+    }
+    
     func settingsViewDidTapSendFeedback(settingsView: SettingsView) {
         let roomDataSource = RoomDataSource()
         let teamFlipsRoom: Room? = roomDataSource.getTeamFlipsRoom()
