@@ -93,6 +93,12 @@
 		40F0939D1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
 		40F0939E1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
 		40F0939F1B7E34E400787969 /* ToolSliderCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */; };
+		4F08E83D1C4F39940096D7B0 /* StockFlipsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E83C1C4F39940096D7B0 /* StockFlipsListView.swift */; };
+		4F08E83E1C4F39940096D7B0 /* StockFlipsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E83C1C4F39940096D7B0 /* StockFlipsListView.swift */; };
+		4F08E83F1C4F39940096D7B0 /* StockFlipsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E83C1C4F39940096D7B0 /* StockFlipsListView.swift */; };
+		4F08E8421C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */; };
+		4F08E8431C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */; };
+		4F08E8441C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
@@ -756,6 +762,8 @@
 		40F093971B7E31C000787969 /* ToolSliderAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSliderAction.swift; sourceTree = "<group>"; };
 		40F0939C1B7E34E400787969 /* ToolSliderCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSliderCollection.swift; sourceTree = "<group>"; };
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
+		4F08E83C1C4F39940096D7B0 /* StockFlipsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockFlipsListView.swift; sourceTree = "<group>"; };
+		4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockFlipsListViewController.swift; sourceTree = "<group>"; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		572BF9161AB9E52600B0D75A /* Flip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flip.h; sourceTree = "<group>"; };
@@ -1110,6 +1118,22 @@
 			name = ToolSlider;
 			sourceTree = "<group>";
 		};
+		4F08E8401C4F399C0096D7B0 /* Stock Flips */ = {
+			isa = PBXGroup;
+			children = (
+				4F08E83C1C4F39940096D7B0 /* StockFlipsListView.swift */,
+			);
+			name = "Stock Flips";
+			sourceTree = "<group>";
+		};
+		4F08E8451C4F3A7E0096D7B0 /* Stock Flips */ = {
+			isa = PBXGroup;
+			children = (
+				4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */,
+			);
+			name = "Stock Flips";
+			sourceTree = "<group>";
+		};
 		5707185619D19D180069064F /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -1259,6 +1283,7 @@
 				7A0D6CEC19D4961700E39A1B /* Settings */,
 				7A9619E419DC2A55005E4343 /* SignUp */,
 				70BD0E7019E30C5100FE8652 /* Splash Screen */,
+				4F08E8451C4F3A7E0096D7B0 /* Stock Flips */,
 				7AB1683619E31951004E2162 /* Take a Picture */,
 				7056FE5419D859DB00BD6571 /* Terms Of Use */,
 				5786B2CA19EEADBC00021DD3 /* Thread Screen */,
@@ -1287,6 +1312,7 @@
 				7033584419E415E60030CF11 /* Settings */,
 				7A9619E719DC2CD9005E4343 /* SignUp */,
 				70BD0E6D19E30A3A00FE8652 /* Splash Screen */,
+				4F08E8401C4F399C0096D7B0 /* Stock Flips */,
 				7AB1683919E319C7004E2162 /* Take a Picture */,
 				7056FE5119D8598C00BD6571 /* Terms Of Use */,
 				5786B2CF19EEADD900021DD3 /* Thread Screen */,
@@ -2348,6 +2374,7 @@
 				7049A7A21A111998001D8121 /* ChangeNumberInfoView.swift in Sources */,
 				70577C761A13AECF0006B1FD /* ContactListHelper.swift in Sources */,
 				704E110F19D0935F00D2BB88 /* LoginView.swift in Sources */,
+				4F08E8421C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */,
 				7AFE1F3F1AB8AB2D00E38673 /* FlipEntry.m in Sources */,
 				7056FE5019D8598600BD6571 /* TermsOfUseView.swift in Sources */,
 				70736C321A0D471F004E55E4 /* UpdateUserProfileViewController.swift in Sources */,
@@ -2444,6 +2471,7 @@
 				7043DF381A1173E500EFF9AD /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				70A2A5B91A0A8E5E00725953 /* AboutViewController.swift in Sources */,
 				BE820DE21AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
+				4F08E83D1C4F39940096D7B0 /* StockFlipsListView.swift in Sources */,
 				70BD0E6F19E30A4A00FE8652 /* SplashScreenView.swift in Sources */,
 				70BD0E7219E30C6300FE8652 /* SplashScreenViewController.swift in Sources */,
 				7033584819E462A20030CF11 /* PubNubService.swift in Sources */,
@@ -2576,6 +2604,7 @@
 				BE245FDF1AD2D95900859233 /* ContactListHelper.swift in Sources */,
 				BE245FE01AD2D95900859233 /* LoginView.swift in Sources */,
 				BE245FE11AD2D95900859233 /* FlipEntry.m in Sources */,
+				4F08E8431C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */,
 				BE245FE21AD2D95900859233 /* TermsOfUseView.swift in Sources */,
 				BE245FE31AD2D95900859233 /* UpdateUserProfileViewController.swift in Sources */,
 				BE245FE41AD2D95900859233 /* UITableViewCellExtensions.swift in Sources */,
@@ -2672,6 +2701,7 @@
 				BE2460331AD2D95900859233 /* FlipDataSource.swift in Sources */,
 				BE2460341AD2D95900859233 /* ChangeNumberInputPhoneViewController.swift in Sources */,
 				BE2460351AD2D95900859233 /* AboutViewController.swift in Sources */,
+				4F08E83E1C4F39940096D7B0 /* StockFlipsListView.swift in Sources */,
 				BE820DE31AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				BE2460361AD2D95900859233 /* SplashScreenView.swift in Sources */,
 				BE2460371AD2D95900859233 /* SplashScreenViewController.swift in Sources */,
@@ -2804,6 +2834,7 @@
 				BE2460B91AD2D9C600859233 /* ContactListHelper.swift in Sources */,
 				BE2460BA1AD2D9C600859233 /* LoginView.swift in Sources */,
 				BE2460BB1AD2D9C600859233 /* FlipEntry.m in Sources */,
+				4F08E8441C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */,
 				BE2460BC1AD2D9C600859233 /* TermsOfUseView.swift in Sources */,
 				BE2460BD1AD2D9C600859233 /* UpdateUserProfileViewController.swift in Sources */,
 				BE2460BE1AD2D9C600859233 /* UITableViewCellExtensions.swift in Sources */,
@@ -2900,6 +2931,7 @@
 				BE24610C1AD2D9C600859233 /* FlipsWebViewController.swift in Sources */,
 				BE24610D1AD2D9C600859233 /* FlipDataSource.swift in Sources */,
 				BE24610E1AD2D9C600859233 /* ChangeNumberInputPhoneViewController.swift in Sources */,
+				4F08E83F1C4F39940096D7B0 /* StockFlipsListView.swift in Sources */,
 				BE24610F1AD2D9C600859233 /* AboutViewController.swift in Sources */,
 				BE820DE41AE6BE5C00C25208 /* AnalyticsService.swift in Sources */,
 				BE2461101AD2D9C600859233 /* SplashScreenView.swift in Sources */,
