@@ -78,7 +78,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     
     override func layoutSubviews() {
         let actionRowsNumber: Int = NUMBER_OF_ROWS - 1
-        let sectionHeight = USER_PROFILE_CELL_HEIGHT + ( CGFloat(NUMBER_OF_ACTION_ROWS) * ACTION_ROW_HEIGHT)
+        let sectionHeight = USER_PROFILE_CELL_HEIGHT + ( CGFloat(actionRowsNumber) * ACTION_ROW_HEIGHT)
         var tableFooterViewHeight = self.tableView.frame.size.height - sectionHeight
         
         if (tableFooterViewHeight < LOGOUT_BUTTON_HEIGHT) {
@@ -314,7 +314,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
     private func createStockFlipsCell() {
         
         if (self.stockFlipsListCell == nil) {
-            self.stockFlipsListCell = SettingsTableViewCell(image: UIImage(named: "Privacy"), labelText: NSLocalizedString("Stock Flips", comment: "Stock Flips"), detailLabel: nil)
+            self.stockFlipsListCell = SettingsTableViewCell(image: UIImage(named: "Terms"), labelText: NSLocalizedString("Stock Flips", comment: "Stock Flips"), detailLabel: nil)
         }
     }
     
