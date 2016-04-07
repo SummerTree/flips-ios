@@ -21,6 +21,9 @@
 
 // Internally known event names
 
+/*! Use to log when the response from the server is not valid UTF-8. */
+FBSDK_EXTERN NSString *const FBAppEventNameInvalidUTF8Response;
+
 /*! Use to log that the share dialog was launched */
 FBSDK_EXTERN NSString *const FBAppEventNameShareSheetLaunch;
 
@@ -66,6 +69,9 @@ FBSDK_EXTERN NSString *const FBAppEventNameFBDialogsPresentShareDialogPhoto;
 FBSDK_EXTERN NSString *const FBAppEventNameFBDialogsPresentMessageDialog;
 FBSDK_EXTERN NSString *const FBAppEventNameFBDialogsPresentMessageDialogPhoto;
 FBSDK_EXTERN NSString *const FBAppEventNameFBDialogsPresentMessageDialogOG;
+
+/*! Use to log the that data that was expected to be UTF-8 but was invalid */
+FBSDK_EXTERN NSString *const FBAppEventNameFBResponseData;
 
 /*! Use to log the start of an auth request that cannot be fulfilled by the token cache */
 FBSDK_EXTERN NSString *const FBAppEventNameFBSessionAuthStart;
@@ -124,6 +130,11 @@ typedef NS_ENUM(NSUInteger, FBAppEventsFlushReason) {
               parameters:(NSDictionary *)parameters
                  session:(FBSession *)session;
 
++ (void)logImplicitPurchaseEvent:(NSString *)eventName
+                      valueToSum:(NSNumber *)valueToSum
+                      parameters:(NSDictionary *)parameters
+                         session:(FBSession *)session;
+
 + (FBRequest *)customAudienceThirdPartyIDRequest:(FBSession *)session;
 
 // *** Expose internally for testing/mocking only ***
@@ -139,7 +150,7 @@ typedef NS_ENUM(NSUInteger, FBAppEventsFlushReason) {
 - (void)instanceFlush:(FBAppEventsFlushReason)flushReason;
 
 + (long)unixTimeNow;
-+ (void)ensureOnMainThread;
++ (void)ensureOnMainThread:(NSString *)methodName className:(NSString *)className;
 + (NSString *)persistenceLibraryFilePath:(NSString *)filename;
 + (void)setSourceApplication:(NSString *)sourceApplication openURL:(NSURL *)url;
 + (void)setSourceApplication:(NSString *)sourceApp isAppLink:(BOOL)isAppLink;

@@ -6,7 +6,7 @@ link_with 'flips-QA', 'flips-DEV', 'flips-PROD'
 
 pod 'AFNetworking', '2.4.1'
 pod 'Masonry'
-pod 'Facebook-iOS-SDK', '3.19.0'
+pod 'Facebook-iOS-SDK', '3.24.4'
 pod 'PubNub', '3.7.11'
 pod 'MagicalRecord/Shorthand', '2.2'
 pod 'Flurry-iOS-SDK'

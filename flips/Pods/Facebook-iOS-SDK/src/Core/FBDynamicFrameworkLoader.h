@@ -20,6 +20,7 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <Security/Security.h>
+#import <StoreKit/StoreKit.h>
 
 #import "FBSDKMacros.h"
 
@@ -204,6 +205,10 @@ void fbdfl_AudioServicesPlaySystemSound(SystemSoundID inSystemSoundID);
 
 Class fbdfl_ASIdentifierManagerClass(void);
 
+#pragma mark - SafariServices Classes
+
+FBSDK_EXTERN Class fbdfl_SFSafariViewControllerClass(void);
+
 #pragma mark Accounts Constants
 
 NSString *fbdfl_ACFacebookAppIdKey(void);
@@ -216,3 +221,8 @@ NSString *fbdfl_ACFacebookPermissionsKey(void);
 #pragma mark Accounts Classes
 
 Class fbdfl_ACAccountStoreClass(void);
+
+#pragma mark StoreKit classes
+
+Class fbdfl_SKPaymentQueueClass(void);
+Class fbdfl_SKProductsRequestClass(void);
