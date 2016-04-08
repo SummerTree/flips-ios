@@ -113,6 +113,10 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
             
             if let firstFlipId = userFlips[messageWord.word.text]?.first {
                 messageWord.setFlipId(firstFlipId)
+            } else {
+                if let firstFlipId = stockFlips[messageWord.word.text]?.first{
+                    messageWord.setFlipId(firstFlipId)
+                }
             }
             
         }

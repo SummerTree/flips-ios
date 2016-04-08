@@ -82,9 +82,12 @@ public class DraftingTable : NSObject {
         for flipPage in self.flipBook.flipPages {
             if let firstFlipId : String = self.myFlipsDictionary[flipPage.word]?.first {
                 flipPage.pageID = firstFlipId
+            } else {
+                if let firstFlipId : String = self.stockFlipsDictionary[flipPage.word]?.first {
+                    flipPage.pageID = firstFlipId
+                }
             }
-        }
-        
+        } 
     }
     
     private let NO_FLIP_SELECTED_INDEX = -1
