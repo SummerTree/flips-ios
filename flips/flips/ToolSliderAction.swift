@@ -39,7 +39,7 @@ class ToolSliderAction: UIView {
         self.actionButton = UIButton(type: .System) as? UIButton
         self.actionButton!.setTitle("testing", forState: .Normal)
         self.actionButton!.imageView!.image = self.actionImage!
-        self.actionButton!.addTarget(self, action: Selector("didTapToolSliderActionButton"), forControlEvents: .TouchUpInside)
+        self.actionButton!.addTarget(self, action: #selector(ToolSliderAction.didTapToolSliderActionButton), forControlEvents: .TouchUpInside)
         self.addSubview(self.actionButton!)
     }
     

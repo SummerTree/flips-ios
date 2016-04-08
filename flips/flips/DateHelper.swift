@@ -30,7 +30,7 @@ class DateHelper {
         while !(currentDateString as NSString).isEqualToString(messageDateString) && daysBetweenDates <= 7 {
             messageDate = messageDate.dateByAddingTimeInterval(SECONDS_IN_A_DAY)
             messageDateString = formatter.stringFromDate(messageDate)
-            daysBetweenDates++
+            daysBetweenDates += 1
         }
         
         if daysBetweenDates == 0 {

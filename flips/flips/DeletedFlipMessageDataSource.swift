@@ -35,7 +35,7 @@ class DeletedFlipMessageDataSource: BaseDataSource {
     }
     
     func hasFlipMessageWithID(flipMessageID: String) -> Bool {
-        if let readFlipMessage: DeletedFlipMessage = DeletedFlipMessage.findFirstByAttribute(FLIP_MESSAGE_ID, withValue: flipMessageID) as? DeletedFlipMessage {
+        if let _: DeletedFlipMessage = DeletedFlipMessage.findFirstByAttribute(FLIP_MESSAGE_ID, withValue: flipMessageID) as? DeletedFlipMessage {
             return true
         }
         return false

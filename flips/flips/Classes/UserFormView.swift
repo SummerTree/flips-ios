@@ -91,7 +91,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         let components = NSDateComponents()
         components.year = DATE_PICKER_DEFAULT_YEAR
         birthdayDatePicker.date = calendar!.dateFromComponents(components)!
-		birthdayDatePicker.addTarget(self, action: "birthdaySelected:", forControlEvents: UIControlEvents.ValueChanged)
+		birthdayDatePicker.addTarget(self, action: #selector(UserFormView.birthdaySelected(_:)), forControlEvents: UIControlEvents.ValueChanged)
 		
 		birthdayTextField.inputView = birthdayDatePicker
 		
@@ -118,7 +118,7 @@ class UserFormView : UIView, UITextFieldDelegate {
         textField.rightViewMode = UITextFieldViewMode.Always
         textField.rightView = UIImageView(image: UIImage(named: "Error"))
         textField.rightView?.hidden = true
-        textField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        textField.addTarget(self, action: #selector(UITextFieldDelegateImproved.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         textField.delegate = self
         
         if (leftImage != nil) {
@@ -217,7 +217,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     private func applyDateFormatToText(text: String) -> String {
         var nonFormatedText = text
         var formatedDate = ""
-        for (var i = 0; i < BIRTHDAY_FIELD_NUMBER_OF_CHARACTERS; i++) {
+        for i in 0 ..< BIRTHDAY_FIELD_NUMBER_OF_CHARACTERS {
             if ((i == BIRTHDAY_FIRST_SEPARATOR_POSITION) || (i == BIRTHDAY_SECOND_SEPARATOR_POSITION)) {
                 formatedDate = "\(formatedDate)\(BIRTHDAY_DATE_SEPARATOR)"
             } else if (!nonFormatedText.isEmpty) {
@@ -265,7 +265,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             shouldChangeTextFieldText = false
             
             var stringWithDigitsOnly = birthdayTextField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
-            var numberOfDigitsProvided = stringWithDigitsOnly.characters.count
+            let numberOfDigitsProvided = stringWithDigitsOnly.characters.count
             
             if (string == "" ) {
                 if (numberOfDigitsProvided > 0) {
@@ -294,7 +294,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(textField: UITextField) {
         if (textField == birthdayTextField) {
-            var stringWithOnlyDigits = textField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
+            let stringWithOnlyDigits = textField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
                 textField.text = NSLocalizedString("MM/DD/YYYY", comment: "Birthday date format")
             }
@@ -303,7 +303,7 @@ class UserFormView : UIView, UITextFieldDelegate {
     
     func textFieldDidEndEditing(textField: UITextField) {
         if (textField == birthdayTextField) {
-            var stringWithOnlyDigits = textField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
+            let stringWithOnlyDigits = textField.text!.stringByRemovingStringsIn([ BIRTHDAY_DATE_SEPARATOR, BIRTHDAY_MONTH_CHARACTER, BIRTHDAY_DAY_CHARACTER, BIRTHDAY_YEAR_CHARACTER ])
             if (stringWithOnlyDigits.isEmpty) {
                 textField.text = ""
             }
@@ -463,7 +463,7 @@ class UserFormView : UIView, UITextFieldDelegate {
             lastButTwoCharacters = lastButOneCharacter
             lastButOneCharacter = lastCharacter
             lastCharacter = String(character)
-            position++
+            position += 1
         }
         return true
     }

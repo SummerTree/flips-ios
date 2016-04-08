@@ -124,13 +124,13 @@ public class DraftingTable : NSObject {
     }
     
     func uploadFlipPage(flipPage: FlipPage?) {
-        if let page = flipPage {
+        if flipPage != nil {
             
         }
     }
     
     func uploadFlipBook(flipBook: FlipBook?) {
-        if let book = flipBook {
+        if flipBook != nil {
             
         }
     }
@@ -139,15 +139,15 @@ public class DraftingTable : NSObject {
     
     func resetDraftingTable() {
         
-        if let contacts = self.contacts {
+        if (self.contacts) != nil {
             self.contacts?.removeAll(keepCapacity: false)
         }
         
-        if let sendOptions = self.sendOptions {
+        if (self.sendOptions) != nil {
             self.sendOptions?.removeAll(keepCapacity: false)
         }
         
-        if let room = self.room {
+        if (self.room) != nil {
             self.room = nil;
         }
         

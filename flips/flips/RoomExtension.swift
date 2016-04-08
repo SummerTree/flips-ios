@@ -15,11 +15,11 @@ extension Room {
     func numberOfUnreadMessages() -> Int {
         var notReadMessagesCount = 0
         let flipMessagesNotRemoved = self.flipMessagesNotRemoved()
-        for (var i = 0; i < flipMessagesNotRemoved.count; i++) {
+        for i in 0 ..< flipMessagesNotRemoved.count {
             let flipMessage = flipMessagesNotRemoved[i] as! FlipMessage
             
             if (flipMessage.notRead.boolValue) {
-                notReadMessagesCount++
+                notReadMessagesCount += 1
             }
         }
         
@@ -41,7 +41,7 @@ extension Room {
     func flipMessagesNotRemoved() -> NSOrderedSet {
         let notRemovedMessages = NSMutableOrderedSet()
         
-        for (var i = 0; i < self.flipMessages.count; i++) {
+        for i in 0 ..< self.flipMessages.count {
             if let flipMessage: FlipMessage = self.flipMessages[i] as? FlipMessage {
                 if (!flipMessage.removed.boolValue) {
                     notRemovedMessages.addObject(flipMessage)
@@ -86,7 +86,7 @@ extension Room {
                 if (participant.userID != loggedUser.userID) {
                     var userFirstName = participant.firstName
                     if (participant.isTemporary!.boolValue) {
-                        if let phoneNumber = participant.phoneNumber {
+                        if (participant.phoneNumber) != nil {
                             userFirstName = participant.formattedPhoneNumber()
                         }
                         

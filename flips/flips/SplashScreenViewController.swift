@@ -72,7 +72,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "logoutNotificationReceived:", name: LOGOUT_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SplashScreenViewController.logoutNotificationReceived(_:)), name: LOGOUT_NOTIFICATION_NAME, object: nil)
     }
     
     deinit {
@@ -154,7 +154,7 @@ class SplashScreenViewController: FlipsViewController, UIAlertViewDelegate {
         let phoneNumberLength = user.phoneNumber.characters.count
         var isDeviceVerified: Bool = false
         
-        if let isVerified = user.device.isVerified {
+        if (user.device.isVerified) != nil {
             isDeviceVerified = user.device.isVerified.boolValue
         }
         

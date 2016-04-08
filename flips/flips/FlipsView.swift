@@ -53,7 +53,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     private func addSubviews() {
         addFlipButton = UIButton()
-        addFlipButton.addTarget(self, action: "addFlipButtonTapped:", forControlEvents: .TouchUpInside)
+        addFlipButton.addTarget(self, action: #selector(FlipsView.addFlipButtonTapped(_:)), forControlEvents: .TouchUpInside)
         addFlipButton.setImage(UIImage(named: "AddMediaButton"), forState: .Normal)
         addFlipButton.sizeToFit()
         
@@ -123,7 +123,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
         var numberOfSections = 1
         
         if (numberOfFlips.stockFlips > 0) {
-            numberOfSections++
+            numberOfSections += 1
         }
         
         return numberOfSections
@@ -184,7 +184,7 @@ class FlipsView : UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDa
             forIndexPath: indexPath) as! FlipsHeaderView
         
         if (kind == UICollectionElementKindSectionHeader) {
-            let numberOfFlips = self.getNumberOfFlips()
+            _ = self.getNumberOfFlips()
             
             if (indexPath.section == 0) {
                 reusableView.setTitle(MY_FLIPS_TITLE)

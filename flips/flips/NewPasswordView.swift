@@ -48,7 +48,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         self.updateConstraints()
         
         let center = NSNotificationCenter.defaultCenter()
-        center.addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        center.addObserver(self, selector: #selector(NewPasswordView.keyboardOnScreen(_:)), name: UIKeyboardDidShowNotification, object: nil)
     }
     
     deinit {
@@ -105,7 +105,7 @@ class NewPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDelegate
         doneButton.setBackgroundImage(UIImage(named: "ForgotButton"), forState: UIControlState.Normal)
         doneButton.setBackgroundImage(UIImage(named: "ForgotButtonTap"), forState: UIControlState.Highlighted)
         doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), forState: UIControlState.Normal)
-        doneButton.addTarget(self, action: "didTapDoneButton", forControlEvents: .TouchUpInside)
+        doneButton.addTarget(self, action: #selector(NewPasswordView.didTapDoneButton), forControlEvents: .TouchUpInside)
         bottomView.addSubview(doneButton)
         
         keyboardFillerView = UIView()

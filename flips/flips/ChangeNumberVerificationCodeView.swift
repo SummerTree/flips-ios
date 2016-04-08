@@ -28,7 +28,7 @@ class ChangeNumberVerificationCodeView: VerificationCodeView {
     }
     
     override func viewWillAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardOnScreen:"), name: UIKeyboardDidShowNotification, object: nil)
     }
     
     override func viewWillDisappear() {

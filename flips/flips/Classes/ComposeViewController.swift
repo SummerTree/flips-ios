@@ -125,7 +125,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         stockFlipsDictionary = Dictionary<String, [String]>()
         
         flipWords = Array()
-        for (var i = 0; i < words.count; i++) {
+        for i in (0 ..< words.count) {
             let word = words[i]
             let flipText: FlipText = FlipText(position: i, text: word, state: FlipState.NotAssociatedAndNoResourcesAvailable)
             self.flipWords.append(flipText)
@@ -384,7 +384,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             if (flipWord.associatedFlipId == nil) {
                 return index
             }
-            index++
+            index += 1
         }
         return NO_FLIP_SELECTED_INDEX
     }
@@ -434,7 +434,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         
         highlightedWordCurrentAssociatedImage = nil
         
-        var status : FlipState = flipWord.state
+        let status : FlipState = flipWord.state
         switch status {
         case FlipState.NotAssociatedAndNoResourcesAvailable:
             composeTopViewContainer.showCameraWithWord(flipWord.text)
@@ -453,7 +453,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
     }
     
     func flipMessageWordListView(flipMessageWordListView: FlipMessageWordListView, didSplitFlipWord flipWord: FlipText!) {
-        var splittedTextWords: [String] = FlipStringsUtil.splitFlipString(flipWord.text);
+        let splittedTextWords: [String] = FlipStringsUtil.splitFlipString(flipWord.text);
         
         var newFlipWords = Array<FlipText>()
         var flipWordsToAdd = Array<FlipText>()
@@ -463,15 +463,15 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
             for oldFlipWord in flipWords {
                 if (flipWord.position == oldFlipWord.position) {
                     for newWord in splittedTextWords {
-                        var newFlipWord = FlipText(position: position, text: newWord, state: FlipState.NotAssociatedAndNoResourcesAvailable)
+                        let newFlipWord = FlipText(position: position, text: newWord, state: FlipState.NotAssociatedAndNoResourcesAvailable)
                         newFlipWords.append(newFlipWord)
                         flipWordsToAdd.append(newFlipWord)
-                        position++
+                        position += 1
                     }
                 } else {
                     oldFlipWord.position = position // updating flip position value
                     newFlipWords.append(oldFlipWord)
-                    position++
+                    position += 1
                 }
             }
             flipWords = newFlipWords
@@ -500,7 +500,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if let recorder = self.audioRecorder {
             recorder.delegate = self
             recorder.startRecording { (error) -> Void in
-                if let error = error {
+                if error != nil {
                     self.composeTopViewContainer.showCameraWithWord(self.flipWords[self.highlightedWordIndex].text)
                     let alertMessage = UIAlertView(title: LocalizedString.MICROPHONE_ACCESS, message: LocalizedString.MICROPHONE_MESSAGE, delegate: nil, cancelButtonTitle: LocalizedString.OK)
                     alertMessage.show()
@@ -623,7 +623,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         let flipWord = flipWords[highlightedWordIndex]
         let flipPage = self.draftingTable!.flipPageAtIndex(self.highlightedWordIndex)
         let autoPlay = (self.navigationController?.topViewController == self)
-        let flipDataSource = FlipDataSource();
+        _ = FlipDataSource();
         
 //        if (flipWord.associatedFlipId != nil) {
 //            var autoPlay = (self.navigationController?.topViewController == self)
@@ -631,7 +631,7 @@ class ComposeViewController : FlipsViewController, FlipMessageWordListViewDelega
         if let pageID = flipPage.pageID {
             composeTopViewContainer.showFlip(pageID, withWord: flipPage.word, autoPlay: autoPlay)
         }
-        else if let videoURL = flipPage.videoURL {
+        else if (flipPage.videoURL) != nil {
             composeTopViewContainer.showFlip(flipPage.createFlip(), autoPlay: autoPlay)
         }
         else {

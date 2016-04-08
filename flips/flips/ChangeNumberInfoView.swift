@@ -62,7 +62,7 @@ class ChangeNumberInfoView: UIView {
         self.nextButton = UIButton()
         self.nextButton.setBackgroundImage(UIImage(named: "NextButtonNormal"), forState: UIControlState.Normal)
         self.nextButton.setBackgroundImage(UIImage(named: "NextButtonTapped"), forState: UIControlState.Highlighted)
-        self.nextButton.addTarget(self, action: "nextButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.nextButton.addTarget(self, action: #selector(ChangeNumberInfoView.nextButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.nextButton.setTitle(NSLocalizedString("Next", comment: "Next"), forState: UIControlState.Normal)
         self.addSubview(nextButton)
     }

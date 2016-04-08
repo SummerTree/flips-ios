@@ -18,21 +18,21 @@ extension UIViewController {
     func setupWhiteNavBarWithCloseButton(title: String) {
         setupWhiteNavBarWithoutButtons(title)
         
-        let closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: "closeButtonTapped")
+        let closeBarButton = UIBarButtonItem(image: UIImage(named: "Cancel") , style: .Done, target: self, action: #selector(UIViewController.closeButtonTapped))
         self.navigationItem.leftBarButtonItem = closeBarButton
     }
     
     func setupWhiteNavBarWithBackButton(title: String) {
         setupWhiteNavBarWithoutButtons(title)
         
-        let backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: "backButtonTapped")
+        let backBarButton = UIBarButtonItem(image: UIImage(named: "Back_Orange") , style: .Done, target: self, action: #selector(UIViewController.backButtonTapped))
         self.navigationItem.leftBarButtonItem = backBarButton
     }
     
     func setupWhiteNavBarWithoutBackButtonWithRightDoneButton(title: String) {
         setupWhiteNavBarWithoutButtons(title)
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonTapped")
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(UIViewController.doneButtonTapped))
         doneButton.tintColor = UIColor.flipOrange()
         self.navigationItem.rightBarButtonItem = doneButton
     }
@@ -40,7 +40,7 @@ extension UIViewController {
 	func setupWhiteNavBarWithCancelButton(title: String) {
 		setupWhiteNavBarWithoutButtons(title)
 		
-		let backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "closeButtonTapped")
+		let backBarButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: #selector(UIViewController.closeButtonTapped))
 		self.navigationItem.leftBarButtonItem = backBarButton
 	}
 	
@@ -71,7 +71,7 @@ extension UIViewController {
         titleLabel.sizeToFit()
         self.navigationItem.titleView = titleLabel
         
-        let backBarButton = UIBarButtonItem(image: UIImage(named: "Back_White") , style: .Done, target: self, action: "backButtonTapped")
+        let backBarButton = UIBarButtonItem(image: UIImage(named: "Back_White") , style: .Done, target: self, action: #selector(UIViewController.backButtonTapped))
         backBarButton.tintColor = UIColor.whiteColor()
         self.navigationItem.leftBarButtonItem = backBarButton
     }

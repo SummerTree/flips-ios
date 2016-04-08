@@ -41,8 +41,8 @@ class FlipMessageSubmissionManager : NSObject {
     
     override init() {
         super.init()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleRetrySubmissionNotification:", name: Notifications.RETRY_SUBMISSION, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleCancelSubmissionNotification:", name: Notifications.CANCEL_SUBMISSION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FlipMessageSubmissionManager.handleRetrySubmissionNotification(_:)), name: Notifications.RETRY_SUBMISSION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FlipMessageSubmissionManager.handleCancelSubmissionNotification(_:)), name: Notifications.CANCEL_SUBMISSION, object: nil)
     }
     
     deinit {
@@ -76,7 +76,7 @@ class FlipMessageSubmissionManager : NSObject {
     
     func hasAdditionalPendingMessagesForRoom(roomID: String) -> (Bool) {
         
-        for (var i = 1; i < requestQueue.count; i++) {
+        for i in (1 ..< requestQueue.count) {
             if roomID == requestQueue[i].roomID {
                 return true
             }
@@ -256,14 +256,14 @@ class FlipMessageSubmissionManager : NSObject {
                 
                 if (!flip.backgroundURL.isEmpty)
                 {
-                    numOfWordsAssigned++
+                    numOfWordsAssigned += 1
                 }
             }
         }
         
         var isGroupRoom = false
         
-        if let contacts = request.contactIDs
+        if request.contactIDs != nil
         {
             isGroupRoom = request.contactIDs?.count > 1
         }

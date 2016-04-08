@@ -215,7 +215,7 @@ class PlayerView: UIView {
                 }
             }
         } else {
-            var isLoadingStarted: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
+            let isLoadingStarted: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
                 self.play()
             })
             
@@ -223,7 +223,7 @@ class PlayerView: UIView {
                 // Retry after half second
                 let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
                 dispatch_after(delay, dispatch_get_main_queue(), { () -> Void in
-                    var isLoadingStarted: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
+                    var _: Bool = self.loadFlipsResourcesForPlayback({ () -> Void in
                         self.play()
                     })
                 })
@@ -553,7 +553,7 @@ class PlayerView: UIView {
             return false
         }
 
-        for (var i = 0; i < flips.count; i++) {
+        for i in 0 ... flips.count {
             let passedFlip = flips[i]
             let localFlip = self.flips[i]
             
@@ -570,7 +570,7 @@ class PlayerView: UIView {
                 return false
             }
 
-            for (var i = 0; i < formattedWords!.count; i++) {
+            for i in (0 ..< formattedWords!.count) {
                 if (formattedWords![i] != self.words![i]) {
                     return false
                 }
@@ -587,7 +587,7 @@ class PlayerView: UIView {
         
         self.flips = flips
         self.flipsDownloadProgress = [Float]()
-        for (var i = 0; i < flips.count; i++) {
+        for _ in (0 ..< flips.count) {
             self.flipsDownloadProgress.append(0.0);
         }
 
@@ -666,7 +666,7 @@ class PlayerView: UIView {
         self.playerItems = [flipPlayerItem]
         
         if (thumbnailURL != nil) {
-            let response = ThumbnailsCache.sharedInstance.get(thumbnailURL!,
+            _ = ThumbnailsCache.sharedInstance.get(thumbnailURL!,
                 success: { (url: String!, localThumbnailPath: String!) in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.thumbnailView.image = UIImage(contentsOfFile: localThumbnailPath)
@@ -688,7 +688,7 @@ class PlayerView: UIView {
     func playerItemWithVideoAsset(videoAsset: AVAsset) -> FlipPlayerItem {
         let playerItem: FlipPlayerItem = FlipPlayerItem(asset: videoAsset)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"videoPlayerItemEnded:",
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(PlayerView.videoPlayerItemEnded(_:)),
             name:AVPlayerItemDidPlayToEndTimeNotification, object:playerItem)
 
         return playerItem
@@ -727,7 +727,7 @@ class PlayerView: UIView {
                 if (currentItem.order == self.playerItems.count - 1) {
                     if (self.playInLoop) {
                         player.pause()
-                        self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("play"), userInfo:nil, repeats:false)
+                        self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:#selector(PlayerView.play), userInfo:nil, repeats:false)
                     } else {
                         self.pause()
                     }
@@ -760,7 +760,7 @@ class PlayerView: UIView {
     // MARK: - View lifecycle
 
     private func addSubviews() {
-        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "pauseResume"))
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(PlayerView.pauseResume)))
 
         self.thumbnailView = UIImageView()
         self.thumbnailView.contentMode = UIViewContentMode.ScaleAspectFit
@@ -855,7 +855,7 @@ class PlayerView: UIView {
         if let player = self.player() {
             SwiftTryCatch.`try`({ () -> Void in
                 player.removeObserver(self, forKeyPath: "status")
-            }, `catch`: { (exception: NSException!) -> Void in
+            }, catch: { (exception: NSException!) -> Void in
                 return // Do nothing
             }, finally: { () -> Void in
                 return

@@ -134,7 +134,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
         self.setupWhiteNavBarWithBackButton(self.compositionTitle)
         self.setNeedsStatusBarAppearanceUpdate()
         
-        let previewButton = UIBarButtonItem(title: NSLocalizedString("Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+        let previewButton = UIBarButtonItem(title: NSLocalizedString("Preview"), style: .Done, target: self, action: #selector(FlipMessageCompositionVC.previewButtonTapped(_:)))
         previewButton.tintColor = UIColor.flipOrange()
         self.navigationItem.rightBarButtonItem = previewButton
         
@@ -414,7 +414,7 @@ class FlipMessageCompositionVC : FlipsViewController, FlipsCompositionViewDataSo
             recorder.delegate = self
             recorder.startManualRecording({ (error) -> Void in
                 
-                if let error = error
+                if error != nil
                 {
                     self.view.userInteractionEnabled = true
                     self.flipCompositionView.showAudioButton(true)

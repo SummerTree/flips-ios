@@ -327,7 +327,7 @@ public class PubNubService: FlipsService, PNDelegate {
             var historiesReceived: Int = 0
             for channelProtocol in subscribedChannels {
                 if let channel: PNChannel = PNChannel.channelWithName(channelProtocol.name) as? PNChannel {
-                    if let loggedUser: User = User.loggedUser() {
+                    if let _: User = User.loggedUser() {
                         dispatch_group_enter(group)
                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), { () -> Void in
                             self.loadMessagesHistoryForChannel(channel, loadMessagesHistoryCompletion: { (success: Bool) -> Void in
@@ -335,7 +335,7 @@ public class PubNubService: FlipsService, PNDelegate {
                                     print("loadMessagesHistoryForChannel progress - PubNub identifier changed.")
                                 } else if (User.loggedUser() != nil) {
                                     if (success) {
-                                        historiesReceived++
+                                        historiesReceived += 1
                                         progress?(received: historiesReceived, total: subscribedChannels.count)
                                     }
                                 }
@@ -540,7 +540,7 @@ public class PubNubService: FlipsService, PNDelegate {
     
     public func pubnubClient(client: PubNub!, didDisconnectFromOrigin origin: String!, withError error: PNError!) {
         print("pubnubClient didDisconnectFromOrigin withError \(error)")
-        if let loggedUser: User = User.loggedUser() {
+        if let _: User = User.loggedUser() {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         }
         

@@ -37,7 +37,7 @@ class ToolSlider: UIView, ToolSliderActionDelegate {
     
     func addSubviews() {
         
-        if let slider = self.slider {
+        if (self.slider) != nil {
             self.panelHeight = self.slider!.frame.height
         }
 

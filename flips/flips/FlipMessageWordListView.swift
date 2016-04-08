@@ -66,7 +66,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         
         addWordButton = UIButton()
         addWordButton.setImage(UIImage(named: "AddWord"), forState: UIControlState.Normal)
-        addWordButton.addTarget(self, action: "addWordButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        addWordButton.addTarget(self, action: #selector(FlipMessageWordListView.addWordButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         addWordButton.hidden = true
         self.addSubview(addWordButton)
     }
@@ -95,7 +95,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if let source = dataSource {
+        if dataSource != nil {
             reloadWords(false)
         }
     }
@@ -103,10 +103,10 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     func addGestureRecognizers(flipTextView: FlipTextView) {
         flipTextView.userInteractionEnabled = true
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "flipWordTapped:")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FlipMessageWordListView.flipWordTapped(_:)))
         flipTextView.addGestureRecognizer(tapGesture)
         
-        let holdGesture = UILongPressGestureRecognizer(target: self, action: "flipWordLongPressed:")
+        let holdGesture = UILongPressGestureRecognizer(target: self, action: #selector(FlipMessageWordListView.flipWordLongPressed(_:)))
         flipTextView.addGestureRecognizer(holdGesture)
     }
     
@@ -142,7 +142,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
             contentOffset += flipTextView.frame.size.width + rightMargin
             scrollView.contentSize = CGSizeMake(contentOffset, flipTextView.frame.size.height)
             
-            index++
+            index += 1
         }
     }
     
@@ -152,7 +152,7 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
         }
         flipTextViews.removeAll(keepCapacity: false)
         
-        for (var i = 0; i < dataSource?.numberOfFlipWords(); i++) {
+        for (var i = 0; i < dataSource?.numberOfFlipWords(); i += 1) {
             let flipText = dataSource?.flipMessageWordListView(self, flipWordAtIndex: i)
             let flipTextView = FlipTextView(flipText: flipText!)
             flipTextView.sizeToFit()
@@ -342,23 +342,23 @@ class FlipMessageWordListView : UIView, UIScrollViewDelegate {
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if action == "cut:" {
+        if action == #selector(NSObject.cut(_:)) {
             return false
         }
             
-        else if action == "copy:" {
+        else if action == #selector(NSObject.copy(_:)) {
             return false
         }
             
-        else if action == "paste:" {
+        else if action == #selector(NSObject.paste(_:)) {
             return false
         }
             
-        else if action == "_define:" {
+        else if action == Selector("_define:") {
             return false
         }
             
-        else if action == "splitText" {
+        else if action == #selector(FlipMessageWordListView.splitText) {
             return true
         }
         

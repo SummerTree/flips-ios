@@ -51,7 +51,7 @@ class MessageComposerExternal: NSObject, MFMessageComposeViewControllerDelegate 
     
     func configuredMessageComposeViewController() -> MFMessageComposeViewController {
         
-        var userName = NSLocalizedString(User.loggedUser()!.fullName()!, comment: User.loggedUser()!.fullName()!)
+        let userName = NSLocalizedString(User.loggedUser()!.fullName()!, comment: User.loggedUser()!.fullName()!)
         
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.messageComposeDelegate = self

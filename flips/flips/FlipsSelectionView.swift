@@ -59,7 +59,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         userFlipsButton.setTitle("My Flips", forState: .Normal)
         userFlipsButton.setTitleColor(UIColor.flipOrange(), forState: .Normal)
         userFlipsButton.titleLabel!.font = UIFont.avenirNextDemiBold(15.0)
-        userFlipsButton.addTarget(self, action: Selector("didTapUserFlipsButton"), forControlEvents: UIControlEvents.TouchUpInside)
+        userFlipsButton.addTarget(self, action: #selector(FlipsSelectionView.didTapUserFlipsButton), forControlEvents: UIControlEvents.TouchUpInside)
         userFlipsButton.backgroundColor = UIColor.whiteColor()
         userFlipsButton.shadowMe()
         addSubview(userFlipsButton)
@@ -71,7 +71,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         stockFlipsButton.setTitle("Stock Flips", forState: .Normal)
         stockFlipsButton.setTitleColor(UIColor.flipOrange(), forState: .Normal)
         stockFlipsButton.titleLabel!.font = UIFont.avenirNextDemiBold(15.0)
-        stockFlipsButton.addTarget(self, action: Selector("didTapStockFlipsButton"), forControlEvents: UIControlEvents.TouchUpInside)
+        stockFlipsButton.addTarget(self, action: #selector(FlipsSelectionView.didTapStockFlipsButton), forControlEvents: UIControlEvents.TouchUpInside)
         stockFlipsButton.backgroundColor = UIColor.whiteColor()
         stockFlipsButton.shadowMe()
         addSubview(stockFlipsButton)
@@ -494,7 +494,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
             delegate?.didSelectStockFlipAtIndex(indexPath.row)
         }
         
-        for var i = 0; i < collectionView.numberOfItemsInSection(0); i++ {
+        for i in 0 ..< collectionView.numberOfItemsInSection(0) {
             
             let cell = collectionView.cellForItemAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as! FlipsViewCell
             

@@ -61,7 +61,7 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
         
         // Video Button Long Press Recognizer
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("handleVideoButtonPress:"))
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(ComposeCaptureControlsView.handleVideoButtonPress(_:)))
         longPressRecognizer.minimumPressDuration = 0.1
         
         // Flips Views
@@ -73,8 +73,8 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
         // Button Containers
         
         videoView = buttonView(.Video, gestureRecognizer: longPressRecognizer)
-        cameraView = buttonView(.Camera, tapSelector: Selector("handleCameraButtonTap:"))
-        galleryView = buttonView(.Gallery, tapSelector: Selector("handleGalleryButtonTap:"))
+        cameraView = buttonView(.Camera, tapSelector: #selector(ComposeCaptureControlsView.handleCameraButtonTap(_:)))
+        galleryView = buttonView(.Gallery, tapSelector: #selector(ComposeCaptureControlsView.handleGalleryButtonTap(_:)))
         
         disableCameraControls()
         
@@ -320,7 +320,7 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
                 startVideoTimer()
                 break;
             case .Ended:
-                if let timer = self.videoTimer {
+                if (self.videoTimer) != nil {
                     clearVideoTimer()
                     self.delegate?.didReleaseVideoButton()
                 }
@@ -338,7 +338,7 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
     ////
     
     func startVideoTimer() {
-        videoTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("handleVideoTimerExpired"), userInfo: nil, repeats: false)
+        videoTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(ComposeCaptureControlsView.handleVideoTimerExpired), userInfo: nil, repeats: false)
     }
     
     func clearVideoTimer() {
@@ -348,7 +348,7 @@ class ComposeCaptureControlsView : EndlessScrollView, FlipSelectionViewDelegate 
     
     func handleVideoTimerExpired() {
         
-        if let timer = self.videoTimer {
+        if (self.videoTimer) != nil {
             clearVideoTimer()
             delegate?.didReleaseVideoButton()
         }

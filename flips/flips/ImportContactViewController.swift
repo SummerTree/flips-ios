@@ -50,7 +50,7 @@ class ImportContactViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         ActivityIndicatorHelper.showActivityIndicatorAtView(self.view)
         
-        let localGroup = dispatch_group_create()
+        _ = dispatch_group_create()
         
         if (User.loggedUser()?.facebookID != nil) {
             UserService.sharedInstance.importFacebookFriends({ (success) -> Void in

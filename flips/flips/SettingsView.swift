@@ -54,7 +54,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         
         self.addSubviews()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsView.resyncNotificationReceived(_:)), name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
     }
     
     deinit {
@@ -105,7 +105,7 @@ class SettingsView: UIView, UITableViewDataSource, UITableViewDelegate, UIScroll
         tableFooterView.backgroundColor = UIColor.clearColor()
         
         logoutButton = UIButton()
-        logoutButton.addTarget(self, action: "logOutButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        logoutButton.addTarget(self, action: #selector(SettingsView.logOutButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         logoutButton.backgroundColor = UIColor.whiteColor()
         logoutButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         logoutButton.setTitleColor(UIColor.flipOrange(), forState: UIControlState.Normal)

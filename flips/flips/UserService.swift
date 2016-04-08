@@ -222,7 +222,7 @@ public class UserService: FlipsService {
                     }
                 },
                 success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
-                    var user = self.parseUserResponse(responseObject)
+                    let user = self.parseUserResponse(responseObject)
                     success(user)
                     
                     AnalyticsService.logProfileChanged()
@@ -398,20 +398,20 @@ public class UserService: FlipsService {
                         return
                     }
 
-                    var url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                    let url = self.HOST + self.FACEBOOK_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                     
-                    var params: Dictionary<String, AnyObject> = [
+                    let params: Dictionary<String, AnyObject> = [
                         RequestParams.FACEBOOK_IDS : usersFacebookIDS
                     ]
                     
                     self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
-                        var response:JSON = JSON(responseObject)
+                        let response:JSON = JSON(responseObject)
                         
-                        for (index, user) in response {
+                        for (_, user) in response {
                             SwiftTryCatch.`try`({ () -> Void in
                                 print("Trying to import: \(user)")
-                                var user = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                                }, `catch`: { (error) -> Void in
+                                _ = PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
+                                }, catch: { (error) -> Void in
                                     print("Error: [\(error))")
                                 }, finally: nil)
                         }
@@ -419,7 +419,7 @@ public class UserService: FlipsService {
                         success(nil)
                         }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                             if (operation.responseObject != nil) {
-                                var response = operation.responseObject as! NSDictionary
+                                let response = operation.responseObject as! NSDictionary
                                 failure(FlipError(error: response["error"] as! String!, details : nil))
                             } else {
                                 failure(FlipError(error: error.localizedDescription, details : nil))
@@ -474,19 +474,19 @@ public class UserService: FlipsService {
                     numbers.append(contact.phoneNumber)
                 }
 
-                var url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                let url = self.HOST + self.UPLOAD_CONTACTS_VERIFY.stringByReplacingOccurrencesOfString("{{user_id}}", withString: loggedUser.userID, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 
-                var params: Dictionary<String, AnyObject> = [
+                let params: Dictionary<String, AnyObject> = [
                     RequestParams.PHONENUMBERS : numbers
                 ]
 
                 self.post(url, parameters: params, success: { (operation, responseObject) -> Void in
-                    var response:JSON = JSON(responseObject)
-                    for (index, user) in response {
+                    let response:JSON = JSON(responseObject)
+                    for (_, user) in response {
                         SwiftTryCatch.`try`({ () -> Void in
                             print("Trying to import: \(user)")
                             PersistentManager.sharedInstance.createOrUpdateUserWithJson(user)
-                        }, `catch`: { (error) -> Void in
+                        }, catch: { (error) -> Void in
                             print("Error: [\(error))")
                         }, finally: nil)
                     }
@@ -496,7 +496,7 @@ public class UserService: FlipsService {
                     AnalyticsService.logContactsImported(response.count)
                 }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) in
                     if (operation.responseObject != nil) {
-                        var response = operation.responseObject as! NSDictionary
+                        let response = operation.responseObject as! NSDictionary
                         failure(FlipError(error: response["error"] as! String!, details: nil))
                     } else {
                         failure(FlipError(error: error.localizedDescription, details: nil))

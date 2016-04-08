@@ -64,13 +64,13 @@ public class ConfirmFlipView : UIView, UIGestureRecognizerDelegate {
         self.rejectButton = UIButton()
         self.rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
         self.rejectButton.backgroundColor = UIColor.flipOrange()
-        self.rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        self.rejectButton.addTarget(self, action: #selector(ConfirmFlipView.rejectButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(self.rejectButton)
         
         self.acceptButton = UIButton()
         self.acceptButton.setImage(UIImage(named: "Approve"), forState: UIControlState.Normal)
         self.acceptButton.backgroundColor = UIColor.avacado()
-        self.acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        self.acceptButton.addTarget(self, action: #selector(ConfirmFlipView.acceptButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(self.acceptButton)
         
         self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)

@@ -36,7 +36,7 @@ class ReadFlipMessageDataSource: BaseDataSource {
     }
     
     func hasFlipMessageWithID(flipMessageID: String) -> Bool {
-        if let readFlipMessage: ReadFlipMessage = ReadFlipMessage.findFirstByAttribute(FLIP_MESSAGE_ID, withValue: flipMessageID) as? ReadFlipMessage {
+        if let _: ReadFlipMessage = ReadFlipMessage.findFirstByAttribute(FLIP_MESSAGE_ID, withValue: flipMessageID) as? ReadFlipMessage {
             return true
         }
         return false

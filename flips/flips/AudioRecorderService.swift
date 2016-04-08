@@ -109,7 +109,7 @@ public class AudioRecorderService: NSObject, AVAudioRecorderDelegate {
                 self.setupRecorder()
                 self.setSessionPlayAndRecord()
                 self.recorder.record()
-                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "stopRecording", userInfo: nil, repeats: false)
+                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(AudioRecorderService.stopRecording), userInfo: nil, repeats: false)
             } else {
                 error(LocalizedString.ERROR)
             }

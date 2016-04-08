@@ -85,7 +85,7 @@ public class CacheJournal {
                         break
                     }
                     count += Int64(entry.size)
-                    ++upperLimit
+                    upperLimit += 1
                 }
             }
             

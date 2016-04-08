@@ -115,7 +115,7 @@ extension FlipMessage {
         
         var flipsDictionary = Array<Dictionary<String, String>>()
         let flipsEntries = self.flipsEntries
-        for (var i = 0; i < flipsEntries!.count; i++) {
+        for i in 0 ..< flipsEntries!.count {
             let flip: Flip = flipsEntries![i].flip
             let flipWord: FlipText = flipWords[i]
             

@@ -23,7 +23,7 @@ public class AuthenticationHelper: NSObject {
     }
     
     func isAuthenticated() -> Bool {
-        if let user = User.loggedUser() {
+        if User.loggedUser() != nil {
             return true
         }
         
@@ -62,7 +62,7 @@ public class AuthenticationHelper: NSObject {
 
     
     func retrieveAuthenticatedUsernameIfExists() -> String? {
-        var loggedUserInfo = User.isUserLoggedIn()
+        _ = User.isUserLoggedIn()
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.valueForKey(LOGIN_USERNAME_KEY) as? String
     }

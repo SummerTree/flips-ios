@@ -64,8 +64,8 @@ struct ContactAttributes {
     
     func sortedByUserFirstNameLastName() -> [NSSortDescriptor] {
         let sortedBy = [
-            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
-            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:))),
+            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))
         ]
 
         return sortedBy
@@ -88,8 +88,8 @@ struct ContactAttributes {
     func getMyContactsIdsWithoutFlipsAccount() -> [String] {
         if let loggedUser = User.loggedUser() {
             let sortedBy = [
-                NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
-                NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+                NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:))),
+                NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))
             ]
             
             let formatedPhoneNumber = PhoneNumberHelper.formatUsingUSInternational(loggedUser.phoneNumber)
@@ -110,8 +110,8 @@ struct ContactAttributes {
     
     func getMyContactsIdsWithFlipsAccount() -> [String] {
         let sortedBy = [
-            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: "caseInsensitiveCompare:"),
-            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: "caseInsensitiveCompare:")
+            NSSortDescriptor(key: ContactAttributes.FIRST_NAME, ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:))),
+            NSSortDescriptor(key: ContactAttributes.LAST_NAME, ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))
         ]
 
         let contacts = Contact.findAllSortedBy("firstName", ascending: true, withPredicate: NSPredicate(format: "(\(ContactAttributes.CONTACT_USER) != nil and \(ContactAttributes.CONTACT_USER).me == false) and (\(ContactAttributes.CONTACT_USER).isTemporary != true)"), inContext: currentContext) as NSArray

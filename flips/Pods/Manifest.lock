@@ -20,18 +20,18 @@ PODS:
   - AFNetworking/UIKit (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Bolts (1.3.0):
-    - Bolts/AppLinks (= 1.3.0)
-    - Bolts/Tasks (= 1.3.0)
-  - Bolts/AppLinks (1.3.0):
+  - Bolts (1.7.0):
+    - Bolts/AppLinks (= 1.7.0)
+    - Bolts/Tasks (= 1.7.0)
+  - Bolts/AppLinks (1.7.0):
     - Bolts/Tasks
-  - Bolts/Tasks (1.3.0)
+  - Bolts/Tasks (1.7.0)
   - Crashlytics (3.3.3)
   - Fabric (1.5.4):
     - Fabric/Base (= 1.5.4)
   - Fabric/Base (1.5.4)
-  - Facebook-iOS-SDK (3.19.0):
-    - Bolts (~> 1.0)
+  - Facebook-iOS-SDK (3.24.4):
+    - Bolts (~> 1.2)
   - Flurry-iOS-SDK (7.1.1):
     - Flurry-iOS-SDK/FlurrySDK (= 7.1.1)
   - Flurry-iOS-SDK/FlurrySDK (7.1.1)
@@ -43,7 +43,7 @@ DEPENDENCIES:
   - AFNetworking (= 2.4.1)
   - Crashlytics
   - Fabric
-  - Facebook-iOS-SDK (= 3.19.0)
+  - Facebook-iOS-SDK (= 3.24.4)
   - Flurry-iOS-SDK
   - MagicalRecord/Shorthand (= 2.2)
   - Masonry
@@ -51,13 +51,13 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 41d45d2c14219af0fa5addf3cfd433a002c13c9f
-  Bolts: 805a4a87413e49d4a0c2b7d469084cbc46b09342
+  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   Crashlytics: 9120a5c1515655e57a65e565e2eae8dd326be2e9
   Fabric: 93e3053474839d8df33a61a29c328a48c83792c8
-  Facebook-iOS-SDK: 2a2f22be64360c46eb76002654aba69c0ea06f5a
+  Facebook-iOS-SDK: 5a7c414a084708220b72d5fd016f2cf3eb6deda4
   Flurry-iOS-SDK: 83fd4f40ae66e80d122fd2f6698f0e0c31021a63
-  MagicalRecord: f8a56bb87ab6552f20c4bb8681a1958a197ea3cd
+  MagicalRecord: 2dc87179ae7c1f2a274442624ec65a07d4357a6f
   Masonry: ff105a956abcd19a618b2028b121cb638d7a8e2f
   PubNub: a2fbe9e35c0e2797f5ce4945dcd529ea7216befa
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

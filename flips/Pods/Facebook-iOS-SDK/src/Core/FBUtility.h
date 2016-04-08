@@ -19,6 +19,7 @@
 
 #import "FBFetchedAppSettings.h"
 #import "FBLogger.h"
+#import "FBSDKMacros.h"
 
 @class FBRequest;
 @class FBSession;
@@ -32,14 +33,26 @@ typedef NS_ENUM(NSUInteger, FBAdvertisingTrackingStatus) {
 };
 
 typedef NS_ENUM(NSInteger, FBIOSVersion) {
-  FBIOSVersion_6_0,
-  FBIOSVersion_6_1,
-  FBIOSVersion_7_0,
-  FBIOSVersion_7_1,
-  FBIOSVersion_8_0,
+    FBIOSVersion_6_0,
+    FBIOSVersion_6_1,
+    FBIOSVersion_7_0,
+    FBIOSVersion_7_1,
+    FBIOSVersion_8_0,
+    FBIOSVersion_9_0,
 
-  FBIOSVersionCount
+    FBIOSVersionCount
 };
+
+typedef NS_ENUM(NSUInteger, FBTriStateBOOL) {
+    FBTriStateBOOLValueNO = 0,
+    FBTriStateBOOLValueYES,
+    FBTriStateBOOLValueUnknown
+};
+
+FBSDK_EXTERN FBTriStateBOOL FBTriStateBOOLFromBOOL(BOOL value);
+FBSDK_EXTERN BOOL BOOLFromFBTriStateBOOL(FBTriStateBOOL value, BOOL defaultValue);
+
+FBSDK_EXTERN BOOL FBCheckObjectIsEqual(NSObject *a, NSObject *b);
 
 @interface FBUtility : NSObject
 
@@ -51,6 +64,7 @@ typedef NS_ENUM(NSInteger, FBIOSVersion) {
 #pragma mark - UI Helpers
 
 + (void)centerView:(UIView *)view tableView:(UITableView *)tableView;
++ (UIViewController *)topMostViewController;
 
 #pragma mark - Time Data
 
@@ -84,18 +98,19 @@ typedef NS_ENUM(NSInteger, FBIOSVersion) {
 
 + (void)fetchAppSettings:(NSString *)appID
                 callback:(void (^)(FBFetchedAppSettings *, NSError *))callback;
-// Only returns nil if no settings have been fetched; otherwise it returns the last fetched settings.
-// If the settings are stale, an async request will be issued to fetch them.
-+ (FBFetchedAppSettings *)fetchedAppSettings;
+// Returns fetched settings if they have been fetched and are not stale; otherwise returns nil.
++ (FBFetchedAppSettings *)fetchedAppSettingsIfCurrent;
 
 #pragma mark - IDs / Attribution
 
 + (NSString *)newUUIDString;
 + (NSString *)attributionID;
 + (NSString *)advertiserID;
++ (NSString *)anonymousID;
 + (FBAdvertisingTrackingStatus)advertisingTrackingStatus;
-+ (void)updateParametersWithEventUsageLimitsAndBundleInfo:(NSMutableDictionary *)parameters
-                          accessAdvertisingTrackingStatus:(BOOL)accessAdvertisingTrackingStatus;
++ (NSMutableDictionary<FBGraphObject> *)activityParametersDictionaryForEvent:(NSString *)eventCategory
+                                                          implicitEventsOnly:(BOOL)implicitEventsOnly
+                                                   shouldAccessAdvertisingID:(BOOL)shouldAccessAdvertisingID;
 
 #pragma mark - JSON Encode / Decode
 

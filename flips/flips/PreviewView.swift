@@ -55,7 +55,7 @@ public class PreviewView: UIView, CustomNavigationBarDelegate, UIGestureRecogniz
         self.sendButton.titleLabel?.textColor = UIColor.whiteColor()
         self.sendButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h1)
         self.sendButton.setImage(UIImage(named: "Send")!, verticallyAlignedWithTitle: NSLocalizedString("Send"))
-        self.sendButton.addTarget(self, action: "sendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.sendButton.addTarget(self, action: #selector(PreviewView.sendButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(sendButton)
     }
 

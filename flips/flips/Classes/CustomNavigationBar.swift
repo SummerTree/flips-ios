@@ -180,7 +180,7 @@ class CustomNavigationBar : UIView {
             self.addSubview(avatarImageView)
         } else if let imageButton = titleObject as? UIButton {
             avatarButton = imageButton
-            avatarButton.addTarget(self, action: "didTapAvatarButton", forControlEvents: UIControlEvents.TouchUpInside)
+            avatarButton.addTarget(self, action: #selector(CustomNavigationBar.didTapAvatarButton), forControlEvents: UIControlEvents.TouchUpInside)
             self.addSubview(avatarButton)
         }
         
@@ -194,7 +194,7 @@ class CustomNavigationBar : UIView {
             if (leftButtonInactiveImage != nil) {
                 leftButton.setImage(leftButtonInactiveImage, forState: UIControlState.Disabled)
             }
-            leftButton.addTarget(self, action: "didTapLeftButton", forControlEvents: .TouchUpInside)
+            leftButton.addTarget(self, action: #selector(CustomNavigationBar.didTapLeftButton), forControlEvents: .TouchUpInside)
             self.addSubview(leftButton)
         }
         
@@ -211,7 +211,7 @@ class CustomNavigationBar : UIView {
                 rightButton.setImage(rightButtonInactiveObject as? UIImage, forState: .Disabled)
             }
             
-            rightButton.addTarget(self, action: "didTapRightButton", forControlEvents: .TouchUpInside)
+            rightButton.addTarget(self, action: #selector(CustomNavigationBar.didTapRightButton), forControlEvents: .TouchUpInside)
             self.addSubview(rightButton)
         }
     }

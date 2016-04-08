@@ -65,7 +65,7 @@ class FlipsSendButton: UIImageView {
                               width: CGFloat(width),
                               height: height)
         
-        let tapRecog = UITapGestureRecognizer(target: self, action: Selector("buttonTouched:"))
+        let tapRecog = UITapGestureRecognizer(target: self, action: #selector(FlipsSendButton.buttonTouched(_:)))
         tapRecog.numberOfTapsRequired = 1
         addGestureRecognizer(tapRecog)
             

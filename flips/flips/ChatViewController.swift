@@ -76,7 +76,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         self.setupWhiteNavBarWithBackButton(self.chatTitle)
 
         if (self.groupParticipantsView != nil) {
-            let participantsButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: "groupParticipantsButtonTapped")
+            let participantsButton = UIBarButtonItem(image: UIImage(named: "Group_Participants_Icon") , style: .Done, target: self, action: #selector(ChatViewController.groupParticipantsButtonTapped))
             self.navigationItem.rightBarButtonItem = participantsButton
 
             let participantsViewInitialY: CGFloat = -self.groupParticipantsView!.calculatedHeight()
@@ -120,8 +120,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
             })
         }
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageContentDownloadedNotificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageReceivedNotification:", name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.onFlipMessageContentDownloadedNotificationReceived(_:)), name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.onFlipMessageReceivedNotification(_:)), name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         self.chatView.delegate = self
         self.chatView.dataSource = self
@@ -140,7 +140,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 })
             } else {
                 let flipMessagesArray: [FlipMessage] = self.flipMessages.array as! [FlipMessage]
-                var alreadyReceivedMessage: Bool = false
+                let alreadyReceivedMessage: Bool = false
                 for flipMessage in flipMessagesArray {
                     if (flipMessage.flipMessageID == flipMessageID) {
                         return
@@ -326,7 +326,7 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
                 if let flipMessageID = self.flipMessageIdFromPushNotification {
                     var flipMessageAlreadyReceived = false
                     let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource()
-                    if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
+                    if let _: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
                         flipMessageAlreadyReceived = true
                         self.flipMessageIdFromPushNotification = nil
                     }
@@ -346,8 +346,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
         let time = 1 * Double(NSEC_PER_SEC)
         let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
         dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            if let flipMessageID = self.flipMessageIdFromPushNotification { // Just to make sure that the user didn't close this screen.
-                self.downloadingMessageFromNotificationRetries++
+            if (self.flipMessageIdFromPushNotification) != nil { // Just to make sure that the user didn't close this screen.
+                self.downloadingMessageFromNotificationRetries += 1
                 if (self.downloadingMessageFromNotificationRetries < self.DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES) {
                     self.showMessageFromReceivedPushNotificationWhenDownloaded()
                 } else {
@@ -464,8 +464,8 @@ class ChatViewController: FlipsViewController, ChatViewDelegate, ChatViewDataSou
     ////
     
     private func registerForMessageSubmissionNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFinishSendingMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFailToSendMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.submissionManagerDidFinishSendingMessage(_:)), name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.submissionManagerDidFailToSendMessage(_:)), name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
     }
     
     private func unregisterMessageSubmissionNotifications() {

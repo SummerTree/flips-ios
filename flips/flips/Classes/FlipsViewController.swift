@@ -211,7 +211,7 @@ class FlipsViewController : UIViewController {
         
         if (shouldShowOnboarding(onboardingKey)) {
             
-            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
+            let singleTap = UITapGestureRecognizer(target: self, action: #selector(FlipsViewController.onOnboardingOverlayClick))
             singleTap.numberOfTapsRequired = 1
             
             overlayView = UIImageView(image: onboardingImage)
@@ -240,7 +240,7 @@ class FlipsViewController : UIViewController {
         
         if (shouldShowOnboarding(onboardingKey)) {
             
-            let singleTap = UITapGestureRecognizer(target: self, action: Selector("onOnboardingOverlayClick"))
+            let singleTap = UITapGestureRecognizer(target: self, action: #selector(FlipsViewController.onOnboardingOverlayClick))
             singleTap.numberOfTapsRequired = 1
             
             overlayView = UIImageView(image: onboardingImage)

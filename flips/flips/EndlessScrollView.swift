@@ -62,7 +62,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        for (var i = 0; i < views.count; i++) {
+        for i in 0 ..< views.count {
             
             if i == 0
             {
@@ -85,7 +85,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
             
         }
         
-        for (var i = 0; i < views.count; i++) {
+        for i in 0 ..< views.count {
             
             if i == 0
             {
@@ -108,7 +108,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
             
         }
         
-        for (var i = views.count; i < views.count * 2; i++) {
+        for i in views.count ..< (views.count * 2) {
             
             if i == views.count
             {
@@ -193,7 +193,7 @@ class EndlessScrollView : UIView, UIScrollViewDelegate {
     
     private func refreshImages() {
         
-        for (var i = 0; i < views.count; i++) {
+        for i in 0 ..< views.count {
             
             let view = views[i]
             

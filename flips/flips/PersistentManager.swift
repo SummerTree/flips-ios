@@ -45,9 +45,9 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             }
         }
         
-        var content = json[RoomJsonParams.PARTICIPANTS]
+        let content = json[RoomJsonParams.PARTICIPANTS]
         var participants = Array<User>()
-        for (index, json): (String, JSON) in content {
+        for (_, json): (String, JSON) in content {
             if (isNewRoom) {
                 // Only users can participate of a room
                 participants.append(self.createOrUpdateUserWithJson(json))
@@ -184,10 +184,10 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
             let content = json[MESSAGE_CONTENT]
             
             var formattedFlips: [FormattedFlip] = Array<FormattedFlip>()
-            for (index, flipJson): (String, JSON) in content {
+            for (_, flipJson): (String, JSON) in content {
                 let flip = self.createFlipWithJson(flipJson)
                 
-                var formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
+                let formattedFlip: FormattedFlip = FormattedFlip(flip: flip, word: flipJson[FlipJsonParams.WORD].stringValue)
                 formattedFlips.append(formattedFlip)
             }
             
@@ -201,7 +201,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                 let isMessageMarkedAsRead: Bool = readFlipMessageDataSource.hasFlipMessageWithID(flipMessageID)
                 
                 let flipMessageDataSource = FlipMessageDataSource()
-                var entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
+                let entity: FlipMessage! = flipMessageDataSource.getFlipMessageById(flipMessageID)
                 if (entity != nil) {
                     return entity // if the user already has his message do not recreate it
                 }
@@ -415,7 +415,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
     func syncUserData(callback:(Bool, FlipError?) -> Void) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             let userService = UserService()
-            let flipDataSource = FlipDataSource()
+            _ = FlipDataSource()
             
             var error: FlipError?
             
@@ -535,7 +535,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
 
             var contactID = contactDataSource.nextContactID()
 
-            for (var i = 0; i < contacts.count; i++) {
+            for i in (0 ..< contacts.count) {
                 let contact: ContactListHelperContact = contacts[i] as ContactListHelperContact
                 let existingContact = contactDataSource.fetchContactByPhoneNumber(contact.phoneNumber)
 
@@ -544,7 +544,7 @@ public typealias CreateFlipFailureCompletion = (FlipError?) -> Void
                         firstName: contact.firstName, lastName: contact.lastName, phoneNumber: contact.phoneNumber,
                         phoneType: contact.phoneType, andContactUser: user)
 
-                    contactID++
+                    contactID += 1
 
                 } else {
                     contactDataSource.updateContact(existingContact!, withFirstName: contact.firstName,

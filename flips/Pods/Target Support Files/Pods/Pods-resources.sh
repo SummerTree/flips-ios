@@ -58,24 +58,21 @@ install_resource()
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "Facebook-iOS-SDK/src/FBUserSettingsViewResources.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/PubNub.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "Facebook-iOS-SDK/src/FBUserSettingsViewResources.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/PubNub.bundle"
 fi
 if [[ "$CONFIGURATION" == "Distribution" ]]; then
-  install_resource "Facebook-iOS-SDK/src/FBUserSettingsViewResources.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/Flurry-iOS-SDK.bundle"
   install_resource "${BUILT_PRODUCTS_DIR}/PubNub.bundle"
 fi
 
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-if [[ "${ACTION}" == "install" ]]; then
+if [[ "${ACTION}" == "install" ]] && [[ "${SKIP_INSTALL}" == "NO" ]]; then
   mkdir -p "${INSTALL_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
   rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${INSTALL_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 fi

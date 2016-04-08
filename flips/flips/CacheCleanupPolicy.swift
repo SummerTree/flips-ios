@@ -77,10 +77,10 @@ public class CacheCleanupPolicy {
                         minIndex = i
                     }
                 }
-                ++entryCountToRemove[minIndex]
+                entryCountToRemove[minIndex] += 1
                 sizeToRemove -= Int64(sizesAndTimestampsArray[minIndex][__reviewIndex__(0)].0)
                 sizesAndTimestampsArray[minIndex].removeAtIndex(__reviewIndex__(0))
-                --entryCount
+                entryCount -= 1
             }
             
             for i in 0..<self.caches.count {
@@ -104,13 +104,13 @@ public class CacheCleanupPolicy {
     private func deviceFreeSpaceInBytes() -> Int64 {
         var freeSpace: Int64 = 0
         var error: NSError?
-        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         do {
             let attributes = try NSFileManager.defaultManager().attributesOfFileSystemForPath(paths.last!)
             if let freeFileSystemSizeInBytes = attributes[NSFileSystemFreeSize] as? NSNumber {
                 return freeFileSystemSizeInBytes.longLongValue
             }
-        } catch var error1 as NSError {
+        } catch let error1 as NSError {
             error = error1
         }
         
