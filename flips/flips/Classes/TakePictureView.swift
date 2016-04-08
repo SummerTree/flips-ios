@@ -60,7 +60,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         takePictureButton = UIButton(type: .Custom)
         takePictureButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         takePictureButton.sizeToFit()
-        takePictureButton.addTarget(self, action: "takePictureButtonTapped", forControlEvents: .TouchUpInside)
+        takePictureButton.addTarget(self, action: #selector(TakePictureView.takePictureButtonTapped), forControlEvents: .TouchUpInside)
         takePictureButton.tintColor = UIColor.whiteColor()
         takePictureButton.layer.borderColor = UIColor.whiteColor().CGColor
         takePictureButton.layer.borderWidth = 3.0
@@ -81,7 +81,7 @@ class TakePictureView : UIView, CustomNavigationBarDelegate, CameraViewDelegate 
         galleryButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         galleryButton.backgroundColor = UIColor.galleryButton()
         galleryButton.setImage(UIImage(named: "Gallery")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate), forState: .Normal)
-        galleryButton.addTarget(self, action: "galleryButtonTapped", forControlEvents: .TouchUpInside)
+        galleryButton.addTarget(self, action: #selector(TakePictureView.galleryButtonTapped), forControlEvents: .TouchUpInside)
         bottomButtonsContainerView.addSubview(galleryButton)
         
         var heightDivider : CGFloat = 3

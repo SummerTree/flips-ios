@@ -32,7 +32,7 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
         self.initSubviews()
         self.initConstraints()
         
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SignUpView.handlePan(_:)))
         self.messagesTopView.addGestureRecognizer(panGestureRecognizer)
     }
     
@@ -86,13 +86,13 @@ class SignUpView : UIView, CustomNavigationBarDelegate, UserFormViewDelegate, Me
     // MARK: - Life Cycle
     
     func loadView() {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SignUpView.dismissKeyboard))
         self.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func viewDidAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SignUpView.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SignUpView.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func viewWillDisappear() {

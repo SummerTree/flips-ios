@@ -69,7 +69,7 @@ class ConfirmFlipViewController: UIViewController, ConfirmFlipViewDelegate {
         self.setupWhiteNavBarWithoutButtons(self.title!)
         
         if (showPreviewButton) {
-            let previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: "previewButtonTapped:")
+            let previewBarButton = UIBarButtonItem(title: NSLocalizedString("Preview", comment: "Preview"), style: .Done, target: self, action: Selector("previewButtonTapped:"))
             previewBarButton.enabled = false
             previewBarButton.tintColor = UIColor.flipOrange()
             self.navigationItem.rightBarButtonItem = previewBarButton

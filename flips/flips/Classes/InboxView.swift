@@ -83,7 +83,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         
         composeButton = UIButton()
         composeButton.setImage(UIImage(named: "Compose"), forState: .Normal)
-        composeButton.addTarget(self, action: "composeButtonTapped", forControlEvents: .TouchUpInside)
+        composeButton.addTarget(self, action: #selector(InboxView.composeButtonTapped), forControlEvents: .TouchUpInside)
         composeButton.sizeToFit()
         self.addSubview(composeButton)
        
@@ -214,7 +214,7 @@ class InboxView : UIView, UITableViewDataSource, UITableViewDelegate, CustomNavi
         return true
     }
     
-    func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String! {
+    func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String? {
         return NSLocalizedString("Delete", comment: "Delete")
     }
     

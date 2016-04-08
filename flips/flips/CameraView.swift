@@ -137,13 +137,13 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         
         frontCameraButtonView = UIView()
         frontCameraButtonView.backgroundColor = UIColor.clearColor()
-        frontCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
+        frontCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CameraView.focusAndExposeTap(_:))))
         self.addSubview(frontCameraButtonView)
         
         backCameraButtonView = UIView()
         backCameraButtonView.alpha = 0
         backCameraButtonView.backgroundColor = UIColor.clearColor()
-        backCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "focusAndExposeTap:"))
+        backCameraButtonView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CameraView.focusAndExposeTap(_:))))
         self.addSubview(backCameraButtonView)
         
         flashLabel = UILabel()
@@ -159,21 +159,21 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         flashButton = UIButton()
         flashButton.setImage(UIImage(named: "Flash_Button"), forState: .Normal)
         flashButton.sizeToFit()
-        flashButton.addTarget(self, action: "flashButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        flashButton.addTarget(self, action: #selector(CameraView.flashButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         flashButton.enabled = false
         self.addSubview(flashButton)
         
         toggleCameraButton = UIButton()
         toggleCameraButton.setImage(UIImage(named: "Front_Back"), forState: .Normal)
         toggleCameraButton.sizeToFit()
-        toggleCameraButton.addTarget(self, action: "toggleCameraButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        toggleCameraButton.addTarget(self, action: #selector(CameraView.toggleCameraButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(toggleCameraButton)
         
         if (self.showMicrophoneButton) {
             microphoneButton = UIButton()
             microphoneButton.setImage(UIImage(named: "Audio"), forState: .Normal)
             microphoneButton.sizeToFit()
-            microphoneButton.addTarget(self, action: "microphoneButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+            microphoneButton.addTarget(self, action: #selector(CameraView.microphoneButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
             self.addSubview(microphoneButton)
         }
         
@@ -305,7 +305,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         self.backgroundRecordingId = UIBackgroundTaskInvalid
 
         var error: NSError?
-        var videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front)
+        let videoDevice = CameraView.deviceWithMediaType(AVMediaTypeVideo, preferringPosition: AVCaptureDevicePosition.Front)
 
         if (videoDevice == nil) {
             self.showAlert(self.CAMERA_ERROR, message: NSLocalizedString("Unable to find a camera"))
@@ -338,7 +338,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 // Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView can only be manipulated on main thread.
                 // Note: As an exception to the above rule, it is not necessary to serialize video orientation changes on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
 
-                var previewViewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
+                let previewViewLayer = self.previewView.layer as! AVCaptureVideoPreviewLayer
                 previewViewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 previewViewLayer.connection.videoOrientation = self.currentInterfaceOrientation
 
@@ -373,16 +373,16 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                 self.isMicrophoneAvailable = false
             }
 
-        var movieOutput = AVCaptureMovieFileOutput()
+        let movieOutput = AVCaptureMovieFileOutput()
 
         if (self.session.canAddOutput(movieOutput)) {
             self.session.addOutput(movieOutput)
-            var connection = movieOutput.connectionWithMediaType(AVMediaTypeVideo)
+            _ = movieOutput.connectionWithMediaType(AVMediaTypeVideo)
 
             self.movieFileOutput = movieOutput
         }
 
-        var imageOutput = AVCaptureStillImageOutput()
+        let imageOutput = AVCaptureStillImageOutput()
         if (self.session.canAddOutput(imageOutput)) {
             imageOutput.outputSettings = [ AVVideoCodecKey : AVVideoCodecJPEG ]
             self.session.addOutput(imageOutput)
@@ -402,7 +402,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.addObserver(self, forKeyPath: self.RECORDING_KEY_PATH, options: ([NSKeyValueObservingOptions.Old, NSKeyValueObservingOptions.New]), context: RecordingContext)
             
             if let deviceInput = self.videoDeviceInput {
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CameraView.subjectAreaDidChange(_:)), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: deviceInput.device)
             }
             
             weak var weakSelf = self
@@ -603,7 +603,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             self.stillImageOutput.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (imageDataSampleBuffer, error) -> Void in
                 
                 if (imageDataSampleBuffer != nil) {
-                    var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
                     var image = UIImage(data: imageData)!
         
                     if (self.videoDeviceInput.device.position == AVCaptureDevicePosition.Front) {
@@ -613,7 +613,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
                         image = image.cropSquareThumbnail()
                     }
                     
-                    var isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
+                    let isLandscape = (videoOrientation == AVCaptureVideoOrientation.LandscapeLeft) || (videoOrientation == AVCaptureVideoOrientation.LandscapeRight)
                     success(image, self.isCameraFrontPositioned(), isLandscape)
                 } else {
                     fail(error)
@@ -636,11 +636,11 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
         let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).mov"
         
         var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        var docsDir: AnyObject = dirPaths[0]
-        var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
-        var videoURL = NSURL(fileURLWithPath: videoFilePath)
+        let docsDir: AnyObject = dirPaths[0]
+        let videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+        let videoURL = NSURL(fileURLWithPath: videoFilePath)
         
-        var fileManager = NSFileManager.defaultManager()
+        let fileManager = NSFileManager.defaultManager()
         
         if (fileManager.fileExistsAtPath(videoURL.path!)) {
             print("File already exists, removing it.")
@@ -677,11 +677,11 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
             let currentFileName = "recording-\(dateFormatter.stringFromDate(NSDate())).mov"
             
             var dirPaths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-            var docsDir: AnyObject = dirPaths[0]
-            var videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
-            var videoURL = NSURL(fileURLWithPath: videoFilePath)
+            let docsDir: AnyObject = dirPaths[0]
+            let videoFilePath = docsDir.stringByAppendingPathComponent(currentFileName)
+            let videoURL = NSURL(fileURLWithPath: videoFilePath)
             
-            var fileManager = NSFileManager.defaultManager()
+            let fileManager = NSFileManager.defaultManager()
             
             if (fileManager.fileExistsAtPath(videoURL.path!)) {
                 print("File already exists, removing it.")
@@ -848,7 +848,7 @@ class CameraView : UIView, AVCaptureFileOutputRecordingDelegate {
 
                 CameraView.setFlashMode(self.flashMode, forDevice: videoDevice)
 
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: videoDevice)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CameraView.subjectAreaDidChange(_:)), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: videoDevice)
 
                 self.videoDeviceInput = deviceInput as? AVCaptureDeviceInput
                 self.session.addInput(self.videoDeviceInput)

@@ -51,14 +51,14 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     
     func setupMenu() {
         let menuController = UIMenuController.sharedMenuController()
-        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: "joinStrings")
+        let lookupMenu = UIMenuItem(title: NSLocalizedString("Join", comment: "Join"), action: #selector(JoinStringsTextField.joinStrings))
         menuController.menuItems = NSArray(array: [lookupMenu]) as? [UIMenuItem]
         menuController.update()
         menuController.setMenuVisible(true, animated: true)
     }
     
     func joinStrings() {
-        var selectedTextRange: UITextRange = self.selectedTextRange!
+        let selectedTextRange: UITextRange = self.selectedTextRange!
         
         var string = [(String,NSRange)]()
         
@@ -70,7 +70,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         var tempEnd: Int?
         var countSubstrings: Int? = 0
         
-        var nsstring = self.text as NSString
+        let nsstring = self.text as NSString
         let fullRange = NSMakeRange(0, nsstring.length)
         nsstring.enumerateSubstringsInRange(fullRange, options: .ByComposedCharacterSequences) { (char: String?, range: NSRange, enclosingRange: NSRange, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
             if (range.location == initialRange!.location) {
@@ -88,19 +88,19 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         var rangeInit: Int = tempInit!
         var rangeEnd: Int = tempEnd!
     
-        for (var i = rangeInit; i < rangeEnd; ++i) {
+        for i in rangeInit ..< rangeEnd {
             if (string[i].0 != WHITESPACE) {
                 break
             }
-            ++rangeInit
+            rangeInit += 1
             posInit += string[i].1.length
         }
         
-        for (var i = rangeEnd-1; i >= rangeInit; --i) {
+        for (var i = rangeEnd-1; i >= rangeInit; i -= 1) {
             if (string[i].0 != WHITESPACE) {
                 break
             }
-            --rangeEnd
+            rangeEnd -= 1
             posEnd -= string[i].1.length
         }
         
@@ -109,25 +109,25 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         }
         
         let firstCharIsSpecial = isSpecialCharacter(string[rangeInit].0)
-        for (var i = rangeInit-1; i >= 0; --i) {
+        for (var i = rangeInit-1; i >= 0; i -= 1) {
             if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) != firstCharIsSpecial) {
                 break
             }
-            --rangeInit
+            rangeInit -= 1
             posInit -= string[i].1.length
         }
         
         let lastCharIsSpecial = isSpecialCharacter(string[rangeEnd-1].0)
-        for (var i = rangeEnd; i < string.count; ++i) {
+        for i in rangeEnd ..< string.count {
             if (string[i].0 == WHITESPACE || isSpecialCharacter(string[i].0) != lastCharIsSpecial) {
                 break
             }
-            ++rangeEnd
+            rangeEnd += 1
             posEnd += string[i].1.length
         }
         
         var newRanges = [NSRange]()
-        for (var i = 0; i < self.joinedTextRanges.count; ++i) {
+        for i in 0 ..< self.joinedTextRanges.count {
             let range = self.joinedTextRanges[i]
             let intersection = NSIntersectionRange(NSMakeRange(posInit, posEnd-posInit), range)
             if (intersection.length > 0) {
@@ -243,23 +243,23 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if action == "cut:" {
+        if action == #selector(NSObject.cut(_:)) {
             return false
         }
             
-        if action == "copy:" {
+        if action == #selector(NSObject.copy(_:)) {
             return true
         }
             
-        if action == "paste:" {
+        if action == #selector(NSObject.paste(_:)) {
             return true
         }
             
-        if action == "_define:" {
+        if action == Selector("_define:") {
             return false
         }
         
-        if action == "joinStrings" {
+        if action == #selector(JoinStringsTextField.joinStrings) {
             return self.selectedTextCanBeJoined()
         }
         
@@ -302,7 +302,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         if let change = self.rangeThatWillChange {
             let range = change.range
             var newRanges = [NSRange]()
-            for (var i = 0; i < self.joinedTextRanges.count; ++i) {
+            for i in 0 ..< self.joinedTextRanges.count {
                 var joinedRange = self.joinedTextRanges[i]
                 if (range.location+range.length <= joinedRange.location) {
                     joinedRange.location += (change.text as NSString).length-range.length
@@ -349,7 +349,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     }
     
     func setWords(words: [String]) {
-        let joiner = " "
+        _ = " "
         var text = "";
         var firstWord = true
         self.joinedTextRanges.removeAll(keepCapacity: false)

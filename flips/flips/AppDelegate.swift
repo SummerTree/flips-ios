@@ -149,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Badge functions
     
     func incrementBadgeCounter() {
-        self.currentBadgeCount++
+        self.currentBadgeCount += 1
         UIApplication.sharedApplication().applicationIconBadgeNumber = self.currentBadgeCount
     }
     
@@ -164,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
   
     private func onAppLaunchedFromNotification(application: UIApplication, withUserInfo userInfo: [NSObject : AnyObject]) {
-        if let loggedUser = User.loggedUser() {
+        if User.loggedUser() != nil {
             if let roomId: String = String.stringFromValue(userInfo[NOTIFICATION_ROOM_KEY]) {
                 let flipMessageId: String? = String.stringFromValue(userInfo[NOTIFICATION_FLIP_MESSAGE_KEY])
                 if (UIApplication.sharedApplication().keyWindow == nil)  {

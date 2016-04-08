@@ -36,9 +36,9 @@ public class GalleryAssetsHelper {
                 if group!.numberOfAssets() > 0 {
                     group!.enumerateAssetsAtIndexes(NSIndexSet(index: group!.numberOfAssets()-1), options: NSEnumerationOptions.Concurrent, usingBlock: { (result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
                         if result != nil {
-                            var assetRep: ALAssetRepresentation = result.defaultRepresentation()
+                            let assetRep: ALAssetRepresentation = result.defaultRepresentation()
                             
-                            var iref = assetRep.fullScreenImage().takeUnretainedValue()
+                            let iref = assetRep.fullScreenImage().takeUnretainedValue()
                             lastImage = UIImage(CGImage: iref).cropSquareImage(self.GALLERY_BUTTON_IMAGE_SIZE)
                             button.setImage(lastImage, forState: .Normal)
                         } else {

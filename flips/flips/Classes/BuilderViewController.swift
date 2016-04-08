@@ -63,7 +63,7 @@ class BuilderViewController : ComposeViewController, BuilderIntroductionViewCont
     override func onFlipAssociated() {
         let flipWord = self.flipWords[self.highlightedWordIndex]
 
-        let builderWordDataSource = BuilderWordDataSource()
+        _ = BuilderWordDataSource()
         PersistentManager.sharedInstance.removeBuilderWordWithWord(flipWord.text)
 
         self.loadBuilderWords()

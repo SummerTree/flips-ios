@@ -32,7 +32,7 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
         userFlips = Dictionary<String, [String]>()
         stockFlips = Dictionary<String, [String]>()
         
-        for (var pos = 0; pos < words.count; pos++) {
+        for pos in (0 ..< words.count) {
             
             let word = words[pos]
             messageWords.append(FlipMessageWord(word: FlipText(position: pos, text: word, state: .NotAssociatedAndNoResourcesAvailable)))

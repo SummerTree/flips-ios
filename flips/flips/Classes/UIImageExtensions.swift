@@ -17,13 +17,13 @@ extension UIImage {
     func cropSquareImage(squareSize: CGFloat) -> UIImage {
         var transform:CGAffineTransform = CGAffineTransformIdentity
 
-        var width = CGFloat(CGImageGetWidth(self.CGImage))
-        var height = CGFloat(CGImageGetHeight(self.CGImage))
-        var size = min(width, height)
-        var scale = squareSize / size
+        let width = CGFloat(CGImageGetWidth(self.CGImage))
+        let height = CGFloat(CGImageGetHeight(self.CGImage))
+        let size = min(width, height)
+        let scale = squareSize / size
         
-        var cropX = (width - size) / 2
-        var cropY = (height - size) / 2
+        let cropX = (width - size) / 2
+        let cropY = (height - size) / 2
         
         if (self.imageOrientation == UIImageOrientation.Up
             || self.imageOrientation == UIImageOrientation.UpMirrored) {
@@ -69,9 +69,9 @@ extension UIImage {
                 transform = CGAffineTransformScale(transform, -1, 1);
         }
         
-        var bitmapInfo = self.normalizeBitmapInfo(CGImageGetBitmapInfo(self.CGImage))
+        let bitmapInfo = self.normalizeBitmapInfo(CGImageGetBitmapInfo(self.CGImage))
         
-        var ctx:CGContextRef = CGBitmapContextCreate(nil, Int(squareSize), Int(squareSize),
+        let ctx:CGContextRef = CGBitmapContextCreate(nil, Int(squareSize), Int(squareSize),
             CGImageGetBitsPerComponent(self.CGImage), 0,
             CGImageGetColorSpace(self.CGImage),
             bitmapInfo.rawValue)!
@@ -80,8 +80,8 @@ extension UIImage {
         CGContextConcatCTM(ctx, transform)
         CGContextDrawImage(ctx, CGRectMake(0, 0, width, height), self.CGImage)
 
-        var cgimg = CGBitmapContextCreateImage(ctx)
-        var img = UIImage(CGImage: cgimg!, scale: 1.0, orientation: UIImageOrientation.Up)
+        let cgimg = CGBitmapContextCreateImage(ctx)
+        let img = UIImage(CGImage: cgimg!, scale: 1.0, orientation: UIImageOrientation.Up)
         
         return img
     }

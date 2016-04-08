@@ -43,7 +43,7 @@ public class RemoteRequestManager: NSObject {
         self.privateQueue = dispatch_queue_create("RemoteRequestManagerQueue", DISPATCH_QUEUE_SERIAL)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "onNetworkReachabilityChangedNotificationReceived:",
+            selector: #selector(RemoteRequestManager.onNetworkReachabilityChangedNotificationReceived(_:)),
             name: NETWORK_REACHABILITY_CHANGED_NOTIFICATION_KEY,
             object: nil)
     }

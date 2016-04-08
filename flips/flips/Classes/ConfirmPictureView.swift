@@ -62,13 +62,13 @@ class ConfirmPictureView : UIView, CustomNavigationBarDelegate {
         rejectButton = UIButton()
         rejectButton.setImage(UIImage(named: "Deny"), forState: UIControlState.Normal)
         rejectButton.backgroundColor = UIColor.flipOrange()
-        rejectButton.addTarget(self, action: "rejectButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        rejectButton.addTarget(self, action: #selector(ConfirmPictureView.rejectButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         bottomButtonsContainerView.addSubview(rejectButton)
         
         acceptButton = UIButton()
         acceptButton.setImage(UIImage(named: "Approve"), forState: UIControlState.Normal)
         acceptButton.backgroundColor = UIColor.avacado()
-        acceptButton.addTarget(self, action: "acceptButtonTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        acceptButton.addTarget(self, action: #selector(ConfirmPictureView.acceptButtonTapped), forControlEvents: UIControlEvents.TouchUpInside)
         bottomButtonsContainerView.addSubview(acceptButton)
     }
     

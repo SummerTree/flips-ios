@@ -52,7 +52,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     }
     
     func viewWillAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PhoneNumberView.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
     }
     
     func viewWillDisappear() {
@@ -98,7 +98,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
-        mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        mobileNumberField.addTarget(self, action: #selector(PhoneNumberView.mobileNumberFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         mobileNumberField.inputAccessoryView = self.setupAccessoryView()
         mobileNumberView.addSubview(mobileNumberField)
         
@@ -306,7 +306,7 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
         
         let numberToolbar = UIToolbar(frame: showFrame)
         numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
-                               UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+                               UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(PhoneNumberView.doneTypingNumber(_:)))]
         numberToolbar.tintColor = UIColor.flipOrange()
         numberToolbar.sizeToFit()
         
@@ -314,9 +314,9 @@ class PhoneNumberView : UIView, UITextFieldDelegate, CustomNavigationBarDelegate
     }
     
     func doneTypingNumber(sender: AnyObject?) {
-        var textField = self.mobileNumberField!
-        var title = NSLocalizedString("Not Enough")
-        var message = NSLocalizedString("Your phone number is not long enough.")
+        let textField = self.mobileNumberField!
+        let title = NSLocalizedString("Not Enough")
+        let message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
             if (textField.text!.characters.count == 12) {

@@ -102,7 +102,7 @@ class BuilderIntroductionViewController : UIViewController {
         self.view.addSubview(separatorBetweenDescriptionAndButton)
         
         self.okSweetButton = UIButton()
-        self.okSweetButton.addTarget(self, action: "okSweetButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.okSweetButton.addTarget(self, action: #selector(BuilderIntroductionViewController.okSweetButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.okSweetButton.backgroundColor = self.OK_SWEET_BACKGROUND_COLOR
         self.okSweetButton.layer.cornerRadius = self.OK_SWEET_CORNER_RADIUS
         self.okSweetButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString(OK_SWEET_MESSAGE, comment: OK_SWEET_MESSAGE), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)

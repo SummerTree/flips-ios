@@ -40,7 +40,7 @@ class SettingsViewController : FlipsViewController, SettingsViewDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.settingsView.viewWillAppear()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDataSyncedNotificationReceived:", name: USER_DATA_SYNCED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SettingsViewController.userDataSyncedNotificationReceived(_:)), name: USER_DATA_SYNCED_NOTIFICATION_NAME, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {

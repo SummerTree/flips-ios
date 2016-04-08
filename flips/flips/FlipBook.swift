@@ -15,7 +15,7 @@ class FlipBook : NSObject {
     var flipMessage : String {
         get {
             var message : String = ""
-            for (index, flip) in self.flipPages.enumerate() {
+            for (_, flip) in self.flipPages.enumerate() {
                 message += "\(flip.word) "
             }
             return message
@@ -24,7 +24,7 @@ class FlipBook : NSObject {
     var flipWords : [String]? {
         get {
             var words : [String] = []
-            for (index, flip) in self.flipPages.enumerate() {
+            for (_, flip) in self.flipPages.enumerate() {
                 words += [flip.word]
             }
             return words

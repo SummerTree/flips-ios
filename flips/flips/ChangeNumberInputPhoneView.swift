@@ -40,7 +40,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     }
     
     func viewWillAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangeNumberInputPhoneView.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
         self.newNumberTextField.becomeFirstResponder()
     }
     
@@ -74,7 +74,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         self.addSubview(newNumberContainerView)
         
         self.newNumberTextField = UITextField()
-        self.newNumberTextField.addTarget(self, action: "newNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        self.newNumberTextField.addTarget(self, action: #selector(ChangeNumberInputPhoneView.newNumberFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
 
         self.newNumberTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("New Number", comment: "New Number"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor()])
         self.newNumberTextField.delegate = self
@@ -205,7 +205,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
         
         let numberToolbar = UIToolbar(frame: showFrame)
         numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+            UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(ChangeNumberInputPhoneView.doneTypingNumber(_:)))]
         numberToolbar.tintColor = UIColor.flipOrange()
         numberToolbar.sizeToFit()
         
@@ -259,9 +259,9 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
     }
     
     func doneTypingNumber(sender: AnyObject?) {
-        var textField = self.newNumberTextField!
-        var title = NSLocalizedString("Not Enough")
-        var message = NSLocalizedString("Your phone number is not long enough.")
+        let textField = self.newNumberTextField!
+        let title = NSLocalizedString("Not Enough")
+        let message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
             if (textField.text!.characters.count == 12) {
@@ -291,7 +291,7 @@ class ChangeNumberInputPhoneView: UIView, UITextFieldDelegate, UIPickerViewDataS
 
     
     func finishTypingMobileNumber(sender: AnyObject?) {
-        var countryCode = self.getSelectedDialCode()
+        let countryCode = self.getSelectedDialCode()
         self.delegate?.changeNumberInputPhoneView(self, didFinishTypingMobileNumber: newNumberTextField.text!, countryCode: countryCode)
     }
     

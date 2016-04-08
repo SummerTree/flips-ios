@@ -55,7 +55,7 @@ class ComposeEditControlsView : EndlessScrollView, FlipSelectionViewDelegate {
         
         // Button Containers
         
-        deleteView = buttonView(.Delete, tapSelector: Selector("handleDeleteButtonTap:"))
+        deleteView = buttonView(.Delete, tapSelector: #selector(ComposeEditControlsView.handleDeleteButtonTap(_:)))
         
         addViews([flipsView, deleteView])
         

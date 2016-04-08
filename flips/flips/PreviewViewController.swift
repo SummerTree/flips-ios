@@ -126,7 +126,7 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPubNubDidConnectNotificationReceived", name: PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PreviewViewController.onPubNubDidConnectNotificationReceived), name: PUBNUB_DID_CONNECT_NOTIFICATION, object: nil)
     }
     
     override func viewWillDisappear(animated: Bool) {

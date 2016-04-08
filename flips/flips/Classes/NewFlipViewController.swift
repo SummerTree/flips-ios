@@ -242,8 +242,8 @@ class NewFlipViewController: FlipsViewController,
     
     private func registerForKeyboardNotifications() {
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NewFlipViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(NewFlipViewController.keyboardWillBeHidden(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     private func updateContactPickerHeight(newHeight: CGFloat) {

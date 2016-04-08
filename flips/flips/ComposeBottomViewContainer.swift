@@ -110,26 +110,26 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         captureAudioButton.hidden = true
         captureAudioButton.setImage(UIImage(named: "Capture_Audio"), forState: .Normal)
         captureAudioButton.sizeToFit()
-        captureAudioButton.addTarget(self, action: "captureAudioButtonTapped:", forControlEvents: UIControlEvents.TouchDown)
+        captureAudioButton.addTarget(self, action: #selector(ComposeBottomViewContainer.captureAudioButtonTapped(_:)), forControlEvents: UIControlEvents.TouchDown)
         cameraButtonsView.addSubview(captureAudioButton)
         
         cancelCaptureAudioButton = UIButton()
         cancelCaptureAudioButton.hidden = true
         cancelCaptureAudioButton.setImage(UIImage(named: "Cancel_Audio"), forState: .Normal)
         cancelCaptureAudioButton.sizeToFit()
-        cancelCaptureAudioButton.addTarget(self, action: "cancelCaptureAudioButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        cancelCaptureAudioButton.addTarget(self, action: #selector(ComposeBottomViewContainer.cancelCaptureAudioButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(cancelCaptureAudioButton)
         
         takePictureButton = UIButton()
         takePictureButton.setImage(UIImage(named: "Capture"), forState: .Normal)
         takePictureButton.sizeToFit()
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: "shutterButtonLongPressAction:")
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(ComposeBottomViewContainer.shutterButtonLongPressAction(_:)))
         longPress.minimumPressDuration = 0.2
         longPress.allowableMovement = 50.0
         takePictureButton.addGestureRecognizer(longPress)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "shutterButtonTapAction:")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ComposeBottomViewContainer.shutterButtonTapAction(_:)))
         takePictureButton.addGestureRecognizer(tapGesture)
         
         cameraButtonsView.addSubview(takePictureButton)
@@ -137,13 +137,13 @@ class ComposeBottomViewContainer : UIView, FlipsViewDelegate, FlipsViewDataSourc
         gridButton = UIButton()
         gridButton.setImage(UIImage(named: "Grid"), forState: .Normal)
         gridButton.sizeToFit()
-        gridButton.addTarget(self, action: "gridButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        gridButton.addTarget(self, action: #selector(ComposeBottomViewContainer.gridButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         gridButton.hidden = true
         cameraButtonsView.addSubview(gridButton)
         
         galleryButton = UIButton()
         galleryButton.setImage(UIImage(named: "Filter_Photo"), forState: .Normal)
-        galleryButton.addTarget(self, action: "galleryButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        galleryButton.addTarget(self, action: #selector(ComposeBottomViewContainer.galleryButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         cameraButtonsView.addSubview(galleryButton)
     }
 

@@ -123,15 +123,15 @@ class LoginView : UIView, UITextFieldDelegate {
             self.layoutIfNeeded()
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginView.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginView.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func viewDidLoad() {
         self.logoView.center = self.center
         setFieldsHidden(true)
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginView.dismissKeyboard))
         self.addGestureRecognizer(tapGestureRecognizer)
         
         self.emailTextField.text = AuthenticationHelper.sharedInstance.retrieveAuthenticatedUsernameIfExists()
@@ -225,18 +225,18 @@ class LoginView : UIView, UITextFieldDelegate {
         credentialsView.addSubview(emailTextField)
         
         emailPasswordSeparator = UIView()
-        let separatorRecognizer = UITapGestureRecognizer(target: self, action: "separatorTapped")
+        let separatorRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginView.separatorTapped))
         emailPasswordSeparator.addGestureRecognizer(separatorRecognizer)
         emailPasswordSeparator.backgroundColor = UIColor.whiteColor()
         credentialsView.addSubview(emailPasswordSeparator)
         
         spaceBetweenEmailFieldAndSeparator = UIView()
-        let emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenEmailAndSeparatorTapped")
+        let emailSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginView.spaceBetweenEmailAndSeparatorTapped))
         spaceBetweenEmailFieldAndSeparator.addGestureRecognizer(emailSpaceViewRecognizer)
         credentialsView.addSubview(spaceBetweenEmailFieldAndSeparator)
         
         spaceBetweenPasswordFieldAndSeparator = UIView()
-        let passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: "spaceBetweenPasswordAndSeparatorTapped")
+        let passwordSpaceViewRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginView.spaceBetweenPasswordAndSeparatorTapped))
         spaceBetweenPasswordFieldAndSeparator.addGestureRecognizer(passwordSpaceViewRecognizer)
         credentialsView.addSubview(spaceBetweenPasswordFieldAndSeparator)
         
@@ -256,7 +256,7 @@ class LoginView : UIView, UITextFieldDelegate {
         
         facebookLogoImage = UIImage(named: "FacebookLogo")
         facebookButton = UIButton()
-        facebookButton.addTarget(self, action: "facebookSignInTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        facebookButton.addTarget(self, action: #selector(LoginView.facebookSignInTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         facebookButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         facebookButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         facebookButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
@@ -276,7 +276,7 @@ class LoginView : UIView, UITextFieldDelegate {
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackground"), forState: UIControlState.Normal)
         signupButton.setBackgroundImage(UIImage(named: "SignupButtonBackgroundTap"), forState: UIControlState.Highlighted)
         signupButton.setTitle(NSLocalizedString("Sign Up", comment: "Sign Up"), forState: UIControlState.Normal)
-        signupButton.addTarget(self, action: "signUpButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        signupButton.addTarget(self, action: #selector(LoginView.signUpButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(signupButton)
         
         spaceBetweenSignUpAndAcceptance = UIView()
@@ -292,7 +292,7 @@ class LoginView : UIView, UITextFieldDelegate {
         acceptanceView.addSubview(self.acceptTermsPhrase)
         
         termsOfUse = UIButton()
-        termsOfUse.addTarget(self, action: "termsOfUseButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        termsOfUse.addTarget(self, action: #selector(LoginView.termsOfUseButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         termsOfUse.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         termsOfUse.setTitle(NSLocalizedString("Terms of Use", comment: "Terms of Use"), forState: UIControlState.Normal)
         acceptanceView.addSubview(termsOfUse)
@@ -304,14 +304,14 @@ class LoginView : UIView, UITextFieldDelegate {
         acceptanceView.addSubview(andWord)
         
         privacyPolicy = UIButton()
-        privacyPolicy.addTarget(self, action: "privacyPolicyButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        privacyPolicy.addTarget(self, action: #selector(LoginView.privacyPolicyButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         privacyPolicy.titleLabel?.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h7)
         privacyPolicy.setTitle(NSLocalizedString("Privacy Policy", comment: "Privacy Policy"), forState: UIControlState.Normal)
         acceptanceView.addSubview(privacyPolicy)
         
         forgotPasswordImage = UIImage(named: "ForgotPassword")
         forgotPasswordButton = UIButton()
-        forgotPasswordButton.addTarget(self, action: "forgotPasswordButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        forgotPasswordButton.addTarget(self, action: #selector(LoginView.forgotPasswordButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         forgotPasswordButton.alpha = 0.0
         forgotPasswordButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         forgotPasswordButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
@@ -337,7 +337,7 @@ class LoginView : UIView, UITextFieldDelegate {
         facebookLoggedOutView.addSubview(spaceBetweenIfYoureAndFacebook)
         
         facebookLoginAgainButton = UIButton()
-        facebookLoginAgainButton.addTarget(self, action: "facebookSignInTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        facebookLoginAgainButton.addTarget(self, action: #selector(LoginView.facebookSignInTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         facebookLoginAgainButton.imageEdgeInsets = UIEdgeInsets(top: 0.0, left: 15.0, bottom: 0.0, right: 60.0)
         facebookLoginAgainButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h4)
         facebookLoginAgainButton.titleLabel?.attributedText = NSAttributedString(string:NSLocalizedString("Login with Facebook", comment: "Login with Facebook"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
@@ -352,7 +352,7 @@ class LoginView : UIView, UITextFieldDelegate {
         facebookLoggedOutView.addSubview(spaceBetweenFacebookAndNotYou)
         
         notYouButton = UIButton()
-        notYouButton.addTarget(self, action: "notYouButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        notYouButton.addTarget(self, action: #selector(LoginView.notYouButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         notYouButton.titleLabel?.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h6)
         notYouButton.setTitle(NSLocalizedString("Not you?", comment: "Not you?"), forState: UIControlState.Normal)
         facebookLoggedOutView.addSubview(notYouButton)
@@ -588,7 +588,7 @@ class LoginView : UIView, UITextFieldDelegate {
     func signInButtonTapped(sender: AnyObject?) {
         
         if (self.emailTextField.text!.isEmpty || self.passwordTextField.text!.isEmpty) {
-            var alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
+            let alertMessage = UIAlertView(title: NSLocalizedString("Login Error", comment: "Login Error"), message: NSLocalizedString("Please complete both fields.", comment: "Please complete both fields."), delegate: nil, cancelButtonTitle: LocalizedString.OK)
             alertMessage.show()
             return
         }

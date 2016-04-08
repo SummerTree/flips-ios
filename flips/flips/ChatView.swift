@@ -84,7 +84,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.isViewDisappearing = false
         self.tableView.reloadData()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatView.keyboardDidShow(_:)), name: UIKeyboardDidShowNotification, object: nil)
         
         replyView.mas_updateConstraints( { (make) in
             make.left.equalTo()(self)
@@ -149,7 +149,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         replyButton.contentMode = .Center
         replyButton.backgroundColor = UIColor.whiteColor()
         replyButton.contentEdgeInsets = UIEdgeInsetsMake(REPLY_VIEW_OFFSET / 2, REPLY_VIEW_OFFSET * 2, REPLY_VIEW_OFFSET / 2, REPLY_VIEW_OFFSET * 2)
-        replyButton.addTarget(self, action: "didTapReplyButton", forControlEvents: UIControlEvents.TouchUpInside)
+        replyButton.addTarget(self, action: #selector(ChatView.didTapReplyButton), forControlEvents: UIControlEvents.TouchUpInside)
         replyButton.setTitle(NSLocalizedString("Reply"), forState: .Normal)
         replyButton.setTitleColor(UIColor.flipOrange(), forState: .Normal)
         replyButton.sizeToFit()
@@ -164,7 +164,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         nextButton = NextButton()
         nextButton.contentEdgeInsets = UIEdgeInsetsMake(REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET, REPLY_VIEW_OFFSET)
         nextButton.hidden = true
-        nextButton.addTarget(self, action: "didTapNextButton", forControlEvents: UIControlEvents.TouchUpInside)
+        nextButton.addTarget(self, action: #selector(ChatView.didTapNextButton), forControlEvents: UIControlEvents.TouchUpInside)
         nextButton.sizeToFit()
         replyView.addSubview(nextButton)
         
@@ -280,7 +280,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         
         var newCellsIndexPaths: Array<NSIndexPath> = Array<NSIndexPath>()
         if let newNumberOfCells: Int = self.dataSource?.numberOfFlipMessages(self) {
-            for (var i = currentNumberOfCells; i < newNumberOfCells; i++) {
+            for i in (currentNumberOfCells ..< newNumberOfCells) {
                 let indexPath = NSIndexPath(forRow: i, inSection: 0)
                 newCellsIndexPaths.append(indexPath)
             }

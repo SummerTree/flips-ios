@@ -29,9 +29,9 @@ struct FlipMessageAttributes {
 class FlipMessageDataSource : BaseDataSource {
     
     private func createEntityWithJson(json: JSON, andReceivedDate receivedDate: NSDate) -> FlipMessage {
-        let userDataSource = UserDataSource(context: currentContext)
+        _ = UserDataSource(context: currentContext)
 
-        let fromUserID = json[FlipMessageJsonParams.FROM_USER_ID].stringValue
+        _ = json[FlipMessageJsonParams.FROM_USER_ID].stringValue
         let flipMessageID = json[FlipMessageJsonParams.FLIP_MESSAGE_ID].stringValue
         
         let entity = FlipMessage.createInContext(currentContext) as! FlipMessage
@@ -143,7 +143,7 @@ class FlipMessageDataSource : BaseDataSource {
         
         let roomDataSource = RoomDataSource(context: currentContext)
         let room = roomDataSource.retrieveRoomWithId(roomID)
-        for (var i = 0; i < room.flipMessages.count; i++) {
+        for i in 0 ..< room.flipMessages.count {
             let flipMessage = room.flipMessages.objectAtIndex(i).inContext(currentContext) as! FlipMessage
             flipMessage.removed = true
             

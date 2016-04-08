@@ -36,7 +36,7 @@ class CropOverlayView : UIView {
         
         let holeRect = CGRectMake(positionX, positionY, holeSize.width, holeSize.height)
         
-        var holeRectIntersection = CGRectIntersection(holeRect, rect)
+        _ = CGRectIntersection(holeRect, rect)
         
         CGContextSetFillColorWithColor(context, UIColor.clearColor().CGColor)
         CGContextSetBlendMode(context, CGBlendMode.Clear)

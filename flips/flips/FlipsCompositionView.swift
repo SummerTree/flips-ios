@@ -69,7 +69,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         progressBar.backgroundColor = UIColor.avacado()
         self.addSubview(progressBar)
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("handleAudioButtonPress:"))
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(FlipsCompositionView.handleAudioButtonPress(_:)))
         longPressRecognizer.minimumPressDuration = 0.1
         
         audioButton = UIButton()
@@ -222,7 +222,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     }
     
     func startAudioTimer() {
-        audioTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: Selector("handleAudioTimerExpired"), userInfo: nil, repeats: false)
+        audioTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(FlipsCompositionView.handleAudioTimerExpired), userInfo: nil, repeats: false)
     }
     
     func clearAudioTimer() {
@@ -232,7 +232,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
     
     func handleAudioTimerExpired() {
         
-        if let timer = self.audioTimer {
+        if (self.audioTimer) != nil {
             clearAudioTimer()
             hideCaptureProgressBar()
             delegate?.didReleaseRecordAudioButton()
@@ -250,7 +250,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
                 startAudioTimer()
                 break;
             case .Ended:
-                if let timer = self.audioTimer {
+                if (self.audioTimer) != nil {
                     clearAudioTimer()
                     hideCaptureProgressBar()
                     self.delegate?.didReleaseRecordAudioButton()
@@ -304,7 +304,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
             
             let index = Int(floor(previewScrollView.contentOffset.x / previewScrollView.frame.width))
             
-            if let image = source.flipImageForWordAtIndex(index)
+            if (source.flipImageForWordAtIndex(index)) != nil
             {
                 showAudioButton(true)
             }
@@ -333,7 +333,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         
         if let source = dataSource
         {
-            for var index = 0; index < source.flipWordsCount(); index++
+            for index in 0 ..< source.flipWordsCount()
             {
                 insertWordLabelAtIndex(index)
                 
@@ -355,7 +355,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         
         if let source = dataSource
         {
-            for var index = 0; index < source.flipWordsCount(); index++
+            for index in 0 ..< source.flipWordsCount()
             {
                 if shouldUpdatePlayerViewAtIndex(index)
                 {
@@ -470,7 +470,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
             
             if let resultView = playerView {
                 
-                let swipeRecognizer = UISwipeGestureRecognizer(target: self, action: Selector("didSwipeUpPlayerView:"))
+                let swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(FlipsCompositionView.didSwipeUpPlayerView(_:)))
                 swipeRecognizer.direction = UISwipeGestureRecognizerDirection.Up
                 playerView?.addGestureRecognizer(swipeRecognizer)
                 
@@ -515,7 +515,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
                 
                 playerView.removeFromSuperview()
                 
-                for var index : Int = 0; index < self.playerViews.count; index++
+                for index : Int in 0 ..< self.playerViews.count
                 {
                     let currentPlayerView = self.playerViews[index]
                     
@@ -560,7 +560,7 @@ class FlipsCompositionView : UIView, UIScrollViewDelegate {
         let offset = CGPointMake(CGFloat(index) * self.previewScrollView.frame.width, 0)
         previewScrollView.setContentOffset(offset, animated: animated)
         
-        if let playerView = playerViews[index], source = dataSource
+        if let _ = playerViews[index], source = dataSource
         {
             if source.flipImageForWordAtIndex(index) == nil
             {

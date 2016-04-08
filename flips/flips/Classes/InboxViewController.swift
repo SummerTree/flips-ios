@@ -70,7 +70,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "resyncNotificationReceived:", name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.resyncNotificationReceived(_:)), name: RESYNC_INBOX_NOTIFICATION_NAME, object: nil)
         
         let didShowSyncView: Bool = DeviceHelper.sharedInstance.didShowSyncView()
         if (PubNubService.sharedInstance.isConnected() && !didShowSyncView) {
@@ -105,9 +105,9 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         
         self.inboxView.viewWillAppear()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageContentDownloadedNotificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "messageHistoryReceivedNotificationReceived:", name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onFlipMessageReceivedNotification:", name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.onFlipMessageContentDownloadedNotificationReceived(_:)), name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.messageHistoryReceivedNotificationReceived(_:)), name: PUBNUB_DID_FETCH_MESSAGE_HISTORY, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.onFlipMessageReceivedNotification(_:)), name: FLIP_MESSAGE_RECEIVED_NOTIFICATION, object: nil)
         
         syncView?.hidden = true
     }
@@ -171,7 +171,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
                     var flipMessageAlreadyReceived = false
                     let flipMessageDataSource: FlipMessageDataSource = FlipMessageDataSource(context: newContext)
                     if let flipMessageID: String = self.flipMessageIdToShow {
-                        if let flipMessage: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
+                        if let _: FlipMessage = flipMessageDataSource.getFlipMessageById(flipMessageID) {
                             flipMessageAlreadyReceived = true
                         }
                         
@@ -198,8 +198,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
         let time = 1 * Double(NSEC_PER_SEC)
         let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time))
         dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            if let roomID = self.roomIdToShow { // Just to make sure that the user didn't close this screen.
-                self.downloadingMessageFromNotificationRetries++
+            if (self.roomIdToShow) != nil { // Just to make sure that the user didn't close this screen.
+                self.downloadingMessageFromNotificationRetries += 1
                 if (self.downloadingMessageFromNotificationRetries < self.DOWNLOAD_MESSAGE_FROM_PUSH_NOTIFICATION_MAX_NUMBER_OF_RETRIES) {
                     self.openRoomForPushNotificationIfMessageReceived()
                 } else {
@@ -320,7 +320,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             if (self.roomIds.count != rooms.count) {
                 shouldReloadTableView = true
             } else {
-                for (var i: Int = 0; i < rooms.count; i++) {
+                for i: Int in (0 ..< rooms.count) {
                     if (self.roomIds[i] as? NSString != rooms[i].roomID) {
                         shouldReloadTableView = true
                     }
@@ -357,7 +357,7 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
             var hasUnreadMessages: Bool = false
             
             if let roomFlipMessages: NSOrderedSet = room.valueForKey("flipMessages") as? NSOrderedSet {
-                for (var i: Int = roomFlipMessages.count - 1; i >= 0; i--) {
+                for (var i: Int = roomFlipMessages.count - 1; i >= 0; i -= 1) {
                     let flipMessage: FlipMessage = roomFlipMessages[i] as! FlipMessage
                     if (flipMessage.notRead.boolValue) {
                         hasUnreadMessages = true
@@ -497,8 +497,8 @@ class InboxViewController : FlipsViewController, InboxViewDelegate, NewFlipViewC
     ////
     
     private func registerForMessageSubmissionNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFinishSendingMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "submissionManagerDidFailToSendMessage:", name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.submissionManagerDidFinishSendingMessage(_:)), name: FlipMessageSubmissionManager.Notifications.SEND_COMPLETE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InboxViewController.submissionManagerDidFailToSendMessage(_:)), name: FlipMessageSubmissionManager.Notifications.SEND_ERROR, object: nil)
     }
     
     private func unregisterMessageSubmissionNotifications() {

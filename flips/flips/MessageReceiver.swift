@@ -49,7 +49,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
     override init() {
         self.flipMessagesWaiting = [String: Array<String>]()
         super.init()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MessageReceiver.notificationReceived(_:)), name: DOWNLOAD_FINISHED_NOTIFICATION_NAME, object: nil)
     }
     
     
@@ -155,7 +155,7 @@ public class MessageReceiver: NSObject, PubNubServiceDelegate {
             flipMessage.messageThumbnail()
         }
         
-        for flipMessage in flipMessagesToRemove {
+        for _ in flipMessagesToRemove {
             self.flipMessagesWaiting[flipMessageID] = nil
         }
     }

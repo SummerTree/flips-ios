@@ -106,14 +106,14 @@ public class ChatTableViewCell: UITableViewCell, PlayerViewDelegate {
         
         shareButton = UIButton(type: .Custom)
         shareButton.setImage(UIImage(named: "Share"), forState: .Normal)
-        shareButton.addTarget(self, action: "shareFlip", forControlEvents: .TouchUpInside)
+        shareButton.addTarget(self, action: #selector(ChatTableViewCell.shareFlip), forControlEvents: .TouchUpInside)
         shareButton.hidden = true
         messageContainerView.addSubview(shareButton)
         
         shareImageButton = RoundImageView.avatarA3()
         shareImageButton.hidden = true
         shareImageButton.setAvatarWithLocalImage("ShareFlip_White")
-        shareImageButton.setTapSelector("shareFlip", targetObject: self)
+        shareImageButton.setTapSelector(#selector(ChatTableViewCell.shareFlip), targetObject: self)
         self.contentView.addSubview(shareImageButton)
         
         shareActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)

@@ -38,14 +38,14 @@ public class MovieExport : NSObject {
     
     func exportFlipForMMS(playerItems: Array<FlipPlayerItem>, words:[String], completion: MovieExportCompletion) {
         
-        if let flipsArray : Array<FlipPlayerItem> = playerItems as Array<FlipPlayerItem>? {
+        if let _ : Array<FlipPlayerItem> = playerItems as Array<FlipPlayerItem>? {
         
             if playerItems.count > 0 {
                 self.videoURLs.removeAll(keepCapacity: false)
                 
                 for (index, playerItem) in playerItems.enumerate() {
                     
-                    let isLastItem = (index == playerItems.count)
+                    _ = (index == playerItems.count)
                     let word = words[index]
                     self.exportIndividualFlipVideo(playerItem, word: word, orderIndex: index, totalWords: words.count, completion: completion)
                 }
@@ -61,14 +61,14 @@ public class MovieExport : NSObject {
     
     private func exportIndividualFlipVideo(playerItem: FlipPlayerItem, word: String, orderIndex: Int, totalWords: Int, completion: MovieExportCompletion) {
         
-        var mixComposition = AVMutableComposition()
-        var videoCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        var audioCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        let mixComposition = AVMutableComposition()
+        let videoCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        let audioCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
         
         var insertTime = kCMTimeZero
         
-        var videoAsset = playerItem.asset
-        var videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
+        let videoAsset = playerItem.asset
+        let videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
         
         NSLog("Video Asset Duration: \(videoAsset.duration)")
         NSLog("Video Track Duration: \(videoAssetTrack.timeRange.duration)")
@@ -134,17 +134,17 @@ public class MovieExport : NSObject {
         
         insertTime = CMTimeAdd(insertTime, videoAsset.duration)
         
-        var videoSize = videoCompositionTrack.naturalSize;
+        let videoSize = videoCompositionTrack.naturalSize;
         
-        var videoComp = AVMutableVideoComposition(propertiesOfAsset: videoAsset)
+        let videoComp = AVMutableVideoComposition(propertiesOfAsset: videoAsset)
         videoComp.renderSize = videoSize;
         videoComp.frameDuration = CMTimeMake(1, 30);
         
         self.applyWordToVideo(videoComp, videoSize: videoSize, word: word)
         
-        var layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+        let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
         
-        var instruction = AVMutableVideoCompositionInstruction()
+        let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, mixComposition.duration)
         instruction.layerInstructions = [layerInstruction]
         videoComp.instructions = [instruction];
@@ -162,7 +162,7 @@ public class MovieExport : NSObject {
             assetExport.outputURL = outputFileUrl
             
             assetExport.exportAsynchronouslyWithCompletionHandler()  {
-                var status = assetExport.status
+                let status = assetExport.status
                 switch (status) {
                 case .Failed:
                     print("Individual Export Failed: \(word)")
@@ -199,16 +199,16 @@ public class MovieExport : NSObject {
         
         self.videoURLs.sortInPlace{ $0.1 < $1.1 }
         
-        var mixComposition = AVMutableComposition()
-        var videoCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        var audioCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        let mixComposition = AVMutableComposition()
+        let videoCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        let audioCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
         
         var insertTime = kCMTimeZero
         
         for videoURL in self.videoURLs {
             
-            var videoAsset = AVURLAsset(URL: videoURL.url, options: nil)
-            var videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
+            let videoAsset = AVURLAsset(URL: videoURL.url, options: nil)
+            let videoAssetTrack = videoAsset.tracksWithMediaType(AVMediaTypeVideo)[0]
             
             let videoTimeRange = CMTimeRangeMake(kCMTimeZero, videoAsset.duration)
             
@@ -247,7 +247,7 @@ public class MovieExport : NSObject {
             assetExport.outputURL = outputFileUrl
             
             assetExport.exportAsynchronouslyWithCompletionHandler()  {
-                var status = assetExport.status
+                let status = assetExport.status
                 switch (status) {
                 case .Failed:
                     print("Export Failed")
@@ -372,17 +372,17 @@ public class MovieExport : NSObject {
     func clearVideoFromLocalStorage(fileURL: NSURL?) {
         
         if (fileURL != nil) {
-            var fileManager : NSFileManager = NSFileManager.defaultManager()
+            let fileManager : NSFileManager = NSFileManager.defaultManager()
             let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
             let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
             
             let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
             if paths.count > 0 {
-                if let dirPath = paths[0] as? String {
-                    var error : NSErrorPointer = NSErrorPointer()
+                if ((paths[0] as? String) != nil) {
+                    let error : NSErrorPointer = nil
                     do {
                         try fileManager.removeItemAtPath(fileURL!.path!)
-                    } catch var error1 as NSError {
+                    } catch let error1 as NSError {
                         error.memory = error1
                     }
                     if error != nil {

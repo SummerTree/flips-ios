@@ -23,14 +23,14 @@ public class NavigationHandler : NSObject {
     }
     
     func registerForNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onPopToRootViewControllerNotificationReceived:", name: POP_TO_ROOT_NOTIFICATION_NAME, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NavigationHandler.onPopToRootViewControllerNotificationReceived(_:)), name: POP_TO_ROOT_NOTIFICATION_NAME, object: nil)
     }
     
     func onPopToRootViewControllerNotificationReceived(notification: NSNotification) {
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             if let rootViewController = keyWindow.rootViewController {
                 if rootViewController is UINavigationController {
-                    var rootNavigationViewController: UINavigationController = rootViewController as! UINavigationController
+                    let rootNavigationViewController: UINavigationController = rootViewController as! UINavigationController
                     rootNavigationViewController.popToRootViewControllerAnimated(true)
                     
                     let completionBlock: () -> Void = { () -> Void in

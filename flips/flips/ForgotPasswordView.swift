@@ -78,7 +78,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         mobileNumberField.tintColor = UIColor.whiteColor()
         mobileNumberField.font = UIFont.avenirNextMedium(UIFont.HeadingSize.h4)
         mobileNumberField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Mobile Number", comment: "Mobile Number"), attributes: [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextUltraLight(UIFont.HeadingSize.h4)])
-        mobileNumberField.addTarget(self, action: "mobileNumberFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        mobileNumberField.addTarget(self, action: #selector(ForgotPasswordView.mobileNumberFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         mobileNumberField.keyboardType = UIKeyboardType.PhonePad
         mobileNumberField.inputAccessoryView = setupAccessoryView()
         mobileNumberView.addSubview(mobileNumberField)
@@ -170,7 +170,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
         
         let numberToolbar = UIToolbar(frame: showFrame)
         numberToolbar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: "Done", style: .Done, target: self, action: "doneTypingNumber:")]
+            UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(ForgotPasswordView.doneTypingNumber(_:)))]
         numberToolbar.tintColor = UIColor.flipOrange()
         numberToolbar.sizeToFit()
         
@@ -178,9 +178,9 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     }
     
     func doneTypingNumber(sender: AnyObject?) {
-        var textField = self.mobileNumberField!
-        var title = NSLocalizedString("Not Enough")
-        var message = NSLocalizedString("Your phone number is not long enough.")
+        let textField = self.mobileNumberField!
+        let title = NSLocalizedString("Not Enough")
+        let message = NSLocalizedString("Your phone number is not long enough.")
         
         if self.getSelectedDialCode() == "+1" {
             if (textField.text!.characters.count == 12) {
@@ -211,7 +211,7 @@ class ForgotPasswordView : UIView, CustomNavigationBarDelegate, UITextFieldDeleg
     // MARK - Life Cycle
     
     func viewWillAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordView.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
     }
     
     func viewWillDisappear() {

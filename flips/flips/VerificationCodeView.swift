@@ -63,7 +63,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     }
     
     func viewWillAppear() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardOnScreen:", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(VerificationCodeView.keyboardOnScreen(_:)), name: UIKeyboardDidShowNotification, object: nil)
     }
     
     func viewWillDisappear() {
@@ -121,7 +121,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         codeView.addSubview(codeField2)
         
         codeField3 = makeCodeField()
-        codeField3.addTarget(self, action: "codeFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        codeField3.addTarget(self, action: #selector(VerificationCodeView.codeFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         codeView.addSubview(codeField3)
         
         codeViewTrailingSpace = UIView()
@@ -136,7 +136,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         disableUserInteractionCodeView.addSubview(codeTappableView)
         disableUserInteractionCodeView.bringSubviewToFront(codeTappableView)
         
-        codeTappableGestRecog = UITapGestureRecognizer(target: self, action: Selector("didTapCodeTappableView:"))
+        codeTappableGestRecog = UITapGestureRecognizer(target: self, action: #selector(VerificationCodeView.didTapCodeTappableView(_:)))
         codeTappableGestRecog.numberOfTapsRequired = 1
         codeTappableGestRecog.numberOfTouchesRequired = 1
         codeTappableView.addGestureRecognizer(codeTappableGestRecog)
@@ -146,7 +146,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
         self.addSubview(resendButtonView)
         
         resendButton = UIButton()
-        resendButton.addTarget(self, action: "resendButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        resendButton.addTarget(self, action: #selector(VerificationCodeView.resendButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         resendButton.setAttributedTitle(NSAttributedString(string:NSLocalizedString("Resend Code", comment: "Resend Code"), attributes:[NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont.avenirNextRegular(UIFont.HeadingSize.h4)]), forState: UIControlState.Normal)
         resendButton.setBackgroundImage(UIImage(named: "ResendButtonNormal"), forState: UIControlState.Normal)
         resendButton.setBackgroundImage(UIImage(named: "ResendButtonTapped"), forState: UIControlState.Highlighted)
@@ -408,7 +408,7 @@ class VerificationCodeView : UIView, UITextFieldDelegate, CustomNavigationBarDel
     
     func didEnterWrongVerificationCode() {
         
-        self.wrongVerificationCodeCounter++
+        self.wrongVerificationCodeCounter += 1
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             if self.wrongVerificationCodeCounter >= 3 {
