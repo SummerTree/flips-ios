@@ -553,7 +553,7 @@ class PlayerView: UIView {
             return false
         }
 
-        for i in 0 ... flips.count {
+        for i in 0 ..< flips.count {
             let passedFlip = flips[i]
             let localFlip = self.flips[i]
             

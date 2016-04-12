@@ -19,7 +19,6 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
     weak var draftingTable : DraftingTable!
     
     
-    
     ////
     // MARK: - Init
     ////
@@ -113,15 +112,14 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
             
             if let firstFlipId = userFlips[messageWord.word.text]?.first {
                 messageWord.setFlipId(firstFlipId)
-            }
-            
+            } else {
+                if let firstFlipId = stockFlips[messageWord.word.text]?.first{
+                    messageWord.setFlipId(firstFlipId)
+                }
+            }  
         }
-        
         draftingTable.mapWordsToFirstAvailableFlip()
-        
     }
-    
-    
     
     ////
     // MARK: - State Setters
