@@ -59,19 +59,21 @@ public class DraftingTable : NSObject {
             let stockFlipsForWord = stockFlipsDictionary[word]
             
             let numberOfLocalFlips = (flipPage.videoURL != nil ? 1 : 0)
-            let numberOfFlipsForWord = myFlipsForWord!.count + stockFlipsForWord!.count + numberOfLocalFlips
+            let numberOfUserFlipsForWord = myFlipsForWord!.count + numberOfLocalFlips
+            let numberOfStockFlipsForWord = stockFlipsForWord!.count
+            let totalNumberOfFlipsForWord = numberOfUserFlipsForWord + numberOfStockFlipsForWord
             
             if (flipPage.pageID == nil && flipPage.videoURL == nil) {
-                if (numberOfFlipsForWord == 0) {
+                if (totalNumberOfFlipsForWord == 0) {
                     flipPage.state = .NotAssociatedAndNoResourcesAvailable
                 } else {
                     flipPage.state = .NotAssociatedButResourcesAvailable
                 }
             } else {
-                if (numberOfFlipsForWord == 1) {
-                    flipPage.state = .AssociatedAndNoResourcesAvailable
+                if (numberOfStockFlipsForWord > 0 && numberOfUserFlipsForWord == 0) {
+                    flipPage.state = numberOfStockFlipsForWord == 1 ? .AssociatedStockAndNoResourcesAvailable : .AssociatedStockAndResourcesAvailable
                 } else {
-                    flipPage.state = .AssociatedAndResourcesAvailable
+                    flipPage.state = totalNumberOfFlipsForWord == 1 ? .AssociatedAndNoResourcesAvailable : .AssociatedAndResourcesAvailable
                 }
             }
         }

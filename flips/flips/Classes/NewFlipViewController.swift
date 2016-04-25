@@ -19,7 +19,9 @@ class NewFlipViewController: FlipsViewController,
     MBContactPickerDataSource,
     MBContactPickerDelegate,
     UITextViewDelegate,
-    FlipsCompositionControllerDelegate {
+    FlipsCompositionControllerDelegate,
+    UITableViewDelegate,
+    UITableViewDataSource {
 
     // MARK: - Constants
     
@@ -62,6 +64,8 @@ class NewFlipViewController: FlipsViewController,
     @IBOutlet weak var nextButton: NextButton!
     @IBOutlet weak var buttonPanelView: UIView!
     @IBOutlet weak var buttonPanel2View: UIView!
+    @IBOutlet weak var suggestedTable: UITableView!
+    @IBOutlet weak var cellView: UIView!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -73,16 +77,23 @@ class NewFlipViewController: FlipsViewController,
     }
     
     var optionButtons : [FlipsSendButton]
+    var allFlips : [Flip]
+    var filteredFlips : [Flip]
+    var flipsAppended : [String]
+    
 
     required init?(coder: NSCoder) {
         contacts = [Contact]()
         optionButtons = [FlipsSendButton]()
-        
+        allFlips = [Flip]()
+        filteredFlips = [Flip]()
+        flipsAppended = [String]()
         super.init(coder: coder)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setupWhiteNavBarWithCancelButton(TITLE)
         self.setNeedsStatusBarAppearanceUpdate()
         
@@ -97,7 +108,7 @@ class NewFlipViewController: FlipsViewController,
         self.automaticallyAdjustsScrollViewInsets = false
         
         self.buttonPanel2View.hidden = true
-        
+        loadAllFlipsArray()
         layoutSendButtons()
         updateNextButtonState()
     }
@@ -269,6 +280,101 @@ class NewFlipViewController: FlipsViewController,
         nextButton.enabled = hasContacts && hasText
     }
     
+    private func loadAllFlipsArray(){
+        let flips = Flip.findAll() as! [Flip]
+        allFlips.appendContentsOf(flips)
+    }
+    private func filterFlipsForTable(word: String) {
+        if (flipsAppended.count > 0){
+            var trimmedWord = word.stringByRemovingStringsIn(flipsAppended)
+            trimmedWord = trimmedWord.removeWhiteSpaces()
+            
+            filteredFlips = self.allFlips.filter { flip in
+                return flip.word.lowercaseString.hasPrefix(trimmedWord.lowercaseString)
+            }
+        } else {
+            filteredFlips = self.allFlips.filter { flip in
+                return flip.word.lowercaseString.hasPrefix(word.lowercaseString)
+            }
+        }
+    }
+    
+    // MARK: - suggestedTable functions
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredFlips.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("suggestedCell", forIndexPath: indexPath)
+//        cell.textLabel!.layer.borderColor = UIColor.avacado().CGColor
+        cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
+        cell.textLabel!.layer.cornerRadius = 11.0
+        cell.textLabel!.textAlignment = NSTextAlignment.Center
+        cell.textLabel!.text = filteredFlips[indexPath.row].word
+        cell.textLabel!.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
+        cell.textLabel!.textColor = UIColor.whiteColor()
+        cell.textLabel!.sizeToFit()
+        cell.textLabel!.mas_makeConstraints { (make) -> Void in
+            make.center.equalTo()(cell.contentView)
+            make.top.equalTo()(cell.contentView).offset()(7)
+            make.bottom.equalTo()(cell.contentView).offset()(-7)
+        }
+        return cell
+    }
+    
+    func updateTableContentInset () {
+        let numberOfRows = suggestedTable.numberOfRowsInSection(0);
+        var contentInsetTop = suggestedTable.bounds.size.height
+        for i in 0 ..< numberOfRows {
+            let indexPath = NSIndexPath.init(forRow: i, inSection: 0)
+            contentInsetTop -= suggestedTable.rectForRowAtIndexPath(indexPath).size.height
+            if (contentInsetTop <= 0) {
+                contentInsetTop = 0
+                break
+            }
+        }
+        suggestedTable.contentInset = UIEdgeInsetsMake(contentInsetTop, 0, 0, 0)
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let row = indexPath.row
+        
+        //add selection to array.
+        flipsAppended.append(filteredFlips[row].word)
+        
+        //set the field to the flipsAppended.
+        flipTextField.setWords(flipsAppended)
+
+        //put a space at the end.
+        let space: Character = " "
+        flipTextField.text.append(space)
+        
+        //if the flip contains a space - it must be selected and joined.
+        if(filteredFlips[row].word.containsString(" ")){
+            
+            //get position of flip just appended.
+            let range: NSRange = (flipTextField.text! as NSString).rangeOfString(filteredFlips[row].word)
+            let from = flipTextField.positionFromPosition(flipTextField.beginningOfDocument, offset: range.location)
+            let to = flipTextField.positionFromPosition(from!, offset: range.length)
+            
+            //select it and join.
+            flipTextField.selectedTextRange = flipTextField.textRangeFromPosition(from!, toPosition: to!)
+            flipTextField.joinStrings()
+            
+            //unselect everything.
+            flipTextField.selectedTextRange = flipTextField.textRangeFromPosition(flipTextField.endOfDocument, toPosition: flipTextField.endOfDocument)
+        }        
+        //then the color can be changed to green.
+        let attributedString = NSMutableAttributedString(string: flipTextField.text)
+        for i in flipsAppended {
+            let flipRange: NSRange = (flipTextField.text! as NSString).rangeOfString(i)
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.avacado(), range: flipRange)
+            attributedString.addAttribute(NSFontAttributeName, value: flipTextField.font!, range: flipRange)
+        }
+        flipTextField.attributedText = attributedString
+        suggestedTable.hidden = true
+    }
+    
     // MARK: - Actions
     
     @IBAction func nextButtonAction(sender: UIButton) {
@@ -436,7 +542,22 @@ class NewFlipViewController: FlipsViewController,
     //MARK: UITextViewDelegate
     
     func textViewDidChange(textView: UITextView) {
+        //We need to check if the field still contains flips that are in appendedFlips
+        //TODO: if not remove the appendedFlip and change left over's text color?
+        for i in flipsAppended{
+            if (!flipTextField.text.containsString(i)){
+                flipsAppended.removeAtIndex(flipsAppended.indexOf(i)!)
+            }
+        }
+        //change text back to black if there aren't any letters.
+        if (flipTextField.text == "" || flipTextField.text == " "){
+            flipTextField.textColor = UIColor.blackColor()
+        }
         updateNextButtonState()
+        filterFlipsForTable(textView.text)
+        suggestedTable.reloadData()
+        updateTableContentInset()
+        suggestedTable.hidden = false
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
