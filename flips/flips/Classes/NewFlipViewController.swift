@@ -287,7 +287,7 @@ class NewFlipViewController: FlipsViewController,
     private func filterFlipsForTable(word: String) {
         if (flipsAppended.count > 0){
             var trimmedWord = word.stringByRemovingStringsIn(flipsAppended)
-            trimmedWord = trimmedWord.removeWhiteSpaces()
+            trimmedWord = trimmedWord.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             
             filteredFlips = self.allFlips.filter { flip in
                 return flip.word.lowercaseString.hasPrefix(trimmedWord.lowercaseString)
@@ -373,6 +373,7 @@ class NewFlipViewController: FlipsViewController,
         }
         flipTextField.attributedText = attributedString
         suggestedTable.hidden = true
+        buttonPanelView.alpha = 1
     }
     
     // MARK: - Actions
@@ -557,6 +558,11 @@ class NewFlipViewController: FlipsViewController,
         filterFlipsForTable(textView.text)
         suggestedTable.reloadData()
         updateTableContentInset()
+        if (suggestedTable.visibleCells.count > 0){
+            buttonPanelView.alpha = 0.25
+        } else {
+            buttonPanelView.alpha = 1
+        }
         suggestedTable.hidden = false
     }
     
