@@ -80,6 +80,9 @@ class NewFlipViewController: FlipsViewController,
     var allFlips : [Flip]
     var filteredFlips : [Flip]
     var flipsAppended : [String]
+    var manuallyJoinedFlips : [String]
+    var flipsManuallyJoinedPlusAppended : [String]
+    var flipAppended : Bool
     
 
     required init?(coder: NSCoder) {
@@ -88,6 +91,9 @@ class NewFlipViewController: FlipsViewController,
         allFlips = [Flip]()
         filteredFlips = [Flip]()
         flipsAppended = [String]()
+        manuallyJoinedFlips = [String]()
+        flipsManuallyJoinedPlusAppended = [String]()
+        flipAppended = false
         super.init(coder: coder)
     }
     
@@ -284,9 +290,9 @@ class NewFlipViewController: FlipsViewController,
         let flips = Flip.findAll() as! [Flip]
         allFlips.appendContentsOf(flips)
     }
-    private func filterFlipsForTable(word: String) {
-        if (flipsAppended.count > 0){
-            var trimmedWord = word.stringByRemovingStringsIn(flipsAppended)
+    private func filterFlipsForTable(word: String) {        
+        if (flipsManuallyJoinedPlusAppended.count > 0){
+            var trimmedWord = word.stringByRemovingStringsIn(flipsManuallyJoinedPlusAppended)
             trimmedWord = trimmedWord.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             
             filteredFlips = self.allFlips.filter { flip in
@@ -339,36 +345,56 @@ class NewFlipViewController: FlipsViewController,
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let row = indexPath.row
         
-        //add selection to array.
+        //add selection to appended array.
         flipsAppended.append(filteredFlips[row].word)
+        //add to all array
+        flipsManuallyJoinedPlusAppended.append(filteredFlips[row].word)
         
         //set the field to the flipsAppended.
-        flipTextField.setWords(flipsAppended)
-
-        //put a space at the end.
-        let space: Character = " "
-        flipTextField.text.append(space)
+        flipTextField.text = ""
+        for i in flipsManuallyJoinedPlusAppended {
+            flipTextField.text.appendContentsOf(i)
+            //put a space at the end.
+            let space: Character = " "
+            flipTextField.text.append(space)
+        }
+        
+        //get position of flip just appended.
+        let range: NSRange = (flipTextField.text! as NSString).rangeOfString(filteredFlips[row].word)
+        
         
         //if the flip contains a space - it must be selected and joined.
         if(filteredFlips[row].word.containsString(" ")){
             
             //get position of flip just appended.
-            let range: NSRange = (flipTextField.text! as NSString).rangeOfString(filteredFlips[row].word)
-            let from = flipTextField.positionFromPosition(flipTextField.beginningOfDocument, offset: range.location)
-            let to = flipTextField.positionFromPosition(from!, offset: range.length)
+            let beginning = flipTextField.beginningOfDocument
+            let start = flipTextField.positionFromPosition(beginning, offset: range.location)
+            let end = flipTextField.positionFromPosition(start!, offset: range.length)
+            let textRange = flipTextField.textRangeFromPosition(start!, toPosition: end!)
+            //before joining the text set flag to true.
+            flipAppended = true
             
             //select it and join.
-            flipTextField.selectedTextRange = flipTextField.textRangeFromPosition(from!, toPosition: to!)
-            flipTextField.joinStrings()
+            flipTextField.selectedTextRange = textRange
+            flipTextField.joinStrings(true)
             
+            flipAppended = false
             //unselect everything.
             flipTextField.selectedTextRange = flipTextField.textRangeFromPosition(flipTextField.endOfDocument, toPosition: flipTextField.endOfDocument)
-        }        
-        //then the color can be changed to green.
+        } else {
+            flipTextField.appendJoinedTextRange(range)
+        }
+        
+        //then the color can be changed to green or orange for all the phrases.
         let attributedString = NSMutableAttributedString(string: flipTextField.text)
-        for i in flipsAppended {
+        for i in flipsManuallyJoinedPlusAppended {
             let flipRange: NSRange = (flipTextField.text! as NSString).rangeOfString(i)
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.avacado(), range: flipRange)
+            //if it was a manually joined string - don't change it's color.
+            if (!manuallyJoinedFlips.contains(i)){
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.avacado(), range: flipRange)
+            } else {
+                attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.flipOrange(), range: flipRange)
+            }
             attributedString.addAttribute(NSFontAttributeName, value: flipTextField.font!, range: flipRange)
         }
         flipTextField.attributedText = attributedString
@@ -490,6 +516,39 @@ class NewFlipViewController: FlipsViewController,
         return false
     }
     
+    func getAppendedFlips() -> [String] {
+        return flipsAppended
+    }
+    
+    func getManuallyJoinedFlips() -> [String] {
+        return manuallyJoinedFlips
+    }
+    
+    func setManuallyJoined(flipText: String){
+        manuallyJoinedFlips.append(flipText)
+    }
+    
+    func setManualPlusAppended(flipText: String) {
+        flipsManuallyJoinedPlusAppended.append(flipText)
+    }
+    
+    func removeFlipFromArrays(flipText: String){
+            if (flipsManuallyJoinedPlusAppended.contains(flipText)){
+                
+                flipsManuallyJoinedPlusAppended.removeAtIndex(flipsManuallyJoinedPlusAppended.indexOf(flipText)!)
+                
+                if (flipsAppended.contains(flipText)){
+                    flipsAppended.removeAtIndex(flipsAppended.indexOf(flipText)!)
+                } else {
+                    manuallyJoinedFlips.removeAtIndex(manuallyJoinedFlips.indexOf(flipText)!)
+                }
+            }
+    }
+    
+    func flipJustAppended() -> Bool{
+        return flipAppended
+    }
+    
     // MARK: - MBContactPickerDataSource
     
     func contactModelsForContactPicker(contactPickerView: MBContactPicker!) -> [AnyObject]! {
@@ -544,25 +603,37 @@ class NewFlipViewController: FlipsViewController,
     
     func textViewDidChange(textView: UITextView) {
         //We need to check if the field still contains flips that are in appendedFlips
-        //TODO: if not remove the appendedFlip and change left over's text color?
-        for i in flipsAppended{
+        //if not remove the appendedFlip
+        //TODO: and change left over's text color?
+        for i in flipsManuallyJoinedPlusAppended{
             if (!flipTextField.text.containsString(i)){
-                flipsAppended.removeAtIndex(flipsAppended.indexOf(i)!)
+                
+                flipsManuallyJoinedPlusAppended.removeAtIndex(flipsManuallyJoinedPlusAppended.indexOf(i)!)
+                
+                if (flipsAppended.contains(i)){
+                    flipsAppended.removeAtIndex(flipsAppended.indexOf(i)!)
+                } else {
+                    manuallyJoinedFlips.removeAtIndex(manuallyJoinedFlips.indexOf(i)!)
+                }
             }
         }
+        
         //change text back to black if there aren't any letters.
         if (flipTextField.text == "" || flipTextField.text == " "){
             flipTextField.textColor = UIColor.blackColor()
         }
+        
         updateNextButtonState()
         filterFlipsForTable(textView.text)
         suggestedTable.reloadData()
         updateTableContentInset()
+        
         if (suggestedTable.visibleCells.count > 0){
             buttonPanelView.alpha = 0.25
         } else {
             buttonPanelView.alpha = 1
         }
+        
         suggestedTable.hidden = false
     }
     
