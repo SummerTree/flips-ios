@@ -88,6 +88,17 @@ class FlipTextView : UIView {
             textLabel.textColor = UIColor.whiteColor()
             textLabel.layer.backgroundColor = UIColor.avacado().CGColor
             hasExtrasImageView.alpha = 1.0
+        case FlipState.AssociatedStockAndNoResourcesAvailable:
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.borderColor = UIColor.flipOrange().CGColor
+            textLabel.layer.backgroundColor = UIColor.flipOrange().CGColor
+            hasExtrasImageView.alpha = 0.0
+        case FlipState.AssociatedStockAndResourcesAvailable:
+            textLabel.textColor = UIColor.whiteColor()
+            textLabel.layer.borderColor = UIColor.flipOrange().CGColor
+            textLabel.layer.backgroundColor = UIColor.flipOrange().CGColor
+            hasExtrasImageView.image = UIImage(named: "mug_options_orange")
+            hasExtrasImageView.alpha = 1.0
         }
     }
     

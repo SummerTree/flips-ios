@@ -204,7 +204,7 @@ class ImportContactsTableViewController: UITableViewController, NewFlipViewContr
         var cell: ContactTableViewCell?
 
         let contactDataSource = ContactDataSource()
-        var contact: Contact!
+//        var contact: Contact!
         
         if (indexPath.section == CONTACTS_ON_FLIPS_SECTION) {
             cell = tableView.dequeueReusableCellWithIdentifier(CONTACT_TABLE_VIEW_IDENTIFIER_ON_FLIPS) as? ContactTableViewCell

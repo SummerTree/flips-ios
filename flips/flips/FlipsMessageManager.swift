@@ -89,15 +89,22 @@ class FlipMessageManager : FlipMessageWordListViewDataSource, FlipsViewDataSourc
             
             let flipPage = draftingTable.flipPageAtIndex(position)
             let localFlipsCount = (flipPage.videoURL != nil ? 1 : 0)
-            let availableFlipsCount = localFlipsCount + userFlipsForWord!.count + stockFlipsForWord!.count
+            let availableUserFlipsCount = localFlipsCount + userFlipsForWord!.count
+            let stockFlipsCount = stockFlipsForWord!.count
+            let stockPlusUserCount = availableUserFlipsCount + stockFlipsCount
             
             if (messageWord.word.associatedFlipId == nil && localFlipsCount == 0)
             {
-                messageWord.word.state = availableFlipsCount == 0 ? .NotAssociatedAndNoResourcesAvailable : .NotAssociatedButResourcesAvailable
+                messageWord.word.state = stockPlusUserCount == 0 ? .NotAssociatedAndNoResourcesAvailable : .NotAssociatedButResourcesAvailable
             }
             else
             {
-                messageWord.word.state = availableFlipsCount == 1 ? .AssociatedAndNoResourcesAvailable : .AssociatedAndResourcesAvailable
+                if (stockFlipsCount > 0 && availableUserFlipsCount == 0){
+                    messageWord.word.state = stockFlipsCount == 1 ? .AssociatedStockAndNoResourcesAvailable : .AssociatedStockAndResourcesAvailable
+                } else {
+                    messageWord.word.state = stockPlusUserCount == 1 ? .AssociatedAndNoResourcesAvailable : .AssociatedAndResourcesAvailable
+                }
+                
             }
             
         }

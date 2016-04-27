@@ -55,10 +55,22 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
     
     var parentViewController : UIViewController?
     
+    var allFlips : [Flip]
+    var filteredFlips : [Flip]
+    var flipsAppended : [String]
+    var manuallyJoinedFlips : [String]
+    var flipsManuallyJoinedPlusAppended : [String]
+    var flipAppended : Bool
     
     // MARK: - Required initializers
     
     init(showOnboarding: Bool, isOpeningFromPushNotification: Bool) {
+        allFlips = [Flip]()
+        filteredFlips = [Flip]()
+        flipsAppended = [String]()
+        manuallyJoinedFlips = [String]()
+        flipsManuallyJoinedPlusAppended = [String]()
+        flipAppended = false
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.whiteColor()
         
@@ -71,6 +83,7 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
         self.updateNextButtonState()
 
         self.lastPlayedRow = -1
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -575,6 +588,38 @@ class ChatView: UIView, UITableViewDelegate, UITableViewDataSource, UIScrollView
             return true
         }
         return false
+    }
+    func getAppendedFlips() -> [String] {
+        return flipsAppended
+    }
+    
+    func getManuallyJoinedFlips() -> [String] {
+        return manuallyJoinedFlips
+    }
+    
+    func setManuallyJoined(flipText: String){
+        manuallyJoinedFlips.append(flipText)
+    }
+    
+    func setManualPlusAppended(flipText: String) {
+        flipsManuallyJoinedPlusAppended.append(flipText)
+    }
+    
+    func removeFlipFromArrays(flipText: String){
+        if (flipsManuallyJoinedPlusAppended.contains(flipText)){
+            
+            flipsManuallyJoinedPlusAppended.removeAtIndex(flipsManuallyJoinedPlusAppended.indexOf(flipText)!)
+            
+            if (flipsAppended.contains(flipText)){
+                flipsAppended.removeAtIndex(flipsAppended.indexOf(flipText)!)
+            } else {
+                manuallyJoinedFlips.removeAtIndex(manuallyJoinedFlips.indexOf(flipText)!)
+            }
+        }
+    }
+    
+    func flipJustAppended() -> Bool{
+        return flipAppended
     }
     
     // MARK: - ChatTableViewCellDelegate

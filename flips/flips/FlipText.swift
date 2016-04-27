@@ -29,4 +29,6 @@ enum FlipState : String {
     case NotAssociatedButResourcesAvailable = "NotAssociatedButResourcesAvailable"
     case AssociatedAndNoResourcesAvailable = "AssociatedAndNoResourcesAvailable"
     case AssociatedAndResourcesAvailable = "AssociatedAndResourcesAvailable"
+    case AssociatedStockAndNoResourcesAvailable = "AssociatedStockAndNoResourcesAvailable"
+    case AssociatedStockAndResourcesAvailable = "AssociatedStockAndResourcesAvailable"
 }

@@ -57,7 +57,7 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         menuController.setMenuVisible(true, animated: true)
     }
     
-    func joinStrings() {
+    func joinStrings(overrideColor: Bool) {
         let selectedTextRange: UITextRange = self.selectedTextRange!
         
         var string = [(String,NSRange)]()
@@ -133,14 +133,27 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
             if (intersection.length > 0) {
                 posInit = min(posInit, range.location)
                 posEnd = max(posEnd, range.location+range.length)
+                
+                var joinedNSString = self.text as NSString
+                joinedNSString = joinedNSString.substringWithRange(range)
+                print(joinedNSString)
+                //if there is an intersection with any previous range - we will remove the phrases in the sub-range
+                //from the arrays used to keep track of appended and manually joined phrases. Unless the user just tapped
+                //a stock flip suggestion that needs to be joined.
+                if (!self.joinStringsTextFieldDelegate!.flipJustAppended!()){
+                   self.joinStringsTextFieldDelegate?.removeFlipFromArrays!(joinedNSString as String)
+                }
+                
             } else {
                 newRanges.append(range)
             }
         }
         newRanges.append(NSMakeRange(posInit, posEnd-posInit))
         self.joinedTextRanges = newRanges
-
-        self.updateColorOnJoinedTexts()
+        
+        if (!overrideColor){
+            self.updateColorOnJoinedTexts()
+        }
         
         AnalyticsService.logWordsJoined()
     }
@@ -157,11 +170,41 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         attributedString.addAttribute(NSFontAttributeName, value: self.font!, range: fullRange)
         attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor(), range: fullRange)
         
+        let manuallyJoinedFlips = self.joinStringsTextFieldDelegate?.getManuallyJoinedFlips!()
+        let flipsAppended = self.joinStringsTextFieldDelegate?.getAppendedFlips!()
+        
         for joinedTextRange in joinedTextRanges {
-            if (NSIntersectionRange(fullRange, joinedTextRange).length == joinedTextRange.length) {
-                attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
-            } else {
-                print("Invalid joined text range \(joinedTextRange) on text field with length \(textLength)")
+
+            var joinedNSString = self.text as NSString
+            joinedNSString = joinedNSString.substringWithRange(joinedTextRange)
+            print(joinedNSString)
+            
+            
+            func turnOrange(){
+                if (NSIntersectionRange(fullRange, joinedTextRange).length == joinedTextRange.length) {
+                    attributedString.addAttribute(NSForegroundColorAttributeName, value: JOINED_COLOR, range: joinedTextRange)
+                } else {
+                    
+                    print("Invalid joined text range \(joinedTextRange) on text field with length \(textLength)")
+                }
+            }
+            func turnGreen(){
+                if (NSIntersectionRange(fullRange, joinedTextRange).length == joinedTextRange.length) {
+                    attributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.avacado(), range: joinedTextRange)
+                } else {
+                    
+                    print("Invalid joined text range \(joinedTextRange) on text field with length \(textLength)")
+                }
+            }
+            
+            if ((!manuallyJoinedFlips!.contains(joinedNSString as String)) && (!flipsAppended!.contains(joinedNSString as String))){
+                self.joinStringsTextFieldDelegate?.setManuallyJoined!(joinedNSString as String)
+                self.joinStringsTextFieldDelegate?.setManualPlusAppended!(joinedNSString as String)
+                turnOrange()
+            } else if (manuallyJoinedFlips!.contains(joinedNSString as String)){
+                turnOrange()
+            } else if (flipsAppended!.contains(joinedNSString as String)){
+                turnGreen()
             }
         }
 
@@ -374,6 +417,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         return wordWithoutSpaces != word
     }
     
+    func appendJoinedTextRange(range: NSRange){
+        self.joinedTextRanges.append(range)
+    }
+    
 }
 
 // MARK: - View Delegate
@@ -383,5 +430,17 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
     optional func joinStringsTextFieldShouldReturn(joinStringsTextField: JoinStringsTextField) -> Bool
     
     optional func joinStringsTextField(joinStringsTextField: JoinStringsTextField, didChangeText: String!)
+    
+    optional func getAppendedFlips() -> [String]
+    
+    optional func getManuallyJoinedFlips() -> [String]
+    
+    optional func setManuallyJoined(flipText: String)
+    
+    optional func setManualPlusAppended(flipText: String)
+    
+    optional func removeFlipFromArrays(flipText: String)
+    
+    optional func flipJustAppended() -> Bool
 
 }
