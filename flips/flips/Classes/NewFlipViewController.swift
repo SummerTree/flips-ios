@@ -77,11 +77,31 @@ class NewFlipViewController: FlipsViewController,
     }
     
     var optionButtons : [FlipsSendButton]
+    
+    //this is loaded with all the flips and we filter on it.
     var allFlips : [Flip]
+    
+    //this is loaded with the filtered flips in filterFlipsForTable.
     var filteredFlips : [Flip]
+    
+    //TODO: combine the next 3 arrays into a single dictionary - key: flipType value: string
+    
+    //This is loaded with flips that are appended from the suggestions.
+    //Wanted to keep track of them so we maintain the correct green color for each.
     var flipsAppended : [String]
+    
+    //This is loaded when the user manually joins a phrase. Similar with the above
+    //array - it helps maintain the orange color of those phrases.
     var manuallyJoinedFlips : [String]
+    
+    //This is loaded with all the phrases / words either appended or manually joined.
+    //Use to filter new suggestions by trimming text not contained within it.
+    //Also used to rebuild the text in the field after appending one of the suggested flips.
     var flipsManuallyJoinedPlusAppended : [String]
+    
+    //This is a flag that is set to true after a suggested flip is appended.
+    //Otherwise it is false and allows an appended flip to be removed if a user decides
+    //to manually join it with something else. See - ln 143 JoinStringsTextField.swift
     var flipAppended : Bool
     
 
@@ -376,6 +396,7 @@ class NewFlipViewController: FlipsViewController,
             
             //select it and join.
             flipTextField.selectedTextRange = textRange
+            //passing in true will prevent the updateColorOnJoinedTexts method from executing.
             flipTextField.joinStrings(true)
             
             flipAppended = false
