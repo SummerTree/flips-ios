@@ -66,6 +66,7 @@ class NewFlipViewController: FlipsViewController,
     @IBOutlet weak var buttonPanel2View: UIView!
     @IBOutlet weak var suggestedTable: UITableView!
     @IBOutlet weak var cellView: UIView!
+    @IBOutlet weak var gradientView: UIView!
 
     let contactDataSource = ContactDataSource()
     var contacts: [Contact] {
@@ -134,7 +135,7 @@ class NewFlipViewController: FlipsViewController,
         self.automaticallyAdjustsScrollViewInsets = false
         
         self.buttonPanel2View.hidden = true
-        loadAllFlipsArray()
+        
         layoutSendButtons()
         updateNextButtonState()
     }
@@ -146,6 +147,14 @@ class NewFlipViewController: FlipsViewController,
         registerForKeyboardNotifications()
         
         self.flipTextField.setupMenu()
+        
+        let gradientLayer = CAGradientLayer.init()
+        gradientLayer.frame = self.gradientView.bounds
+        gradientLayer.colors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
+        gradientLayer.locations = [0.0, 0.08]
+        self.gradientView.layer.mask = gradientLayer
+        
+        loadAllFlipsArray()
         
         if shouldShowOnboarding(self.ONBOARDING_KEY)
         {
@@ -333,17 +342,18 @@ class NewFlipViewController: FlipsViewController,
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("suggestedCell", forIndexPath: indexPath)
 //        cell.textLabel!.layer.borderColor = UIColor.avacado().CGColor
+        cell.contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
-        cell.textLabel!.layer.cornerRadius = 11.0
+        cell.textLabel!.layer.cornerRadius = 14.0
         cell.textLabel!.textAlignment = NSTextAlignment.Center
-        cell.textLabel!.text = filteredFlips[indexPath.row].word
+        cell.textLabel!.text = filteredFlips[indexPath.row].word + "  "
         cell.textLabel!.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         cell.textLabel!.textColor = UIColor.whiteColor()
         cell.textLabel!.sizeToFit()
         cell.textLabel!.mas_makeConstraints { (make) -> Void in
             make.center.equalTo()(cell.contentView)
-            make.top.equalTo()(cell.contentView).offset()(7)
-            make.bottom.equalTo()(cell.contentView).offset()(-7)
+            make.top.equalTo()(cell.contentView).offset()(2)
+            make.bottom.equalTo()(cell.contentView).offset()(-2)
         }
         return cell
     }
@@ -648,12 +658,6 @@ class NewFlipViewController: FlipsViewController,
         filterFlipsForTable(textView.text)
         suggestedTable.reloadData()
         updateTableContentInset()
-        
-        if (suggestedTable.visibleCells.count > 0){
-            buttonPanelView.alpha = 0.25
-        } else {
-            buttonPanelView.alpha = 1
-        }
         
         suggestedTable.hidden = false
     }

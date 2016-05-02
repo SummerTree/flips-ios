@@ -53,6 +53,47 @@
                                     <constraint firstAttribute="height" priority="750" constant="56" id="xKP-Wf-aH5"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zyG-48-JwT">
+                                <rect key="frame" x="0.0" y="120" width="600" height="430"/>
+                                <subviews>
+                                    <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="40" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uZN-T5-OLZ">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="430"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="suggestedCell" textLabel="E37-dD-Riz" style="IBUITableViewCellStyleDefault" id="gH9-MW-YZF">
+                                                <rect key="frame" x="0.0" y="28" width="600" height="40"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gH9-MW-YZF" id="RH7-D0-hN8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E37-dD-Riz">
+                                                            <rect key="frame" x="15" y="0.0" width="570" height="40"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </tableViewCell>
+                                        </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="wbx-sL-NPb" id="5fW-6k-KVA"/>
+                                            <outlet property="delegate" destination="wbx-sL-NPb" id="wSd-On-avK"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="uZN-T5-OLZ" firstAttribute="height" secondItem="zyG-48-JwT" secondAttribute="height" id="KsX-4l-XM2"/>
+                                    <constraint firstItem="uZN-T5-OLZ" firstAttribute="centerX" secondItem="zyG-48-JwT" secondAttribute="centerX" id="OJH-b4-VS5"/>
+                                    <constraint firstItem="uZN-T5-OLZ" firstAttribute="width" secondItem="zyG-48-JwT" secondAttribute="width" id="nmH-bP-h4T"/>
+                                    <constraint firstItem="uZN-T5-OLZ" firstAttribute="centerY" secondItem="zyG-48-JwT" secondAttribute="centerY" id="uRH-nN-Wyi"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q7T-V3-eBo" userLabel="Flip View" customClass="TopBorderedView" customModule="Flips" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <subviews>
@@ -87,34 +128,6 @@
                                     <constraint firstItem="98x-j1-QcY" firstAttribute="leading" secondItem="Q7T-V3-eBo" secondAttribute="leading" constant="16" id="jU4-tL-NIs"/>
                                 </constraints>
                             </view>
-                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uZN-T5-OLZ">
-                                <rect key="frame" x="20" y="120" width="560" height="430"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="suggestedCell" textLabel="E37-dD-Riz" style="IBUITableViewCellStyleDefault" id="gH9-MW-YZF">
-                                        <rect key="frame" x="0.0" y="28" width="560" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gH9-MW-YZF" id="RH7-D0-hN8">
-                                            <rect key="frame" x="0.0" y="0.0" width="560" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E37-dD-Riz">
-                                                    <rect key="frame" x="15" y="0.0" width="530" height="44"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="wbx-sL-NPb" id="5fW-6k-KVA"/>
-                                    <outlet property="delegate" destination="wbx-sL-NPb" id="wSd-On-avK"/>
-                                </connections>
-                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -123,16 +136,16 @@
                             <constraint firstAttribute="trailing" secondItem="Q7T-V3-eBo" secondAttribute="trailing" id="DA7-5k-LEx"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="KvQ-Zv-xiL"/>
                             <constraint firstItem="ffq-6Z-ir5" firstAttribute="top" secondItem="Q7T-V3-eBo" secondAttribute="bottom" id="RsM-4p-7hb"/>
+                            <constraint firstItem="zyG-48-JwT" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="XQG-eC-S4R"/>
                             <constraint firstItem="RaE-FS-hRl" firstAttribute="top" secondItem="Okg-Xy-YC9" secondAttribute="bottom" id="XWF-ih-Y5Y"/>
+                            <constraint firstItem="zyG-48-JwT" firstAttribute="centerX" secondItem="NWJ-B6-OXu" secondAttribute="centerX" id="Xk4-RD-gtO"/>
                             <constraint firstItem="Q7T-V3-eBo" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="Y1h-Qd-Wmb"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="uZN-T5-OLZ" secondAttribute="trailing" id="adk-jF-pGO"/>
                             <constraint firstItem="jaq-uX-Oxx" firstAttribute="top" secondItem="oZS-Za-EsS" secondAttribute="bottom" id="dQa-Gy-ZlE"/>
-                            <constraint firstItem="uZN-T5-OLZ" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="fTi-Gp-SsP"/>
+                            <constraint firstItem="Q7T-V3-eBo" firstAttribute="top" secondItem="zyG-48-JwT" secondAttribute="bottom" id="fOC-Qz-PxC"/>
+                            <constraint firstItem="zyG-48-JwT" firstAttribute="width" secondItem="NWJ-B6-OXu" secondAttribute="width" id="fwT-Ql-6MA"/>
                             <constraint firstItem="RaE-FS-hRl" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leadingMargin" constant="-16" id="kB1-hy-gM9"/>
                             <constraint firstItem="Q7T-V3-eBo" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leading" id="kJ8-TE-GA9"/>
-                            <constraint firstItem="98x-j1-QcY" firstAttribute="top" secondItem="uZN-T5-OLZ" secondAttribute="bottom" id="nGy-5K-ehP"/>
                             <constraint firstItem="Okg-Xy-YC9" firstAttribute="top" secondItem="jaq-uX-Oxx" secondAttribute="bottom" id="nzc-sw-ZMz"/>
-                            <constraint firstItem="uZN-T5-OLZ" firstAttribute="leading" secondItem="NWJ-B6-OXu" secondAttribute="leadingMargin" id="qr1-pE-dFN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Okg-Xy-YC9" secondAttribute="trailing" constant="-16" id="thx-7S-abC"/>
                             <constraint firstAttribute="trailingMargin" secondItem="RaE-FS-hRl" secondAttribute="trailing" constant="-16" id="vam-Oh-ykU"/>
                         </constraints>
@@ -147,6 +160,7 @@
                         <outlet property="flipTextField" destination="98x-j1-QcY" id="Ah9-gs-L47"/>
                         <outlet property="flipTextFieldHeightConstraint" destination="NbK-k6-HWN" id="QWc-bd-1Jw"/>
                         <outlet property="flipView" destination="Q7T-V3-eBo" id="rwb-aP-tVr"/>
+                        <outlet property="gradientView" destination="zyG-48-JwT" id="udp-Xa-eue"/>
                         <outlet property="nextButton" destination="YYl-cb-dw6" id="lbW-3t-WzR"/>
                         <outlet property="suggestedTable" destination="uZN-T5-OLZ" id="e6y-lh-U1m"/>
                     </connections>
