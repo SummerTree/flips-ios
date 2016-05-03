@@ -82,8 +82,11 @@ class NewFlipViewController: FlipsViewController,
     //this is loaded with all the flips and we filter on it.
     var allFlips : [Flip]
     
+    //Just the MyFlips - used to color the bubbles green in the suggested table.
+    var myFlips : [Flip]
+    
     //this is loaded with the filtered flips in filterFlipsForTable.
-    var filteredFlips : [Flip]
+    var filteredFlips : [String]
     
     //TODO: combine the next 3 arrays into a single dictionary - key: flipType value: string
     
@@ -110,7 +113,8 @@ class NewFlipViewController: FlipsViewController,
         contacts = [Contact]()
         optionButtons = [FlipsSendButton]()
         allFlips = [Flip]()
-        filteredFlips = [Flip]()
+        myFlips = [Flip]()
+        filteredFlips = [String]()
         flipsAppended = [String]()
         manuallyJoinedFlips = [String]()
         flipsManuallyJoinedPlusAppended = [String]()
@@ -150,11 +154,16 @@ class NewFlipViewController: FlipsViewController,
         
         let gradientLayer = CAGradientLayer.init()
         gradientLayer.frame = self.gradientView.bounds
-        gradientLayer.colors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
-        gradientLayer.locations = [0.0, 0.08]
+        gradientLayer.colors = [UIColor.clearColor().CGColor, UIColor.whiteColor().CGColor]
+        gradientLayer.locations = [0.0, 0.05]
         self.gradientView.layer.mask = gradientLayer
         
         loadAllFlipsArray()
+        
+//        print(self.flipTextField.getTextWords())
+//        print(flipsAppended)
+//        print(manuallyJoinedFlips)
+//        print(flipsManuallyJoinedPlusAppended)
         
         if shouldShowOnboarding(self.ONBOARDING_KEY)
         {
@@ -316,22 +325,39 @@ class NewFlipViewController: FlipsViewController,
     }
     
     private func loadAllFlipsArray(){
+        allFlips.removeAll()
+        myFlips.removeAll()
+        let flipDataSource = FlipDataSource()
         let flips = Flip.findAll() as! [Flip]
+        let userFlips = flipDataSource.getMyFlips()
         allFlips.appendContentsOf(flips)
+        myFlips.appendContentsOf(userFlips)
     }
+    
     private func filterFlipsForTable(word: String) {        
+        var tempFlips = [Flip]()
+        filteredFlips.removeAll()
+        
+        //If a flips are appended - filter on portion that isn't a part of those.
         if (flipsManuallyJoinedPlusAppended.count > 0){
             var trimmedWord = word.stringByRemovingStringsIn(flipsManuallyJoinedPlusAppended)
             trimmedWord = trimmedWord.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             
-            filteredFlips = self.allFlips.filter { flip in
+            tempFlips = self.allFlips.filter { flip in
                 return flip.word.lowercaseString.hasPrefix(trimmedWord.lowercaseString)
             }
         } else {
-            filteredFlips = self.allFlips.filter { flip in
+            tempFlips = self.allFlips.filter { flip in
                 return flip.word.lowercaseString.hasPrefix(word.lowercaseString)
             }
         }
+        
+        //add the flip words to the filteredFlips[String]
+        for flip in tempFlips {
+            filteredFlips.append(flip.word)
+        }
+        //remove duplicate words
+        filteredFlips = Array(Set(filteredFlips))
     }
     
     // MARK: - suggestedTable functions
@@ -342,11 +368,18 @@ class NewFlipViewController: FlipsViewController,
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("suggestedCell", forIndexPath: indexPath)
 //        cell.textLabel!.layer.borderColor = UIColor.avacado().CGColor
-        cell.contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
-        cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
+        cell.contentView.backgroundColor = UIColor.whiteColor()
+        
+        for flip in myFlips {
+            if (flip.word == filteredFlips[indexPath.row]){
+                cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
+            } else {
+                cell.textLabel!.layer.backgroundColor = UIColor.flipOrange().CGColor
+            }
+        }
         cell.textLabel!.layer.cornerRadius = 14.0
         cell.textLabel!.textAlignment = NSTextAlignment.Center
-        cell.textLabel!.text = filteredFlips[indexPath.row].word + "  "
+        cell.textLabel!.text = filteredFlips[indexPath.row] + "  "
         cell.textLabel!.font = UIFont.avenirNextRegular(UIFont.HeadingSize.h2)
         cell.textLabel!.textColor = UIColor.whiteColor()
         cell.textLabel!.sizeToFit()
@@ -376,9 +409,9 @@ class NewFlipViewController: FlipsViewController,
         let row = indexPath.row
         
         //add selection to appended array.
-        flipsAppended.append(filteredFlips[row].word)
+        flipsAppended.append(filteredFlips[row])
         //add to all array
-        flipsManuallyJoinedPlusAppended.append(filteredFlips[row].word)
+        flipsManuallyJoinedPlusAppended.append(filteredFlips[row])
         
         //set the field to the flipsAppended.
         flipTextField.text = ""
@@ -390,11 +423,11 @@ class NewFlipViewController: FlipsViewController,
         }
         
         //get position of flip just appended.
-        let range: NSRange = (flipTextField.text! as NSString).rangeOfString(filteredFlips[row].word)
+        let range: NSRange = (flipTextField.text! as NSString).rangeOfString(filteredFlips[row])
         
         
         //if the flip contains a space - it must be selected and joined.
-        if(filteredFlips[row].word.containsString(" ")){
+        if(filteredFlips[row].containsString(" ")){
             
             //get position of flip just appended.
             let beginning = flipTextField.beginningOfDocument
