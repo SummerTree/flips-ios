@@ -16,6 +16,7 @@ enum FlipsSendButtonOption : String, CustomStringConvertible {
     case Twitter = "Twitter"
     case Instagram = "Instagram"
     case NotSet = "Not Set"
+    case Gallery = "Gallery"
     
      var description : String {
         get {
@@ -56,7 +57,9 @@ class FlipsSendButton: UIImageView {
         self.imageName = anImage
         self.allowedToBeInactive = canBeInactive
         
-        super.init(image: UIImage(named: self.imageName) as UIImage?)
+        super.init(image: UIImage(named: self.imageName)?.imageWithRenderingMode(.AlwaysTemplate) as UIImage?)
+        
+        self.tintColor = UIColor.whiteColor()
         
         let width = calculateWidth(buttonCount: aCount)
         let xPosition = Float(order) * width

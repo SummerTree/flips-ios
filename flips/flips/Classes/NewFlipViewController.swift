@@ -156,7 +156,8 @@ class NewFlipViewController: FlipsViewController,
         gradientLayer.frame = self.gradientView.bounds
         gradientLayer.colors = [UIColor.clearColor().CGColor, UIColor.whiteColor().CGColor]
         gradientLayer.locations = [0.0, 0.05]
-        self.gradientView.layer.mask = gradientLayer
+//        self.gradientView.layer.mask = gradientLayer
+        self.gradientView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
         
         loadAllFlipsArray()
         
@@ -197,7 +198,7 @@ class NewFlipViewController: FlipsViewController,
     
     private func layoutSendButtons() {
         
-        let firstRowButtonCount = 2
+        let firstRowButtonCount = 3
         let secondRowButtonCount = 3
         
         let flipsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
@@ -206,7 +207,7 @@ class NewFlipViewController: FlipsViewController,
                                               activeColor: UIColor.flipOrange(),
                                               buttonType: .Flips,
                                               imageName: "FlipWord",
-                                              allowedToBeInactive: false)
+                                              allowedToBeInactive: true)
         
         let smsSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
                                             buttonOrder: 1,
@@ -214,6 +215,14 @@ class NewFlipViewController: FlipsViewController,
                                             activeColor: UIColor.avacado(),
                                             buttonType: .SMS,
                                             imageName: "smsicon",
+                                            allowedToBeInactive: true)
+        
+        let galSendButton = FlipsSendButton(buttonCount: firstRowButtonCount,
+                                            buttonOrder: 2,
+                                            buttonHeight: self.buttonPanelView.frame.size.height,
+                                            activeColor: UIColor.purpleColor(),
+                                            buttonType: .Gallery,
+                                            imageName: "Gallery",
                                             allowedToBeInactive: true)
         
         let facebookButton = FlipsSendButton(buttonCount: secondRowButtonCount,
@@ -241,14 +250,16 @@ class NewFlipViewController: FlipsViewController,
                                             allowedToBeInactive: true)
         
         smsSendButton.makeInactive()
+        galSendButton.makeInactive()
         facebookButton.makeInactive()
         twitterButton.makeInactive()
         instagramButton.makeInactive()
         
-        self.optionButtons += [smsSendButton,facebookButton,twitterButton,instagramButton]
+        self.optionButtons += [flipsSendButton,smsSendButton,galSendButton,facebookButton,twitterButton,instagramButton]
         
         self.buttonPanelView.addSubview(flipsSendButton)
         self.buttonPanelView.addSubview(smsSendButton)
+        self.buttonPanelView.addSubview(galSendButton)
         
         self.buttonPanel2View.addSubview(facebookButton)
         self.buttonPanel2View.addSubview(twitterButton)
@@ -317,11 +328,18 @@ class NewFlipViewController: FlipsViewController,
     }
     
     private func updateNextButtonState() {
+        let options = self.retrieveSendOptions()
+        
         let hasContacts = contacts.count > 0
         let textValue = flipTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         let hasText = Bool(textValue != MESSAGE_PLACEHOLDER)
         
-        nextButton.enabled = hasContacts && hasText
+        if options.count == 1 && options.contains(.Gallery) {
+            nextButton.enabled = hasText
+        }
+        else {
+            nextButton.enabled = hasText && hasContacts
+        }
     }
     
     private func loadAllFlipsArray(){
@@ -368,7 +386,7 @@ class NewFlipViewController: FlipsViewController,
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("suggestedCell", forIndexPath: indexPath)
 //        cell.textLabel!.layer.borderColor = UIColor.avacado().CGColor
-        cell.contentView.backgroundColor = UIColor.whiteColor()
+        cell.contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
         
         for flip in myFlips {
             if (flip.word == filteredFlips[indexPath.row]){
@@ -462,8 +480,10 @@ class NewFlipViewController: FlipsViewController,
             attributedString.addAttribute(NSFontAttributeName, value: flipTextField.font!, range: flipRange)
         }
         flipTextField.attributedText = attributedString
+        
+        
         suggestedTable.hidden = true
-        buttonPanelView.alpha = 1
+        buttonPanelView.superview?.bringSubviewToFront(buttonPanelView)
     }
     
     // MARK: - Actions
@@ -693,6 +713,7 @@ class NewFlipViewController: FlipsViewController,
         updateTableContentInset()
         
         suggestedTable.hidden = false
+        gradientView.superview?.bringSubviewToFront(gradientView)
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
