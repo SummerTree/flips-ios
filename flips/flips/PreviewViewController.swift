@@ -429,7 +429,15 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         
         if success
         {
-            submitMessageRequest()
+            if self.sendOptions.contains(.Flips) {
+                submitMessageRequest()
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    let rootVC = self.navigationController?.viewControllers[0]
+                    rootVC?.dismissViewControllerAnimated(true, completion: nil)
+                })
+            }
         }
         else
         {
