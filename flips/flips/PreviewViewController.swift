@@ -221,40 +221,82 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         
     }
     
-    private func submitMMSMessage() {
-        
+    private func exportMovie(completion: (NSURL?,FlipError?) -> Void) {
         let movieExport = MovieExport.sharedInstance
-                    
-        movieExport.exportFlipForMMS(self.previewView.retrievePlayerItems(), words: self.flipWordStrings,
-            completion: { (url: NSURL?, error: FlipError?) -> Void in
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
-                    //Attach movie to native text message
-                    self.messageComposer = MessageComposerExternal()
-                    self.messageComposer!.delegate = self
-                    self.messageComposer!.videoUrl = url
-                    self.messageComposer!.contacts = self.phoneNumbers
-                    self.messageComposer!.containsNonFlipsUsers = self.didFindNonFlipsUsers
-                    
-                    let messageComposerController = self.messageComposer?.configuredMessageComposeViewController()
-                    
-                    if let messageComposerController = messageComposerController
-                    {
-                        self.presentViewController(messageComposerController, animated: true, completion: nil)
-                    }
-                    else
-                    {
-                        self.showExternalComposerErrorAlert()
-                    }
-                
-                })
-                
-            }
-        )
         
+        movieExport.exportFlipForMMS(self.previewView.retrievePlayerItems(), words: self.flipWordStrings) { (url, error) in
+            completion(url, error)
+        }
     }
     
+    private func submitMMSMessage() {
+        
+        self.exportMovie { (url, error) in
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                //Attach movie to native text message
+                self.messageComposer = MessageComposerExternal()
+                self.messageComposer!.delegate = self
+                self.messageComposer!.videoUrl = url
+                self.messageComposer!.contacts = self.phoneNumbers
+                self.messageComposer!.containsNonFlipsUsers = self.didFindNonFlipsUsers
+                
+                let messageComposerController = self.messageComposer?.configuredMessageComposeViewController()
+                
+                if let messageComposerController = messageComposerController
+                {
+                    self.presentViewController(messageComposerController, animated: true, completion: nil)
+                }
+                else
+                {
+                    self.showExternalComposerErrorAlert()
+                }
+                
+            })
+        }
+    }
+    
+    private func submitSaveToLibrary() {
+        self.exportMovie { (url, error) in
+            CameraLibrary.sharedInstance.saveVideo(url!)
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                let rootVC = self.navigationController?.viewControllers[0]
+                rootVC?.dismissViewControllerAnimated(true, completion: nil)
+            })
+        }
+    }
+    
+    private func submitToMMSAndToLibrary() {
+        
+        self.exportMovie { (url, error) in
+            
+            CameraLibrary.sharedInstance.saveVideo(url!)
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                //Attach movie to native text message
+                self.messageComposer = MessageComposerExternal()
+                self.messageComposer!.delegate = self
+                self.messageComposer!.videoUrl = url
+                self.messageComposer!.contacts = self.phoneNumbers
+                self.messageComposer!.containsNonFlipsUsers = self.didFindNonFlipsUsers
+                
+                let messageComposerController = self.messageComposer?.configuredMessageComposeViewController()
+                
+                if let messageComposerController = messageComposerController
+                {
+                    self.presentViewController(messageComposerController, animated: true, completion: nil)
+                }
+                else
+                {
+                    self.showExternalComposerErrorAlert()
+                }
+                
+            })
+        }
+    }
     
     
     ////
@@ -330,8 +372,17 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
             self.previewView.stopMovie()
             self.showActivityIndicator()
             
-            if sendOptions.count > 0
-            {
+            if self.sendOptions.contains(.SMS) && self.sendOptions.contains(.Gallery) {
+                if MessageComposerExternal.canSendText()
+                {
+                    submitToMMSAndToLibrary()
+                }
+                else
+                {
+                    showMMSUnsupportedErrorAlert()
+                }
+            }
+            else if self.sendOptions.contains(.SMS) {
                 if MessageComposerExternal.canSendText()
                 {
                     submitMMSMessage()
@@ -341,12 +392,13 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
                     showMMSUnsupportedErrorAlert()
                 }
             }
-            else
-            {
+            else if self.sendOptions.contains(.Flips) {
                 submitMessageRequest()
             }
+            else if self.sendOptions.contains(.Gallery) {
+                submitSaveToLibrary()
+            }
         }
-        
     }
     
     
@@ -377,7 +429,15 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
         
         if success
         {
-            submitMessageRequest()
+            if self.sendOptions.contains(.Flips) {
+                submitMessageRequest()
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    let rootVC = self.navigationController?.viewControllers[0]
+                    rootVC?.dismissViewControllerAnimated(true, completion: nil)
+                })
+            }
         }
         else
         {

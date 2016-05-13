@@ -99,6 +99,10 @@
 		4F08E8421C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */; };
 		4F08E8431C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */; };
 		4F08E8441C4F3A5B0096D7B0 /* StockFlipsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */; };
+		4FDB51D41CDA518B00EE592C /* CameraLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDB51D31CDA518B00EE592C /* CameraLibrary.swift */; };
+		4FDB51D51CDA518B00EE592C /* CameraLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDB51D31CDA518B00EE592C /* CameraLibrary.swift */; };
+		4FDB51D61CDA518B00EE592C /* CameraLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDB51D31CDA518B00EE592C /* CameraLibrary.swift */; };
+		4FDB51D81CDA51A400EE592C /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FDB51D71CDA51A400EE592C /* Photos.framework */; };
 		5707186519D1AEBB0069064F /* FlipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186419D1AEBB0069064F /* FlipsService.swift */; };
 		5707186719D1AF110069064F /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5707186619D1AF110069064F /* UserService.swift */; };
 		572BF9181AB9E52600B0D75A /* Flip.m in Sources */ = {isa = PBXBuildFile; fileRef = 572BF9171AB9E52600B0D75A /* Flip.m */; };
@@ -764,6 +768,8 @@
 		431760096D7FBE8BA2FC8F22 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		4F08E83C1C4F39940096D7B0 /* StockFlipsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockFlipsListView.swift; sourceTree = "<group>"; };
 		4F08E8411C4F3A5B0096D7B0 /* StockFlipsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockFlipsListViewController.swift; sourceTree = "<group>"; };
+		4FDB51D31CDA518B00EE592C /* CameraLibrary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLibrary.swift; sourceTree = "<group>"; };
+		4FDB51D71CDA51A400EE592C /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		5707186419D1AEBB0069064F /* FlipsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsService.swift; sourceTree = "<group>"; };
 		5707186619D1AF110069064F /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		572BF9161AB9E52600B0D75A /* Flip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flip.h; sourceTree = "<group>"; };
@@ -1001,6 +1007,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FDB51D81CDA51A400EE592C /* Photos.framework in Frameworks */,
 				F23E38241AF2E0C8003CAAC3 /* MediaPlayer.framework in Frameworks */,
 				BE2461321AD2D9C600859233 /* AVFoundation.framework in Frameworks */,
 				BE2461331AD2D9C600859233 /* libPods.a in Frameworks */,
@@ -1048,6 +1055,7 @@
 			children = (
 				7A54599B1A9A84FC00EAC679 /* NavigationHandler.swift */,
 				075A0C081A43A1F800E92760 /* ThreadSafe.swift */,
+				4FDB51D31CDA518B00EE592C /* CameraLibrary.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1934,6 +1942,7 @@
 		EC5A81A5795A49A3B7523B70 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4FDB51D71CDA51A400EE592C /* Photos.framework */,
 				F23E38211AF2E0B2003CAAC3 /* MediaPlayer.framework */,
 				7AB1685919E32DE3004E2162 /* AVFoundation.framework */,
 				57D2A0A019D3240E00FA729D /* Foundation.framework */,
@@ -2506,6 +2515,7 @@
 				704E111419D0ACAB00D2BB88 /* UIColorExtensions.swift in Sources */,
 				7AB1683819E3196E004E2162 /* TakePictureViewController.swift in Sources */,
 				7AA3F93F1AB70DC500B562B9 /* DAKeyboardControl.m in Sources */,
+				4FDB51D41CDA518B00EE592C /* CameraLibrary.swift in Sources */,
 				7AFB1E991AC2FA0700C60D8E /* BlurredThumbnailsCache.swift in Sources */,
 				A2D60FCD19E45EEA001C92A0 /* NewPasswordViewController.swift in Sources */,
 				7A9619F019DC3F01005E4343 /* UserFormView.swift in Sources */,
@@ -2736,6 +2746,7 @@
 				BE2460271AD2D95900859233 /* FlipPlayerItem.swift in Sources */,
 				BE2460281AD2D95900859233 /* UIColorExtensions.swift in Sources */,
 				BE2460291AD2D95900859233 /* TakePictureViewController.swift in Sources */,
+				4FDB51D51CDA518B00EE592C /* CameraLibrary.swift in Sources */,
 				BE24602A1AD2D95900859233 /* DAKeyboardControl.m in Sources */,
 				BE24602B1AD2D95900859233 /* BlurredThumbnailsCache.swift in Sources */,
 				BE24602C1AD2D95900859233 /* NewPasswordViewController.swift in Sources */,
@@ -2966,6 +2977,7 @@
 				BE2461011AD2D9C600859233 /* FlipPlayerItem.swift in Sources */,
 				BE2461021AD2D9C600859233 /* UIColorExtensions.swift in Sources */,
 				BE2461031AD2D9C600859233 /* TakePictureViewController.swift in Sources */,
+				4FDB51D61CDA518B00EE592C /* CameraLibrary.swift in Sources */,
 				40900BA81B62C3460043E495 /* DraftingTable.swift in Sources */,
 				BE2461041AD2D9C600859233 /* DAKeyboardControl.m in Sources */,
 				BE2461051AD2D9C600859233 /* BlurredThumbnailsCache.swift in Sources */,
@@ -3236,7 +3248,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = flips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DPROD -D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flipsapp.flipsmessenger;
@@ -3260,7 +3272,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = flips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DPROD";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flipsapp.flipsmessenger;
@@ -3284,7 +3296,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = flips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DPROD";
 				PRODUCT_BUNDLE_IDENTIFIER = com.flipsapp.flipsmessenger;
