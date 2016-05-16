@@ -130,6 +130,17 @@ public class MovieExport : NSObject {
                     atTime: insertTime)
             } catch _ {
             }
+        } else {
+            let path = NSBundle.mainBundle().pathForResource("empty_audio", ofType: "m4a")
+            let url = NSURL.fileURLWithPath(path!)
+            let asset = AVAsset.init(URL: url)
+            let audioAssetTrack = asset.tracksWithMediaType(AVMediaTypeAudio)[0]
+            do {
+                try audioCompositionTrack.insertTimeRange(audioTimeRange,
+                                                          ofTrack: audioAssetTrack,
+                                                          atTime: insertTime)
+            } catch _ {
+            }
         }
         
         insertTime = CMTimeAdd(insertTime, videoAsset.duration)

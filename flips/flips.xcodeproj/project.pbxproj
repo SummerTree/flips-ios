@@ -33,6 +33,8 @@
 		07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */; };
 		07E47BA01A3A32F3001B3809 /* NSErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */; };
 		1D48E9E31A27389300FA890E /* BuilderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D48E9E21A27389300FA890E /* BuilderService.swift */; };
+		24ECA48B1CEA670500CD8CA4 /* empty_audio.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 24ECA48A1CEA670500CD8CA4 /* empty_audio.m4a */; };
+		24ECA48C1CEA68CE00CD8CA4 /* empty_audio.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 24ECA48A1CEA670500CD8CA4 /* empty_audio.m4a */; };
 		3E4E6A2F1B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */; };
 		3E4E6A301B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */; };
 		3E4E6A311B90C72F00AD002B /* FlipsCompositionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */; };
@@ -744,6 +746,7 @@
 		07E0A0821A113A7400D5B292 /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactTableViewCell.xib; path = Classes/ContactTableViewCell.xib; sourceTree = "<group>"; };
 		07E47B9F1A3A32F3001B3809 /* NSErrorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSErrorExtensions.swift; path = Classes/NSErrorExtensions.swift; sourceTree = "<group>"; };
 		1D48E9E21A27389300FA890E /* BuilderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuilderService.swift; sourceTree = "<group>"; };
+		24ECA48A1CEA670500CD8CA4 /* empty_audio.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = empty_audio.m4a; sourceTree = "<group>"; };
 		3E4E6A2E1B90C72F00AD002B /* FlipsCompositionControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlipsCompositionControlsView.swift; sourceTree = "<group>"; };
 		3E4E6A321B90C74400AD002B /* ComposeEditControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeEditControlsView.swift; sourceTree = "<group>"; };
 		3E4E6A371B90C76800AD002B /* ComposeCaptureControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeCaptureControlsView.swift; sourceTree = "<group>"; };
@@ -1933,6 +1936,7 @@
 		BE2E72061A98119400F237BE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				24ECA48A1CEA670500CD8CA4 /* empty_audio.m4a */,
 				BE2E72071A98119400F237BE /* empty_video.mov */,
 				40BF167F1B963CC80086E425 /* CountryCodes.json */,
 			);
@@ -2116,6 +2120,7 @@
 				07E0A0831A113A7400D5B292 /* ContactTableViewCell.xib in Resources */,
 				40BF16801B963CC80086E425 /* CountryCodes.json in Resources */,
 				70FD4E8019D064450024EBDB /* Images.xcassets in Resources */,
+				24ECA48B1CEA670500CD8CA4 /* empty_audio.m4a in Resources */,
 				075A0C0B1A44B84B00E92760 /* SyncView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2137,6 +2142,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24ECA48C1CEA68CE00CD8CA4 /* empty_audio.m4a in Resources */,
 				BE2461351AD2D9C600859233 /* empty_video.mov in Resources */,
 				BE2461361AD2D9C600859233 /* NewFlip.storyboard in Resources */,
 				BE2461381AD2D9C600859233 /* ContactTableViewCell.xib in Resources */,
