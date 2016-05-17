@@ -496,8 +496,7 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
         
         for i in 0 ..< collectionView.numberOfItemsInSection(0) {
             
-            let cell = collectionView.cellForItemAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as! FlipsViewCell
-            
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! FlipsViewCell
             if i == indexPath.row
             {
                 cell.setIsSelected(cell.isSelected ?? true)
