@@ -485,25 +485,28 @@ class FlipsSelectionView : UIView, UICollectionViewDelegateFlowLayout, UICollect
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! FlipsViewCell
+        
         if isShowingUserFlips
         {
-            delegate?.didSelectUserFlipAtIndex(indexPath.row)
-        }
-        else
-        {
-            delegate?.didSelectStockFlipAtIndex(indexPath.row)
+            if (cell.isSelected == false){
+                delegate?.didSelectUserFlipAtIndex(indexPath.item)
+            }
+            
+        } else {
+            if (cell.isSelected == false){
+                delegate?.didSelectStockFlipAtIndex(indexPath.item)
+            }
         }
         
-        for i in 0 ..< collectionView.numberOfItemsInSection(0) {
-            
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! FlipsViewCell
-            if i == indexPath.row
-            {
-                cell.setIsSelected(cell.isSelected ?? true)
-            }
-            else
-            {
-                cell.setIsSelected(false)
+        //Select the one that was just tapped.
+        cell.setIsSelected(true)
+        
+        //Go through and deselect all that are selected.
+        for i in collectionView.indexPathsForVisibleItems(){
+            if (i != indexPath){
+                let selectedCell = collectionView.cellForItemAtIndexPath(i) as! FlipsViewCell
+                selectedCell.setIsSelected(false)
             }
             
         }
