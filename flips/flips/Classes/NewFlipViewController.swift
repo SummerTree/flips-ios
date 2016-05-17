@@ -693,7 +693,7 @@ class NewFlipViewController: FlipsViewController,
             if (!flipTextField.text.containsString(i)){
                 
                 flipsManuallyJoinedPlusAppended.removeAtIndex(flipsManuallyJoinedPlusAppended.indexOf(i)!)
-                
+                flipTextField.removeFromJoinedTextRanges()
                 if (flipsAppended.contains(i)){
                     flipsAppended.removeAtIndex(flipsAppended.indexOf(i)!)
                 } else {
