@@ -421,6 +421,10 @@ class JoinStringsTextField : UITextView, UITextViewDelegate {
         self.joinedTextRanges.append(range)
     }
     
+    func removeFromJoinedTextRanges(){
+        self.joinedTextRanges.removeLast()
+    }
+    
 }
 
 // MARK: - View Delegate
