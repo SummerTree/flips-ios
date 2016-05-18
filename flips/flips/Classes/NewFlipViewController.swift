@@ -350,7 +350,7 @@ class NewFlipViewController: FlipsViewController,
         let userFlips = flipDataSource.getMyFlips()
         allFlips.appendContentsOf(flips)
         for flip in userFlips {
-            self.myFlips.append(flip.word.lowercaseString)
+            myFlips.append(flip.word.lowercaseString)
         }
     }
     
@@ -378,6 +378,12 @@ class NewFlipViewController: FlipsViewController,
         }
         //remove duplicate words
         filteredFlips = Array(Set(filteredFlips))
+        
+        if (filteredFlips.count > 0){
+            gradientView.superview?.bringSubviewToFront(gradientView)
+        } else {
+            gradientView.superview?.sendSubviewToBack(gradientView)
+        }
     }
     
     // MARK: - suggestedTable functions
@@ -713,7 +719,7 @@ class NewFlipViewController: FlipsViewController,
         updateTableContentInset()
         
         suggestedTable.hidden = false
-        gradientView.superview?.bringSubviewToFront(gradientView)
+        
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
