@@ -83,7 +83,7 @@ class NewFlipViewController: FlipsViewController,
     var allFlips : [Flip]
     
     //Just the MyFlips - used to color the bubbles green in the suggested table.
-    var myFlips : [Flip]
+    var myFlips : [String]
     
     //this is loaded with the filtered flips in filterFlipsForTable.
     var filteredFlips : [String]
@@ -113,7 +113,7 @@ class NewFlipViewController: FlipsViewController,
         contacts = [Contact]()
         optionButtons = [FlipsSendButton]()
         allFlips = [Flip]()
-        myFlips = [Flip]()
+        myFlips = [String]()
         filteredFlips = [String]()
         flipsAppended = [String]()
         manuallyJoinedFlips = [String]()
@@ -349,7 +349,9 @@ class NewFlipViewController: FlipsViewController,
         let flips = Flip.findAll() as! [Flip]
         let userFlips = flipDataSource.getMyFlips()
         allFlips.appendContentsOf(flips)
-        myFlips.appendContentsOf(userFlips)
+        for flip in userFlips {
+            self.myFlips.append(flip.word.lowercaseString)
+        }
     }
     
     private func filterFlipsForTable(word: String) {        
@@ -372,7 +374,7 @@ class NewFlipViewController: FlipsViewController,
         
         //add the flip words to the filteredFlips[String]
         for flip in tempFlips {
-            filteredFlips.append(flip.word)
+            filteredFlips.append(flip.word.lowercaseString)
         }
         //remove duplicate words
         filteredFlips = Array(Set(filteredFlips))
@@ -388,12 +390,10 @@ class NewFlipViewController: FlipsViewController,
 //        cell.textLabel!.layer.borderColor = UIColor.avacado().CGColor
         cell.contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
         
-        for flip in myFlips {
-            if (flip.word == filteredFlips[indexPath.row]){
-                cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
-            } else {
-                cell.textLabel!.layer.backgroundColor = UIColor.flipOrange().CGColor
-            }
+        if (self.myFlips.contains(filteredFlips[indexPath.row])){
+            cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
+        } else {
+            cell.textLabel!.layer.backgroundColor = UIColor.flipOrange().CGColor
         }
         cell.textLabel!.layer.cornerRadius = 14.0
         cell.textLabel!.textAlignment = NSTextAlignment.Center
