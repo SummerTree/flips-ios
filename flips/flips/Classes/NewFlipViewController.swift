@@ -255,6 +255,17 @@ class NewFlipViewController: FlipsViewController,
         twitterButton.makeInactive()
         instagramButton.makeInactive()
         
+        let tapSms = UITapGestureRecognizer(target: self, action: #selector(buttonTap(_:)))
+        tapSms.numberOfTapsRequired = 1
+        let tapGal = UITapGestureRecognizer(target: self, action: #selector(buttonTap(_:)))
+        tapGal.numberOfTapsRequired = 1
+        let tapFlip = UITapGestureRecognizer(target: self, action: #selector(buttonTap(_:)))
+        tapFlip.numberOfTapsRequired = 1
+        
+        smsSendButton.addGestureRecognizer(tapSms)
+        galSendButton.addGestureRecognizer(tapGal)
+        flipsSendButton.addGestureRecognizer(tapFlip)
+        
         self.optionButtons += [flipsSendButton,smsSendButton,galSendButton,facebookButton,twitterButton,instagramButton]
         
         self.buttonPanelView.addSubview(flipsSendButton)
@@ -332,16 +343,29 @@ class NewFlipViewController: FlipsViewController,
         
         let hasContacts = contacts.count > 0
         let textValue = flipTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let hasText = Bool(textValue != MESSAGE_PLACEHOLDER)
+        let hasText = Bool((textValue != MESSAGE_PLACEHOLDER) && (textValue != ""))
         
-        if options.count == 1 && options.contains(.Gallery) {
+        if (options.count == 1 || options.count == 2) && (!options.contains(.Flips)) {
             nextButton.enabled = hasText
         }
-        else {
+        else if options.contains(.Flips){
             nextButton.enabled = hasText && hasContacts
+        } else {
+            nextButton.enabled = false
         }
     }
     
+    func buttonTap(sender: UITapGestureRecognizer) {
+        let button = sender.view as! FlipsSendButton
+        if button.allowedToBeInactive {
+            if button.backgroundColor == button.inactiveColor {
+                button.backgroundColor = button.activeColor
+            } else {
+                button.backgroundColor = button.inactiveColor
+            }
+        }
+        updateNextButtonState()
+    }
     private func loadAllFlipsArray(){
         allFlips.removeAll()
         myFlips.removeAll()
