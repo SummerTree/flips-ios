@@ -83,7 +83,7 @@ class NewFlipViewController: FlipsViewController,
     var allFlips : [Flip]
     
     //Just the MyFlips - used to color the bubbles green in the suggested table.
-    var myFlips : [Flip]
+    var myFlips : [String]
     
     //this is loaded with the filtered flips in filterFlipsForTable.
     var filteredFlips : [String]
@@ -113,7 +113,7 @@ class NewFlipViewController: FlipsViewController,
         contacts = [Contact]()
         optionButtons = [FlipsSendButton]()
         allFlips = [Flip]()
-        myFlips = [Flip]()
+        myFlips = [String]()
         filteredFlips = [String]()
         flipsAppended = [String]()
         manuallyJoinedFlips = [String]()
@@ -255,6 +255,17 @@ class NewFlipViewController: FlipsViewController,
         twitterButton.makeInactive()
         instagramButton.makeInactive()
         
+        let tapSms = UITapGestureRecognizer(target: self, action: #selector(buttonTap(_:)))
+        tapSms.numberOfTapsRequired = 1
+        let tapGal = UITapGestureRecognizer(target: self, action: #selector(buttonTap(_:)))
+        tapGal.numberOfTapsRequired = 1
+        let tapFlip = UITapGestureRecognizer(target: self, action: #selector(buttonTap(_:)))
+        tapFlip.numberOfTapsRequired = 1
+        
+        smsSendButton.addGestureRecognizer(tapSms)
+        galSendButton.addGestureRecognizer(tapGal)
+        flipsSendButton.addGestureRecognizer(tapFlip)
+        
         self.optionButtons += [flipsSendButton,smsSendButton,galSendButton,facebookButton,twitterButton,instagramButton]
         
         self.buttonPanelView.addSubview(flipsSendButton)
@@ -332,16 +343,29 @@ class NewFlipViewController: FlipsViewController,
         
         let hasContacts = contacts.count > 0
         let textValue = flipTextField.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let hasText = Bool(textValue != MESSAGE_PLACEHOLDER)
+        let hasText = Bool((textValue != MESSAGE_PLACEHOLDER) && (textValue != ""))
         
-        if options.count == 1 && options.contains(.Gallery) {
+        if (options.count == 1 || options.count == 2) && (!options.contains(.Flips)) {
             nextButton.enabled = hasText
         }
-        else {
+        else if options.contains(.Flips){
             nextButton.enabled = hasText && hasContacts
+        } else {
+            nextButton.enabled = false
         }
     }
     
+    func buttonTap(sender: UITapGestureRecognizer) {
+        let button = sender.view as! FlipsSendButton
+        if button.allowedToBeInactive {
+            if button.backgroundColor == button.inactiveColor {
+                button.backgroundColor = button.activeColor
+            } else {
+                button.backgroundColor = button.inactiveColor
+            }
+        }
+        updateNextButtonState()
+    }
     private func loadAllFlipsArray(){
         allFlips.removeAll()
         myFlips.removeAll()
@@ -349,7 +373,9 @@ class NewFlipViewController: FlipsViewController,
         let flips = Flip.findAll() as! [Flip]
         let userFlips = flipDataSource.getMyFlips()
         allFlips.appendContentsOf(flips)
-        myFlips.appendContentsOf(userFlips)
+        for flip in userFlips {
+            myFlips.append(flip.word.lowercaseString)
+        }
     }
     
     private func filterFlipsForTable(word: String) {        
@@ -372,10 +398,16 @@ class NewFlipViewController: FlipsViewController,
         
         //add the flip words to the filteredFlips[String]
         for flip in tempFlips {
-            filteredFlips.append(flip.word)
+            filteredFlips.append(flip.word.lowercaseString)
         }
         //remove duplicate words
         filteredFlips = Array(Set(filteredFlips))
+        
+        if (filteredFlips.count > 0){
+            gradientView.superview?.bringSubviewToFront(gradientView)
+        } else {
+            gradientView.superview?.sendSubviewToBack(gradientView)
+        }
     }
     
     // MARK: - suggestedTable functions
@@ -388,12 +420,10 @@ class NewFlipViewController: FlipsViewController,
 //        cell.textLabel!.layer.borderColor = UIColor.avacado().CGColor
         cell.contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.65)
         
-        for flip in myFlips {
-            if (flip.word == filteredFlips[indexPath.row]){
-                cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
-            } else {
-                cell.textLabel!.layer.backgroundColor = UIColor.flipOrange().CGColor
-            }
+        if (self.myFlips.contains(filteredFlips[indexPath.row])){
+            cell.textLabel!.layer.backgroundColor = UIColor.avacado().CGColor
+        } else {
+            cell.textLabel!.layer.backgroundColor = UIColor.flipOrange().CGColor
         }
         cell.textLabel!.layer.cornerRadius = 14.0
         cell.textLabel!.textAlignment = NSTextAlignment.Center
@@ -713,7 +743,7 @@ class NewFlipViewController: FlipsViewController,
         updateTableContentInset()
         
         suggestedTable.hidden = false
-        gradientView.superview?.bringSubviewToFront(gradientView)
+        
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
