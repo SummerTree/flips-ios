@@ -246,6 +246,24 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
                 
                 if let messageComposerController = messageComposerController
                 {
+                    let request = FlipMessageSubmissionManager.SubmissionRequest(
+                        flipWords: self.flipWords,
+                        flipPages: self.draftingTable!.flipBook.flipPages,
+                        roomID: self.roomID,
+                        contacts: self.fullContacts)
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                        if FlipMessageSubmissionManager.sharedInstance.createAndUploadFlips(request){
+                            print("Creating and Uploading Flips")
+                        }
+                        else
+                        {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                FlipMessageSubmissionManager.sharedInstance.state = .Error
+                                FlipMessageSubmissionManager.sharedInstance.sendMessageSendFailedNotification(self.roomID, error: "Flips Message Error", errorDetails: "Flips was unable to create your message at this time.")
+                            })
+                        }
+                    })
                     self.presentViewController(messageComposerController, animated: true, completion: nil)
                 }
                 else
@@ -256,24 +274,6 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
             })
         }
         
-        let request = FlipMessageSubmissionManager.SubmissionRequest(
-            flipWords: self.flipWords,
-            flipPages: self.draftingTable!.flipBook.flipPages,
-            roomID: self.roomID,
-            contacts: self.fullContacts)
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                if FlipMessageSubmissionManager.sharedInstance.createAndUploadFlips(request){
-                    print("Creating and Uploading Flips")
-                }
-                else
-                {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        FlipMessageSubmissionManager.sharedInstance.state = .Error
-                        FlipMessageSubmissionManager.sharedInstance.sendMessageSendFailedNotification(self.roomID, error: "Flips Message Error", errorDetails: "Flips was unable to create your message at this time.")
-                })
-            }
-        })
     }
     
     private func submitSaveToLibrary() {
@@ -281,29 +281,30 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
             CameraLibrary.sharedInstance.saveVideo(url!)
             
             dispatch_async(dispatch_get_main_queue(), {
+                
+                let request = FlipMessageSubmissionManager.SubmissionRequest(
+                    flipWords: self.flipWords,
+                    flipPages: self.draftingTable!.flipBook.flipPages,
+                    roomID: self.roomID,
+                    contacts: self.fullContacts)
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                    if FlipMessageSubmissionManager.sharedInstance.createAndUploadFlips(request){
+                        print("Creating and Uploading Flips")
+                    }
+                    else
+                    {
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            FlipMessageSubmissionManager.sharedInstance.state = .Error
+                            FlipMessageSubmissionManager.sharedInstance.sendMessageSendFailedNotification(self.roomID, error: "Flips Message Error", errorDetails: "Flips was unable to create your message at this time.")
+                        })
+                    }
+                })
+                
                 let rootVC = self.navigationController?.viewControllers[0]
                 rootVC?.dismissViewControllerAnimated(true, completion: nil)
             })
         }
-
-        let request = FlipMessageSubmissionManager.SubmissionRequest(
-            flipWords: self.flipWords,
-            flipPages: self.draftingTable!.flipBook.flipPages,
-            roomID: self.roomID,
-            contacts: self.fullContacts)
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            if FlipMessageSubmissionManager.sharedInstance.createAndUploadFlips(request){
-                print("Creating and Uploading Flips")
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    FlipMessageSubmissionManager.sharedInstance.state = .Error
-                    FlipMessageSubmissionManager.sharedInstance.sendMessageSendFailedNotification(self.roomID, error: "Flips Message Error", errorDetails: "Flips was unable to create your message at this time.")
-                })
-            }
-        })
     }
     
     private func submitToMMSAndToLibrary() {
@@ -325,35 +326,36 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
                 
                 if let messageComposerController = messageComposerController
                 {
+                    
+                    let request = FlipMessageSubmissionManager.SubmissionRequest(
+                        flipWords: self.flipWords,
+                        flipPages: self.draftingTable!.flipBook.flipPages,
+                        roomID: self.roomID,
+                        contacts: self.fullContacts)
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                        
+                        if FlipMessageSubmissionManager.sharedInstance.createAndUploadFlips(request){
+                            print("Creating and Uploading Flips")
+                        }
+                        else
+                        {
+                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                FlipMessageSubmissionManager.sharedInstance.state = .Error
+                                FlipMessageSubmissionManager.sharedInstance.sendMessageSendFailedNotification(self.roomID, error: "Flips Message Error", errorDetails: "Flips was unable to create your message at this time.")
+                            })
+                        }
+                    })
+
                     self.presentViewController(messageComposerController, animated: true, completion: nil)
                 }
                 else
                 {
                     self.showExternalComposerErrorAlert()
                 }
-                
             })
         }
         
-        let request = FlipMessageSubmissionManager.SubmissionRequest(
-            flipWords: self.flipWords,
-            flipPages: self.draftingTable!.flipBook.flipPages,
-            roomID: self.roomID,
-            contacts: self.fullContacts)
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-
-            if FlipMessageSubmissionManager.sharedInstance.createAndUploadFlips(request){
-                print("Creating and Uploading Flips")
-            }
-            else
-            {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    FlipMessageSubmissionManager.sharedInstance.state = .Error
-                    FlipMessageSubmissionManager.sharedInstance.sendMessageSendFailedNotification(self.roomID, error: "Flips Message Error", errorDetails: "Flips was unable to create your message at this time.")
-                })
-            }
-        })
     }
     
     
