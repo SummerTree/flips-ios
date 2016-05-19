@@ -30,7 +30,7 @@ class FlipMessageSubmissionManager : NSObject {
         return Singleton.instance;
     }
     
-    private var state : SubmissionState = .Waiting
+    var state : SubmissionState = .Waiting
     private var requestQueue : [SubmissionRequest] = []
     
     
@@ -158,7 +158,7 @@ class FlipMessageSubmissionManager : NSObject {
     // MARK: - Message Submission
     ////
     
-    private func createAndUploadFlips(request: SubmissionRequest) -> (Bool) {
+    func createAndUploadFlips(request: SubmissionRequest) -> (Bool) {
         
         var error : FlipError?
         let group = dispatch_group_create()
@@ -297,7 +297,7 @@ class FlipMessageSubmissionManager : NSObject {
         
     }
     
-    private func sendMessageSendFailedNotification(roomID: String?, error: String?, errorDetails: String?) {
+    func sendMessageSendFailedNotification(roomID: String?, error: String?, errorDetails: String?) {
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             
