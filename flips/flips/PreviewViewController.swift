@@ -451,6 +451,9 @@ class PreviewViewController : FlipsViewController, PreviewViewDelegate, MessageC
                 {
                     showMMSUnsupportedErrorAlert()
                 }
+            } else if self.sendOptions.contains(.Gallery) && self.sendOptions.contains(.Flips){
+                submitSaveToLibrary()
+                submitMessageRequest()
             }
             else if self.sendOptions.contains(.Flips) {
                 submitMessageRequest()

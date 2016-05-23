@@ -166,11 +166,11 @@ class NewFlipViewController: FlipsViewController,
 //        print(manuallyJoinedFlips)
 //        print(flipsManuallyJoinedPlusAppended)
         
-        if shouldShowOnboarding(self.ONBOARDING_KEY)
-        {
-            setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "New Flip Overlay")!)
-        }
-        else if self.contacts.isEmpty
+//        if shouldShowOnboarding(self.ONBOARDING_KEY)
+//        {
+//            setupOnboardingInNavigationController(self.ONBOARDING_KEY, onboardingImage: UIImage(named: "New Flip Overlay")!)
+//        }
+        if self.contacts.isEmpty
         {
             self.contactPicker.becomeFirstResponder()
         }
