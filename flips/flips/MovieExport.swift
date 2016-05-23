@@ -306,6 +306,7 @@ public class MovieExport : NSObject {
         titleLayer.foregroundColor = UIColor.whiteColor().CGColor
         titleLayer.alignmentMode = kCAAlignmentCenter
         titleLayer.frame = CGRectMake(0, 10, videoSize.width, 100)
+        titleLayer.wrapped = true
         titleLayer.displayIfNeeded()
         
         let watermarkImage = UIImage(named: "Watermark")

@@ -22,6 +22,8 @@ extension UILabel {
         flipWordLabel.textColor = UIColor.whiteColor()
         flipWordLabel.layer.shadowColor = UIColor.blackColor().CGColor
         flipWordLabel.layer.shadowOffset = CGSizeMake(1.0, 1.0)
+        flipWordLabel.numberOfLines = 0
+        flipWordLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         return flipWordLabel
     }
 }
